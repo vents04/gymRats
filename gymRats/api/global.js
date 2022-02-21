@@ -16,7 +16,8 @@ const DATABASE_MODELS = {
     PERSONAL_TRAINER: "PersonalTrainer",
     CLIENT: "Client",
     REQUEST: "Request",
-    DIET_PLAN: "DietPlan"
+    DIET_PLAN: "DietPlan",
+    REVIEW: "Review"
 }
 
 const COLLECTIONS = {
@@ -36,7 +37,8 @@ const COLLECTIONS = {
     PERSONAL_TRAINERS: "personalTrainers",
     CLIENTS: "clients",
     REQUESTS: "requests",
-    DIET_PLANS: "dietPlans"
+    DIET_PLANS: "dietPlans",
+    REVIEWS: "reviews"
 }
 
 const PERSONAL_TRAINER_STATUSES = {
