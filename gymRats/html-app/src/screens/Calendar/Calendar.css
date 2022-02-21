@@ -1,0 +1,70 @@
+@import "../../styles/css/global.styles.css";
+
+.home-page-topbar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.home-page-title {
+  font-family: "Spartan Black", sans-serif;
+  font-size: 1.25rem;
+  width: 80%;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.home-page-date-picker {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin: 2rem 0rem;
+  width: 100%;
+  flex: 3;
+}
+
+.home-page-date-picker-side {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-size: 1rem;
+  flex: 1;
+}
+
+.home-page-date-picker-side-title {
+  font-family: "Spartan Bold", sans-serif;
+  font-size: 0.6rem;
+  color: #999;
+  text-transform: uppercase;
+}
+
+.home-page-date-picker-current-title {
+  font-family: "Spartan Bold", sans-serif;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  flex: 1;
+  text-align: center;
+}
+
+.right-side {
+  justify-content: flex-end;
+}
+
+.home-page-date-add-card {
+  font-family: "Spartan Bold", sans-serif;
+  font-size: 0.9rem;
+  color: white;
+  background-color: #1f6cb0;
+  padding: 0.75rem;
+  width: 100%;
+  border: none;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+}
+
+.home-page-date-section {
+  margin: 1rem 0rem;
+}

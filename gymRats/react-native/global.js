@@ -1,0 +1,19 @@
+const AUTHENTICATION_TOKEN_KEY = "x-auth-token";
+
+const ROOT_URL_API = "http://localhost:4056";
+
+const HTTP_STATUS_CODES = {
+    OK: 200,
+    BAD_REQUEST: 400,
+    UNAUTHORIZED: 401,
+    FORBIDDEN: 403,
+    NOT_FOUND: 404,
+    CONFLICT: 409,
+    INTERNAL_SERVER_ERROR: 500,
+}
+
+module.exports = {
+    AUTHENTICATION_TOKEN_KEY,
+    ROOT_URL_API,
+    HTTP_STATUS_CODES,
+}

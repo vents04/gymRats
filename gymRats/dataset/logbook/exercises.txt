@@ -1,0 +1,1233 @@
+Cable Neck Flexion
+Cable Neck Rotation (with belt)
+Cable Lateral Neck Rotation (with belt)
+Machine Neck Flexion 
+Machine Lateral Neck Flexion
+Weighted Lying Neck Flexion
+Weighted Neck Flexion
+Weighted Lateral Neck Flexion
+Cable Neck Extension (with belt)
+Machine Neck Extension
+Weighted Lying Neck Extension
+Weighted Neck Extension
+Weighted Seated Neck Extension
+Front Neck Bridge
+Wall Front Neck Bridge
+Wall Side Neck Bridge
+Neck Retraction Stretch
+Neck Rotation Stretch
+Suspended Neck Flexion
+Suspended Lateral Neck Flexion
+Band Resistive Neck Retraction
+Rear Neck Bridge
+Wall Rear Neck Bridge
+Lying Neck Retraction
+Neck Extensor Stretch
+Suspended Neck Extension
+Barbell Behind Neck Press
+Barbell Front Raise
+Incline Barbell Front Raise
+Barbell Military Press
+Seated Barbell Military Press
+Barbell Shoulder Press
+Reclined Barbell Shoulder Press
+Cable Bar Behind Neck Press
+Cable Bar Front Raise
+Cable Bar Military Press
+Cable Bar Shoulder Press
+Cable Front Raise
+Cable Alternating Front Raise
+Seated Cable Alternating Front Raise
+Cable One Arm Front Raise
+Cable One Arm Front Raise with Rope
+Cable Shoulder Press
+Seated Cable Shoulder Press
+Cable Twisting Overhead Press
+Dumbbell Arnold Press
+Dumbbell Front Raise
+Dumbbell Alternating Front Raise
+Incline Dumbbell Alternating Front Raise
+Seated Dumbbell Alternating Front Raise
+Seated Dumbbell Front Raise
+Dumbbell Shoulder Press
+Dumbbell One Arm Shoulder Press
+Reclined Dumbbell Shoulder Press
+Machine Behind Neck Press
+Machine Barbell Behind Neck Press
+Machine Military Press
+Reclined Machine Shoulder Press
+Machine Shoulder Press
+Machine Barbell Machine Shoulder Press
+Machine One Arm Shoulder Press
+Sled Machine Shoulder Press
+Smith Machine Behind Neck Press
+Smith Machine Shoulder Press
+Barbell Upright Row
+Cable Lateral Raise
+Cable One Arm Lateral Raise
+Cable Lateral Raise with Close Pulleys
+Seated Cable Lateral Raise
+Cable Upright Row
+Cable Bar Upright Row
+Cable Dual Pulley Upright Row
+Cable One Arm Upright Row
+Cable Y Raise
+Seated Cable Y Raise
+Seated Cable Y Raise with Rope
+Incline Dumbbell Lateral Raise
+Dumbbell Lateral Raise
+Dumbbell One Arm Lateral Raise
+Seated Dumbbell One Arm Lateral Raise
+Seated Dumbbell Lateral Raise
+Dumbbell Lying Lateral Raise
+Dumbbell Raise
+Dumbbell Upright Row
+Dumbbell One Arm Upright Row
+Seated Dumbbell Upright Row
+Barbell Machine Upright Row
+Machine Lateral Raise
+Smith Machine Upright Row
+Barbell Rear Delt Raise
+Barbell Rear Delt Row
+Barbell Lying Rear Delt Row
+Cable Reverse Fly
+Seated Cable Reverse Fly
+Cable One Arm Reverse Fly
+Cable Supine Reverse Fly
+Cable Rear Delt Row
+Cable One Arm Rear Delt Row
+Cable Rear Lateral Raise
+Cable One Arm Rear Lateral Raise
+Seated Cable Rear Lateral Raise
+Standing Cable Cross Row
+Standing Cable One Arm Cross Row
+Dumbbell Lying Rear Delt Row
+Dumbbell Lying Rear Lateral Raise
+Dumbbell Lying One Arm Rear Lateral Raise
+Dumbbell Rear Lateral Raise
+Dumbbell Rear Delt Row
+Seated Dumbbell Rear Lateral Raise
+Dumbbell Side Lying Rear Delt Raise
+Incline Machine Rear Delt Row
+Machine Lying Rear Lateral Raise
+Machine Rear Delt Raise
+Seated Machine Rear Delt Row
+Seated Machine Rear Lateral Raise
+T-Bar Rear Delt Row
+Seated Machine Reverse Fly
+Smith Machine Rear Delt Row
+Cable Front Lateral Raise
+Dumbbell Front Lateral Raise
+Seated Dumbbell Front Lateral Raise
+Dumbbell Lying Lateral Raise
+Handstand Push-up
+Handstand Push-up on parallettes
+Pike Press
+Elevated Pike Press
+Suspended Front Raise
+Doorway Stretch
+Lying Front Deltoid Stretch
+Seated Front Deltoid Stretch
+Wall Stretch
+Assisted Triceps Dip
+Barbell Close Grip Bench Press
+Incline Barbell Close Grip Bench Press
+Barbell JM Press
+Barbell Lying Tricpes Extension
+Decline Barbell Lying Tricpes Extension
+Incline Barbell Lying Triceps Extension
+Barbell Skull Crusher
+Barbell Triceps Extension
+Reclined Barbell Triceps Extension
+Cable Bent-over Triceps Extension
+Cable Bar Bent-over Triceps Extension
+Cable Forward Triceps Extension
+Incline Cable Triceps Extension
+Kneeling Cable Triceps Extension
+Cable Lying Triceps Extension
+Cable Bar Lying Triceps Extension
+Decline Cable Lying Triceps Extension
+Cable Pushdown
+Alternating Cable Pushdown
+Seated Cable Pushdown
+Alternating Seated Cable Pushdown
+Cable Bar Pushdown
+Incline Cable Pushdown
+Cable One Arm Pushdown
+Cable Side Triceps Extension
+Cable Triceps Dip
+Cable Triceps Extension
+Cable One Arm Triceps Extension
+Dumbbell Kickback
+Dumbbell Lying Triceps Extension
+Decline Dumbbell Lying Triceps Extension
+Incline Dumbbell Lying Triceps Extension
+Dumbbell One Arm Triceps Extension
+Reclined Dumbell One Arm Triceps Extension
+Dumbbell Triceps Extension
+Reclined Dumbbell Triceps Extension
+Machine Close Grip Bench Press
+Barbell Machine Close Grip Bench Press
+Machine Triceps Extension
+Machine Triceps Dip
+Incline Machine Triceps Extension
+Machine Overhead Triceps Extension
+Machine Pushdown
+Seated Machine Close Grip Press
+Machine Triceps Dip
+Standing Sled Machine Triceps Dip
+Smith Machine Close Grip Bench Press
+Incline Smith Machine Close Grip Bench Press
+Weighted Bench Dip
+Weighted Close Grip Push-up
+Weighted Triceps Dip
+Barbell Curl
+Barbell Drag Curl
+Alternating Cable Curl
+Seated Alternating Cable Curl
+Cable Curl
+Cable Bar Curl
+EZ-bar curl
+Cable One Arm Curl
+Dumbbell Curl
+Seated Dumbbell Curl
+Incline Dumbbell Curl
+Machine Curl
+Alternating Machine Curl
+Band-assisted Triceps Dip
+Bench Dip
+Close Grip Push-up
+Decline Close Grip Push-up
+Incline Close Grip Push-up
+Suspended Triceps Extension
+Triceps dip between benches
+Triceps Dip between benches
+Suspended Triceps Dip
+Overhead Stretch
+Towel Stretch
+Barbell Reverse Curl
+Barbell Reverse Preacher Curl
+Standing Barbell Reverse Preacher Curl
+Cable Hammer Curl
+Cable Reverse Curl
+Cable Bar Reverse Curl
+Cable Reverse Preacher Curl
+Standing Cable Reverse Preacher Curl
+Dumbbell Hammer Curl
+Machine Hammer Preacher Curl
+Machine Reverse Curl
+Machine Reverse Preacher Curl
+Barbell Wrist Curl
+Cable Wrist Curl
+Cable One Arm Wrist Curl
+Dumbbell Wrist Curl
+Machine Wrist Curl
+Machine Grip
+Machine Wrist Roller
+Sled Machine One Hand Grip
+Sled Machine Grip
+Barbell Reverse Wrist Curl
+Cable Reverse Wrist Curl
+Cable One Arm Reverse Wrist Curl
+Cable Wrist Roller
+Dumbbell Reverse Wrist Curl
+Machine Reverse Wrist Curl
+Machine Wrist Roller
+Dumbbell Lying Pronation
+Seated Dumbbell Pronation
+Seated Machine Pronation
+Standing Machine Pronation
+Dumbbell Lying Supination
+Seated Dumbbell Supination
+Seated Machine Supination
+Standing Machine Supination
+Standing Stretch
+Praying Stretch
+Seated Stretch
+Single Arm Stretch
+Kneeling Stretch
+Barbell Bent-over Row
+Barbell Cambered Bar Lying Row
+Incline Cable Row
+Cable Kneeling Row
+Cable Lying Row
+Cable One Arm Bent-over Row
+Seated Cable One Arm ROw
+Seated Cable One Arm Row
+Seated Cable One Arm High Row
+Cable Seated High Row
+Cable Seated Row
+Standing Cable One Arm Row
+Dumbbell Bent-over Row
+Dumbbell Lying Row
+Machine Bent-over Row
+Barbell Machine Bent-over Row
+Machine One Arm Bent-over Row
+Incline Machine Row
+Standing Machine One Arm Row
+Seated Machine Alternating Row
+Seated Machine Row
+Machine T-bar Row
+Smith Machine Bent-over Row
+Weighted Inverted Row
+Machine Chin-up
+Machine Parallel Close Grip Pull-up
+Machine Pull-up
+Barbell Pullover
+Cable Close Grip Pulldown
+Alternating Cable Close Grip Pulldown
+Cable One Arm Close Grip Pulldown
+Kneeling Cable One Arm Close Grip Pulldown
+Kneeling Bent-over Pulldown
+Kneeling Cable Bent-over Pulldown
+Cable Pulldown
+Alternating Cable Pulldown
+Cable Pullover
+Cable Chinup
+Cable Parallel Close Grip Pull-up
+Cable Parallel Grip Pull-up
+Cable Pull-up
+Cable Rear Pull-up
+Cable Rear Pulldown
+Standing Cable Pulldown
+Alternating Standing Cable Pulldown
+Machine Close Grip Pulldown
+Machine Front Pulldown
+Machine Pulldown
+Machine Pullover
+Machine Rear Pulldown
+Machine Underhand Pulldown
+Machine Iron Cross
+Weighted Chin-up
+Weighted Parallel Close Grip Pull-up
+Weighted Pull-up
+Weighted Rear Pull-up
+Inverted Row
+Underhand Inverted Row
+Suspended Inverted Row
+Suspended Power Pull
+Suspended Row
+Fixed Bar Stretch
+Lever Stretch
+Band-assisted Chin-up
+Band-assisted Pull--up
+Band-assisted Rear Pull-up
+Band-assisted Pull-up
+Chin-up
+Pull-up
+Parallel Close Grip Pull-up
+Rear Pull-up
+Inverted Shrug
+Suspended Inverted Shrug
+Upper Trapezious Stretch
+Chair Trapezius Stretch
+Broomstick Stretch
+Bent-over Stretch
+Seated Bent-over Stretch
+Side Lying Stretch
+Side Lying Teres Minor Stretch
+Supine Infraspinatus Stretch
+Prone InfraSpinatus Stretch
+Suspended Shoulder External Rotation
+Doorway Stretch
+Seated Barbell Cambered Bar Shrug
+Barbell Shrug
+Trap Bar Shrug
+Cable Shrug
+Cable Bar Shrug
+Cable Dual Pulley Shrug
+Dumbbell Shrug
+Machine Gripless Shrug
+Machine Seated Shrug
+Machine Shrug
+Sled Machine Gripless Shrug
+Smith Machine Shrug
+Cable Seated Shoulder External Rotation
+Standing Cable Seated Shoulder External Rotation
+Cable Upright Shoulder External Roation
+Cable Upright Shoulder External Rotation
+Dumbbell Lying Shoulder External Rotation
+Incline Dumbbell Lying Shoulder External Rotation
+Dumbbell Prone External Rotation
+Incline Dumbbell Prone External Rotation
+Seated Dumbbell Shoulder External Rotation
+Dumbbell Upright Shoulder External Rotation
+Machine Shoulder External Rotation
+Machine Upright Shoulder External Rotation
+Seated Cable Shoulder Internal Rotation
+Standing Cable Shoulder Internal Rotation
+Dumbbell Shoulder Internal Rotation
+Machine Shoulder Internal Rotation
+Machine Upright Shoulder Internal Rotation
+Assisted Chest Dip
+Barbell Bench Press
+Barbell Board Bench Press
+Barbell Floor Bench Press
+Decline Barbell Bench Press
+Incline Barbell Bench Press
+Cable Chest Dip
+Cable Flies
+Decline Cable Flies
+Lying Cable Flies
+Seated Cable Flies
+Standing Cable Flies
+Cable Bench Press
+Cable Bar Bench Press
+Cable Chest Press
+Cable One Arm Chest Press
+Standing Cable Chest Press
+Standing Cable Bar Chest Press
+Decline Cable Chest Press
+Decline Cable Bar Chest Press
+Dumbbell Bench Press
+Decline Dumbbell Bench Press
+Decline Dumbbell Fly
+Dumbbell Pullover
+Machine Bench Press
+Barbell Machine Bench Press
+Machine Chest Dip
+Machine Chest Press
+Decline Machine Chest Press
+Machine Bent-over Fly (iron cross)
+Decline Machine Fly
+Lying Machine Fly
+Decline Lying Machine Fly
+Seated Machine Fly
+Seated Machine Iron Cross
+Decline Machine Bench Press
+Standing Sled Machine Chest Dip
+Smith Machine Bench Press
+Decline Smith Machine Bench Press
+Weighted Chest Dip
+Weighted Push-up
+Incline Cable Bench Press
+Incline Cable Bar Bench Press
+Incline Cable Chest Press
+Standing Incline Cable Chest Press
+Standing Incline Cable Bar Chest Press
+Standing Incline One Arm Cable Chest Press
+Incline Cable Fly
+Standing Incline Cable Fly
+Incline Dumbbell Bench Press
+Incline Dumbbell Fly
+Incline Machine Bench Press
+Incline Barbell Machine Bench Press
+Incline Machine Chest Press
+Incline Machine Chest Press on Military Press Machine
+Incline Machine Fly
+Incline Smith Machine Bench Press
+Assisted Chest Dip
+Standing Cable Fly
+Machine Chest Dip
+Weighted Chest Dip
+Incline Barbell Shoulder Raise
+Incline Cable Shoulder Raise
+Incline Cable One Arm Push
+Incline Dumbbell Shoulder Raise
+Incline Machine Shoulder Raise
+Incline Smith Machine Shoulder Raise
+Band-assisted Chest Dip
+Chest Dip
+Chest Dip between benches
+Push-up
+Incline Push-up
+Suspended Chest Dip
+Suspended Chest Press
+Suspended Fly
+Clap Push-up
+Depth Push-up
+Behind Head Stretch
+Lying Stretch
+Straight Arm Stretch
+Decline Push-up
+Pike Push-up
+Bench Angel Stretch
+Doorway Chest Stretch
+Lying Shoulder Gridle Stretch
+Towel Shoulder Gridle
+Towel Shoulder Gridle Stretch
+Wall Angel Stretch
+Barbell Push Crunch
+Barbell Push Sit-up
+Cable Lying Crunch on Ball
+Cable Lying Leg-Hip Raise
+Kneeling Cable Crunch
+Seated Cable Crunch
+Seated Cable Overhead Crunch
+Standing Cable Crunch
+Standing Cable Overhead Crunch
+Dumbbell Push Crunch
+Dumbbell Push Sit-up
+Machine Lying Crunch
+Machine Lying Leg Raise Crunch
+Seated Machine Leg Raise Crunch
+Machine Vertical Leg-Hip Raise
+Machine Lying Leg-Hip Crunch
+Machine Lying Leg-Hip Raise
+Machine Push Crunch
+Seated Machine Crunch
+Seated Machine Leg Raise Crunch
+Machine Side Lying Leg-Hip Raise
+Sled Machine Leg Hip Raise (Ab Coaster)
+Weighted Crunch
+Weighted Crunch on Ball
+Incline Weighted Crunch
+Weighted Sit-up
+Incline Weighted Sit-up
+Weighted Medicine Ball Overhead Throw Sit-up (machine)
+Weighted Hanging Leg-Hip Raise
+Incline Weighted Leg-Hip Raise
+Weighted Lying Leg-Hip raise
+Weighted Vertical Leg-Hip Raise
+Weighted V-up
+Kneeling Cable Twisting Crunch
+Cable Russion Twist (on ball)
+Cable Russian Twist (on ball)
+Cable Side Bend
+Cable Side Crunch
+Seated Cable Twist
+Standing Cable Twisting Crunch
+Cable Twist
+Dumbbell 45° Side Bend
+Dumbbell Russian Twist (on ball)
+Dumbbell Side Bend
+Barbell Machine Side Bend
+Seated Machine Twisting Leg Raise Crunch
+Seated Machine Side Leg Raise Crunch
+Kneeling Machine Twist
+Lying Machine Twist
+Seated Machine Side Bend
+Machine Side Crunch
+Standing Machine Side Bend
+Sled Machine Side Leg-Hip Raise (Ab Coaster)
+Lying Weighted Twist
+Weighted Russian Twist
+Weighted 45° Side Bend
+Weighted Side Bend on ball
+Incline Weighted Twisting Crunch
+Weighted Side Crunch (on ball)
+Weighted Twisting Crunch (on ball)
+Incline Weighted Twisting Sit-up
+Weighted Twisting Sit-up
+Barbell Hyperextensions
+Barbell Back Extension
+Barbell Hyperextension (45°)
+Barbell Back Extension (45°)
+Barbell Bent Knee Good-morning
+Barbell Deadlift
+Barbell Block Pull
+Barbell Deficit Deadlift
+Barbell Rack Pull
+Barbell Sumo Deadlift
+Barbell Sumo Block Pull
+Barbell Stiff-leg Deadlift
+Barbell Straight-leg Deadlift
+Trap Bar Deadlift
+Trap Bar Stiff-leg Deadlift
+Trap Bar Straight-leg Deadlift
+Cable Stiff-leg Deadlift
+Cable Straight-leg Deadlift
+Dumbbell Straight-leg Deadlift
+Dumbbell One Arm Straight-leg Deadlift
+Machine Deadlift
+Machine Stiff-leg Deadlift
+Machine straight-leg Deadlift
+Machine Back Extension
+Kneeling Machine Back Extension
+Machine Pull Back Extension
+Smith Machine Knee Good-morning
+Smith Machine Deadlift
+Smith Machine Stiff-leg Deadlift
+Smith Machine Straight-leg Deadlift
+Weighted Hyperextensions
+Weighted Back Extension
+Weighted Back Extension on ball
+Weighted Hyperextensions (45°)
+Weighted Back Extension (45°)
+Seated Cable Row
+Crunch
+Incline Crunch
+Crunch on ball
+Jack-knife Sit-up
+Hanging Leg-Hip Raise
+Incline Leg-Hip Raise
+Lying Leg-Hip Raise
+Vertical Leg-Hip Raise
+Incline Sit-up
+Inverted Sit-up
+Sit-up
+V-up
+L-sit
+Suspended Jack-knife
+
+Suspended Jack-knife Pike
+Suspended Pull Through
+Suspended Rollout
+Medicine Ball Sit-up
+Front Plank
+Stability Ball Rollout
+Kneeling Stretch
+Lying Stretch
+Standing Stretch
+Abdominal Vacuum
+Angled Side Bridge
+Lying Twist
+Plank Twist on Ball
+Side Bend on Ball
+Side Bridge 
+Twisting Leg Raises
+Twisting Sit-up
+Incline Twisting Sit-up
+Incline Twisting Crunch
+Side Crunch
+Twisting Crunch
+Hanging Windshield Wiper
+Suspended Side Bend
+Suspended Side Bridge
+Suspended Twist
+Suspended Twisting Jack-knife
+Broomstick Twist
+Seated Medicine Ball Twist
+Standing Medicine Ball Twist
+Lying Medicine Ball Twist
+Side Plank
+Lying Bent Leg Stretch
+Lying Crossover Stretch
+Pretzel Stretch
+Seated Bent Leg Stretch
+Back Extension on Ball
+Bird Dog
+Bird Dog on Ball
+Hanging Hyperextension
+Hyperextension
+Hyperextension (45°)
+Superman
+Contralateral Superman
+Suspended Hyperextension
+Suspended Pull Through
+Rear Bridge
+Decline Rear Bridge
+Decline Single Leg Rear Bridge
+Incline Rear Bridge
+Cat Stretch
+Bent-over Cat Stretch
+Lever Stretch
+Lying Stretch
+Seated Stretch
+Seated Bent-over Stretch
+Squatting Stretch
+Plow Stratch
+Plow Stretch
+Clean and Jerk
+Power Clean and Jerk
+Hang Power Clean and Jerk
+Hang Clean and Jerk (from floor)
+Power Hang Clean and Jerk
+Clean
+Power Clean
+Deficit Clean
+Block Clean
+Power Block Clean
+Block Pull
+Hang Clean
+Power Hang Clean
+High Pulls
+Hang High Pulls
+Below Knee High Pulls
+Jump Shrug
+Hang Jump Shrug
+Push Press
+Behind Neck Push Press
+Split Jerk
+Behind Neck Split Jerk
+Romanian Deadlift
+Bulgarian Squat
+Front Squat
+Dumbbell Hang Clean and Jerk
+Dumbbell Power Hang Clean and Jerk
+Dumbbell Clean
+Dumbbell Hang Power Clean
+Kettlebell Clean and Jerk
+Kettlebell Clean
+Snatch
+Power Snatch
+Deficit Snatch
+Block Snatch Pull
+Block Snatch
+Power Block Snatch
+High Block Snatch
+Power High Block Snatch
+Hang Snatch
+Power Hang Snatch
+Overhead Lunge
+Overhead Squat
+Press Under
+Quick Drop Press Under
+Sots Press
+Dumbbell Power Snatch
+Kettlebell Snatch
+90° Jump Turns
+Ankle Hop
+Box March (high
+Box March (high)
+Box March (low)
+180° Jump Turns
+Box Jump March
+Split Jump
+Squat Jump
+360° Jump Turn
+Barrier Speed Hop
+Box Jumps
+Double Leg Butt Kick
+Medicine Ball Split Jump
+Medicine Ball Squat Jump
+Vertical Jumps
+360° Jump Turns
+Box Jump
+Box Squat Box Jump
+Kneeling Squat Jump
+Hurdle Depth Jump
+Hurdle Jump
+Hurdle Jumps
+Seated Box Jump
+Single Leg Vertical Hop
+Single Leg Vertical Jump
+Stair Jumps
+Steir Jumps
+Tuck Jump
+Vertical Power Jump
+Vertical Jump
+Box Depth Jump
+Multiple Box Depth Jumps
+Multiple Box Jumps (progressive)
+Single Leg Box Depth Jump
+Single Leg Hurdle Depth Jump
+Single Leg Vertical Depth Jump
+Single Leg Vertical Depth Power Jump
+Single Leg Vertical Power Jump
+Staircase Depth Jump
+Vertical Depth Jump
+Ladder Speed Hop
+Speed Hop
+Cone Jumps
+Alternate Bound
+Alternate Bound (single arm)
+Broad Jump
+Butt Kickc Jumps
+Multiple Broad Jumps
+Double Leg Bound
+Single Leg Hop
+Standing Triple Jump
+Long Depth Jump
+Single Leg Speed Hop
+Triple Jump
+Lateral Box Shuffle
+Bosu Lateral Box Shuffle
+Lateral Bound
+Lateral Line Hop
+Diagonal Qudarant Jumps
+Square Quadrant Jumps
+Slalom Jump
+Lateral Barrier Jump
+Lateral Box Jumps
+Lateral Cone Hop
+Lateral Cone Jumps
+Long Slalom Jumps
+Medicine Ball Lateral Bound
+Single Leg Lateral Hop (over line)
+Single Leg Lateral Hop (over barrier)
+Single Leg Zigzag Hop
+Medicine Ball Arch Chop
+Medicine Ball Single Leg Chop
+Medicine Ball Vertical Chop
+Medicine Ball Chest Throw Sit-up (on wall)
+Medicine Ball Chest Throw Sit-up (with partner)
+Pike Jump
+Lying Leg Raise Throwdown (with partner)
+Lying Diagonal Leg Raise Throwdown (with partner)
+Medicine Ball Overhead Throw Sit-up (with partner)
+Medicine Ball Overhead Throw Sit-up (on wall)
+Pike Jumps
+Broomstick Twist
+Medicine Ball Diagonal Chop
+Medicine Ball Seated Twist
+Medicine Ball Standing Twist
+Medicine Ball Seated Twist (with partner)
+Medicine Ball Seated Twist 
+Medicine Ball Standing Twist
+Medicine Ball Russian Twist
+Medicine Ball Alternating Side Rotation Throw (against wall)
+Medicine Ball Kneeling Side Twist Throw (against wall)
+Medicine Ball Russian Twist Throw (against wall)
+Medicine Ball Russian Twist Intermittent Throw (againts wall)
+Medicine Ball Russian Twist Throw (with partner)
+Medicine Ball Seated Backward Twist Throw (with partner standing)
+Medicine Ball Seated Side Twist Throw (with partner)
+Medicine Ball Side Twist Throw (with partner)
+Medicine Ball Side Twist Throw (against wall)
+Medicine Ball Rotation Scoop Throw
+Medicine Ball Overhead Throw (with partner)
+Medicine Ball Pullover Throw (with partner
+Medicine Ball Pullover Throw (with partner)
+Medicine Ball Pullover Throw (with partner standing)
+Medicine Ball Pullover Throw (against wall)
+Medicine Ball Slam
+Medicine Ball Chest Throw (with partner)
+Medicine Ball Side Throw (with partner)
+Wall Plyo Push-up
+Medicine Ball on rebounder
+Medicine Ball One Arm Throw (with partner)
+Medicine Ball Side Throw (on wall)
+Medicine Ball Chest Throw (on wall)
+Plank Suffle (on medicine ball)
+Shoulder Tap Push-up
+Medicine Ball Lying Chest Throw (with assistant)
+Incline Plyo Push-up
+Kneeling Plyo Push-up
+Plyo Push-up Shuffle (on knees and Bosu)
+Plyo Push-up Shuffle (on medicine ball)
+Self-assisted Plyo Pushup
+Depth Push-up (on knees)
+Depth Push-up (on medicine ball)
+Clap Push-up
+Clap Push-up on ball
+Depth Push-up
+Depth Push-up with feet elevated
+Medicine Ball Squat and Overhead Throws
+Medicine Ball Wall Shot
+Medicine Ball Overhead Backward Throw
+Medicine Ball Squat and Forward Throw
+Medicine Ball Squat and Overhead Throw
+Medicine Ball Squat and Underhand Forward Throw
+Jog
+Run
+Sprint
+Burpee
+Burpee Push-up
+Jumping Jacks
+Mountain Climber
+Side Lunge
+Walking Lunge
+Back Pedal
+Bear Crawl
+Butt Kick
+CrabWalk
+Rear CrabWalk
+Grapevine
+High Knee Run
+Side Shuffle
+Skip
+Sprint to Turn
+Tapioca
+Alternating Leg Hop
+Boxer Step
+Basic Hop
+Criss Cross
+Single Leg Criss Cross
+Double Under
+Heel Tap
+Jog Step
+Keltic Step
+Side Swing
+Alternating Hop Side Swing
+Twister
+Toe Tap
+Back Stroke
+Breast Stroke
+Butterfly
+Freestyle
+Back Stroke Swim
+Breast Stroke Swim
+Butterfly Swim
+Freestyle Swim
+Climb Mill / Tread Wall
+Climber
+Ladder Mill
+Bycycling 
+Cycle Cross Trainer
+Cycle Ergometer
+Recumbent Cycle
+Recumbent Cycle Cross Trainer
+Recumbent Upright Cycle
+Elliptical Cross Trainer
+Elliptical Glider
+Elliptical Trainer
+Recumbent Elliptical Cross Trainer
+Kayak Machine
+Rider
+Kayak Machine Row
+Rider Row
+Row Ergometer
+Row Ergometer (Canoe)
+Ski Machine (Cords)
+Ski Machine (Rails)
+Ski Ergometer
+Recumbent Stepper
+Recumbent Stepper Cross Trainer
+Stair Climber
+Stepmill
+Thread Climber
+ThreadMill (Run) 
+ThreadMill (Walk) 
+Arm Ergometer
+Mini Tramp
+Skate Machine 
+Wave Machine
+Barbell Sumo Deadlift High Pull
+Barbell Farmer's Walk
+Barbell Thruster
+Barbell Turkish Get-up
+Cable Push Pull
+Dumbbell High Swing
+Dumbbell Low Swing
+Dumbbell Thruster
+Dumbbell Turkish Get-up
+Dumbbell Windmill
+Machine Jammer Press
+Machine One Arm Jammer Press
+Machine One Arm Press
+Machine Power Twist
+Machine Push Pull
+Decline Machine Push Pull
+Sprint Machine
+Rope Wave
+Alternating Rope Wave
+Jump Rope Wave
+Rope Machine Seated Pull
+Rope Machine Seated Vertical Pull
+Weighted Sled Pull Sprint 
+Weighted Drive Sled Sprint 
+Weighted Tire Flip
+Arm Circle
+Angled Ladder Climb
+Angled Pole Climb
+Balance Board Stand
+Banace Board Squat
+Kipping Handstand Push-up
+Kipping Pull-up
+Butterfly Pull-up
+Muscle-up (on vertical bar)
+Windmill Push-up
+Suspended Muscle-up
+Suspended Chest Press / Push-up
+Suspended Prone Feet
+Suspended Supine Feet
+Kettlebell Deadlift
+Kettlebell Press
+Kettlebell Sumo Deadlift
+Kettlebell Two Arm Swing
+Kettlebell Two Arm Overhead Swing
+Kettlebell Two Arm Swing Catch
+Kettlebell Swing
+Kettlebell Alternating Swing Catch
+Kettlebell Alternating Swing Flip Catch
+Kettlebell Bent-knee Windmill
+Kettlebell Windmill
+Kettlebell Framer's Walk
+Kettlebell Turkish Get-up
+Kettlebell Clean
+Kettlebell Clean and Press
+Kettlebell Snatch
+Kettlebell Split Snatch
+Kettlebell Front Squat
+Kettlebell Goblet Squat
+Kettlebell Overhead Split Squat
+Kettlebell Overhead Rear Lunge
+Kettlebell Straight-leg Deadlift
+Barbell Bent Knee Good-morning
+Seated Barbell Bent Knee Good-morning
+Barbell Block Pull
+Barbell Deficit Deadlift
+Barbell Rack Pull
+Barbell Sumo Deadlift
+Barbell Sumo Block Pull
+Barbell Stiff-leg Deadlift
+Barbell Hip Thrust
+Barbell Lunge 
+Barbell Lunge & Rear Lunge
+Barbell Lunge to Rear Lunge
+Barbell Rear Lunge
+Barbell Side Lunge
+Barbell Walking Lunge
+Barbell Single Leg Split Squat
+Barbell Single Leg Side Split Squat
+Barbell Split Squat
+Barbell Single Leg Squat
+Barbell Box Squat
+Barbell Front Squat
+Barbell Full Squat
+Barbell Hack Squa
+Barbell Hack Squat
+Barbell Safety Squat
+Trap Bar Squat
+Barbell Zercher Squat
+Barbell Step-up
+Barbell Lateral Step-up
+Trap Bar Deadlift
+Trap Bar Stiff-leg Deadlift
+Cable Glute Kickback
+Cable Rear Lunge
+Cable Single Leg Split Squat
+Cable Split Squat
+Cable Squat
+Cable Bar Squat
+Cable Belt Squat
+Cable Step-up
+Cable Stiff-leg Deadlift
+Dumbbell Lunge
+Dummbell Alternating Side Lunge
+Dumbbell Rear Lunge
+Dumbbell Alternating Side Lunge
+Dumbbell Side Lunge
+Dumbbell Walking Lunge
+Dumbbell Single Leg Stiff Leg Deadlift
+Dumbbell Single Leg Split Squat
+Dumbbell Single Leg Squat
+Dumbbell Single Split Squat
+Dumbbell Squat
+Dumbbell Front Squat
+Dumbbell Step-up
+Dumbbell Lateral Step-up
+Machine Bent-over Glute Kickback
+Machine Deadlift
+Machine Stiff-leg Deadlift
+Machine Hip Thrust
+Machine 45° Leg Press
+Machine Hack Press
+Machine Lying Leg Press
+Machine Seated Leg Press
+Machine Alternating Seated Leg Press
+Machine Seated Single Leg Leg Press
+Machine Lying Hip Extension
+Machine Power Runner
+Machine Rear Lunge
+Barbell Machine Rear Lunge
+Machine Reverse Hyper-extension
+Machine Single Leg Split Squat
+Barbell Machine Single Leg Split Squat
+Machine Single Leg Squat
+Machine Split SquatSqu
+Barbell Machine Split Squat
+Machine Split Squat
+Machine Sliding Split Squat
+Machine Squat
+Barbell Machine Squat
+Barbell Machine Front Squat
+Barbell Machine Full Squat
+Machine Front Squat
+Machine Full Squat
+Machine Hack Squat
+Machine V-Squat
+Smith Machine Bent Knee Good-morning
+Smith Machine Deadlift
+Smith Machine Stiff-leg Deadlift
+Smith Machine Rear Lunge
+Smith Machine Split Squat
+Smith Machine Squat
+Smith Machine Single Leg Squat
+Smith Machine Front Squat
+Smith Machine Hack Squat
+Smith Machine Wide Squat
+Weighted Belt Squat
+Weighted Front Squat
+Weighted Reverse Hyperextension
+Weighted Single Leg Squat
+Cable Hip Abduction
+Cable Lying Hip Internal Rotation
+Cable Seated Hip Internal Rotation
+Dumbbell Lying Hip Abduction
+Machine Seated Hip Abduction
+Machine Kneeling Hip Internal Rotation (on hip abduction machine)
+Machine Lying Hip Abduction
+Machine Seated Hip Abduction
+Machine Standing Hip Abduction
+Weighted Lying Hip Abduction
+Cable Push Pull
+Cable Twist
+Cable Assisted Wheel Rollout
+Cable Lying Leg Raise
+Cable Standing Leg Raise
+Machine Hip Flexion
+Machine Lying Leg Raise
+Machine Vertical Leg Raise
+Weighted Decline Sit-up
+Weighted Hanging Leg Raise
+Weighted Incline Leg Raise
+Weighted Incline Straight Leg Raise
+Weighted Lying Leg Raise
+Weighted Roman Chair Sit-up
+Weighted Seated Leg Raise
+Weighted Vertical Leg Raise
+Cable Lying Hip External Rotation
+Cable Seated Hip External Rotation
+Machine Kneeling Hip External Rotation
+Lunge
+Reverse Hyper-extension
+Single Leg Hip Bridge
+Single Leg Squat
+Split Squat
+Single Leg Split Squat
+Single Leg Stiff-leg Deadlift
+Squat
+Half Squat
+Squat on Balance Board
+Step--up
+Step-up
+Lateral Step-up
+Suspended Hip Bridge
+Suspended Single Leg Squat
+Suspended Single Leg Split Squat
+Lever Stretch
+Lying Stretch
+Lying Wall Stretch
+Prone Stretch
+Seated Stretch
+Standing Stretch
+Squatting Stretch
+Knee Hug Stretch
+Walking Ankle Grab Stretch
+Side Brdige Hip Abduction
+Angled Side Bridge
+Angled Side Bridge Hip Abduction
+Suspneded Side Bend
+Suspended Side Bridge
+Suspended Twist
+Lying Crossover Stretch
+Lying Pretzel Stretch
+Seated Hip Internal Rotator Stretch
+Seated Pretzel Stretch
+Side Pretzel Stretch
+Lying Iliotibial Stretch
+Squatting Iliotibial Stretch
+Standing Iliotibial Stretch
+Wall Iliotibial Stretch
+Hanging Leg Raise
+Incline Leg Raise
+Incline Straight Leg Raise
+Lying Leg Raise
+Lying Straight Leg Raise
+Seated Leg Raise
+Vertical Leg Raise
+Jack-knife on Ball
+Roman Chair Sit-up
+Scissor Kick
+Wheel Jack-knife
+Wheel Rollout
+Wheel Pike
+Suspended Mountain Climber
+Suspended Pike
+Bentover Lunging Stretch
+Kneeling Stretch
+Lever Stretch
+Lunging Stretch
+Lunging Stretch on Bench 
+Sled Stretch
+Weighted Sissy Squat
+Sissy Squat
+Walking Quadriceps Stretch
+Barbell Good-morning
+Barbell Glute-Ham Raise
+Barbell Inverse Leg Curll
+Barbell Inverse Leg Curl
+Barbell Hyperextension
+Trap Bar Straight-leg Deadlift
+Barbell Straight-leg Deadlift
+Cable Bent-over Leg Curl
+Cable Lying Leg Curl
+Cable Standing Leg Curl
+Cable Straight-leg Deadlift
+Dumbbell Straight-leg Deadlift
+Machine Kneeling Leg Curl
+Machine Lying Leg Curl
+Machine Seated Leg Curl
+Machine Standing Leg Curl
+Smith Machine Good-morning
+Smith Machine Straight-leg Deadlift
+Weighted Glute-Ham Raise
+Weighted Inverse Leg Curl
+Weighted Hyperextension
+Kneeling Groin
+Kneeling Groin Stretch
+Kneeling Side Lunge Stretch
+Lying Groin Stretch
+Lying Wall Groin Stretch
+Seated Groin Stretch
+Side Lunge Stretch
+Squatting Groin Stretch
+Standing Groin Stretch
+Cable Hip Adduction
+Cable Lying Hip Adduction
+Machine Seated Hip Adduction
+Machine Lying Hip Adduction
+Machine Seated Hip Adduction
+Machine Standing Hip Adduction
+Weighted Lying Hip Adduction
+Band-assisted Hamstring Raise
+Glute-Ham Raise
+Hanging Hamstring Raise
+Hanging Hamstring Bridge Curl
+Hanging Hamstring Single Leg Bridge Curl
+Hanging Leg Curl
+Inverse Leg Curl
+Straight Leg Curl (on ball)
+Leg Curl on Power Wheel
+Suspended Leg Curl
+Suspended Hamstring runner
+Suspended Hanging Leg Curl
+Suspended Hyperextension
+Soldier Kick Stretch
+Barbell Safety Calf Raise
+Barbell Standing Calf Raise
+Cable Standing Calf Raise
+Cable Standing Single Leg Calf Raise
+Dumbbell Standing Calf Raise
+Dumbbell Standing Single Leg Calf Raise
+Machine 45° Calf Press
+Machine 45° Calf Raise
+Machine Calf Extension
+Machine Donkey Calf Raise
+Machine Seated Calf Raise
+Machine Standing Calf Raise
+Machine Standing Calf Raise on V-Squat Machine
+Smith Machine Donkey Calf Raise
+Smith Machine Standing Calf Raise
+Weighted Donkey Calf Raise
+Weighted Single Leg Calf Raise
+Safety Barbell Seated Calf Raise
+Machine Seated Calf Raise
+Machine Bent-knee Calf Extension
+Machine Alternating Bent-knee Calf Extension
+Machine Seated Calf Raise
+Machine Seated Calf Extension
+Smith Machine Seated Calf Raise
+Barbell Reverse Calf Raise
+Barbell Safety Bar Reverse Calf Raise
+Cable Reverse Calf Raise
+Cable Single Leg Reverse Calf Raise
+Machine 45° Reverse Calf Raise
+Machine 45° Reverse Calf Press
+Machine Reverse Calf Raise
+Machine Reverse Calf Raise on V-Squat Machine
+Machine Reverse Calf Extension
+Machine Seated Tibia Raise
+Machine Seated Single Leg Tibia Raise
+Machine Standing Tibia Raise
+Machine Donkey Reverse Calf Raise
+Machine Reverse Calf Extension
+Machine Reverse Calf Raise
+Machine Seated Reverse Calf Raise
+Smith Machine Reverse Calf Raise
+Standing Calf Raise
+Standing Single Leg Calf Raise
+Single Leg Forward Angled Calf Raise
+Floor Board Stretch
+Lunging Stretch
+Pike Stretch
+Step Stretch
+Towel Stretch
+Wall Stretch]
+Wall Stretch
+Kneeling Stretch
+Reverse Calf Raise
+Single Leg Reverse Calf Raise
+Steinborn Squat

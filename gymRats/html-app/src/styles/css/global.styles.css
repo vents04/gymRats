@@ -1,0 +1,190 @@
+@font-face {
+  font-family: "Spartan Black";
+  src: url("../fonts/Spartan/static/Spartan-Black.ttf");
+}
+
+@font-face {
+  font-family: "Spartan Bold";
+  src: url("../fonts/Spartan/static/Spartan-Bold.ttf");
+}
+
+@font-face {
+  font-family: "Spartan ExtraBold";
+  src: url("../fonts/Spartan/static/Spartan-ExtraBold.ttf");
+}
+
+@font-face {
+  font-family: "Spartan ExtraLight";
+  src: url("../fonts/Spartan/static/Spartan-ExtraLight.ttf");
+}
+
+@font-face {
+  font-family: "Spartan Light";
+  src: url("../fonts/Spartan/static/Spartan-Light.ttf");
+}
+
+@font-face {
+  font-family: "Spartan Medium";
+  src: url("../fonts/Spartan/static/Spartan-Medium.ttf");
+}
+
+@font-face {
+  font-family: "Spartan Regular";
+  src: url("../fonts/Spartan/static/Spartan-Regular.ttf");
+}
+
+@font-face {
+  font-family: "Spartan SemiBold";
+  src: url("../fonts/Spartan/static/Spartan-SemiBold.ttf");
+}
+
+@font-face {
+  font-family: "Spartan Thin";
+  src: url("../fonts/Spartan/static/Spartan-Thin.ttf");
+}
+
+@font-face {
+  font-family: "Logo";
+  src: url("../fonts/Bebas_Neue/BebasNeue-Regular.ttf");
+}
+
+p {
+  margin-block: 0px;
+}
+
+.login-page-container {
+  padding: 2rem;
+}
+
+.login-page-logo {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-size: 30px;
+  margin-bottom: 2rem;
+}
+
+.login-page-logo-text {
+  font-family: "Logo", sans-serif;
+  margin-top: 2px;
+  font-size: 25px;
+  margin-left: 5px;
+}
+
+.login-page-title {
+  font-family: "Spartan Black", sans-serif;
+  font-size: 3rem;
+}
+
+.login-page-inputs {
+  margin: 1.5rem 0rem;
+}
+
+.login-page-input {
+  font-family: "Spartan Regular", sans-serif;
+  font-size: 0.9rem;
+  color: #262626;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  padding: 0.85rem 0.5rem 0.75rem 0.5rem;
+  margin: 0.25rem 0rem;
+  width: calc(100% - 1rem);
+}
+
+.login-page-action-button {
+  background-color: #1f6cb0;
+  padding: 0.75rem;
+  border-radius: 4px;
+  border: none;
+  width: 100%;
+  font-family: "Spartan Black", sans-serif;
+  font-size: 0.9rem;
+  color: white;
+}
+
+.login-page-text {
+  font-family: "Spartan Medium", sans-serif;
+  font-size: 0.9rem;
+  margin-top: 1rem;
+}
+
+.login-page-highlight-text {
+  color: #1f6cb0;
+  font-family: "Spartan Bold", sans-serif;
+}
+
+.error {
+  color: red;
+  font-family: "Spartan Bold", sans-serif;
+  font-size: 0.9rem;
+  margin-bottom: 1.5rem;
+}
+
+.box-container {
+  border-radius: 4px;
+  border: 1px solid #e7e7e7;
+  padding: 0.75rem;
+  margin: 0.5rem 0rem;
+}
+
+.box-container-topbar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.box-container-title {
+  margin-left: 0.75rem;
+  font-family: "Spartan Bold", sans-serif;
+  text-transform: uppercase;
+  color: #aaa;
+  font-size: 0.7rem;
+  margin-top: 2px;
+}
+
+.box-container-content {
+  margin-top: 1rem;
+}
+
+.overlay {
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  z-index: 999;
+  background-color: white;
+}
+
+.overlay-topbar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 1.5rem 1rem;
+}
+
+.overlay-title {
+  font-family: "Spartan Bold", sans-serif;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+}
+
+.overlay-topbar-column {
+  margin-left: 0.75rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.overlay-date {
+  font-size: 0.8rem;
+  color: gray;
+  font-family: "Spartan Regular", sans-serif;
+}
+
+.notation {
+  font-family: "Spartan Regular", sans-serif;
+  font-size: 0.8rem;
+  color: gray;
+}
+
+.weight-tracker-contents {
+  margin: 1rem 1.5rem;
+}

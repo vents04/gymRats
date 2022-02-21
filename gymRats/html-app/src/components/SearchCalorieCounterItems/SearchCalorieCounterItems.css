@@ -1,0 +1,16 @@
+@import "../../styles/css/global.styles.css";
+
+.calories-search {
+  padding: 1rem;
+}
+
+.calories-search-section {
+  display: flex;
+  flex-direction: column;
+  margin: 1rem 0rem;
+}
+
+.calories-search-section-title {
+  font-family: "Spartan Bold", sans-serif;
+  font-size: 0.8rem;
+}

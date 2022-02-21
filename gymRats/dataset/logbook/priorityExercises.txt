@@ -1,0 +1,83 @@
+Barbell Behind Neck Press
+Barbell Front Raise
+Barbell Military Press
+Seated Barbell Military Press
+Barbell Shoulder Press
+Reclined Barbell Shoulder Press
+Cable Front Raise
+Cable Alternating Front Raise
+Cable One Arm Front Raise
+Dumbbell Arnold Press
+Dumbbell Front Raise
+Dumbbell Alternating Front Raise
+Incline Dumbbell Alternating Front Raise
+Seated Dumbbell Alternating Front Raise
+Seated Dumbbell Front Raise
+Dumbbell Shoulder Press
+Dumbbell One Arm Shoulder Press
+Reclined Dumbbell Shoulder Press
+Smith Machine Behind Neck Press
+Smith Machine Shoulder Press
+Machine Military Press
+Reclined Machine Shoulder Press
+Machine Shoulder Press
+Machine Barbell Machine Shoulder Press
+Machine One Arm Shoulder Press
+Barbell Upright Row
+Cable Lateral Raise
+Cable One Arm Lateral Raise
+Cable Lateral Raise with Close Pulleys
+Cable Bar Upright Row
+Cable Y Raise
+Incline Dumbbell Lateral Raise
+Dumbbell Lateral Raise
+Dumbbell One Arm Lateral Raise
+Seated Dumbbell One Arm Lateral Raise
+Seated Dumbbell Lateral Raise
+Dumbbell Lying Lateral Raise
+Dumbbell Raise
+Dumbbell Upright Row
+Dumbbell One Arm Upright Row
+Seated Dumbbell Upright Row
+Barbell Machine Upright Row
+Machine Lateral Raise
+Smith Machine Upright Row
+Barbell Rear Delt Raise
+Barbell Rear Delt Row
+Cable Reverse Fly
+Seated Cable Reverse Fly
+Cable One Arm Reverse Fly
+Cable Supine Reverse Fly
+Cable Rear Delt Row
+Cable One Arm Rear Delt Row
+Cable Rear Lateral Raise
+Cable One Arm Rear Lateral Raise
+Seated Cable Rear Lateral Raise
+Standing Cable Cross Row
+Standing Cable One Arm Cross Row
+Dumbbell Lying Rear Delt Row
+Dumbbell Lying Rear Lateral Raise
+Dumbbell Lying One Arm Rear Lateral Raise
+Dumbbell Rear Lateral Raise
+Dumbbell Rear Delt Row
+Seated Dumbbell Rear Lateral Raise
+Dumbbell Side Lying Rear Delt Raise
+Incline Machine Rear Delt Row
+Machine Rear Delt Raise
+Seated Machine Rear Delt Row
+Seated Machine Rear Lateral Raise
+T-Bar Rear Delt Row
+Seated Machine Reverse Fly
+Smith Machine Rear Delt Row
+Cable Front Lateral Raise
+Dumbbell Front Lateral Raise
+Seated Dumbbell Front Lateral Raise
+Handstand Push-up
+Handstand Push-up on parallettes
+Pike Press
+Elevated Pike Press
+Suspended Front Raise
+Doorway Stretch
+Lying Front Deltoid Stretch
+Seated Front Deltoid Stretch
+Wall Stretch

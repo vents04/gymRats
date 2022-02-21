@@ -1,0 +1,143 @@
+const DATABASE_MODELS = {
+    EXERCISE: "Exercise",
+    MUSCLE: "Muscle",
+    SPLIT: "Split",
+    WORKOUT: "Workout",
+    WORKOUT_SESSION: "WorkoutSession",
+    USER: "User",
+    CALORIES_COUNTER_ITEM: "CaloriesCounterItems",
+    CALORIES_COUNTER_DAY: "CaloriesCounterDay",
+    CALORIES_COUNTER_DAILY_GOAL: "CaloriesCounterDailyGoal",
+    DAILY_WEIGHT: "DailyWeight",
+    DAILY_WATER_INTAKE: "DailyWaterIntake",
+    DAILY_WATER_INTAKE_GOAL: "DailyWaterIntakeGoal",
+    SUGGESTION: "Suggestion",
+    SUPPLEMENTS: "Supplements",
+    PERSONAL_TRAINER: "PersonalTrainer",
+    CLIENT: "Client",
+    REQUEST: "Request",
+    DIET_PLAN: "DietPlan"
+}
+
+const COLLECTIONS = {
+    EXERCISES: "exercises",
+    MUSCLES: "muscles",
+    SPLITS: "splits",
+    WORKOUTS: "workouts",
+    WORKOUT_SESSIONS: "workoutSessions",
+    USERS: "users",
+    CALORIES_COUNTER_ITEMS: "caloriesCounterItems",
+    CALORIES_COUNTER_DAYS: "caloriesCounterDays",
+    CALORIES_COUNTER_DAILY_GOALS: "caloriesCounterDailyGoals",
+    DAILY_WEIGHTS: "dailyWeights",
+    DAILY_WATER_INTAKES: "dailyWaterIntakes",
+    DAILY_WATER_INTAKE_GOALS: "dailyWaterIntakeGoals",
+    SUGGESTIONS: "suggestions",
+    PERSONAL_TRAINERS: "personalTrainers",
+    CLIENTS: "clients",
+    REQUESTS: "requests",
+    DIET_PLANS: "dietPlans"
+}
+
+const PERSONAL_TRAINER_STATUSES = {
+    ACTIVE: "ACTIVE",
+    INACTIVE: "INACTIVE",
+    BLOCKED: "BLOCKED"
+}
+
+const REQUEST_STATUSES = {
+    ACCEPTED: "ACCEPTED",
+    DECLINED: "DECLINED",
+    NOT_ANSWERED: "NOT_ANSWERED"
+}
+
+const PROFFESIONS = {
+    NUTRITIONIST: "NUTRITIONIST",
+    DIETITIAN: "DIETITIAN",
+    PERSONAL_TRAINER: "PERSONAL_TRAINER",
+    NOT_GIVEN: "NOT_GIVEN" 
+}
+
+const CARD_COLLECTIONS = [
+    COLLECTIONS.DAILY_WEIGHTS,
+    COLLECTIONS.WORKOUT_SESSIONS
+]
+
+const DB_URI = "mongodb://127.0.0.1:27017/GYM";
+
+const JWT_SECRET = "lj1ds21idpk2]312d's[23123q";
+
+const PORT = 4056;
+
+const NODE_ENVIRONMENTS = {
+    DEVELOPMENT: "DEVELOPMENT",
+    PRODUCTION: "PRODUCTION",
+}
+
+const NODE_ENVIRONMENT = NODE_ENVIRONMENTS.PRODUCTION;
+
+const HTTP_STATUS_CODES = {
+    OK: 200,
+    BAD_REQUEST: 400,
+    UNAUTHORIZED: 401,
+    FORBIDDEN: 403,
+    NOT_FOUND: 404,
+    CONFLICT: 409,
+    INTERNAL_SERVER_ERROR: 500,
+}
+
+const ROOT_URL_API = `https://api.gymrats.uploy.app`;
+
+const UNITS = {
+    1: ["sets", "reps", "kgs"],
+    2: ["sets", "duration"],
+    3: ["sets", "reps"],
+}
+
+const CALORIES_COUNTER_UNITS = {
+    MILLILITERS: "MILLILITERS",
+    GRAMS: "GRAMS"
+}
+
+const WEIGHT_UNITS = {
+    POUNDS: "POUNDS",
+    KILOGRAMS: "KILOGRAMS",
+}
+
+const WATER_INTAKE_UNITS = {
+    GLASSES: "GLASSES"
+}
+
+const CALORIES_COUNTER_MEALS = {
+    BREAKFAST: "BREAKFAST",
+    LUNCH: "LUNCH",
+    DINNER: "DINNER",
+    SNACKS: "SNACKS",
+}
+
+const SENDGRID_API_KEY = "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";
+
+const APP_EMAIL = "support@uploy.app";
+
+module.exports = {
+    DATABASE_MODELS: DATABASE_MODELS,
+    DB_URI: DB_URI,
+    COLLECTIONS: COLLECTIONS,
+    PORT: PORT,
+    NODE_ENVIRONMENT: NODE_ENVIRONMENT,
+    NODE_ENVIRONMENTS: NODE_ENVIRONMENTS,
+    HTTP_STATUS_CODES: HTTP_STATUS_CODES,
+    JWT_SECRET: JWT_SECRET,
+    ROOT_URL_API: ROOT_URL_API,
+    UNITS: UNITS,
+    CALORIES_COUNTER_UNITS: CALORIES_COUNTER_UNITS,
+    WEIGHT_UNITS: WEIGHT_UNITS,
+    WATER_INTAKE_UNITS: WATER_INTAKE_UNITS,
+    SENDGRID_API_KEY: SENDGRID_API_KEY,
+    CALORIES_COUNTER_MEALS: CALORIES_COUNTER_MEALS,
+    CARD_COLLECTIONS: CARD_COLLECTIONS,
+    APP_EMAIL: APP_EMAIL,
+    PERSONAL_TRAINER_STATUSES: PERSONAL_TRAINER_STATUSES,
+    REQUEST_STATUSES: REQUEST_STATUSES,
+    PROFFESIONS: PROFFESIONS
+}
