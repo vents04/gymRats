@@ -67,42 +67,75 @@ export default class Coaching extends Component {
                         }}>My clients</Text>
                     </View>
                     {
-                        this.state.activeTab == "myCoach" && this.state.coaching
-                            ? <View style={styles.tabContent}>
-                                {
-                                    !this.state.coaching.myCoach.hasCoach
-                                        ? <View style={styles.noCoachContainer}>
-                                            <View style={styles.noCoachTopbar}>
-                                                <MdOutlineFitnessCenter size={25} color="#1f6cb0" />
-                                                <Text style={styles.noCoachTitle}>Get in shape with Gym Rats</Text>
+                        this.state.coaching
+                            ? this.state.activeTab == "myCoach"
+                                ? <View style={styles.tabContent}>
+                                    {
+                                        !this.state.coaching.myCoach.hasCoach
+                                            ? <View style={styles.noCoachContainer}>
+                                                <View style={styles.noCoachTopbar}>
+                                                    <MdOutlineFitnessCenter size={25} color="#1f6cb0" />
+                                                    <Text style={styles.noCoachTitle}>Get in shape with Gym Rats</Text>
+                                                </View>
+                                                <Text style={styles.noCoachDescription}>All of our coaches are:</Text>
+                                                <View style={styles.noCoachProContainer}>
+                                                    <BsShieldFillCheck color="#1f6cb0" style={styles.noCoachProIcon} />
+                                                    <Text style={styles.noCoachPro}>Single handedly approved by us</Text>
+                                                </View>
+                                                <View style={styles.noCoachProContainer}>
+                                                    <BsShieldFillCheck color="#1f6cb0" style={styles.noCoachProIcon} />
+                                                    <Text style={styles.noCoachPro}>Motivated and ready to help</Text>
+                                                </View>
+                                                <View style={styles.noCoachProContainer}>
+                                                    <BsShieldFillCheck color="#1f6cb0" style={styles.noCoachProIcon} />
+                                                    <Text style={styles.noCoachPro}>Capable of training people with different goals</Text>
+                                                </View>
+                                                <TouchableOpacity style={[globalStyles.authPageActionButton, {
+                                                    marginTop: 30
+                                                }]} onPress={() => {
+                                                }}>
+                                                    <Text style={globalStyles.authPageActionButtonText}>Search coaches</Text>
+                                                </TouchableOpacity>
                                             </View>
-                                            <Text style={styles.noCoachDescription}>All of our coaches are:</Text>
-                                            <View style={styles.noCoachProContainer}>
-                                                <BsShieldFillCheck color="#1f6cb0" style={styles.noCoachProIcon} />
-                                                <Text style={styles.noCoachPro}>Single handedly approved by us</Text>
-                                            </View>
-                                            <View style={styles.noCoachProContainer}>
-                                                <BsShieldFillCheck color="#1f6cb0" style={styles.noCoachProIcon} />
-                                                <Text style={styles.noCoachPro}>Motivated and ready to help</Text>
-                                            </View>
-                                            <View style={styles.noCoachProContainer}>
-                                                <BsShieldFillCheck color="#1f6cb0" style={styles.noCoachProIcon} />
-                                                <Text style={styles.noCoachPro}>Capable of training people with different goals</Text>
-                                            </View>
-                                            <TouchableOpacity style={[globalStyles.authPageActionButton, {
-                                                marginTop: 30
-                                            }]} onPress={() => {
-                                            }}>
-                                                <Text style={globalStyles.authPageActionButtonText}>Search coaches</Text>
-                                            </TouchableOpacity>
+                                            : null
+                                    }
+                                </View>
+                                : !this.state.coaching.myClients.isPersonalTrainer
+                                    ? <View style={styles.noCoachContainer}>
+                                        <View style={styles.noCoachTopbar}>
+                                            <MdOutlineFitnessCenter size={25} color="#1f6cb0" />
+                                            <Text style={styles.noCoachTitle}>Be a couch at Gym Rats</Text>
                                         </View>
-                                        : null
-                                }
-                            </View>
+                                        <Text style={styles.noCoachDescription}>Catch the opportunity to:</Text>
+                                        <View style={styles.noCoachProContainer}>
+                                            <BsShieldFillCheck color="#1f6cb0" style={styles.noCoachProIcon} />
+                                            <Text style={styles.noCoachPro}>Work with people locally and internationally</Text>
+                                        </View>
+                                        <View style={styles.noCoachProContainer}>
+                                            <BsShieldFillCheck color="#1f6cb0" style={styles.noCoachProIcon} />
+                                            <Text style={styles.noCoachPro}>Get access to your clients' Gym Rats data (logbooks, diet, weight and etc.)</Text>
+                                        </View>
+                                        <View style={styles.noCoachProContainer}>
+                                            <BsShieldFillCheck color="#1f6cb0" style={styles.noCoachProIcon} />
+                                            <Text style={styles.noCoachPro}>Get the most out of what you have earned through Gym Rats</Text>
+                                        </View>
+                                        <TouchableOpacity style={[globalStyles.authPageActionButton, {
+                                            marginTop: 30
+                                        }]} onPress={() => {
+                                        }}>
+                                            <Text style={globalStyles.authPageActionButtonText}>Submit application</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                    : null
                             : null
                     }
                 </View>
             </View>
         )
     }
+
+    /*
+Be able to have access to your clients' data in Gym Rats. You can check what they are eating, what they are training and many more
+Get the most of what you have earned. Gym Rats will get only 5% cut from your earnings through the app. We do not require you to receive payments through our system
+    */
 }
