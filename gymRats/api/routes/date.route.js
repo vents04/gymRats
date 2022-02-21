@@ -27,6 +27,7 @@ router.get('/:date/:timezoneOffset', authenticate, async (req, res, next) => {
                     case COLLECTIONS.DAILY_WEIGHTS:
                         const trend = await WeightTrackerService.getDailyTrend(currentUserRecord._id);
                         currentUserRecord.trend = trend;
+                        currentUserRecord.weight = parseFloat(currentUserRecord.weight).toFixed(2);
                         break;
                     case COLLECTIONS.WORKOUT_SESSIONS:
                         let exercises = [];

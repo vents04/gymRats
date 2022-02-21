@@ -148,7 +148,7 @@ export default class Calendar extends Component {
                                                                 weightUnit: card.data.unit,
                                                                 _id: card.data._id
                                                             });
-                                                        }} key={card.data._id} />
+                                                        }} key={card.data._id} data={card.data} rerender={this.reloadDateAfterDelete} date={this.state.selectedDate} />
                                                         : card.card == 'workoutSessions'
                                                             ? <LogbookCard actionButtonFunction={() => {
                                                                 this.props.navigation.navigate("Logbook", {

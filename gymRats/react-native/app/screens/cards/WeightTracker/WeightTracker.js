@@ -15,7 +15,6 @@ export default class WeightTracker extends Component {
         weight: null,
         weightUnit: "KILOGRAMS",
         showSaving: false,
-        showDeleting: false,
         showError: false,
         error: "",
         originalRecord: null
@@ -23,7 +22,7 @@ export default class WeightTracker extends Component {
 
     componentDidMount() {
         this.setState({
-            weightUnit: (this.props.route.params.weightUnit) ? this.props.route.params.weightUnit : "KILOGRAMS",
+            weightUnit: (this.props.route.params.weightUnit) ? this.props.route.params.weightUnit : this.getWeightUnit(),
             weight: (this.props.route.params.weight) ? this.props.route.params.weight : null
         }, () => {
             if (this.state.weight) {
@@ -35,6 +34,24 @@ export default class WeightTracker extends Component {
                 })
             }
         });
+    }
+
+    getWeightUnit = () => {
+        ApiRequests.get("user/profile", {}, true).then((response) => {
+            this.setState({ weightUnit: response.data.weightUnit });
+        }).catch((error) => {
+            if (error.response) {
+                if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
+                    this.setState({ showError: true, error: error.response.data });
+                } else {
+                    ApiRequests.showInternalServerError();
+                }
+            } else if (error.request) {
+                ApiRequests.showNoResponseError();
+            } else {
+                ApiRequests.showRequestSettingError();
+            }
+        })
     }
 
     postWeight = () => {
@@ -83,7 +100,7 @@ export default class WeightTracker extends Component {
             <View style={globalStyles.pageContainer}>
                 <View style={globalStyles.followUpScreenTopbar}>
                     <BiArrowBack size={25} onClick={() => {
-                        this.props.navigation.navigate("Calendar")
+                        this.props.navigation.navigate("Calendar", { reloadDate: true, date: this.props.route.params.date })
                     }} />
                     <Text style={globalStyles.followUpScreenTitle}>Weight</Text>
                 </View>
@@ -96,18 +113,7 @@ export default class WeightTracker extends Component {
                         placeholder="Weight:"
                         editable={!this.state.showSaving}
                         onChangeText={(val) => { this.setState({ weight: val, showError: false }) }} />
-                    <Picker
-                        style={[styles.editSectionInput, {
-                            width: "20%"
-                        }]}
-                        enabled={!this.state.showSaving}
-                        selectedValue={this.state.weightUnit}
-                        onValueChange={(value) =>
-                            this.setState({ weightUnit: value, showError: false })
-                        }>
-                        <Picker.Item label="kgs" value="KILOGRAMS" />
-                        <Picker.Item label="lbs" value="POUNDS" />
-                    </Picker>
+                    <Text style={styles.editSectionInput}>{this.state.weightUnit == "KILOGRAMS" ? "kgs" : "lbs"}</Text>
                 </View>
                 {
                     this.state.showError
@@ -136,25 +142,7 @@ export default class WeightTracker extends Component {
                             </Text>
                     }
                 </TouchableOpacity>
-                {
-                    this.state.originalRecord
-                    && <TouchableOpacity style={[globalStyles.authPageActionButton, {
-                        backgroundColor: cardColors.negative,
-                        marginTop: 16
-                    }]} onPress={() => {
-                        if (!this.state.showSaving && !this.state.showDeleting) this.deleteWeight();
-                    }}>
-                        {
-                            this.state.showDeleting
-                                ? <ActivityIndicator
-                                    animating={true}
-                                    size="small"
-                                    color="#fff" />
-                                : <Text style={globalStyles.authPageActionButtonText}>Delete daily weight</Text>
-                        }
-                    </TouchableOpacity>
-                }
             </View>
-        </View>;
+        </View >;
     }
 }

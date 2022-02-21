@@ -47,16 +47,15 @@ router.post("/daily-weight", authenticate, async (req, res, next) => {
     }
 });
 
-router.delete("/daily-weight/:id", authenticate, async (req, res, next) => {
-    if (!mongoose.Types.ObjectId(req.params.id)) {
-        return next(new ResponseError("Invalid id", HTTP_STATUS_CODES.BAD_REQUEST));
-    }
-
+router.delete("/daily-weight/:date/:timezoneOffset", authenticate, async (req, res, next) => {
     try {
-        const dailyWeight = await DbService.getById(COLLECTIONS.DAILY_WEIGHTS, req.params.id);
-        if (!dailyWeight) return next(new ResponseError("Daily weight not found", HTTP_STATUS_CODES.NOT_FOUND));
-        if (dailyWeight.userId.toString() != req.user._id.toString()) return next(new ResponseError("Forbidden", HTTP_STATUS_CODES.FORBIDDEN));
-        await DbService.delete(COLLECTIONS.DAILY_WEIGHTS, { _id: mongoose.Types.ObjectId(req.params.id) });
+        const date = new Date(new Date(req.params.date).setMinutes(new Date(req.params.date).getMinutes() - req.params.timezoneOffset));
+        await DbService.delete(COLLECTIONS.DAILY_WEIGHTS, {
+            userId: mongoose.Types.ObjectId(req.user._id),
+            date: +date.getDate(),
+            month: +date.getMonth() + 1,
+            year: +date.getFullYear(),
+        });
         res.sendStatus(HTTP_STATUS_CODES.OK);
     } catch (error) {
         return next(new ResponseError(error.message || "Internal server error", error.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));

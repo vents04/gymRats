@@ -1,4 +1,4 @@
-const { HTTP_STATUS_CODES, COLLECTIONS, WEIGHT_UNITS } = require("../../global");
+const { HTTP_STATUS_CODES, COLLECTIONS, WEIGHT_UNITS, WEIGHT_UNIT_RELATIONS } = require("../../global");
 const DbService = require("../db.service");
 const mongoose = require("mongoose");
 const ResponseError = require("../../errors/responseError");
@@ -15,11 +15,11 @@ const WeightTrackerService = {
                         if (previousDailyWeight.unit != dailyWeight.unit) {
                             switch (previousDailyWeight.unit) {
                                 case WEIGHT_UNITS.KILOGRAMS:
-                                    previousDailyWeight.weight = previousDailyWeight.weight * 2.20462;
+                                    previousDailyWeight.weight = previousDailyWeight.weight * WEIGHT_UNIT_RELATIONS.KILOGRAMS.POUNDS;
                                     previousDailyWeight.unit = WEIGHT_UNITS.POUNDS;
                                     break;
                                 case WEIGHT_UNITS.POUNDS:
-                                    previousDailyWeight.weight = previousDailyWeight.weight * 0.453592;
+                                    previousDailyWeight.weight = previousDailyWeight.weight * WEIGHT_UNIT_RELATIONS.POUNDS.KILOGRAMS;
                                     previousDailyWeight.unit = WEIGHT_UNITS.KILOGRAMS;
                             }
                         }
@@ -83,11 +83,11 @@ const WeightTrackerService = {
                     if (dailyWeight.unit != currentUnit) {
                         switch (dailyWeight.unit) {
                             case WEIGHT_UNITS.KILOGRAMS:
-                                dailyWeight.weight = dailyWeight.weight * 2.20462;
+                                dailyWeight.weight = dailyWeight.weight * WEIGHT_UNIT_RELATIONS.KILOGRAMS.POUNDS;
                                 dailyWeight.unit = WEIGHT_UNITS.POUNDS;
                                 break;
                             case WEIGHT_UNITS.POUNDS:
-                                dailyWeight.weight = dailyWeight.weight * 0.453592;
+                                dailyWeight.weight = dailyWeight.weight * WEIGHT_UNIT_RELATIONS.POUNDS.KILOGRAMS;
                                 dailyWeight.unit = WEIGHT_UNITS.KILOGRAMS;
                         }
                     }
@@ -104,6 +104,29 @@ const WeightTrackerService = {
     getWeeklyAverage: (_id) => {
         return new Promise(async (resolve, reject) => {
 
+        })
+    },
+
+    updateAllWeightUnits: (userId, currentWeightUnit) => {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const dailyWeights = await DbService.getMany(COLLECTIONS.DAILY_WEIGHTS, { userId: mongoose.Types.ObjectId(userId) });
+                for (let dailyWeight of dailyWeights) {
+                    if (dailyWeight.unit != currentWeightUnit) {
+                        switch (dailyWeight.unit) {
+                            case WEIGHT_UNITS.KILOGRAMS:
+                                await DbService.update(COLLECTIONS.DAILY_WEIGHTS, { _id: mongoose.Types.ObjectId(dailyWeight._id) }, { weight: dailyWeight.weight * WEIGHT_UNIT_RELATIONS.KILOGRAMS.POUNDS, unit: WEIGHT_UNITS.POUNDS })
+                                break;
+                            case WEIGHT_UNITS.POUNDS:
+                                await DbService.update(COLLECTIONS.DAILY_WEIGHTS, { _id: mongoose.Types.ObjectId(dailyWeight._id) }, { weight: dailyWeight.weight * WEIGHT_UNIT_RELATIONS.POUNDS.KILOGRAMS, unit: WEIGHT_UNITS.KILOGRAMS })
+                                break;
+                        }
+                    }
+                }
+                resolve();
+            } catch (error) {
+                reject(new ResponseError(error.message || "Internal server error"));
+            }
         })
     }
 }

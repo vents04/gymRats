@@ -236,3 +236,6 @@
 {"level":"error","message":"card is not defined"}
 {"level":"error","message":"Token not provided"}
 {"level":"error","message":"Cannot read properties of undefined (reading '_id')"}
+{"level":"error","message":"DbService.findById is not a function"}
+{"level":"error","message":"DbService.findById is not a function"}
+{"level":"error","message":"DbService.findById is not a function"}

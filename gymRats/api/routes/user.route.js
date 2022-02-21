@@ -11,6 +11,7 @@ const ResponseError = require('../errors/responseError');
 const DbService = require('../services/db.service');
 const AuthenticationService = require('../services/authentication.service');
 const Suggestion = require('../db/models/generic/suggestion.model');
+const WeightTrackerService = require('../services/cards/weightTracker.service');
 
 router.post("/signup", async (req, res, next) => {
     const { error } = signupValidation(req.body);
@@ -62,8 +63,9 @@ router.put("/", authenticate, async (req, res, next) => {
     if (error) return next(new ResponseError(error.details[0].message, HTTP_STATUS_CODES.BAD_REQUEST));
 
     try {
-        await DbService.update(COLLECTIONS.USERS, { _id: mongoose.Types.ObjectId(req.user._id) }, req.body)
-
+        await DbService.update(COLLECTIONS.USERS, { _id: mongoose.Types.ObjectId(req.user._id) }, req.body);
+        const user = await DbService.getById(COLLECTIONS.USERS, req.user._id);
+        await WeightTrackerService.updateAllWeightUnits(req.user._id, user.weightUnit);
         res.sendStatus(HTTP_STATUS_CODES.OK);
     } catch (err) {
         return next(new ResponseError(err.message || "Internal server error", err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
@@ -122,7 +124,6 @@ router.get("/profile", authenticate, async (req, res, next) => {
         const user = await DbService.getById(COLLECTIONS.USERS, req.user._id);
         if (!user) return next(new ResponseError("User not found", HTTP_STATUS_CODES.NOT_FOUND))
 
-        console.log(user)
         res.status(HTTP_STATUS_CODES.OK).send({
             firstName: user.firstName,
             lastName: user.lastName,
