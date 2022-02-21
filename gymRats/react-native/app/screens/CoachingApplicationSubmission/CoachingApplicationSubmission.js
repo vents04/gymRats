@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
-import { BiArrowBack } from 'react-icons/bi'
-import { Dimensions, ScrollView, Text, View } from 'react-native'
+import { BiArrowBack } from 'react-icons/bi';
+import { Text, View } from 'react-native';
 
-const globalStyles = require('../../../assets/styles/global.styles');
+const globalStyles = require('../../../../assets/styles/global.styles');
 const styles = require('./CoachingApplicationSubmission.styles');
 
 export default class CoachingApplicationSubmission extends Component {
@@ -16,11 +16,6 @@ export default class CoachingApplicationSubmission extends Component {
                         }} />
                         <Text style={globalStyles.followUpScreenTitle}>Application submission</Text>
                     </View>
-                    <ScrollView style={{
-                        height: `${Dimensions.get('window').height - 140}px`
-                    }}>
-
-                    </ScrollView>
                 </View>
             </View>
         )
