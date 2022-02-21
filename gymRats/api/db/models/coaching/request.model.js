@@ -20,6 +20,10 @@ const requestSchema = mongoose.Schema({
         type: String,
         enum: Object.values(REQUEST_STATUSES),
         default: REQUEST_STATUSES.NOT_ANSWERED
+    },
+    hasSubmittedReview: {
+        type: Boolean,
+        default: false
     }
 });
 

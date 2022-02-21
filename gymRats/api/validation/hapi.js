@@ -279,6 +279,14 @@ const requestsStatusUpdateValidation = (data) => {
     return schema.validate(data);
 }
 
+const coachingReviewPostValidation = (data) => {
+    const schema = Joi.object({
+        rating: Joi.number().min(1).max(10).required(),
+        review: Joi.string().min(1).max(1000).optional()
+    });
+    return schema.validate(data);
+}
+
 module.exports = {
     signupValidation,
     loginValidation,
@@ -296,5 +304,6 @@ module.exports = {
     supplementsReminderValidation,
     workoutTemplateCheckValidation,
     requestValidation,
-    requestsStatusUpdateValidation
+    requestsStatusUpdateValidation,
+    coachingReviewPostValidation
 }
