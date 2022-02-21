@@ -7,6 +7,22 @@ const personalTrainerSchema = mongoose.Schema({
         required: true,
         ref: COLLECTIONS.USERS
     },
+    location: {
+        address: {
+            type: String,
+            min: 1,
+            max: 100,
+            required: true,
+        },
+        lat: {
+            type: Number,
+            required: true,
+        },
+        lng: {
+            type: Number,
+            required: true,
+        }
+    },
     timeOfCreation: {
         type: Number,
         default: Date.now
