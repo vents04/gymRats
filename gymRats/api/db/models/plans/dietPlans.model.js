@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { DATABASE_MODELS, PROFFESIONS } = require('../../../global');
+const { DATABASE_MODELS, PROFESSIONS } = require('../../../global');
 
 const dietPlanSchema = mongoose.Schema({
     title: {
@@ -14,10 +14,10 @@ const dietPlanSchema = mongoose.Schema({
         min: 1,
         max: 100
     },
-    creatorProffesion: [{
+    creatorProfession: [{
         name: {
             type: String,
-            enum: Object.values(PROFFESIONS),
+            enum: Object.values(PROFESSIONS),
         }
     }]
 });
