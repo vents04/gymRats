@@ -17,6 +17,7 @@ import WeightTracker from '../screens/cards/WeightTracker/WeightTracker';
 import Logbook from '../screens/cards/Logbook/Logbook';
 import ExerciseSearch from '../screens/cards/ExerciseSearch/ExerciseSearch';
 import Coaching from '../screens/Coaching/Coaching';
+import CoachingApplicationSubmission from '../screens/CoachingApplicationSubmission/CoachingApplicationSubmission';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -65,6 +66,13 @@ const coachingScreenStack = ({ navigation }) => {
                     headerShown: false
                 }}
                 component={Coaching}
+            />
+            <Stack.Screen
+                name="CoachingApplicationSubmission"
+                options={{
+                    headerShown: false
+                }}
+                component={CoachingApplicationSubmission}
             />
         </Stack.Navigator>
     )

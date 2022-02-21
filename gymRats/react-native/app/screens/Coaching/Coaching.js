@@ -100,33 +100,38 @@ export default class Coaching extends Component {
                                             : null
                                     }
                                 </View>
-                                : !this.state.coaching.myClients.isPersonalTrainer
-                                    ? <View style={styles.noCoachContainer}>
-                                        <View style={styles.noCoachTopbar}>
-                                            <MdOutlineFitnessCenter size={25} color="#1f6cb0" />
-                                            <Text style={styles.noCoachTitle}>Be a couch at Gym Rats</Text>
-                                        </View>
-                                        <Text style={styles.noCoachDescription}>Catch the opportunity to:</Text>
-                                        <View style={styles.noCoachProContainer}>
-                                            <BsShieldFillCheck color="#1f6cb0" style={styles.noCoachProIcon} />
-                                            <Text style={styles.noCoachPro}>Work with people locally and internationally</Text>
-                                        </View>
-                                        <View style={styles.noCoachProContainer}>
-                                            <BsShieldFillCheck color="#1f6cb0" style={styles.noCoachProIcon} />
-                                            <Text style={styles.noCoachPro}>Get access to your clients' Gym Rats data (logbooks, diet, weight and etc.)</Text>
-                                        </View>
-                                        <View style={styles.noCoachProContainer}>
-                                            <BsShieldFillCheck color="#1f6cb0" style={styles.noCoachProIcon} />
-                                            <Text style={styles.noCoachPro}>Get the most out of what you have earned through Gym Rats</Text>
-                                        </View>
-                                        <TouchableOpacity style={[globalStyles.authPageActionButton, {
-                                            marginTop: 30
-                                        }]} onPress={() => {
-                                        }}>
-                                            <Text style={globalStyles.authPageActionButtonText}>Submit application</Text>
-                                        </TouchableOpacity>
-                                    </View>
-                                    : null
+                                : <View style={styles.tabContent}>
+                                    {
+                                        !this.state.coaching.myClients.isPersonalTrainer
+                                            ? <View style={styles.noCoachContainer}>
+                                                <View style={styles.noCoachTopbar}>
+                                                    <MdOutlineFitnessCenter size={25} color="#1f6cb0" />
+                                                    <Text style={styles.noCoachTitle}>Be a couch at Gym Rats</Text>
+                                                </View>
+                                                <Text style={styles.noCoachDescription}>Catch the opportunity to:</Text>
+                                                <View style={styles.noCoachProContainer}>
+                                                    <BsShieldFillCheck color="#1f6cb0" style={styles.noCoachProIcon} />
+                                                    <Text style={styles.noCoachPro}>Work with people locally and internationally</Text>
+                                                </View>
+                                                <View style={styles.noCoachProContainer}>
+                                                    <BsShieldFillCheck color="#1f6cb0" style={styles.noCoachProIcon} />
+                                                    <Text style={styles.noCoachPro}>Get access to your clients' Gym Rats data (logbooks, diet, weight and etc.)</Text>
+                                                </View>
+                                                <View style={styles.noCoachProContainer}>
+                                                    <BsShieldFillCheck color="#1f6cb0" style={styles.noCoachProIcon} />
+                                                    <Text style={styles.noCoachPro}>Get the most out of what you have earned through Gym Rats</Text>
+                                                </View>
+                                                <TouchableOpacity style={[globalStyles.authPageActionButton, {
+                                                    marginTop: 30
+                                                }]} onPress={() => {
+                                                    this.props.navigation.navigate("CoachingApplicationSubmission");
+                                                }}>
+                                                    <Text style={globalStyles.authPageActionButtonText}>Submit application</Text>
+                                                </TouchableOpacity>
+                                            </View>
+                                            : null
+                                    }
+                                </View>
                             : null
                     }
                 </View>
