@@ -287,6 +287,13 @@ const coachingReviewPostValidation = (data) => {
     return schema.validate(data);
 }
 
+const googlePlacesSearchValidation = (data) => {
+    const schema = Joi.object({
+        query: Joi.string().required().allow(null).allow("")
+    });
+    return schema.validate(data);
+}
+
 module.exports = {
     signupValidation,
     loginValidation,
@@ -305,5 +312,6 @@ module.exports = {
     workoutTemplateCheckValidation,
     requestValidation,
     requestsStatusUpdateValidation,
-    coachingReviewPostValidation
+    coachingReviewPostValidation,
+    googlePlacesSearchValidation
 }

@@ -59,7 +59,7 @@ const calendarScreenStack = ({ navigation }) => {
 
 const coachingScreenStack = ({ navigation }) => {
     return (
-        <Stack.Navigator initialRouteName="Coaching">
+        <Stack.Navigator initialRouteName="CoachingApplicationSubmission">
             <Stack.Screen
                 name="Coaching"
                 options={{
@@ -136,28 +136,6 @@ const NavigationRoutes = (props) => {
                 },
             }}>
             <Tab.Screen
-                name="calendarScreenStack"
-                options={{
-                    tabBarLabel: 'Calendar',
-                    headerShown: false,
-                    tabBarActiveTintColor: "#ccc",
-                    tabBarIcon: (tabInfo) =>
-                    (
-                        <View style={styles.tabBarIconContainer}>
-                            <BiCalendar
-                                size={30}
-                                color={tabInfo.focused ? "#1f6cb0" : "#ccc"}
-                            />
-                            <Text style={[styles.tabBarIconText, {
-                                fontFamily: (tabInfo.focused ? "SpartanBold" : "SpartanRegular")
-                            }]}>Calendar</Text>
-                        </View>
-                    )
-
-                }}
-                component={calendarScreenStack}
-            />
-            <Tab.Screen
                 name="coachingScreenStack"
                 options={{
                     tabBarLabel: 'Coaching',
@@ -178,6 +156,28 @@ const NavigationRoutes = (props) => {
 
                 }}
                 component={coachingScreenStack}
+            />
+            <Tab.Screen
+                name="calendarScreenStack"
+                options={{
+                    tabBarLabel: 'Calendar',
+                    headerShown: false,
+                    tabBarActiveTintColor: "#ccc",
+                    tabBarIcon: (tabInfo) =>
+                    (
+                        <View style={styles.tabBarIconContainer}>
+                            <BiCalendar
+                                size={30}
+                                color={tabInfo.focused ? "#1f6cb0" : "#ccc"}
+                            />
+                            <Text style={[styles.tabBarIconText, {
+                                fontFamily: (tabInfo.focused ? "SpartanBold" : "SpartanRegular")
+                            }]}>Calendar</Text>
+                        </View>
+                    )
+
+                }}
+                component={calendarScreenStack}
             />
             <Tab.Screen
                 name="profileScreenStack"

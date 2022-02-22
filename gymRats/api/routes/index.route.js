@@ -8,6 +8,7 @@ const waterIntakeRoute = require("./waterIntake.route");
 const logbookRoute = require("./logbook.route");
 const dateRoute = require("./date.route");
 const coachingRoute = require("./coaching.route");
+const googleRoute = require("./google.route");
 
 router.use("/user", userRoute);
 router.use("/calories-counter", caloriesCounterRoute);
@@ -16,5 +17,6 @@ router.use("/water-intake", waterIntakeRoute);
 router.use("/logbook", logbookRoute);
 router.use("/date", dateRoute);
 router.use("/coaching", coachingRoute);
+router.use("/google", googleRoute);
 
 module.exports = router;
