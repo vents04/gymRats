@@ -294,6 +294,17 @@ const googlePlacesSearchValidation = (data) => {
     return schema.validate(data);
 }
 
+const coachApplicationPostValidation = (data) => {
+    const schema = Joi.object({
+        location: Joi.object({
+            address: Joi.string().required(),
+            lat: Joi.number().required(),
+            lng: Joi.number().required(),
+        })
+    });
+    return schema.validate(data);
+}
+
 module.exports = {
     signupValidation,
     loginValidation,
@@ -313,5 +324,6 @@ module.exports = {
     requestValidation,
     requestsStatusUpdateValidation,
     coachingReviewPostValidation,
-    googlePlacesSearchValidation
+    googlePlacesSearchValidation,
+    coachApplicationPostValidation
 }

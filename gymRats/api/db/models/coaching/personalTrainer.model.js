@@ -30,7 +30,7 @@ const personalTrainerSchema = mongoose.Schema({
     status: {
         type: String,
         enum: Object.values(PERSONAL_TRAINER_STATUSES),
-        default: PERSONAL_TRAINER_STATUSES.INACTIVE
+        default: PERSONAL_TRAINER_STATUSES.PENDING
     }
 });
 

@@ -6,7 +6,8 @@ const DbService = require('../services/db.service');
 const Request = require('../db/models/coaching/request.model');
 const router = express.Router();
 const { authenticate } = require('../middlewares/authenticate');
-const { requestValidation, requestsStatusUpdateValidation, coachingReviewPostValidation } = require('../validation/hapi');
+const { requestValidation, requestsStatusUpdateValidation, coachingReviewPostValidation, coachApplicationPostValidation } = require('../validation/hapi');
+const PersonalTrainer = require('../db/models/coaching/personalTrainer.model');
 
 router.get('/', authenticate, async (req, res, next) => {
     try {
@@ -46,6 +47,26 @@ router.get('/', authenticate, async (req, res, next) => {
         return next(new ResponseError(err.message || "Internal server error", err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
     }
 })
+
+router.post('/application', authenticate, async (req, res, next) => {
+    const { error } = coachApplicationPostValidation(req.body);
+    if (error) return next(new ResponseError(error.details[0].message, HTTP_STATUS_CODES.BAD_REQUEST));
+
+    try {
+        const personalTrainer = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, { userId: mongoose.Types.ObjectId(req.user._id) });
+        if (personalTrainer) return next(new ResponseError("Request denied", HTTP_STATUS_CODES.CONFLICT));
+
+        const newPersonalTrainer = new PersonalTrainer({
+            userId: mongoose.Types.ObjectId(req.user._id),
+            location: req.body.location
+        })
+        await DbService.create(COLLECTIONS.PERSONAL_TRAINERS, newPersonalTrainer);
+
+        res.sendStatus(HTTP_STATUS_CODES.OK);
+    } catch (error) {
+        return next(new ResponseError(error.message || "Internal server error", error.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+    }
+});
 
 router.post('/request', authenticate, async (req, res, next) => {
     const { error } = requestValidation(req.body);

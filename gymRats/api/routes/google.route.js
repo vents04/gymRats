@@ -23,8 +23,20 @@ router.get('/search-places', authenticate, async (req, res, next) => {
     }
 })
 
-router.get('', async (req, res, next) => {
-    res.sendStatus(HTTP_STATUS_CODES.OK)
+router.get('/place/:id', authenticate, async (req, res, next) => {
+    try {
+        axios.get(`https://maps.googleapis.com/maps/api/place/details/json?place_id=${req.params.id}&key=${GOOGLE_API_KEY}`)
+            .then((response) => {
+                res.status(HTTP_STATUS_CODES.OK).send({
+                    result: response.data.result
+                })
+            })
+            .catch((error) => {
+                throw new Error(error);
+            })
+    } catch (e) {
+        return next(new ResponseError(e.message || "Internal server error", e.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+    }
 })
 
 module.exports = router;

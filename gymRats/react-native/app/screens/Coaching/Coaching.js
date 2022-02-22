@@ -17,8 +17,23 @@ export default class Coaching extends Component {
         coaching: null
     }
 
-    componentDidMount() {
+    focusListener;
+
+    onFocusFunction = () => {
+        if (this.props && this.props.route && this.props.route.params && this.props.route.params.tab) {
+            this.setState({ activeTab: this.props.route.params.tab });
+        }
         this.getCoachingPageState();
+    }
+
+    componentDidMount() {
+        this.focusListener = this.props.navigation.addListener('focus', () => {
+            this.onFocusFunction()
+        })
+    }
+
+    componentWillUnmount() {
+        if (this.focusListener) this.focusListener()
     }
 
     getCoachingPageState = () => {
