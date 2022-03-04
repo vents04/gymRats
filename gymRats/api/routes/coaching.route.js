@@ -158,4 +158,69 @@ router.post('/review/:id', authenticate, async (req, res, next) => {
     }
 });
 
+router.get("/coach/search", authenticate, async (req, res, next) => {
+    let words = req.query.name;
+    if (!words) {
+        const trainers = await DbService.getMany(COLLECTIONS.PERSONAL_TRAINERS, {});
+        return res.status(HTTP_STATUS_CODES.OK).send({
+            results: trainers
+        })
+    }
+    try {
+        words = words.split(" ");
+        let sorted = [];
+        if (words) {
+            for (let word of words) {
+                const users = await DbService.getMany(COLLECTIONS.USERS, { "$and": [{ firstName: { "$regex": word } }, { lastName: { "$regex": word } }] });
+                for (let user in users) {
+                    const trainer = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, { _id: mongoose.Types.ObjectId(user._id) });
+                    if (trainer) {
+                        sorted.push(trainer);
+                    }
+                }
+            }
+        }
+        for (let i = 0; i < sorted.length - 1; i++) {
+            if(req.body.lat && req.body.lng){
+                if (req.body.maxDistance) {
+                    sorted[i].location.lng = sorted[i].location.lng * Math.PI / 180;
+                    req.body.lng = req.body.lng * Math.PI / 180;
+
+                    sorted[i].location.lat = sorted[i].location.lat * Math.PI / 180;
+                    req.body.lat = req.body.lat * Math.PI / 180;
+
+                    let dlon = req.body.lng - sorted[i].location.lng;
+                    let dlat = req.body.lat - sorted[i].location.lat;
+                    let a = Math.pow(Math.sin(dlat / 2), 2)
+                        + Math.cos(lat1) * Math.cos(lat2)
+                        * Math.pow(Math.sin(dlon / 2), 2);
+
+                    let c = 2 * Math.asin(Math.sqrt(a));
+
+                    let radius = 6371;
+
+                    if(c * radius > req.body.maxDistance){
+                        sorted.splice(i, 1);
+                        i--;
+                        continue;
+                    }
+                }
+                if(req.body.minRating){
+                    const reviews = await DbService.getMany(COLLECTIONS.REVIEWS, {});
+                    for(let review of reviews){
+                        const request = await DbService.getMany(COLLECTIONS.REQUESTS, {_id: mongoose.Types.ObjectId(review.requestId)});
+                        if(request.initiatorId.toString() == sorted[i]._id.toString()){
+
+                        }
+                    }
+                }
+            }
+        }
+        return res.status(HTTP_STATUS_CODES.OK).send({
+            results: sorted
+        })
+    } catch (error) {
+        return next(new ResponseError(error.message || "Internal server error", error.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+    }
+});
 module.exports = router;
