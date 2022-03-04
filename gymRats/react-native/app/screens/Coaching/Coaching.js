@@ -17,6 +17,12 @@ export default class Coaching extends Component {
         coaching: null
     }
 
+    personalTrainerStatusMessages = {
+        "PENDING": "Your personal trainer account is being reviewed by our team and will become active soon",
+        "ACTIVE": "You do not have any clients, yet",
+        "BLOCKED": "You have been blocked by our team. Contact us at support@uploy.app for more information",
+    }
+
     focusListener;
 
     onFocusFunction = () => {
@@ -39,6 +45,7 @@ export default class Coaching extends Component {
     getCoachingPageState = () => {
         ApiRequests.get("coaching", {}, true).then((response) => {
             this.setState({ coaching: response.data.coaching });
+            console.log(response.data.coaching);
         }).catch((error) => {
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
@@ -108,6 +115,7 @@ export default class Coaching extends Component {
                                                 <TouchableOpacity style={[globalStyles.authPageActionButton, {
                                                     marginTop: 30
                                                 }]} onPress={() => {
+                                                    this.props.navigation.navigate("CoachSearch");
                                                 }}>
                                                     <Text style={globalStyles.authPageActionButtonText}>Search coaches</Text>
                                                 </TouchableOpacity>
@@ -144,7 +152,18 @@ export default class Coaching extends Component {
                                                     <Text style={globalStyles.authPageActionButtonText}>Submit application</Text>
                                                 </TouchableOpacity>
                                             </View>
-                                            : null
+                                            : <>
+                                                {
+                                                    this.state.coaching.myClients.clients.length > 0
+                                                        && this.state.coaching.myClients.trainerObject
+                                                        ? <>
+                                                            <Text>Clients</Text>
+                                                        </>
+                                                        : <>
+                                                            <Text style={globalStyles.notation}>{this.personalTrainerStatusMessages[this.state.coaching.myClients.trainerObject.status]}</Text>
+                                                        </>
+                                                }
+                                            </>
                                     }
                                 </View>
                             : null

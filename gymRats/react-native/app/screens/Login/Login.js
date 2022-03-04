@@ -19,7 +19,7 @@ export default class Login extends Component {
     login = () => {
         this.setState({ showError: false, error: null, isLoading: true });
         ApiRequests.post("user/login", {}, {
-            email: this.state.email,
+            email: this.state.email.trim(),
             password: this.state.password
         }, false).then(async (response) => {
             await Auth.setToken(response.data.token);

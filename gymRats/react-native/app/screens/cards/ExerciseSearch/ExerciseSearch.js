@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Dimensions, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { BiArrowBack } from 'react-icons/bi';
 import ApiRequests from '../../../classes/ApiRequests';
 import { HTTP_STATUS_CODES } from '../../../../global';
@@ -25,7 +25,7 @@ export default class ExerciseSearch extends Component {
     }
 
     searchExercises = () => {
-        ApiRequests.get(`logbook/search?words=${this.state.query}`, {}, true).then((response) => {
+        ApiRequests.get(`logbook/search?words=${this.state.query.toLowerCase()}`, {}, true).then((response) => {
             if (response.data.results) this.setState({ queryResults: response.data.results });
         }).catch((error) => {
             if (error.response) {
@@ -64,21 +64,21 @@ export default class ExerciseSearch extends Component {
                             })
                         }} />
                     <View style={styles.searchResultsContainer}>
-                        <ScrollView style={styles.searchResults}>
+                        <ScrollView style={[styles.searchResults, {
+                            height: `${(Dimensions.get("screen").height - 375)}px`
+                        }]}>
                             {
                                 this.state.queryResults.map((exercise) =>
-                                    <TouchableOpacity onPress={() => {
+                                    <View style={styles.searchResult} onClick={() => {
                                         this.props.navigation.navigate("Logbook", {
                                             exercise: exercise,
                                             date: this.props.route.params.date,
                                             timezoneOffset: this.props.route.params.timezoneOffset
                                         })
-                                    }} key={exercise._id}>
-                                        <View style={styles.searchResult}>
-                                            <Text style={styles.searchResultTitle}>{exercise.title}</Text>
-                                            <Text style={styles.searchResultStats}>Used in {exercise.sessionsCount} workout sessions</Text>
-                                        </View>
-                                    </TouchableOpacity>
+                                    }}>
+                                        <Text style={styles.searchResultTitle}>{exercise.title}</Text>
+                                        <Text style={styles.searchResultStats}>Used in {exercise.sessionsCount} workout sessions</Text>
+                                    </View>
                                 )
                             }
                         </ScrollView>

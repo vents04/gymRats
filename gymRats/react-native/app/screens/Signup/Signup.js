@@ -23,7 +23,7 @@ export default class Signup extends Component {
         ApiRequests.post("user/signup", {}, {
             firstName: this.state.firstName,
             lastName: this.state.lastName,
-            email: this.state.email,
+            email: this.state.email.trim(),
             password: this.state.password
         }, false).then(async (response) => {
             await Auth.setToken(response.data.token);
