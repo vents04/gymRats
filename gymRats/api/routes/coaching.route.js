@@ -17,20 +17,18 @@ router.get('/', authenticate, async (req, res, next) => {
             },
             myClients: {
                 isPersonalTrainer: false,
-                hasClients: false
             }
         }
 
         const userAsTrainer = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, { userId: mongoose.Types.ObjectId(req.user._id) });
         coaching.myClients.isPersonalTrainer = userAsTrainer ? true : false;
-        coaching.myClients.trainerObject = coaching.myClients.isPersonalTrainer ? req.user : null;
+        coaching.myClients.trainerObject = coaching.myClients.isPersonalTrainer ? userAsTrainer : null;
 
         let clients = await DbService.getMany(COLLECTIONS.CLIENTS, { trainerId: mongoose.Types.ObjectId(req.user._id) });
         for (let client of clients) {
             const clientInstance = await DbService.getById(COLLECTIONS.USERS, { _id: mongoose.Types.ObjectId(client.clientId) });
             client.clientInstance = clientInstance;
         }
-        coaching.myClients.hasClients = clients.length > 0;
         coaching.myClients.clients = clients;
 
         let coach = null;

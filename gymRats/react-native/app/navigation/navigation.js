@@ -18,6 +18,7 @@ import Logbook from '../screens/cards/Logbook/Logbook';
 import ExerciseSearch from '../screens/cards/ExerciseSearch/ExerciseSearch';
 import Coaching from '../screens/Coaching/Coaching';
 import CoachingApplicationSubmission from '../screens/CoachingApplicationSubmission/CoachingApplicationSubmission';
+import CoachSearch from '../screens/CoachSearch/CoachSearch';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -73,6 +74,13 @@ const coachingScreenStack = ({ navigation }) => {
                     headerShown: false
                 }}
                 component={CoachingApplicationSubmission}
+            />
+            <Stack.Screen
+                name="CoachSearch"
+                options={{
+                    headerShown: false
+                }}
+                component={CoachSearch}
             />
         </Stack.Navigator>
     )
