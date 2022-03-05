@@ -179,7 +179,7 @@ router.get("/coach/search", authenticate, async (req, res, next) => {
             }
         }
         for (let i = 0; i < sorted.length - 1; i++) {
-            if(req.body.lat && req.body.lng){
+            if (req.body.lat && req.body.lng) {
                 if (req.body.maxDistance) {
                     sorted[i].location.lng = sorted[i].location.lng * Math.PI / 180;
                     req.body.lng = req.body.lng * Math.PI / 180;
@@ -197,17 +197,17 @@ router.get("/coach/search", authenticate, async (req, res, next) => {
 
                     let radius = 6371;
 
-                    if(c * radius > req.body.maxDistance){
+                    if (c * radius > req.body.maxDistance) {
                         sorted.splice(i, 1);
                         i--;
                         continue;
                     }
                 }
-                if(req.body.minRating){
+                if (req.body.minRating) {
                     const reviews = await DbService.getMany(COLLECTIONS.REVIEWS, {});
-                    for(let review of reviews){
-                        const request = await DbService.getMany(COLLECTIONS.REQUESTS, {_id: mongoose.Types.ObjectId(review.requestId)});
-                        if(request.initiatorId.toString() == sorted[i]._id.toString()){
+                    for (let review of reviews) {
+                        const request = await DbService.getMany(COLLECTIONS.REQUESTS, { _id: mongoose.Types.ObjectId(review.requestId) });
+                        if (request.initiatorId.toString() == sorted[i]._id.toString()) {
 
                         }
                     }

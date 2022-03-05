@@ -15,15 +15,26 @@ export default class CoachSearch extends Component {
         error: "",
         query: "",
         maxDistance: 30,
-        minRating: 2
+        minRating: 2,
+        lat: null,
+        lng: null
+    }
+
+    componentDidMount() {
+        this.getLocationByIp();
+    }
+
+    getLocationByIp = async () => {
+        const geolocationByIp = await axios.get('https://geolocation-db.com/json/');
+        this.setState({ lat: geolocationByIp.data.latitude, lng: geolocationByIp.data.longitude });
+        return;
     }
 
     searchCoaches = async () => {
-        const geolocationByIp = await axios.get('https://geolocation-db.com/json/');
         ApiRequests.get(`coaching/coach/search
             ?name=${this.state.query.toLowerCase()}
-            &lat=${geolocationByIp.data.latitude}
-            &lng=${geolocationByIp.data.longitude}
+            &lat=${this.state.lat}
+            &lng=${this.state.lng}
             &maxDistance=${this.state.maxDistance}
             &minRating=${this.state.minRating}`, {}, true).then((response) => {
             console.log(response.data);
