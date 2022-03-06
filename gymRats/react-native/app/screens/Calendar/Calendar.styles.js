@@ -6,7 +6,8 @@ module.exports = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        flex: 3,
+        flexGrow: 0,
+        flexShrink: 0,
         marginBottom: 32
     },
     calendarController: {

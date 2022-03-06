@@ -94,15 +94,28 @@ export default class Calendar extends Component {
     }
 
     render() {
-        return <View style={globalStyles.safeAreaView}>
-            <View style={globalStyles.pageContainer}>
+        return <View style={[globalStyles.safeAreaView, {
+            position: "absolute",
+            left: 0,
+            top: 0,
+            right: 0,
+            bottom: 0,
+            paddingBottom: 125
+        }]}>
+            <View style={[globalStyles.pageContainer, {
+                flexGrow: 1,
+                flexShrink: 1
+            }]}>
                 <View style={globalStyles.pageLogoContainer}>
                     <Image style={globalStyles.pageLogo} source={require('../../../assets/img/logo.png')} />
                     <Text style={globalStyles.pageLogoText}>Gym Rats</Text>
                 </View>
                 {
                     this.state.selectedDate
-                        ? <View>
+                        ? <View style={{
+                            flexGrow: 1,
+                            flexShrink: 1
+                        }}>
                             <View style={styles.calendarControllersContainer}>
                                 <View style={styles.calendarController} onClick={() => { this.incrementDate(-1) }}>
                                     <IoIosArrowBack style={{ marginRight: 5 }} size={14} color="#999" />
@@ -131,9 +144,10 @@ export default class Calendar extends Component {
                                     <Text style={globalStyles.authPageActionButtonText}>Add data</Text>
                                 </TouchableOpacity>
                             </View>
-                            <ScrollView style={[styles.cards, {
-                                height: `${(Dimensions.get("screen").height - 325)}px`
-                            }]}>
+                            <ScrollView contentContainerStyle={{
+                                flexGrow: 1,
+                                flexShrink: 1
+                            }}>
                                 {
                                     this.state.dates.map((date) =>
                                         date.date.getTime() == this.state.selectedDate.getTime()

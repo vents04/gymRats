@@ -4,17 +4,20 @@ module.exports = StyleSheet.create({
     safeAreaView: {
         marginTop: StatusBar.currentHeight,
         backgroundColor: "#fff",
-        flex: 1,
+        position: "absolute",
+        left: 0,
+        top: 0,
+        right: 0,
+        bottom: 0,
+        paddingBottom: 125
     },
     tabsBg: {
         backgroundColor: "#1f6cb0"
     },
     pageContainer: {
         padding: 32,
-        marginBottom: 125,
         flex: 1,
-        display: "flex",
-        flexDirection: "column",
+        maxHeight: "100%",
     },
     pageLogoContainer: {
         display: "flex",
