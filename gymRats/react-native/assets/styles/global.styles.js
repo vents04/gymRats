@@ -225,5 +225,14 @@ module.exports = StyleSheet.create({
         textAlign: "center",
         fontFamily: "SpartanMedium",
         fontSize: 14
+    },
+    important: {
+        padding: 16,
+        fontFamily: "SpartanMedium",
+        fontSize: 14,
+        borderRadius: 4,
+        borderColor: "#1f6cb0",
+        borderWidth: 1,
+        backgroundColor: "#a2d2fc"
     }
 });

@@ -38,6 +38,7 @@ export default class CoachSearch extends Component {
     }
 
     componentDidMount() {
+        this.props.navigation.navigate("CoachPage");
         this.getLocationByIp();
     }
 
@@ -96,7 +97,9 @@ export default class CoachSearch extends Component {
                             ? <ScrollView style={{ marginTop: 8 }}>
                                 {
                                     this.state.searchResults.map((result) =>
-                                        <View style={styles.coachResult}>
+                                        <View style={styles.coachResult} onClick={() => {
+                                            this.props.navigation.navigate("CoachPage", {})
+                                        }}>
                                             <View style={styles.coachResultInline}>
                                                 {
                                                     !result.profilePicture
