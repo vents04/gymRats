@@ -1,7 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const ResponseError = require('../errors/responseError');
-const { HTTP_STATUS_CODES, COLLECTIONS, REQUEST_STATUSES } = require('../global');
+const { HTTP_STATUS_CODES, COLLECTIONS, REQUEST_STATUSES, PERSONAL_TRAINER_STATUSES } = require('../global');
 const DbService = require('../services/db.service');
 const Request = require('../db/models/coaching/request.model');
 const router = express.Router();
@@ -158,7 +158,7 @@ router.post('/review/:id', authenticate, async (req, res, next) => {
 
 router.get("/coach/search", authenticate, async (req, res, next) => {
     let words = req.query.name;
-    if (!words) {
+    if (!words && (!req.query.lat || !req.query.lng)) {
         const trainers = await DbService.getMany(COLLECTIONS.PERSONAL_TRAINERS, {});
         return res.status(HTTP_STATUS_CODES.OK).send({
             results: trainers
@@ -166,54 +166,124 @@ router.get("/coach/search", authenticate, async (req, res, next) => {
     }
     try {
         words = words.split(" ");
-        let sorted = [];
+        let allTrainers = [];
+        let sorted1, sorted2, sorted3, sorted4 = [];
         if (words) {
             for (let word of words) {
                 const users = await DbService.getMany(COLLECTIONS.USERS, { "$and": [{ firstName: { "$regex": word } }, { lastName: { "$regex": word } }] });
                 for (let user in users) {
                     const trainer = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, { _id: mongoose.Types.ObjectId(user._id) });
-                    if (trainer) {
-                        sorted.push(trainer);
-                    }
-                }
-            }
-        }
-        for (let i = 0; i < sorted.length - 1; i++) {
-            if (req.body.lat && req.body.lng) {
-                if (req.body.maxDistance) {
-                    sorted[i].location.lng = sorted[i].location.lng * Math.PI / 180;
-                    req.body.lng = req.body.lng * Math.PI / 180;
-
-                    sorted[i].location.lat = sorted[i].location.lat * Math.PI / 180;
-                    req.body.lat = req.body.lat * Math.PI / 180;
-
-                    let dlon = req.body.lng - sorted[i].location.lng;
-                    let dlat = req.body.lat - sorted[i].location.lat;
-                    let a = Math.pow(Math.sin(dlat / 2), 2)
-                        + Math.cos(lat1) * Math.cos(lat2)
-                        * Math.pow(Math.sin(dlon / 2), 2);
-
-                    let c = 2 * Math.asin(Math.sqrt(a));
-
-                    let radius = 6371;
-
-                    if (c * radius > req.body.maxDistance) {
-                        sorted.splice(i, 1);
-                        i--;
-                        continue;
-                    }
-                }
-                if (req.body.minRating) {
-                    const reviews = await DbService.getMany(COLLECTIONS.REVIEWS, {});
-                    for (let review of reviews) {
-                        const request = await DbService.getMany(COLLECTIONS.REQUESTS, { _id: mongoose.Types.ObjectId(review.requestId) });
-                        if (request.initiatorId.toString() == sorted[i]._id.toString()) {
-
+                    for(let i = 0; i < allTrainers.length; i++){
+                        if(allTrainers[i] == trainer && trainer.status == PERSONAL_TRAINER_STATUSES.PENDING){
+                            continue;
                         }
                     }
+                    allTrainers.push(trainer); 
                 }
             }
         }
+        for (let i = 0; i < allTrainers.length; i++) {
+            allTrainers[i].location.lng = allTrainers[i].location.lng * Math.PI / 180;
+            req.query.lng = req.query.lng * Math.PI / 180;
+
+            allTrainers[i].location.lat = allTrainers[i].location.lat * Math.PI / 180;
+            req.query.lat = req.query.lat * Math.PI / 180;
+
+            let dlon = req.query.lng - allTrainers[i].location.lng;
+            let dlat = req.query.lat - allTrainers[i].location.lat;
+            let a = Math.pow(Math.sin(dlat / 2), 2)
+                + Math.cos(lat1) * Math.cos(lat2)
+                * Math.pow(Math.sin(dlon / 2), 2);
+
+            let c = 2 * Math.asin(Math.sqrt(a));
+
+            let radius = 6371;
+
+            let distance = c * radius;
+            if(req.query.maxDistance){
+                if(distance > req.query.maxDistance){
+                    allTrainers.splice(i, 1);
+                    i--;
+                    continue;
+                }
+            }
+            Object.assign(allTrainers[i], { distance: distance});
+            
+
+            let sumOfAllRatings, counter = 0;
+            const reviews = await DbService.getMany(COLLECTIONS.REVIEWS, {});
+            for(let review of reviews){
+                const request = await DbService.getOne(COLLECTIONS.REQUESTS, {_id: mongoose.Types.ObjectId(review.requestId)});
+                if(request.initiatorId.toString() == allTrainers[i]._id.toString()){
+                    sumOfAllRatings += review.rating;
+                    counter++;
+                }
+            }
+            let overallRating = sumOfAllRatings / counter;
+            if(overallRating < minRating){
+                allTrainers.splice(i, 1);
+                i--;
+                continue;
+            }
+            Object.assign(allTrainers[i], { rating: overallRating});
+            
+        }
+
+        let distanceForCheck = 30; 
+        if(req.query.maxDistance && req.query.maxDistance < 200){
+            distanceForCheck = req.query.maxDistance/6;
+        }
+
+        for (let i = 0; i < allTrainers.length; i++) {
+            let temp = allTrainers[i];
+            if(allTrainers[i].distance <= distanceForCheck && 
+            allTrainers[i].rating >= (5 - req.query.minRating)/2 + req.query.minRating) {
+                sorted1.push(allTrainers[i]);
+                for(let j = 0; j < sorted1.length-1; j++){
+                    if (sorted1[i].distance > sorted1[i + 1].distance) {
+                        sorted1[i] = sorted1[i + 1];
+                        sorted1[i + 1] = temp;
+                    }
+                }
+                continue;
+            }
+            if(allTrainers[i].distance > distanceForCheck && 
+            allTrainers[i].rating >= (5 - req.query.minRating)/2 + req.query.minRating){
+                sorted2.push(allTrainers[i]);
+                for(let j = 0; j < sorted2.length-1; j++){
+                    if (sorted2[i].distance > sorted2[i + 1].distance) {
+                        sorted2[i] = sorted2[i + 1];
+                        sorted2[i + 1] = temp;
+                    }
+                }
+                continue;
+            }
+            if(allTrainers[i].distance <= distanceForCheck && 
+            allTrainers[i].rating < (5 - req.query.minRating)/2 + req.query.minRating){
+                sorted3.push(allTrainers[i]);
+                for(let j = 0; j < sorted3.length-1; j++){
+                    if (sorted3[i].distance > sorted3[i + 1].distance) {
+                        sorted3[i] = sorted3[i + 1];
+                        sorted3[i + 1] = temp;
+                    }
+                }
+                continue;
+            }
+            if(allTrainers[i].distance > distanceForCheck && 
+            allTrainers[i].rating < (5 - req.query.minRating)/2 + req.query.minRating){
+                sorted4.push(allTrainers[i]);
+                for(let j = 0; j < sorted4.length-1; j++){
+                    if (sorted4[i].distance > sorted4[i + 1].distance) {
+                        sorted4[i] = sorted4[i + 1];
+                        sorted4[i + 1] = temp;
+                    }
+                }
+                continue;
+            }
+        }
+
+        let sorted = sorted1.contact(sorted2, sorted3, sorted4);
+
         return res.status(HTTP_STATUS_CODES.OK).send({
             results: sorted
         })
