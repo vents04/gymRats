@@ -1,7 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const ResponseError = require('../errors/responseError');
-const { HTTP_STATUS_CODES, COLLECTIONS, REQUEST_STATUSES } = require('../global');
+const { HTTP_STATUS_CODES, COLLECTIONS, REQUEST_STATUSES, PERSONAL_TRAINER_STATUSES } = require('../global');
 const DbService = require('../services/db.service');
 const Request = require('../db/models/coaching/request.model');
 const router = express.Router();
@@ -173,9 +173,12 @@ router.get("/coach/search", authenticate, async (req, res, next) => {
                 const users = await DbService.getMany(COLLECTIONS.USERS, { "$and": [{ firstName: { "$regex": word } }, { lastName: { "$regex": word } }] });
                 for (let user in users) {
                     const trainer = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, { _id: mongoose.Types.ObjectId(user._id) });
-                    if (trainer) {
-                        allTrainers.push(trainer);
+                    for(let i = 0; i < allTrainers.length; i++){
+                        if(allTrainers[i] == trainer && trainer.status == PERSONAL_TRAINER_STATUSES.PENDING){
+                            continue;
+                        }
                     }
+                    allTrainers.push(trainer); 
                 }
             }
         }
@@ -210,7 +213,7 @@ router.get("/coach/search", authenticate, async (req, res, next) => {
             let sumOfAllRatings, counter = 0;
             const reviews = await DbService.getMany(COLLECTIONS.REVIEWS, {});
             for(let review of reviews){
-                const request = await DbService.getMany(COLLECTIONS.REQUESTS, {_id: mongoose.Types.ObjectId(review.requestId)});
+                const request = await DbService.getOne(COLLECTIONS.REQUESTS, {_id: mongoose.Types.ObjectId(review.requestId)});
                 if(request.initiatorId.toString() == allTrainers[i]._id.toString()){
                     sumOfAllRatings += review.rating;
                     counter++;
