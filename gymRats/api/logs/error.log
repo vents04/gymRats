@@ -250,3 +250,5 @@
 {"level":"error","message":"\"query\" is required"}
 {"level":"error","message":"\"query\" is required"}
 {"level":"error","message":"Token not provided"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'contact')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'concat')"}

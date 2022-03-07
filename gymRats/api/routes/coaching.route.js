@@ -156,25 +156,31 @@ router.post('/review/:id', authenticate, async (req, res, next) => {
     }
 });
 
-router.get("/coach/search", authenticate, async (req, res, next) => {
-    let words = req.query.name;
-    if (!words && (!req.query.lat || !req.query.lng)) {
+router.get("/coach/search", async (req, res, next) => {
+    let valuesGiven = {
+        names: false,
+        minRating: false,
+        maxDistance: false
+    }
+    let names = req.query.name;
+    if ((req.query.lat && !req.query.lng) || (!req.query.lat && req.query.lng)) {
         const trainers = await DbService.getMany(COLLECTIONS.PERSONAL_TRAINERS, {});
         return res.status(HTTP_STATUS_CODES.OK).send({
             results: trainers
         })
     }
     try {
-        words = words.split(" ");
+        console.log(names);
+        names = names.split(" ");
         let allTrainers = [];
-        let sorted1, sorted2, sorted3, sorted4 = [];
-        if (words) {
-            for (let word of words) {
-                const users = await DbService.getMany(COLLECTIONS.USERS, { "$and": [{ firstName: { "$regex": word } }, { lastName: { "$regex": word } }] });
+        let sorted = [];
+        if (names) {
+            for (let name of names) {
+                const users = await DbService.getMany(COLLECTIONS.USERS, { "$and": [{ firstName: { "$regex": name } }, { lastName: { "$regex": name } }] });
                 for (let user in users) {
                     const trainer = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, { _id: mongoose.Types.ObjectId(user._id) });
                     for(let i = 0; i < allTrainers.length; i++){
-                        if(allTrainers[i] == trainer && trainer.status == PERSONAL_TRAINER_STATUSES.PENDING){
+                        if(allTrainers[i] == trainer && trainer.status != PERSONAL_TRAINER_STATUSES.ACTIVE && trainer._id.toString() == req.user._id.toString()){
                             continue;
                         }
                     }
@@ -238,51 +244,37 @@ router.get("/coach/search", authenticate, async (req, res, next) => {
             let temp = allTrainers[i];
             if(allTrainers[i].distance <= distanceForCheck && 
             allTrainers[i].rating >= (5 - req.query.minRating)/2 + req.query.minRating) {
-                sorted1.push(allTrainers[i]);
-                for(let j = 0; j < sorted1.length-1; j++){
-                    if (sorted1[i].distance > sorted1[i + 1].distance) {
-                        sorted1[i] = sorted1[i + 1];
-                        sorted1[i + 1] = temp;
-                    }
-                }
+                Object.assign(allTrainers[i], { category: 1});
+                sorted.push(allTrainers[i]);
                 continue;
             }
             if(allTrainers[i].distance > distanceForCheck && 
             allTrainers[i].rating >= (5 - req.query.minRating)/2 + req.query.minRating){
-                sorted2.push(allTrainers[i]);
-                for(let j = 0; j < sorted2.length-1; j++){
-                    if (sorted2[i].distance > sorted2[i + 1].distance) {
-                        sorted2[i] = sorted2[i + 1];
-                        sorted2[i + 1] = temp;
-                    }
-                }
+                Object.assign(allTrainers[i], { category: 2});
+                sorted.push(allTrainers[i]);
                 continue;
             }
             if(allTrainers[i].distance <= distanceForCheck && 
             allTrainers[i].rating < (5 - req.query.minRating)/2 + req.query.minRating){
-                sorted3.push(allTrainers[i]);
-                for(let j = 0; j < sorted3.length-1; j++){
-                    if (sorted3[i].distance > sorted3[i + 1].distance) {
-                        sorted3[i] = sorted3[i + 1];
-                        sorted3[i + 1] = temp;
-                    }
-                }
+                Object.assign(allTrainers[i], { category: 3});
+                sorted.push(allTrainers[i]);
                 continue;
             }
             if(allTrainers[i].distance > distanceForCheck && 
             allTrainers[i].rating < (5 - req.query.minRating)/2 + req.query.minRating){
-                sorted4.push(allTrainers[i]);
-                for(let j = 0; j < sorted4.length-1; j++){
-                    if (sorted4[i].distance > sorted4[i + 1].distance) {
-                        sorted4[i] = sorted4[i + 1];
-                        sorted4[i + 1] = temp;
-                    }
-                }
+                Object.assign(allTrainers[i], { category: 4});
+                sorted.push(allTrainers[i]);
                 continue;
             }
         }
 
-        let sorted = sorted1.contact(sorted2, sorted3, sorted4);
+        for(let i = 0; i < sorted.length - 1; i++){
+            let temp = sorted[i];
+            if (sorted[i].category > sorted[i + 1].category) {
+                sorted[i] = sorted[i + 1];
+                sorted[i + 1] = temp;
+            }
+        }
 
         return res.status(HTTP_STATUS_CODES.OK).send({
             results: sorted
