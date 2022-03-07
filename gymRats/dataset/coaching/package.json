@@ -10,8 +10,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.0.1",
     "fake-address-generator": "^1.1.0",
-    "persona-generator": "^1.4.1"
+    "mongoose": "^6.2.4",
+    "persona-generator": "^1.4.1",
+    "randomstring": "^1.2.2"
   },
   "devDependencies": {
     "@faker-js/faker": "^6.0.0-alpha.7"
