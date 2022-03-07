@@ -19,6 +19,7 @@ import ExerciseSearch from '../screens/cards/ExerciseSearch/ExerciseSearch';
 import Coaching from '../screens/Coaching/Coaching';
 import CoachingApplicationSubmission from '../screens/CoachingApplicationSubmission/CoachingApplicationSubmission';
 import CoachSearch from '../screens/CoachSearch/CoachSearch';
+import CoachPage from '../screens/CoachPage/CoachPage';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -82,6 +83,13 @@ const coachingScreenStack = ({ navigation }) => {
                 }}
                 component={CoachSearch}
             />
+            <Stack.Screen
+                name="CoachPage"
+                options={{
+                    headerShown: false
+                }}
+                component={CoachPage}
+            />
         </Stack.Navigator>
     )
 }
@@ -144,28 +152,6 @@ const NavigationRoutes = (props) => {
                 },
             }}>
             <Tab.Screen
-                name="calendarScreenStack"
-                options={{
-                    tabBarLabel: 'Calendar',
-                    headerShown: false,
-                    tabBarActiveTintColor: "#ccc",
-                    tabBarIcon: (tabInfo) =>
-                    (
-                        <View style={styles.tabBarIconContainer}>
-                            <BiCalendar
-                                size={30}
-                                color={tabInfo.focused ? "#1f6cb0" : "#ccc"}
-                            />
-                            <Text style={[styles.tabBarIconText, {
-                                fontFamily: (tabInfo.focused ? "SpartanBold" : "SpartanRegular")
-                            }]}>Calendar</Text>
-                        </View>
-                    )
-
-                }}
-                component={calendarScreenStack}
-            />
-            <Tab.Screen
                 name="coachingScreenStack"
                 options={{
                     tabBarLabel: 'Coaching',
@@ -186,6 +172,28 @@ const NavigationRoutes = (props) => {
 
                 }}
                 component={coachingScreenStack}
+            />
+            <Tab.Screen
+                name="calendarScreenStack"
+                options={{
+                    tabBarLabel: 'Calendar',
+                    headerShown: false,
+                    tabBarActiveTintColor: "#ccc",
+                    tabBarIcon: (tabInfo) =>
+                    (
+                        <View style={styles.tabBarIconContainer}>
+                            <BiCalendar
+                                size={30}
+                                color={tabInfo.focused ? "#1f6cb0" : "#ccc"}
+                            />
+                            <Text style={[styles.tabBarIconText, {
+                                fontFamily: (tabInfo.focused ? "SpartanBold" : "SpartanRegular")
+                            }]}>Calendar</Text>
+                        </View>
+                    )
+
+                }}
+                component={calendarScreenStack}
             />
             <Tab.Screen
                 name="profileScreenStack"
