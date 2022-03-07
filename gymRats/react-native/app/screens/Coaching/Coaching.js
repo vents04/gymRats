@@ -33,6 +33,7 @@ export default class Coaching extends Component {
     }
 
     componentDidMount() {
+        this.props.navigation.navigate("CoachSearch")
         this.focusListener = this.props.navigation.addListener('focus', () => {
             this.onFocusFunction()
         })

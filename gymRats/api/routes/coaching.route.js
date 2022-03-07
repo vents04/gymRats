@@ -261,4 +261,5 @@ router.get("/coach/search", authenticate, async (req, res, next) => {
         return next(new ResponseError(error.message || "Internal server error", error.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
     }
 });
+
 module.exports = router;
