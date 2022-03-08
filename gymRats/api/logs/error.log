@@ -271,3 +271,9 @@
 {"level":"error","message":"Cannot read properties of undefined (reading '_id')"}
 {"level":"error","message":"User not found"}
 {"level":"error","message":"Cannot read properties of undefined (reading '_id')"}
+{"level":"error","message":"Cannot read properties of null (reading 'firstName')"}
+{"level":"error","message":"User not found"}
+{"level":"error","message":"Cannot read properties of undefined (reading '_id')"}
+{"level":"error","message":"User not found"}
+{"level":"error","message":"Cannot read properties of undefined (reading '_id')"}
+{"level":"error","message":"Cannot read properties of null (reading 'firstName')"}

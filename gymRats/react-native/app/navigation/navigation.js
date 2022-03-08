@@ -138,19 +138,19 @@ const NavigationRoutes = (props) => {
             screenOptions={{
                 headerShown: false,
                 tabBarShowLabel: false,
+                tabBarHideOnKeyboard: true,
                 tabBarStyle: {
                     position: 'absolute',
                     bottom: 25,
-                    left: 20,
-                    right: 20,
-                    elevation: 0,
-                    backgroundColor: "#fafafa",
+                    paddingTop: 25,
+                    elevation: 10,
                     borderRadius: 10,
                     borderColor: "#ccc",
                     height: 75,
                     ...styles.shadow
                 },
-            }}>
+            }}
+        >
             <Tab.Screen
                 name="coachingScreenStack"
                 options={{

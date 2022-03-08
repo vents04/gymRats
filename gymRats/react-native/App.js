@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -6,10 +6,12 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Splash from './app/screens/Splash/Splash';
 import { NavigationRoutes, Auth } from './app/navigation/navigation';
 import { useFonts } from 'expo-font';
+import { BackHandler } from 'react-native';
 
 const Stack = createStackNavigator();
 
 const App = () => {
+
   const [loaded] = useFonts({
     Logo: require("./assets/fonts/Bebas_Neue/BebasNeue-Regular.ttf"),
     SpartanLight: require('./assets/fonts/Spartan/Spartan-Light.ttf'),

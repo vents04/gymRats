@@ -94,14 +94,7 @@ export default class Calendar extends Component {
     }
 
     render() {
-        return <View style={[globalStyles.safeAreaView, {
-            position: "absolute",
-            left: 0,
-            top: 0,
-            right: 0,
-            bottom: 0,
-            paddingBottom: 125
-        }]}>
+        return <View style={globalStyles.safeAreaView}>
             <View style={[globalStyles.pageContainer, {
                 flexGrow: 1,
                 flexShrink: 1
@@ -148,6 +141,35 @@ export default class Calendar extends Component {
                                 flexGrow: 1,
                                 flexShrink: 1
                             }}>
+                                {
+                                    this.state.dates.map((date) =>
+                                        date.date.getTime() == this.state.selectedDate.getTime()
+                                            ? date.cards.length > 0
+                                                ? date.cards.map((card) =>
+                                                    card.card == "dailyWeights"
+                                                        ? <WeightTrackerCard data={card.data} actionButtonFunction={() => {
+                                                            this.props.navigation.navigate("WeightTracker", {
+                                                                date: this.state.selectedDate,
+                                                                timezoneOffset: this.state.timezoneOffset,
+                                                                weight: card.data.weight,
+                                                                weightUnit: card.data.unit,
+                                                                _id: card.data._id
+                                                            });
+                                                        }} key={card.data._id} data={card.data} rerender={this.reloadDateAfterDelete} date={this.state.selectedDate} />
+                                                        : card.card == 'workoutSessions'
+                                                            ? <LogbookCard actionButtonFunction={() => {
+                                                                this.props.navigation.navigate("Logbook", {
+                                                                    date: this.state.selectedDate,
+                                                                    timezoneOffset: this.state.timezoneOffset,
+                                                                    data: card.data
+                                                                });
+                                                            }} data={card.data} rerender={this.reloadDateAfterDelete} date={this.state.selectedDate} />
+                                                            : null
+                                                )
+                                                : <Text style={globalStyles.notation}>No data added for that date</Text>
+                                            : null
+                                    )
+                                }
                                 {
                                     this.state.dates.map((date) =>
                                         date.date.getTime() == this.state.selectedDate.getTime()

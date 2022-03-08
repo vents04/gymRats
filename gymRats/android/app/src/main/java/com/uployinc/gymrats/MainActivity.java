@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setDomStorageEnabled(true);
 
-        webView.loadUrl("https://gymrats.uploy.app");
+        webView.loadUrl("http://192.168.0.184:19006");
     }
 
     @Override

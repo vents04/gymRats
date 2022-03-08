@@ -9,7 +9,7 @@ module.exports = StyleSheet.create({
         top: 0,
         right: 0,
         bottom: 0,
-        paddingBottom: 125
+        paddingBottom: 75
     },
     tabsBg: {
         backgroundColor: "#1f6cb0"
