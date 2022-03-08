@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { BiArrowBack } from 'react-icons/bi';
-import { Text, TextInput, View, TouchableOpacity } from 'react-native';
+import { Text, TextInput, View, TouchableOpacity, Switch } from 'react-native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { HTTP_STATUS_CODES } from '../../../global';
 import ApiRequests from '../../classes/ApiRequests';
@@ -14,6 +14,7 @@ export default class CoachingApplicationSubmission extends Component {
         query: "",
         results: [],
         selectedLocation: "",
+        prefersOfflineCoaching: false,
         showError: false,
         error: ""
     }
@@ -65,7 +66,8 @@ export default class CoachingApplicationSubmission extends Component {
                 address: this.state.selectedLocation.description,
                 lat: this.state.selectedLocation.location.lat,
                 lng: this.state.selectedLocation.location.lng
-            }
+            },
+            prefersOfflineCoaching: this.state.prefersOfflineCoaching
         }, true).then((response) => {
             this.props.navigation.navigate("Coaching", { tab: "myClients" });
         }).catch((error) => {
@@ -121,12 +123,31 @@ export default class CoachingApplicationSubmission extends Component {
                             </TouchableOpacity>
                         )
                     }
+                    <Text style={[globalStyles.notation, {
+                        marginTop: 16
+                    }]}>Do you prefer to work with clients only in person?</Text>
+                    <View style={styles.inline}>
+                        <Switch
+                            style={{
+                                marginTop: 10
+                            }}
+                            trackColor={{ false: '#767577', true: '#53c7f0' }}
+                            thumbColor={this.state.prefersOfflineCoaching ? '#1f6cb0' : '#f4f3f4'}
+                            ios_backgroundColor="#3e3e3e"
+                            onValueChange={() => {
+                                console.log("wewe")
+                                this.setState({ prefersOfflineCoaching: !this.state.prefersOfflineCoaching });
+                            }}
+                            value={this.state.prefersOfflineCoaching}
+                        />
+                    </View>
                     {
                         this.state.selectedLocation &&
                         <>
                             <Text style={[globalStyles.notation, {
-                                marginBottom: 10
-                            }]}>Reviewing you application will take no more than 24 hours after</Text>
+                                marginBottom: 10,
+                                marginTop: 16
+                            }]}>Our team will review your application as soon as possible.</Text>
                             <TouchableOpacity style={globalStyles.authPageActionButton} onPress={() => {
                                 this.getPlace()
                             }}>

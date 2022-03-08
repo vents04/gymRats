@@ -18,7 +18,7 @@ export default class Coaching extends Component {
     }
 
     personalTrainerStatusMessages = {
-        "PENDING": "Your personal trainer account is being reviewed by our team and will become active soon",
+        "PENDING": "Your coach account is being reviewed by our team and will become active soon",
         "ACTIVE": "You do not have any clients, yet",
         "BLOCKED": "You have been blocked by our team. Contact us at support@uploy.app for more information",
     }
@@ -33,7 +33,6 @@ export default class Coaching extends Component {
     }
 
     componentDidMount() {
-        this.props.navigation.navigate("CoachSearch")
         this.focusListener = this.props.navigation.addListener('focus', () => {
             this.onFocusFunction()
         })

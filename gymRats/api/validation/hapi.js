@@ -300,7 +300,8 @@ const coachApplicationPostValidation = (data) => {
             address: Joi.string().required(),
             lat: Joi.number().required(),
             lng: Joi.number().required(),
-        })
+        }),
+        prefersOfflineCoaching: Joi.boolean().required()
     });
     return schema.validate(data);
 }

@@ -156,7 +156,7 @@ router.post('/review/:id', authenticate, async (req, res, next) => {
     }
 });
 
-router.get("/coach/search", async (req, res, next) => {
+router.get("/coach/search", authenticate, async (req, res, next) => {
     let names = req.query.name;
     if (((req.query.lat && !req.query.lng) || (!req.query.lat && req.query.lng)) && !names) {
         const trainers = await DbService.getMany(COLLECTIONS.PERSONAL_TRAINERS, {});
@@ -165,27 +165,27 @@ router.get("/coach/search", async (req, res, next) => {
         })
     }
     try {
-        names = names.split(" ");
         let minRating = 0;
         let distanceForCheck = 30;
         let allTrainers = [];
         let sorted = [];
 
         const trainers = await DbService.getMany(COLLECTIONS.PERSONAL_TRAINERS, {})
-        for(let trainer of trainers){
-            Object.assign(trainer, { criteriasMet: 0});
-            if(trainer.status == PERSONAL_TRAINER_STATUSES.ACTIVE && trainer.userId.toString() != req.user._id.toString()){
+        for (let trainer of trainers) {
+            Object.assign(trainer, { criteriasMet: 0 });
+            if (trainer.status == PERSONAL_TRAINER_STATUSES.ACTIVE && trainer.userId.toString() != req.user._id.toString()) {
                 allTrainers.push(trainer);
             }
         }
 
         if (names) {
+            names = names.split(" ");
             for (let name of names) {
                 const users = await DbService.getMany(COLLECTIONS.USERS, { "$or": [{ firstName: { "$regex": name } }, { lastName: { "$regex": name } }] });
                 for (let i = 0; i < users.length; i++) {
                     const trainer = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, { userId: mongoose.Types.ObjectId(users[i]._id) });
-                    for(let i = 0; i < allTrainers.length; i++){
-                        if(trainer && allTrainers[i].userId.toString() == trainer.userId.toString()){
+                    for (let i = 0; i < allTrainers.length; i++) {
+                        if (trainer && allTrainers[i].userId.toString() == trainer.userId.toString()) {
                             allTrainers[i].criteriasMet++;
                         }
                     }
@@ -193,7 +193,7 @@ router.get("/coach/search", async (req, res, next) => {
             }
         }
 
-        if(req.query.lat && req.query.lng){
+        if (req.query.lat && req.query.lng) {
             for (let i = 0; i < allTrainers.length; i++) {
                 let lat1 = allTrainers[i].location.lat;
                 let lat2 = req.query.lat;
@@ -217,81 +217,90 @@ router.get("/coach/search", async (req, res, next) => {
                 let radius = 6371;
 
                 let distance = c * radius;
-                Object.assign(allTrainers[i], { distance: distance});
-                if(req.query.maxDistance){
-                    if(distance > req.query.maxDistance){
+                Object.assign(allTrainers[i], { distance: distance });
+                if (req.query.maxDistance) {
+                    if (distance > req.query.maxDistance) {
                         continue;
                     }
                     allTrainers[i].criteriasMet++;
                 }
             }
-        }else if(req.query.maxDistance){
+        } else if (req.query.maxDistance) {
             return next(new ResponseError("We cannot search for max distance when we don't know your location", HTTP_STATUS_CODES.BAD_REQUEST));
         }
 
-        
         for (let i = 0; i < allTrainers.length; i++) {
-            let sumOfAllRatings, counter = 0;
+            let sumOfAllRatings = 3, counter = 1;
             const reviews = await DbService.getMany(COLLECTIONS.REVIEWS, {});
-            for(let review of reviews){
-                const request = await DbService.getOne(COLLECTIONS.REQUESTS, {_id: mongoose.Types.ObjectId(review.requestId) });
-                if(request.initiatorId.toString() == allTrainers[i].userId.toString()){
+            for (let review of reviews) {
+                const request = await DbService.getOne(COLLECTIONS.REQUESTS, { _id: mongoose.Types.ObjectId(review.requestId) });
+                if (request.initiatorId.toString() == allTrainers[i].userId.toString()) {
                     sumOfAllRatings += review.rating;
                     counter++;
                 }
             }
             let overallRating = sumOfAllRatings / counter;
-            if(req.query.minRating){
+            if (req.query.minRating) {
                 minRating = req.query.minRating
-                if(overallRating < minRating){
+                if (overallRating < minRating) {
                     continue;
                 }
                 allTrainers[i].criteriasMet++;
             }
-            Object.assign(allTrainers[i], { rating: overallRating});  
+            Object.assign(allTrainers[i], { rating: overallRating, reviews: reviews.length });
         }
 
-
-
-        if(req.query.maxDistance && req.query.maxDistance <= 120){
-            distanceForCheck = req.query.maxDistance/4;
+        if (req.query.maxDistance && req.query.maxDistance <= 120) {
+            distanceForCheck = req.query.maxDistance / 4;
         }
 
         for (let i = 0; i < allTrainers.length; i++) {
-            if(allTrainers[i].distance <= distanceForCheck 
-            && allTrainers[i].rating >= (5 - minRating)/2 + minRating) {
+            if (allTrainers[i].distance <= distanceForCheck
+                && allTrainers[i].rating >= (5 - minRating) / 2 + minRating) {
                 allTrainers[i].criteriasMet += 4
                 sorted.push(allTrainers[i]);
                 continue;
             }
-            if(allTrainers[i].distance > distanceForCheck 
-            && allTrainers[i].rating >= (5 - minRating)/2 + minRating){
+            if (allTrainers[i].distance > distanceForCheck
+                && allTrainers[i].rating >= (5 - minRating) / 2 + minRating) {
                 allTrainers[i].criteriasMet += 3
                 sorted.push(allTrainers[i]);
                 continue;
             }
-            if(allTrainers[i].distance <= distanceForCheck 
-            && allTrainers[i].rating < (5 - minRating)/2 + minRating){
+            if (allTrainers[i].distance <= distanceForCheck
+                && allTrainers[i].rating < (5 - minRating) / 2 + minRating) {
                 allTrainers[i].criteriasMet += 2;
                 sorted.push(allTrainers[i]);
                 continue;
             }
-            if(allTrainers[i].distance > distanceForCheck 
-            && allTrainers[i].rating < (5 - minRating)/2 + minRating){
+            if (allTrainers[i].distance > distanceForCheck
+                && allTrainers[i].rating < (5 - minRating) / 2 + minRating) {
                 allTrainers[i].criteriasMet += 1;
                 sorted.push(allTrainers[i]);
                 continue;
             }
         }
 
-        for(let i = 0; i < sorted.length; i++){
-            for(let j = 0; j < ( sorted.length - i -1 ); j++){
-              if(sorted[j].criteriasMet < sorted[j+1].criteriasMet){
-                var temp = sorted[j]
-                sorted[j] = sorted[j + 1]
-                sorted[j+1] = temp
-              }
+        for (let i = 0; i < sorted.length; i++) {
+            for (let j = 0; j < (sorted.length - i - 1); j++) {
+                if (sorted[j].criteriasMet < sorted[j + 1].criteriasMet) {
+                    var temp = sorted[j]
+                    sorted[j] = sorted[j + 1]
+                    sorted[j + 1] = temp
+                }
             }
+        }
+
+        for (let index = 0; index < sorted.length; index++) {
+            let user = await DbService.getById(COLLECTIONS.USERS, sorted[index].userId.toString());
+            // remove below line when in production
+            if (!user) user = await DbService.getOne(COLLECTIONS.USERS, { _id: sorted[index].userId.toString() });
+            if (!user) {
+                sorted.splice(index, 1);
+                index--;
+                continue;
+            }
+            sorted[index].user = user;
         }
 
         return res.status(HTTP_STATUS_CODES.OK).send({

@@ -19,27 +19,12 @@ export default class CoachSearch extends Component {
         minRating: 2,
         lat: null,
         lng: null,
-        searchResults: [
-            {
-                firstName: "Alexander",
-                lastName: "Zlatkov",
-                profilePicture: null,
-                rating: 4.15,
-                reviewsCount: 10
-            },
-            {
-                firstName: "Ventsislav",
-                lastName: "Dimitrov",
-                profilePicture: null,
-                rating: 4.5,
-                reviewsCount: 10
-            }
-        ]
+        searchResults: []
     }
 
-    componentDidMount() {
-        this.props.navigation.navigate("CoachPage");
-        this.getLocationByIp();
+    async componentDidMount() {
+        await this.getLocationByIp();
+        this.searchCoaches();
     }
 
     getLocationByIp = async () => {
@@ -49,8 +34,9 @@ export default class CoachSearch extends Component {
     }
 
     searchCoaches = async () => {
-        ApiRequests.get(`coaching/coach/search?name=${this.state.query.toLowerCase()}&lat=${this.state.lat}&lng=${this.state.lng}&maxDistance=${this.state.maxDistance}&minRating=${this.state.minRating}`, {}, true).then((response) => {
-            console.log(response.data);
+        ApiRequests.get(`coaching/coach/search?name=${this.state.query.toLowerCase()}&lat=${this.state.lat}&lng=${this.state.lng}`, {}, true).then((response) => {
+            console.log(response);
+            this.setState({ searchResults: response.data.results })
         }).catch((error) => {
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
@@ -102,187 +88,40 @@ export default class CoachSearch extends Component {
                                     flexShrink: 1,
                                 }}>
                                 {
-                                    this.state.searchResults.map((result) =>
-                                        <View style={styles.coachResult} onClick={() => {
+                                    this.state.searchResults.map((result) => {
+                                        return <View style={styles.coachResult} onClick={() => {
                                             this.props.navigation.navigate("CoachPage", {})
                                         }}>
                                             <View style={styles.coachResultInline}>
                                                 {
-                                                    !result.profilePicture
+                                                    !result.user.profilePicture
                                                         ? <View style={styles.profilePictureContainer}>
                                                             <Text style={styles.noProfilePictureText}>
-                                                                {result.firstName.charAt(0)}
-                                                                {result.lastName.charAt(0)}
+                                                                {result.user.firstName.charAt(0)}
+                                                                {result.user.lastName.charAt(0)}
                                                             </Text>
                                                         </View>
                                                         : <Image style={styles.profilePictureContainer}
-                                                            source={{ uri: result.profilePicture }} />
+                                                            source={{ uri: result.user.profilePicture }} />
                                                 }
                                                 <Text style={styles.names}>
-                                                    {result.firstName}
+                                                    {result.user.firstName}
                                                     &nbsp;
-                                                    {result.lastName}
+                                                    {result.user.lastName}
                                                 </Text>
                                             </View>
                                             <View style={[styles.coachResultInline, { marginTop: 8 }]}>
                                                 <Rating rating={result.rating} interactive={false} count={5} size={20} filledColor="#1f6cb0" borderColor="#1f6cb0" />
-                                                <Text style={styles.coachResultReviews}>(10 reviews)</Text>
+                                                <Text style={styles.coachResultReviews}>({result.reviews} reviews)</Text>
                                             </View>
                                         </View>
-                                    )
-                                }
-                                {
-                                    this.state.searchResults.map((result) =>
-                                        <View style={styles.coachResult} onClick={() => {
-                                            this.props.navigation.navigate("CoachPage", {})
-                                        }}>
-                                            <View style={styles.coachResultInline}>
-                                                {
-                                                    !result.profilePicture
-                                                        ? <View style={styles.profilePictureContainer}>
-                                                            <Text style={styles.noProfilePictureText}>
-                                                                {result.firstName.charAt(0)}
-                                                                {result.lastName.charAt(0)}
-                                                            </Text>
-                                                        </View>
-                                                        : <Image style={styles.profilePictureContainer}
-                                                            source={{ uri: result.profilePicture }} />
-                                                }
-                                                <Text style={styles.names}>
-                                                    {result.firstName}
-                                                    &nbsp;
-                                                    {result.lastName}
-                                                </Text>
-                                            </View>
-                                            <View style={[styles.coachResultInline, { marginTop: 8 }]}>
-                                                <Rating rating={result.rating} interactive={false} count={5} size={20} filledColor="#1f6cb0" borderColor="#1f6cb0" />
-                                                <Text style={styles.coachResultReviews}>(10 reviews)</Text>
-                                            </View>
-                                        </View>
-                                    )
-                                }
-                                {
-                                    this.state.searchResults.map((result) =>
-                                        <View style={styles.coachResult} onClick={() => {
-                                            this.props.navigation.navigate("CoachPage", {})
-                                        }}>
-                                            <View style={styles.coachResultInline}>
-                                                {
-                                                    !result.profilePicture
-                                                        ? <View style={styles.profilePictureContainer}>
-                                                            <Text style={styles.noProfilePictureText}>
-                                                                {result.firstName.charAt(0)}
-                                                                {result.lastName.charAt(0)}
-                                                            </Text>
-                                                        </View>
-                                                        : <Image style={styles.profilePictureContainer}
-                                                            source={{ uri: result.profilePicture }} />
-                                                }
-                                                <Text style={styles.names}>
-                                                    {result.firstName}
-                                                    &nbsp;
-                                                    {result.lastName}
-                                                </Text>
-                                            </View>
-                                            <View style={[styles.coachResultInline, { marginTop: 8 }]}>
-                                                <Rating rating={result.rating} interactive={false} count={5} size={20} filledColor="#1f6cb0" borderColor="#1f6cb0" />
-                                                <Text style={styles.coachResultReviews}>(10 reviews)</Text>
-                                            </View>
-                                        </View>
-                                    )
-                                }
-                                {
-                                    this.state.searchResults.map((result) =>
-                                        <View style={styles.coachResult} onClick={() => {
-                                            this.props.navigation.navigate("CoachPage", {})
-                                        }}>
-                                            <View style={styles.coachResultInline}>
-                                                {
-                                                    !result.profilePicture
-                                                        ? <View style={styles.profilePictureContainer}>
-                                                            <Text style={styles.noProfilePictureText}>
-                                                                {result.firstName.charAt(0)}
-                                                                {result.lastName.charAt(0)}
-                                                            </Text>
-                                                        </View>
-                                                        : <Image style={styles.profilePictureContainer}
-                                                            source={{ uri: result.profilePicture }} />
-                                                }
-                                                <Text style={styles.names}>
-                                                    {result.firstName}
-                                                    &nbsp;
-                                                    {result.lastName}
-                                                </Text>
-                                            </View>
-                                            <View style={[styles.coachResultInline, { marginTop: 8 }]}>
-                                                <Rating rating={result.rating} interactive={false} count={5} size={20} filledColor="#1f6cb0" borderColor="#1f6cb0" />
-                                                <Text style={styles.coachResultReviews}>(10 reviews)</Text>
-                                            </View>
-                                        </View>
-                                    )
-                                }
-                                {
-                                    this.state.searchResults.map((result) =>
-                                        <View style={styles.coachResult} onClick={() => {
-                                            this.props.navigation.navigate("CoachPage", {})
-                                        }}>
-                                            <View style={styles.coachResultInline}>
-                                                {
-                                                    !result.profilePicture
-                                                        ? <View style={styles.profilePictureContainer}>
-                                                            <Text style={styles.noProfilePictureText}>
-                                                                {result.firstName.charAt(0)}
-                                                                {result.lastName.charAt(0)}
-                                                            </Text>
-                                                        </View>
-                                                        : <Image style={styles.profilePictureContainer}
-                                                            source={{ uri: result.profilePicture }} />
-                                                }
-                                                <Text style={styles.names}>
-                                                    {result.firstName}
-                                                    &nbsp;
-                                                    {result.lastName}
-                                                </Text>
-                                            </View>
-                                            <View style={[styles.coachResultInline, { marginTop: 8 }]}>
-                                                <Rating rating={result.rating} interactive={false} count={5} size={20} filledColor="#1f6cb0" borderColor="#1f6cb0" />
-                                                <Text style={styles.coachResultReviews}>(10 reviews)</Text>
-                                            </View>
-                                        </View>
-                                    )
-                                }
-                                {
-                                    this.state.searchResults.map((result) =>
-                                        <View style={styles.coachResult} onClick={() => {
-                                            this.props.navigation.navigate("CoachPage", {})
-                                        }}>
-                                            <View style={styles.coachResultInline}>
-                                                {
-                                                    !result.profilePicture
-                                                        ? <View style={styles.profilePictureContainer}>
-                                                            <Text style={styles.noProfilePictureText}>
-                                                                {result.firstName.charAt(0)}
-                                                                {result.lastName.charAt(0)}
-                                                            </Text>
-                                                        </View>
-                                                        : <Image style={styles.profilePictureContainer}
-                                                            source={{ uri: result.profilePicture }} />
-                                                }
-                                                <Text style={styles.names}>
-                                                    {result.firstName}
-                                                    &nbsp;
-                                                    {result.lastName}
-                                                </Text>
-                                            </View>
-                                            <View style={[styles.coachResultInline, { marginTop: 8 }]}>
-                                                <Rating rating={result.rating} interactive={false} count={5} size={20} filledColor="#1f6cb0" borderColor="#1f6cb0" />
-                                                <Text style={styles.coachResultReviews}>(10 reviews)</Text>
-                                            </View>
-                                        </View>
+                                    }
                                     )
                                 }
                             </ScrollView>
-                            : <Text style={globalStyles.notation}>No coaches found</Text>
+                            : <Text style={[globalStyles.notation, {
+                                marginTop: 16
+                            }]}>No coaches found</Text>
                     }
                 </View>
             </View>

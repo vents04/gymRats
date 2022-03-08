@@ -23,6 +23,10 @@ const personalTrainerSchema = mongoose.Schema({
             required: true,
         }
     },
+    prefersOfflineCoaching: {
+        type: Boolean,
+        default: false,
+    },
     timeOfCreation: {
         type: Number,
         default: Date.now

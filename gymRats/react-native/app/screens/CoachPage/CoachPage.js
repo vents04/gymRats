@@ -81,7 +81,7 @@ export default class CoachPage extends Component {
                             }}>{this.state.profile.location.address}</Text>
                         </View>
                         {
-                            this.state.profile.trainsOnlyOffline && <Text style={globalStyles.important}>This coach will train with clients only in person (offline).</Text>
+                            this.state.profile.trainsOnlyOffline && <Text style={globalStyles.important}>This coach prefers to work with clients in person (offline).</Text>
                         }
                     </ScrollView>
                 </View>
