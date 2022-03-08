@@ -45,7 +45,6 @@ export default class Calendar extends Component {
     }
 
     async componentDidMount() {
-        this.props.navigation.navigate("ExerciseSearch")
         this.focusListener = this.props.navigation.addListener('focus', () => {
             this.onFocusFunction()
         })

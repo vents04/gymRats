@@ -6,15 +6,15 @@ module.exports = StyleSheet.create({
         marginTop: 30,
         display: 'flex',
         flexDirection: 'column',
-        flex: 1
+        flexGrow: 1,
+        flexShrink: 1
     },
     exercisesListContainerTopbar: {
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        marginBottom: 10,
-        height: 30
+        marginBottom: 16
     },
     sectionTitle: {
         fontFamily: "SpartanBold",

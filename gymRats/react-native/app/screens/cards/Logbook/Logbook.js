@@ -385,8 +385,9 @@ export default class Logbook extends Component {
                                 this.props.navigation.navigate("ExerciseSearch", { date: this.state.date, timezoneOffset: this.state.timezoneOffset })
                             }} />
                         </View>
-                        <ScrollView style={{
-                            height: `${Dimensions.get("window").height - 275}px`
+                        <ScrollView contentContainerStyle={{
+                            flexGrow: 1,
+                            flexShrink: 1
                         }}>
                             {
                                 this.state.exercises.length == 0

@@ -109,7 +109,7 @@ module.exports = StyleSheet.create({
         display: "flex",
         flexDirection: "row",
         alignItems: "center",
-        height: 40
+        paddingBottom: 32
     },
     followUpScreenTitle: {
         marginLeft: 10,

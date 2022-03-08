@@ -129,7 +129,10 @@ export default class ProfileDetailsEdit extends Component {
                         marginTop: 48
                     }]}>{this.state.error}</Text>
                 }
-                <ScrollView style={styles.editSectionContainer}>
+                <ScrollView style={styles.editSectionContainer} contentContainerStyle={{
+                    flexGrow: 1,
+                    flexShrink: 1
+                }}>
                     <View style={styles.editSection}>
                         <Text style={styles.editSectionTitle}>First name</Text>
                         <TextInput
