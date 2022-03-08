@@ -47,7 +47,7 @@ export default class WeightTrackerCard extends Component {
 
     render() {
         return <View style={globalStyles.card}>
-            {this.state.showConfirmationBox && <ConfirmationBox deleteCard={this.deleteCard} />}
+            {this.state.showConfirmationBox && <ConfirmationBox deleteCard={this.deleteCard} toggleShowConfirmationBox={this.toggleShowConfirmationBox} />}
             <View style={globalStyles.cardTopbar}>
                 <FaWeight size={25} color={cardColors.weightTracker} />
                 <Text style={globalStyles.cardTitle}>Weight</Text>

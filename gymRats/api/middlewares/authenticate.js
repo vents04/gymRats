@@ -20,11 +20,12 @@ let authenticate = async (req, res, next) => {
         }
 
         let user = await DbService.getById(COLLECTIONS.USERS, verified._id);
+        console.log(user);
         if (!user) {
             errorHandler(new ResponseError("User not found", HTTP_STATUS_CODES.UNAUTHORIZED), req, res, next);
             return;
         }
-        if (verified.iat <= user.lastPasswordReset.getTime() / 1000) {
+        if (verified.iat <= new Date(user.lastPasswordReset).getTime() / 1000) {
             errorHandler(new ResponseError("Token has expired", HTTP_STATUS_CODES.UNAUTHORIZED), req, res, next);
             return;
         }
