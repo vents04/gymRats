@@ -2,7 +2,9 @@ const { StyleSheet } = require('react-native');
 
 module.exports = StyleSheet.create({
     searchResultsContainer: {
-        paddingVertical: 30,
+        flexGrow: 1,
+        flexShrink: 1,
+        marginTop: 16
     },
     searchResultsTitle: {
         fontFamily: "SpartanBold",

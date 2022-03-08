@@ -9,12 +9,12 @@ module.exports = StyleSheet.create({
     },
     weight: {
         fontFamily: 'SpartanBold',
-        fontSize: 24,
+        fontSize: 20,
         marginTop: 24
     },
     weightTrend: {
         fontFamily: 'SpartanMedium',
-        fontSize: 14,
+        fontSize: 12,
         marginTop: 3,
         marginLeft: 10,
         color: "#333"

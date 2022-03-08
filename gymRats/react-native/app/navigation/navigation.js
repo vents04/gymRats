@@ -152,28 +152,6 @@ const NavigationRoutes = (props) => {
             }}
         >
             <Tab.Screen
-                name="coachingScreenStack"
-                options={{
-                    tabBarLabel: 'Coaching',
-                    headerShown: false,
-                    tabBarActiveTintColor: "#ccc",
-                    tabBarIcon: (tabInfo) =>
-                    (
-                        <View style={styles.tabBarIconContainer}>
-                            <GiRat
-                                size={30}
-                                color={tabInfo.focused ? "#1f6cb0" : "#ccc"}
-                            />
-                            <Text style={[styles.tabBarIconText, {
-                                fontFamily: (tabInfo.focused ? "SpartanBold" : "SpartanRegular")
-                            }]}>Coaching</Text>
-                        </View>
-                    )
-
-                }}
-                component={coachingScreenStack}
-            />
-            <Tab.Screen
                 name="calendarScreenStack"
                 options={{
                     tabBarLabel: 'Calendar',
@@ -194,6 +172,28 @@ const NavigationRoutes = (props) => {
 
                 }}
                 component={calendarScreenStack}
+            />
+            <Tab.Screen
+                name="coachingScreenStack"
+                options={{
+                    tabBarLabel: 'Coaching',
+                    headerShown: false,
+                    tabBarActiveTintColor: "#ccc",
+                    tabBarIcon: (tabInfo) =>
+                    (
+                        <View style={styles.tabBarIconContainer}>
+                            <GiRat
+                                size={30}
+                                color={tabInfo.focused ? "#1f6cb0" : "#ccc"}
+                            />
+                            <Text style={[styles.tabBarIconText, {
+                                fontFamily: (tabInfo.focused ? "SpartanBold" : "SpartanRegular")
+                            }]}>Coaching</Text>
+                        </View>
+                    )
+
+                }}
+                component={coachingScreenStack}
             />
             <Tab.Screen
                 name="profileScreenStack"
