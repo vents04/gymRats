@@ -73,33 +73,17 @@ export default class Logbook extends Component {
         })
     }
 
-    componentWillMount() {
-        BackHandler.addEventListener('hardwareBackPress', this.goBack);
-    }
-
     componentDidMount = () => {
         this.focusListener = this.props.navigation.addListener('focus', () => {
             this.onFocusFunction();
         })
     }
 
-    componentWillUnmount() {
-        BackHandler.removeEventListener('hardwareBackPress', this.goBack);
-        if (this.focusListener) this.focusListener()
-    }
-
-    goBack = () => {
-        this.props.navigation.goBack();
-        return;
-    }
-
     getTemplates = () => {
         ApiRequests.get("logbook/workout", {}, true).then((response) => {
             this.setState({ templates: response.data.templates });
             if (response.data.templates.length > 0) {
-                this.setState({ showTemplatePickerModal: !this.state.hasDeniedWorkoutTemplateReplication, selectedTemplateId: response.data.templates[0]._id }, () => {
-                    console.log(this.state);
-                });
+                this.setState({ showTemplatePickerModal: !this.state.hasDeniedWorkoutTemplateReplication, selectedTemplateId: response.data.templates[0]._id });
             }
         }).catch((error) => {
             if (error.response) {
@@ -233,7 +217,6 @@ export default class Logbook extends Component {
     loadWorkoutTemplate = () => {
         for (let template of this.state.templates) {
             if (template._id.toString() == this.state.selectedTemplateId) {
-                console.log(template);
                 this.setState({ exercises: template.nearestSession.session.exercises, showTemplatePickerModal: false, hasChanges: true });
             }
         }

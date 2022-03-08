@@ -46,7 +46,7 @@ export default class Login extends Component {
             <View style={globalStyles.safeAreaView}>
                 <View style={globalStyles.pageContainer}>
                     <View style={globalStyles.pageLogoContainer}>
-                        <Image style={globalStyles.pageLogo} source={require('../../../assets/img/logo.png')} />
+                        <Image style={globalStyles.pageLogo} source={require('../../../assets/img/icon.png')} />
                         <Text style={globalStyles.pageLogoText}>Gym Rats</Text>
                     </View>
                     <Text style={globalStyles.authPageTitle}>Login</Text>

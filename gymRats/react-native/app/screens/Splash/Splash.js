@@ -28,7 +28,7 @@ export default class Splash extends Component {
             <View style={globalStyles.safeAreaView}>
                 <View style={styles.centeredContent}>
                     <View style={styles.logoContainer}>
-                        <Image style={styles.logo} source={require('../../../assets/img/logo.png')} />
+                        <Image style={styles.logo} source={require('../../../assets/img/icon.png')} />
                         <Text style={styles.logoText}>Gym Rats</Text>
                     </View>
                     <ActivityIndicator
