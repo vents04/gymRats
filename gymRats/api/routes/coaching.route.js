@@ -174,11 +174,13 @@ router.get("/coach/search", async (req, res, next) => {
         names = names.split(" ");
         let allTrainers = [];
         let sorted = [];
+        let criteriaToBeMet = 2;
         if (names) {
             for (let name of names) {
                 const users = await DbService.getMany(COLLECTIONS.USERS, { "$and": [{ firstName: { "$regex": name } }, { lastName: { "$regex": name } }] });
                 for (let user in users) {
-                    const trainer = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, { _id: mongoose.Types.ObjectId(user._id) });
+                    const trainer = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, { userId: mongoose.Types.ObjectId(user._id) });
+                    Object.assign(trainer, { criteria: 1});
                     for(let i = 0; i < allTrainers.length; i++){
                         if(allTrainers[i] == trainer && trainer.status != PERSONAL_TRAINER_STATUSES.ACTIVE && trainer._id.toString() == req.user._id.toString()){
                             continue;
@@ -207,61 +209,62 @@ router.get("/coach/search", async (req, res, next) => {
 
             let distance = c * radius;
             if(req.query.maxDistance){
+                criteriaToBeMet = 3;
                 if(distance > req.query.maxDistance){
-                    allTrainers.splice(i, 1);
-                    i--;
                     continue;
                 }
             }
-            Object.assign(allTrainers[i], { distance: distance});
+            allTrainers[i].criteria++;
             
 
             let sumOfAllRatings, counter = 0;
             const reviews = await DbService.getMany(COLLECTIONS.REVIEWS, {});
             for(let review of reviews){
                 const request = await DbService.getOne(COLLECTIONS.REQUESTS, {_id: mongoose.Types.ObjectId(review.requestId)});
-                if(request.initiatorId.toString() == allTrainers[i]._id.toString()){
+                if(request.initiatorId.toString() == allTrainers[i].userId.toString()){
                     sumOfAllRatings += review.rating;
                     counter++;
                 }
             }
             let overallRating = sumOfAllRatings / counter;
             if(overallRating < minRating){
-                allTrainers.splice(i, 1);
-                i--;
                 continue;
             }
-            Object.assign(allTrainers[i], { rating: overallRating});
+            allTrainers[i].criteria++;
             
         }
 
         let distanceForCheck = 30; 
         if(req.query.maxDistance && req.query.maxDistance < 200){
             distanceForCheck = req.query.maxDistance/6;
+
         }
 
         for (let i = 0; i < allTrainers.length; i++) {
-            let temp = allTrainers[i];
-            if(allTrainers[i].distance <= distanceForCheck && 
-            allTrainers[i].rating >= (5 - req.query.minRating)/2 + req.query.minRating) {
+            if(allTrainers[i].distance <= distanceForCheck 
+            && allTrainers[i].rating >= (5 - req.query.minRating)/2 + req.query.minRating 
+            && allTrainers[i].criteria == criteriaToBeMet) {
                 Object.assign(allTrainers[i], { category: 1});
                 sorted.push(allTrainers[i]);
                 continue;
             }
-            if(allTrainers[i].distance > distanceForCheck && 
-            allTrainers[i].rating >= (5 - req.query.minRating)/2 + req.query.minRating){
+            if(allTrainers[i].distance > distanceForCheck 
+            && allTrainers[i].rating >= (5 - req.query.minRating)/2 + req.query.minRating
+            && allTrainers[i].criteria == criteriaToBeMet){
                 Object.assign(allTrainers[i], { category: 2});
                 sorted.push(allTrainers[i]);
                 continue;
             }
-            if(allTrainers[i].distance <= distanceForCheck && 
-            allTrainers[i].rating < (5 - req.query.minRating)/2 + req.query.minRating){
+            if(allTrainers[i].distance <= distanceForCheck 
+            && allTrainers[i].rating < (5 - req.query.minRating)/2 + req.query.minRating
+            && allTrainers[i].criteria == criteriaToBeMet){
                 Object.assign(allTrainers[i], { category: 3});
                 sorted.push(allTrainers[i]);
                 continue;
             }
-            if(allTrainers[i].distance > distanceForCheck && 
-            allTrainers[i].rating < (5 - req.query.minRating)/2 + req.query.minRating){
+            if(allTrainers[i].distance > distanceForCheck 
+            && allTrainers[i].rating < (5 - req.query.minRating)/2 + req.query.minRating
+            && allTrainers[i].criteria == criteriaToBeMet){
                 Object.assign(allTrainers[i], { category: 4});
                 sorted.push(allTrainers[i]);
                 continue;
