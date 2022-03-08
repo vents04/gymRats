@@ -252,3 +252,18 @@
 {"level":"error","message":"Token not provided"}
 {"level":"error","message":"Cannot read properties of undefined (reading 'contact')"}
 {"level":"error","message":"Cannot read properties of undefined (reading 'concat')"}
+{"level":"error","message":"Cannot read properties of undefined (reading '_id')"}
+{"level":"error","message":"Cannot read properties of undefined (reading '_id')"}
+{"level":"error","message":"Cannot read properties of undefined (reading '_id')"}
+{"level":"error","message":"lat1 is not defined"}
+{"level":"error","message":"Cannot read properties of null (reading 'userId')"}
+{"level":"error","message":"i is not defined"}
+{"level":"error","message":"i is not defined"}
+{"level":"error","message":"i is not defined"}
+{"level":"error","message":"i is not defined"}
+{"level":"error","message":"i is not defined"}
+{"level":"error","message":"i is not defined"}
+{"level":"error","message":"allTrain is not defined"}
+{"level":"error","message":"allTrain is not defined"}
+{"level":"error","message":"distanceForCheck is not defined"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'sort')"}

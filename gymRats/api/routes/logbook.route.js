@@ -284,18 +284,18 @@ router.get("/search", authenticate, async (req, res, next) => {
                 }
             }
         }
-        for (let i = 0; i < sorted.length - 1; i++) {
-            let temp = sorted[i];
-
-            if (sorted[i].timesFound < sorted[i + 1].timesFound) {
-                sorted[i] = sorted[i + 1];
-                sorted[i + 1] = temp;
-            }
-
-            if (sorted[i].timesFound == sorted[i + 1].timesFound) {
-                if (sorted[i].keywords.length > sorted[i + 1].keywords.length) {
-                    sorted[i] = sorted[i + 1];
-                    sorted[i + 1] = temp;
+        for(let i = 0; i < sorted.length; i++){
+            for(let j = 0; j < ( sorted.length - i -1 ); j++){
+                var temp = sorted[j]
+                if(sorted[j].timesFound < sorted[j+1].timesFound){
+                    sorted[j] = sorted[j + 1]
+                    sorted[j+1] = temp
+                }
+                if (sorted[j].timesFound == sorted[j + 1].timesFound) {
+                    if (sorted[j].keywords.length > sorted[j + 1].keywords.length) {
+                        sorted[j] = sorted[j + 1];
+                        sorted[j + 1] = temp;
+                    }
                 }
             }
         }
