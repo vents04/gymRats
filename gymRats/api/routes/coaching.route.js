@@ -157,125 +157,140 @@ router.post('/review/:id', authenticate, async (req, res, next) => {
 });
 
 router.get("/coach/search", async (req, res, next) => {
-    let valuesGiven = {
-        names: false,
-        minRating: false,
-        maxDistance: false
-    }
     let names = req.query.name;
-    if ((req.query.lat && !req.query.lng) || (!req.query.lat && req.query.lng)) {
+    if (((req.query.lat && !req.query.lng) || (!req.query.lat && req.query.lng)) && !names) {
         const trainers = await DbService.getMany(COLLECTIONS.PERSONAL_TRAINERS, {});
         return res.status(HTTP_STATUS_CODES.OK).send({
             results: trainers
         })
     }
     try {
-        console.log(names);
         names = names.split(" ");
+        let minRating = 0;
+        let distanceForCheck = 30;
         let allTrainers = [];
         let sorted = [];
-        let criteriaToBeMet = 2;
+
+        const trainers = await DbService.getMany(COLLECTIONS.PERSONAL_TRAINERS, {})
+        for(let trainer of trainers){
+            Object.assign(trainer, { criteriasMet: 0});
+            if(trainer.status == PERSONAL_TRAINER_STATUSES.ACTIVE && trainer.userId.toString() != req.user._id.toString()){
+                allTrainers.push(trainer);
+            }
+        }
+
         if (names) {
             for (let name of names) {
-                const users = await DbService.getMany(COLLECTIONS.USERS, { "$and": [{ firstName: { "$regex": name } }, { lastName: { "$regex": name } }] });
-                for (let user in users) {
-                    const trainer = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, { userId: mongoose.Types.ObjectId(user._id) });
-                    Object.assign(trainer, { criteria: 1});
+                const users = await DbService.getMany(COLLECTIONS.USERS, { "$or": [{ firstName: { "$regex": name } }, { lastName: { "$regex": name } }] });
+                for (let i = 0; i < users.length; i++) {
+                    const trainer = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, { userId: mongoose.Types.ObjectId(users[i]._id) });
                     for(let i = 0; i < allTrainers.length; i++){
-                        if(allTrainers[i] == trainer && trainer.status != PERSONAL_TRAINER_STATUSES.ACTIVE && trainer._id.toString() == req.user._id.toString()){
-                            continue;
+                        if(trainer && allTrainers[i].userId.toString() == trainer.userId.toString()){
+                            allTrainers[i].criteriasMet++;
                         }
                     }
-                    allTrainers.push(trainer); 
                 }
             }
         }
-        for (let i = 0; i < allTrainers.length; i++) {
-            allTrainers[i].location.lng = allTrainers[i].location.lng * Math.PI / 180;
-            req.query.lng = req.query.lng * Math.PI / 180;
 
-            allTrainers[i].location.lat = allTrainers[i].location.lat * Math.PI / 180;
-            req.query.lat = req.query.lat * Math.PI / 180;
+        if(req.query.lat && req.query.lng){
+            for (let i = 0; i < allTrainers.length; i++) {
+                let lat1 = allTrainers[i].location.lat;
+                let lat2 = req.query.lat;
+                let lng1 = allTrainers[i].location.lng;
+                let lng2 = req.query.lng;
 
-            let dlon = req.query.lng - allTrainers[i].location.lng;
-            let dlat = req.query.lat - allTrainers[i].location.lat;
-            let a = Math.pow(Math.sin(dlat / 2), 2)
-                + Math.cos(lat1) * Math.cos(lat2)
-                * Math.pow(Math.sin(dlon / 2), 2);
+                lng1 = lng1 * Math.PI / 180;
+                lng2 = lng2 * Math.PI / 180;
 
-            let c = 2 * Math.asin(Math.sqrt(a));
+                lat1 = lat1 * Math.PI / 180;
+                lat2 = lat2 * Math.PI / 180;
 
-            let radius = 6371;
+                let dlon = lng2 - lng1;
+                let dlat = lat2 - lat1;
+                let a = Math.pow(Math.sin(dlat / 2), 2)
+                    + Math.cos(lat1) * Math.cos(lat2)
+                    * Math.pow(Math.sin(dlon / 2), 2);
 
-            let distance = c * radius;
-            if(req.query.maxDistance){
-                criteriaToBeMet = 3;
-                if(distance > req.query.maxDistance){
-                    continue;
+                let c = 2 * Math.asin(Math.sqrt(a));
+
+                let radius = 6371;
+
+                let distance = c * radius;
+                Object.assign(allTrainers[i], { distance: distance});
+                if(req.query.maxDistance){
+                    if(distance > req.query.maxDistance){
+                        continue;
+                    }
+                    allTrainers[i].criteriasMet++;
                 }
             }
-            allTrainers[i].criteria++;
-            
+        }else if(req.query.maxDistance){
+            return next(new ResponseError("We cannot search for max distance when we don't know your location", HTTP_STATUS_CODES.BAD_REQUEST));
+        }
 
+        
+        for (let i = 0; i < allTrainers.length; i++) {
             let sumOfAllRatings, counter = 0;
             const reviews = await DbService.getMany(COLLECTIONS.REVIEWS, {});
             for(let review of reviews){
-                const request = await DbService.getOne(COLLECTIONS.REQUESTS, {_id: mongoose.Types.ObjectId(review.requestId)});
+                const request = await DbService.getOne(COLLECTIONS.REQUESTS, {_id: mongoose.Types.ObjectId(review.requestId) });
                 if(request.initiatorId.toString() == allTrainers[i].userId.toString()){
                     sumOfAllRatings += review.rating;
                     counter++;
                 }
             }
             let overallRating = sumOfAllRatings / counter;
-            if(overallRating < minRating){
-                continue;
+            if(req.query.minRating){
+                minRating = req.query.minRating
+                if(overallRating < minRating){
+                    continue;
+                }
+                allTrainers[i].criteriasMet++;
             }
-            allTrainers[i].criteria++;
-            
+            Object.assign(allTrainers[i], { rating: overallRating});  
         }
 
-        let distanceForCheck = 30; 
-        if(req.query.maxDistance && req.query.maxDistance < 200){
-            distanceForCheck = req.query.maxDistance/6;
 
+
+        if(req.query.maxDistance && req.query.maxDistance <= 120){
+            distanceForCheck = req.query.maxDistance/4;
         }
 
         for (let i = 0; i < allTrainers.length; i++) {
             if(allTrainers[i].distance <= distanceForCheck 
-            && allTrainers[i].rating >= (5 - req.query.minRating)/2 + req.query.minRating 
-            && allTrainers[i].criteria == criteriaToBeMet) {
-                Object.assign(allTrainers[i], { category: 1});
+            && allTrainers[i].rating >= (5 - minRating)/2 + minRating) {
+                allTrainers[i].criteriasMet += 4
                 sorted.push(allTrainers[i]);
                 continue;
             }
             if(allTrainers[i].distance > distanceForCheck 
-            && allTrainers[i].rating >= (5 - req.query.minRating)/2 + req.query.minRating
-            && allTrainers[i].criteria == criteriaToBeMet){
-                Object.assign(allTrainers[i], { category: 2});
+            && allTrainers[i].rating >= (5 - minRating)/2 + minRating){
+                allTrainers[i].criteriasMet += 3
                 sorted.push(allTrainers[i]);
                 continue;
             }
             if(allTrainers[i].distance <= distanceForCheck 
-            && allTrainers[i].rating < (5 - req.query.minRating)/2 + req.query.minRating
-            && allTrainers[i].criteria == criteriaToBeMet){
-                Object.assign(allTrainers[i], { category: 3});
+            && allTrainers[i].rating < (5 - minRating)/2 + minRating){
+                allTrainers[i].criteriasMet += 2;
                 sorted.push(allTrainers[i]);
                 continue;
             }
             if(allTrainers[i].distance > distanceForCheck 
-            && allTrainers[i].rating < (5 - req.query.minRating)/2 + req.query.minRating
-            && allTrainers[i].criteria == criteriaToBeMet){
-                Object.assign(allTrainers[i], { category: 4});
+            && allTrainers[i].rating < (5 - minRating)/2 + minRating){
+                allTrainers[i].criteriasMet += 1;
                 sorted.push(allTrainers[i]);
                 continue;
             }
         }
 
-        for(let i = 0; i < sorted.length - 1; i++){
-            let temp = sorted[i];
-            if (sorted[i].category > sorted[i + 1].category) {
-                sorted[i] = sorted[i + 1];
-                sorted[i + 1] = temp;
+        for(let i = 0; i < sorted.length; i++){
+            for(let j = 0; j < ( sorted.length - i -1 ); j++){
+              if(sorted[j].criteriasMet < sorted[j+1].criteriasMet){
+                var temp = sorted[j]
+                sorted[j] = sorted[j + 1]
+                sorted[j+1] = temp
+              }
             }
         }
 
