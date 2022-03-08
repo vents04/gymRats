@@ -31,7 +31,7 @@ export default class CoachPage extends Component {
     render() {
         return (
             <View style={globalStyles.safeAreaView}>
-                <ScrollView style={globalStyles.pageContainer}>
+                <View style={globalStyles.pageContainer}>
                     <View style={globalStyles.followUpScreenTopbar}>
                         <BiArrowBack size={25} onClick={() => {
                             this.props.navigation.navigate("CoachSearch")
@@ -41,45 +41,50 @@ export default class CoachPage extends Component {
                     {
                         this.state.showError && <Text style={globalStyles.errorBox}>{this.state.error}</Text>
                     }
-                    <View style={styles.profileTop}>
-                        {
-                            !this.state.profile.profilePicture
-                                ? <View style={styles.profilePictureContainer}>
-                                    <Text style={styles.noProfilePictureText}>
-                                        {this.state.profile.firstName.charAt(0)}
-                                        {this.state.profile.lastName.charAt(0)}
-                                    </Text>
+                    <ScrollView contentContainerStyle={{
+                        flexGrow: 1,
+                        flexShrink: 1
+                    }}>
+                        <View style={styles.profileTop}>
+                            {
+                                !this.state.profile.profilePicture
+                                    ? <View style={styles.profilePictureContainer}>
+                                        <Text style={styles.noProfilePictureText}>
+                                            {this.state.profile.firstName.charAt(0)}
+                                            {this.state.profile.lastName.charAt(0)}
+                                        </Text>
+                                    </View>
+                                    : <Image style={styles.profilePictureContainer}
+                                        source={{ uri: this.state.profile.profilePicture }} />
+                            }
+                            <Text style={styles.names}>
+                                {this.state.profile.firstName}
+                                &nbsp;
+                                {this.state.profile.lastName}
+                            </Text>
+                            <View style={styles.coachStats}>
+                                <View style={styles.statContainer}>
+                                    <Text style={styles.statValue}>{this.state.profile.stats.clients}</Text>
+                                    <Text style={styles.statTitle}>clients</Text>
                                 </View>
-                                : <Image style={styles.profilePictureContainer}
-                                    source={{ uri: this.state.profile.profilePicture }} />
-                        }
-                        <Text style={styles.names}>
-                            {this.state.profile.firstName}
-                            &nbsp;
-                            {this.state.profile.lastName}
-                        </Text>
-                        <View style={styles.coachStats}>
-                            <View style={styles.statContainer}>
-                                <Text style={styles.statValue}>{this.state.profile.stats.clients}</Text>
-                                <Text style={styles.statTitle}>clients</Text>
+                                <View style={styles.statContainer}>
+                                    <Text style={styles.statValue}>{this.state.profile.stats.rating}</Text>
+                                    <Text style={styles.statTitle}>rating</Text>
+                                </View>
+                                <View style={styles.statContainer}>
+                                    <Text style={styles.statValue}>{this.state.profile.stats.experience}</Text>
+                                    <Text style={styles.statTitle}>experience</Text>
+                                </View>
                             </View>
-                            <View style={styles.statContainer}>
-                                <Text style={styles.statValue}>{this.state.profile.stats.rating}</Text>
-                                <Text style={styles.statTitle}>rating</Text>
-                            </View>
-                            <View style={styles.statContainer}>
-                                <Text style={styles.statValue}>{this.state.profile.stats.experience}</Text>
-                                <Text style={styles.statTitle}>experience</Text>
-                            </View>
+                            <Text style={styles.location} onClick={() => {
+                                Linking.openURL(`https://google.com/maps/@${this.state.profile.location.lat},${this.state.profile.location.lng},11z`)
+                            }}>{this.state.profile.location.address}</Text>
                         </View>
-                        <Text style={styles.location} onClick={() => {
-                            Linking.openURL(`https://google.com/maps/@${this.state.profile.location.lat},${this.state.profile.location.lng},11z`)
-                        }}>{this.state.profile.location.address}</Text>
-                    </View>
-                    {
-                        this.state.profile.trainsOnlyOffline && <Text style={globalStyles.important}>This coach will train with clients only in person (offline).</Text>
-                    }
-                </ScrollView>
+                        {
+                            this.state.profile.trainsOnlyOffline && <Text style={globalStyles.important}>This coach will train with clients only in person (offline).</Text>
+                        }
+                    </ScrollView>
+                </View>
             </View>
         )
     }

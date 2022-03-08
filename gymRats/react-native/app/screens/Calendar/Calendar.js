@@ -94,14 +94,7 @@ export default class Calendar extends Component {
     }
 
     render() {
-        return <View style={[globalStyles.safeAreaView, {
-            position: "absolute",
-            left: 0,
-            top: 0,
-            right: 0,
-            bottom: 0,
-            paddingBottom: 125
-        }]}>
+        return <View style={globalStyles.safeAreaView}>
             <View style={[globalStyles.pageContainer, {
                 flexGrow: 1,
                 flexShrink: 1

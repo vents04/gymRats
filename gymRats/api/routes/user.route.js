@@ -26,7 +26,7 @@ router.post("/signup", async (req, res, next) => {
         await DbService.create(COLLECTIONS.USERS, user);
 
         setTimeout(() => {
-            const token = AuthenticationService.generateToken({ _id: user._id });
+            const token = AuthenticationService.generateToken({ _id: mongoose.Types.ObjectId(user._id) });
             res.status(HTTP_STATUS_CODES.OK).send({
                 token: token,
             });
@@ -48,7 +48,7 @@ router.post("/login", async (req, res, next) => {
         if (!isPasswordValid) return next(new ResponseError("Invalid password", HTTP_STATUS_CODES.BAD_REQUEST));
 
         setTimeout(() => {
-            const token = AuthenticationService.generateToken({ _id: user._id });
+            const token = AuthenticationService.generateToken({ _id: mongoose.Types.ObjectId(user._id) });
             res.status(HTTP_STATUS_CODES.OK).send({
                 token: token,
             });

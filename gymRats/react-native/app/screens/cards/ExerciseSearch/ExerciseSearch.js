@@ -64,9 +64,38 @@ export default class ExerciseSearch extends Component {
                             })
                         }} />
                     <View style={styles.searchResultsContainer}>
-                        <ScrollView style={[styles.searchResults, {
-                            height: `${(Dimensions.get("screen").height - 375)}px`
-                        }]}>
+                        <ScrollView contentContainerStyle={{
+                            flexGrow: 1,
+                            flexShrink: 1
+                        }}>
+                            {
+                                this.state.queryResults.map((exercise) =>
+                                    <View style={styles.searchResult} onClick={() => {
+                                        this.props.navigation.navigate("Logbook", {
+                                            exercise: exercise,
+                                            date: this.props.route.params.date,
+                                            timezoneOffset: this.props.route.params.timezoneOffset
+                                        })
+                                    }}>
+                                        <Text style={styles.searchResultTitle}>{exercise.title}</Text>
+                                        <Text style={styles.searchResultStats}>Used in {exercise.sessionsCount} workout sessions</Text>
+                                    </View>
+                                )
+                            }
+                            {
+                                this.state.queryResults.map((exercise) =>
+                                    <View style={styles.searchResult} onClick={() => {
+                                        this.props.navigation.navigate("Logbook", {
+                                            exercise: exercise,
+                                            date: this.props.route.params.date,
+                                            timezoneOffset: this.props.route.params.timezoneOffset
+                                        })
+                                    }}>
+                                        <Text style={styles.searchResultTitle}>{exercise.title}</Text>
+                                        <Text style={styles.searchResultStats}>Used in {exercise.sessionsCount} workout sessions</Text>
+                                    </View>
+                                )
+                            }
                             {
                                 this.state.queryResults.map((exercise) =>
                                     <View style={styles.searchResult} onClick={() => {

@@ -3,7 +3,7 @@ const { StyleSheet } = require('react-native');
 module.exports = StyleSheet.create({
     workoutName: {
         fontFamily: 'SpartanBold',
-        fontSize: "16px",
+        fontSize: "20px",
         marginTop: "16px",
     },
     exercisesContainer: {

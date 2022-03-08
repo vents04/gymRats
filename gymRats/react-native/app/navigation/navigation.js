@@ -138,41 +138,19 @@ const NavigationRoutes = (props) => {
             screenOptions={{
                 headerShown: false,
                 tabBarShowLabel: false,
+                tabBarHideOnKeyboard: true,
                 tabBarStyle: {
                     position: 'absolute',
                     bottom: 25,
-                    left: 20,
-                    right: 20,
-                    elevation: 0,
-                    backgroundColor: "#fafafa",
+                    paddingTop: 25,
+                    elevation: 10,
                     borderRadius: 10,
                     borderColor: "#ccc",
                     height: 75,
                     ...styles.shadow
                 },
-            }}>
-            <Tab.Screen
-                name="coachingScreenStack"
-                options={{
-                    tabBarLabel: 'Coaching',
-                    headerShown: false,
-                    tabBarActiveTintColor: "#ccc",
-                    tabBarIcon: (tabInfo) =>
-                    (
-                        <View style={styles.tabBarIconContainer}>
-                            <GiRat
-                                size={30}
-                                color={tabInfo.focused ? "#1f6cb0" : "#ccc"}
-                            />
-                            <Text style={[styles.tabBarIconText, {
-                                fontFamily: (tabInfo.focused ? "SpartanBold" : "SpartanRegular")
-                            }]}>Coaching</Text>
-                        </View>
-                    )
-
-                }}
-                component={coachingScreenStack}
-            />
+            }}
+        >
             <Tab.Screen
                 name="calendarScreenStack"
                 options={{
@@ -194,6 +172,28 @@ const NavigationRoutes = (props) => {
 
                 }}
                 component={calendarScreenStack}
+            />
+            <Tab.Screen
+                name="coachingScreenStack"
+                options={{
+                    tabBarLabel: 'Coaching',
+                    headerShown: false,
+                    tabBarActiveTintColor: "#ccc",
+                    tabBarIcon: (tabInfo) =>
+                    (
+                        <View style={styles.tabBarIconContainer}>
+                            <GiRat
+                                size={30}
+                                color={tabInfo.focused ? "#1f6cb0" : "#ccc"}
+                            />
+                            <Text style={[styles.tabBarIconText, {
+                                fontFamily: (tabInfo.focused ? "SpartanBold" : "SpartanRegular")
+                            }]}>Coaching</Text>
+                        </View>
+                    )
+
+                }}
+                component={coachingScreenStack}
             />
             <Tab.Screen
                 name="profileScreenStack"

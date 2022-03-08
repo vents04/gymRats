@@ -46,7 +46,7 @@ export default class LogbookCard extends Component {
 
     render() {
         return <View style={globalStyles.card}>
-            {this.state.showConfirmationBox && <ConfirmationBox deleteCard={this.deleteCard} />}
+            {this.state.showConfirmationBox && <ConfirmationBox deleteCard={this.deleteCard} toggleShowConfirmationBox={this.toggleShowConfirmationBox} />}
             <View style={globalStyles.cardTopbar}>
                 <BsJournalBookmarkFill size={25} color={cardColors.logbook} />
                 <Text style={globalStyles.cardTitle}>Workout</Text>

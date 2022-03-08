@@ -9,7 +9,7 @@ module.exports = StyleSheet.create({
         top: 0,
         right: 0,
         bottom: 0,
-        paddingBottom: 125
+        paddingBottom: 75
     },
     tabsBg: {
         backgroundColor: "#1f6cb0"
@@ -109,7 +109,7 @@ module.exports = StyleSheet.create({
         display: "flex",
         flexDirection: "row",
         alignItems: "center",
-        height: 40
+        paddingBottom: 32
     },
     followUpScreenTitle: {
         marginLeft: 10,

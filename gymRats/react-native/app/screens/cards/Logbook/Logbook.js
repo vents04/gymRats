@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Dimensions, Modal, ScrollView, Text, TextInput, View } from 'react-native'
+import { BackHandler, Dimensions, Modal, ScrollView, Text, TextInput, View } from 'react-native'
 import { BiArrowBack, BiCheck } from 'react-icons/bi';
 import { IoIosAdd } from 'react-icons/io';
 import { MdRemoveCircleOutline } from 'react-icons/md';
@@ -73,6 +73,10 @@ export default class Logbook extends Component {
         })
     }
 
+    componentWillMount() {
+        BackHandler.addEventListener('hardwareBackPress', this.goBack);
+    }
+
     componentDidMount = () => {
         this.focusListener = this.props.navigation.addListener('focus', () => {
             this.onFocusFunction();
@@ -80,7 +84,13 @@ export default class Logbook extends Component {
     }
 
     componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.goBack);
         if (this.focusListener) this.focusListener()
+    }
+
+    goBack = () => {
+        this.props.navigation.goBack();
+        return;
     }
 
     getTemplates = () => {
@@ -375,8 +385,9 @@ export default class Logbook extends Component {
                                 this.props.navigation.navigate("ExerciseSearch", { date: this.state.date, timezoneOffset: this.state.timezoneOffset })
                             }} />
                         </View>
-                        <ScrollView style={{
-                            height: `${Dimensions.get("window").height - 275}px`
+                        <ScrollView contentContainerStyle={{
+                            flexGrow: 1,
+                            flexShrink: 1
                         }}>
                             {
                                 this.state.exercises.length == 0
