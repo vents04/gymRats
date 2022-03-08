@@ -94,10 +94,13 @@ export default class CoachSearch extends Component {
                         }} />
                     {
                         this.state.searchResults.length > 0
-                            ? <ScrollView contentContainerStyle={{
-                                flexGrow: 1,
-                                flexShrink: 1
-                            }}>
+                            ? <ScrollView style={{
+                                marginTop: 16
+                            }}
+                                contentContainerStyle={{
+                                    flexGrow: 1,
+                                    flexShrink: 1,
+                                }}>
                                 {
                                     this.state.searchResults.map((result) =>
                                         <View style={styles.coachResult} onClick={() => {

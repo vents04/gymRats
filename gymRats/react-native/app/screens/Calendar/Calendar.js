@@ -100,7 +100,7 @@ export default class Calendar extends Component {
                 flexShrink: 1
             }]}>
                 <View style={globalStyles.pageLogoContainer}>
-                    <Image style={globalStyles.pageLogo} source={require('../../../assets/img/logo.png')} />
+                    <Image style={globalStyles.pageLogo} source={require('../../../assets/img/icon.png')} />
                     <Text style={globalStyles.pageLogoText}>Gym Rats</Text>
                 </View>
                 {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -12,7 +12,7 @@ import ProfileDetailsEdit from '../screens/ProfileDetailsEdit/ProfileDetailsEdit
 import { BsCalendarWeek } from 'react-icons/bs';
 import { BiCalendar, BiUserCircle } from 'react-icons/bi';
 import { GiRat } from 'react-icons/gi';
-import { StyleSheet, Text, View } from 'react-native';
+import { Keyboard, StyleSheet, Text, View } from 'react-native';
 import WeightTracker from '../screens/cards/WeightTracker/WeightTracker';
 import Logbook from '../screens/cards/Logbook/Logbook';
 import ExerciseSearch from '../screens/cards/ExerciseSearch/ExerciseSearch';
@@ -133,6 +133,20 @@ const Auth = () => {
 };
 
 const NavigationRoutes = (props) => {
+
+    const [keyboardShown, setKeyboardShown] = useState(false);
+
+    useEffect(() => {
+        const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
+            console.log("POKAZVA SE")
+            setKeyboardShown(true);
+        });
+        const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
+            console.log("NE POKAZVA SE")
+            setKeyboardShown(false);
+        });
+    }, []);
+
     return (
         <Tab.Navigator
             screenOptions={{
@@ -140,13 +154,13 @@ const NavigationRoutes = (props) => {
                 tabBarShowLabel: false,
                 tabBarHideOnKeyboard: true,
                 tabBarStyle: {
+                    display: keyboardShown ? 'none' : 'flex',
                     position: 'absolute',
                     bottom: 25,
                     paddingTop: 25,
-                    elevation: 10,
-                    borderRadius: 10,
-                    borderColor: "#ccc",
-                    height: 75,
+                    elevation: 0,
+                    borderColor: "#ddd",
+                    height: 60,
                     ...styles.shadow
                 },
             }}

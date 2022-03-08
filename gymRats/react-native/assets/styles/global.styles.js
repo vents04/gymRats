@@ -15,7 +15,9 @@ module.exports = StyleSheet.create({
         backgroundColor: "#1f6cb0"
     },
     pageContainer: {
-        padding: 32,
+        paddingTop: 32,
+        paddingHorizontal: 32,
+        paddingBottom: 16,
         flex: 1,
         maxHeight: "100%",
     },

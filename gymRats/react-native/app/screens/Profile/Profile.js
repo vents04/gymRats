@@ -81,7 +81,7 @@ export default class Profile extends Component {
         return <View style={[globalStyles.safeAreaView]}>
             <View style={globalStyles.pageContainer}>
                 <View style={globalStyles.pageLogoContainer}>
-                    <Image style={globalStyles.pageLogo} source={require('../../../assets/img/logo.png')} />
+                    <Image style={globalStyles.pageLogo} source={require('../../../assets/img/icon.png')} />
                     <Text style={globalStyles.pageLogoText}>Gym Rats</Text>
                 </View>
                 <View style={globalStyles.topbarIconContainer} onClick={() => { this.navigateToProfileDetailsEdit() }}>
