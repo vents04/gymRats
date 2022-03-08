@@ -225,22 +225,19 @@ router.get("/coach/search", async (req, res, next) => {
                     allTrainers[i].criteriasMet++;
                 }
             }
-        }else if(req.query.maxDistance){
-            return next(new ResponseError("We cannot search for max distance when we don't know your location", HTTP_STATUS_CODES.BAD_REQUEST));
         }
-
         
+        const reviews = await DbService.getMany(COLLECTIONS.REVIEWS, {});
         for (let i = 0; i < allTrainers.length; i++) {
             let sumOfAllRatings, counter = 0;
-            const reviews = await DbService.getMany(COLLECTIONS.REVIEWS, {});
             for(let review of reviews){
                 const request = await DbService.getOne(COLLECTIONS.REQUESTS, {_id: mongoose.Types.ObjectId(review.requestId) });
-                if(request.initiatorId.toString() == allTrainers[i].userId.toString()){
+                if(request.recieverId.toString() == allTrainers[i].userId.toString()){
                     sumOfAllRatings += review.rating;
                     counter++;
                 }
             }
-            let overallRating = sumOfAllRatings / counter;
+            let overallRating = Number.parseFloat(sumOfAllRatings / counter).toFixed(1);
             if(req.query.minRating){
                 minRating = req.query.minRating
                 if(overallRating < minRating){
@@ -250,7 +247,6 @@ router.get("/coach/search", async (req, res, next) => {
             }
             Object.assign(allTrainers[i], { rating: overallRating});  
         }
-
 
 
         if(req.query.maxDistance && req.query.maxDistance <= 120){
