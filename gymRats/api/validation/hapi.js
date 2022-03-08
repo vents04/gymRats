@@ -281,7 +281,7 @@ const requestsStatusUpdateValidation = (data) => {
 
 const coachingReviewPostValidation = (data) => {
     const schema = Joi.object({
-        rating: Joi.number().min(1).max(5).required(),
+        rating: Joi.number().min(0).max(5).required(),
         review: Joi.string().min(1).max(1000).optional()
     });
     return schema.validate(data);
