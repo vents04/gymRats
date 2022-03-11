@@ -2,6 +2,8 @@
 const express = require('express');
 const app = express();
 const router = express.Router();
+const server = require('http').createServer(app);
+const io = require('socket.io')(server, { cors: { origin: '*' } });
 const cors = require('cors');
 const mongo = require("./db/mongo");
 const indexRoute = require('./routes/index.route');
@@ -41,6 +43,6 @@ for (var d = new Date(1970, 0, 1); d <= now; d.setDate(d.getDate() + 1)) {
     }
 })();
 
-app.listen(PORT, function () {
+server.listen(PORT, function () {
     console.log("API server listening on port " + PORT)
 })
