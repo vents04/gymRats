@@ -11,6 +11,11 @@ const styles = require('./CoachSearch.styles')
 
 export default class CoachSearch extends Component {
 
+    constructor(props) {
+        super(props);
+        this.scrollViewRef = React.createRef();
+    }
+
     state = {
         showError: false,
         error: "",
@@ -21,6 +26,7 @@ export default class CoachSearch extends Component {
         lng: null,
         searchResults: []
     }
+
 
     async componentDidMount() {
         await this.getLocationByIp();
@@ -34,6 +40,7 @@ export default class CoachSearch extends Component {
     }
 
     searchCoaches = async () => {
+        if (this.scrollViewRef.current) this.scrollViewRef.current.scrollTo(0);
         ApiRequests.get(`coaching/coach/search?name=${this.state.query.toLowerCase()}&lat=${this.state.lat}&lng=${this.state.lng}`, {}, true).then((response) => {
             console.log(response);
             this.setState({ searchResults: response.data.results })
@@ -73,6 +80,7 @@ export default class CoachSearch extends Component {
                             marginTop: 20
                         }]}
                         placeholder="Type your search here"
+                        autoFocus={true}
                         onChangeText={(val) => {
                             this.setState({ query: val, showError: false }, () => {
                                 this.searchCoaches();
@@ -86,7 +94,8 @@ export default class CoachSearch extends Component {
                                 contentContainerStyle={{
                                     flexGrow: 1,
                                     flexShrink: 1,
-                                }}>
+                                }}
+                                ref={this.scrollViewRef}>
                                 {
                                     this.state.searchResults.map((result) => {
                                         return <View style={styles.coachResult} onClick={() => {
