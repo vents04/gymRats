@@ -7,6 +7,16 @@ module.exports = {
             submitButton: "Continue",
             dontHaveAccount: "Don't have an account?",
             goToSignup: "Go to Signup"
+        },
+        signup: {
+            pageTitle: "Signup",
+            firstNamePlaceholder: "First name:",
+            lastNamePlaceholder: "Last name:",
+            emailPlaceholder: "Email:",
+            passwordPlaceholder: "Password:",
+            submitButton: "Create account",
+            haveAccount: "Have an account?",
+            goToLogin: "Go to Login"
         }
     },
     bg: {
@@ -16,7 +26,17 @@ module.exports = {
             passwordPlaceholder: "Парола:",
             submitButton: "Продължи",
             dontHaveAccount: "Нямаш акаунт?",
-            goToSignup: "Регистрирай се!"
+            goToSignup: "Регистрирай се тук!"
+        },
+        signup: {
+            pageTitle: "Регистрация",
+            firstNamePlaceholder: "Име:",
+            lastNamePlaceholder: "Фамилия:",
+            emailPlaceholder: "Имейл:",
+            passwordPlaceholder: "Парола:",
+            submitButton: "Създай акаунт",
+            haveAccount: "Имаш акаунт?",
+            goToLogin: "Влез тук!"
         }
     }
 }

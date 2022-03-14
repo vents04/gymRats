@@ -41,7 +41,7 @@ module.exports = StyleSheet.create({
     },
     authPageTitle: {
         fontFamily: "SpartanBlack",
-        fontSize: 48
+        fontSize: 36
     },
     authPageInputs: {
         marginVertical: 24
