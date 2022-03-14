@@ -8,17 +8,21 @@ const ResponseError = require('../errors/responseError');
 const { HTTP_STATUS_CODES, CARD_COLLECTIONS, COLLECTIONS } = require('../global');
 const WeightTrackerService = require('../services/cards/weightTracker.service');
 
-router.get('/:date/:timezoneOffset', authenticate, async (req, res, next) => {
-    const date = new Date(new Date(req.params.date).setMinutes(new Date(req.params.date).getMinutes() - req.params.timezoneOffset));
+router.get('/', authenticate, async (req, res, next) => {
+    if (!req.query.date || !req.query.month || !req.query.year
+        || !Date.parse(req.query.year + "-" + req.query.month + "-" + req.query.date)) {
+        return next(new ResponseError("Invalid parameters", HTTP_STATUS_CODES.BAD_REQUEST));
+    }
+
     try {
         let cards = [];
         let doNotShow = [];
         for (let card of CARD_COLLECTIONS) {
             const currentUserRecord = await DbService.getOne(card, {
                 userId: mongoose.Types.ObjectId(req.user._id),
-                date: +date.getDate(),
-                month: +date.getMonth() + 1,
-                year: +date.getFullYear(),
+                date: +req.query.date,
+                month: +req.query.month,
+                year: +req.query.year,
             });
 
             if (currentUserRecord) {

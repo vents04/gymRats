@@ -111,7 +111,7 @@ module.exports = StyleSheet.create({
         display: "flex",
         flexDirection: "row",
         alignItems: "center",
-        paddingBottom: 32
+        paddingBottom: 16
     },
     followUpScreenTitle: {
         marginLeft: 10,

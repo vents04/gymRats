@@ -39,7 +39,10 @@ export default class CoachSearch extends Component {
     }
 
     searchCoaches = async () => {
-        this.scrollView.current.scrollTo(0);
+        this.scrollView.current?.scrollTo({
+            y: 0,
+            animated: true
+        });
         ApiRequests.get(`coaching/coach/search?name=${this.state.query.toLowerCase()}&lat=${this.state.lat}&lng=${this.state.lng}`, {}, true).then((response) => {
             console.log(response);
             this.setState({ searchResults: response.data.results })
@@ -92,7 +95,8 @@ export default class CoachSearch extends Component {
                                 contentContainerStyle={{
                                     flexGrow: 1,
                                     flexShrink: 1,
-                                }}>
+                                }}
+                                ref={this.scrollView}>
                                 {
                                     this.state.searchResults.map((result) => {
                                         return <View style={styles.coachResult} onClick={() => {

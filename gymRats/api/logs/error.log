@@ -315,3 +315,5 @@
 {"level":"error","message":"Cannot read properties of undefined (reading '_id')"}
 {"level":"error","message":"Assignment to constant variable."}
 {"level":"error","message":"trainer is not defined"}
+{"level":"error","message":"Invalid parameters"}
+{"level":"error","message":"Invalid parameters"}

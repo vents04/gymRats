@@ -64,7 +64,7 @@ export default class Calendar extends Component {
     }
 
     getDate = (selectedDate, timezoneOffset) => {
-        ApiRequests.get(`date/${selectedDate}/${timezoneOffset}`, false, true).then((response) => {
+        ApiRequests.get(`date?date=${selectedDate.getDate()}&month=${selectedDate.getMonth() + 1}&year=${selectedDate.getFullYear()}`, false, true).then((response) => {
             const dates = this.state.dates;
             for (let index = 0; index < dates.length; index++) {
                 if (dates[index].date.getTime() == selectedDate.getTime()) {
@@ -80,6 +80,7 @@ export default class Calendar extends Component {
 
     getCurrentDate = () => {
         const currentDate = new Date();
+        console.log(currentDate);
         this.setState({ selectedDate: currentDate, timezoneOffset: new Date().getTimezoneOffset() }, () => {
             this.getDate(this.state.selectedDate, this.state.timezoneOffset);
         });
