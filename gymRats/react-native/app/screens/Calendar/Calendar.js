@@ -10,6 +10,7 @@ import ApiRequests from '../../classes/ApiRequests';
 import LogbookCard from '../../components/LogbookCard/LogbookCard';
 import { cardColors } from '../../../assets/styles/cardColors';
 import { HTTP_STATUS_CODES } from '../../../../api/global';
+import i18n from 'i18n-js';
 
 const globalStyles = require('../../../assets/styles/global.styles');
 const styles = require('./Calendar.styles');

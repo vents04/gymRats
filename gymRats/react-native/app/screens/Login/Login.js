@@ -3,6 +3,7 @@ import { Text, View, Image, TextInput, TouchableOpacity, ActivityIndicator } fro
 import { AUTHENTICATION_TOKEN_KEY, HTTP_STATUS_CODES } from '../../../global';
 import ApiRequests from '../../classes/ApiRequests';
 import Auth from '../../classes/Auth';
+import i18n from 'i18n-js';
 
 const globalStyles = require('../../../assets/styles/global.styles');
 
@@ -49,17 +50,17 @@ export default class Login extends Component {
                         <Image style={globalStyles.pageLogo} source={require('../../../assets/img/icon.png')} />
                         <Text style={globalStyles.pageLogoText}>Gym Rats</Text>
                     </View>
-                    <Text style={globalStyles.authPageTitle}>Login</Text>
+                    <Text style={globalStyles.authPageTitle}>{i18n.t('login')['pageTitle']}</Text>
                     <View style={globalStyles.authPageInputs}>
                         <TextInput
                             value={this.state.email}
                             style={globalStyles.authPageInput}
-                            placeholder="Email:"
+                            placeholder={i18n.t('login')['emailPlaceholder']}
                             onChangeText={(val) => { this.setState({ email: val, showError: false }) }} />
                         <TextInput
                             value={this.state.password}
                             style={globalStyles.authPageInput}
-                            placeholder="Password:"
+                            placeholder={i18n.t('login')['passwordPlaceholder']}
                             secureTextEntry={true}
                             onChangeText={(val) => { this.setState({ password: val, showError: false }) }} />
                     </View>
@@ -71,7 +72,7 @@ export default class Login extends Component {
                     }}>
                         {
                             !this.state.isLoading
-                                ? <Text style={globalStyles.authPageActionButtonText}>Continue</Text>
+                                ? <Text style={globalStyles.authPageActionButtonText}>{i18n.t('login')['submitButton']}</Text>
                                 : <ActivityIndicator
                                     animating={true}
                                     color="#fff"
@@ -82,9 +83,9 @@ export default class Login extends Component {
                     <View style={globalStyles.authPageRedirectTextContainer} onClick={() => {
                         this.props.navigation.navigate("Signup")
                     }}>
-                        <Text style={globalStyles.authPageRedirectText}>Don't have an account?</Text>
+                        <Text style={globalStyles.authPageRedirectText}>{i18n.t('login')['dontHaveAccount']}</Text>
                         &nbsp;
-                        <Text style={globalStyles.authPageRedirectHighlightText}>Go to Signup</Text>
+                        <Text style={globalStyles.authPageRedirectHighlightText}>{i18n.t('login')['goToSignup']}</Text>
                     </View>
                 </View>
             </View>
