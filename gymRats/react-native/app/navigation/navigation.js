@@ -10,7 +10,7 @@ import Profile from '../screens/Profile/Profile';
 import ProfileDetailsEdit from '../screens/ProfileDetailsEdit/ProfileDetailsEdit';
 
 import { BsCalendarWeek } from 'react-icons/bs';
-import { BiCalendar, BiUserCircle } from 'react-icons/bi';
+import { BiCalendar, BiUserCircle, BiMessageSquareDetail } from 'react-icons/bi';
 import { GiRat } from 'react-icons/gi';
 import { Keyboard, StyleSheet, Text, View } from 'react-native';
 import WeightTracker from '../screens/cards/WeightTracker/WeightTracker';
@@ -20,6 +20,8 @@ import Coaching from '../screens/Coaching/Coaching';
 import CoachingApplicationSubmission from '../screens/CoachingApplicationSubmission/CoachingApplicationSubmission';
 import CoachSearch from '../screens/CoachSearch/CoachSearch';
 import CoachPage from '../screens/CoachPage/CoachPage';
+import Chats from '../screens/Chats/Chats';
+import Chat from '../screens/Chat/Chat';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -89,6 +91,28 @@ const coachingScreenStack = ({ navigation }) => {
                     headerShown: false
                 }}
                 component={CoachPage}
+            />
+        </Stack.Navigator>
+    )
+}
+
+
+const chatsScreenStack = ({ navigation }) => {
+    return (
+        <Stack.Navigator initialRouteName="Chats">
+            <Stack.Screen
+                name="Chats"
+                options={{
+                    headerShown: false
+                }}
+                component={Chats}
+            />
+            <Stack.Screen
+                name="Chat"
+                options={{
+                    headerShown: false
+                }}
+                component={Chat}
             />
         </Stack.Navigator>
     )
@@ -210,6 +234,27 @@ const NavigationRoutes = (props) => {
                 component={coachingScreenStack}
             />
             <Tab.Screen
+                name="chatsScreenStack"
+                options={{
+                    tabBarLabel: 'Chats',
+                    headerShown: false,
+                    tabBarActiveTintColor: "#ccc",
+                    tabBarIcon: (tabInfo) =>
+                    (
+                        <View style={styles.tabBarIconContainer}>
+                            <BiMessageSquareDetail
+                                size={30}
+                                color={tabInfo.focused ? "#1f6cb0" : "#ccc"}
+                            />
+                            <Text style={[styles.tabBarIconText, {
+                                fontFamily: (tabInfo.focused ? "SpartanBold" : "SpartanRegular")
+                            }]}>Chats</Text>
+                        </View>
+                    )
+                }}
+                component={chatsScreenStack}
+            />
+            <Tab.Screen
                 name="profileScreenStack"
                 options={{
                     tabBarLabel: 'Profile',
@@ -253,7 +298,7 @@ const styles = StyleSheet.create({
     },
     tabBarIconText: {
         fontFamily: "SpartanRegular",
-        fontSize: 13,
+        fontSize: 10,
         marginTop: 10
     }
 })
