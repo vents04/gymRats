@@ -190,6 +190,27 @@ const NavigationRoutes = (props) => {
             }}
         >
             <Tab.Screen
+                name="chatsScreenStack"
+                options={{
+                    tabBarLabel: 'Chats',
+                    headerShown: false,
+                    tabBarActiveTintColor: "#ccc",
+                    tabBarIcon: (tabInfo) =>
+                    (
+                        <View style={styles.tabBarIconContainer}>
+                            <BiMessageSquareDetail
+                                size={30}
+                                color={tabInfo.focused ? "#1f6cb0" : "#ccc"}
+                            />
+                            <Text style={[styles.tabBarIconText, {
+                                fontFamily: (tabInfo.focused ? "SpartanBold" : "SpartanRegular")
+                            }]}>Chats</Text>
+                        </View>
+                    )
+                }}
+                component={chatsScreenStack}
+            />
+            <Tab.Screen
                 name="calendarScreenStack"
                 options={{
                     tabBarLabel: 'Calendar',
@@ -232,27 +253,6 @@ const NavigationRoutes = (props) => {
 
                 }}
                 component={coachingScreenStack}
-            />
-            <Tab.Screen
-                name="chatsScreenStack"
-                options={{
-                    tabBarLabel: 'Chats',
-                    headerShown: false,
-                    tabBarActiveTintColor: "#ccc",
-                    tabBarIcon: (tabInfo) =>
-                    (
-                        <View style={styles.tabBarIconContainer}>
-                            <BiMessageSquareDetail
-                                size={30}
-                                color={tabInfo.focused ? "#1f6cb0" : "#ccc"}
-                            />
-                            <Text style={[styles.tabBarIconText, {
-                                fontFamily: (tabInfo.focused ? "SpartanBold" : "SpartanRegular")
-                            }]}>Chats</Text>
-                        </View>
-                    )
-                }}
-                component={chatsScreenStack}
             />
             <Tab.Screen
                 name="profileScreenStack"
