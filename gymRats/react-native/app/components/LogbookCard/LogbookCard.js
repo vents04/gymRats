@@ -26,8 +26,7 @@ export default class LogbookCard extends Component {
     }
 
     deleteCard = () => {
-        const date = new Date(this.state.data.year, this.state.data.month - 1, this.state.data.date);
-        ApiRequests.delete(`logbook/workout-session/${date}/${new Date().getTimezoneOffset()}`, {}, true).then((response) => {
+        ApiRequests.delete(`logbook/workout-session?date=${this.state.data.date}&month=${this.state.data.month}&year=${this.state.data.year}`, {}, true).then((response) => {
             this.toggleShowConfirmationBox(false);
             this.props.rerender(this.props.date);
         }).catch((error) => {

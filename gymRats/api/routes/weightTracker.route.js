@@ -10,21 +10,20 @@ const DbService = require('../services/db.service');
 const WeightTrackerService = require('../services/cards/weightTracker.service');
 
 router.post("/daily-weight", authenticate, async (req, res, next) => {
+    if (!req.query.date || !req.query.month || !req.query.year
+        || !Date.parse(req.query.year + "-" + req.query.month + "-" + req.query.date)) {
+        return next(new ResponseError("Invalid date parameters", HTTP_STATUS_CODES.BAD_REQUEST));
+    }
+
     const { error } = dailyWeightPostValidation(req.body);
     if (error) return next(new ResponseError(error.details[0].message, HTTP_STATUS_CODES.BAD_REQUEST));
 
-    const date = new Date(new Date(req.body.date).setMinutes(new Date(req.body.date).getMinutes() - req.body.timezoneOffset));
-
     try {
-        if (date.getTime() !== date.getTime()) {
-            return next(new ResponseError("Invalid date", HTTP_STATUS_CODES.BAD_REQUEST));
-        }
-
         const existingDailyWeight = await DbService.getOne(COLLECTIONS.DAILY_WEIGHTS, {
             userId: mongoose.Types.ObjectId(req.user._id),
-            date: +date.getDate(),
-            month: +date.getMonth() + 1,
-            year: +date.getFullYear()
+            date: +req.query.date,
+            month: +req.query.month,
+            year: +req.query.year
         })
 
         if (existingDailyWeight) {
@@ -32,9 +31,9 @@ router.post("/daily-weight", authenticate, async (req, res, next) => {
         }
 
         const dailyWeight = new DailyWeight({
-            date: +date.getDate(),
-            month: +date.getMonth() + 1,
-            year: +date.getFullYear(),
+            date: +req.query.date,
+            month: +req.query.month,
+            year: +req.query.year,
             weight: +req.body.weight,
             unit: req.body.unit
         });
@@ -47,14 +46,19 @@ router.post("/daily-weight", authenticate, async (req, res, next) => {
     }
 });
 
-router.delete("/daily-weight/:date/:timezoneOffset", authenticate, async (req, res, next) => {
+router.delete("/daily-weight", authenticate, async (req, res, next) => {
+    if (!req.query.date || !req.query.month || !req.query.year
+        || !Date.parse(req.query.year + "-" + req.query.month + "-" + req.query.date)) {
+        return next(new ResponseError("Invalid date parameters", HTTP_STATUS_CODES.BAD_REQUEST));
+    }
+
     try {
         const date = new Date(new Date(req.params.date).setMinutes(new Date(req.params.date).getMinutes() - req.params.timezoneOffset));
         await DbService.delete(COLLECTIONS.DAILY_WEIGHTS, {
             userId: mongoose.Types.ObjectId(req.user._id),
-            date: +date.getDate(),
-            month: +date.getMonth() + 1,
-            year: +date.getFullYear(),
+            date: +req.query.date,
+            month: +req.query.month,
+            year: +req.query.year,
         });
         res.sendStatus(HTTP_STATUS_CODES.OK);
     } catch (error) {

@@ -317,3 +317,5 @@
 {"level":"error","message":"trainer is not defined"}
 {"level":"error","message":"Invalid parameters"}
 {"level":"error","message":"Invalid parameters"}
+{"level":"error","message":"Invalid date"}
+{"level":"error","message":"\"dt\" is not allowed"}

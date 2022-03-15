@@ -59,7 +59,6 @@ const WeightTrackerService = {
                         currentMin._id = time._id;
                     }
                 }
-                console.log(currentMin);
 
                 if (currentMin._id == null) {
                     resolve(null);

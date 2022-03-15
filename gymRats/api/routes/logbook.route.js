@@ -67,7 +67,6 @@ router.get("/workout", authenticate, async (req, res, next) => {
                 session: null
             }
             for (let session of sessions) {
-                console.log("tuka2");
                 let match = true;
                 for (let templateExercise of template.exercises) {
                     let innerMatch = false;
@@ -131,21 +130,20 @@ router.get("/workout/:id/last-session", authenticate, async (req, res, next) => 
 });
 
 router.post("/workout-session", authenticate, async (req, res, next) => {
+    if (!req.query.date || !req.query.month || !req.query.year
+        || !Date.parse(req.query.year + "-" + req.query.month + "-" + req.query.date)) {
+        return next(new ResponseError("Invalid date parameters", HTTP_STATUS_CODES.BAD_REQUEST));
+    }
+
     const { error } = workoutSessionValidation(req.body);
     if (error) return next(new ResponseError(error.details[0].message, HTTP_STATUS_CODES.BAD_REQUEST));
 
     try {
-        const date = new Date(new Date(req.body.dt).setMinutes(new Date(req.body.dt).getMinutes() - req.body.timezoneOffset));
-
-        if (date.getTime() !== date.getTime()) {
-            return next(new ResponseError("Invalid date", HTTP_STATUS_CODES.BAD_REQUEST));
-        }
-
         const existingSession = await DbService.getOne(COLLECTIONS.WORKOUT_SESSIONS, {
             userId: mongoose.Types.ObjectId(req.user._id),
-            date: +date.getDate(),
-            month: +date.getMonth() + 1,
-            year: +date.getFullYear()
+            date: +req.query.date,
+            month: +req.query.month,
+            year: +req.query.year
         });
 
         if (existingSession) await DbService.delete(COLLECTIONS.WORKOUT_SESSIONS, { _id: mongoose.Types.ObjectId(existingSession._id) })
@@ -156,9 +154,9 @@ router.post("/workout-session", authenticate, async (req, res, next) => {
         }
 
         const workoutSession = new Session({
-            date: +date.getDate(),
-            month: +date.getMonth() + 1,
-            year: +date.getFullYear(),
+            date: +req.query.date,
+            month: +req.query.month,
+            year: +req.query.year,
             userId: mongoose.Types.ObjectId(req.user._id),
             exercises: req.body.exercises
         });
@@ -170,14 +168,18 @@ router.post("/workout-session", authenticate, async (req, res, next) => {
     }
 });
 
-router.get("/workout-session/:date/:timezoneOffset", authenticate, async (req, res, next) => {
+router.get("/workout-session", authenticate, async (req, res, next) => {
+    if (!req.query.date || !req.query.month || !req.query.year
+        || !Date.parse(req.query.year + "-" + req.query.month + "-" + req.query.date)) {
+        return next(new ResponseError("Invalid date parameters", HTTP_STATUS_CODES.BAD_REQUEST));
+    }
+
     try {
-        const date = new Date(new Date(req.params.date).setMinutes(new Date(req.params.date).getMinutes() - req.params.timezoneOffset));
         const workoutSession = await DbService.getOne(COLLECTIONS.WORKOUT_SESSIONS, {
             userId: mongoose.Types.ObjectId(req.user._id),
-            date: +date.getDate(),
-            month: +date.getMonth() + 1,
-            year: +date.getFullYear(),
+            date: +req.query.date,
+            month: +req.query.month,
+            year: +req.query.year,
         });
         if (workoutSession) {
             for (let exercise of workoutSession.exercises) {
@@ -193,15 +195,18 @@ router.get("/workout-session/:date/:timezoneOffset", authenticate, async (req, r
     }
 });
 
-router.delete("/workout-session/:date/:timezoneOffset", authenticate, async (req, res, next) => {
+router.delete("/workout-session", authenticate, async (req, res, next) => {
+    if (!req.query.date || !req.query.month || !req.query.year
+        || !Date.parse(req.query.year + "-" + req.query.month + "-" + req.query.date)) {
+        return next(new ResponseError("Invalid date parameters", HTTP_STATUS_CODES.BAD_REQUEST));
+    }
+
     try {
-        const date = new Date(new Date(req.params.date).setMinutes(new Date(req.params.date).getMinutes() - req.params.timezoneOffset));
-        console.log(+date.getDate(), +date.getMonth() + 1, +date.getFullYear())
         await DbService.delete(COLLECTIONS.WORKOUT_SESSIONS, {
             userId: mongoose.Types.ObjectId(req.user._id),
-            date: +date.getDate(),
-            month: +date.getMonth() + 1,
-            year: +date.getFullYear(),
+            date: +req.query.date,
+            month: +req.query.month,
+            year: +req.query.year,
         });
         res.sendStatus(HTTP_STATUS_CODES.OK);
     } catch (error) {
@@ -220,7 +225,6 @@ router.post('/check-template', authenticate, async (req, res, next) => {
             for (let exercise of userTemplate.exercises) {
                 let innerMatch = false;
                 for (let bodyExercise of req.body.exercises) {
-                    console.log(bodyExercise);
                     if (bodyExercise.exerciseId.toString() == exercise.toString()) {
                         innerMatch = true;
                         break;
@@ -247,7 +251,7 @@ router.post('/check-template', authenticate, async (req, res, next) => {
     } catch (error) {
         return next(new ResponseError(error.message || "Internal server error", error.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
     }
-})
+});
 
 router.get("/search", authenticate, async (req, res, next) => {
     let words = req.query.words;
@@ -284,12 +288,12 @@ router.get("/search", authenticate, async (req, res, next) => {
                 }
             }
         }
-        for(let i = 0; i < sorted.length; i++){
-            for(let j = 0; j < ( sorted.length - i -1 ); j++){
+        for (let i = 0; i < sorted.length; i++) {
+            for (let j = 0; j < (sorted.length - i - 1); j++) {
                 var temp = sorted[j]
-                if(sorted[j].timesFound < sorted[j+1].timesFound){
+                if (sorted[j].timesFound < sorted[j + 1].timesFound) {
                     sorted[j] = sorted[j + 1]
-                    sorted[j+1] = temp
+                    sorted[j + 1] = temp
                 }
                 if (sorted[j].timesFound == sorted[j + 1].timesFound) {
                     if (sorted[j].keywords.length > sorted[j + 1].keywords.length) {

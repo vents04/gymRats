@@ -11,7 +11,7 @@ const WeightTrackerService = require('../services/cards/weightTracker.service');
 router.get('/', authenticate, async (req, res, next) => {
     if (!req.query.date || !req.query.month || !req.query.year
         || !Date.parse(req.query.year + "-" + req.query.month + "-" + req.query.date)) {
-        return next(new ResponseError("Invalid parameters", HTTP_STATUS_CODES.BAD_REQUEST));
+        return next(new ResponseError("Invalid date parameters", HTTP_STATUS_CODES.BAD_REQUEST));
     }
 
     try {

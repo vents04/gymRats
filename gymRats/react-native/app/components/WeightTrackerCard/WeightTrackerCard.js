@@ -27,8 +27,7 @@ export default class WeightTrackerCard extends Component {
     }
 
     deleteCard = () => {
-        const date = new Date(this.state.data.year, this.state.data.month - 1, this.state.data.date);
-        ApiRequests.delete(`weight-tracker/daily-weight/${date}/${new Date().getTimezoneOffset()}`, {}, true).then((response) => {
+        ApiRequests.delete(`weight-tracker/daily-weight?date=${this.state.data.date}&month=${this.state.data.month}&year=${this.state.data.year}`, {}, true).then((response) => {
             this.toggleShowConfirmationBox(false);
             this.props.rerender(this.props.date);
         }).catch((error) => {

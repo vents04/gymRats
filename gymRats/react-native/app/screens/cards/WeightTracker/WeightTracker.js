@@ -57,9 +57,7 @@ export default class WeightTracker extends Component {
     postWeight = () => {
         this.setState({ showSaving: true });
         setTimeout(() => {
-            ApiRequests.post('weight-tracker/daily-weight', false, {
-                date: this.props.route.params.date,
-                timezoneOffset: this.props.route.params.timezoneOffset,
+            ApiRequests.post(`weight-tracker/daily-weight?date=${this.props.route.params.date.getDate()}&month=${this.props.route.params.date.getMonth() + 1}&year=${this.props.route.params.date.getFullYear()}`, false, {
                 weight: this.state.weight,
                 unit: this.state.weightUnit,
             }, true).then((response) => {

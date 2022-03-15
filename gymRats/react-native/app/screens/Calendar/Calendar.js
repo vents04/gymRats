@@ -80,7 +80,7 @@ export default class Calendar extends Component {
     }
 
     getCurrentDate = () => {
-        const currentDate = new Date();
+        const currentDate = new Date(new Date().setHours(new Date().getHours() + 5));
         console.log(currentDate);
         this.setState({ selectedDate: currentDate, timezoneOffset: new Date().getTimezoneOffset() }, () => {
             this.getDate(this.state.selectedDate, this.state.timezoneOffset);

@@ -101,7 +101,7 @@ export default class Logbook extends Component {
     }
 
     getSession = (date) => {
-        ApiRequests.get(`logbook/workout-session/${date}/${this.state.timezoneOffset}`, {}, true).then((response) => {
+        ApiRequests.get(`logbook/workout-session?date=${this.state.date.getDate()}&month=${this.state.date.getMonth() + 1}&year=${this.state.date.getFullYear()}`, {}, true).then((response) => {
             this.setState({ exercises: response.data.session.exercises })
         }).catch((error) => {
             if (error.response) {
@@ -227,9 +227,7 @@ export default class Logbook extends Component {
         for (let exercise of payload.exercises) {
             if (exercise.hasOwnProperty("exerciseName")) delete exercise.exerciseName;
         }
-        payload.dt = this.state.date;
-        payload.timezoneOffset = this.state.timezoneOffset || new Date().getTimezoneOffset();
-        ApiRequests.post("logbook/workout-session", {}, payload, true).then((response) => {
+        ApiRequests.post(`logbook/workout-session?date=${this.state.date.getDate()}&month=${this.state.date.getMonth() + 1}&year=${this.state.date.getFullYear()}`, {}, payload, true).then((response) => {
             this.getSession(this.state.date);
             this.setState({ hasChanges: false });
         }).catch((error) => {

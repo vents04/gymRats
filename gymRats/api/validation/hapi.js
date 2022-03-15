@@ -133,8 +133,6 @@ const dailyWeightPostValidation = (data) => {
     const schema = Joi.object({
         weight: Joi.number().required(),
         unit: Joi.string().valid(...Object.values(WEIGHT_UNITS)).required(),
-        date: Joi.date().required(),
-        timezoneOffset: Joi.number().required(),
     })
     return schema.validate(data);
 }
@@ -209,8 +207,6 @@ const workoutPostValidation = (data) => {
 
 const workoutSessionValidation = (data) => {
     const schema = Joi.object({
-        dt: Joi.date().required(),
-        timezoneOffset: Joi.number().required(),
         exercises: Joi.array().items(Joi.object({
             _id: Joi.string().optional(),
             exerciseId: Joi.string().required().custom((value, helper) => {
