@@ -26,6 +26,9 @@ module.exports = {
                 noData: "No data added for that date",
                 bottomSheetTitle: "Cards",
                 bottomSheetNoCards: "You have already added all type of cards"
+            },
+            profile: {
+
             }
         },
         components: {

@@ -5,6 +5,7 @@ import { BiEdit } from 'react-icons/bi';
 import { MdEdit } from 'react-icons/md';
 import ApiRequests from '../../classes/ApiRequests';
 import * as ImagePicker from 'expo-image-picker';
+import i18n from 'i18n-js';
 
 const globalStyles = require('../../../assets/styles/global.styles');
 const styles = require('./Profile.styles');
