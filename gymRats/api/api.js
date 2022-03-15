@@ -1,6 +1,9 @@
 
 const express = require('express');
 const app = express();
+const httpServer = require("http").createServer(app);
+const options = {};
+const io = require("socket.io")(httpServer, options);
 const router = express.Router();
 const cors = require('cors');
 const mongo = require("./db/mongo");

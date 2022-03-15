@@ -23,6 +23,16 @@ const exerciseSchema = mongoose.Schema({
         ref: COLLECTIONS.MUSCLES,
         optional: true,
     }],
+    translations: {
+        en: {
+            type: String,
+            default: null
+        },
+        bg: {
+            type: String,
+            default: null
+        }
+    },
     keywords: [{
         type: String,
         required: true,
