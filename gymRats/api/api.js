@@ -44,6 +44,6 @@ for (var d = new Date(1970, 0, 1); d <= now; d.setDate(d.getDate() + 1)) {
     }
 })();
 
-app.listen(PORT, function () {
+httpServer.listen(PORT, function () {
     console.log("API server listening on port " + PORT)
 })
