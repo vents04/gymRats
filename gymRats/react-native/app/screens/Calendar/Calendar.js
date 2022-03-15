@@ -114,7 +114,7 @@ export default class Calendar extends Component {
                             <View style={styles.calendarControllersContainer}>
                                 <View style={styles.calendarController} onClick={() => { this.incrementDate(-1) }}>
                                     <IoIosArrowBack style={{ marginRight: 5 }} size={14} color="#999" />
-                                    <Text style={styles.calendarControllerText}>Previous</Text>
+                                    <Text style={styles.calendarControllerText}>{i18n.t('screens')['calendar']['calendarControllerBack']}</Text>
                                 </View>
                                 <Text style={styles.calendarCurrentDate} onClick={() => { this.setState({ showDatePicker: true }) }}>
                                     {this.state.selectedDate.getDate()}
@@ -126,7 +126,7 @@ export default class Calendar extends Component {
                                     }
                                 </Text>
                                 <View style={[styles.calendarController, { justifyContent: 'flex-end' }]} onClick={() => { this.incrementDate(1) }}>
-                                    <Text style={styles.calendarControllerText}>Next</Text>
+                                    <Text style={styles.calendarControllerText}>{i18n.t('screens')['calendar']['calendarControllerNext']}</Text>
                                     <IoIosArrowForward style={{ marginLeft: 5 }} size={14} color="#999" />
                                 </View>
                             </View>
@@ -136,7 +136,7 @@ export default class Calendar extends Component {
                                 }]} onPress={() => {
                                     this.bottomSheet.current.show()
                                 }}>
-                                    <Text style={globalStyles.authPageActionButtonText}>Add data</Text>
+                                    <Text style={globalStyles.authPageActionButtonText}>{i18n.t('screens')['calendar']['addData']}</Text>
                                 </TouchableOpacity>
                             </View>
                             <ScrollView contentContainerStyle={{
@@ -168,7 +168,7 @@ export default class Calendar extends Component {
                                                             }} data={card.data} rerender={this.reloadDateAfterDelete} date={this.state.selectedDate} />
                                                             : null
                                                 )
-                                                : <Text style={globalStyles.notation}>No data added for that date</Text>
+                                                : <Text style={globalStyles.notation}>{i18n.t('screens')['calendar']['noData']}</Text>
                                             : null
                                     )
                                 }
@@ -179,7 +179,7 @@ export default class Calendar extends Component {
             </View>
             <BottomSheet ref={this.bottomSheet} height={400} draggable={false}>
                 <View style={styles.bottomSheetTopbar}>
-                    <Text style={styles.bottomSheetTitle}>Cards</Text>
+                    <Text style={styles.bottomSheetTitle}>{i18n.t('screens')['calendar']['bottomSheetTitle']}</Text>
                     <IoMdClose size={30} onClick={() => {
                         this.bottomSheet.current.close();
                     }} />
@@ -187,7 +187,7 @@ export default class Calendar extends Component {
                 <ScrollView style={styles.cardsContainer}>
                     {
                         this.state.doNotShow.length == 2
-                            ? <Text style={globalStyles.notation}>No cards available</Text>
+                            ? <Text style={globalStyles.notation}>{i18n.t('screens')['calendar']['bottomSheetNoCards']}</Text>
                             : null
                     }
                     {
@@ -203,7 +203,7 @@ export default class Calendar extends Component {
                             }}>
                                 <View style={styles.cardTopbar}>
                                     <FaWeight color="#fff" size={25} />
-                                    <Text style={styles.cardTitle}>Weight</Text>
+                                    <Text style={styles.cardTitle}>{i18n.t('components')['cards']['weightTracker']['cardTitle']}</Text>
                                 </View>
                             </View>
                             : null
@@ -221,7 +221,7 @@ export default class Calendar extends Component {
                             }}>
                                 <View style={styles.cardTopbar}>
                                     <BsJournalBookmarkFill color="#fff" size={25} />
-                                    <Text style={styles.cardTitle}>Workout session</Text>
+                                    <Text style={styles.cardTitle}>{i18n.t('components')['cards']['logbook']['cardTitle']}</Text>
                                 </View>
                             </View>
                             : null

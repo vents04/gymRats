@@ -5,6 +5,7 @@ import { AiFillDelete } from 'react-icons/ai';
 import ApiRequests from '../../classes/ApiRequests';
 import ConfirmationBox from '../ConfirmationBox/ConfirmationBox';
 import { HTTP_STATUS_CODES } from '../../../global';
+import i18n from 'i18n-js';
 
 const { cardColors } = require('../../../assets/styles/cardColors');
 const globalStyles = require('../../../assets/styles/global.styles');
@@ -50,7 +51,7 @@ export default class WeightTrackerCard extends Component {
             {this.state.showConfirmationBox && <ConfirmationBox deleteCard={this.deleteCard} toggleShowConfirmationBox={this.toggleShowConfirmationBox} />}
             <View style={globalStyles.cardTopbar}>
                 <FaWeight size={25} color={cardColors.weightTracker} />
-                <Text style={globalStyles.cardTitle}>Weight</Text>
+                <Text style={globalStyles.cardTitle}>{i18n.t('components')['cards']['weightTracker']['cardTitle']}</Text>
                 <View style={globalStyles.cardTopbarIcon}>
                     <AiFillDelete size={25} color="#ddd" onClick={() => {
                         this.setState({ showConfirmationBox: true })
@@ -81,7 +82,7 @@ export default class WeightTrackerCard extends Component {
                                             : "lbs"
                                     }
                                     &nbsp;
-                                    lost compared to last measurement</Text>
+                                    {i18n.t('components')['cards']['weightTracker']['lostWeight']}</Text>
                             </View>
                             : <View style={styles.statsContainer}>
                                 <FaLongArrowAltUp size={20} color={cardColors.weightTracker} />
@@ -94,7 +95,7 @@ export default class WeightTrackerCard extends Component {
                                             : "lbs"
                                     }
                                     &nbsp;
-                                    gained compared to last measurement</Text>
+                                    {i18n.t('components')['cards']['weightTracker']['gainedWeight']}</Text>
                             </View>
                         : null
                 }
@@ -104,7 +105,7 @@ export default class WeightTrackerCard extends Component {
                 }]} onPress={() => {
                     this.props.actionButtonFunction();
                 }}>
-                    <Text style={globalStyles.authPageActionButtonText}>More info</Text>
+                    <Text style={globalStyles.authPageActionButtonText}>{i18n.t('components')['cards']['weightTracker']['redirectButton']}</Text>
                 </TouchableOpacity>
             </View>
         </View>;

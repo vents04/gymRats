@@ -22,6 +22,7 @@ import CoachSearch from '../screens/CoachSearch/CoachSearch';
 import CoachPage from '../screens/CoachPage/CoachPage';
 import Chats from '../screens/Chats/Chats';
 import Chat from '../screens/Chat/Chat';
+import i18n from 'i18n-js';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -157,20 +158,6 @@ const Auth = () => {
 };
 
 const NavigationRoutes = (props) => {
-
-    const [keyboardShown, setKeyboardShown] = useState(false);
-
-    useEffect(() => {
-        const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
-            console.log("POKAZVA SE")
-            setKeyboardShown(true);
-        });
-        const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
-            console.log("NE POKAZVA SE")
-            setKeyboardShown(false);
-        });
-    }, []);
-
     return (
         <Tab.Navigator
             screenOptions={{
@@ -178,7 +165,7 @@ const NavigationRoutes = (props) => {
                 tabBarShowLabel: false,
                 tabBarHideOnKeyboard: true,
                 tabBarStyle: {
-                    display: keyboardShown ? 'none' : 'flex',
+                    display: 'flex',
                     position: 'absolute',
                     bottom: 25,
                     paddingTop: 25,
@@ -189,27 +176,6 @@ const NavigationRoutes = (props) => {
                 },
             }}
         >
-            <Tab.Screen
-                name="chatsScreenStack"
-                options={{
-                    tabBarLabel: 'Chats',
-                    headerShown: false,
-                    tabBarActiveTintColor: "#ccc",
-                    tabBarIcon: (tabInfo) =>
-                    (
-                        <View style={styles.tabBarIconContainer}>
-                            <BiMessageSquareDetail
-                                size={30}
-                                color={tabInfo.focused ? "#1f6cb0" : "#ccc"}
-                            />
-                            <Text style={[styles.tabBarIconText, {
-                                fontFamily: (tabInfo.focused ? "SpartanBold" : "SpartanRegular")
-                            }]}>Chats</Text>
-                        </View>
-                    )
-                }}
-                component={chatsScreenStack}
-            />
             <Tab.Screen
                 name="calendarScreenStack"
                 options={{
@@ -225,7 +191,7 @@ const NavigationRoutes = (props) => {
                             />
                             <Text style={[styles.tabBarIconText, {
                                 fontFamily: (tabInfo.focused ? "SpartanBold" : "SpartanRegular")
-                            }]}>Calendar</Text>
+                            }]}>{i18n.t('navigation')['calendar']}</Text>
                         </View>
                     )
 
@@ -247,12 +213,33 @@ const NavigationRoutes = (props) => {
                             />
                             <Text style={[styles.tabBarIconText, {
                                 fontFamily: (tabInfo.focused ? "SpartanBold" : "SpartanRegular")
-                            }]}>Coaching</Text>
+                            }]}>{i18n.t('navigation')['coaching']}</Text>
                         </View>
                     )
 
                 }}
                 component={coachingScreenStack}
+            />
+            <Tab.Screen
+                name="chatsScreenStack"
+                options={{
+                    tabBarLabel: 'Chats',
+                    headerShown: false,
+                    tabBarActiveTintColor: "#ccc",
+                    tabBarIcon: (tabInfo) =>
+                    (
+                        <View style={styles.tabBarIconContainer}>
+                            <BiMessageSquareDetail
+                                size={30}
+                                color={tabInfo.focused ? "#1f6cb0" : "#ccc"}
+                            />
+                            <Text style={[styles.tabBarIconText, {
+                                fontFamily: (tabInfo.focused ? "SpartanBold" : "SpartanRegular")
+                            }]}>{i18n.t('navigation')['chats']}</Text>
+                        </View>
+                    )
+                }}
+                component={chatsScreenStack}
             />
             <Tab.Screen
                 name="profileScreenStack"
@@ -269,7 +256,7 @@ const NavigationRoutes = (props) => {
                             />
                             <Text style={[styles.tabBarIconText, {
                                 fontFamily: (tabInfo.focused ? "SpartanBold" : "SpartanRegular")
-                            }]}>Profile</Text>
+                            }]}>{i18n.t('navigation')['profile']}</Text>
                         </View>
                     )
                 }}

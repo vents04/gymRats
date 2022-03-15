@@ -4,6 +4,7 @@ import { BsJournalBookmarkFill } from 'react-icons/bs';
 import { AiFillDelete } from 'react-icons/ai';
 import ConfirmationBox from '../ConfirmationBox/ConfirmationBox';
 import ApiRequests from '../../classes/ApiRequests';
+import i18n from 'i18n-js';
 
 const { cardColors } = require('../../../assets/styles/cardColors');
 const globalStyles = require('../../../assets/styles/global.styles');
@@ -49,7 +50,7 @@ export default class LogbookCard extends Component {
             {this.state.showConfirmationBox && <ConfirmationBox deleteCard={this.deleteCard} toggleShowConfirmationBox={this.toggleShowConfirmationBox} />}
             <View style={globalStyles.cardTopbar}>
                 <BsJournalBookmarkFill size={25} color={cardColors.logbook} />
-                <Text style={globalStyles.cardTitle}>Workout</Text>
+                <Text style={globalStyles.cardTitle}>{i18n.t('components')['cards']['logbook']['cardTitle']}</Text>
                 <View style={globalStyles.cardTopbarIcon}>
                     <AiFillDelete size={25} color="#ddd" onClick={() => {
                         this.setState({ showConfirmationBox: true })
@@ -60,12 +61,12 @@ export default class LogbookCard extends Component {
                 {
                     this.props.data.hasWorkoutTemplateName
                         ? <Text style={styles.workoutName}>{this.props.data.workoutTemplateName}</Text>
-                        : <Text style={styles.workoutName}>Workout</Text>
+                        : <Text style={styles.workoutName}>{i18n.t('components')['cards']['logbook']['cardTitle']}</Text>
                 }
                 <View style={styles.exercisesContainer}>
                     {
                         this.props.data.exercises.map((exercise) =>
-                            <Text style={styles.exercise}>{exercise.sets.length} x {exercise.exerciseName}</Text>
+                            <Text style={styles.exercise}>{exercise.sets.length} x {i18n.t('exercises')[exercise.exerciseId]}</Text>
                         )
                     }
                 </View>
@@ -75,7 +76,7 @@ export default class LogbookCard extends Component {
                 }]} onPress={() => {
                     this.props.actionButtonFunction();
                 }}>
-                    <Text style={globalStyles.authPageActionButtonText}>Info and progress</Text>
+                    <Text style={globalStyles.authPageActionButtonText}>{i18n.t('components')['cards']['logbook']['redirectButton']}</Text>
                 </TouchableOpacity>
             </View>
         </View>;

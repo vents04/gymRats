@@ -3,6 +3,7 @@ import { Text, View, Modal, Pressable } from 'react-native'
 import { cardColors } from '../../../assets/styles/cardColors';
 import { HTTP_STATUS_CODES } from '../../../global';
 import ApiRequests from '../../classes/ApiRequests';
+import i18n from 'i18n-js';
 
 const globalStyles = require('../../../assets/styles/global.styles');
 const styles = require('./ConfirmationBox.styles');
@@ -31,16 +32,16 @@ export default class ConfirmationBox extends Component {
             >
                 <View style={globalStyles.centeredView}>
                     <View style={globalStyles.modalView}>
-                        <Text style={globalStyles.modalText}>Are you sure you want to delete this item?</Text>
+                        <Text style={globalStyles.modalText}>{i18n.t('components')['confirmationBox']['question']}</Text>
                         <View style={globalStyles.modalActionsContainer}>
                             <Text style={globalStyles.modalActionTitle} onClick={() => {
                                 this.props.deleteCard()
-                            }}>Yes</Text>
+                            }}>{i18n.t('components')['confirmationBox']['affirmation']}</Text>
                             <Text style={[globalStyles.modalActionTitle, {
                                 color: "#1f6cb0"
                             }]} onClick={() => {
                                 this.props.toggleShowConfirmationBox(false);
-                            }}>No</Text>
+                            }}>{i18n.t('components')['confirmationBox']['denial']}</Text>
                         </View>
                     </View>
                 </View>
