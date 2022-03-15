@@ -54,27 +54,27 @@ export default class Signup extends Component {
                         <Image style={globalStyles.pageLogo} source={require('../../../assets/img/icon.png')} />
                         <Text style={globalStyles.pageLogoText}>Gym Rats</Text>
                     </View>
-                    <Text style={globalStyles.authPageTitle}>{i18n.t('signup')['pageTitle']}</Text>
+                    <Text style={globalStyles.authPageTitle}>{i18n.t('screens')['signup']['pageTitle']}</Text>
                     <View style={globalStyles.authPageInputs}>
                         <TextInput
                             value={this.state.firstName}
                             style={globalStyles.authPageInput}
-                            placeholder={i18n.t('signup')['firstNamePlaceholder']}
+                            placeholder={i18n.t('screens')['signup']['firstNamePlaceholder']}
                             onChangeText={(val) => { this.setState({ firstName: val, showError: false }) }} />
                         <TextInput
                             value={this.state.lastName}
                             style={globalStyles.authPageInput}
-                            placeholder={i18n.t('signup')['lastNamePlaceholder']}
+                            placeholder={i18n.t('screens')['signup']['lastNamePlaceholder']}
                             onChangeText={(val) => { this.setState({ lastName: val, showError: false }) }} />
                         <TextInput
                             value={this.state.email}
                             style={globalStyles.authPageInput}
-                            placeholder={i18n.t('signup')['emailPlaceholder']}
+                            placeholder={i18n.t('screens')['signup']['emailPlaceholder']}
                             onChangeText={(val) => { this.setState({ email: val }); this.setState({ showError: false }) }} />
                         <TextInput
                             value={this.state.password}
                             style={globalStyles.authPageInput}
-                            placeholder={i18n.t('signup')['passwordPlaceholder']}
+                            placeholder={i18n.t('screens')['signup']['passwordPlaceholder']}
                             secureTextEntry={true}
                             onChangeText={(val) => { this.setState({ password: val }); this.setState({ showError: false }) }} />
                     </View>
@@ -86,7 +86,7 @@ export default class Signup extends Component {
                     }}>
                         {
                             !this.state.isLoading
-                                ? <Text style={globalStyles.authPageActionButtonText}>{i18n.t('signup')['submitButton']}</Text>
+                                ? <Text style={globalStyles.authPageActionButtonText}>{i18n.t('screens')['signup']['submitButton']}</Text>
                                 : <ActivityIndicator
                                     animating={true}
                                     color="#fff"
@@ -97,9 +97,9 @@ export default class Signup extends Component {
                     <View style={globalStyles.authPageRedirectTextContainer} onClick={() => {
                         this.props.navigation.navigate("Login")
                     }}>
-                        <Text style={globalStyles.authPageRedirectText}>{i18n.t('signup')['haveAccount']}</Text>
+                        <Text style={globalStyles.authPageRedirectText}>{i18n.t('screens')['signup']['haveAccount']}</Text>
                         &nbsp;
-                        <Text style={globalStyles.authPageRedirectHighlightText}>{i18n.t('signup')['goToLogin']}</Text>
+                        <Text style={globalStyles.authPageRedirectHighlightText}>{i18n.t('screens')['signup']['goToLogin']}</Text>
                     </View>
                 </View>
             </View>

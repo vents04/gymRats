@@ -50,17 +50,17 @@ export default class Login extends Component {
                         <Image style={globalStyles.pageLogo} source={require('../../../assets/img/icon.png')} />
                         <Text style={globalStyles.pageLogoText}>Gym Rats</Text>
                     </View>
-                    <Text style={globalStyles.authPageTitle}>{i18n.t('login')['pageTitle']}</Text>
+                    <Text style={globalStyles.authPageTitle}>{i18n.t('screens')['login']['pageTitle']}</Text>
                     <View style={globalStyles.authPageInputs}>
                         <TextInput
                             value={this.state.email}
                             style={globalStyles.authPageInput}
-                            placeholder={i18n.t('login')['emailPlaceholder']}
+                            placeholder={i18n.t('screens')['login']['emailPlaceholder']}
                             onChangeText={(val) => { this.setState({ email: val, showError: false }) }} />
                         <TextInput
                             value={this.state.password}
                             style={globalStyles.authPageInput}
-                            placeholder={i18n.t('login')['passwordPlaceholder']}
+                            placeholder={i18n.t('screens')['login']['passwordPlaceholder']}
                             secureTextEntry={true}
                             onChangeText={(val) => { this.setState({ password: val, showError: false }) }} />
                     </View>
@@ -72,7 +72,7 @@ export default class Login extends Component {
                     }}>
                         {
                             !this.state.isLoading
-                                ? <Text style={globalStyles.authPageActionButtonText}>{i18n.t('login')['submitButton']}</Text>
+                                ? <Text style={globalStyles.authPageActionButtonText}>{i18n.t('screens')['login']['submitButton']}</Text>
                                 : <ActivityIndicator
                                     animating={true}
                                     color="#fff"
@@ -83,9 +83,9 @@ export default class Login extends Component {
                     <View style={globalStyles.authPageRedirectTextContainer} onClick={() => {
                         this.props.navigation.navigate("Signup")
                     }}>
-                        <Text style={globalStyles.authPageRedirectText}>{i18n.t('login')['dontHaveAccount']}</Text>
+                        <Text style={globalStyles.authPageRedirectText}>{i18n.t('screens')['login']['dontHaveAccount']}</Text>
                         &nbsp;
-                        <Text style={globalStyles.authPageRedirectHighlightText}>{i18n.t('login')['goToSignup']}</Text>
+                        <Text style={globalStyles.authPageRedirectHighlightText}>{i18n.t('screens')['login']['goToSignup']}</Text>
                     </View>
                 </View>
             </View>
