@@ -42,8 +42,8 @@ const WeightTrackerService = {
 
                 const times = [];
                 const dailyWeights = await DbService.getMany(COLLECTIONS.DAILY_WEIGHTS, { userId: mongoose.Types.ObjectId(userId) });
-                for (let dailyWeight of dailyWeights) {
-                    times.push({ _id: dailyWeight._id, time: new Date(dailyWeight.year, dailyWeight.month - 1, dailyWeight.date).getTime() });
+                for (let currentDailyWeight of dailyWeights) {
+                    times.push({ _id: currentDailyWeight._id, time: new Date(currentDailyWeight.year, currentDailyWeight.month - 1, currentDailyWeight.date).getTime() });
                 }
 
                 let currentMin = {
@@ -52,11 +52,14 @@ const WeightTrackerService = {
                 };
 
                 for (let time of times) {
-                    if (currentMin.time == null || (Math.abs(currentDailyWeightTime - time.time) < currentMin.time && time.time < currentDailyWeightTime)) {
+                    if ((currentMin.time == null || (Math.abs(currentDailyWeightTime - time.time) < currentMin.time && time.time < currentDailyWeightTime))
+                        && time._id.toString() != dailyWeight._id.toString()
+                        && time.time < currentDailyWeightTime) {
                         currentMin.time = Math.abs(currentDailyWeightTime - time.time);
                         currentMin._id = time._id;
                     }
                 }
+                console.log(currentMin);
 
                 if (currentMin._id == null) {
                     resolve(null);
