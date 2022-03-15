@@ -14,6 +14,8 @@ export default class CoachSearch extends Component {
     constructor(props) {
         super(props);
         this.scrollView = React.createRef();
+        this.query = "";
+        this.typingTimeout = null
     }
 
     state = {
@@ -24,7 +26,7 @@ export default class CoachSearch extends Component {
         minRating: 2,
         lat: null,
         lng: null,
-        searchResults: []
+        searchResults: [],
     }
 
     async componentDidMount() {
@@ -38,7 +40,7 @@ export default class CoachSearch extends Component {
         return;
     }
 
-    searchCoaches = async () => {
+    searchCoaches = () => {
         this.scrollView.current?.scrollTo({
             y: 0,
             animated: true
@@ -61,6 +63,18 @@ export default class CoachSearch extends Component {
         });
     }
 
+    changeName = (value) => {
+        this.query = value;
+
+        if (this.typingTimeout) {
+            clearTimeout(this.typingTimeout);
+        }
+
+        this.typingTimeout = setTimeout(() => {
+            this.searchCoaches();
+        }, 1500);
+    }
+
     render() {
         return (
             <View style={globalStyles.safeAreaView}>
@@ -77,16 +91,11 @@ export default class CoachSearch extends Component {
                             : null
                     }
                     <TextInput
-                        value={this.state.query}
                         style={[globalStyles.authPageInput, {
                             marginTop: 20
                         }]}
                         placeholder="Type your search here"
-                        onChangeText={(val) => {
-                            this.setState({ query: val, showError: false }, () => {
-                                this.searchCoaches();
-                            })
-                        }} />
+                        onChangeText={this.changeName} />
                     {
                         this.state.searchResults.length > 0
                             ? <ScrollView style={{

@@ -157,6 +157,7 @@ router.post('/review/:id', authenticate, async (req, res, next) => {
 });
 
 router.get("/coach/search", authenticate, async (req, res, next) => {
+    const dt = new Date().getTime();
     let names = req.query.name;
     if (((req.query.lat && !req.query.lng) || (!req.query.lat && req.query.lng)) && !names) {
         const trainers = await DbService.getMany(COLLECTIONS.PERSONAL_TRAINERS, {});
@@ -304,6 +305,8 @@ router.get("/coach/search", authenticate, async (req, res, next) => {
             sorted[index].user = user;
         }
 
+        const dt2 = new Date().getTime();
+        console.log(dt - dt2);
         return res.status(HTTP_STATUS_CODES.OK).send({
             results: sorted
         })
