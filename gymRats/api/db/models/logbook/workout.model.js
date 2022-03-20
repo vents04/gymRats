@@ -25,7 +25,7 @@ const workoutSchema = mongoose.Schema({
     createdDt: {
         type: Number,
         default: Date.now,
-    }
+    }    
 });
 
 const Workout = mongoose.model(DATABASE_MODELS.WORKOUT, workoutSchema);
