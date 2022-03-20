@@ -179,7 +179,7 @@ router.get("/coach/search", authenticate, async (req, res, next) => {
                     const trainer = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, { "$or": [{userId: users[i]._id}, {userId: mongoose.Types.ObjectId(users[i]._id)}] });
                     if(trainer){
                         Object.assign(trainer, { criteriasMet: 1 });
-                        if (trainer.status == PERSONAL_TRAINER_STATUSES.ACTIVE /*&& trainer.userId.toString() != req.user._id.toString()*/) {
+                        if (trainer.status == PERSONAL_TRAINER_STATUSES.ACTIVE && trainer.userId.toString() != req.user._id.toString()) {
                             allTrainers.push(trainer);
                         }
                     }
@@ -189,7 +189,7 @@ router.get("/coach/search", authenticate, async (req, res, next) => {
             const trainers = await DbService.getMany(COLLECTIONS.PERSONAL_TRAINERS, {})
             for (let trainer of trainers) {
                 Object.assign(trainer, { criteriasMet: 0 });
-                if (trainer.status == PERSONAL_TRAINER_STATUSES.ACTIVE /*&& trainer.userId.toString() != req.user._id.toString()*/) {
+                if (trainer.status == PERSONAL_TRAINER_STATUSES.ACTIVE && trainer.userId.toString() != req.user._id.toString()) {
                     allTrainers.push(trainer);
                 }
             }
