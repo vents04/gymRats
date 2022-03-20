@@ -15,6 +15,7 @@ const Stack = createStackNavigator();
 
 const App = () => {
 
+  i18n.defaultLocale = "en";
   i18n.translations = translations;
   i18n.locale = Localization.locale;
   i18n.fallbacks = true;

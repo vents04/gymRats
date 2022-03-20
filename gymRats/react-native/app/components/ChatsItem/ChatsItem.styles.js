@@ -8,7 +8,8 @@ module.exports = StyleSheet.create({
         borderWidth: 1,
         borderColor: '#ccc',
         borderRadius: 4,
-        padding: 16
+        padding: 16,
+        marginVertical: 8
     },
     profilePictureContainer: {
         width: 40,
