@@ -45,7 +45,7 @@ export default class CoachSearch extends Component {
             y: 0,
             animated: true
         });
-        ApiRequests.get(`coaching/coach/search?name=${this.state.query.toLowerCase()}&lat=${this.state.lat}&lng=${this.state.lng}`, {}, true).then((response) => {
+        ApiRequests.get(`coaching/coach/search?name=${this.query.toLowerCase()}&lat=${this.state.lat}&lng=${this.state.lng}`, {}, true).then((response) => {
             console.log(response);
             this.setState({ searchResults: response.data.results })
         }).catch((error) => {
@@ -107,7 +107,8 @@ export default class CoachSearch extends Component {
                                 }}
                                 ref={this.scrollView}>
                                 {
-                                    this.state.searchResults.map((result) => {
+                                    this.state.searchResults?.length > 0
+                                    ?this.state.searchResults.map((result) => {
                                         return <View style={styles.coachResult} onClick={() => {
                                             this.props.navigation.navigate("CoachPage", {})
                                         }}>
@@ -136,6 +137,7 @@ export default class CoachSearch extends Component {
                                         </View>
                                     }
                                     )
+                                    : <Text style={globalStyles.notation}>No coaches found for that search</Text>
                                 }
                             </ScrollView>
                             : <Text style={[globalStyles.notation, {
