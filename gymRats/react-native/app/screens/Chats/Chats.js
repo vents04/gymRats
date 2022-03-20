@@ -6,6 +6,32 @@ const globalStyles = require('../../../assets/styles/global.styles');
 const styles = require('./Chats.styles');
 
 export default class Chats extends Component {
+
+    state = {
+        chats: [
+            {
+                _id: "1",
+                user: {
+                    profilePicture: null,
+                    firstName: "Alexander",
+                    lastName: "Zlatkov"
+                },
+                lastMessage: "Test"
+            },
+            {
+                _id: "2",
+                user: {
+                    profilePicture: null,
+                    firstName: "Ventsislav",
+                    lastName: "Dimitrov"
+                },
+                lastMessage: null
+            }
+        ],
+        showError: true,
+        error: "",
+    }
+    
     render() {
         return (
             <View style={globalStyles.safeAreaView}>
@@ -14,15 +40,21 @@ export default class Chats extends Component {
                         <Image style={globalStyles.pageLogo} source={require('../../../assets/img/icon.png')} />
                         <Text style={globalStyles.pageLogoText}>Gym Rats</Text>
                     </View>
-                    <ScrollView style={{
-                        marginTop: 16
-                    }}
-                        contentContainerStyle={{
-                            flexGrow: 1,
-                            flexShrink: 1,
-                        }}>
-                        <ChatsItem />
-                    </ScrollView>
+                    {
+                        this.state.chats?.length > 0
+                        ? <ScrollView
+                            contentContainerStyle={{
+                                flexGrow: 1,
+                                flexShrink: 1,
+                            }}>
+                                {
+                                    this.state.chats.map((chat) => 
+                                        <ChatsItem chat={chat} {...this.props}/>                                    
+                                    )
+                                }
+                        </ScrollView>
+                        : <Text style={globalStyles.notation}>Chats with clients and coaches will appear here</Text>
+                    }
                 </View>
             </View>
         )
