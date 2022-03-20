@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { DATABASE_MODELS, COLLECTIONS } = require('../../../global');
+const { DATABASE_MODELS, COLLECTIONS} = require('../../../global');
 
 const clientSchema = mongoose.Schema({
     clientId: {
@@ -13,7 +13,7 @@ const clientSchema = mongoose.Schema({
         ref: COLLECTIONS.PERSONAL_TRAINERS
     },
     from: {
-        type: Number,
+        type: Date,
         default: Date.now
     },
     to: {

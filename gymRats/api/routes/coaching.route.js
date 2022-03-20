@@ -156,7 +156,7 @@ router.post('/review/:id', authenticate, async (req, res, next) => {
     }
 });
 
-router.get("/coach/search", authenticate, async (req, res, next) => {
+router.get("/coach/search", async (req, res, next) => {
     let names = req.query.name;
     if (((req.query.lat && !req.query.lng) || (!req.query.lat && req.query.lng)) && !names) {
         const trainers = await DbService.getMany(COLLECTIONS.PERSONAL_TRAINERS, {});
@@ -170,25 +170,26 @@ router.get("/coach/search", authenticate, async (req, res, next) => {
         let allTrainers = [];
         let sorted = [];
 
-        const trainers = await DbService.getMany(COLLECTIONS.PERSONAL_TRAINERS, {})
-        for (let trainer of trainers) {
-            Object.assign(trainer, { criteriasMet: 0 });
-            if (trainer.status == PERSONAL_TRAINER_STATUSES.ACTIVE && trainer.userId.toString() != req.user._id.toString()) {
-                allTrainers.push(trainer);
-            }
-        }
-
         if (names) {
             names = names.split(" ");
             for (let name of names) {
-                const users = await DbService.getMany(COLLECTIONS.USERS, { "$or": [{ firstName: { "$regex": name } }, { lastName: { "$regex": name } }] });
+                const users = await DbService.getMany(COLLECTIONS.USERS, { "$or": [{ firstName: { "$regex": name, "$options": "i"} }, { lastName: { "$regex": name, "$options": "i" } }] });
                 for (let i = 0; i < users.length; i++) {
-                    const trainer = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, { userId: mongoose.Types.ObjectId(users[i]._id) });
-                    for (let i = 0; i < allTrainers.length; i++) {
-                        if (trainer && allTrainers[i].userId.toString() == trainer.userId.toString()) {
-                            allTrainers[i].criteriasMet++;
+                    const trainer = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, { "$or": [{userId: users[i]._id}, {userId: mongoose.Types.ObjectId(users[i]._id)}] });
+                    if(trainer){
+                        Object.assign(trainer, { criteriasMet: 1 });
+                        if (trainer.status == PERSONAL_TRAINER_STATUSES.ACTIVE /*&& trainer.userId.toString() != req.user._id.toString()*/) {
+                            allTrainers.push(trainer);
                         }
                     }
+                }
+            }
+        }else{
+            const trainers = await DbService.getMany(COLLECTIONS.PERSONAL_TRAINERS, {})
+            for (let trainer of trainers) {
+                Object.assign(trainer, { criteriasMet: 0 });
+                if (trainer.status == PERSONAL_TRAINER_STATUSES.ACTIVE /*&& trainer.userId.toString() != req.user._id.toString()*/) {
+                    allTrainers.push(trainer);
                 }
             }
         }
@@ -233,7 +234,7 @@ router.get("/coach/search", authenticate, async (req, res, next) => {
         for (let i = 0; i < allTrainers.length; i++) {
             let sumOfAllRatings = 3, counter = 1;
             for (let review of reviews) {
-                const request = await DbService.getOne(COLLECTIONS.REQUESTS, { _id: mongoose.Types.ObjectId(review.requestId) });
+                const request = await DbService.getOne(COLLECTIONS.REQUESTS, { "$or": [{_id: review.requestId}, {_id: mongoose.Types.ObjectId(review.requestId)}] });
                 if (request.recieverId.toString() == allTrainers[i].userId.toString()) {
                     sumOfAllRatings += review.rating;
                     counter++;

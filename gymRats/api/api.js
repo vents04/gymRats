@@ -1,4 +1,3 @@
-
 const express = require('express');
 const app = express();
 const httpServer = require("http").createServer(app);
@@ -43,6 +42,13 @@ for (var d = new Date(1970, 0, 1); d <= now; d.setDate(d.getDate() + 1)) {
         });
     }
 })();
+
+io.on("connection", (socket) => {
+    console.log("connection established", socket.id);
+    socket.on("join-room", (payload) => {
+
+    })
+});
 
 httpServer.listen(PORT, function () {
     console.log("API server listening on port " + PORT)
