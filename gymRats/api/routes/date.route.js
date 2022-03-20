@@ -39,6 +39,7 @@ router.get('/', authenticate, async (req, res, next) => {
                             exercises.push({ exerciseId: exercise.exerciseId });
                             const exerciseInstance = await DbService.getById(COLLECTIONS.EXERCISES, exercise.exerciseId);
                             exercise.exerciseName = exerciseInstance.title;
+                            exercise.translations = exerciseInstance.translations;
                         }
                         const userTemplates = await DbService.getMany(COLLECTIONS.WORKOUTS, { userId: mongoose.Types.ObjectId(req.user._id) });
                         let hasWorkoutTemplateName = false;

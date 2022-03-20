@@ -65,7 +65,11 @@ export default class LogbookCard extends Component {
                 <View style={styles.exercisesContainer}>
                     {
                         this.props.data.exercises.map((exercise) =>
-                            <Text style={styles.exercise}>{exercise.sets.length} x {i18n.t('exercises')[exercise.exerciseId]}</Text>
+                            <Text style={styles.exercise}>{exercise.sets.length} x {
+                                exercise.translations.hasOwnProperty(i18n.locale)
+                                ? exercise.translations[i18n.locale]
+                                : exercise.exerciseName
+                            }</Text>
                         )
                     }
                 </View>
