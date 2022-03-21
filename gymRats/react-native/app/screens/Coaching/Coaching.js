@@ -4,6 +4,8 @@ import { HTTP_STATUS_CODES } from '../../../global';
 import ApiRequests from '../../classes/ApiRequests';
 import { MdOutlineFitnessCenter } from 'react-icons/md';
 import { BsShieldFillCheck } from 'react-icons/bs';
+import { HiInbox } from 'react-icons/hi';
+import { Badge } from 'react-native-elements';
 
 const globalStyles = require('../../../assets/styles/global.styles');
 const styles = require('./Coaching.styles')
@@ -68,6 +70,17 @@ export default class Coaching extends Component {
                     <View style={globalStyles.pageLogoContainer}>
                         <Image style={globalStyles.pageLogo} source={require('../../../assets/img/icon.png')} />
                         <Text style={globalStyles.pageLogoText}>Gym Rats</Text>
+                    </View>
+                    <View style={globalStyles.topbarIconContainer} onClick={() => { 
+                        this.props.navigation.navigate("CoachRequests");
+                     }}>
+                        <HiInbox size={30} color="#1f6cb0" />
+                        <Badge
+                            status="error"
+                            value={3}
+                            textStyle={{ fontFamily: "SpartanMedium" }}
+                            containerStyle={{ position: 'absolute', top: 8, right: 8, height: 12, width: 12 }}
+                        />
                     </View>
                     {
                         this.state.showError

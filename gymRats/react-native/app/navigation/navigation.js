@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {useRoute} from '@react-navigation/native';
+import {useRoute, getFocusedRouteNameFromRoute} from '@react-navigation/native';
 
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -24,6 +24,7 @@ import CoachPage from '../screens/CoachPage/CoachPage';
 import Chats from '../screens/Chats/Chats';
 import Chat from '../screens/Chat/Chat';
 import i18n from 'i18n-js';
+import CoachRequests from '../screens/CoachRequests/CoachRequests';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -94,6 +95,13 @@ const coachingScreenStack = ({ navigation }) => {
                 }}
                 component={CoachPage}
             />
+            <Stack.Screen
+                name="CoachRequests"
+                options={{
+                    headerShown: false
+                }}
+                component={CoachRequests}
+            />
         </Stack.Navigator>
     )
 }
@@ -161,7 +169,7 @@ const Auth = () => {
 const NavigationRoutes = (props) => {
     return (
         <Tab.Navigator
-            screenOptions={{
+            screenOptions={({route}) => ({
                 headerShown: false,
                 tabBarShowLabel: false,
                 tabBarHideOnKeyboard: true,
@@ -175,11 +183,11 @@ const NavigationRoutes = (props) => {
                     height: 60,
                     ...styles.shadow
                 },
-            }}
+            })}
         >
             <Tab.Screen
                 name="chatsScreenStack"
-                options={{
+                options={({route}) => ({
                     tabBarLabel: 'Chats',
                     headerShown: false,
                     tabBarActiveTintColor: "#ccc",
@@ -195,7 +203,7 @@ const NavigationRoutes = (props) => {
                             }]}>{i18n.t('navigation')['chats']}</Text>
                         </View>
                     )
-                }}
+                })}
                 component={chatsScreenStack}
             />
             <Tab.Screen
