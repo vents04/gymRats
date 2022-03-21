@@ -13,6 +13,10 @@ export default class CoachPage extends Component {
         coach: {}
     }
 
+    componentDidMount() {
+        console.log(this.props)
+    }
+
     render() {
         return (
             <View style={globalStyles.safeAreaView}>

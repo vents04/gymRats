@@ -39,7 +39,7 @@ router.get('/', authenticate, async function (req, res, next) {
     }
 })
 
-router.get('/:id', authenticate1``, async function (req, res, next) {
+router.get('/:id', authenticate, async function (req, res, next) {
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
         return next(new ResponseError("Invalid chat id", HTTP_STATUS_CODES.BAD_REQUEST));
     }
