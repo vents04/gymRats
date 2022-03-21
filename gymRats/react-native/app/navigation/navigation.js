@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import {useRoute} from '@react-navigation/native';
 
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -104,7 +105,7 @@ const chatsScreenStack = ({ navigation }) => {
             <Stack.Screen
                 name="Chats"
                 options={{
-                    headerShown: false
+                    headerShown: false,
                 }}
                 component={Chats}
             />
@@ -177,6 +178,27 @@ const NavigationRoutes = (props) => {
             }}
         >
             <Tab.Screen
+                name="chatsScreenStack"
+                options={{
+                    tabBarLabel: 'Chats',
+                    headerShown: false,
+                    tabBarActiveTintColor: "#ccc",
+                    tabBarIcon: (tabInfo) =>
+                    (
+                        <View style={styles.tabBarIconContainer}>
+                            <BiMessageSquareDetail
+                                size={30}
+                                color={tabInfo.focused ? "#1f6cb0" : "#ccc"}
+                            />
+                            <Text style={[styles.tabBarIconText, {
+                                fontFamily: (tabInfo.focused ? "SpartanBold" : "SpartanRegular")
+                            }]}>{i18n.t('navigation')['chats']}</Text>
+                        </View>
+                    )
+                }}
+                component={chatsScreenStack}
+            />
+            <Tab.Screen
                 name="calendarScreenStack"
                 options={{
                     tabBarLabel: 'Calendar',
@@ -219,27 +241,6 @@ const NavigationRoutes = (props) => {
 
                 }}
                 component={coachingScreenStack}
-            />
-            <Tab.Screen
-                name="chatsScreenStack"
-                options={{
-                    tabBarLabel: 'Chats',
-                    headerShown: false,
-                    tabBarActiveTintColor: "#ccc",
-                    tabBarIcon: (tabInfo) =>
-                    (
-                        <View style={styles.tabBarIconContainer}>
-                            <BiMessageSquareDetail
-                                size={30}
-                                color={tabInfo.focused ? "#1f6cb0" : "#ccc"}
-                            />
-                            <Text style={[styles.tabBarIconText, {
-                                fontFamily: (tabInfo.focused ? "SpartanBold" : "SpartanRegular")
-                            }]}>{i18n.t('navigation')['chats']}</Text>
-                        </View>
-                    )
-                }}
-                component={chatsScreenStack}
             />
             <Tab.Screen
                 name="profileScreenStack"
