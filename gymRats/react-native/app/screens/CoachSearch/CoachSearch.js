@@ -110,7 +110,7 @@ export default class CoachSearch extends Component {
                                     this.state.searchResults?.length > 0
                                     ?this.state.searchResults.map((result) => {
                                         return <View style={styles.coachResult} onClick={() => {
-                                            this.props.navigation.navigate("CoachPage", {})
+                                            this.props.navigation.navigate("CoachPage", {coach: result})
                                         }}>
                                             <View style={styles.coachResultInline}>
                                                 {

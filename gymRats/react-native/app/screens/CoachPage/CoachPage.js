@@ -10,22 +10,7 @@ export default class CoachPage extends Component {
     state = {
         showError: false,
         error: "",
-        profile: {
-            profilePicture: null,
-            firstName: "Ventsislav",
-            lastName: "Dimitrov",
-            stats: {
-                clients: 19,
-                rating: 3.89,
-                experience: "1y 6m"
-            },
-            trainsOnlyOffline: true,
-            location: {
-                address: "Sofia, Bulgaria",
-                lat: 42.6953468,
-                lng: 23.1838624
-            }
-        }
+        coach: {}
     }
 
     render() {
@@ -45,43 +30,48 @@ export default class CoachPage extends Component {
                         flexGrow: 1,
                         flexShrink: 1
                     }}>
-                        <View style={styles.profileTop}>
-                            {
-                                !this.state.profile.profilePicture
-                                    ? <View style={styles.profilePictureContainer}>
-                                        <Text style={styles.noProfilePictureText}>
-                                            {this.state.profile.firstName.charAt(0)}
-                                            {this.state.profile.lastName.charAt(0)}
-                                        </Text>
-                                    </View>
-                                    : <Image style={styles.profilePictureContainer}
-                                        source={{ uri: this.state.profile.profilePicture }} />
-                            }
-                            <Text style={styles.names}>
-                                {this.state.profile.firstName}
-                                &nbsp;
-                                {this.state.profile.lastName}
-                            </Text>
-                            <View style={styles.coachStats}>
-                                <View style={styles.statContainer}>
-                                    <Text style={styles.statValue}>{this.state.profile.stats.clients}</Text>
-                                    <Text style={styles.statTitle}>clients</Text>
-                                </View>
-                                <View style={styles.statContainer}>
-                                    <Text style={styles.statValue}>{this.state.profile.stats.rating}</Text>
-                                    <Text style={styles.statTitle}>rating</Text>
-                                </View>
-                                <View style={styles.statContainer}>
-                                    <Text style={styles.statValue}>{this.state.profile.stats.experience}</Text>
-                                    <Text style={styles.statTitle}>experience</Text>
-                                </View>
-                            </View>
-                            <Text style={styles.location} onClick={() => {
-                                Linking.openURL(`https://google.com/maps/@${this.state.profile.location.lat},${this.state.profile.location.lng},11z`)
-                            }}>{this.state.profile.location.address}</Text>
-                        </View>
                         {
-                            this.state.profile.trainsOnlyOffline && <Text style={globalStyles.important}>This coach prefers to work with clients in person (offline).</Text>
+                            !this.state.coach
+                            && <>
+                                <View style={styles.profileTop}>
+                                    {
+                                        !this.props.route.params.coach.user.profilePicture
+                                            ? <View style={styles.profilePictureContainer}>
+                                                <Text style={styles.noProfilePictureText}>
+                                                    {this.props.route.params.coach.user.firstName.charAt(0)}
+                                                    {this.props.route.params.coach.user.lastName.charAt(0)}
+                                                </Text>
+                                            </View>
+                                            : <Image style={styles.profilePictureContainer}
+                                                source={{ uri: this.state.coach.user.profilePicture }} />
+                                    }
+                                    <Text style={styles.names}>
+                                        {this.props.route.params.coach.user.firstName}
+                                        &nbsp;
+                                        {this.props.route.params.coach.user.lastName}
+                                    </Text>
+                                    <View style={styles.coachStats}>
+                                        <View style={styles.statContainer}>
+                                            <Text style={styles.statValue}>{this.props.route.params.coach.stats.clients}</Text>
+                                            <Text style={styles.statTitle}>clients</Text>
+                                        </View>
+                                        <View style={styles.statContainer}>
+                                            <Text style={styles.statValue}>{this.props.route.params.coach.rating}</Text>
+                                            <Text style={styles.statTitle}>rating</Text>
+                                        </View>
+                                        <View style={styles.statContainer}>
+                                            <Text style={styles.statValue}>{this.props.route.params.coach.experience}</Text>
+                                            <Text style={styles.statTitle}>experience</Text>
+                                        </View>
+                                    </View>
+                                    <Text style={styles.location} onClick={() => {
+                                        Linking.openURL(`https://google.com/maps/@${this.props.route.params.coach.location.lat},${this.props.route.params.coach.location.lng},11z`)
+                                    }}>{this.state.coach.location.address}</Text>
+                                </View>
+                                {
+                                    this.props.route.params.coach.prefersOfflineCoaching && <Text style={globalStyles.important}>This coach prefers to work with clients in person (offline).</Text>
+                                }
+                            </>
                         }
                     </ScrollView>
                 </View>
