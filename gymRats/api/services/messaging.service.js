@@ -44,7 +44,7 @@ const MessagingService = {
                 const textMessage = {
                     senderId: senderId,
                     chatId: chatId,
-                    typeOfMessage: {
+                    message: {
                         text: message
                     }
                 }
@@ -53,8 +53,9 @@ const MessagingService = {
 
                 const chat = await DbService.getById(COLLECTIONS.CHATS, chatId);
 
-                if(chat && (chat.trainerId == senderId || chat.clientId == senderId)){
+                if(chat && (chat.trainerId.toString() == senderId.toString() || chat.clientId.toString() == senderId.toString())){
                     await DbService.create(COLLECTIONS.MESSAGES, textMessage);
+                    resolve();
                 }
                 reject(new ResponseError("Sender is not part of the chat or the chat does not exist", HTTP_STATUS_CODES.BAD_REQUEST));
 
@@ -70,7 +71,7 @@ const MessagingService = {
                 const fileMessage = {
                     senderId: senderId,
                     chatId: chatId,
-                    typeOfMessage: {
+                    message: {
                         file: base64
                     }
                 }
@@ -79,8 +80,9 @@ const MessagingService = {
 
                 const chat = await DbService.getById(COLLECTIONS.CHATS, chatId);
 
-                if(chat && (chat.trainerId == senderId || chat.clientId == senderId)){
+                if(chat && (chat.trainerId.toString() == senderId.toString() || chat.clientId.toString() == senderId.toString())){
                     await DbService.create(COLLECTIONS.MESSAGES, fileMessage);
+                    resolve();
                 }
                 reject(new ResponseError("Sender is not part of the chat or the chat does not exist", HTTP_STATUS_CODES.BAD_REQUEST));
             }catch (err) {

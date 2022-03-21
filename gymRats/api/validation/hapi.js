@@ -334,9 +334,9 @@ const messageValidation = (data) => {
             }
             return true;
         }).required(),
-        typeOfMessage: Joi.object({
+        message: Joi.object({
             text: Joi.string().min(0).max(1000).optional(),
-            file: Joi.number().optional()
+            file: Joi.string().optional()
         }).required()
     });
     return schema.validate(data);

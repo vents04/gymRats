@@ -12,7 +12,7 @@ const messageSchema = mongoose.Schema({
         required: true,
         ref: COLLECTIONS.CHATS
     },
-    typeOfMessage: {
+    message: {
         text: {
             type: String,
             min: 1,
@@ -21,7 +21,7 @@ const messageSchema = mongoose.Schema({
         },
         file: {
             type: String,
-            required: function() {return this.message.length == 0}
+            required: function() {return this.text.length == 0}
         }
     },
     createdAt: {
