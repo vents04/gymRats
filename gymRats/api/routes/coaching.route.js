@@ -156,7 +156,7 @@ router.post('/review/:id', authenticate, async (req, res, next) => {
     }
 });
 
-router.get("/coach/search", authenticate, async (req, res, next) => {
+router.get("/coach/search", async (req, res, next) => {
     const dt = new Date().getTime();
     let names = req.query.name;
     if (((req.query.lat && !req.query.lng) || (!req.query.lat && req.query.lng)) && !names) {
@@ -178,8 +178,9 @@ router.get("/coach/search", authenticate, async (req, res, next) => {
                 for (let i = 0; i < users.length; i++) {
                     const trainer = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, { "$or": [{userId: users[i]._id}, {userId: mongoose.Types.ObjectId(users[i]._id)}] });
                     if(trainer){
-                        Object.assign(trainer, { criteriasMet: 1 });
-                        if (trainer.status == PERSONAL_TRAINER_STATUSES.ACTIVE && trainer.userId.toString() != req.user._id.toString()) {
+                        const clients = await DbService.getMany(COLLECTIONS.CLIENTS, { "$or": [{trainerId: trainer._id}, {trainerId: mongoose.Types.ObjectId(trainer._id)}] });
+                        Object.assign(trainer, { criteriasMet: 0 }, {clients: clients.length});
+                        if (trainer.status == PERSONAL_TRAINER_STATUSES.ACTIVE /*&& trainer.userId.toString() != req.user._id.toString()*/) {
                             allTrainers.push(trainer);
                         }
                     }
@@ -188,12 +189,14 @@ router.get("/coach/search", authenticate, async (req, res, next) => {
         }else{
             const trainers = await DbService.getMany(COLLECTIONS.PERSONAL_TRAINERS, {})
             for (let trainer of trainers) {
-                Object.assign(trainer, { criteriasMet: 0 });
-                if (trainer.status == PERSONAL_TRAINER_STATUSES.ACTIVE && trainer.userId.toString() != req.user._id.toString()) {
+                const clients = await DbService.getMany(COLLECTIONS.CLIENTS, { "$or": [{trainerId: trainer._id}, {trainerId: mongoose.Types.ObjectId(trainer._id)}] });
+                Object.assign(trainer, { criteriasMet: 0 }, {clients: clients.length});
+                if (trainer.status == PERSONAL_TRAINER_STATUSES.ACTIVE /*&& trainer.userId.toString() != req.user._id.toString()*/) {
                     allTrainers.push(trainer);
                 }
             }
         }
+
 
         if (req.query.lat && req.query.lng) {
             for (let i = 0; i < allTrainers.length; i++) {
