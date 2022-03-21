@@ -12,15 +12,17 @@ const messageSchema = mongoose.Schema({
         required: true,
         ref: COLLECTIONS.CHATS
     },
-    message: {
-        type: String,
-        min: 1,
-        max: 1000,
-        required: function() {return this.file.length == 0}
-    },
-    file: {
-        type: String,
-        required: function() {return this.message.length == 0}
+    typeOfMessage: {
+        text: {
+            type: String,
+            min: 1,
+            max: 1000,
+            required: function() {return this.file.length == 0}
+        },
+        file: {
+            type: String,
+            required: function() {return this.message.length == 0}
+        }
     },
     createdAt: {
         type: Date,

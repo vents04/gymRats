@@ -1,6 +1,6 @@
 const Joi = require('@hapi/joi');
 const mongoose = require('mongoose');
-const { CALORIES_COUNTER_UNITS, WEIGHT_UNITS, WATER_INTAKE_UNITS, CALORIES_COUNTER_MEALS, REQUEST_STATUSES } = require('../global');
+const { CALORIES_COUNTER_UNITS, WEIGHT_UNITS, WATER_INTAKE_UNITS, CALORIES_COUNTER_MEALS, REQUEST_STATUSES , CHAT_STATUSES} = require('../global');
 
 const signupValidation = (data) => {
     const schema = Joi.object({
@@ -302,6 +302,46 @@ const coachApplicationPostValidation = (data) => {
     return schema.validate(data);
 }
 
+const chatValidation = (data) => {
+    const schema = Joi.object({
+        trainerId: Joi.string().custom((value, helper) => {
+            if (!mongoose.Types.ObjectId.isValid(value)) {
+                return helper.message("Invalid triner id");
+            }
+            return true;
+        }).required(),
+        clientId: Joi.string().custom((value, helper) => {
+            if (!mongoose.Types.ObjectId.isValid(value)) {
+                return helper.message("Invalid client id");
+            }
+            return true;
+        }).required()
+    });
+    return schema.validate(data);
+}
+
+const messageValidation = (data) => {
+    const schema = Joi.object({
+        senderId: Joi.string().custom((value, helper) => {
+            if (!mongoose.Types.ObjectId.isValid(value)) {
+                return helper.message("Invalid sender id");
+            }
+            return true;
+        }).required(),
+        chatId: Joi.string().custom((value, helper) => {
+            if (!mongoose.Types.ObjectId.isValid(value)) {
+                return helper.message("Invalid chat id");
+            }
+            return true;
+        }).required(),
+        typeOfMessage: Joi.object({
+            text: Joi.string().min(0).max(1000).optional(),
+            file: Joi.number().optional()
+        }).required()
+    });
+    return schema.validate(data);
+}
+
 module.exports = {
     signupValidation,
     loginValidation,
@@ -322,5 +362,7 @@ module.exports = {
     requestsStatusUpdateValidation,
     coachingReviewPostValidation,
     googlePlacesSearchValidation,
-    coachApplicationPostValidation
+    coachApplicationPostValidation,
+    chatValidation,
+    messageValidation
 }

@@ -27,7 +27,7 @@ const personalTrainerSchema = mongoose.Schema({
         type: Boolean,
         default: false,
     },
-    timeOfCreation: {
+    createdAt: {
         type: Number,
         default: Date.now
     },
