@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { BiArrowBack } from 'react-icons/bi';
-import { ScrollView, Text, TextInput, View } from 'react-native';
+import { Image, ScrollView, Text, TextInput, View } from 'react-native';
 import axios from 'axios';
 import ApiRequests from '../../classes/ApiRequests';
 import { HTTP_STATUS_CODES } from '../../../global';

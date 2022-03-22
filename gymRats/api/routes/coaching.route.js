@@ -71,17 +71,25 @@ router.post('/request', authenticate, async (req, res, next) => {
     if (error) return next(new ResponseError(error.details[0].message, HTTP_STATUS_CODES.BAD_REQUEST));
 
     try {
-        const existingRequests = await DbService.getMany(COLLECTIONS.REQUESTS, { initiatorId: mongoose.Types.ObjectId(req.body.initiatorId), recieverId: mongoose.Types.ObjectId(req.body.recieverId) });
+        const coach = await DbService.getById(COLLECTIONS.PERSONAL_TRAINERS, req.body.coachId);
+        if(!coach) return next(new ResponseError("Coach was not found", HTTP_STATUS_CODES.NOT_FOUND));
+        if(coach.status != PERSONAL_TRAINER_STATUSES.ACTIVE) return next(new ResponseError("This coach is not accepting requests currently", HTTP_STATUS_CODES.CONFLICT));
+
+        const existingRequests = await DbService.getMany(COLLECTIONS.REQUESTS, { initiatorId: mongoose.Types.ObjectId(req.user._id), receiverId: mongoose.Types.ObjectId(req.body.coachId) });
         let hasConflict = false;
         for (let request of existingRequests) {
-            if (request.to) {
+            if (request.status == REQUEST_STATUSES.NOT_ANSWERED) {
                 hasConflict = true;
                 break;
             }
         }
         if (hasConflict) return next(new ResponseError("You have already sent a request. Please wait for a response!", HTTP_STATUS_CODES.CONFLICT));
 
-        const request = new Request(req.body);
+        const request = new Request({
+            initiatorId: mongoose.Types.ObjectId(req.user._id),
+            receiverId: mongoose.Types.ObjectId(req.body.coachId),
+        });
+
         await DbService.create(COLLECTIONS.REQUESTS, request);
 
         res.sendStatus(HTTP_STATUS_CODES.OK);

@@ -251,19 +251,12 @@ const workoutTemplateCheckValidation = (data) => {
 
 const requestValidation = (data) => {
     const schema = Joi.object({
-        initiatorId: Joi.string().custom((value, helper) => {
-            if (!mongoose.Types.ObjectId.isValid(value)) {
-                return helper.message("Invalid initiator id");
-            }
-            return true;
-        }).required(),
-        recieverId: Joi.string().custom((value, helper) => {
+        coachId: Joi.string().custom((value, helper) => {
             if (!mongoose.Types.ObjectId.isValid(value)) {
                 return helper.message("Invalid reciever id");
             }
             return true;
         }).required(),
-        createdDt: Joi.date().required()
     });
     return schema.validate(data);
 }
