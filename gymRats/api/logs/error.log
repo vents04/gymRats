@@ -337,3 +337,6 @@
 {"level":"error","message":"Cannot convert undefined or null to object"}
 {"level":"error","message":"Token not provided"}
 {"level":"error","message":"Cannot read properties of undefined (reading '_id')"}
+{"level":"error","message":"This coach is not accepting requests currently"}
+{"level":"error","message":"You have already sent a request. Please wait for a response!"}
+{"level":"error","message":"Argument \"filter\" must be an object"}

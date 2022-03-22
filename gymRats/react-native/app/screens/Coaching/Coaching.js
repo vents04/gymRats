@@ -6,6 +6,8 @@ import { MdOutlineFitnessCenter } from 'react-icons/md';
 import { BsShieldFillCheck } from 'react-icons/bs';
 import { HiInbox } from 'react-icons/hi';
 import { Badge } from 'react-native-elements';
+import { AiFillDelete } from 'react-icons/ai';
+import ConfirmationBox from '../../components/ConfirmationBox/ConfirmationBox';
 
 const globalStyles = require('../../../assets/styles/global.styles');
 const styles = require('./Coaching.styles')
@@ -48,6 +50,24 @@ export default class Coaching extends Component {
         ApiRequests.get("coaching", {}, true).then((response) => {
             this.setState({ coaching: response.data.coaching });
             console.log(response.data.coaching);
+        }).catch((error) => {
+            if (error.response) {
+                if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
+                    this.setState({ showError: true, error: error.response.data });
+                } else {
+                    ApiRequests.showInternalServerError();
+                }
+            } else if (error.request) {
+                ApiRequests.showNoResponseError();
+            } else {
+                ApiRequests.showRequestSettingError();
+            }
+        })
+    }
+
+    deleteRequest = (id) => {
+        ApiRequests.delete(`coaching/request/${id}`, {}, true).then((response) => {
+            this.getCoachingPageState();
         }).catch((error) => {
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
@@ -106,7 +126,7 @@ export default class Coaching extends Component {
                             ? this.state.activeTab == "myCoach"
                                 ? <View style={styles.tabContent}>
                                     {
-                                        !this.state.coaching.myCoach.hasCoach
+                                        !this.state.coaching.myCoach.hasCoach && !this.state.coaching.myCoach.hasRequests
                                             ? <View style={styles.noCoachContainer}>
                                                 <View style={styles.noCoachTopbar}>
                                                     <MdOutlineFitnessCenter size={25} color="#1f6cb0" />
@@ -133,7 +153,46 @@ export default class Coaching extends Component {
                                                     <Text style={globalStyles.authPageActionButtonText}>Search coaches</Text>
                                                 </TouchableOpacity>
                                             </View>
-                                            : null
+                                            : <>
+                                                {
+                                                    !this.state.coaching.myCoach.hasCoach
+                                                    ? <Text style={globalStyles.notation}>You still do not have any coaches</Text>
+                                                    : null
+                                                }
+                                                {
+                                                    this.state.coaching.myCoach.hasRequests &&
+                                                    <>
+                                                        <Text style={styles.coachingSectionTitle}>Unanswered requests</Text>
+                                                        {
+                                                            this.state.coaching.myCoach.requests.map((request) => 
+                                                            <View style={styles.requestItem}>
+                                                                <View style={styles.requestItemProfile}>
+                                                                    {
+                                                                        !request.coach.profilePicture
+                                                                            ? <View style={styles.profilePictureContainer}>
+                                                                                <Text style={styles.noProfilePictureText}>
+                                                                                    {request.coach.firstName.charAt(0)}
+                                                                                    {request.coach.lastName.charAt(0)}
+                                                                                </Text>
+                                                                            </View>
+                                                                            : <Image style={styles.profilePictureContainer}
+                                                                                source={{ uri: request.coach.profilePicture }} />
+                                                                    }
+                                                                    <Text style={styles.names}>
+                                                                        {request.coach.firstName}
+                                                                        &nbsp;
+                                                                        {request.coach.lastName}
+                                                                    </Text>
+                                                                </View>
+                                                                <AiFillDelete size={20} onClick={() => {
+                                                                    this.deleteRequest(request._id);
+                                                                }}/>
+                                                            </View>
+                                                        )
+                                                        }
+                                                    </>
+                                                }
+                                            </>
                                     }
                                 </View>
                                 : <View style={styles.tabContent}>

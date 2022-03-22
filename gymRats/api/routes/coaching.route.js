@@ -38,6 +38,15 @@ router.get('/', authenticate, async (req, res, next) => {
         coaching.myCoach.coach = coach;
         coaching.myCoach.relationInstance = userAsClient;
 
+        const requests = await DbService.getMany(COLLECTIONS.REQUESTS, { initiatorId: mongoose.Types.ObjectId(req.user._id), status: REQUEST_STATUSES.NOT_ANSWERED});
+        for(let request of requests) {
+            const coach = await DbService.getById(COLLECTIONS.PERSONAL_TRAINERS, request.receiverId);
+            const coachUser = await DbService.getOne(COLLECTIONS.USERS, {_id: coach.userId});
+            request.coach = coachUser;
+        }
+        coaching.myCoach.hasRequests = requests.length > 0;
+        coaching.myCoach.requests = requests;
+
         res.status(HTTP_STATUS_CODES.OK).send({
             coaching: coaching
         })
@@ -97,6 +106,23 @@ router.post('/request', authenticate, async (req, res, next) => {
         return next(new ResponseError(err.message || "Internal server error", err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
     }
 })
+
+router.delete("/request/:id", authenticate, async (req, res, next) => {
+    if(!mongoose.Types.ObjectId.isValid(req.params.id)) return next(new ResponseError("Invalid request id", HTTP_STATUS_CODES.BAD_REQUEST));
+
+    try {
+        const request = await DbService.getById(COLLECTIONS.REQUESTS, req.params.id);
+        if(!request) return next(new ResponseError("Request was not found", HTTP_STATUS_CODES.NOT_FOUND));
+        if(request.status != REQUEST_STATUSES.NOT_ANSWERED) return next(new ResponseError("Request was already answered", HTTP_STATUS_CODES.CONFLICT));
+        if(request.initiatorId.toString() != req.user._id.toString()) return next(new ResponseError("You are not allowed to delete this request", HTTP_STATUS_CODES.FORBIDDEN));
+
+        await DbService.delete(COLLECTIONS.REQUESTS, { _id: mongoose.Types.ObjectId(req.params.id) });
+
+        res.sendStatus(HTTP_STATUS_CODES.OK);
+    } catch (err) {
+        return next(new ResponseError(err.message || "Internal server error", err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+    }
+});
 
 router.put('/request-status/:id', authenticate, async (req, res, next) => {
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) return next(new ResponseError("Invalid request id", HTTP_STATUS_CODES.BAD_REQUEST))
