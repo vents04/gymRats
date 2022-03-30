@@ -1,22 +1,21 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const ResponseError = require('../errors/responseError');
-const { HTTP_STATUS_CODES, COLLECTIONS, REQUEST_STATUSES, PERSONAL_TRAINER_STATUSES } = require('../global');
+const { HTTP_STATUS_CODES, COLLECTIONS, REQUEST_STATUSES, PERSONAL_TRAINER_STATUSES, RELATION_STATUSES } = require('../global');
 const DbService = require('../services/db.service');
-const Request = require('../db/models/coaching/request.model');
+const Request = require('../db/models/coaching/relation.model');
 const router = express.Router();
 const { authenticate } = require('../middlewares/authenticate');
-const { requestValidation, requestsStatusUpdateValidation, coachingReviewPostValidation, coachApplicationPostValidation } = require('../validation/hapi');
+const { relationValidation, relationStatusUpdateValidation, coachingReviewPostValidation, coachApplicationPostValidation } = require('../validation/hapi');
 const PersonalTrainer = require('../db/models/coaching/personalTrainer.model');
+const Relation = require('../db/models/coaching/relation.model');
 
 router.get('/', authenticate, async (req, res, next) => {
     try {
         let coaching = {
             myCoach: {
-                hasCoach: false
             },
             myClients: {
-                isPersonalTrainer: false,
             }
         }
 
@@ -24,28 +23,31 @@ router.get('/', authenticate, async (req, res, next) => {
         coaching.myClients.isPersonalTrainer = userAsTrainer ? true : false;
         coaching.myClients.trainerObject = coaching.myClients.isPersonalTrainer ? userAsTrainer : null;
 
-        let clients = await DbService.getMany(COLLECTIONS.CLIENTS, { trainerId: mongoose.Types.ObjectId(req.user._id) });
-        for (let client of clients) {
-            const clientInstance = await DbService.getById(COLLECTIONS.USERS, { _id: mongoose.Types.ObjectId(client.clientId) });
-            client.clientInstance = clientInstance;
+        let relations = await DbService.getMany(COLLECTIONS.RELATIONS, { personalTrainerId: mongoose.Types.ObjectId(userAsTrainer._id), status: RELATION_STATUSES.ACTIVE, to: null });
+        for (let relation of relations) {
+            const clientInstance = await DbService.getById(COLLECTIONS.USERS, relation.clientId);
+            relation.clientInstance = clientInstance;
         }
-        coaching.myClients.clients = clients;
+        coaching.myClients.clients = relations;
 
-        let coach = null;
-        const userAsClient = await DbService.getOne(COLLECTIONS.CLIENTS, { clientId: mongoose.Types.ObjectId(req.user._id) });
-        if (userAsClient) coach = await DbService.getById(COLLECTIONS.USERS, userAsClient.trainerId);
-        coaching.myCoach.hasCoach = userAsClient ? true : false;
-        coaching.myCoach.coach = coach;
-        coaching.myCoach.relationInstance = userAsClient;
+        const activeRelations = await DbService.getMany(COLLECTIONS.RELATIONS, { clientId: mongoose.Types.ObjectId(req.user._id), status: RELATION_STATUSES.ACTIVE, to: null });
+        coaching.myCoach.hasCoaches = activeRelations.length > 0 ? true : false;
+        for(let activeRelation of activeRelations) {
+            const coach = await DbService.getById(COLLECTIONS.PERSONAL_TRAINERS, activeRelation.personalTrainerId);
+            const coachUser = await DbService.getOne(COLLECTIONS.USERS, coach.userId);
+            activeRelation.coach = coach;
+            activeRelation.coachUser = coachUser;
+        }
+        coaching.myCoach.coaches = activeRelations;
 
-        const requests = await DbService.getMany(COLLECTIONS.REQUESTS, { initiatorId: mongoose.Types.ObjectId(req.user._id), status: REQUEST_STATUSES.NOT_ANSWERED});
-        for(let request of requests) {
-            const coach = await DbService.getById(COLLECTIONS.PERSONAL_TRAINERS, request.receiverId);
+        const pendingRelations = await DbService.getMany(COLLECTIONS.RELATIONS, { clientId: mongoose.Types.ObjectId(req.user._id), status: RELATION_STATUSES.PENDING_APPROVAL });
+        for(let pendingRelation of pendingRelations) {
+            const coach = await DbService.getById(COLLECTIONS.PERSONAL_TRAINERS, pendingRelation.personalTrainerId);
             const coachUser = await DbService.getOne(COLLECTIONS.USERS, {_id: coach.userId});
-            request.coach = coachUser;
+            pendingRelation.coach = coachUser;
         }
-        coaching.myCoach.hasRequests = requests.length > 0;
-        coaching.myCoach.requests = requests;
+        coaching.myCoach.hasRelations = pendingRelations.length > 0;
+        coaching.myCoach.relations = pendingRelations;
 
         res.status(HTTP_STATUS_CODES.OK).send({
             coaching: coaching
@@ -75,8 +77,8 @@ router.post('/application', authenticate, async (req, res, next) => {
     }
 });
 
-router.post('/request', authenticate, async (req, res, next) => {
-    const { error } = requestValidation(req.body);
+router.post('/relation', authenticate, async (req, res, next) => {
+    const { error } = relationValidation(req.body);
     if (error) return next(new ResponseError(error.details[0].message, HTTP_STATUS_CODES.BAD_REQUEST));
 
     try {
@@ -84,22 +86,23 @@ router.post('/request', authenticate, async (req, res, next) => {
         if(!coach) return next(new ResponseError("Coach was not found", HTTP_STATUS_CODES.NOT_FOUND));
         if(coach.status != PERSONAL_TRAINER_STATUSES.ACTIVE) return next(new ResponseError("This coach is not accepting requests currently", HTTP_STATUS_CODES.CONFLICT));
 
-        const existingRequests = await DbService.getMany(COLLECTIONS.REQUESTS, { initiatorId: mongoose.Types.ObjectId(req.user._id), receiverId: mongoose.Types.ObjectId(req.body.coachId) });
+        const existingRequests = await DbService.getMany(COLLECTIONS.RELATIONS, { clientId: mongoose.Types.ObjectId(req.user._id), personalTrainerId: mongoose.Types.ObjectId(req.body.coachId) });
         let hasConflict = false;
         for (let request of existingRequests) {
-            if (request.status == REQUEST_STATUSES.NOT_ANSWERED) {
+            if (request.status == RELATION_STATUSES.PENDING_APPROVAL || request.status == RELATION_STATUSES.ACTIVE) {
                 hasConflict = true;
                 break;
             }
         }
-        if (hasConflict) return next(new ResponseError("You have already sent a request. Please wait for a response!", HTTP_STATUS_CODES.CONFLICT));
 
-        const request = new Request({
-            initiatorId: mongoose.Types.ObjectId(req.user._id),
-            receiverId: mongoose.Types.ObjectId(req.body.coachId),
+        if (hasConflict) return next(new ResponseError("You have already sent a request or have an active relation with this coach. Please wait for a response!", HTTP_STATUS_CODES.CONFLICT));
+
+        const relation = new Relation({
+            clientId: mongoose.Types.ObjectId(req.user._id),
+            personalTrainerId: mongoose.Types.ObjectId(req.body.coachId),
         });
 
-        await DbService.create(COLLECTIONS.REQUESTS, request);
+        await DbService.create(COLLECTIONS.RELATIONS, relation);
 
         res.sendStatus(HTTP_STATUS_CODES.OK);
     } catch (err) {
@@ -107,16 +110,16 @@ router.post('/request', authenticate, async (req, res, next) => {
     }
 })
 
-router.delete("/request/:id", authenticate, async (req, res, next) => {
+router.delete("/relation/:id", authenticate, async (req, res, next) => {
     if(!mongoose.Types.ObjectId.isValid(req.params.id)) return next(new ResponseError("Invalid request id", HTTP_STATUS_CODES.BAD_REQUEST));
 
     try {
-        const request = await DbService.getById(COLLECTIONS.REQUESTS, req.params.id);
+        const request = await DbService.getById(COLLECTIONS.RELATIONS, req.params.id);
         if(!request) return next(new ResponseError("Request was not found", HTTP_STATUS_CODES.NOT_FOUND));
-        if(request.status != REQUEST_STATUSES.NOT_ANSWERED) return next(new ResponseError("Request was already answered", HTTP_STATUS_CODES.CONFLICT));
-        if(request.initiatorId.toString() != req.user._id.toString()) return next(new ResponseError("You are not allowed to delete this request", HTTP_STATUS_CODES.FORBIDDEN));
+        if(request.status != RELATION_STATUSES.PENDING_APPROVAL) return next(new ResponseError("Request was already answered", HTTP_STATUS_CODES.CONFLICT));
+        if(request.clientId.toString() != req.user._id.toString()) return next(new ResponseError("You are not allowed to delete this request", HTTP_STATUS_CODES.FORBIDDEN));
 
-        await DbService.delete(COLLECTIONS.REQUESTS, { _id: mongoose.Types.ObjectId(req.params.id) });
+        await DbService.delete(COLLECTIONS.RELATIONS, { _id: mongoose.Types.ObjectId(req.params.id) });
 
         res.sendStatus(HTTP_STATUS_CODES.OK);
     } catch (err) {
@@ -124,24 +127,51 @@ router.delete("/request/:id", authenticate, async (req, res, next) => {
     }
 });
 
-router.put('/request-status/:id', authenticate, async (req, res, next) => {
-    if (!mongoose.Types.ObjectId.isValid(req.params.id)) return next(new ResponseError("Invalid request id", HTTP_STATUS_CODES.BAD_REQUEST))
-    const { error } = requestsStatusUpdateValidation(req.body);
+router.put('/relation/:id/status', authenticate, async (req, res, next) => {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) return next(new ResponseError("Invalid relation id", HTTP_STATUS_CODES.BAD_REQUEST))
+    const { error } = relationStatusUpdateValidation(req.body);
     if (error) return next(new ResponseError(error.details[0].message, HTTP_STATUS_CODES.BAD_REQUEST));
 
     try {
-        const request = await DbService.getById(COLLECTIONS.REQUESTS, req.params.id);
-        if (!request) return next(new ResponseError("Request was not found", HTTP_STATUS_CODES.NOT_FOUND));
+        const relation = await DbService.getById(COLLECTIONS.RELATIONS, req.params.id);
+        if (!relation) return next(new ResponseError("Relation was not found", HTTP_STATUS_CODES.NOT_FOUND));
 
-        if (req.user._id.toString() != req.body.recieverId.toString()) return next(new ResponseError("You cannot change the status of this request!", HTTP_STATUS_CODES.FORBIDDEN));
+        const coach = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, { _id: mongoose.Types.ObjectId(relation.personalTrainerId) });
+        if(!coach) return next(new ResponseError("Coach was not found", HTTP_STATUS_CODES.NOT_FOUND));
 
-        if (request.status == req.body.status) {
-            if (request.status == REQUEST_STATUSES.ACCEPTED) return next(new ResponseError("The request is already accepted", HTTP_STATUS_CODES.CONFLICT));
-            if (request.status == REQUEST_STATUSES.DECLINED) return next(new ResponseError("The request is already declined", HTTP_STATUS_CODES.CONFLICT));
-            if (request.status == REQUEST_STATUSES.NOT_ANSWERED) return next(new ResponseError("The request is already not answered", HTTP_STATUS_CODES.CONFLICT));
+        console.log(!(relation.status == RELATION_STATUSES.PENDING_APPROVAL 
+            && req.body.status == RELATION_STATUSES.ACTIVE
+            && req.user._id.toString() == coach.userId.toString())
+        );
+        console.log(!(relation.status == RELATION_STATUSES.PENDING_APPROVAL 
+            && req.body.status == RELATION_STATUSES.DECLINED
+            && req.user._id.toString() == coach.userId.toString())
+        );
+        console.log(!(relation.status == RELATION_STATUSES.ACTIVE 
+            && req.body.status == RELATION_STATUSES.CANCELED
+            && (req.user._id.toString() == coach.userId.toString() || req.user._id.toString() == relation.clientId.toString()))
+        );
+            
+
+        if(relation.status != RELATION_STATUSES.ACTIVE
+            && relation.status != RELATION_STATUSES.PENDING_APPROVAL) return next(new ResponseError("Relation must be in statuses active or pending approval to update its status", HTTP_STATUS_CODES.CONFLICT));
+        if(!(relation.status == RELATION_STATUSES.PENDING_APPROVAL 
+            && req.body.status == RELATION_STATUSES.ACTIVE
+            && req.user._id.toString() == coach.userId.toString())
+        && !(relation.status == RELATION_STATUSES.PENDING_APPROVAL 
+            && req.body.status == RELATION_STATUSES.DECLINED
+            && req.user._id.toString() == coach.userId.toString())
+        && !(relation.status == RELATION_STATUSES.ACTIVE 
+            && req.body.status == RELATION_STATUSES.CANCELED
+            && (req.user._id.toString() == coach.userId.toString() || req.user._id.toString() == relation.clientId.toString()))) 
+            return next(new ResponseError("Cannot perform this status update", HTTP_STATUS_CODES.CONFLICT));
+
+        await DbService.update(COLLECTIONS.RELATIONS, { _id: mongoose.Types.ObjectId(req.params.id) }, req.body);
+        if(req.body.status == RELATION_STATUSES.ACCEPTED){
+            await DbService.update(COLLECTIONS.RELATIONS, { _id: mongoose.Types.ObjectId(req.params.id) }, {
+                from: new Date().getTime()
+            });
         }
-
-        await DbService.update(COLLECTIONS.REQUESTS, { _id: mongoose.Types.ObjectId(req.body.requestId) }, req.body);
 
         res.sendStatus(HTTP_STATUS_CODES.OK);
     } catch (err) {
@@ -149,38 +179,34 @@ router.put('/request-status/:id', authenticate, async (req, res, next) => {
     }
 })
 
-router.put('/end-relation/:id', authenticate, async (req, res, next) => {
-    if (!mongoose.Types.ObjectId.isValid(req.params.id)) return next(new ResponseError("Invalid request id", HTTP_STATUS_CODES.BAD_REQUEST));
-    const { error } = coachingReviewPostValidation(req.body);
-    if (error) return next(new ResponseError(error.details[0].message, HTTP_STATUS_CODES.BAD_REQUEST));
-
+router.get('/relation', authenticate, async (req, res, next) => {
     try {
-        const request = await DbService.getById(COLLECTIONS.REQUESTS, req.params.id);
-        if (!request) return next(new ResponseError("Request not found", HTTP_STATUS_CODES.NOT_FOUND));
-        if (request.clientId.toString() != req.user._id.toString()
-            && request.trainerId.toString() != req.user._id.toString())
-            return next(new ResponseError("Forbidden", HTTP_STATUS_CODES.FORBIDDEN));
-        if (request.to) return next(new ResponseError("Relations for this object have already been ended", HTTP_STATUS_CODES.CONFLICT));
-
-        await DbService.update(COLLECTIONS.REQUESTS, { _id: mongoose.Types.ObjectId(req.params.id) }, { to: new Date().getTime() });
-
-        res.sendStatus(HTTP_STATUS_CODES.OK);
-    } catch (error) {
-        return next(new ResponseError(error.message || "Internal server error", error.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+        const coach = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, { userId: mongoose.Types.ObjectId(req.user._id) });
+        if(!coach) return res.status(HTTP_STATUS_CODES.OK).send({relations: []})
+        const relations = await DbService.getMany(COLLECTIONS.RELATIONS, { personalTrainerId: mongoose.Types.ObjectId(coach._id), status: RELATION_STATUSES.PENDING_APPROVAL });
+        for(let relation of relations) {
+            const client = await DbService.getById(COLLECTIONS.USERS, relation.clientId);
+            relation.client = client;
+        }
+        res.status(HTTP_STATUS_CODES.OK).send({
+            relations
+        })
+    } catch (err) {
+        return next(new ResponseError(err.message || "Internal server error", err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
     }
 });
 
 router.post('/review/:id', authenticate, async (req, res, next) => {
-    if (!mongoose.Types.ObjectId.isValid(req.params.id)) return next(new ResponseError("Invalid request id", HTTP_STATUS_CODES.BAD_REQUEST))
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) return next(new ResponseError("Invalid relation id", HTTP_STATUS_CODES.BAD_REQUEST))
 
     try {
-        const request = await DbService.getById(COLLECTIONS.REQUESTS, req.params.id);
-        if (!request) return next(new ResponseError("Request not found", HTTP_STATUS_CODES.NOT_FOUND));
-        if (request.clientId.toString() != req.user._id.toString()) return next(new ResponseError("Forbidden", HTTP_STATUS_CODES.FORBIDDEN));
-        if (!request.to) return next(new ResponseError("Relations for this object have not been ended so you cannot leave a review", HTTP_STATUS_CODES.CONFLICT));
+        const relation = await DbService.getById(COLLECTIONS.RELATIONS, req.params.id);
+        if (!relation) return next(new ResponseError("Relation not found", HTTP_STATUS_CODES.NOT_FOUND));
+        if (!relation.to) return next(new ResponseError("Relation has not been ended so you cannot leave a review", HTTP_STATUS_CODES.CONFLICT));
 
-        const review = await DbService.getOne(COLLECTIONS.REVIEWS, { requestId: mongoose.Types.ObjectId(req.params.id) });
+        const review = await DbService.getOne(COLLECTIONS.REVIEWS, { relationId: mongoose.Types.ObjectId(req.params.id) });
         if (review) return next(new ResponseError("Review already added", HTTP_STATUS_CODES.CONFLICT));
+        if (relation.clientId.toString() != req.user._id.toString()) return next(new ResponseError("Only clients may post reviews", HTTP_STATUS_CODES.CONFLICT));
 
         await DbService.create()
 
@@ -193,12 +219,14 @@ router.post('/review/:id', authenticate, async (req, res, next) => {
 router.get("/coach/search",authenticate, async (req, res, next) => {
     const dt = new Date().getTime();
     let names = req.query.name;
+
     if (((req.query.lat && !req.query.lng) || (!req.query.lat && req.query.lng)) && !names) {
         const trainers = await DbService.getMany(COLLECTIONS.PERSONAL_TRAINERS, {});
         return res.status(HTTP_STATUS_CODES.OK).send({
             results: trainers
         })
     }
+
     try {
         let minRating = 0;
         let distanceForCheck = 30;

@@ -22,7 +22,7 @@ export default class CoachPage extends Component {
 
     sendRequest = () => {
         this.setState({showError: false, error: "", isLoading: true});
-        ApiRequests.post("coaching/request", {}, {
+        ApiRequests.post("coaching/relation", {}, {
             coachId: this.props.route.params.coach._id
         }, true).then((response) => {
             this.setState({isLoading: false});

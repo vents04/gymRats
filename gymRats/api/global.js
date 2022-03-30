@@ -15,7 +15,7 @@ const DATABASE_MODELS = {
     SUPPLEMENTS: "Supplements",
     PERSONAL_TRAINER: "PersonalTrainer",
     CLIENT: "Client",
-    REQUEST: "Request",
+    RELATION: "Relation",
     DIET_PLAN: "DietPlan",
     REVIEW: "Review",
     CHAT: "Chat",
@@ -38,7 +38,7 @@ const COLLECTIONS = {
     SUGGESTIONS: "suggestions",
     PERSONAL_TRAINERS: "personalTrainers",
     CLIENTS: "clients",
-    REQUESTS: "requests",
+    RELATIONS: "relations",
     DIET_PLANS: "dietPlans",
     REVIEWS: "reviews",
     CHATS: "chats",
@@ -56,10 +56,11 @@ const CHAT_STATUSES = {
     BLOCKED: "BLOCKED",
 }
 
-const REQUEST_STATUSES = {
-    ACCEPTED: "ACCEPTED",
+const RELATION_STATUSES = {
+    ACTIVE: "ACTIVE",
     DECLINED: "DECLINED",
-    NOT_ANSWERED: "NOT_ANSWERED"
+    PENDING_APPROVAL: "PENDING_APPROVAL",
+    CANCELED: "CANCELED"
 }
 
 const PROFESSIONS = {
@@ -160,7 +161,7 @@ module.exports = {
     CARD_COLLECTIONS: CARD_COLLECTIONS,
     APP_EMAIL: APP_EMAIL,
     PERSONAL_TRAINER_STATUSES: PERSONAL_TRAINER_STATUSES,
-    REQUEST_STATUSES: REQUEST_STATUSES,
+    RELATION_STATUSES: RELATION_STATUSES,
     PROFESSIONS: PROFESSIONS,
     WEIGHT_UNIT_RELATIONS: WEIGHT_UNIT_RELATIONS,
     GOOGLE_API_KEY: GOOGLE_API_KEY,

@@ -94,13 +94,11 @@ module.exports = StyleSheet.create({
         fontFamily: "SpartanBold",
         fontSize: 10,
         color: "#777",
-        marginTop: 2
     },
     names: {
         fontFamily: "SpartanBold",
         fontSize: 16,
         color: "#222",
         marginLeft: 16,
-        marginTop: 4
     },
 });

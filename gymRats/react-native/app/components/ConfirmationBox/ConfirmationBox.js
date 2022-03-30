@@ -10,16 +10,6 @@ const styles = require('./ConfirmationBox.styles');
 
 export default class ConfirmationBox extends Component {
 
-    state = {
-        data: null
-    }
-
-    componentDidMount() {
-        this.setState({ data: this.props.data }, () => {
-            console.log(this.props);
-        })
-    }
-
     render() {
         return (
             <Modal
@@ -35,7 +25,8 @@ export default class ConfirmationBox extends Component {
                         <Text style={globalStyles.modalText}>{i18n.t('components')['confirmationBox']['question']}</Text>
                         <View style={globalStyles.modalActionsContainer}>
                             <Text style={globalStyles.modalActionTitle} onClick={() => {
-                                this.props.deleteCard()
+                                this.props.deleteCard();
+                                this.props.toggleShowConfirmationBox(false);
                             }}>{i18n.t('components')['confirmationBox']['affirmation']}</Text>
                             <Text style={[globalStyles.modalActionTitle, {
                                 color: "#1f6cb0"
