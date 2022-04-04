@@ -30,6 +30,13 @@ router.get('/', authenticate, async (req, res, next) => {
         }
         coaching.myClients.clients = relations;
 
+        let pendingClientsRelations = await DbService.getMany(COLLECTIONS.RELATIONS, {personalTrainerId: mongoose.Types.ObjectId(userAsTrainer._id), status: RELATION_STATUSES.PENDING_APPROVAL});
+        for(let relation of pendingClientsRelations) {
+            const clientInstance = await DbService.getById(COLLECTIONS.USERS, relation.clientId);
+            relation.clientInstance = clientInstance;
+        }
+        coaching.myClients.requests = pendingClientsRelations;
+
         const activeRelations = await DbService.getMany(COLLECTIONS.RELATIONS, { clientId: mongoose.Types.ObjectId(req.user._id), status: RELATION_STATUSES.ACTIVE, to: null });
         coaching.myCoach.hasCoaches = activeRelations.length > 0 ? true : false;
         for(let activeRelation of activeRelations) {
@@ -167,10 +174,15 @@ router.put('/relation/:id/status', authenticate, async (req, res, next) => {
             return next(new ResponseError("Cannot perform this status update", HTTP_STATUS_CODES.CONFLICT));
 
         await DbService.update(COLLECTIONS.RELATIONS, { _id: mongoose.Types.ObjectId(req.params.id) }, req.body);
-        if(req.body.status == RELATION_STATUSES.ACCEPTED){
+        if(req.body.status == RELATION_STATUSES.ACTIVE){
             await DbService.update(COLLECTIONS.RELATIONS, { _id: mongoose.Types.ObjectId(req.params.id) }, {
                 from: new Date().getTime()
             });
+        }
+        if(req.body.status == RELATION_STATUSES.CANCELED) {
+            await DbService.update(COLLECTIONS.RELATIONS, { _id: mongoose.Types.ObjectId(req.params.id) }, {
+                to: new Date().getTime()
+            })
         }
 
         res.sendStatus(HTTP_STATUS_CODES.OK);
@@ -179,11 +191,13 @@ router.put('/relation/:id/status', authenticate, async (req, res, next) => {
     }
 })
 
-router.get('/relation', authenticate, async (req, res, next) => {
+router.get('/requests', authenticate, async (req, res, next) => {
     try {
         const coach = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, { userId: mongoose.Types.ObjectId(req.user._id) });
+        console.log(coach)
         if(!coach) return res.status(HTTP_STATUS_CODES.OK).send({relations: []})
         const relations = await DbService.getMany(COLLECTIONS.RELATIONS, { personalTrainerId: mongoose.Types.ObjectId(coach._id), status: RELATION_STATUSES.PENDING_APPROVAL });
+        console.log(coach._id, RELATION_STATUSES.PENDING_APPROVAL, relations)
         for(let relation of relations) {
             const client = await DbService.getById(COLLECTIONS.USERS, relation.clientId);
             relation.client = client;

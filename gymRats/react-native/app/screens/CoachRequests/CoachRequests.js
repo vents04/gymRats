@@ -21,7 +21,7 @@ export default class CoachRequests extends Component {
     }
 
     getRequests = () => {
-        ApiRequests.get("coaching/relation", {}, true).then((response) => {
+        ApiRequests.get("coaching/requests", {}, true).then((response) => {
             console.log(response);
             this.setState({relations: response.data.relations});
         }).catch((error) => {
@@ -71,7 +71,7 @@ export default class CoachRequests extends Component {
                     </View>
                     { this.state.showError && <Text style={globalStyles.errorBox}>{this.state.error}</Text> }
                     {
-                        this.state.requests.length > 0
+                        this.state.relations?.length > 0
                         ? <>
                             <Text style={[globalStyles.notation, {marginTop: 24}]}>Users that have requested to be coached by you:</Text>
                             <ScrollView style={{marginTop: 14}}>

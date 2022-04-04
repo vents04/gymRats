@@ -3932,3 +3932,5 @@
 {"level":"error","message":"Cannot read properties of undefined (reading 'NOT_ANSWERED')"}
 {"level":"error","message":"Cannot read properties of undefined (reading 'NOT_ANSWERED')"}
 {"level":"error","message":"Cannot read properties of undefined (reading 'PENDING_APPROVAL')"}
+{"level":"error","message":"\"status\" must be one of [ACTIVE, DECLINED, PENDING_APPROVAL, CANCELED]"}
+{"level":"error","message":"Cannot perform this status update"}

@@ -54,7 +54,6 @@ export default class Coaching extends Component {
     getCoachingPageState = () => {
         ApiRequests.get("coaching", {}, true).then((response) => {
             this.setState({ coaching: response.data.coaching });
-            console.log(response.data.coaching);
         }).catch((error) => {
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
@@ -108,7 +107,7 @@ export default class Coaching extends Component {
     }
 
     getRequests = () => {
-        ApiRequests.get("coaching/relation", {}, true).then((response) => {
+        ApiRequests.get("coaching/requests", {}, true).then((response) => {
             console.log(response);
             this.setState({requests: response.data.requests});
         }).catch((error) => {
@@ -143,14 +142,15 @@ export default class Coaching extends Component {
                         <Text style={globalStyles.pageLogoText}>Gym Rats</Text>
                     </View>
                     {
-                        this.state.relations.length > 0 &&
+                        this.state.coaching &&
+                        this.state.coaching.myClients.requests.length > 0 &&
                         <View style={globalStyles.topbarIconContainer} onClick={() => { 
                             this.props.navigation.navigate("CoachRequests", {relations: this.state.relations});
                         }}>
                             <HiInbox size={30} color="#1f6cb0" />
                                 <Badge
                                     status="error"
-                                    value={this.state.relations.length}
+                                    value={this.state.coaching.myClients.requests.length}
                                     textStyle={{ fontFamily: "SpartanMedium" }}
                                     containerStyle={{ position: 'absolute', top: 8, right: 8, height: 12, width: 12 }}
                                 />
