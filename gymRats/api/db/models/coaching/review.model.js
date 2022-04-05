@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const { COLLECTIONS, DATABASE_MODELS } = require('../../../global');
 
 const reviewSchema = mongoose.Schema({
-    requestId: {
+    relationId: {
         type: mongoose.Types.ObjectId,
         ref: COLLECTIONS.REQUESTS,
         required: true

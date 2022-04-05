@@ -1,6 +1,6 @@
 const Joi = require('@hapi/joi');
 const mongoose = require('mongoose');
-const { CALORIES_COUNTER_UNITS, WEIGHT_UNITS, WATER_INTAKE_UNITS, CALORIES_COUNTER_MEALS, REQUEST_STATUSES , CHAT_STATUSES} = require('../global');
+const { CALORIES_COUNTER_UNITS, WEIGHT_UNITS, WATER_INTAKE_UNITS, CALORIES_COUNTER_MEALS, REQUEST_STATUSES , CHAT_STATUSES, RELATION_STATUSES} = require('../global');
 
 const signupValidation = (data) => {
     const schema = Joi.object({
@@ -249,28 +249,21 @@ const workoutTemplateCheckValidation = (data) => {
     return schema.validate(data);
 }
 
-const requestValidation = (data) => {
+const relationValidation = (data) => {
     const schema = Joi.object({
-        initiatorId: Joi.string().custom((value, helper) => {
-            if (!mongoose.Types.ObjectId.isValid(value)) {
-                return helper.message("Invalid initiator id");
-            }
-            return true;
-        }).required(),
-        recieverId: Joi.string().custom((value, helper) => {
+        coachId: Joi.string().custom((value, helper) => {
             if (!mongoose.Types.ObjectId.isValid(value)) {
                 return helper.message("Invalid reciever id");
             }
             return true;
         }).required(),
-        createdDt: Joi.date().required()
     });
     return schema.validate(data);
 }
 
-const requestsStatusUpdateValidation = (data) => {
+const relationStatusUpdateValidation = (data) => {
     const schema = Joi.object({
-        status: Joi.string().valid(...Object.values(REQUEST_STATUSES)).required()
+        status: Joi.string().valid(...Object.values(RELATION_STATUSES)).required()
     });
     return schema.validate(data);
 }
@@ -358,8 +351,8 @@ module.exports = {
     workoutSessionValidation,
     supplementsReminderValidation,
     workoutTemplateCheckValidation,
-    requestValidation,
-    requestsStatusUpdateValidation,
+    relationValidation,
+    relationStatusUpdateValidation,
     coachingReviewPostValidation,
     googlePlacesSearchValidation,
     coachApplicationPostValidation,

@@ -16,12 +16,13 @@ router.get('/', authenticate, async function (req, res, next) {
                 oppositeUser = await DbService.getOne(COLLECTIONS.USERS, {_id: mongoose.Types.ObjectId(chat.clientId)});
             }
             if(chat.clientId.toString() == req.user._id.toString()){
-                oppositeUser = await DbService.getOne(COLLECTIONS.USERS, {_id: mongoose.Types.ObjectId(chat.trainerId)});
+                const coach = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, {_id: mongoose.Types.ObjectId(chat.trainerId)});
+                oppositeUser = await DbService.getOne(COLLECTIONS.USERS, {_id: mongoose.Types.ObjectId(coach.userId)});
             }
-            if(!oppositeUser) return next(new ResponseError("User not found", HTTP_STATUS_CODES.NOT_FOUND));
-            Object.assign(chat, { oppositeUser: oppositeUser }, {lastMessage: ""});
+            if(!oppositeUser) return next(new ResponseError("Opposite user not found", HTTP_STATUS_CODES.NOT_FOUND));
+            Object.assign(chat, {user: req.user}, { oppositeUser: oppositeUser }, {lastMessage: ""});
 
-            const messages = await await DbService.getMany(COLLECTIONS.MESSAGES, {chatId: mongoose.Types.ObjectId(chat._id)});
+            const messages = await DbService.getMany(COLLECTIONS.MESSAGES, {chatId: mongoose.Types.ObjectId(chat._id)});
             let minTime = 0;
             for(let message of messages){
                 if(new Date(message.createdAt).getTime() > minTime){
@@ -59,15 +60,14 @@ router.get('/:id', authenticate, async function (req, res, next) {
             oppositeUser = await DbService.getOne(COLLECTIONS.USERS, {_id: mongoose.Types.ObjectId(chat.clientId)});
         }
         if(chat.clientId.toString() == req.user._id.toString()){
-            oppositeUser = await DbService.getOne(COLLECTIONS.USERS, {_id: mongoose.Types.ObjectId(chat.trainerId)});
+            const coach = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, {_id: mongoose.Types.ObjectId(chat.trainerId)});
+            oppositeUser = await DbService.getOne(COLLECTIONS.USERS, {_id: mongoose.Types.ObjectId(coach.userId)});
         }
-        if(!oppositeUser) return next(new ResponseError("User not found", HTTP_STATUS_CODES.NOT_FOUND));
+        if(!oppositeUser) return next(new ResponseError("Opposite user not found", HTTP_STATUS_CODES.NOT_FOUND));
 
         const messages = await DbService.getMany(COLLECTIONS.MESSAGES, {chatId: mongoose.Types.ObjectId(req.params.id)});
 
-        const user = await DbService.getById(COLLECTIONS.USERS, req.user._id)
-
-        Object.assign(chat, { user: user }, { oppositeUser: oppositeUser }, { messages: messages });
+        Object.assign(chat, { user: req.user }, { oppositeUser: oppositeUser }, { messages: messages });
 
         res.status(HTTP_STATUS_CODES.OK).send({
             chat: chat

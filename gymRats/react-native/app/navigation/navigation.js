@@ -186,25 +186,26 @@ const NavigationRoutes = (props) => {
             })}
         >
             <Tab.Screen
-                name="chatsScreenStack"
-                options={({route}) => ({
-                    tabBarLabel: 'Chats',
+                name="coachingScreenStack"
+                options={{
+                    tabBarLabel: 'Coaching',
                     headerShown: false,
                     tabBarActiveTintColor: "#ccc",
                     tabBarIcon: (tabInfo) =>
                     (
                         <View style={styles.tabBarIconContainer}>
-                            <BiMessageSquareDetail
+                            <GiRat
                                 size={30}
                                 color={tabInfo.focused ? "#1f6cb0" : "#ccc"}
                             />
                             <Text style={[styles.tabBarIconText, {
                                 fontFamily: (tabInfo.focused ? "SpartanBold" : "SpartanRegular")
-                            }]}>{i18n.t('navigation')['chats']}</Text>
+                            }]}>{i18n.t('navigation')['coaching']}</Text>
                         </View>
                     )
-                })}
-                component={chatsScreenStack}
+
+                }}
+                component={coachingScreenStack}
             />
             <Tab.Screen
                 name="calendarScreenStack"
@@ -229,26 +230,25 @@ const NavigationRoutes = (props) => {
                 component={calendarScreenStack}
             />
             <Tab.Screen
-                name="coachingScreenStack"
-                options={{
-                    tabBarLabel: 'Coaching',
+                name="chatsScreenStack"
+                options={({route}) => ({
+                    tabBarLabel: 'Chats',
                     headerShown: false,
                     tabBarActiveTintColor: "#ccc",
                     tabBarIcon: (tabInfo) =>
                     (
                         <View style={styles.tabBarIconContainer}>
-                            <GiRat
+                            <BiMessageSquareDetail
                                 size={30}
                                 color={tabInfo.focused ? "#1f6cb0" : "#ccc"}
                             />
                             <Text style={[styles.tabBarIconText, {
                                 fontFamily: (tabInfo.focused ? "SpartanBold" : "SpartanRegular")
-                            }]}>{i18n.t('navigation')['coaching']}</Text>
+                            }]}>{i18n.t('navigation')['chats']}</Text>
                         </View>
                     )
-
-                }}
-                component={coachingScreenStack}
+                })}
+                component={chatsScreenStack}
             />
             <Tab.Screen
                 name="profileScreenStack"

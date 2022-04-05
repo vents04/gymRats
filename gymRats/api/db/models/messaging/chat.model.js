@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const { DATABASE_MODELS, COLLECTIONS, CHAT_STATUSES } = require('../../../global');
 
 const chatSchema = mongoose.Schema({
-    trainerId: {
+    personalTrainerId: {
         type: mongoose.Types.ObjectId,
         required: true,
         ref: COLLECTIONS.PERSONAL_TRAINERS
