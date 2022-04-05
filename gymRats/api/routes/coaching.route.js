@@ -236,7 +236,7 @@ router.get("/coach/search",authenticate, async (req, res, next) => {
 
         const reviews = await DbService.getMany(COLLECTIONS.REVIEWS, {});
         for (let i = 0; i < allTrainers.length; i++) {
-            let sumOfAllRatings = 3, counter = 1;
+            let sumOfAllRatings = 0, counter = 1;
             for (let review of reviews) {
                 const request = await DbService.getOne(COLLECTIONS.REQUESTS, { "$or": [{_id: review.requestId}, {_id: mongoose.Types.ObjectId(review.requestId)}] });
                 if (request.recieverId.toString() == allTrainers[i].userId.toString()) {

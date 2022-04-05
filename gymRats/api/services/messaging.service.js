@@ -3,6 +3,7 @@ const DbService = require("../db.service");
 const mongoose = require("mongoose");
 const ResponseError = require("../../errors/responseError");
 const Chat = require('../db/models/messaging/chat.model');
+const Message = require('../db/models/messaging/message.model');
 const { chatValidation, messageValidation } = require('../validation/hapi');
 
 const MessagingService = {
@@ -16,10 +17,10 @@ const MessagingService = {
                 if((trainer && client) && client.trainerId.toString() == trainer.userId.toString()){
                     const chat = await DbService.getOne(COLLECTIONS.CHATS, { "$and": [{ trainerId: mongoose.Types.ObjectId(trainerId) }, { clientId: mongoose.Types.ObjectId(clientId) }] });
                     if(!chat){
-                        const chat = {
+                        const chat = new Chat({
                             trainerId: mongoose.Types.ObjectId(trainerId),
                             clientId: mongoose.Types.ObjectId(clientId)
-                        }
+                        })
                         const { error } = chatValidation(chat);
                         if (error) reject(new ResponseError(error.details[0].message, HTTP_STATUS_CODES.BAD_REQUEST));
 
@@ -41,13 +42,13 @@ const MessagingService = {
     sendTextMessage: (chatId, senderId, message) => {
         return new Promise(async (resolve, reject) => {
             try {
-                const textMessage = {
-                    senderId: senderId,
-                    chatId: chatId,
+                const textMessage = new Message({
+                    senderId: mongoose.Types.ObjectId(senderId),
+                    chatId: mongoose.Types.ObjectId(chatId),
                     message: {
                         text: message
                     }
-                }
+                })
                 const { error } = messageValidation(textMessage);
                 if (error) reject(new ResponseError(error.details[0].message, HTTP_STATUS_CODES.BAD_REQUEST));
 
@@ -68,13 +69,13 @@ const MessagingService = {
     sendFileMessage: (chatId, senderId, base64) => {
         return new Promise(async (resolve, reject) => {
             try {
-                const fileMessage = {
-                    senderId: senderId,
-                    chatId: chatId,
+                const fileMessage = new Message({
+                    senderId: mongoose.Types.ObjectId(senderId),
+                    chatId: mongoose.Types.ObjectId(chatId),
                     message: {
                         file: base64
                     }
-                }
+                })
                 const { error } = messageValidation(textMessage);
                 if (error) reject(new ResponseError(error.details[0].message, HTTP_STATUS_CODES.BAD_REQUEST));
 

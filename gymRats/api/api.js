@@ -11,8 +11,10 @@ const errorHandler = require('./errors/errorHandler');
 
 const { PORT, COLLECTIONS } = require('./global');
 const DbService = require('./services/db.service');
+const MessagingService = require('./services/messaging.service');
 const mongoose = require('mongoose');
 const User = require('./db/models/generic/user.model');
+const { authenticate } = require('./middlewares/authenticate');
 
 app
     .use(cors())
@@ -43,10 +45,21 @@ for (var d = new Date(1970, 0, 1); d <= now; d.setDate(d.getDate() + 1)) {
     }
 })();
 
-io.on("connection", (socket) => {
+io.on("connection", authenticate, (socket) => {
     console.log("connection established", socket.id);
     socket.on("join-room", (payload) => {
+        try{
+            const chatId = payload.chadId;
 
+            socket.join(chatId);
+
+            socket.on("send-text-message", () => {
+                socket.to(chatId).emit("send-text-message", {});
+            });
+        }catch (err) {
+            reject(new ResponseError("Internal server error", err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+            socket.disconnect();
+        }
     })
 });
 
