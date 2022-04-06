@@ -11,7 +11,7 @@ const errorHandler = require('./errors/errorHandler');
 
 const { PORT, COLLECTIONS } = require('./global');
 const DbService = require('./services/db.service');
-const MessagingService = require('./services/messaging.service');
+//const MessagingService = require('./services/messaging.service');
 const mongoose = require('mongoose');
 const User = require('./db/models/generic/user.model');
 const { authenticate } = require('./middlewares/authenticate');
