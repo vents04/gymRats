@@ -22,7 +22,7 @@ export default class Chat extends Component {
             oppositeUser: {
                 _id: "2",
                 profilePicture: null,
-                firstName: 'Alexander',
+                firstName: 'Aleksander',
                 lastName: 'Zlatkov',
             },
             messages: [

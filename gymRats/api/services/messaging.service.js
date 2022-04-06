@@ -1,7 +1,7 @@
-const { HTTP_STATUS_CODES, COLLECTIONS, CHAT_STATUSES } = require("../../global");
-const DbService = require("../db.service");
+const { HTTP_STATUS_CODES, COLLECTIONS } = require("../global");
+const DbService = require('../services/db.service');
 const mongoose = require("mongoose");
-const ResponseError = require("../../errors/responseError");
+const ResponseError = require('../errors/responseError');
 const Chat = require('../db/models/messaging/chat.model');
 const Message = require('../db/models/messaging/message.model');
 const { chatValidation, messageValidation } = require('../validation/hapi');
