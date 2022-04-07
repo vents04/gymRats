@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const { DATABASE_MODELS, COLLECTIONS} = require('../../../global');
 
 const clientSchema = mongoose.Schema({
-    clientId: {
+    userId: {
         type: mongoose.Types.ObjectId,
         required: true,
         ref: COLLECTIONS.USERS

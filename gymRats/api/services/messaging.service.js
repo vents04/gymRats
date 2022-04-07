@@ -10,19 +10,18 @@ const MessagingService = {
     createChat: (personalTrainerId, clientId) => {
         return new Promise(async (resolve, reject) => {
             try {
-                const client = await DbService.getOne(COLLECTIONS.CLIENTS, {_id: mongoose.Types.ObjectId(clientId)});
-                const trainer = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, {userId: mongoose.Types.ObjectId(personalTrainerId)});
+                const client = await DbService.getById(COLLECTIONS.CLIENTS, clientId);
+                const trainer = await DbService.getById(COLLECTIONS.PERSONAL_TRAINERS, personalTrainerId);
 
                 if(trainer && client){
                     
                     const relation = await DbService.getOne(COLLECTIONS.RELATIONS, {personalTrainerId: mongoose.Types.ObjectId(trainer._id), clientId: mongoose.Types.ObjectId(client._id)});
-
                     if(relation && relation.status == RELATION_STATUSES.ACTIVE){
                         const chat = await DbService.getOne(COLLECTIONS.CHATS, { personalTrainerId: mongoose.Types.ObjectId(personalTrainerId), clientId: mongoose.Types.ObjectId(clientId) });
                         if(!chat){
                             const chat = new Chat({
-                                personalTrainerId: mongoose.Types.ObjectId(personalTrainerId),
-                                clientId: mongoose.Types.ObjectId(clientId)
+                                personalTrainerId: mongoose.Types.ObjectId(trainer._id),
+                                clientId: mongoose.Types.ObjectId(client._id)
                             })
                             const { error } = chatValidation(chat);
                             if (error) reject(new ResponseError(error.details[0].message, HTTP_STATUS_CODES.BAD_REQUEST));
