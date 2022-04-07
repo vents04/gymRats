@@ -58,7 +58,7 @@ io.on("connection", authenticate, (socket) => {
             });
 
             socket.on("send-file-message", (messageInfo) => {
-                await MessagingService.sendTextMessage(chatId, messageInfo.senderId, messageInfo.base64);
+                await MessagingService.sendFileMessage(chatId, messageInfo.senderId, messageInfo.base64);
                 socket.to(chatId).emit("send-file-message", {});
             });
         }catch (err) {
