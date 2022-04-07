@@ -15,9 +15,9 @@ const MessagingService = {
 
                 if(trainer && client){
                     
-                    const relation = await DbService.getOne(COLLECTIONS.RELATIONS, { "$and": [{personalTrainerId: mongoose.Types.ObjectId(trainer._id)}, {clientId: mongoose.Types.ObjectId(client._id)}]});
+                    const relation = await DbService.getOne(COLLECTIONS.RELATIONS, {personalTrainerId: mongoose.Types.ObjectId(trainer._id), clientId: mongoose.Types.ObjectId(client._id)});
 
-                    if(relation && relation.status == RELATION_STATUSES.ACTIVE){
+                    if(relation || relation.status == RELATION_STATUSES.ACTIVE){
                         const chat = await DbService.getOne(COLLECTIONS.CHATS, { personalTrainerId: mongoose.Types.ObjectId(personalTrainerId), clientId: mongoose.Types.ObjectId(clientId) });
                         if(!chat){
                             const chat = new Chat({
@@ -61,7 +61,7 @@ const MessagingService = {
                     await DbService.create(COLLECTIONS.MESSAGES, textMessage);
                     resolve();
                 }
-                reject(new ResponseError("Sender or client is not part of the chat or the chat does not exist", HTTP_STATUS_CODES.BAD_REQUEST));
+                reject(new ResponseError("Trainer or client is not part of the chat or the chat does not exist", HTTP_STATUS_CODES.BAD_REQUEST));
             }catch (err) {
                 reject(new ResponseError("Internal server error", err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
             }
@@ -87,7 +87,7 @@ const MessagingService = {
                     await DbService.create(COLLECTIONS.MESSAGES, fileMessage);
                     resolve();
                 }
-                reject(new ResponseError("Sender or client is not part of the chat or the chat does not exist", HTTP_STATUS_CODES.BAD_REQUEST));
+                reject(new ResponseError("Trainer or client is not part of the chat or the chat does not exist", HTTP_STATUS_CODES.BAD_REQUEST));
             }catch (err) {
                 reject(new ResponseError("Internal server error", err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
             }
