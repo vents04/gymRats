@@ -254,7 +254,7 @@ router.get("/coach/search",authenticate, async (req, res, next) => {
                 for (let i = 0; i < users.length; i++) {
                     const trainer = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, { "$or": [{userId: users[i]._id}, {userId: mongoose.Types.ObjectId(users[i]._id)}] });
                     if(trainer){
-                        const clients = await DbService.getMany(COLLECTIONS.CLIENTS, { "$or": [{trainerId: trainer._id}, {trainerId: mongoose.Types.ObjectId(trainer._id)}] });
+                        const clients = await DbService.getMany(COLLECTIONS.CLIENTS, { "$or": [{personalTrainerId: trainer._id}, {personalTrainerId: mongoose.Types.ObjectId(trainer._id)}] });
                         Object.assign(trainer, { criteriasMet: 0 }, {clients: clients.length});
                         if (trainer.status == PERSONAL_TRAINER_STATUSES.ACTIVE && trainer.userId.toString() != req.user._id.toString()) {
                             allTrainers.push(trainer);
@@ -265,7 +265,7 @@ router.get("/coach/search",authenticate, async (req, res, next) => {
         }else{
             const trainers = await DbService.getMany(COLLECTIONS.PERSONAL_TRAINERS, {})
             for (let trainer of trainers) {
-                const clients = await DbService.getMany(COLLECTIONS.CLIENTS, { "$or": [{trainerId: trainer._id}, {trainerId: mongoose.Types.ObjectId(trainer._id)}] });
+                const clients = await DbService.getMany(COLLECTIONS.CLIENTS, { "$or": [{personalTrainerId: trainer._id}, {personalTrainerId: mongoose.Types.ObjectId(trainer._id)}] });
                 Object.assign(trainer, { criteriasMet: 0 }, {clients: clients.length});
                 if (trainer.status == PERSONAL_TRAINER_STATUSES.ACTIVE && trainer.userId.toString() != req.user._id.toString()) {
                     allTrainers.push(trainer);

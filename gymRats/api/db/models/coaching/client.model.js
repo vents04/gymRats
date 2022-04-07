@@ -7,7 +7,7 @@ const clientSchema = mongoose.Schema({
         required: true,
         ref: COLLECTIONS.USERS
     },
-    trainerId: {
+    personalTrainerId: {
         type: mongoose.Types.ObjectId,
         required: true,
         ref: COLLECTIONS.PERSONAL_TRAINERS

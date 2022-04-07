@@ -1,4 +1,4 @@
-const { HTTP_STATUS_CODES, COLLECTIONS } = require("../global");
+const { HTTP_STATUS_CODES, COLLECTIONS, RELATION_STATUSES } = require("../global");
 const DbService = require('../services/db.service');
 const mongoose = require("mongoose");
 const ResponseError = require('../errors/responseError');
@@ -10,23 +10,29 @@ const MessagingService = {
     createChat: (personalTrainerId, clientId) => {
         return new Promise(async (resolve, reject) => {
             try {
+                const client = await DbService.getOne(COLLECTIONS.CLIENTS, {_id: mongoose.Types.ObjectId(clientId)});
                 const trainer = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, {userId: mongoose.Types.ObjectId(personalTrainerId)});
-                const client = await DbService.getOne(COLLECTIONS.USERS, {_id: mongoose.Types.ObjectId(clientId)});
 
-                if((trainer && client)){
-                    const chat = await DbService.getOne(COLLECTIONS.CHATS, { trainerId: mongoose.Types.ObjectId(trainerId), clientId: mongoose.Types.ObjectId(clientId) });
-                    if(!chat){
-                        const chat = new Chat({
-                            trainerId: mongoose.Types.ObjectId(trainerId),
-                            clientId: mongoose.Types.ObjectId(clientId)
-                        })
-                        const { error } = chatValidation(chat);
-                        if (error) reject(new ResponseError(error.details[0].message, HTTP_STATUS_CODES.BAD_REQUEST));
+                if(trainer && client){
+                    
+                    const relation = await DbService.getOne(COLLECTIONS.RELATIONS, { "$and": [{personalTrainerId: mongoose.Types.ObjectId(trainer._id)}, {clientId: mongoose.Types.ObjectId(client._id)}]});
 
-                        await DbService.create(COLLECTIONS.CHATS, chat);
-                        resolve();
+                    if(relation && relation.status == RELATION_STATUSES.ACTIVE){
+                        const chat = await DbService.getOne(COLLECTIONS.CHATS, { personalTrainerId: mongoose.Types.ObjectId(personalTrainerId), clientId: mongoose.Types.ObjectId(clientId) });
+                        if(!chat){
+                            const chat = new Chat({
+                                personalTrainerId: mongoose.Types.ObjectId(personalTrainerId),
+                                clientId: mongoose.Types.ObjectId(clientId)
+                            })
+                            const { error } = chatValidation(chat);
+                            if (error) reject(new ResponseError(error.details[0].message, HTTP_STATUS_CODES.BAD_REQUEST));
+
+                            await DbService.create(COLLECTIONS.CHATS, chat);
+                            resolve();
+                        }
+                        reject(new ResponseError("There is already a chat between these people", HTTP_STATUS_CODES.BAD_REQUEST));
                     }
-                    reject(new ResponseError("There is already a chat between these people", HTTP_STATUS_CODES.BAD_REQUEST));
+                    reject(new ResponseError("There is no active relation between these people", HTTP_STATUS_CODES.CONFLICT));
                 }
                 reject(new ResponseError("Client or trainer not found", HTTP_STATUS_CODES.NOT_FOUND));
 
@@ -51,7 +57,7 @@ const MessagingService = {
 
                 const chat = await DbService.getById(COLLECTIONS.CHATS, chatId);
 
-                if(chat && (chat.trainerId.toString() == senderId.toString() || chat.clientId.toString() == senderId.toString())){
+                if(chat && (chat.personalTrainerId.toString() == senderId.toString() || chat.clientId.toString() == senderId.toString())){
                     await DbService.create(COLLECTIONS.MESSAGES, textMessage);
                     resolve();
                 }
@@ -77,7 +83,7 @@ const MessagingService = {
 
                 const chat = await DbService.getById(COLLECTIONS.CHATS, chatId);
 
-                if(chat && (chat.trainerId.toString() == senderId.toString() || chat.clientId.toString() == senderId.toString())){
+                if(chat && (chat.personalTrainerId.toString() == senderId.toString() || chat.clientId.toString() == senderId.toString())){
                     await DbService.create(COLLECTIONS.MESSAGES, fileMessage);
                     resolve();
                 }
