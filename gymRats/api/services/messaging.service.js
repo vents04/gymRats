@@ -78,7 +78,7 @@ const MessagingService = {
                         file: base64
                     }
                 })
-                const { error } = messageValidation(textMessage);
+                const { error } = messageValidation(fileMessage);
                 if (error) reject(new ResponseError(error.details[0].message, HTTP_STATUS_CODES.BAD_REQUEST));
 
                 const chat = await DbService.getById(COLLECTIONS.CHATS, chatId);
