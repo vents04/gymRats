@@ -17,7 +17,7 @@ const MessagingService = {
                     
                     const relation = await DbService.getOne(COLLECTIONS.RELATIONS, {personalTrainerId: mongoose.Types.ObjectId(trainer._id), clientId: mongoose.Types.ObjectId(client._id)});
 
-                    if(relation || relation.status == RELATION_STATUSES.ACTIVE){
+                    if(relation && relation.status == RELATION_STATUSES.ACTIVE){
                         const chat = await DbService.getOne(COLLECTIONS.CHATS, { personalTrainerId: mongoose.Types.ObjectId(personalTrainerId), clientId: mongoose.Types.ObjectId(clientId) });
                         if(!chat){
                             const chat = new Chat({
