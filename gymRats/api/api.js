@@ -52,12 +52,12 @@ io.on("connection", authenticate, (socket) => {
 
             socket.join(chatId);
 
-            socket.on("send-text-message", (messageInfo) => {
+            socket.on("send-text-message", async (messageInfo) => {
                 await MessagingService.sendTextMessage(chatId, messageInfo.senderId, messageInfo.message);
                 socket.to(chatId).emit("send-text-message", {});
             });
 
-            socket.on("send-file-message", (messageInfo) => {
+            socket.on("send-file-message", async (messageInfo) => {
                 await MessagingService.sendFileMessage(chatId, messageInfo.senderId, messageInfo.base64);
                 socket.to(chatId).emit("send-file-message", {});
             });

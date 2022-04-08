@@ -110,6 +110,7 @@ export default class CoachPage extends Component {
                                     }}
                                     value={this.state.coach.prefersOfflineCoaching}
                                 />
+                                <Text style={styles.sectionTitle}>Uploaded content</Text>
                             </>
                         }
                     </ScrollView>

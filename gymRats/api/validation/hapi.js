@@ -1,6 +1,6 @@
 const Joi = require('@hapi/joi');
 const mongoose = require('mongoose');
-const { CALORIES_COUNTER_UNITS, WEIGHT_UNITS, WATER_INTAKE_UNITS, CALORIES_COUNTER_MEALS, REQUEST_STATUSES , CHAT_STATUSES, RELATION_STATUSES} = require('../global');
+const { CALORIES_COUNTER_UNITS, WEIGHT_UNITS, WATER_INTAKE_UNITS, CALORIES_COUNTER_MEALS, REQUEST_STATUSES , CHAT_STATUSES, RELATION_STATUSES, CONTENT_VISIBILITY_SCOPES} = require('../global');
 
 const signupValidation = (data) => {
     const schema = Joi.object({
@@ -335,6 +335,26 @@ const messageValidation = (data) => {
     return schema.validate(data);
 }
 
+const contentPostValidation = (data) => {
+    const schema = Joi.object({
+        file: Joi.string().required(),
+        visibilityScope: Joi.string().valid(...Object.values(CONTENT_VISIBILITY_SCOPES)).required(),
+        isVisible: Joi.boolean().optional(),
+        section: Joi.string().min(1).max(40).required(),
+        title: Joi.string().min(1).max(40).required()
+    });
+}
+
+const contentUpdateValidation = (data) => {
+    const schema = Joi.object({
+        visibilityScope: Joi.string().valid(...Object.values(CONTENT_VISIBILITY_SCOPES)).required(),
+        isVisible: Joi.boolean().optional(),
+        section: Joi.string().min(1).max(40).required(),
+        title: Joi.string().min(1).max(40).required()
+    });
+}
+
+
 module.exports = {
     signupValidation,
     loginValidation,
@@ -357,5 +377,7 @@ module.exports = {
     googlePlacesSearchValidation,
     coachApplicationPostValidation,
     chatValidation,
-    messageValidation
+    messageValidation,
+    contentPostValidation,
+    contentUpdateValidation
 }
