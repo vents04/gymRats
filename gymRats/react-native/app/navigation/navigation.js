@@ -25,6 +25,7 @@ import Chats from '../screens/Chats/Chats';
 import Chat from '../screens/Chat/Chat';
 import i18n from 'i18n-js';
 import CoachRequests from '../screens/CoachRequests/CoachRequests';
+import CoachProfileEdit from '../screens/CoachProfileEdit/CoachProfileEdit';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -101,6 +102,13 @@ const coachingScreenStack = ({ navigation }) => {
                     headerShown: false
                 }}
                 component={CoachRequests}
+            />
+            <Stack.Screen
+                name="CoachProfileEdit"
+                options={{
+                    headerShown: false
+                }}
+                component={CoachProfileEdit}
             />
         </Stack.Navigator>
     )

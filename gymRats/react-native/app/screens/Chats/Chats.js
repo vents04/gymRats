@@ -31,6 +31,10 @@ export default class Chats extends Component {
         showError: true,
         error: "",
     }
+
+    componentDidMount() {
+        this.props.navigation.navigate("Chat");
+    }
     
     render() {
         return (

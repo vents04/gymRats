@@ -135,7 +135,6 @@ export default class CoachingApplicationSubmission extends Component {
                             thumbColor={this.state.prefersOfflineCoaching ? '#1f6cb0' : '#f4f3f4'}
                             ios_backgroundColor="#3e3e3e"
                             onValueChange={() => {
-                                console.log("wewe")
                                 this.setState({ prefersOfflineCoaching: !this.state.prefersOfflineCoaching });
                             }}
                             value={this.state.prefersOfflineCoaching}

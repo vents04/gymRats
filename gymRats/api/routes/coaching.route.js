@@ -64,6 +64,35 @@ router.get('/', authenticate, async (req, res, next) => {
     }
 })
 
+router.get('/me-as-coach', authenticate, async (req, res, next) => {
+    try {
+        const coach = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, { userId: mongoose.Types.ObjectId(req.user._id) });
+        if(!coach) return next(new ResponseError("Coach was not found", HTTP_STATUS_CODES.NOT_FOUND));
+
+        const relations = await DbService.getMany(COLLECTIONS.RELATIONS, { personalTrainerId: mongoose.Types.ObjectId(coach._id), status: RELATION_STATUSES.ACTIVE, to: null });
+        coach.relations = relations;
+        let overallRating = 3;
+        let overallRatingCounter = 1;
+        for(let relation of relations) {
+            const rating = await DbService.getOne(COLLECTIONS.REVIEWS, { relationId: mongoose.Types.ObjectId(relation._id) })
+            relation.rating = rating;
+            overallRatingCounter++;
+            overAllRating = (overallRating + rating.rating) / overallRatingCounter;
+        }
+
+        const clients = await DbService.getMany(COLLECTIONS.RELATIONS, { personalTrainerId: mongoose.Types.ObjectId(coach._id)});
+        coach.clients = clients.length;
+        coach.rating = parseFloat(overallRating).toFixed(1);
+        coach.user = req.user;
+
+        res.status(HTTP_STATUS_CODES.OK).send({
+            coach
+        })
+    } catch (err) {
+        return next(new ResponseError(err.message || "Internal server error", err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+    }
+})
+
 router.post('/application', authenticate, async (req, res, next) => {
     const { error } = coachApplicationPostValidation(req.body);
     if (error) return next(new ResponseError(error.details[0].message, HTTP_STATUS_CODES.BAD_REQUEST));

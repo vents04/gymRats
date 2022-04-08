@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Image, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Image, Text, TouchableOpacity, View } from 'react-native';
 import { HTTP_STATUS_CODES } from '../../../global';
 import ApiRequests from '../../classes/ApiRequests';
 import { MdOutlineFitnessCenter } from 'react-icons/md';
@@ -15,7 +15,7 @@ const styles = require('./Coaching.styles')
 export default class Coaching extends Component {
 
     state = {
-        activeTab: "myCoach",
+        activeTab: "myClients",
         showError: false,
         error: "",
         coaching: null,
@@ -167,13 +167,13 @@ export default class Coaching extends Component {
                         }]} onClick={() => {
                             this.setState({ activeTab: "myCoach" });
                             this.getCoachingPageState();
-                        }}>My couch</Text>
+                        }}>Me as client</Text>
                         <Text style={[styles.tabTitle, {
                             color: this.state.activeTab == "myClients" ? "#1f6cb0" : "#aaa"
                         }]} onClick={() => {
                             this.setState({ activeTab: "myClients" });
                             this.getCoachingPageState();
-                        }}>My clients</Text>
+                        }}>Me as coach</Text>
                     </View>
                     {
                         this.state.coaching
@@ -289,6 +289,16 @@ export default class Coaching extends Component {
                                     }
                                 </View>
                                 : <View style={styles.tabContent}>
+                                    {
+                                        this.state.coaching.myClients.isPersonalTrainer
+                                        && <TouchableOpacity style={[globalStyles.authPageActionButton, {
+                                            marginBottom: 12
+                                        }]} onPress={() => {
+                                            this.props.navigation.navigate("CoachProfileEdit");
+                                        }}>
+                                            <Text style={globalStyles.authPageActionButtonText}>Open my coach profile</Text>
+                                        </TouchableOpacity>
+                                    }
                                     {
                                         !this.state.coaching.myClients.isPersonalTrainer
                                             ? <View style={styles.noCoachContainer}>

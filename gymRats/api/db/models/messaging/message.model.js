@@ -17,11 +17,13 @@ const messageSchema = mongoose.Schema({
             type: String,
             min: 1,
             max: 1000,
-            required: function() {return this.file.length == 0}
+            required: function() {return this.file.length == 0},
+            default: null
         },
         file: {
             type: String,
-            required: function() {return this.text.length == 0}
+            required: function() {return this.text.length == 0},
+            default: null
         }
     },
     createdAt: {
