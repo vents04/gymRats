@@ -11,8 +11,9 @@ const errorHandler = require('./errors/errorHandler');
 
 const { PORT, COLLECTIONS } = require('./global');
 const DbService = require('./services/db.service');
+const MessagingService = require('./services/messaging.service');
 const mongoose = require('mongoose');
-const User = require('./db/models/generic/user.model');
+const { authenticate } = require('./middlewares/authenticate');
 
 app
     .use(cors())
@@ -35,7 +36,7 @@ for (var d = new Date(1970, 0, 1); d <= now; d.setDate(d.getDate() + 1)) {
 
 (async function () {
     const users = await DbService.getMany(COLLECTIONS.USERS, {});
-    for (user of users) {
+    for (let user of users) {
         await DbService.update(COLLECTIONS.USERS, { _id: mongoose.Types.ObjectId(user._id) }, {
             weightUnit: "KILOGRAMS",
             verifiedEmail: false
@@ -43,11 +44,38 @@ for (var d = new Date(1970, 0, 1); d <= now; d.setDate(d.getDate() + 1)) {
     }
 })();
 
-io.on("connection", (socket) => {
+io.on("connection", authenticate, (socket) => {
     console.log("connection established", socket.id);
-    socket.on("join-room", (payload) => {
+    socket.on("join-chat", async (payload) => {
+        try{
+            const chatId = payload.chatId;
 
+            socket.join(chatId);
+
+            socket.on("send-text-message", (messageInfo) => {
+                await MessagingService.sendTextMessage(chatId, messageInfo.senderId, messageInfo.message);
+                socket.to(chatId).emit("send-text-message", {});
+            });
+
+            socket.on("send-file-message", (messageInfo) => {
+                await MessagingService.sendFileMessage(chatId, messageInfo.senderId, messageInfo.base64);
+                socket.to(chatId).emit("send-file-message", {});
+            });
+        }catch (err) {
+            reject(new ResponseError("Internal server error", err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+            socket.disconnect();
+        }
     })
+
+    socket.on("create-chat", async (payload) => {
+        try{
+            await MessagingService.createChat(payload.personalTrainerId, payload.clientId);
+        }catch (err) {
+            reject(new ResponseError("Internal server error", err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+            socket.disconnect();
+        }
+    })
+
 });
 
 httpServer.listen(PORT, function () {

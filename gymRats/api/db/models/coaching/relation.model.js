@@ -5,7 +5,7 @@ const relationSchema = mongoose.Schema({
     clientId: {
         type: mongoose.Types.ObjectId,
         required: true,
-        ref: COLLECTIONS.USERS
+        ref: COLLECTIONS.CLIENTS
     },
     personalTrainerId: {
         type: mongoose.Types.ObjectId,

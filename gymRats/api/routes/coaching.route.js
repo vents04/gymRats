@@ -271,8 +271,8 @@ router.get("/coach/search",authenticate, async (req, res, next) => {
     }
 
     try {
-        let minRating = 0;
-        let distanceForCheck = 30;
+        const minRating = 0;
+        const distanceForCheck = 30;
         let allTrainers = [];
         let sorted = [];
 
@@ -283,9 +283,11 @@ router.get("/coach/search",authenticate, async (req, res, next) => {
                 for (let i = 0; i < users.length; i++) {
                     const trainer = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, { "$or": [{userId: users[i]._id}, {userId: mongoose.Types.ObjectId(users[i]._id)}] });
                     if(trainer){
-                        const clients = await DbService.getMany(COLLECTIONS.CLIENTS, { "$or": [{trainerId: trainer._id}, {trainerId: mongoose.Types.ObjectId(trainer._id)}] });
+                        const clients = await DbService.getMany(COLLECTIONS.CLIENTS, { "$or": [{personalTrainerId: trainer._id}, {personalTrainerId: mongoose.Types.ObjectId(trainer._id)}] });
                         Object.assign(trainer, { criteriasMet: 0 }, {clients: clients.length});
                         if (trainer.status == PERSONAL_TRAINER_STATUSES.ACTIVE && trainer.userId.toString() != req.user._id.toString()) {
+                            const relation = await DbService.getOne(COLLECTIONS.RELATIONS, {personalTrainerId: trainer._id, clientId: req.user._id})
+                            if(relation && relation.status == RELATION_STATUSES.PENDING_APPROVAL) continue;
                             allTrainers.push(trainer);
                         }
                     }
@@ -294,9 +296,11 @@ router.get("/coach/search",authenticate, async (req, res, next) => {
         }else{
             const trainers = await DbService.getMany(COLLECTIONS.PERSONAL_TRAINERS, {})
             for (let trainer of trainers) {
-                const clients = await DbService.getMany(COLLECTIONS.CLIENTS, { "$or": [{trainerId: trainer._id}, {trainerId: mongoose.Types.ObjectId(trainer._id)}] });
+                const clients = await DbService.getMany(COLLECTIONS.CLIENTS, { "$or": [{personalTrainerId: trainer._id}, {personalTrainerId: mongoose.Types.ObjectId(trainer._id)}] });
                 Object.assign(trainer, { criteriasMet: 0 }, {clients: clients.length});
                 if (trainer.status == PERSONAL_TRAINER_STATUSES.ACTIVE && trainer.userId.toString() != req.user._id.toString()) {
+                    const relation = await DbService.getOne(COLLECTIONS.RELATIONS, {personalTrainerId: trainer._id, clientId: req.user._id})
+                    if(relation && relation.status == RELATION_STATUSES.PENDING_APPROVAL) continue;
                     allTrainers.push(trainer);
                 }
             }
@@ -341,7 +345,7 @@ router.get("/coach/search",authenticate, async (req, res, next) => {
 
         const reviews = await DbService.getMany(COLLECTIONS.REVIEWS, {});
         for (let i = 0; i < allTrainers.length; i++) {
-            let sumOfAllRatings = 3, counter = 1;
+            let sumOfAllRatings = 0, counter = 1;
             for (let review of reviews) {
                 const request = await DbService.getOne(COLLECTIONS.REQUESTS, { "$or": [{_id: review.requestId}, {_id: mongoose.Types.ObjectId(review.requestId)}] });
                 if (request.recieverId.toString() == allTrainers[i].userId.toString()) {
