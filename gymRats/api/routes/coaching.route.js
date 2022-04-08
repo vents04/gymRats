@@ -496,7 +496,7 @@ router.get('/content/:personalTrainerId', authenticate, async (req, res, next) =
         const personalTrainer = await DbService.getById(COLLECTIONS.PERSONAL_TRAINERS, req.params.personalTrainerId);
         if(!personalTrainer) return next(new ResponseError("Personal trainer not found", HTTP_STATUS_CODES.NOT_FOUND));
         
-        const relations = await DbService.getMany(COLLECTIONS.RELATIONS, { personalTrainerId: mongoose.Types.ObjectId(coach._id)});
+        const relations = await DbService.getMany(COLLECTIONS.RELATIONS, { personalTrainerId: mongoose.Types.ObjectId(coach._id), status: RELATION_STATUSES.ACTIVE});
         let contents = [];
         for(let relation of relations) {
             if(relation.clientId.toString() == req.user._id.toString()) {
