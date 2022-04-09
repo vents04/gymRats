@@ -3994,3 +3994,14 @@
 {"level":"error","message":"Opposite user not found"}
 {"level":"error","message":"Opposite user not found"}
 {"level":"error","message":"Opposite user not found"}
+{"level":"error","message":"You cannot access chats in which you are not a participant!"}
+{"level":"error","message":"You cannot access chats in which you are not a participant!"}
+{"level":"error","message":"You cannot access chats in which you are not a participant!"}
+{"level":"error","message":"You cannot access chats in which you are not a participant!"}
+{"level":"error","message":"You cannot access chats in which you are not a participant!"}
+{"level":"error","message":"You cannot access chats in which you are not a participant!"}
+{"level":"error","message":"Token not provided"}
+{"level":"error","message":"Cannot read properties of undefined (reading '_id')"}
+{"level":"error","message":"Token not provided"}
+{"level":"error","message":"Cannot read properties of undefined (reading '_id')"}
+{"level":"error","message":"You cannot access chats in which you are not a participant!"}

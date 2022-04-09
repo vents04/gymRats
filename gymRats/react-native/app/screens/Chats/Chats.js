@@ -55,7 +55,9 @@ export default class Chats extends Component {
                             }}>
                                 {
                                     this.state.chats.map((chat) => 
-                                        <ChatsItem chat={chat} {...this.props}/>                                    
+                                        <ChatsItem onClick={() => {
+                                            this.props.navigation.navigate("Chat", {chatId: chat._id})
+                                        }} chat={chat} {...this.props}/>                                    
                                     )
                                 }
                         </ScrollView>
