@@ -46,18 +46,18 @@ for (var d = new Date(1970, 0, 1); d <= now; d.setDate(d.getDate() + 1)) {
 
 io.on("connection", authenticate, (socket) => {
     console.log("connection established", socket.id);
-    socket.on("join-chat", async (payload) => {
+    socket.on("join-chat", (payload) => {
         try{
             const chatId = payload.chatId;
 
             socket.join(chatId);
 
-            socket.on("send-text-message", (messageInfo) => {
+            socket.on("send-text-message", async (messageInfo) => {
                 await MessagingService.sendTextMessage(chatId, messageInfo.senderId, messageInfo.message);
                 socket.to(chatId).emit("send-text-message", {});
             });
 
-            socket.on("send-file-message", (messageInfo) => {
+            socket.on("send-file-message", async (messageInfo) => {
                 await MessagingService.sendFileMessage(chatId, messageInfo.senderId, messageInfo.base64);
                 socket.to(chatId).emit("send-file-message", {});
             });
