@@ -67,15 +67,6 @@ io.on("connection", authenticate, (socket) => {
         }
     })
 
-    socket.on("create-chat", async (payload) => {
-        try{
-            await MessagingService.createChat(payload.personalTrainerId, payload.clientId);
-        }catch (err) {
-            reject(new ResponseError("Internal server error", err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
-            socket.disconnect();
-        }
-    })
-
 });
 
 httpServer.listen(PORT, function () {

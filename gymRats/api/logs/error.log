@@ -3981,3 +3981,12 @@
 {"level":"error","message":"Token not provided"}
 {"level":"error","message":"Cannot read properties of undefined (reading '_id')"}
 {"level":"error","message":"alltrainers is not defined"}
+{"level":"error","message":"Client or trainer not found"}
+{"level":"error","message":"Client or trainer not found"}
+{"level":"error","message":"\"trainerId\" is required"}
+{"level":"error","message":"There is already a chat between these people"}
+{"level":"error","message":"\"personalTrainerId\" must be a string"}
+{"level":"error","message":"\"personalTrainerId\" must be a string"}
+{"level":"error","message":"\"personalTrainerId\" must be a string"}
+{"level":"error","message":"\"personalTrainerId\" must be a string"}
+{"level":"error","message":"\"personalTrainerId\" must be a string"}

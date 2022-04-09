@@ -10,6 +10,8 @@ const { relationValidation, relationStatusUpdateValidation, coachingReviewPostVa
 const PersonalTrainer = require('../db/models/coaching/personalTrainer.model');
 const Relation = require('../db/models/coaching/relation.model');
 const Content = require('../db/models/coaching/content.model');
+const MessagingService = require('../services/messaging.service');
+
 
 router.get('/', authenticate, async (req, res, next) => {
     try {
@@ -23,19 +25,21 @@ router.get('/', authenticate, async (req, res, next) => {
         const userAsTrainer = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, { userId: mongoose.Types.ObjectId(req.user._id) });
         coaching.myClients.isPersonalTrainer = userAsTrainer ? true : false;
         coaching.myClients.trainerObject = coaching.myClients.isPersonalTrainer ? userAsTrainer : null;
+        let relations, pendingClientsRelations = []
+        if(userAsTrainer){
+            relations = await DbService.getMany(COLLECTIONS.RELATIONS, { personalTrainerId: mongoose.Types.ObjectId(userAsTrainer._id), status: RELATION_STATUSES.ACTIVE, to: null });
+            for (let relation of relations) {
+                const clientInstance = await DbService.getById(COLLECTIONS.USERS, relation.clientId);
+                relation.clientInstance = clientInstance;
+            }
 
-        let relations = await DbService.getMany(COLLECTIONS.RELATIONS, { personalTrainerId: mongoose.Types.ObjectId(req.user._id), status: RELATION_STATUSES.ACTIVE, to: null });
-        for (let relation of relations) {
-            const clientInstance = await DbService.getById(COLLECTIONS.USERS, relation.clientId);
-            relation.clientInstance = clientInstance;
+            pendingClientsRelations = await DbService.getMany(COLLECTIONS.RELATIONS, {personalTrainerId: mongoose.Types.ObjectId(userAsTrainer._id), status: RELATION_STATUSES.PENDING_APPROVAL});
+            for(let relation of pendingClientsRelations) {
+                const clientInstance = await DbService.getById(COLLECTIONS.USERS, relation.clientId);
+                relation.clientInstance = clientInstance;
+            }
         }
         coaching.myClients.clients = relations;
-
-        let pendingClientsRelations = await DbService.getMany(COLLECTIONS.RELATIONS, {personalTrainerId: mongoose.Types.ObjectId(req.user._id), status: RELATION_STATUSES.PENDING_APPROVAL});
-        for(let relation of pendingClientsRelations) {
-            const clientInstance = await DbService.getById(COLLECTIONS.USERS, relation.clientId);
-            relation.clientInstance = clientInstance;
-        }
         coaching.myClients.requests = pendingClientsRelations;
 
         const activeRelations = await DbService.getMany(COLLECTIONS.RELATIONS, { clientId: mongoose.Types.ObjectId(req.user._id), status: RELATION_STATUSES.ACTIVE, to: null });
@@ -175,21 +179,7 @@ router.put('/relation/:id/status', authenticate, async (req, res, next) => {
 
         const coach = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, { _id: mongoose.Types.ObjectId(relation.personalTrainerId) });
         if(!coach) return next(new ResponseError("Coach was not found", HTTP_STATUS_CODES.NOT_FOUND));
-
-        console.log(!(relation.status == RELATION_STATUSES.PENDING_APPROVAL 
-            && req.body.status == RELATION_STATUSES.ACTIVE
-            && req.user._id.toString() == coach.userId.toString())
-        );
-        console.log(!(relation.status == RELATION_STATUSES.PENDING_APPROVAL 
-            && req.body.status == RELATION_STATUSES.DECLINED
-            && req.user._id.toString() == coach.userId.toString())
-        );
-        console.log(!(relation.status == RELATION_STATUSES.ACTIVE 
-            && req.body.status == RELATION_STATUSES.CANCELED
-            && (req.user._id.toString() == coach.userId.toString() || req.user._id.toString() == relation.clientId.toString()))
-        );
             
-
         if(relation.status != RELATION_STATUSES.ACTIVE
             && relation.status != RELATION_STATUSES.PENDING_APPROVAL) return next(new ResponseError("Relation must be in statuses active or pending approval to update its status", HTTP_STATUS_CODES.CONFLICT));
         if(!(relation.status == RELATION_STATUSES.PENDING_APPROVAL 
@@ -208,6 +198,7 @@ router.put('/relation/:id/status', authenticate, async (req, res, next) => {
             await DbService.update(COLLECTIONS.RELATIONS, { _id: mongoose.Types.ObjectId(req.params.id) }, {
                 from: new Date().getTime()
             });
+            await MessagingService.createChat(relation.personalTrainerId, relation.clientId)
         }
         if(req.body.status == RELATION_STATUSES.CANCELED) {
             await DbService.update(COLLECTIONS.RELATIONS, { _id: mongoose.Types.ObjectId(req.params.id) }, {
