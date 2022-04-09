@@ -14,7 +14,6 @@ const MessagingService = {
                 const trainer = await DbService.getById(COLLECTIONS.PERSONAL_TRAINERS, personalTrainerId);
 
                 if(trainer && client){
-                    
                     const relation = await DbService.getOne(COLLECTIONS.RELATIONS, {personalTrainerId: mongoose.Types.ObjectId(trainer._id), clientId: mongoose.Types.ObjectId(client._id)});
                     if(relation && relation.status == RELATION_STATUSES.ACTIVE){
                         const chat = await DbService.getOne(COLLECTIONS.CHATS, { personalTrainerId: mongoose.Types.ObjectId(trainer._id), clientId: mongoose.Types.ObjectId(client._id) });
@@ -49,8 +48,6 @@ const MessagingService = {
                         text: message
                     }
                 })
-                const { error } = messageValidation(textMessage);
-                if (error) reject(new ResponseError(error.details[0].message, HTTP_STATUS_CODES.BAD_REQUEST));
 
                 const chat = await DbService.getById(COLLECTIONS.CHATS, chatId);
 
@@ -75,8 +72,6 @@ const MessagingService = {
                         file: base64
                     }
                 })
-                const { error } = messageValidation(fileMessage);
-                if (error) reject(new ResponseError(error.details[0].message, HTTP_STATUS_CODES.BAD_REQUEST));
 
                 const chat = await DbService.getById(COLLECTIONS.CHATS, chatId);
 

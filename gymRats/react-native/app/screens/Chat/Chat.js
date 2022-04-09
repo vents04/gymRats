@@ -7,6 +7,7 @@ const styles = require('./Chat.styles');
 
 import { IoIosSend } from 'react-icons/io';
 import Message from '../../components/Message/Message';
+import ApiRequests from '../../classes/ApiRequests';
 
 export default class Chat extends Component {
 
@@ -15,90 +16,9 @@ export default class Chat extends Component {
         showError: false,
         error: "",
         chat: {
-            user: {
-                _id: "1",
-                profilePicture: null,
-                firstName: "Ventsislav",
-                lastName: "Dimitrov"
-            },
-            oppositeUser: {
-                _id: "2",
-                profilePicture: null,
-                firstName: 'Alexander',
-                lastName: 'Zlatkov',
-            },
-            messages: [
-                {
-                    senderId: "2",
-                    text: "Hello",
-                    file: null,
-                },
-                {
-                    senderId: "1",
-                    text: "world!",
-                    file: null,
-                },
-                {
-                    senderId: "2",
-                    text: "Hello",
-                    file: null,
-                },
-                {
-                    senderId: "1",
-                    text: "world!",
-                    file: null,
-                },
-                {
-                    senderId: "2",
-                    text: "Hello",
-                    file: null,
-                },
-                {
-                    senderId: "1",
-                    text: "world!",
-                    file: null,
-                },
-                {
-                    senderId: "2",
-                    text: "Hello",
-                    file: null,
-                },
-                {
-                    senderId: "1",
-                    text: "world!",
-                    file: null,
-                },
-                {
-                    senderId: "2",
-                    text: "Hello",
-                    file: null,
-                },
-                {
-                    senderId: "1",
-                    text: "world!",
-                    file: null,
-                },
-                {
-                    senderId: "2",
-                    text: "Hello",
-                    file: null,
-                },
-                {
-                    senderId: "1",
-                    text: "world!",
-                    file: null,
-                },
-                {
-                    senderId: "2",
-                    text: "Hello",
-                    file: null,
-                },
-                {
-                    senderId: "1",
-                    text: "world!",
-                    file: null,
-                },
-            ]
+            user: null,
+            oppositeUser: null,
+            messages: []
         }
     }
 

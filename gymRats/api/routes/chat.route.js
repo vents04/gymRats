@@ -8,11 +8,17 @@ const { authenticate } = require('../middlewares/authenticate');
 
 router.get('/', authenticate, async function (req, res, next) {
     try {
-        const chats = await DbService.getMany(COLLECTIONS.CHATS, {"$or": [{ personalTrainerId: mongoose.Types.ObjectId(req.user._id) }, { clientId: mongoose.Types.ObjectId(req.user._id) }] });
-
+        const personalTrainer = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, {userId:  mongoose.Types.ObjectId(req.user._id)})
+        let chats
+        if(personalTrainer){
+            chats = await DbService.getMany(COLLECTIONS.CHATS, {personalTrainerId: mongoose.Types.ObjectId(personalTrainer._id) });
+        }else{
+            chats = await DbService.getMany(COLLECTIONS.CHATS, {clientId: mongoose.Types.ObjectId(req.user._id) });
+        }
         for(let chat of chats){
             let oppositeUser;
-            if(chat.personalTrainerId.toString() == req.user._id.toString()){
+            if(personalTrainer && (chat.personalTrainerId.toString() == personalTrainer._id.toString())){
+
                 oppositeUser = await DbService.getOne(COLLECTIONS.USERS, {_id: mongoose.Types.ObjectId(chat.clientId)});
             }
             if(chat.clientId.toString() == req.user._id.toString()){

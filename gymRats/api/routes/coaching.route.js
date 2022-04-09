@@ -215,10 +215,8 @@ router.put('/relation/:id/status', authenticate, async (req, res, next) => {
 router.get('/requests', authenticate, async (req, res, next) => {
     try {
         const coach = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, { userId: mongoose.Types.ObjectId(req.user._id) });
-        console.log(coach)
         if(!coach) return res.status(HTTP_STATUS_CODES.OK).send({relations: []})
         const relations = await DbService.getMany(COLLECTIONS.RELATIONS, { personalTrainerId: mongoose.Types.ObjectId(coach._id), status: RELATION_STATUSES.PENDING_APPROVAL });
-        console.log(coach._id, RELATION_STATUSES.PENDING_APPROVAL, relations)
         for(let relation of relations) {
             const client = await DbService.getById(COLLECTIONS.USERS, relation.clientId);
             relation.client = client;

@@ -15,18 +15,18 @@ export default class ChatsItem extends Component {
         return (
             <View style={styles.chatItemContainer} onClick={this.navigateToChat}>
                 {
-                    !this.props.chat.user.profilePicture
+                    !this.props.chat.oppositeUser.profilePicture
                         ? <View style={styles.profilePictureContainer}>
                             <Text style={styles.noProfilePictureText}>
-                                {this.props.chat.user.firstName.charAt(0)}
-                                {this.props.chat.user.lastName.charAt(0)}
+                                {this.props.chat.oppositeUser.firstName.charAt(0)}
+                                {this.props.chat.oppositeUser.lastName.charAt(0)}
                             </Text>
                         </View>
                         : <Image style={styles.profilePictureContainer}
-                            source={{ uri: this.props.chat.user.profilePicture }} />
+                            source={{ uri: this.props.chat.oppositeUser.profilePicture }} />
                 }
                 <View style={styles.chatsItemDetailsContainer}>
-                    <Text style={styles.chatsItemNames}>{this.props.chat.user.firstName} {this.props.chat.user.lastName}</Text>
+                    <Text style={styles.chatsItemNames}>{this.props.chat.oppositeUser.firstName} {this.props.chat.oppositeUser.lastName}</Text>
                     {
                         this.props.chat.lastMessage && 
                         <Text style={styles.chatsItemLastMessage}>{this.props.chat.lastMessage}</Text>

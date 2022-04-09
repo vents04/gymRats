@@ -3990,3 +3990,7 @@
 {"level":"error","message":"\"personalTrainerId\" must be a string"}
 {"level":"error","message":"\"personalTrainerId\" must be a string"}
 {"level":"error","message":"\"personalTrainerId\" must be a string"}
+{"level":"error","message":"DbService.getByOne is not a function"}
+{"level":"error","message":"Opposite user not found"}
+{"level":"error","message":"Opposite user not found"}
+{"level":"error","message":"Opposite user not found"}
