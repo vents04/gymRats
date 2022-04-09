@@ -3,6 +3,7 @@ import { Image, ScrollView, Text, View } from 'react-native';
 import { HTTP_STATUS_CODES } from '../../../global';
 import ApiRequests from '../../classes/ApiRequests';
 import ChatsItem from '../../components/ChatsItem/ChatsItem';
+import { io } from "socket.io-client";
 
 const globalStyles = require('../../../assets/styles/global.styles');
 const styles = require('./Chats.styles');

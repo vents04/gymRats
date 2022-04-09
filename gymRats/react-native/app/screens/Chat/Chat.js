@@ -19,6 +19,16 @@ export default class Chat extends Component {
         chat: null
     }
 
+    sendTextMessage = () => {
+        const socket = io("http://localhost:4001", {
+            reconnectionDelayMax: 10000,
+        });
+
+        socket.emit("join-chat", {chatId});
+
+       
+    }
+
     getChat = (id) => {
         ApiRequests.get(`chat/${id}`, {}, true).then((response) => {
             console.log(response);
@@ -60,6 +70,11 @@ export default class Chat extends Component {
         const chatId = this.props.route.params.chatId
         this.getChat(chatId)
         this.updateSeenStatus(chatId)
+        const socket = io("http://localhost:4056", {
+            reconnectionDelayMax: 10000,
+        });
+
+        socket.emit("join-chat", {chatId});
     }
 
     render() {

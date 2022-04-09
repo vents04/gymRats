@@ -54,12 +54,12 @@ io.on("connection", authenticate, (socket) => {
 
             socket.on("send-text-message", async (messageInfo) => {
                 await MessagingService.sendTextMessage(chatId, messageInfo.senderId, messageInfo.message);
-                socket.to(chatId).emit("send-text-message", {});
+                socket.to(chatId).emit("receive-text-message", {messageInfo});
             });
 
             socket.on("send-file-message", async (messageInfo) => {
                 await MessagingService.sendFileMessage(chatId, messageInfo.senderId, messageInfo.base64);
-                socket.to(chatId).emit("send-file-message", {});
+                socket.to(chatId).emit("receive-file-message", {messageInfo});
             });
         }catch (err) {
             reject(new ResponseError("Internal server error", err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
