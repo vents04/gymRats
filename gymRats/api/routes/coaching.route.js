@@ -1,14 +1,15 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const ResponseError = require('../errors/responseError');
-const { HTTP_STATUS_CODES, COLLECTIONS, REQUEST_STATUSES, PERSONAL_TRAINER_STATUSES, RELATION_STATUSES } = require('../global');
+const { HTTP_STATUS_CODES, COLLECTIONS, REQUEST_STATUSES, PERSONAL_TRAINER_STATUSES, RELATION_STATUSES, CONTENT_VISIBILITY_SCOPES } = require('../global');
 const DbService = require('../services/db.service');
 const Request = require('../db/models/coaching/relation.model');
 const router = express.Router();
 const { authenticate } = require('../middlewares/authenticate');
-const { relationValidation, relationStatusUpdateValidation, coachingReviewPostValidation, coachApplicationPostValidation } = require('../validation/hapi');
+const { relationValidation, relationStatusUpdateValidation, coachingReviewPostValidation, coachApplicationPostValidation, contentPostValidation, contentUpdateValidation } = require('../validation/hapi');
 const PersonalTrainer = require('../db/models/coaching/personalTrainer.model');
 const Relation = require('../db/models/coaching/relation.model');
+const Content = require('../db/models/coaching/content.model');
 
 router.get('/', authenticate, async (req, res, next) => {
     try {
@@ -431,6 +432,108 @@ router.get("/coach/search",authenticate, async (req, res, next) => {
         })
     } catch (error) {
         return next(new ResponseError(error.message || "Internal server error", error.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+    }
+});
+
+router.post('/content', authenticate, async (req, res, next) => {
+    const { error } = contentPostValidation(req.body);
+    if (error) return next(new ResponseError(error.details[0].message, HTTP_STATUS_CODES.BAD_REQUEST));
+
+    try {
+        const personalTrainer = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, { userId: mongoose.Types.ObjectId(req.user._id) });
+        if(!personalTrainer) return next(new ResponseError("Personal trainer not found", HTTP_STATUS_CODES.NOT_FOUND));
+
+        const content = new Content(req.body);
+        content.personalTrainerId = personalTrainer._id;
+
+        await DbService.create(COLLECTIONS.CONTENTS, content);
+
+        return res.sendStatus(HTTP_STATUS_CODES.OK);
+    } catch (err) {
+        return next(new ResponseError(err.message || "Internal server error", err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+    }
+});
+
+router.put('/content/:id', authenticate, async (req, res, next) => {
+    if(!mongoose.Types.ObjectId.isValid(req.params.id)) return next(new ResponseError("Invalid content id", HTTP_STATUS_CODES.BAD_REQUEST));
+
+    const { error } = contentUpdateValidation(req.body);
+    if (error) return next(new ResponseError(error.details[0].message, HTTP_STATUS_CODES.BAD_REQUEST));
+
+    try {
+        const content = await DbService.getById(COLLECTIONS.CONTENTS, req.params.id);
+        if(!content) return next(new ResponseError("Content not found", HTTP_STATUS_CODES.NOT_FOUND));
+        
+        const personalTrainer = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, { userId: mongoose.Types.ObjectId(req.user._id) });
+        if(!personalTrainer) return next(new ResponseError("Personal trainer not found", HTTP_STATUS_CODES.NOT_FOUND));
+        if(personalTrainer.userId.toString() != req.user._id.toString()) return next(new ResponseError("Cannot update this content", HTTP_STATUS_CODES.FORBIDDEN));
+
+        await DbService.update(COLLECTIONS.CONTENTS, { _id: mongoose.Types.ObjectId(req.params.id) }, req.body);
+
+        return res.sendStatus(HTTP_STATUS_CODES.OK);
+    } catch (err) {
+        return next(new ResponseError(err.message || "Internal server error", err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+    }
+});
+
+router.delete('/:id', authenticate, async (req, res, next) => {
+    if(!mongoose.Types.ObjectId.isValid(req.params.id)) return next(new ResponseError("Invalid content id", HTTP_STATUS_CODES.BAD_REQUEST));
+
+    try {
+        const content = await DbService.getById(COLLECTIONS.CONTENTS, req.params.id);
+        if(!content) return next(new ResponseError("Content not found", HTTP_STATUS_CODES.NOT_FOUND));
+
+        const personalTrainer = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, { userId: mongoose.Types.ObjectId(req.user._id) });
+        if(!personalTrainer) return next(new ResponseError("Personal trainer not found", HTTP_STATUS_CODES.NOT_FOUND));
+        if(personalTrainer.userId.toString() != req.user._id.toString()) return next(new ResponseError("Cannot update this content", HTTP_STATUS_CODES.FORBIDDEN));
+        
+        await DbService.delete(COLLECTIONS.CONTENTS, { _id: mongoose.Types.ObjectId(req.params.id) });
+
+        return res.sendStatus(HTTP_STATUS_CODES.OK);
+    } catch (err) {
+        return next(new ResponseError(err.message || "Internal server error", err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+    }
+});
+
+router.get('/content/:personalTrainerId', authenticate, async (req, res, next) => {
+    if(!mongoose.Types.ObjectId.isValid(req.params.personalTrainerId)) return next(new ResponseError("Invalid personal trainer id", HTTP_STATUS_CODES.BAD_REQUEST));
+
+    try {
+        const personalTrainer = await DbService.getById(COLLECTIONS.PERSONAL_TRAINERS, req.params.personalTrainerId);
+        if(!personalTrainer) return next(new ResponseError("Personal trainer not found", HTTP_STATUS_CODES.NOT_FOUND));
+        
+        const relations = await DbService.getMany(COLLECTIONS.RELATIONS, { personalTrainerId: mongoose.Types.ObjectId(coach._id), status: RELATION_STATUSES.ACTIVE});
+        let contents = [];
+        for(let relation of relations) {
+            if(relation.clientId.toString() == req.user._id.toString()) {
+                const clientsContents = await DbService.getMany(COLLECTIONS.CONTENTS, { personalTrainerId: mongoose.Types.ObjectId(personalTrainer._id), isVisible: true, visibilityScope: CONTENT_VISIBILITY_SCOPES.CLIENTS })
+                contents.push(...clientsContents);
+                break;
+            }
+        }
+        if(personalTrainer.userId.toString() == req.user._id.toString()) {
+            const allContents = await DbService.getMany(COLLECTIONS.CONTENTS, { personalTrainerId: mongoose.Types.ObjectId(personalTrainer._id) });
+            contents.push(...allContents);
+        } else {
+            const publicContents = await DbService.getMany(COLLECTIONS.CONTENTS, { personalTrainerId: mongoose.Types.ObjectId(personalTrainer._id), isVisible: true, visibilityScope: CONTENT_VISIBILITY_SCOPES.PUBLIC })
+            contents.push(...publicContents);
+        }
+
+
+        let response = {}
+        for(let content of contents) {
+            if(!response[content.section]) {
+                response[content.section] = [].push(content);
+                continue;
+            }
+            response[content.section].push(content);
+        }
+
+        return res.status(HTTP_STATUS_CODES.OK).send({
+            response
+        })
+    } catch (err) {
+        return next(new ResponseError(err.message || "Internal server error", err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
     }
 });
 

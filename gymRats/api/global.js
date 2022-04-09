@@ -20,6 +20,7 @@ const DATABASE_MODELS = {
     REVIEW: "Review",
     CHAT: "Chat",
     MESSAGE: "Message",
+    CONTENT: "Content"
 }
 
 const COLLECTIONS = {
@@ -42,7 +43,8 @@ const COLLECTIONS = {
     DIET_PLANS: "dietPlans",
     REVIEWS: "reviews",
     CHATS: "chats",
-    MESSAGES: "messages"
+    MESSAGES: "messages",
+    CONTENTS: "contents"
 }
 
 const PERSONAL_TRAINER_STATUSES = {
@@ -142,6 +144,11 @@ const WEIGHT_UNIT_RELATIONS = {
 
 const GOOGLE_API_KEY = "AIzaSyAYQnnCgQuzHGk6WMcbhtOPJHROn5vycE4";
 
+const CONTENT_VISIBILITY_SCOPES = {
+    PUBLIC: "PUBLIC",
+    CLIENTS: "CLIENTS",
+}
+
 module.exports = {
     DATABASE_MODELS: DATABASE_MODELS,
     DB_URI: DB_URI,
@@ -165,5 +172,6 @@ module.exports = {
     PROFESSIONS: PROFESSIONS,
     WEIGHT_UNIT_RELATIONS: WEIGHT_UNIT_RELATIONS,
     GOOGLE_API_KEY: GOOGLE_API_KEY,
-    CHAT_STATUSES: CHAT_STATUSES
+    CHAT_STATUSES: CHAT_STATUSES,
+    CONTENT_VISIBILITY_SCOPES: CONTENT_VISIBILITY_SCOPES
 }
