@@ -3978,3 +3978,6 @@
 {"level":"error","message":"Cannot read properties of null (reading '_id')"}
 {"level":"error","message":"Cannot read properties of undefined (reading 'criteriasMet')"}
 {"level":"error","message":"Cannot read properties of undefined (reading 'criteriasMet')"}
+{"level":"error","message":"Token not provided"}
+{"level":"error","message":"Cannot read properties of undefined (reading '_id')"}
+{"level":"error","message":"alltrainers is not defined"}

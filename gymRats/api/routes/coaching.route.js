@@ -391,7 +391,6 @@ router.get("/coach/search",authenticate, async (req, res, next) => {
                     continue;
                 }
 
-
             }
         } else if (req.query.maxDistance) {
             return next(new ResponseError("We cannot search for max distance when we don't know your location", HTTP_STATUS_CODES.BAD_REQUEST));
@@ -404,7 +403,7 @@ router.get("/coach/search",authenticate, async (req, res, next) => {
                     allTrainers[j] = allTrainers[j + 1]
                     allTrainers[j + 1] = temp
                 }
-                if(allTrainers[j].criteriasMet = allTrainers[j + 1].criteriasMet){
+                if(allTrainers[j].criteriasMet == allTrainers[j + 1].criteriasMet){
                     if (allTrainers[j].distance > allTrainers[j + 1].distance) {
                         allTrainers[j] = allTrainers[j + 1];
                         allTrainers[j + 1] = temp;
@@ -424,6 +423,10 @@ router.get("/coach/search",authenticate, async (req, res, next) => {
             }
             allTrainers[index].user = user;
         }
+
+        /*for(let i = 0; i < allTrainers.length; i++){
+            console.log(allTrainers[i])
+        }*/
 
         const dt2 = new Date().getTime();
         console.log(dt - dt2);
