@@ -45,7 +45,7 @@ for (var d = new Date(1970, 0, 1); d <= now; d.setDate(d.getDate() + 1)) {
 })();
 
 io.on("connection", (socket) => {
-    //onsole.log("connection established", socket.id);
+    //console.log("connection established", socket.id);
     socket.on("join-chat", (payload) => {
         try{
             const chatId = payload.chatId;
@@ -58,11 +58,6 @@ io.on("connection", (socket) => {
                 socket.to(chatId).emit("receive-text-message", {});
             });
 
-            socket.on("disconnect-user-from-chat",() => {
-                socket.leave(chatId)
-                //console.log(socket.id , " is now disconected from the chat")
-            });
-
             socket.on("send-file-message", async (messageInfo) => {
                 await MessagingService.sendFileMessage(chatId, messageInfo.senderId, messageInfo.base64);
                 socket.to(chatId).emit("receive-file-message", {});
@@ -71,6 +66,11 @@ io.on("connection", (socket) => {
             reject(new ResponseError("Internal server error", err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
             socket.disconnect();
         }
+    })
+
+    socket.on("update-last-message", () => {
+        console.log("here")
+        socket.emit("last-message-to-be-updated", {})  
     })
 
 });

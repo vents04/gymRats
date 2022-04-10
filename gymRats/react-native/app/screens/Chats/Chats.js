@@ -3,6 +3,7 @@ import { Image, ScrollView, Text, View } from 'react-native';
 import { HTTP_STATUS_CODES } from '../../../global';
 import ApiRequests from '../../classes/ApiRequests';
 import ChatsItem from '../../components/ChatsItem/ChatsItem';
+import socket from '../Chat/Socket';
 
 const globalStyles = require('../../../assets/styles/global.styles');
 const styles = require('./Chats.styles');
@@ -13,6 +14,12 @@ export default class Chats extends Component {
         chats: [],
         showError: true,
         error: "",
+    }
+
+    focusListener;
+
+    onFocusFunction = () => {
+        this.getChats()
     }
 
     getChats = () => {
@@ -33,8 +40,18 @@ export default class Chats extends Component {
         })
     }
 
+    updateLastMessage = () => {
+        socket.on("last-message-to-be-updated", () => {
+            console.log("here213")
+            this.getChats()
+        });
+    }
+
     componentDidMount() {
-        this.getChats()
+        this.focusListener = this.props.navigation.addListener('focus', () => {
+            this.onFocusFunction()
+        })
+        this.updateLastMessage()
     }
     
     render() {
