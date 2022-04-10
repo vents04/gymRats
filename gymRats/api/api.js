@@ -2,7 +2,6 @@ const express = require('express');
 const app = express();
 const httpServer = require("http").createServer(app);
 const options = {};
-const io = require("socket.io")(httpServer, options);
 const router = express.Router();
 const cors = require('cors');
 const mongo = require("./db/mongo");
@@ -14,6 +13,7 @@ const DbService = require('./services/db.service');
 const MessagingService = require('./services/messaging.service');
 const mongoose = require('mongoose');
 const { authenticate } = require('./middlewares/authenticate');
+const io = require("socket.io")(httpServer, { cors: { origin: "*" } });
 
 app
     .use(cors())
@@ -44,17 +44,23 @@ for (var d = new Date(1970, 0, 1); d <= now; d.setDate(d.getDate() + 1)) {
     }
 })();
 
-io.on("connection", authenticate, (socket) => {
+io.on("connection", (socket) => {
     console.log("connection established", socket.id);
     socket.on("join-chat", (payload) => {
         try{
             const chatId = payload.chatId;
 
             socket.join(chatId);
+            console.log(socket.id , " is now connected to the chat")
 
             socket.on("send-text-message", async (messageInfo) => {
-                await MessagingService.sendTextMessage(chatId, messageInfo.senderId, messageInfo.message);
+                await MessagingService.sendTextMessage(chatId, messageInfo.messageInfo.senderId, messageInfo.messageInfo.message);
                 socket.to(chatId).emit("receive-text-message", {messageInfo});
+            });
+
+            socket.on("disconnect-user-from-chat",() => {
+                socket.leave(chatId)
+                console.log(socket.id , " is now disconected from the chat")
             });
 
             socket.on("send-file-message", async (messageInfo) => {

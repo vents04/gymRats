@@ -51,11 +51,14 @@ const MessagingService = {
 
                 const chat = await DbService.getById(COLLECTIONS.CHATS, chatId);
 
-                if(chat && (chat.personalTrainerId.toString() == senderId.toString() || chat.clientId.toString() == senderId.toString())){
-                    await DbService.create(COLLECTIONS.MESSAGES, textMessage);
-                    resolve();
+                const personalTrainer = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, {userId:  mongoose.Types.ObjectId(senderId)})
+
+                if(chat && ((personalTrainer && (personalTrainer._id.toString() != chat.personalTrainerId.toString())) && senderId.toString() != chat.clientId.toString())){
+                    reject(new ResponseError("Trainer or client is not part of the chat or the chat does not exist", HTTP_STATUS_CODES.BAD_REQUEST));
                 }
-                reject(new ResponseError("Trainer or client is not part of the chat or the chat does not exist", HTTP_STATUS_CODES.BAD_REQUEST));
+                await DbService.create(COLLECTIONS.MESSAGES, textMessage);
+                resolve();
+
             }catch (err) {
                 reject(new ResponseError("Internal server error", err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
             }
@@ -75,11 +78,14 @@ const MessagingService = {
 
                 const chat = await DbService.getById(COLLECTIONS.CHATS, chatId);
 
-                if(chat && (chat.personalTrainerId.toString() == senderId.toString() || chat.clientId.toString() == senderId.toString())){
-                    await DbService.create(COLLECTIONS.MESSAGES, fileMessage);
-                    resolve();
+                const personalTrainer = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, {userId:  mongoose.Types.ObjectId(senderId)})
+
+                if(chat && ((personalTrainer && (personalTrainer._id.toString() != chat.personalTrainerId.toString())) && senderId.toString() != chat.clientId.toString())){
+                    reject(new ResponseError("Trainer or client is not part of the chat or the chat does not exist", HTTP_STATUS_CODES.BAD_REQUEST));
                 }
-                reject(new ResponseError("Trainer or client is not part of the chat or the chat does not exist", HTTP_STATUS_CODES.BAD_REQUEST));
+                await DbService.create(COLLECTIONS.MESSAGES, fileMessage);
+                resolve();
+
             }catch (err) {
                 reject(new ResponseError("Internal server error", err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
             }

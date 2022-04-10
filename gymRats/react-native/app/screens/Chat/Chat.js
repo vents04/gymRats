@@ -9,6 +9,7 @@ import { IoIosSend } from 'react-icons/io';
 import Message from '../../components/Message/Message';
 import ApiRequests from '../../classes/ApiRequests';
 import { HTTP_STATUS_CODES } from '../../../global';
+import socket from './Socket';
 
 export default class Chat extends Component {
 
@@ -16,23 +17,28 @@ export default class Chat extends Component {
         message: "",
         showError: false,
         error: "",
-        chat: null
+        chat: null,
+        chatId: null
     }
 
-    sendTextMessage = () => {
-        const socket = io("http://localhost:4001", {
-            reconnectionDelayMax: 10000,
+    sendTextMessage = (messageInfo) => {
+        socket.emit("send-text-message", {messageInfo})
+    }
+
+    receiveTextMessage = () => {
+        socket.on("receive-text-message", (messageInfo) => {
+            this.getChat(this.state.chatId)
         });
+    }
 
-        socket.emit("join-chat", {chatId});
-
-       
+    disconnectUserFromChat = () => {
+        socket.emit("disconnect-user-from-chat", {});
     }
 
     getChat = (id) => {
         ApiRequests.get(`chat/${id}`, {}, true).then((response) => {
-            console.log(response);
             this.setState({chat: response.data.chat});
+            this.receiveTextMessage()
         }).catch((error) => {
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
@@ -66,15 +72,11 @@ export default class Chat extends Component {
     }
 
     componentDidMount() {
-        console.log(this.props)
         const chatId = this.props.route.params.chatId
+        this.setState({chatId: this.props.route.params.chatId});
         this.getChat(chatId)
         this.updateSeenStatus(chatId)
-        const socket = io("http://localhost:4056", {
-            reconnectionDelayMax: 10000,
-        });
-
-        socket.emit("join-chat", {chatId});
+        socket.emit("join-chat", {chatId})
     }
 
     render() {
@@ -85,7 +87,8 @@ export default class Chat extends Component {
                     <>
                         <View style={styles.chatTopbarContainer}>
                             <BiArrowBack size={25} onClick={() => {
-                                    this.props.navigation.navigate("Chats")
+                                    this.props.navigation.navigate("Chats"),
+                                    this.disconnectUserFromChat()
                                 }} />
                                 {
                                     !this.state.chat.user.profilePicture
@@ -102,7 +105,7 @@ export default class Chat extends Component {
                         <ScrollView style={styles.chatMessagesContainer}>
                             {
                                 this.state.chat.messages.map((message) =>
-                                    <Message message={message} user={this.state.chat.user} oppositeUser={this.state.chat.oppositeUser} />
+                                    <Message message={message.message} user={this.state.chat.user} oppositeUser={this.state.chat.oppositeUser} />
                                 )
                             }
                         </ScrollView>
@@ -113,7 +116,7 @@ export default class Chat extends Component {
                                 placeholder="Type a message"
                                 onChangeText={(val) => { this.setState({ message: val, showError: false }) }} />
                             <View style={styles.chatActionButtonContainer}>
-                                <IoIosSend size={24} style={styles.chatInputButton} color="#1f6cb0"/>
+                                <IoIosSend onClick={() => {this.sendTextMessage({senderId: this.state.chat.user._id, message: this.state.message}), this.setState({ message: "", showError: false }), this.getChat(this.state.chatId)}} size={24} style={styles.chatInputButton} color="#1f6cb0"/>
                             </View>                
                         </View>
                     </>
