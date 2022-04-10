@@ -6,7 +6,6 @@ const styles = require('./Message.styles');
 export default class Message extends Component {
 
     componentDidMount() {
-        console.log(this.props)
     }
 
   render() {

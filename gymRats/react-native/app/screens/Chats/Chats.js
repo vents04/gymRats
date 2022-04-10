@@ -18,7 +18,6 @@ export default class Chats extends Component {
     getChats = () => {
         ApiRequests.get("chat", {}, true).then((response) => {
             this.setState({chats: response.data.chats});
-            console.log(this.state.chats)
         }).catch((error) => {
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {

@@ -26,7 +26,7 @@ export default class Chat extends Component {
     }
 
     receiveTextMessage = () => {
-        socket.on("receive-text-message", (messageInfo) => {
+        socket.on("receive-text-message", () => {
             this.getChat(this.state.chatId)
         });
     }

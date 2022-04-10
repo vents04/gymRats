@@ -76,8 +76,10 @@ router.get('/:id', authenticate, async function (req, res, next) {
             oppositeUser = await DbService.getOne(COLLECTIONS.USERS, {_id: mongoose.Types.ObjectId(coach.userId)});
         }
         if(!oppositeUser) return next(new ResponseError("Opposite user not found", HTTP_STATUS_CODES.NOT_FOUND));
-        
+
         const messages = await DbService.getMany(COLLECTIONS.MESSAGES, {chatId: mongoose.Types.ObjectId(req.params.id)});
+
+        for(let message of messages){Object.assign(message.message, { senderId: message.senderId });}
 
         Object.assign(chat, { user: req.user }, { oppositeUser: oppositeUser }, { messages: messages });
 
