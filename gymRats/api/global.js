@@ -9,8 +9,6 @@ const DATABASE_MODELS = {
     CALORIES_COUNTER_DAY: "CaloriesCounterDay",
     CALORIES_COUNTER_DAILY_GOAL: "CaloriesCounterDailyGoal",
     DAILY_WEIGHT: "DailyWeight",
-    DAILY_WATER_INTAKE: "DailyWaterIntake",
-    DAILY_WATER_INTAKE_GOAL: "DailyWaterIntakeGoal",
     SUGGESTION: "Suggestion",
     SUPPLEMENTS: "Supplements",
     PERSONAL_TRAINER: "PersonalTrainer",
@@ -34,8 +32,6 @@ const COLLECTIONS = {
     CALORIES_COUNTER_DAYS: "caloriesCounterDays",
     CALORIES_COUNTER_DAILY_GOALS: "caloriesCounterDailyGoals",
     DAILY_WEIGHTS: "dailyWeights",
-    DAILY_WATER_INTAKES: "dailyWaterIntakes",
-    DAILY_WATER_INTAKE_GOALS: "dailyWaterIntakeGoals",
     SUGGESTIONS: "suggestions",
     PERSONAL_TRAINERS: "personalTrainers",
     CLIENTS: "clients",
@@ -118,10 +114,6 @@ const WEIGHT_UNITS = {
     KILOGRAMS: "KILOGRAMS",
 }
 
-const WATER_INTAKE_UNITS = {
-    GLASSES: "GLASSES"
-}
-
 const CALORIES_COUNTER_MEALS = {
     BREAKFAST: "BREAKFAST",
     LUNCH: "LUNCH",
@@ -164,7 +156,6 @@ module.exports = {
     UNITS: UNITS,
     CALORIES_COUNTER_UNITS: CALORIES_COUNTER_UNITS,
     WEIGHT_UNITS: WEIGHT_UNITS,
-    WATER_INTAKE_UNITS: WATER_INTAKE_UNITS,
     SENDGRID_API_KEY: SENDGRID_API_KEY,
     CALORIES_COUNTER_MEALS: CALORIES_COUNTER_MEALS,
     CARD_COLLECTIONS: CARD_COLLECTIONS,
