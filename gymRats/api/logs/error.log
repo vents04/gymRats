@@ -3965,3 +3965,45 @@
 {"level":"error","message":"Cannot read properties of null (reading '_id')"}
 {"level":"error","message":"Cannot read properties of null (reading '_id')"}
 {"level":"error","message":"Cannot read properties of null (reading '_id')"}
+{"level":"error","message":"Cannot read properties of null (reading '_id')"}
+{"level":"error","message":"Cannot read properties of null (reading '_id')"}
+{"level":"error","message":"Cannot read properties of null (reading '_id')"}
+{"level":"error","message":"Cannot read properties of null (reading '_id')"}
+{"level":"error","message":"Cannot read properties of null (reading '_id')"}
+{"level":"error","message":"Cannot read properties of null (reading '_id')"}
+{"level":"error","message":"Cannot read properties of null (reading '_id')"}
+{"level":"error","message":"Cannot read properties of null (reading '_id')"}
+{"level":"error","message":"Cannot read properties of null (reading '_id')"}
+{"level":"error","message":"Cannot read properties of null (reading '_id')"}
+{"level":"error","message":"Cannot read properties of null (reading '_id')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'criteriasMet')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'criteriasMet')"}
+{"level":"error","message":"Token not provided"}
+{"level":"error","message":"Cannot read properties of undefined (reading '_id')"}
+{"level":"error","message":"alltrainers is not defined"}
+{"level":"error","message":"Client or trainer not found"}
+{"level":"error","message":"Client or trainer not found"}
+{"level":"error","message":"\"trainerId\" is required"}
+{"level":"error","message":"There is already a chat between these people"}
+{"level":"error","message":"\"personalTrainerId\" must be a string"}
+{"level":"error","message":"\"personalTrainerId\" must be a string"}
+{"level":"error","message":"\"personalTrainerId\" must be a string"}
+{"level":"error","message":"\"personalTrainerId\" must be a string"}
+{"level":"error","message":"\"personalTrainerId\" must be a string"}
+{"level":"error","message":"DbService.getByOne is not a function"}
+{"level":"error","message":"Opposite user not found"}
+{"level":"error","message":"Opposite user not found"}
+{"level":"error","message":"Opposite user not found"}
+{"level":"error","message":"You cannot access chats in which you are not a participant!"}
+{"level":"error","message":"You cannot access chats in which you are not a participant!"}
+{"level":"error","message":"You cannot access chats in which you are not a participant!"}
+{"level":"error","message":"You cannot access chats in which you are not a participant!"}
+{"level":"error","message":"You cannot access chats in which you are not a participant!"}
+{"level":"error","message":"You cannot access chats in which you are not a participant!"}
+{"level":"error","message":"Token not provided"}
+{"level":"error","message":"Cannot read properties of undefined (reading '_id')"}
+{"level":"error","message":"Token not provided"}
+{"level":"error","message":"Cannot read properties of undefined (reading '_id')"}
+{"level":"error","message":"You cannot access chats in which you are not a participant!"}
+{"level":"error","message":"Invalid chat id"}
+{"level":"error","message":"Invalid chat id"}

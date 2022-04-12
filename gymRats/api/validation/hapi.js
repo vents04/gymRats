@@ -297,7 +297,7 @@ const coachApplicationPostValidation = (data) => {
 
 const chatValidation = (data) => {
     const schema = Joi.object({
-        trainerId: Joi.string().custom((value, helper) => {
+        personalTrainerId: Joi.string().custom((value, helper) => {
             if (!mongoose.Types.ObjectId.isValid(value)) {
                 return helper.message("Invalid triner id");
             }

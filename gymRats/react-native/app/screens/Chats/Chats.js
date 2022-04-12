@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
 import { Image, ScrollView, Text, View } from 'react-native';
+import { HTTP_STATUS_CODES } from '../../../global';
+import ApiRequests from '../../classes/ApiRequests';
 import ChatsItem from '../../components/ChatsItem/ChatsItem';
+import socket from '../Chat/Socket';
 
 const globalStyles = require('../../../assets/styles/global.styles');
 const styles = require('./Chats.styles');
@@ -8,32 +11,47 @@ const styles = require('./Chats.styles');
 export default class Chats extends Component {
 
     state = {
-        chats: [
-            {
-                _id: "1",
-                user: {
-                    profilePicture: null,
-                    firstName: "Alexander",
-                    lastName: "Zlatkov"
-                },
-                lastMessage: "Test"
-            },
-            {
-                _id: "2",
-                user: {
-                    profilePicture: null,
-                    firstName: "Ventsislav",
-                    lastName: "Dimitrov"
-                },
-                lastMessage: null
-            }
-        ],
+        chats: [],
         showError: true,
         error: "",
     }
 
+    focusListener;
+
+    onFocusFunction = () => {
+        this.getChats()
+    }
+
+    getChats = () => {
+        ApiRequests.get("chat", {}, true).then((response) => {
+            this.setState({chats: response.data.chats});
+        }).catch((error) => {
+            if (error.response) {
+                if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
+                    this.setState({ showError: true, error: error.response.data });
+                } else {
+                    ApiRequests.showInternalServerError();
+                }
+            } else if (error.request) {
+                ApiRequests.showNoResponseError();
+            } else {
+                ApiRequests.showRequestSettingError();
+            }
+        })
+    }
+
+    updateLastMessage = () => {
+        socket.on("last-message-to-be-updated", () => {
+            console.log("here213")
+            this.getChats()
+        });
+    }
+
     componentDidMount() {
-        this.props.navigation.navigate("Chat");
+        this.focusListener = this.props.navigation.addListener('focus', () => {
+            this.onFocusFunction()
+        })
+        this.updateLastMessage()
     }
     
     render() {
@@ -53,7 +71,9 @@ export default class Chats extends Component {
                             }}>
                                 {
                                     this.state.chats.map((chat) => 
-                                        <ChatsItem chat={chat} {...this.props}/>                                    
+                                        <ChatsItem onClick={() => {
+                                            this.props.navigation.navigate("Chat", {chatId: chat._id})
+                                        }} chat={chat} {...this.props}/>                                    
                                     )
                                 }
                         </ScrollView>

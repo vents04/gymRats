@@ -10,7 +10,7 @@ const chatSchema = mongoose.Schema({
     clientId: {
         type: mongoose.Types.ObjectId,
         required: true,
-        ref: COLLECTIONS.CLIENTS
+        ref: COLLECTIONS.USERS
     },
     createdAt: {
         type: Date,

@@ -2,7 +2,6 @@ const express = require('express');
 const app = express();
 const httpServer = require("http").createServer(app);
 const options = {};
-const io = require("socket.io")(httpServer, options);
 const router = express.Router();
 const cors = require('cors');
 const mongo = require("./db/mongo");
@@ -14,6 +13,7 @@ const DbService = require('./services/db.service');
 const MessagingService = require('./services/messaging.service');
 const mongoose = require('mongoose');
 const { authenticate } = require('./middlewares/authenticate');
+const io = require("socket.io")(httpServer, { cors: { origin: "*" } });
 
 app
     .use(cors())
@@ -44,22 +44,23 @@ for (var d = new Date(1970, 0, 1); d <= now; d.setDate(d.getDate() + 1)) {
     }
 })();
 
-io.on("connection", authenticate, (socket) => {
-    console.log("connection established", socket.id);
-    socket.on("join-chat", async (payload) => {
+io.on("connection", (socket) => {
+    //console.log("connection established", socket.id);
+    socket.on("join-chat", (payload) => {
         try{
             const chatId = payload.chatId;
 
             socket.join(chatId);
+            //console.log(socket.id , " is now connected to the chat")
 
             socket.on("send-text-message", async (messageInfo) => {
-                await MessagingService.sendTextMessage(chatId, messageInfo.senderId, messageInfo.message);
-                socket.to(chatId).emit("send-text-message", {});
+                await MessagingService.sendTextMessage(chatId, messageInfo.messageInfo.senderId, messageInfo.messageInfo.message);
+                socket.to(chatId).emit("receive-text-message", {});
             });
 
             socket.on("send-file-message", async (messageInfo) => {
                 await MessagingService.sendFileMessage(chatId, messageInfo.senderId, messageInfo.base64);
-                socket.to(chatId).emit("send-file-message", {});
+                socket.to(chatId).emit("receive-file-message", {});
             });
         }catch (err) {
             reject(new ResponseError("Internal server error", err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
@@ -67,13 +68,9 @@ io.on("connection", authenticate, (socket) => {
         }
     })
 
-    socket.on("create-chat", async (payload) => {
-        try{
-            await MessagingService.createChat(payload.personalTrainerId, payload.clientId);
-        }catch (err) {
-            reject(new ResponseError("Internal server error", err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
-            socket.disconnect();
-        }
+    socket.on("update-last-message", () => {
+        console.log("here")
+        socket.emit("last-message-to-be-updated", {})  
     })
 
 });

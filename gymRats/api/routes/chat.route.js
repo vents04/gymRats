@@ -8,11 +8,16 @@ const { authenticate } = require('../middlewares/authenticate');
 
 router.get('/', authenticate, async function (req, res, next) {
     try {
-        const chats = await DbService.getMany(COLLECTIONS.CHATS, {"$or": [{ personalTrainerId: mongoose.Types.ObjectId(req.user._id) }, { clientId: mongoose.Types.ObjectId(req.user._id) }] });
-
+        const personalTrainer = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, {userId:  mongoose.Types.ObjectId(req.user._id)})
+        let chats
+        if(personalTrainer){
+            chats = await DbService.getMany(COLLECTIONS.CHATS, {personalTrainerId: mongoose.Types.ObjectId(personalTrainer._id) });
+        }else{
+            chats = await DbService.getMany(COLLECTIONS.CHATS, {clientId: mongoose.Types.ObjectId(req.user._id) });
+        }
         for(let chat of chats){
             let oppositeUser;
-            if(chat.personalTrainerId.toString() == req.user._id.toString()){
+            if(personalTrainer && (chat.personalTrainerId.toString() == personalTrainer._id.toString())){
                 oppositeUser = await DbService.getOne(COLLECTIONS.USERS, {_id: mongoose.Types.ObjectId(chat.clientId)});
             }
             if(chat.clientId.toString() == req.user._id.toString()){
@@ -27,6 +32,11 @@ router.get('/', authenticate, async function (req, res, next) {
             for(let message of messages){
                 if(new Date(message.createdAt).getTime() > minTime){
                     chat.lastMessage = message.message;
+                    if(message.message.text){
+                        chat.lastMessage = message.message.text
+                    }else{
+                        chat.lastMessage = "File"
+                    }
                     minTime = new Date(message.createdAt).getTime();
                 }
             }
@@ -45,18 +55,20 @@ router.get('/:id', authenticate, async function (req, res, next) {
         return next(new ResponseError("Invalid chat id", HTTP_STATUS_CODES.BAD_REQUEST));
     }
     try {
+        const personalTrainer = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, {userId:  mongoose.Types.ObjectId(req.user._id)})
+
         const chat = await DbService.getById(COLLECTIONS.CHATS, req.params.id);
 
         if (!chat) {
             return next(new ResponseError("Chat not found", HTTP_STATUS_CODES.NOT_FOUND));
         }
 
-        if (req.user._id.toString() != chat.personalTrainerId.toString() || req.user._id.toString() != chat.clientId.toString()) {
+        if ((personalTrainer && (personalTrainer._id.toString() != chat.personalTrainerId.toString())) && req.user._id.toString() != chat.clientId.toString()) {
             return next(new ResponseError("You cannot access chats in which you are not a participant!", HTTP_STATUS_CODES.FORBIDDEN));
         }
 
         let oppositeUser;
-        if(chat.personalTrainerId.toString() == req.user._id.toString()){
+        if(personalTrainer && (chat.personalTrainerId.toString() == personalTrainer._id.toString())){
             oppositeUser = await DbService.getOne(COLLECTIONS.USERS, {_id: mongoose.Types.ObjectId(chat.clientId)});
         }
         if(chat.clientId.toString() == req.user._id.toString()){
@@ -66,6 +78,8 @@ router.get('/:id', authenticate, async function (req, res, next) {
         if(!oppositeUser) return next(new ResponseError("Opposite user not found", HTTP_STATUS_CODES.NOT_FOUND));
 
         const messages = await DbService.getMany(COLLECTIONS.MESSAGES, {chatId: mongoose.Types.ObjectId(req.params.id)});
+
+        for(let message of messages){Object.assign(message.message, { senderId: message.senderId });}
 
         Object.assign(chat, { user: req.user }, { oppositeUser: oppositeUser }, { messages: messages });
 
@@ -82,18 +96,20 @@ router.put('/:id/seen', authenticate, async function (req, res, next) {
         return next(new ResponseError("Invalid chat id", HTTP_STATUS_CODES.BAD_REQUEST));
     }
     try {
+        const personalTrainer = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, {userId:  mongoose.Types.ObjectId(req.user._id)})
+
         const chat = await DbService.getById(COLLECTIONS.CHATS, req.params.id);
 
         if (!chat) {
             return next(new ResponseError("Chat not found", HTTP_STATUS_CODES.NOT_FOUND));
         }
-
-        if (req.user._id.toString() != chat.personalTrainerId.toString() || req.user._id.toString() != chat.clientId.toString()) {
+        
+        if ((personalTrainer && (personalTrainer._id.toString() != chat.personalTrainerId.toString())) && req.user._id.toString() != chat.clientId.toString()) {
             return next(new ResponseError("You cannot access chats in which you are not a participant!", HTTP_STATUS_CODES.FORBIDDEN));
         }
 
         let messages;
-        if(chat.personalTrainerId.toString() == req.user._id.toString()){
+        if(personalTrainer && (chat.personalTrainerId.toString() == personalTrainer._id.toString())){
             messages = await DbService.getMany(COLLECTIONS.MESSAGES, {senderId: mongoose.Types.ObjectId(chat.clientId)});
         }
         if(chat.clientId.toString() == req.user._id.toString()){

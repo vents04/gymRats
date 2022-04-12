@@ -10,21 +10,18 @@ const MessagingService = {
     createChat: (personalTrainerId, clientId) => {
         return new Promise(async (resolve, reject) => {
             try {
-                const client = await DbService.getById(COLLECTIONS.CLIENTS, clientId);
+                const client = await DbService.getById(COLLECTIONS.USERS, clientId);
                 const trainer = await DbService.getById(COLLECTIONS.PERSONAL_TRAINERS, personalTrainerId);
 
                 if(trainer && client){
-                    
                     const relation = await DbService.getOne(COLLECTIONS.RELATIONS, {personalTrainerId: mongoose.Types.ObjectId(trainer._id), clientId: mongoose.Types.ObjectId(client._id)});
                     if(relation && relation.status == RELATION_STATUSES.ACTIVE){
-                        const chat = await DbService.getOne(COLLECTIONS.CHATS, { personalTrainerId: mongoose.Types.ObjectId(personalTrainerId), clientId: mongoose.Types.ObjectId(clientId) });
+                        const chat = await DbService.getOne(COLLECTIONS.CHATS, { personalTrainerId: mongoose.Types.ObjectId(trainer._id), clientId: mongoose.Types.ObjectId(client._id) });
                         if(!chat){
                             const chat = new Chat({
                                 personalTrainerId: mongoose.Types.ObjectId(trainer._id),
                                 clientId: mongoose.Types.ObjectId(client._id)
                             })
-                            const { error } = chatValidation(chat);
-                            if (error) reject(new ResponseError(error.details[0].message, HTTP_STATUS_CODES.BAD_REQUEST));
 
                             await DbService.create(COLLECTIONS.CHATS, chat);
                             resolve();
@@ -51,16 +48,17 @@ const MessagingService = {
                         text: message
                     }
                 })
-                const { error } = messageValidation(textMessage);
-                if (error) reject(new ResponseError(error.details[0].message, HTTP_STATUS_CODES.BAD_REQUEST));
 
                 const chat = await DbService.getById(COLLECTIONS.CHATS, chatId);
 
-                if(chat && (chat.personalTrainerId.toString() == senderId.toString() || chat.clientId.toString() == senderId.toString())){
-                    await DbService.create(COLLECTIONS.MESSAGES, textMessage);
-                    resolve();
+                const personalTrainer = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, {userId:  mongoose.Types.ObjectId(senderId)})
+
+                if(chat && ((personalTrainer && (personalTrainer._id.toString() != chat.personalTrainerId.toString())) && senderId.toString() != chat.clientId.toString())){
+                    reject(new ResponseError("Trainer or client is not part of the chat or the chat does not exist", HTTP_STATUS_CODES.BAD_REQUEST));
                 }
-                reject(new ResponseError("Trainer or client is not part of the chat or the chat does not exist", HTTP_STATUS_CODES.BAD_REQUEST));
+                await DbService.create(COLLECTIONS.MESSAGES, textMessage);
+                resolve();
+
             }catch (err) {
                 reject(new ResponseError("Internal server error", err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
             }
@@ -77,16 +75,17 @@ const MessagingService = {
                         file: base64
                     }
                 })
-                const { error } = messageValidation(fileMessage);
-                if (error) reject(new ResponseError(error.details[0].message, HTTP_STATUS_CODES.BAD_REQUEST));
 
                 const chat = await DbService.getById(COLLECTIONS.CHATS, chatId);
 
-                if(chat && (chat.personalTrainerId.toString() == senderId.toString() || chat.clientId.toString() == senderId.toString())){
-                    await DbService.create(COLLECTIONS.MESSAGES, fileMessage);
-                    resolve();
+                const personalTrainer = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, {userId:  mongoose.Types.ObjectId(senderId)})
+
+                if(chat && ((personalTrainer && (personalTrainer._id.toString() != chat.personalTrainerId.toString())) && senderId.toString() != chat.clientId.toString())){
+                    reject(new ResponseError("Trainer or client is not part of the chat or the chat does not exist", HTTP_STATUS_CODES.BAD_REQUEST));
                 }
-                reject(new ResponseError("Trainer or client is not part of the chat or the chat does not exist", HTTP_STATUS_CODES.BAD_REQUEST));
+                await DbService.create(COLLECTIONS.MESSAGES, fileMessage);
+                resolve();
+
             }catch (err) {
                 reject(new ResponseError("Internal server error", err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
             }
