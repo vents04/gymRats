@@ -1,6 +1,6 @@
 const Joi = require('@hapi/joi');
 const mongoose = require('mongoose');
-const { CALORIES_COUNTER_UNITS, WEIGHT_UNITS, WATER_INTAKE_UNITS, CALORIES_COUNTER_MEALS, REQUEST_STATUSES, CHAT_STATUSES, RELATION_STATUSES, CONTENT_VISIBILITY_SCOPES } = require('../global');
+const { CALORIES_COUNTER_UNITS, WEIGHT_UNITS, CALORIES_COUNTER_MEALS, REQUEST_STATUSES, CHAT_STATUSES, RELATION_STATUSES, CONTENT_VISIBILITY_SCOPES } = require('../global');
 
 const signupValidation = (data) => {
     const schema = Joi.object({
@@ -148,24 +148,6 @@ const supplementsReminderValidation = (data) => {
             })),
             until: Joi.date.required()
         })).required(),
-    })
-    return schema.validate(data);
-}
-
-const dailyWaterIntakeGoalPostValidation = (data) => {
-    const schema = Joi.object({
-        amount: Jou.number().required(),
-        unit: Joi.string().valid(...Object.values(WATER_INTAKE_UNITS)).required()
-    })
-    return schema.validate(data);
-}
-
-const dailyWaterIntakePutValidation = (data) => {
-    const schema = Joi.object({
-        amount: Joi.number().required(),
-        date: Joi.number().required(),
-        month: Joi.number().required(),
-        year: Joi.number().required()
     })
     return schema.validate(data);
 }
@@ -363,8 +345,6 @@ module.exports = {
     dailyItemPostValidation,
     dailyGoalPostValidation,
     dailyWeightPostValidation,
-    dailyWaterIntakeGoalPostValidation,
-    dailyWaterIntakePutValidation,
     suggestionPostValidation,
     exercisePostValidation,
     workoutPostValidation,
