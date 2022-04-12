@@ -1,6 +1,6 @@
 const Joi = require('@hapi/joi');
 const mongoose = require('mongoose');
-const { CALORIES_COUNTER_UNITS, WEIGHT_UNITS, WATER_INTAKE_UNITS, CALORIES_COUNTER_MEALS, REQUEST_STATUSES , CHAT_STATUSES, RELATION_STATUSES, CONTENT_VISIBILITY_SCOPES} = require('../global');
+const { CALORIES_COUNTER_UNITS, WEIGHT_UNITS, WATER_INTAKE_UNITS, CALORIES_COUNTER_MEALS, REQUEST_STATUSES, CHAT_STATUSES, RELATION_STATUSES, CONTENT_VISIBILITY_SCOPES } = require('../global');
 
 const signupValidation = (data) => {
     const schema = Joi.object({
