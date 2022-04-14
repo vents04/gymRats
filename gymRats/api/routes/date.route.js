@@ -1,12 +1,15 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const router = express.Router();
+const mongoose = require('mongoose');
+
+const DbService = require('../services/db.service');
+const WeightTrackerService = require('../services/cards/weightTracker.service');
+
+const ResponseError = require('../errors/responseError');
 
 const { authenticate } = require('../middlewares/authenticate');
-const DbService = require('../services/db.service');
-const ResponseError = require('../errors/responseError');
-const { HTTP_STATUS_CODES, CARD_COLLECTIONS, COLLECTIONS } = require('../global');
-const WeightTrackerService = require('../services/cards/weightTracker.service');
+
+const { HTTP_STATUS_CODES, CARD_COLLECTIONS, COLLECTIONS, DEFAULT_ERROR_MESSAGE } = require('../global');
 
 router.get('/', authenticate, async (req, res, next) => {
     if (!req.query.date || !req.query.month || !req.query.year
@@ -73,12 +76,12 @@ router.get('/', authenticate, async (req, res, next) => {
                 cards.push({ card: card, data: currentUserRecord });
             }
         }
-        res.status(HTTP_STATUS_CODES.OK).send({
-            cards: cards,
-            doNotShow: doNotShow
+        return res.status(HTTP_STATUS_CODES.OK).send({
+            cards,
+            doNotShow
         });
     } catch (err) {
-        return next(new ResponseError(err.message || "Internal server error", err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
     }
 });
 
