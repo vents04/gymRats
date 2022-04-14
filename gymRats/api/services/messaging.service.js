@@ -4,7 +4,6 @@ const mongoose = require("mongoose");
 const ResponseError = require('../errors/responseError');
 const Chat = require('../db/models/messaging/chat.model');
 const Message = require('../db/models/messaging/message.model');
-const { chatValidation, messageValidation } = require('../validation/hapi');
 
 const MessagingService = {
     createChat: (personalTrainerId, clientId) => {
