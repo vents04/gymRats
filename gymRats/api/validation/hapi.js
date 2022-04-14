@@ -86,12 +86,6 @@ const itemPostValidation = (data) => {
         title: Joi.string().min(1).max(300).required(),
         barcode: Joi.string().optional(),
         img: Joi.string().optional(),
-        userId: Joi.string().optional().custom((value, helper) => {
-            if (!mongoose.Types.ObjectId.isValid(value)) {
-                return helper.message("Invalid user id");
-            }
-            return true;
-        }),
         unit: Joi.string().valid(...Object.values(CALORIES_COUNTER_UNITS)).required(),
         calories: Joi.number().required(),
         protein: Joi.number().required(),
