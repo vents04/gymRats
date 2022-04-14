@@ -5,9 +5,9 @@ import ApiRequests from '../../../classes/ApiRequests';
 import { HTTP_STATUS_CODES } from '../../../../global';
 
 const globalStyles = require('../../../../assets/styles/global.styles');
-const styles = require('./ExerciseSearch.styles');
+const styles = require('./SearchCaloriesIntake.styles');
 
-export default class ExerciseSearch extends Component {
+export default class SearchCaloriesIntake extends Component {
 
     state = {
         query: "",
@@ -17,16 +17,12 @@ export default class ExerciseSearch extends Component {
     }
 
     componentDidMount() {
-        this.searchExercises();
+        this.searchFood();
     }
 
-    getSession = () => {
-
-    }
-
-    searchExercises = () => {
-        ApiRequests.get(`logbook/search?words=${this.state.query.toLowerCase()}`, {}, true).then((response) => {
-            if (response.data.results) this.setState({ queryResults: response.data.results });
+    searchFood = () => {
+        ApiRequests.get(`calories-counter/search/food?query=${this.state.query.toLowerCase()}`, {}, true).then((response) => {
+            if (response.data.results) this.setState({ queryResults: response.data.results.hits });
         }).catch((error) => {
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
@@ -48,9 +44,9 @@ export default class ExerciseSearch extends Component {
                 <View style={globalStyles.pageContainer}>
                     <View style={globalStyles.followUpScreenTopbar}>
                         <BiArrowBack size={25} onClick={() => {
-                            this.props.navigation.navigate("Logbook", { date: this.props.route.params.date, timezoneOffset: this.props.route.params.timezoneOffset })
+                            this.props.navigation.navigate("CaloriesIntake", { date: this.props.route.params.date, timezoneOffset: this.props.route.params.timezoneOffset })
                         }} />
-                        <Text style={globalStyles.followUpScreenTitle}>Exercise search</Text>
+                        <Text style={globalStyles.followUpScreenTitle}>Search food</Text>
                     </View>
                     <TextInput
                         value={this.state.query}
@@ -60,7 +56,7 @@ export default class ExerciseSearch extends Component {
                         placeholder="Type your search here"
                         onChangeText={(val) => {
                             this.setState({ query: val, showError: false }, () => {
-                                this.searchExercises();
+                                this.searchFood();
                             })
                         }} />
                     <View style={styles.searchResultsContainer}>
@@ -69,18 +65,19 @@ export default class ExerciseSearch extends Component {
                             flexShrink: 1
                         }}>
                             {
-                                this.state.queryResults.map((exercise) =>
-                                    <View style={styles.searchResult} onClick={() => {
-                                        this.props.navigation.navigate("Logbook", {
-                                            exercise: exercise,
-                                            date: this.props.route.params.date,
-                                            timezoneOffset: this.props.route.params.timezoneOffset
-                                        })
-                                    }}>
-                                        <Text style={styles.searchResultTitle}>{exercise.title}</Text>
-                                        <Text style={styles.searchResultStats}>Used in {exercise.sessionsCount} workout sessions</Text>
-                                    </View>
-                                )
+                                this.state.queryResults?.length > 0
+                                    ? this.state.queryResults.map((item) =>
+                                        <View style={styles.searchResult} onClick={() => {
+                                            this.props.navigation.navigate("AddCaloriesIntakeItem", {
+                                                item: item,
+                                                date: this.props.route.params.date,
+                                                timezoneOffset: this.props.route.params.timezoneOffset
+                                            })
+                                        }} key={item._id}>
+                                            <Text style={styles.searchResultTitle}>{item.fields.item_name}</Text>
+                                        </View>
+                                    )
+                                    : <Text style={globalStyles.notation}>No results found</Text>
                             }
                         </ScrollView>
                     </View>

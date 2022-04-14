@@ -1,0 +1,30 @@
+{"level":"error","message":"Provide a food name to search for"}
+{"level":"error","message":"Provide a barcode to search for"}
+{"level":"error","message":"Request failed with status code 400"}
+{"level":"error","message":"Request failed with status code 400"}
+{"level":"error","message":"Request failed with status code 400"}
+{"level":"error","message":"Invalid barcode"}
+{"level":"error","message":"Request failed with status code 404"}
+{"level":"error","message":"Request failed with status code 404"}
+{"level":"error","message":"Request failed with status code 404"}
+{"level":"error","message":"Request failed with status code 404"}
+{"level":"error","message":"Item ID or UPC was invalid"}
+{"level":"error","message":"Item ID or UPC was invalid"}
+{"level":"error","message":"Item ID or UPC was invalid"}
+{"level":"error","message":"Item ID or UPC was invalid"}
+{"level":"error","message":"Item ID or UPC was invalid"}
+{"level":"error","message":"Item ID or UPC was invalid"}
+{"level":"error","message":"Item ID or UPC was invalid"}
+{"level":"error","message":"Invalid barcode"}
+{"level":"error","message":"Item ID or UPC was invalid"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'data')"}
+{"level":"error","message":"user is not defined"}
+{"level":"error","message":"user is not defined"}
+{"level":"error","message":"Token not provided"}
+{"level":"error","message":"Cannot read properties of undefined (reading '_id')"}
+{"level":"error","message":"Provide a food name to search for"}
+{"level":"error","message":"Provide a food name to search for"}
+{"level":"error","message":"Provide a food name to search for"}
+{"level":"error","message":"Provide a food name to search for"}
+{"level":"error","message":"Provide a food name to search for"}
+{"level":"error","message":"Provide a food name to search for"}

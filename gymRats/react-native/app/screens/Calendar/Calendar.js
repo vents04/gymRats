@@ -3,6 +3,7 @@ import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { IoIosArrowBack, IoIosArrowForward, IoMdClose } from 'react-icons/io';
 import { FaWeight } from 'react-icons/fa';
 import { BsJournalBookmarkFill } from 'react-icons/bs';
+import { GiMeal } from 'react-icons/gi';
 import BottomSheet from "react-native-gesture-bottom-sheet";
 import WeightTrackerCard from '../../components/WeightTrackerCard/WeightTrackerCard';
 import ApiRequests from '../../classes/ApiRequests';
@@ -156,7 +157,7 @@ export default class Calendar extends Component {
                                                                 weightUnit: card.data.unit,
                                                                 _id: card.data._id
                                                             });
-                                                        }} key={card.data._id} data={card.data} rerender={this.reloadDateAfterDelete} date={this.state.selectedDate} />
+                                                        }} key={card.data._id} rerender={this.reloadDateAfterDelete} date={this.state.selectedDate} />
                                                         : card.card == 'workoutSessions'
                                                             ? <LogbookCard actionButtonFunction={() => {
                                                                 this.props.navigation.navigate("Logbook", {
@@ -221,6 +222,24 @@ export default class Calendar extends Component {
                                 <View style={styles.cardTopbar}>
                                     <BsJournalBookmarkFill color="#fff" size={25} />
                                     <Text style={styles.cardTitle}>{i18n.t('components')['cards']['logbook']['cardTitle']}</Text>
+                                </View>
+                            </View>
+                            : null
+                    }
+                    {
+                        !this.state.doNotShow.includes("caloriesCounterDays")
+                            ? <View style={[styles.card, {
+                                backgroundColor: cardColors.caloriesIntake
+                            }]} onClick={() => {
+                                this.bottomSheet.current.close();
+                                this.props.navigation.navigate("CaloriesIntake", {
+                                    date: this.state.selectedDate,
+                                    timezoneOffset: this.state.timezoneOffset
+                                });
+                            }}>
+                                <View style={styles.cardTopbar}>
+                                    <GiMeal color="#fff" size={25} />
+                                    <Text style={styles.cardTitle}>Calories intake</Text>
                                 </View>
                             </View>
                             : null

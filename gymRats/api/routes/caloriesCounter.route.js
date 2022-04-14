@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
+const validbarcode = require("barcode-validator");
 
 const DbService = require('../services/db.service');
 
@@ -14,6 +15,7 @@ const { authenticate } = require('../middlewares/authenticate');
 const { HTTP_STATUS_CODES, COLLECTIONS, DEFAULT_ERROR_MESSAGE } = require('../global');
 const { itemPostValidation, dailyItemPostValidation, dailyGoalPostValidation } = require('../validation/hapi');
 const checkCaloriesAndMacros = require('../helperFunctions/checkCaloriesAndMacros');
+const NutritionixService = require('../services/nutritionix.service');
 
 router.post('/item', authenticate, async (req, res, next) => {
     const { error } = itemPostValidation(req.body);
@@ -119,6 +121,22 @@ router.post("/daily-goal", authenticate, async (req, res, next) => {
     }
 });
 
+router.delete('/:id', authenticate, async (req, res, next) => {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) return next(new ResponseError("Invalid calorie counter day id", HTTP_STATUS_CODES.BAD_REQUEST));
+
+    try {
+        const calorieCounterDay = await DbService.getById(COLLECTIONS.CALORIES_COUNTER_DAYS, req.params.id);
+        if (!calorieCounterDay) return next(new ResponseError("Calorie counter day not found", HTTP_STATUS_CODES.NOT_FOUND));
+        if (calorieCounterDay.userId.toString() != req.user._id.toString()) return next(new ResponseError("Cannot delete calorie counter day", HTTP_STATUS_CODES.FORBIDDEN));
+
+        await DbService.delete(COLLECTIONS.CALORIES_COUNTER_DAYS, { _id: mongoose.Types.ObjectId(req.params.id) });
+
+        return res.sendStatus(HTTP_STATUS_CODES.OK);
+    } catch (err) {
+        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+    }
+});
+
 router.delete("/:dayId/:itemId", authenticate, async (req, res, next) => {
     if (!mongoose.Types.ObjectId.isValid(req.params.dayId) || !mongoose.Types.ObjectId.isValid(req.params.itemId))
         return next(new ResponseError("Invalid day id and/or item id", HTTP_STATUS_CODES.BAD_REQUEST));
@@ -132,6 +150,60 @@ router.delete("/:dayId/:itemId", authenticate, async (req, res, next) => {
         await DbService.pullUpdate(COLLECTIONS.CALORIES_COUNTER_DAYS, { _id: mongoose.Types.ObjectId(req.params.dayId) }, { "items": { _id: mongoose.Types.ObjectId(req.params.itemId) } })
 
         return res.sendStatus(HTTP_STATUS_CODES.OK);
+    } catch (err) {
+        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+    }
+});
+
+router.get('/day', authenticate, async (req, res, next) => {
+    if (!req.query.date || !req.query.month || !req.query.year
+        || !Date.parse(req.query.year + "-" + req.query.month + "-" + req.query.date)) {
+        return next(new ResponseError("Invalid date parameters", HTTP_STATUS_CODES.BAD_REQUEST));
+    }
+
+    try {
+        const calorieCounterDay = await DbService.getOne(COLLECTIONS.CALORIES_COUNTER_DAYS, {
+            userId: mongoose.Types.ObjectId(req.user._id),
+            date: +req.query.date,
+            month: +req.query.month,
+            year: +req.query.year,
+        });
+        if (calorieCounterDay) {
+            for (let item of calorieCounterDay.items) {
+                const itemInstance = await DbService.getById(COLLECTIONS.CALORIES_COUNTER_ITEMS, item.itemId);
+                item.itemInstance = itemInstance;
+            }
+        }
+
+        return res.status(HTTP_STATUS_CODES.OK).send({
+            calorieCounterDay
+        })
+    } catch (error) {
+        return next(new ResponseError(error.message || DEFAULT_ERROR_MESSAGE, error.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+    }
+});
+
+router.get("/search/food", async (req, res, next) => {
+    if (!req.query.query) return next(new ResponseError("Provide a food name to search for", HTTP_STATUS_CODES.BAD_REQUEST));
+
+    try {
+        const results = await NutritionixService.searchFood(req.query.query);
+        return res.status(HTTP_STATUS_CODES.OK).send({
+            results
+        })
+    } catch (err) {
+        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+    }
+});
+
+router.get("/search/barcode", async (req, res, next) => {
+    if (!req.query.barcode) return next(new ResponseError("Provide a barcode to search for", HTTP_STATUS_CODES.BAD_REQUEST));
+    if (!validbarcode(req.query.barcode)) return next(new ResponseError("Invalid barcode", HTTP_STATUS_CODES.BAD_REQUEST));
+    try {
+        const results = await NutritionixService.searchBarcode(req.query.barcode);
+        return res.status(HTTP_STATUS_CODES.OK).send({
+            results
+        })
     } catch (err) {
         return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
     }

@@ -192,7 +192,7 @@ router.get("/workout-session", authenticate, async (req, res, next) => {
                 exercise.exerciseName = exerciseInstance.title;
             }
         }
-        res.status(HTTP_STATUS_CODES.OK).send({
+        return res.status(HTTP_STATUS_CODES.OK).send({
             session: workoutSession
         })
     } catch (error) {

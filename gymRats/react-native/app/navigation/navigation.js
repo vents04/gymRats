@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {useRoute, getFocusedRouteNameFromRoute} from '@react-navigation/native';
+import { useRoute, getFocusedRouteNameFromRoute } from '@react-navigation/native';
 
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -26,6 +26,8 @@ import Chat from '../screens/Chat/Chat';
 import i18n from 'i18n-js';
 import CoachRequests from '../screens/CoachRequests/CoachRequests';
 import CoachProfileEdit from '../screens/CoachProfileEdit/CoachProfileEdit';
+import CaloriesIntake from '../screens/cards/CaloriesIntake/CaloriesIntake';
+import SearchCaloriesIntake from '../screens/cards/SearchCaloriesIntake/SearchCaloriesIntake';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -60,6 +62,20 @@ const calendarScreenStack = ({ navigation }) => {
                     headerShown: false
                 }}
                 component={ExerciseSearch}
+            />
+            <Stack.Screen
+                name="CaloriesIntake"
+                options={{
+                    headerShown: false
+                }}
+                component={CaloriesIntake}
+            />
+            <Stack.Screen
+                name="SearchCaloriesIntake"
+                options={{
+                    headerShown: false
+                }}
+                component={SearchCaloriesIntake}
             />
         </Stack.Navigator>
     );
@@ -177,7 +193,7 @@ const Auth = () => {
 const NavigationRoutes = (props) => {
     return (
         <Tab.Navigator
-            screenOptions={({route}) => ({
+            screenOptions={({ route }) => ({
                 headerShown: false,
                 tabBarShowLabel: false,
                 tabBarHideOnKeyboard: true,
@@ -239,7 +255,7 @@ const NavigationRoutes = (props) => {
             />
             <Tab.Screen
                 name="chatsScreenStack"
-                options={({route}) => ({
+                options={({ route }) => ({
                     tabBarLabel: 'Chats',
                     headerShown: false,
                     tabBarActiveTintColor: "#ccc",

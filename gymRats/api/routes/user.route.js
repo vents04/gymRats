@@ -76,9 +76,10 @@ router.put("/", authenticate, async (req, res, next) => {
 
 router.post("/validate-token", async (req, res, next) => {
     const token = req.header("x-auth-token");
+    let user = null;
     if (!token) return res.status(HTTP_STATUS_CODES.OK).send({
         valid: false,
-        user: null,
+        user,
     })
 
     try {
@@ -87,7 +88,7 @@ router.post("/validate-token", async (req, res, next) => {
         const verified = AuthenticationService.verifyToken(token);
         if (!verified) valid = false;
         else {
-            const user = await DbService.getById(COLLECTIONS.USERS, verified._id);
+            user = await DbService.getById(COLLECTIONS.USERS, verified._id);
             if (!user) valid = false;
             else {
                 if (verified.iat <= user.lastPasswordReset.getTime() / 1000) valid = false;
@@ -96,7 +97,7 @@ router.post("/validate-token", async (req, res, next) => {
 
         return res.status(HTTP_STATUS_CODES.OK).send({
             valid: valid,
-            user: user
+            user
         })
     }
     catch (error) {
