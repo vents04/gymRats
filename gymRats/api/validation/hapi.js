@@ -353,5 +353,5 @@ module.exports = {
     chatValidation,
     messageValidation,
     contentPostValidation,
-    contentUpdateValidation
+    contentUpdateValidation,
 }
