@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
-const { COLLECTIONS, DATABASE_MODELS } = require('../../../global');
+const { DATABASE_MODELS } = require('../../../global');
 
 const reviewSchema = mongoose.Schema({
     relationId: {
         type: mongoose.Types.ObjectId,
-        ref: COLLECTIONS.REQUESTS,
+        ref: DATABASE_MODELS.RELATION,
         required: true
     },
     rating: {
@@ -15,8 +15,8 @@ const reviewSchema = mongoose.Schema({
     },
     review: {
         type: String,
-        min: 1,
-        max: 1000,
+        minLength: 1,
+        maxLength: 1000,
         optional: true
     }
 });

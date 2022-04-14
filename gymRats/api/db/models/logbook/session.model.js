@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { COLLECTIONS, DATABASE_MODELS, WEIGHT_UNITS } = require('../../../global');
+const { DATABASE_MODELS, WEIGHT_UNITS } = require('../../../global');
 
 const sessionSchema = mongoose.Schema({
     date: {
@@ -16,13 +16,13 @@ const sessionSchema = mongoose.Schema({
     },
     userId: {
         type: mongoose.Types.ObjectId,
+        ref: DATABASE_MODELS.USER,
         required: true,
-        ref: COLLECTIONS.USERS
     },
     exercises: [{
         exerciseId: {
             type: mongoose.Types.ObjectId,
-            ref: COLLECTIONS.EXERCISES,
+            ref: DATABASE_MODELS.EXERCISE,
             required: true,
         },
         sets: [{

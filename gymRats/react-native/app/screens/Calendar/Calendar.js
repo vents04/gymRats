@@ -1,15 +1,13 @@
 import React, { Component } from 'react';
-import { Dimensions, Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { IoIosArrowBack, IoIosArrowForward, IoMdClose } from 'react-icons/io';
 import { FaWeight } from 'react-icons/fa';
 import { BsJournalBookmarkFill } from 'react-icons/bs';
 import BottomSheet from "react-native-gesture-bottom-sheet";
 import WeightTrackerCard from '../../components/WeightTrackerCard/WeightTrackerCard';
-import WeightTracker from '../cards/WeightTracker/WeightTracker';
 import ApiRequests from '../../classes/ApiRequests';
 import LogbookCard from '../../components/LogbookCard/LogbookCard';
 import { cardColors } from '../../../assets/styles/cardColors';
-import { HTTP_STATUS_CODES } from '../../../../api/global';
 import i18n from 'i18n-js';
 
 const globalStyles = require('../../../assets/styles/global.styles');

@@ -12,7 +12,6 @@ const DATABASE_MODELS = {
     SUGGESTION: "Suggestion",
     SUPPLEMENTS: "Supplements",
     PERSONAL_TRAINER: "PersonalTrainer",
-    CLIENT: "Client",
     RELATION: "Relation",
     DIET_PLAN: "DietPlan",
     REVIEW: "Review",
@@ -34,7 +33,6 @@ const COLLECTIONS = {
     DAILY_WEIGHTS: "dailyWeights",
     SUGGESTIONS: "suggestions",
     PERSONAL_TRAINERS: "personalTrainers",
-    CLIENTS: "clients",
     RELATIONS: "relations",
     DIET_PLANS: "dietPlans",
     REVIEWS: "reviews",
@@ -51,6 +49,7 @@ const PERSONAL_TRAINER_STATUSES = {
 
 const CHAT_STATUSES = {
     ACTIVE: "ACTIVE",
+    INACTIVE: "INACTIVE",
     BLOCKED: "BLOCKED",
 }
 

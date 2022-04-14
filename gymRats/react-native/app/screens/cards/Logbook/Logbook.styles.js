@@ -57,7 +57,7 @@ module.exports = StyleSheet.create({
     setContainer: {
         display: 'flex',
         flexDirection: 'row',
-        overflow: "",
+        overflow: "hidden",
     },
     setContainerTitle: {
         fontFamily: "SpartanRegular",
@@ -81,7 +81,6 @@ module.exports = StyleSheet.create({
     setContainerItemInput: {
         width: "100%",
         textAlign: "center",
-        outline: "none",
         fontFamily: "SpartanMedium",
         fontSize: 14
     },

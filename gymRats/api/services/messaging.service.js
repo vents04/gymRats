@@ -13,11 +13,11 @@ const MessagingService = {
                 const client = await DbService.getById(COLLECTIONS.USERS, clientId);
                 const trainer = await DbService.getById(COLLECTIONS.PERSONAL_TRAINERS, personalTrainerId);
 
-                if(trainer && client){
-                    const relation = await DbService.getOne(COLLECTIONS.RELATIONS, {personalTrainerId: mongoose.Types.ObjectId(trainer._id), clientId: mongoose.Types.ObjectId(client._id)});
-                    if(relation && relation.status == RELATION_STATUSES.ACTIVE){
+                if (trainer && client) {
+                    const relation = await DbService.getOne(COLLECTIONS.RELATIONS, { personalTrainerId: mongoose.Types.ObjectId(trainer._id), clientId: mongoose.Types.ObjectId(client._id) });
+                    if (relation && relation.status == RELATION_STATUSES.ACTIVE) {
                         const chat = await DbService.getOne(COLLECTIONS.CHATS, { personalTrainerId: mongoose.Types.ObjectId(trainer._id), clientId: mongoose.Types.ObjectId(client._id) });
-                        if(!chat){
+                        if (!chat) {
                             const chat = new Chat({
                                 personalTrainerId: mongoose.Types.ObjectId(trainer._id),
                                 clientId: mongoose.Types.ObjectId(client._id)
@@ -32,7 +32,7 @@ const MessagingService = {
                 }
                 reject(new ResponseError("Client or trainer not found", HTTP_STATUS_CODES.NOT_FOUND));
 
-            }catch (err) {
+            } catch (err) {
                 reject(new ResponseError("Internal server error", err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
             }
         })
@@ -51,15 +51,15 @@ const MessagingService = {
 
                 const chat = await DbService.getById(COLLECTIONS.CHATS, chatId);
 
-                const personalTrainer = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, {userId:  mongoose.Types.ObjectId(senderId)})
+                const personalTrainer = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, { userId: mongoose.Types.ObjectId(senderId) })
 
-                if(chat && ((personalTrainer && (personalTrainer._id.toString() != chat.personalTrainerId.toString())) && senderId.toString() != chat.clientId.toString())){
+                if (chat && ((personalTrainer && (personalTrainer._id.toString() != chat.personalTrainerId.toString())) && senderId.toString() != chat.clientId.toString())) {
                     reject(new ResponseError("Trainer or client is not part of the chat or the chat does not exist", HTTP_STATUS_CODES.BAD_REQUEST));
                 }
                 await DbService.create(COLLECTIONS.MESSAGES, textMessage);
                 resolve();
 
-            }catch (err) {
+            } catch (err) {
                 reject(new ResponseError("Internal server error", err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
             }
         })
@@ -78,19 +78,19 @@ const MessagingService = {
 
                 const chat = await DbService.getById(COLLECTIONS.CHATS, chatId);
 
-                const personalTrainer = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, {userId:  mongoose.Types.ObjectId(senderId)})
+                const personalTrainer = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, { userId: mongoose.Types.ObjectId(senderId) })
 
-                if(chat && ((personalTrainer && (personalTrainer._id.toString() != chat.personalTrainerId.toString())) && senderId.toString() != chat.clientId.toString())){
+                if (chat && ((personalTrainer && (personalTrainer._id.toString() != chat.personalTrainerId.toString())) && senderId.toString() != chat.clientId.toString())) {
                     reject(new ResponseError("Trainer or client is not part of the chat or the chat does not exist", HTTP_STATUS_CODES.BAD_REQUEST));
                 }
                 await DbService.create(COLLECTIONS.MESSAGES, fileMessage);
                 resolve();
 
-            }catch (err) {
+            } catch (err) {
                 reject(new ResponseError("Internal server error", err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
             }
         })
     }
-}   
+}
 
 module.exports = MessagingService;

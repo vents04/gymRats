@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { DATABASE_MODELS, COLLECTIONS } = require('../../../global');
+const { DATABASE_MODELS } = require('../../../global');
 
 const exerciseSchema = mongoose.Schema({
     title: {
@@ -16,11 +16,12 @@ const exerciseSchema = mongoose.Schema({
     },
     userId: {
         type: mongoose.Types.ObjectId,
+        ref: DATABASE_MODELS.USER,
         required: true,
     },
     targetMuscles: [{
         type: mongoose.Types.ObjectId,
-        ref: COLLECTIONS.MUSCLES,
+        ref: DATABASE_MODELS.MUSCLE,
         optional: true,
     }],
     translations: {

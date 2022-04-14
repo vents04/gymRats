@@ -1,11 +1,11 @@
 const mongoose = require('mongoose');
-const { COLLECTIONS, DATABASE_MODELS, CALORIES_COUNTER_MEALS } = require('../../../global');
+const { DATABASE_MODELS, CALORIES_COUNTER_MEALS } = require('../../../global');
 
 const caloriesCounterDaySchema = mongoose.Schema({
     userId: {
         type: mongoose.Types.ObjectId,
         required: true,
-        ref: COLLECTIONS.USERS
+        ref: DATABASE_MODELS.USER
     },
     date: {
         type: Number,
@@ -27,13 +27,9 @@ const caloriesCounterDaySchema = mongoose.Schema({
         itemId: {
             type: mongoose.Types.ObjectId,
             required: true,
-            ref: COLLECTIONS.ITEMS
+            ref: DATABASE_MODELS.CALORIES_COUNTER_ITEM
         },
         amount: {
-            type: Number,
-            required: true
-        },
-        dt: {
             type: Number,
             required: true
         },
@@ -41,11 +37,15 @@ const caloriesCounterDaySchema = mongoose.Schema({
             type: String,
             enum: Object.values(CALORIES_COUNTER_MEALS),
             required: true
-        }
+        },
+        dt: {
+            type: Number,
+            required: true
+        },
     }],
-    caloriesCounterDailyGoalId: {
-        type: mongoose.Types.ObjectId,
-        required: true
+    createdDt: {
+        type: Number,
+        default: Date.now
     }
 });
 

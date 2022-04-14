@@ -1,11 +1,11 @@
 const mongoose = require('mongoose');
-const { DATABASE_MODELS, COLLECTIONS } = require('../../../global');
+const { DATABASE_MODELS } = require('../../../global');
 
 const caloriesCounterDailyGoalSchema = mongoose.Schema({
     userId: {
         type: mongoose.Types.ObjectId,
         required: true,
-        ref: COLLECTIONS.USERS
+        ref: DATABASE_MODELS.USER
     },
     calories: {
         type: Number,
@@ -23,7 +23,7 @@ const caloriesCounterDailyGoalSchema = mongoose.Schema({
         type: Number,
         required: true
     },
-    dt: {
+    createdDt: {
         type: Number,
         default: Date.now
     }

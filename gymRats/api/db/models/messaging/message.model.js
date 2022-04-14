@@ -1,28 +1,28 @@
 const mongoose = require('mongoose');
-const { DATABASE_MODELS, COLLECTIONS } = require('../../../global');
+const { DATABASE_MODELS } = require('../../../global');
 
 const messageSchema = mongoose.Schema({
     senderId: {
         type: mongoose.Types.ObjectId,
+        ref: DATABASE_MODELS.USER,
         required: true,
-        ref: COLLECTIONS.USERS
     },
     chatId: {
         type: mongoose.Types.ObjectId,
+        ref: DATABASE_MODELS.CHAT,
         required: true,
-        ref: COLLECTIONS.CHATS
     },
     message: {
         text: {
             type: String,
             min: 1,
             max: 1000,
-            required: function() {return this.file.length == 0},
+            required: function () { return this.file.length == 0 },
             default: null
         },
         file: {
             type: String,
-            required: function() {return this.text.length == 0},
+            required: function () { return this.text.length == 0 },
             default: null
         }
     },
@@ -30,8 +30,8 @@ const messageSchema = mongoose.Schema({
         type: Boolean,
         default: false
     },
-    createdAt: {
-        type: Date,
+    createdDt: {
+        type: Number,
         default: Date.now
     },
 });

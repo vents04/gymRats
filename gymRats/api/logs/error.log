@@ -4007,3 +4007,5 @@
 {"level":"error","message":"You cannot access chats in which you are not a participant!"}
 {"level":"error","message":"Invalid chat id"}
 {"level":"error","message":"Invalid chat id"}
+{"level":"error","message":"user is not defined"}
+{"level":"error","message":"user is not defined"}

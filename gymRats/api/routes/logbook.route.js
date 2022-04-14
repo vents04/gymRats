@@ -1,14 +1,18 @@
 const express = require('express');
+const router = express.Router();
 const mongoose = require('mongoose');
+
+const DbService = require('../services/db.service');
+
 const Exercise = require('../db/models/logbook/exercise.model');
 const Workout = require('../db/models/logbook/workout.model');
 const Session = require('../db/models/logbook/session.model');
+
 const ResponseError = require('../errors/responseError');
-const { HTTP_STATUS_CODES, COLLECTIONS, APP_EMAIL } = require('../global');
-const router = express.Router();
 
 const { authenticate } = require('../middlewares/authenticate');
-const DbService = require('../services/db.service');
+
+const { HTTP_STATUS_CODES, COLLECTIONS, APP_EMAIL } = require('../global');
 const { workoutPostValidation, workoutSessionValidation, exercisePostValidation, workoutTemplateCheckValidation } = require('../validation/hapi');
 
 router.post("/exercise", authenticate, async (req, res, next) => {
@@ -19,6 +23,7 @@ router.post("/exercise", authenticate, async (req, res, next) => {
         if (req.body.keywords && req.body.keywords.length > 0 && req.user.email != APP_EMAIL) {
             return next(new ResponseError("Keywords is a forbidden field for your user rights", HTTP_STATUS_CODES.FORBIDDEN));
         }
+
         if (req.body.targetMuscles) {
             for (let targetMuscle of req.body.targetMuscles) {
                 const muscle = await DbService.getById(COLLECTIONS.MUSCLES, targetMuscle);

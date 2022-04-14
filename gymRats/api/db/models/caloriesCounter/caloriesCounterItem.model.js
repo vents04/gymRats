@@ -44,6 +44,10 @@ const caloriesCounterItem = mongoose.Schema({
     fats: {
         type: Number,
         required: true
+    },
+    createdDt: {
+        type: Number,
+        default: Date.now
     }
 });
 

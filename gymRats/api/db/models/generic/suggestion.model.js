@@ -8,9 +8,10 @@ const suggestionSchema = mongoose.Schema({
     },
     userId: {
         type: mongoose.Types.ObjectId,
+        ref: DATABASE_MODELS.USER,
         required: true
     },
-    dt: {
+    createdDt: {
         type: Number,
         default: Date.now
     }

@@ -29,7 +29,7 @@ const userSchema = mongoose.Schema({
     profilePicture: {
         type: String,
         optional: true,
-        default: undefined
+        default: null
     },
     verifiedEmail: {
         type: Boolean,
@@ -42,7 +42,7 @@ const userSchema = mongoose.Schema({
         default: WEIGHT_UNITS.KILOGRAMS
     },
     lastPasswordReset: {
-        type: Date,
+        type: Number,
         default: Date.now
     },
     createdDt: {

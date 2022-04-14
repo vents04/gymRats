@@ -11,12 +11,12 @@ const workoutSchema = mongoose.Schema({
     exercises: [{
         type: mongoose.Types.ObjectId,
         required: true,
-        ref: COLLECTIONS.EXERCISES
+        ref: DATABASE_MODELS.EXERCISE
     }],
     userId: {
         type: mongoose.Types.ObjectId,
         optional: true,
-        ref: COLLECTIONS.USERS
+        ref: DATABASE_MODELS.USER
     },
     isPublic: {
         type: Boolean,
@@ -25,7 +25,7 @@ const workoutSchema = mongoose.Schema({
     createdDt: {
         type: Number,
         default: Date.now,
-    }    
+    }
 });
 
 const Workout = mongoose.model(DATABASE_MODELS.WORKOUT, workoutSchema);

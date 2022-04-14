@@ -47,7 +47,7 @@ for (var d = new Date(1970, 0, 1); d <= now; d.setDate(d.getDate() + 1)) {
 io.on("connection", (socket) => {
     //console.log("connection established", socket.id);
     socket.on("join-chat", (payload) => {
-        try{
+        try {
             const chatId = payload.chatId;
 
             socket.join(chatId);
@@ -62,7 +62,7 @@ io.on("connection", (socket) => {
                 await MessagingService.sendFileMessage(chatId, messageInfo.senderId, messageInfo.base64);
                 socket.to(chatId).emit("receive-file-message", {});
             });
-        }catch (err) {
+        } catch (err) {
             reject(new ResponseError("Internal server error", err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
             socket.disconnect();
         }
@@ -70,7 +70,7 @@ io.on("connection", (socket) => {
 
     socket.on("update-last-message", () => {
         console.log("here")
-        socket.emit("last-message-to-be-updated", {})  
+        socket.emit("last-message-to-be-updated", {})
     })
 
 });

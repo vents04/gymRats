@@ -1,12 +1,12 @@
 const mongoose = require('mongoose');
 
-const { WEIGHT_UNITS, COLLECTIONS, DATABASE_MODELS } = require('../../../global');
+const { WEIGHT_UNITS, DATABASE_MODELS } = require('../../../global');
 
 const dailyWeightSchema = mongoose.Schema({
     userId: {
         type: mongoose.Types.ObjectId,
+        ref: DATABASE_MODELS.USER,
         required: true,
-        ref: COLLECTIONS.USERS
     },
     weight: {
         type: Number,
@@ -16,8 +16,8 @@ const dailyWeightSchema = mongoose.Schema({
     },
     unit: {
         type: String,
+        enum: Object.values(WEIGHT_UNITS),
         required: true,
-        enum: Object.values(WEIGHT_UNITS)
     },
     date: {
         type: Number,
