@@ -25,10 +25,6 @@ const relationSchema = mongoose.Schema({
         enum: Object.values(RELATION_STATUSES),
         default: RELATION_STATUSES.PENDING_APPROVAL
     },
-    hasSubmittedReview: {
-        type: Boolean,
-        default: false
-    },
     createdDt: {
         type: Number,
         default: Date.now

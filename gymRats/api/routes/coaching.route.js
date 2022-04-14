@@ -1,17 +1,21 @@
 const express = require('express');
-const mongoose = require('mongoose');
-const ResponseError = require('../errors/responseError');
-const { HTTP_STATUS_CODES, COLLECTIONS, REQUEST_STATUSES, PERSONAL_TRAINER_STATUSES, RELATION_STATUSES, CONTENT_VISIBILITY_SCOPES, DEFAULT_ERROR_MESSAGE } = require('../global');
-const DbService = require('../services/db.service');
-const Request = require('../db/models/coaching/relation.model');
 const router = express.Router();
-const { authenticate } = require('../middlewares/authenticate');
-const { relationValidation, relationStatusUpdateValidation, coachingReviewPostValidation, coachApplicationPostValidation, contentPostValidation, contentUpdateValidation } = require('../validation/hapi');
+const mongoose = require('mongoose');
+
+const DbService = require('../services/db.service');
+const MessagingService = require('../services/messaging.service');
+
 const PersonalTrainer = require('../db/models/coaching/personalTrainer.model');
 const Relation = require('../db/models/coaching/relation.model');
 const Content = require('../db/models/coaching/content.model');
-const MessagingService = require('../services/messaging.service');
+const Review = require('../db/models/coaching/review.model');
 
+const ResponseError = require('../errors/responseError');
+
+const { authenticate } = require('../middlewares/authenticate');
+
+const { HTTP_STATUS_CODES, COLLECTIONS, PERSONAL_TRAINER_STATUSES, RELATION_STATUSES, CONTENT_VISIBILITY_SCOPES, DEFAULT_ERROR_MESSAGE } = require('../global');
+const { relationValidation, relationStatusUpdateValidation, coachApplicationPostValidation, contentPostValidation, contentUpdateValidation, coachingReviewPostValidation } = require('../validation/hapi');
 
 router.get('/', authenticate, async (req, res, next) => {
     try {
@@ -61,28 +65,31 @@ router.get('/', authenticate, async (req, res, next) => {
         coaching.myCoach.hasRelations = pendingRelations.length > 0;
         coaching.myCoach.relations = pendingRelations;
 
-        res.status(HTTP_STATUS_CODES.OK).send({
-            coaching: coaching
+        return res.status(HTTP_STATUS_CODES.OK).send({
+            coaching
         })
     } catch (err) {
-        return next(new ResponseError(err.message || "Internal server error", err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
     }
-})
+});
 
 router.get('/me-as-coach', authenticate, async (req, res, next) => {
     try {
         const coach = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, { userId: mongoose.Types.ObjectId(req.user._id) });
         if (!coach) return next(new ResponseError("Coach was not found", HTTP_STATUS_CODES.NOT_FOUND));
 
-        const relations = await DbService.getMany(COLLECTIONS.RELATIONS, { personalTrainerId: mongoose.Types.ObjectId(coach._id), status: RELATION_STATUSES.ACTIVE, to: null });
-        coach.relations = relations;
+        const activeRelations = await DbService.getMany(COLLECTIONS.RELATIONS, { personalTrainerId: mongoose.Types.ObjectId(coach._id), status: RELATION_STATUSES.ACTIVE });
+        coach.relations = activeRelations;
+
         let overallRating = 3;
         let overallRatingCounter = 1;
-        for (let relation of relations) {
-            const rating = await DbService.getOne(COLLECTIONS.REVIEWS, { relationId: mongoose.Types.ObjectId(relation._id) })
-            relation.rating = rating;
-            overallRatingCounter++;
-            overallRating = (overallRating + rating.rating) / overallRatingCounter;
+        const finishedRelations = await DbService.getMany(COLLECTIONS.RELATIONS, { personalTrainerId: mongoose.Types.ObjectId(coach._id), status: RELATION_STATUSES.CANCELED })
+        for (let finishedRelation of finishedRelations) {
+            const rating = await DbService.getOne(COLLECTIONS.REVIEWS, { relationId: mongoose.Types.ObjectId(finishedRelation._id) })
+            if (rating) {
+                overallRatingCounter++;
+                overallRating = (overallRating + rating.rating) / overallRatingCounter;
+            }
         }
 
         const clients = await DbService.getMany(COLLECTIONS.RELATIONS, { personalTrainerId: mongoose.Types.ObjectId(coach._id) });
@@ -90,31 +97,29 @@ router.get('/me-as-coach', authenticate, async (req, res, next) => {
         coach.rating = parseFloat(overallRating).toFixed(1);
         coach.user = req.user;
 
-        res.status(HTTP_STATUS_CODES.OK).send({
+        return res.status(HTTP_STATUS_CODES.OK).send({
             coach
         })
     } catch (err) {
-        return next(new ResponseError(err.message || "Internal server error", err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
     }
-})
+});
 
 router.post('/application', authenticate, async (req, res, next) => {
     const { error } = coachApplicationPostValidation(req.body);
     if (error) return next(new ResponseError(error.details[0].message, HTTP_STATUS_CODES.BAD_REQUEST));
 
     try {
-        const personalTrainer = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, { userId: mongoose.Types.ObjectId(req.user._id) });
-        if (personalTrainer) return next(new ResponseError("Request denied", HTTP_STATUS_CODES.CONFLICT));
+        const existingPersonalTrainer = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, { userId: mongoose.Types.ObjectId(req.user._id) });
+        if (existingPersonalTrainer) return next(new ResponseError("You are already a personal trainer", HTTP_STATUS_CODES.CONFLICT));
 
-        const newPersonalTrainer = new PersonalTrainer({
-            userId: mongoose.Types.ObjectId(req.user._id),
-            location: req.body.location
-        })
-        await DbService.create(COLLECTIONS.PERSONAL_TRAINERS, newPersonalTrainer);
+        const personalTrainer = new PersonalTrainer(req.body);
+        personalTrainer.userId = req.user._id;
+        await DbService.create(COLLECTIONS.PERSONAL_TRAINERS, personalTrainer);
 
-        res.sendStatus(HTTP_STATUS_CODES.OK);
+        return res.sendStatus(HTTP_STATUS_CODES.OK);
     } catch (error) {
-        return next(new ResponseError(error.message || "Internal server error", error.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+        return next(new ResponseError(error.message || DEFAULT_ERROR_MESSAGE, error.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
     }
 });
 
@@ -126,6 +131,7 @@ router.post('/relation', authenticate, async (req, res, next) => {
         const coach = await DbService.getById(COLLECTIONS.PERSONAL_TRAINERS, req.body.coachId);
         if (!coach) return next(new ResponseError("Coach was not found", HTTP_STATUS_CODES.NOT_FOUND));
         if (coach.status != PERSONAL_TRAINER_STATUSES.ACTIVE) return next(new ResponseError("This coach is not accepting requests currently", HTTP_STATUS_CODES.CONFLICT));
+        if (coach.userId.toString() == req.user._id.toString()) return next(new ResponseError("You cannot be your own client", HTTP_STATUS_CODES.CONFLICT));
 
         const existingRequests = await DbService.getMany(COLLECTIONS.RELATIONS, { clientId: mongoose.Types.ObjectId(req.user._id), personalTrainerId: mongoose.Types.ObjectId(req.body.coachId) });
         let hasConflict = false;
@@ -136,7 +142,7 @@ router.post('/relation', authenticate, async (req, res, next) => {
             }
         }
 
-        if (hasConflict) return next(new ResponseError("You have already sent a request or have an active relation with this coach. Please wait for a response!", HTTP_STATUS_CODES.CONFLICT));
+        if (hasConflict) return next(new ResponseError("You have already sent a request for coaching or have an active relation with this coach.", HTTP_STATUS_CODES.CONFLICT));
 
         const relation = new Relation({
             clientId: mongoose.Types.ObjectId(req.user._id),
@@ -145,11 +151,11 @@ router.post('/relation', authenticate, async (req, res, next) => {
 
         await DbService.create(COLLECTIONS.RELATIONS, relation);
 
-        res.sendStatus(HTTP_STATUS_CODES.OK);
+        return res.sendStatus(HTTP_STATUS_CODES.OK);
     } catch (err) {
-        return next(new ResponseError(err.message || "Internal server error", err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
     }
-})
+});
 
 router.delete("/relation/:id", authenticate, async (req, res, next) => {
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) return next(new ResponseError("Invalid request id", HTTP_STATUS_CODES.BAD_REQUEST));
@@ -162,14 +168,15 @@ router.delete("/relation/:id", authenticate, async (req, res, next) => {
 
         await DbService.delete(COLLECTIONS.RELATIONS, { _id: mongoose.Types.ObjectId(req.params.id) });
 
-        res.sendStatus(HTTP_STATUS_CODES.OK);
+        return res.sendStatus(HTTP_STATUS_CODES.OK);
     } catch (err) {
-        return next(new ResponseError(err.message || "Internal server error", err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
     }
 });
 
 router.put('/relation/:id/status', authenticate, async (req, res, next) => {
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) return next(new ResponseError("Invalid relation id", HTTP_STATUS_CODES.BAD_REQUEST))
+
     const { error } = relationStatusUpdateValidation(req.body);
     if (error) return next(new ResponseError(error.details[0].message, HTTP_STATUS_CODES.BAD_REQUEST));
 
@@ -180,8 +187,9 @@ router.put('/relation/:id/status', authenticate, async (req, res, next) => {
         const coach = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, { _id: mongoose.Types.ObjectId(relation.personalTrainerId) });
         if (!coach) return next(new ResponseError("Coach was not found", HTTP_STATUS_CODES.NOT_FOUND));
 
-        if (relation.status != RELATION_STATUSES.ACTIVE
-            && relation.status != RELATION_STATUSES.PENDING_APPROVAL) return next(new ResponseError("Relation must be in statuses active or pending approval to update its status", HTTP_STATUS_CODES.CONFLICT));
+        if (relation.status != RELATION_STATUSES.ACTIVE && relation.status != RELATION_STATUSES.PENDING_APPROVAL)
+            return next(new ResponseError("Relation status should be active or pending approval to update", HTTP_STATUS_CODES.CONFLICT));
+
         if (!(relation.status == RELATION_STATUSES.PENDING_APPROVAL
             && req.body.status == RELATION_STATUSES.ACTIVE
             && req.user._id.toString() == coach.userId.toString())
@@ -194,58 +202,65 @@ router.put('/relation/:id/status', authenticate, async (req, res, next) => {
             return next(new ResponseError("Cannot perform this status update", HTTP_STATUS_CODES.CONFLICT));
 
         await DbService.update(COLLECTIONS.RELATIONS, { _id: mongoose.Types.ObjectId(req.params.id) }, req.body);
+
         if (req.body.status == RELATION_STATUSES.ACTIVE) {
             await DbService.update(COLLECTIONS.RELATIONS, { _id: mongoose.Types.ObjectId(req.params.id) }, {
                 from: new Date().getTime()
             });
             await MessagingService.createChat(relation.personalTrainerId, relation.clientId)
-        }
-        if (req.body.status == RELATION_STATUSES.CANCELED) {
+        } else if (req.body.status == RELATION_STATUSES.CANCELED) {
             await DbService.update(COLLECTIONS.RELATIONS, { _id: mongoose.Types.ObjectId(req.params.id) }, {
                 to: new Date().getTime()
             })
         }
 
-        res.sendStatus(HTTP_STATUS_CODES.OK);
+        return res.sendStatus(HTTP_STATUS_CODES.OK);
     } catch (err) {
-        return next(new ResponseError(err.message || "Internal server error", err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
     }
-})
+});
 
 router.get('/requests', authenticate, async (req, res, next) => {
     try {
         const coach = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, { userId: mongoose.Types.ObjectId(req.user._id) });
         if (!coach) return res.status(HTTP_STATUS_CODES.OK).send({ relations: [] })
+
         const relations = await DbService.getMany(COLLECTIONS.RELATIONS, { personalTrainerId: mongoose.Types.ObjectId(coach._id), status: RELATION_STATUSES.PENDING_APPROVAL });
         for (let relation of relations) {
             const client = await DbService.getById(COLLECTIONS.USERS, relation.clientId);
             relation.client = client;
         }
-        res.status(HTTP_STATUS_CODES.OK).send({
+
+        return res.status(HTTP_STATUS_CODES.OK).send({
             relations
         })
     } catch (err) {
-        return next(new ResponseError(err.message || "Internal server error", err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
     }
 });
 
-router.post('/review/:id', authenticate, async (req, res, next) => {
+router.post('/relation/:id/review', authenticate, async (req, res, next) => {
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) return next(new ResponseError("Invalid relation id", HTTP_STATUS_CODES.BAD_REQUEST))
+
+    const { error } = coachingReviewPostValidation(req.body);
+    if (error) return next(new ResponseError(error.details[0].message, HTTP_STATUS_CODES.BAD_REQUEST));
 
     try {
         const relation = await DbService.getById(COLLECTIONS.RELATIONS, req.params.id);
         if (!relation) return next(new ResponseError("Relation not found", HTTP_STATUS_CODES.NOT_FOUND));
-        if (!relation.to) return next(new ResponseError("Relation has not been ended so you cannot leave a review", HTTP_STATUS_CODES.CONFLICT));
-
-        const review = await DbService.getOne(COLLECTIONS.REVIEWS, { relationId: mongoose.Types.ObjectId(req.params.id) });
-        if (review) return next(new ResponseError("Review already added", HTTP_STATUS_CODES.CONFLICT));
+        if (relation.status != RELATION_STATUSES.CANCELED) return next(new ResponseError("Relation has not been ended or has been declined. You cannot leave a review", HTTP_STATUS_CODES.CONFLICT));
         if (relation.clientId.toString() != req.user._id.toString()) return next(new ResponseError("Only clients may post reviews", HTTP_STATUS_CODES.CONFLICT));
 
-        await DbService.create()
+        const existingReview = await DbService.getOne(COLLECTIONS.REVIEWS, { relationId: mongoose.Types.ObjectId(req.params.id) });
+        if (existingReview) return next(new ResponseError("Review already added", HTTP_STATUS_CODES.CONFLICT));
 
-        res.sendStatus(HTTP_STATUS_CODES.OK);
+        const review = new Review(req.body);
+        review.relationId = req.params.id;
+        await DbService.create(COLLECTIONS.REVIEWS, review);
+
+        return res.sendStatus(HTTP_STATUS_CODES.CREATED);
     } catch (error) {
-        return next(new ResponseError(error.message || "Internal server error", error.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+        return next(new ResponseError(error.message || DEFAULT_ERROR_MESSAGE, error.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
     }
 });
 
@@ -413,12 +428,7 @@ router.get("/coach/search", authenticate, async (req, res, next) => {
             allTrainers[index].user = user;
         }
 
-        /*for(let i = 0; i < allTrainers.length; i++){
-            console.log(allTrainers[i])
-        }*/
-
         const dt2 = new Date().getTime();
-        console.log(dt - dt2);
         return res.status(HTTP_STATUS_CODES.OK).send({
             results: allTrainers
         })
@@ -442,7 +452,7 @@ router.post('/content', authenticate, async (req, res, next) => {
 
         return res.sendStatus(HTTP_STATUS_CODES.OK);
     } catch (err) {
-        return next(new ResponseError(err.message || "Internal server error", err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
     }
 });
 
@@ -464,7 +474,7 @@ router.put('/content/:id', authenticate, async (req, res, next) => {
 
         return res.sendStatus(HTTP_STATUS_CODES.OK);
     } catch (err) {
-        return next(new ResponseError(err.message || "Internal server error", err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
     }
 });
 
@@ -477,32 +487,13 @@ router.delete('/content/:id', authenticate, async (req, res, next) => {
 
         const personalTrainer = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, { userId: mongoose.Types.ObjectId(req.user._id) });
         if (!personalTrainer) return next(new ResponseError("Personal trainer not found", HTTP_STATUS_CODES.NOT_FOUND));
-        if (personalTrainer.userId.toString() != req.user._id.toString()) return next(new ResponseError("Cannot update this content", HTTP_STATUS_CODES.FORBIDDEN));
+        if (personalTrainer.userId.toString() != req.user._id.toString()) return next(new ResponseError("Cannot delete this content", HTTP_STATUS_CODES.FORBIDDEN));
 
         await DbService.delete(COLLECTIONS.CONTENTS, { _id: mongoose.Types.ObjectId(req.params.id) });
 
         return res.sendStatus(HTTP_STATUS_CODES.OK);
     } catch (err) {
         return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
-    }
-});
-
-router.delete('/:id', authenticate, async (req, res, next) => {
-    if (!mongoose.Types.ObjectId.isValid(req.params.id)) return next(new ResponseError("Invalid content id", HTTP_STATUS_CODES.BAD_REQUEST));
-
-    try {
-        const content = await DbService.getById(COLLECTIONS.CONTENTS, req.params.id);
-        if (!content) return next(new ResponseError("Content not found", HTTP_STATUS_CODES.NOT_FOUND));
-
-        const personalTrainer = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, { userId: mongoose.Types.ObjectId(req.user._id) });
-        if (!personalTrainer) return next(new ResponseError("Personal trainer not found", HTTP_STATUS_CODES.NOT_FOUND));
-        if (personalTrainer.userId.toString() != req.user._id.toString()) return next(new ResponseError("Cannot update this content", HTTP_STATUS_CODES.FORBIDDEN));
-
-        await DbService.delete(COLLECTIONS.CONTENTS, { _id: mongoose.Types.ObjectId(req.params.id) });
-
-        return res.sendStatus(HTTP_STATUS_CODES.OK);
-    } catch (err) {
-        return next(new ResponseError(err.message || "Internal server error", err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
     }
 });
 
@@ -531,20 +522,20 @@ router.get('/content/:personalTrainerId', authenticate, async (req, res, next) =
         }
 
 
-        let response = {}
+        let finalContents = {}
         for (let content of contents) {
-            if (!response[content.section]) {
-                response[content.section] = [].push(content);
+            if (!finalContents[content.section]) {
+                finalContents[content.section] = [].push(content);
                 continue;
             }
-            response[content.section].push(content);
+            finalContents[content.section].push(content);
         }
 
         return res.status(HTTP_STATUS_CODES.OK).send({
-            response
+            finalContents
         })
     } catch (err) {
-        return next(new ResponseError(err.message || "Internal server error", err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
     }
 });
 

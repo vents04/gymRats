@@ -229,7 +229,7 @@ const relationValidation = (data) => {
     const schema = Joi.object({
         coachId: Joi.string().custom((value, helper) => {
             if (!mongoose.Types.ObjectId.isValid(value)) {
-                return helper.message("Invalid reciever id");
+                return helper.message("Invalid receiver id");
             }
             return true;
         }).required(),
@@ -319,6 +319,7 @@ const contentPostValidation = (data) => {
         section: Joi.string().min(1).max(40).required(),
         title: Joi.string().min(1).max(40).required()
     });
+    return schema.validate(data);
 }
 
 const contentUpdateValidation = (data) => {
@@ -328,6 +329,7 @@ const contentUpdateValidation = (data) => {
         section: Joi.string().min(1).max(40).required(),
         title: Joi.string().min(1).max(40).required()
     });
+    return schema.validate(data);
 }
 
 
