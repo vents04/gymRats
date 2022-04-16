@@ -84,6 +84,7 @@ const userUpdateValidation = (data) => {
 const itemPostValidation = (data) => {
     const schema = Joi.object({
         title: Joi.string().min(1).max(300).required(),
+        brand: Joi.string().min(1).max(300).optional(),
         barcode: Joi.string().optional(),
         unit: Joi.string().valid(...Object.values(CALORIES_COUNTER_UNITS)).required(),
         calories: Joi.number().required(),

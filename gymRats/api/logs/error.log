@@ -1,2 +1,27 @@
 {"level":"error","message":"results is not defined"}
 {"level":"error","message":"results is not defined"}
+{"level":"error","message":"Token not provided"}
+{"level":"error","message":"\"title\" is required"}
+{"level":"error","message":"First name is a required field"}
+{"level":"error","message":"User with this email was not found"}
+{"level":"error","message":"User with this email was not found"}
+{"level":"error","message":"User with this email was not found"}
+{"level":"error","message":"\"title\" is required"}
+{"level":"error","message":"\"calories\" is required"}
+{"level":"error","message":"An item with that title, calories and macros already exists"}
+{"level":"error","message":"Please double check the calories and the macros because there was a mismatch found"}
+{"level":"error","message":"Please double check the calories and the macros because there was a mismatch found"}
+{"level":"error","message":"Please double check the calories and the macros because there was a mismatch found"}
+{"level":"error","message":"Please double check the calories and the macros because there was a mismatch found"}
+{"level":"error","message":"Please double check the calories and the macros because there was a mismatch found"}
+{"level":"error","message":"Provide a food name to search for"}
+{"level":"error","message":"Provide a food name to search for"}
+{"level":"error","message":"Provide a food name to search for"}
+{"level":"error","message":"Provide a food name to search for"}
+{"level":"error","message":"Provide a food name to search for"}
+{"level":"error","message":"Provide a food name to search for"}
+{"level":"error","message":"Provide a food name to search for"}
+{"level":"error","message":"Provide a food name to search for"}
+{"level":"error","message":"Provide a food name to search for"}
+{"level":"error","message":"Provide a food name to search for"}
+{"level":"error","message":"Provide a food name to search for"}

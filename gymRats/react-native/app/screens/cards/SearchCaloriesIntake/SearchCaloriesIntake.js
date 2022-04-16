@@ -22,7 +22,7 @@ export default class SearchCaloriesIntake extends Component {
 
     searchFood = () => {
         ApiRequests.get(`calories-counter/search/food?query=${this.state.query.toLowerCase()}`, {}, true).then((response) => {
-            if (response.data.results) this.setState({ queryResults: response.data.results.hits });
+            if (response.data.results) this.setState({ queryResults: response.data.results });
         }).catch((error) => {
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
@@ -74,7 +74,32 @@ export default class SearchCaloriesIntake extends Component {
                                                 timezoneOffset: this.props.route.params.timezoneOffset
                                             })
                                         }} key={item._id}>
-                                            <Text style={styles.searchResultTitle}>{item.fields.item_name}</Text>
+                                            <Text style={styles.searchResultTitle}>{item.title}</Text>
+                                            {
+                                                item.brand
+                                                && <Text style={styles.searchResultBrand}>{item.brand}</Text>
+                                            }
+                                            {
+                                                item.userInstance
+                                                && <View style={styles.user}>
+                                                    {
+                                                        !item.userInstance.profilePicture
+                                                            ? <View style={styles.profilePictureContainer}>
+                                                                <Text style={styles.noProfilePictureText}>
+                                                                    {item.userInstance.firstName.charAt(0)}
+                                                                    {item.userInstance.lastName.charAt(0)}
+                                                                </Text>
+                                                            </View>
+                                                            : <Image style={styles.profilePictureContainer}
+                                                                source={{ uri: item.userInstance.profilePicture }} />
+                                                    }
+                                                    <Text style={styles.names}>
+                                                        {item.userInstance.firstName}
+                                                        &nbsp;
+                                                        {item.userInstance.lastName}
+                                                    </Text>
+                                                </View>
+                                            }
                                         </View>
                                     )
                                     : <Text style={globalStyles.notation}>No results found</Text>

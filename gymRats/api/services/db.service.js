@@ -115,10 +115,10 @@ const DbService = {
         });
     },
 
-    getManyWithSort: function (collection, filter, sort) {
+    getManyWithSortAndLimit: function (collection, filter, sort, limit) {
         return new Promise((resolve, reject) => {
             validateCollection(collection, reject);
-            db.collection(collection).find(filter).sort(sort).toArray(function (err, cursor) {
+            db.collection(collection).find(filter).sort(sort).limit(limit).toArray(function (err, cursor) {
                 if (err) return reject(new ResponseError(err.message || HTTP_STATUS_CODES.INTERNAL_SERVER));
                 resolve(cursor);
             });

@@ -108,36 +108,36 @@ export default class CoachSearch extends Component {
                                 ref={this.scrollView}>
                                 {
                                     this.state.searchResults?.length > 0
-                                    ?this.state.searchResults.map((result) => {
-                                        return <View style={styles.coachResult} onClick={() => {
-                                            this.props.navigation.navigate("CoachPage", {coach: result})
-                                        }}>
-                                            <View style={styles.coachResultInline}>
-                                                {
-                                                    !result.user.profilePicture
-                                                        ? <View style={styles.profilePictureContainer}>
-                                                            <Text style={styles.noProfilePictureText}>
-                                                                {result.user.firstName.charAt(0)}
-                                                                {result.user.lastName.charAt(0)}
-                                                            </Text>
-                                                        </View>
-                                                        : <Image style={styles.profilePictureContainer}
-                                                            source={{ uri: result.user.profilePicture }} />
-                                                }
-                                                <Text style={styles.names}>
-                                                    {result.user.firstName}
-                                                    &nbsp;
-                                                    {result.user.lastName}
-                                                </Text>
+                                        ? this.state.searchResults.map((result) => {
+                                            return <View style={styles.coachResult} onClick={() => {
+                                                this.props.navigation.navigate("CoachPage", { coach: result })
+                                            }}>
+                                                <View style={styles.coachResultInline}>
+                                                    {
+                                                        !result.user.profilePicture
+                                                            ? <View style={styles.profilePictureContainer}>
+                                                                <Text style={styles.noProfilePictureText}>
+                                                                    {result.user.firstName.charAt(0)}
+                                                                    {result.user.lastName.charAt(0)}
+                                                                </Text>
+                                                            </View>
+                                                            : <Image style={styles.profilePictureContainer}
+                                                                source={{ uri: result.user.profilePicture }} />
+                                                    }
+                                                    <Text style={styles.names}>
+                                                        {result.user.firstName}
+                                                        &nbsp;
+                                                        {result.user.lastName}
+                                                    </Text>
+                                                </View>
+                                                <View style={[styles.coachResultInline, { marginTop: 8 }]}>
+                                                    <Rating rating={result.rating} interactive={false} count={5} size={20} filledColor="#1f6cb0" borderColor="#1f6cb0" />
+                                                    <Text style={styles.coachResultReviews}>({result.reviews} reviews)</Text>
+                                                </View>
                                             </View>
-                                            <View style={[styles.coachResultInline, { marginTop: 8 }]}>
-                                                <Rating rating={result.rating} interactive={false} count={5} size={20} filledColor="#1f6cb0" borderColor="#1f6cb0" />
-                                                <Text style={styles.coachResultReviews}>({result.reviews} reviews)</Text>
-                                            </View>
-                                        </View>
-                                    }
-                                    )
-                                    : <Text style={globalStyles.notation}>No coaches found for that search</Text>
+                                        }
+                                        )
+                                        : <Text style={globalStyles.notation}>No coaches found for that search</Text>
                                 }
                             </ScrollView>
                             : <Text style={[globalStyles.notation, {

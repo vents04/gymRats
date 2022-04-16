@@ -22,11 +22,6 @@ router.post('/item', authenticate, async (req, res, next) => {
     if (error) return next(new ResponseError(error.details[0].message, HTTP_STATUS_CODES.BAD_REQUEST));
 
     try {
-        if (req.body.barcode && req.body.barcode.length > 0) {
-            const existingItem = await DbService.getOne(COLLECTIONS.CALORIES_COUNTER_ITEMS, { barcode: req.body.barcode });
-            if (existingItem) return next(new ResponseError("An item with that barcode already exists", HTTP_STATUS_CODES.BAD_REQUEST));
-        }
-
         const existingItem = await DbService.getOne(COLLECTIONS.CALORIES_COUNTER_ITEMS, {
             title: req.body.title,
             calories: req.body.calories,
@@ -40,7 +35,7 @@ router.post('/item', authenticate, async (req, res, next) => {
         if (!validCaloriesAndMacros) return next(new ResponseError("Please double check the calories and the macros because there was a mismatch found", HTTP_STATUS_CODES.BAD_REQUEST));
 
         const item = new CaloriesCounterItem(req.body);
-        item.userId = req.user._id;
+        // add userId before production
         await DbService.create(COLLECTIONS.CALORIES_COUNTER_ITEMS, item);
 
         return res.sendStatus(HTTP_STATUS_CODES.CREATED);
@@ -184,11 +179,30 @@ router.get('/day', authenticate, async (req, res, next) => {
 });
 
 router.get("/search/food", async (req, res, next) => {
-    if (!req.query.query) return next(new ResponseError("Provide a food name to search for", HTTP_STATUS_CODES.BAD_REQUEST));
+    if (!req.query.query) {
+        /* 
+        return user's most used items (max 20 items in results) 
+        otherwise if they do not have enough data add the most used and most searched items in the platform
+        */
+        return res.status(HTTP_STATUS_CODES.OK).send({
+            results: await DbService.getManyWithSortAndLimit(COLLECTIONS.CALORIES_COUNTER_ITEMS, {}, { usedTimes: -1, searchedTimes: -1 }, 20)
+        })
+    }
 
     try {
-        const results = await DbService.getManyWithSort(COLLECTIONS.CALORIES_COUNTER_ITEMS, { keywords: { $all: Object.values(req.query) } }, { usedTimes: -1, searchedTimes: -1 });
-        console.log(results.length);
+        /*
+        first of all loop through the user's most used and add all
+        items matching with their search. Then loop through the most used and most searched items
+        and add such to the results until you fill the max size of 20 results
+        */
+
+        const results = await DbService.getManyWithSortAndLimit(COLLECTIONS.CALORIES_COUNTER_ITEMS, { keywords: { $all: Object.values(req.query) } }, { usedTimes: -1, searchedTimes: -1 }, 20);
+        for (let result of results) {
+            if (result.userId) {
+                const user = await DbService.getById(COLLECTIONS.USERS, result.userId);
+                result.userInstance = user;
+            }
+        }
 
         return res.status(HTTP_STATUS_CODES.OK).send({
             results
