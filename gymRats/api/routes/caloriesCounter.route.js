@@ -187,7 +187,9 @@ router.get("/search/food", async (req, res, next) => {
     if (!req.query.query) return next(new ResponseError("Provide a food name to search for", HTTP_STATUS_CODES.BAD_REQUEST));
 
     try {
-        const results = await NutritionixService.searchFood(req.query.query);
+        const results = await DbService.getManyWithSort(COLLECTIONS.CALORIES_COUNTER_ITEMS, { keywords: { $all: Object.values(req.query) } }, { usedTimes: -1, searchedTimes: -1 });
+        console.log(results.length);
+
         return res.status(HTTP_STATUS_CODES.OK).send({
             results
         })

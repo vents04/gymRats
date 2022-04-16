@@ -65,6 +65,15 @@ const DbService = {
         })
     },
 
+    updateMany: function (collection, filter, data) {
+        return new Promise((resolve, reject) => {
+            validateCollection(collection, reject);
+            db.collection(collection).updateMany(filter, { "$set": data }).then(resolve).catch((error) => {
+                reject(new ResponseError(error.message, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+            });
+        })
+    },
+
     pushUpdate: function (collection, filter, data) {
         return new Promise((resolve, reject) => {
             validateCollection(collection, reject);
@@ -105,6 +114,16 @@ const DbService = {
             });
         });
     },
+
+    getManyWithSort: function (collection, filter, sort) {
+        return new Promise((resolve, reject) => {
+            validateCollection(collection, reject);
+            db.collection(collection).find(filter).sort(sort).toArray(function (err, cursor) {
+                if (err) return reject(new ResponseError(err.message || HTTP_STATUS_CODES.INTERNAL_SERVER));
+                resolve(cursor);
+            });
+        })
+    }
 }
 
 module.exports = DbService;

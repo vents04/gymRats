@@ -50,6 +50,14 @@ const caloriesCounterItem = mongoose.Schema({
         type: String,
         required: true
     }],
+    searchedTimes: {
+        type: Number,
+        default: 0,
+    },
+    usedTimes: {
+        type: Number,
+        default: 0,
+    },
     createdDt: {
         type: Number,
         default: Date.now
