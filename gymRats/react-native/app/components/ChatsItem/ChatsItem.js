@@ -8,7 +8,7 @@ export default class ChatsItem extends Component {
 
     navigateToChat = () => {
         console.log("tuka", this.props);
-        this.props.navigation.navigate("Chat", {chatId: this.props.chat._id})
+        this.props.navigation.navigate("Chat", { chatId: this.props.chat._id })
     }
 
     render() {
@@ -28,7 +28,7 @@ export default class ChatsItem extends Component {
                 <View style={styles.chatsItemDetailsContainer}>
                     <Text style={styles.chatsItemNames}>{this.props.chat.oppositeUser.firstName} {this.props.chat.oppositeUser.lastName}</Text>
                     {
-                        this.props.chat.lastMessage && 
+                        this.props.chat.lastMessage &&
                         <Text style={styles.chatsItemLastMessage}>{this.props.chat.lastMessage}</Text>
                     }
                 </View>

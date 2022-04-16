@@ -38,7 +38,7 @@ const COLLECTIONS = {
     REVIEWS: "reviews",
     CHATS: "chats",
     MESSAGES: "messages",
-    CONTENTS: "contents"
+    CONTENTS: "contents",
 }
 
 const PERSONAL_TRAINER_STATUSES = {
@@ -72,7 +72,7 @@ const CARD_COLLECTIONS = [
     COLLECTIONS.WORKOUT_SESSIONS
 ]
 
-const DB_URI = "mongodb://127.0.0.1:27017/GYM";
+const DB_URI = "mongodb://127.0.0.1:27017/FOODS";
 
 const JWT_SECRET = "lj1ds21idpk2]312d's[23123q";
 

@@ -1,8 +1,6 @@
 const express = require('express');
 const app = express();
 const httpServer = require("http").createServer(app);
-const options = {};
-const router = express.Router();
 const cors = require('cors');
 const mongo = require("./db/mongo");
 const indexRoute = require('./routes/index.route');
@@ -12,7 +10,6 @@ const { PORT, COLLECTIONS } = require('./global');
 const DbService = require('./services/db.service');
 const MessagingService = require('./services/messaging.service');
 const mongoose = require('mongoose');
-const { authenticate } = require('./middlewares/authenticate');
 const io = require("socket.io")(httpServer, { cors: { origin: "*" } });
 
 app
@@ -77,4 +74,4 @@ io.on("connection", (socket) => {
 
 httpServer.listen(PORT, function () {
     console.log("API server listening on port " + PORT)
-})
+});

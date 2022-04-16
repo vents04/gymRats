@@ -10,12 +10,13 @@ const caloriesCounterItem = mongoose.Schema({
         maxLength: 300,
         required: true,
     },
-    barcode: {
+    brand: {
         type: String,
+        minLength: 1,
+        maxLength: 300,
         optional: true,
-        unique: true,
     },
-    img: {
+    barcode: {
         type: String,
         optional: true,
     },
@@ -45,6 +46,10 @@ const caloriesCounterItem = mongoose.Schema({
         type: Number,
         required: true
     },
+    keywords: [{
+        type: String,
+        required: true
+    }],
     createdDt: {
         type: Number,
         default: Date.now

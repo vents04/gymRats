@@ -90,7 +90,21 @@ const DbService = {
                 reject(new ResponseError(error.message, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
             });
         })
-    }
+    },
+
+    getWithFilterAndProduct: function (collection, filter, product) {
+        return new Promise((resolve, reject) => {
+            validateCollection(collection, reject);
+            let results = [];
+            db.collection(collection).find(filter, product, async function (err, cursor) {
+                if (err) return reject(new ResponseError(err.message || HTTP_STATUS_CODES.INTERNAL_SERVER));
+                await cursor.forEach(result => {
+                    results.push(result);
+                })
+                resolve(results);
+            });
+        });
+    },
 }
 
 module.exports = DbService;
