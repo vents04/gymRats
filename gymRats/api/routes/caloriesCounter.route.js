@@ -179,6 +179,9 @@ router.get('/day', authenticate, async (req, res, next) => {
 });
 
 router.get("/search/food", async (req, res, next) => {
+
+    // IMPORTANT: DO NOT USE KEYWORDS FOR MATCHING WITH THE USER QUERY. USE ONLY ITEMS' titles //
+
     if (!req.query.query) {
         /* 
         return user's most used items (max 20 items in results) 
