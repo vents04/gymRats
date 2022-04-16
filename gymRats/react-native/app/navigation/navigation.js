@@ -28,6 +28,7 @@ import CoachRequests from '../screens/CoachRequests/CoachRequests';
 import CoachProfileEdit from '../screens/CoachProfileEdit/CoachProfileEdit';
 import CaloriesIntake from '../screens/cards/CaloriesIntake/CaloriesIntake';
 import SearchCaloriesIntake from '../screens/cards/SearchCaloriesIntake/SearchCaloriesIntake';
+import AddCaloriesIntakeItem from '../screens/cards/AddCaloriesIntakeItem/AddCaloriesIntakeItem';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -76,6 +77,13 @@ const calendarScreenStack = ({ navigation }) => {
                     headerShown: false
                 }}
                 component={SearchCaloriesIntake}
+            />
+            <Stack.Screen
+                name="AddCaloriesIntakeItem"
+                options={{
+                    headerShown: false
+                }}
+                component={AddCaloriesIntakeItem}
             />
         </Stack.Navigator>
     );

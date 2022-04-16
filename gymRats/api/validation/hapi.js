@@ -113,12 +113,10 @@ const dailyItemPostValidation = (data) => {
     return schema.validate(data);
 }
 
-const dailyGoalPostValidation = (data) => {
+const dailyItemUpdateValidation = (data) => {
     const schema = Joi.object({
-        calories: Joi.number().required(),
-        protein: Joi.number().required(),
-        carbs: Joi.number().required(),
-        fats: Joi.number().required()
+        amount: Joi.number().optional(),
+        meal: Joi.string().valid(...Object.values(CALORIES_COUNTER_MEALS)).optional()
     })
     return schema.validate(data);
 }
@@ -339,7 +337,6 @@ module.exports = {
     userUpdateValidation,
     itemPostValidation,
     dailyItemPostValidation,
-    dailyGoalPostValidation,
     dailyWeightPostValidation,
     suggestionPostValidation,
     exercisePostValidation,
@@ -356,4 +353,5 @@ module.exports = {
     messageValidation,
     contentPostValidation,
     contentUpdateValidation,
+    dailyItemUpdateValidation
 }

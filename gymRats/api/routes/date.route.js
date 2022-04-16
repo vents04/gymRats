@@ -72,6 +72,12 @@ router.get('/', authenticate, async (req, res, next) => {
                             currentUserRecord.hasWorkoutTemplateName = false;
                         }
                         break;
+                    case COLLECTIONS.CALORIES_COUNTER_DAYS:
+                        for (let item of currentUserRecord.items) {
+                            const itemInstance = await DbService.getById(COLLECTIONS.CALORIES_COUNTER_ITEMS, item.itemId);
+                            item.itemInstance = itemInstance;
+                        }
+                        break;
                 }
                 cards.push({ card: card, data: currentUserRecord });
             }

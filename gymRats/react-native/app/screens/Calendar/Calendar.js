@@ -6,6 +6,7 @@ import { BsJournalBookmarkFill } from 'react-icons/bs';
 import { GiMeal } from 'react-icons/gi';
 import BottomSheet from "react-native-gesture-bottom-sheet";
 import WeightTrackerCard from '../../components/WeightTrackerCard/WeightTrackerCard';
+import CaloriesIntakeCard from '../../components/CaloriesIntakeCard/CaloriesIntakeCard';
 import ApiRequests from '../../classes/ApiRequests';
 import LogbookCard from '../../components/LogbookCard/LogbookCard';
 import { cardColors } from '../../../assets/styles/cardColors';
@@ -166,7 +167,15 @@ export default class Calendar extends Component {
                                                                     data: card.data
                                                                 });
                                                             }} data={card.data} rerender={this.reloadDateAfterDelete} date={this.state.selectedDate} />
-                                                            : null
+                                                            : card.card == 'caloriesCounterDays'
+                                                                ? <CaloriesIntakeCard actionButtonFunction={() => {
+                                                                    this.props.navigation.navigate("CaloriesIntake", {
+                                                                        date: this.state.selectedDate,
+                                                                        timezoneOffset: this.state.timezoneOffset,
+                                                                        data: card.data
+                                                                    });
+                                                                }} data={card.data} rerender={this.reloadDateAfterDelete} date={this.state.selectedDate} />
+                                                                : null
                                                 )
                                                 : <Text style={globalStyles.notation}>{i18n.t('screens')['calendar']['noData']}</Text>
                                             : null

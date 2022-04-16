@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { Dimensions, Text, TouchableOpacity, View } from 'react-native';
 import { FaWeight, FaLongArrowAltUp, FaLongArrowAltDown } from 'react-icons/fa';
+import { GiMeal } from 'react-icons/gi';
 import { AiFillDelete } from 'react-icons/ai';
 import ApiRequests from '../../classes/ApiRequests';
 import ConfirmationBox from '../ConfirmationBox/ConfirmationBox';
 import { HTTP_STATUS_CODES } from '../../../global';
+import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import i18n from 'i18n-js';
 
 const { cardColors } = require('../../../assets/styles/cardColors');
@@ -19,7 +21,27 @@ export default class CaloriesIntakeCard extends Component {
     }
 
     componentDidMount() {
-        this.setState({ data: this.props.data })
+        this.setState({ data: this.props.data });
+        let calories = 0;
+        let carbs = 0;
+        let fats = 0;
+        let protein = 0;
+
+        for (let data of this.props.data.items) {
+            calories += parseInt(data.amount * data.itemInstance.calories);
+            carbs += parseInt(data.amount * data.itemInstance.carbs);
+            fats += parseInt(data.amount * data.itemInstance.fats);
+            protein += parseInt(data.amount * data.itemInstance.protein);
+        }
+
+        this.setState({
+            calories,
+            carbs,
+            fats,
+            protein
+        }, () => {
+            console.log(this.state)
+        })
     }
 
     toggleShowConfirmationBox = (state) => {
@@ -27,7 +49,7 @@ export default class CaloriesIntakeCard extends Component {
     }
 
     deleteCard = () => {
-        ApiRequests.delete(`calories-counter/${this.state.data._id}`).then((response) => {
+        ApiRequests.delete(`calories-counter/${this.props.data._id}`, {}, true).then((response) => {
             this.toggleShowConfirmationBox(false);
             this.props.rerender(this.props.date);
         }).catch((error) => {
@@ -49,7 +71,7 @@ export default class CaloriesIntakeCard extends Component {
         return <View style={globalStyles.card}>
             {this.state.showConfirmationBox && <ConfirmationBox deleteCard={this.deleteCard} toggleShowConfirmationBox={this.toggleShowConfirmationBox} />}
             <View style={globalStyles.cardTopbar}>
-                <FaWeight size={25} color={cardColors.weightTracker} />
+                <GiMeal size={25} color={cardColors.caloriesIntake} />
                 <Text style={globalStyles.cardTitle}>Calories intake</Text>
                 <View style={globalStyles.cardTopbarIcon}>
                     <AiFillDelete size={25} color="#ddd" onClick={() => {
@@ -57,14 +79,89 @@ export default class CaloriesIntakeCard extends Component {
                     }} />
                 </View>
             </View>
+            <Text style={styles.calories}>{this.state.calories} calories</Text>
+            <View style={[styles.inline, styles.macronutrientsCircles]}>
+                <View style={styles.macronutrientsCirclesContainer}>
+                    <AnimatedCircularProgress
+                        ref={(ref) => this.circularProgress = ref}
+                        size={Dimensions.get('window').width * 0.2}
+                        width={Dimensions.get('window').width * 0.2 * 0.1}
+                        fill={
+                            (this.state.carbs * 4) /
+                            this.state.calories
+                            * 100
+                        }
+                        rotation={0}
+                        tintColor={cardColors.caloriesIntake}
+                        onAnimationComplete={() => console.log('onAnimationComplete')}
+                        backgroundColor="#3d5875"
+                        children={(fill) => {
+                            return (
+                                <Text style={styles.macronutrientsRatioCircleTitle}>
+                                    {this.state.carbs}g
+                                </Text>
+                            )
+                        }}
+                    />
+                    <Text style={styles.macroCircleTitle}>carbs</Text>
+                </View>
+                <View style={styles.macronutrientsCirclesContainer}>
+                    <AnimatedCircularProgress
+                        ref={(ref) => this.circularProgress = ref}
+                        size={Dimensions.get('window').width * 0.2}
+                        width={Dimensions.get('window').width * 0.2 * 0.1}
+                        fill={
+                            (this.state.protein * 4) /
+                            this.state.calories
+                            * 100
+                        }
+                        rotation={0}
+                        tintColor={cardColors.caloriesIntake}
+                        onAnimationComplete={() => console.log('onAnimationComplete')}
+                        backgroundColor="#3d5875"
+                        children={(fill) => {
+                            return (
+                                <Text style={styles.macronutrientsRatioCircleTitle}>
+                                    {this.state.protein}g
+                                </Text>
+                            )
+                        }}
+                    />
+                    <Text style={styles.macroCircleTitle}>proteins</Text>
+                </View>
+                <View style={styles.macronutrientsCirclesContainer}>
+                    <AnimatedCircularProgress
+                        ref={(ref) => this.circularProgress = ref}
+                        size={Dimensions.get('window').width * 0.2}
+                        width={Dimensions.get('window').width * 0.2 * 0.1}
+                        fill={
+                            (this.state.fats * 9) /
+                            this.state.calories
+                            * 100
+                        }
+                        rotation={0}
+                        tintColor={cardColors.caloriesIntake}
+                        onAnimationComplete={() => console.log('onAnimationComplete')}
+                        backgroundColor="#3d5875"
+                        children={(fill) => {
+                            return (
+                                <Text style={styles.macronutrientsRatioCircleTitle}>
+                                    {this.state.fats}g
+                                </Text>
+                            )
+                        }}
+                    />
+                    <Text style={styles.macroCircleTitle}>fats</Text>
+                </View>
+            </View>
             <View>
                 <TouchableOpacity style={[globalStyles.authPageActionButton, {
-                    backgroundColor: cardColors.weightTracker,
+                    backgroundColor: cardColors.caloriesIntake,
                     marginTop: 16
                 }]} onPress={() => {
                     this.props.actionButtonFunction();
                 }}>
-                    <Text style={globalStyles.authPageActionButtonText}>Update</Text>
+                    <Text style={globalStyles.authPageActionButtonText}>Add or update food</Text>
                 </TouchableOpacity>
             </View>
         </View>;

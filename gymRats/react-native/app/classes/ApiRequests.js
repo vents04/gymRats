@@ -71,6 +71,14 @@ const ApiRequests = {
         )
     },
 
+    alert: (messageTitle, messageDescription, actions) => {
+        Alert.alert(
+            messageTitle,
+            messageDescription,
+            actions
+        );
+    },
+
     showInternalServerError: () => {
         Alert.alert(
             "Error",

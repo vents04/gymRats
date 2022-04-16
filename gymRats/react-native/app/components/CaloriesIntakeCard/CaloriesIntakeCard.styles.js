@@ -7,16 +7,35 @@ module.exports = StyleSheet.create({
         marginTop: 16,
         alignItems: 'center',
     },
-    weight: {
+    calories: {
         fontFamily: 'SpartanBold',
         fontSize: 20,
         marginTop: 24
     },
-    weightTrend: {
-        fontFamily: 'SpartanMedium',
+    inline: {
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between"
+    },
+    macronutrientsCirclesContainer: {
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center"
+    },
+    macronutrientsCircles: {
+        marginTop: 32
+    },
+    macronutrientsRatioCircleTitle: {
+        fontFamily: "SpartanBold",
+        fontSize: 16,
+    },
+    macroCircleTitle: {
+        fontFamily: "SpartanBold",
         fontSize: 12,
-        marginTop: 3,
-        marginLeft: 10,
-        color: "#333"
+        textTransform: "uppercase",
+        color: "#ccc",
+        marginTop: 8
     }
 })

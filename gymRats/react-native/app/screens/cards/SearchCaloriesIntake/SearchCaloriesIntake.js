@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Dimensions, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { BiArrowBack } from 'react-icons/bi';
 import ApiRequests from '../../../classes/ApiRequests';
-import { HTTP_STATUS_CODES } from '../../../../global';
+import { CALORIES_COUNTER_SCREEN_INTENTS, HTTP_STATUS_CODES } from '../../../../global';
 
 const globalStyles = require('../../../../assets/styles/global.styles');
 const styles = require('./SearchCaloriesIntake.styles');
@@ -10,7 +10,7 @@ const styles = require('./SearchCaloriesIntake.styles');
 export default class SearchCaloriesIntake extends Component {
 
     state = {
-        query: "",
+        query: "banana",
         queryResults: [],
         showError: false,
         error: ""
@@ -46,7 +46,7 @@ export default class SearchCaloriesIntake extends Component {
                         <BiArrowBack size={25} onClick={() => {
                             this.props.navigation.navigate("CaloriesIntake", { date: this.props.route.params.date, timezoneOffset: this.props.route.params.timezoneOffset })
                         }} />
-                        <Text style={globalStyles.followUpScreenTitle}>Search food</Text>
+                        <Text style={globalStyles.followUpScreenTitle}>Search food for {this.props.route.params.meal.toLowerCase()}</Text>
                     </View>
                     <TextInput
                         value={this.state.query}
@@ -69,7 +69,9 @@ export default class SearchCaloriesIntake extends Component {
                                     ? this.state.queryResults.map((item) =>
                                         <View style={styles.searchResult} onClick={() => {
                                             this.props.navigation.navigate("AddCaloriesIntakeItem", {
+                                                intent: CALORIES_COUNTER_SCREEN_INTENTS.ADD,
                                                 item: item,
+                                                meal: this.props.route.params.meal,
                                                 date: this.props.route.params.date,
                                                 timezoneOffset: this.props.route.params.timezoneOffset
                                             })
