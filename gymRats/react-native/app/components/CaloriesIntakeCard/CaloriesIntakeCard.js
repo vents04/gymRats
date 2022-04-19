@@ -21,6 +21,11 @@ export default class CaloriesIntakeCard extends Component {
     }
 
     componentDidMount() {
+        console.log("CALCULIRAM MACROSI")
+        this.calculateMacros();
+    }
+
+    calculateMacros = () => {
         this.setState({ data: this.props.data });
         let calories = 0;
         let carbs = 0;

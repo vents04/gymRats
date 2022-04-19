@@ -32,6 +32,7 @@ export default class CaloriesIntake extends Component {
 
     onFocusFunction = () => {
         this.setState({ timezoneOffset: this.props.route.params.timezoneOffset || new Date().getTimezoneOffset(), date: this.props.route.params.date }, () => {
+            this.setState({ calorieCounterDay: null })
             this.getCaloriesIntake();
         })
     }
@@ -86,7 +87,7 @@ export default class CaloriesIntake extends Component {
                         marginBottom: 32
                     }]}>
                         <BiArrowBack size={25} onClick={() => {
-                            this.props.navigation.navigate("Calendar", { reloadDate: true, date: this.props.route.params.date })
+                            this.props.navigation.navigate("Calendar", { reloadDate: true, date: this.state.date || this.props.route.params.date })
                         }} />
                         <Text style={globalStyles.followUpScreenTitle}>Calories intake</Text>
                     </View>
@@ -108,20 +109,20 @@ export default class CaloriesIntake extends Component {
                                         this.state.calorieCounterDay.items.some(item => item.meal == key)
                                         ? this.state.calorieCounterDay.items.map(item =>
                                             item.meal == key &&
-                                            <View key={item._id} style={styles.itemContainer} onClick={() => {
-                                                this.props.navigation.navigate("AddCaloriesIntakeItem", {
-                                                    dayId: this.state.calorieCounterDay._id,
-                                                    intent: CALORIES_COUNTER_SCREEN_INTENTS.UPDATE,
-                                                    item: item.itemInstance,
-                                                    itemId: item._id,
-                                                    amount: item.amount,
-                                                    meal: item.meal,
-                                                    date: this.props.route.params.date,
-                                                    timezoneOffset: this.props.route.params.timezoneOffset,
-                                                    previousScreen: "CaloriesIntake"
-                                                })
-                                            }}>
-                                                <View style={styles.itemContainerLeft}>
+                                            <View key={item._id} style={styles.itemContainer}>
+                                                <View style={styles.itemContainerLeft} onClick={() => {
+                                                    this.props.navigation.navigate("AddCaloriesIntakeItem", {
+                                                        dayId: this.state.calorieCounterDay._id,
+                                                        intent: CALORIES_COUNTER_SCREEN_INTENTS.UPDATE,
+                                                        item: item.itemInstance,
+                                                        itemId: item._id,
+                                                        amount: item.amount,
+                                                        meal: item.meal,
+                                                        date: this.props.route.params.date,
+                                                        timezoneOffset: this.props.route.params.timezoneOffset,
+                                                        previousScreen: "CaloriesIntake"
+                                                    })
+                                                }}>
                                                     <Text style={styles.itemTitle}>{item.itemInstance.title}</Text>
                                                     <Text style={styles.itemAmount}>{item.amount}&nbsp;{item.itemInstance.unit.toLowerCase()}</Text>
                                                 </View>

@@ -29,6 +29,7 @@ import CoachProfileEdit from '../screens/CoachProfileEdit/CoachProfileEdit';
 import CaloriesIntake from '../screens/cards/CaloriesIntake/CaloriesIntake';
 import SearchCaloriesIntake from '../screens/cards/SearchCaloriesIntake/SearchCaloriesIntake';
 import AddCaloriesIntakeItem from '../screens/cards/AddCaloriesIntakeItem/AddCaloriesIntakeItem';
+import BarcodeReader from '../screens/BarcodeReader/BarcodeReader';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -84,6 +85,13 @@ const calendarScreenStack = ({ navigation }) => {
                     headerShown: false
                 }}
                 component={AddCaloriesIntakeItem}
+            />
+            <Stack.Screen
+                name="BarcodeReader"
+                options={{
+                    headerShown: false
+                }}
+                component={BarcodeReader}
             />
         </Stack.Navigator>
     );

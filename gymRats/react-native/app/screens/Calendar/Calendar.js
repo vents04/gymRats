@@ -33,11 +33,14 @@ export default class Calendar extends Component {
     focusListener;
 
     onFocusFunction = () => {
+        console.log("TUAKAKSLAKSL:2")
         if (this.props && this.props.route && this.props.route.params && this.props.route.params.reloadDate) {
+            console.log("TUAKAKSLAKSL:1")
             this.setState({
                 selectedDate: this.props.route.params.date,
                 timezoneOffset: new Date(this.props.route.params.date).getTimezoneOffset()
             }, () => {
+                console.log("TUAKAKSLAKSL:")
                 this.getDate(this.state.selectedDate, this.state.timezoneOffset);
             })
         } else {
@@ -66,8 +69,9 @@ export default class Calendar extends Component {
     }
 
     getDate = (selectedDate, timezoneOffset) => {
+        console.log(selectedDate)
         ApiRequests.get(`date?date=${selectedDate.getDate()}&month=${selectedDate.getMonth() + 1}&year=${selectedDate.getFullYear()}`, false, true).then((response) => {
-            const dates = this.state.dates;
+            const dates = [...this.state.dates];
             for (let index = 0; index < dates.length; index++) {
                 if (dates[index].date.getTime() == selectedDate.getTime()) {
                     dates.splice(index, 1);
@@ -174,7 +178,7 @@ export default class Calendar extends Component {
                                                                         timezoneOffset: this.state.timezoneOffset,
                                                                         data: card.data
                                                                     });
-                                                                }} data={card.data} rerender={this.reloadDateAfterDelete} date={this.state.selectedDate} />
+                                                                }} data={card.data} rerender={this.reloadDateAfterDelete} date={this.state.selectedDate} {...this.props} />
                                                                 : null
                                                 )
                                                 : <Text style={globalStyles.notation}>{i18n.t('screens')['calendar']['noData']}</Text>

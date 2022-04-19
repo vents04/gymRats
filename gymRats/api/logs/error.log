@@ -7744,3 +7744,6 @@
 {"level":"error","message":"Token not provided"}
 {"level":"error","message":"Cannot read properties of undefined (reading '_id')"}
 {"level":"error","message":"\"dt\" is not allowed"}
+{"level":"error","message":"Day not found"}
+{"level":"error","message":"Day not found"}
+{"level":"error","message":"\"unit\" is required"}

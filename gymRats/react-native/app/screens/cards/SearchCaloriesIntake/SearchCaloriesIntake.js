@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Dimensions, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import { BiArrowBack } from 'react-icons/bi';
+import { BiArrowBack, BiBarcodeReader } from 'react-icons/bi';
 import ApiRequests from '../../../classes/ApiRequests';
 import { CALORIES_COUNTER_SCREEN_INTENTS, HTTP_STATUS_CODES } from '../../../../global';
 
@@ -10,14 +10,24 @@ const styles = require('./SearchCaloriesIntake.styles');
 export default class SearchCaloriesIntake extends Component {
 
     state = {
-        query: "banana",
+        query: "",
         queryResults: [],
         showError: false,
         error: ""
     }
 
+    focusListener;
+
+    onFocusFunction = () => {
+        this.setState({ timezoneOffset: this.props.route.params.timezoneOffset || new Date().getTimezoneOffset(), date: this.props.route.params.date }, () => {
+            this.searchFood();
+        })
+    }
+
     componentDidMount() {
-        this.searchFood();
+        this.focusListener = this.props.navigation.addListener('focus', () => {
+            this.onFocusFunction();
+        })
     }
 
     searchFood = () => {
@@ -46,7 +56,18 @@ export default class SearchCaloriesIntake extends Component {
                         <BiArrowBack size={25} onClick={() => {
                             this.props.navigation.navigate("CaloriesIntake", { date: this.props.route.params.date, timezoneOffset: this.props.route.params.timezoneOffset })
                         }} />
-                        <Text style={globalStyles.followUpScreenTitle}>Search food for {this.props.route.params.meal.toLowerCase()}</Text>
+                        <Text style={globalStyles.followUpScreenTitle}>Search food</Text>
+                    </View>
+                    <View style={globalStyles.topbarIconContainer}>
+                        <BiBarcodeReader color="#1f6cb0" size={25} onClick={() => {
+                            this.props.navigation.navigate("BarcodeReader", {
+                                timezoneOffset: this.state.timezoneOffset,
+                                date: this.state.date,
+                                onGoBack: () => {
+                                    this.props.navigation.navigate("SearchCaloriesIntake", { date: this.props.route.params.date, timezoneOffset: this.props.route.params.timezoneOffset })
+                                }
+                            })
+                        }} />
                     </View>
                     <TextInput
                         value={this.state.query}

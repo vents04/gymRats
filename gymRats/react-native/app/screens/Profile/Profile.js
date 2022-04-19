@@ -37,8 +37,8 @@ export default class Profile extends Component {
     }
 
     loadProfile = () => {
-        ApiRequests.get('user/profile', {}, true).then((response) => {
-            this.setState({ profile: response.data });
+        ApiRequests.get('user', {}, true).then((response) => {
+            this.setState({ profile: response.data.user });
         }).catch((error) => {
             this.setState({ showLoadProfileError: true });
         });
