@@ -1,70 +1,39 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { Dimensions, StyleSheet, Text, View } from 'react-native';
 import { Camera } from 'expo-camera';
+import { useRef } from 'react';
 
-export default class BarcodeReader extends React.Component {
+export default function App() {
+    const [hasPermission, setHasPermission] = useState(null);
+    const cameraRef = useRef(null);
 
-    state = {
-        hasPermission: null,
-        type: Camera.Constants.Type.back
+    useEffect(() => {
+        (async () => {
+            const { status } = await Camera.requestCameraPermissionsAsync();
+            setHasPermission(status === 'granted');
+        })();
+    }, []);
+
+    if (hasPermission === null) {
+        return <View />;
     }
 
-    async componentDidMount() {
-        const { status } = await Camera.requestCameraPermissionsAsync();
-        this.setState({ hasPermission: status === 'granted' });
+    if (hasPermission === false) {
+        return <Text>No access to camera</Text>;
     }
 
-    render() {
-        if (this.state.hasPermission === null) {
-            return <View />;
-        }
-        if (this.state.hasPermission === false) {
-            return <Text>No access to camera</Text>;
-        }
-        return (
-            <View style={styles.container}>
-                <Camera style={styles.camera} type={this.state.type}>
-                    <View style={styles.buttonContainer}>
-                        <TouchableOpacity
-                            style={styles.button}
-                            onPress={() => {
-                                this.setState({
-                                    type:
-                                        this.state.type === Camera.Constants.Type.back
-                                            ? Camera.Constants.Type.front
-                                            : Camera.Constants.Type.back
-                                });
-                            }}>
-                            <Text style={styles.text}>Flip</Text>
-                        </TouchableOpacity>
-                    </View>
-                </Camera>
-            </View>
-        );
-    }
+    return (
+        <Camera ref={cameraRef} style={styles.camera} type={Camera.Constants.Type.front}>
+
+        </Camera>
+    );
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
     camera: {
-        flex: 1,
+        paddingBottom: "60px",
+        height: Dimensions.get('window').height - "75px",
+        width: "100%",
         justifyContent: 'space-between',
-    },
-    buttonContainer: {
-        flex: 1,
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        marginBottom: 30,
-    },
-    button: {
-        alignItems: 'center',
-        backgroundColor: '#DDDDDD',
-        padding: 10,
-    },
-    text: {
-        fontSize: 18,
-        marginBottom: 10,
-    },
+    }
 })

@@ -64,11 +64,11 @@ export default class LogbookCard extends Component {
                 }
                 <View style={styles.exercisesContainer}>
                     {
-                        this.props.data.exercises.map((exercise) =>
-                            <Text style={styles.exercise}>{exercise.sets.length} x {
+                        this.props.data.exercises.map((exercise, index) =>
+                            <Text key={index} style={styles.exercise}>{exercise.sets.length} x {
                                 exercise.translations.hasOwnProperty(i18n.locale)
-                                ? exercise.translations[i18n.locale]
-                                : exercise.exerciseName
+                                    ? exercise.translations[i18n.locale]
+                                    : exercise.exerciseName
                             }</Text>
                         )
                     }
