@@ -7784,3 +7784,9 @@
 {"level":"error","message":"\"unit\" is required"}
 {"level":"error","message":"Invalid client id"}
 {"level":"error","message":"RELATION_STATUSES is not defined"}
+{"level":"error","message":"\"unit\" is required"}
+{"level":"error","message":"\"unit\" is required"}
+{"level":"error","message":"\"unit\" is required"}
+{"level":"error","message":"\"unit\" is required"}
+{"level":"error","message":"WeightTrackerService is not defined"}
+{"level":"error","message":"RELATION_STATUSES is not defined"}

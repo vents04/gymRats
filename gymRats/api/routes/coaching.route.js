@@ -16,6 +16,7 @@ const { authenticate } = require('../middlewares/authenticate');
 
 const { HTTP_STATUS_CODES, COLLECTIONS, PERSONAL_TRAINER_STATUSES, RELATION_STATUSES, CONTENT_VISIBILITY_SCOPES, DEFAULT_ERROR_MESSAGE, CARD_COLLECTIONS } = require('../global');
 const { relationValidation, relationStatusUpdateValidation, coachApplicationPostValidation, contentPostValidation, contentUpdateValidation, coachingReviewPostValidation } = require('../validation/hapi');
+const WeightTrackerService = require('../services/cards/weightTracker.service');
 
 router.get('/', authenticate, async (req, res, next) => {
     try {

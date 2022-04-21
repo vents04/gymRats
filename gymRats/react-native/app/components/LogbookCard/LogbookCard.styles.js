@@ -15,5 +15,10 @@ module.exports = StyleSheet.create({
         fontFamily: "SpartanRegular",
         fontSize: 12,
         marginVertical: 3
+    },
+    setInfo: {
+        fontFamily: "SpartanRegular",
+        fontSize: 13,
+        marginVertical: 3
     }
 });

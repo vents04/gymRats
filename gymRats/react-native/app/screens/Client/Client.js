@@ -170,7 +170,7 @@ export default class Client extends Component {
                                                                     weightUnit: card.data.unit,
                                                                     _id: card.data._id
                                                                 });
-                                                            }} key={card.data._id} rerender={this.reloadDateAfterDelete} date={this.state.selectedDate} />
+                                                            }} client={this.state.client} key={card.data._id} rerender={this.reloadDateAfterDelete} date={this.state.selectedDate} />
                                                             : card.card == 'workoutSessions'
                                                                 ? <LogbookCard actionButtonFunction={() => {
                                                                     this.props.navigation.navigate("Logbook", {
@@ -178,7 +178,7 @@ export default class Client extends Component {
                                                                         timezoneOffset: this.state.timezoneOffset,
                                                                         data: card.data
                                                                     });
-                                                                }} data={card.data} rerender={this.reloadDateAfterDelete} date={this.state.selectedDate} />
+                                                                }} client={this.state.client} data={card.data} rerender={this.reloadDateAfterDelete} date={this.state.selectedDate} />
                                                                 : card.card == 'caloriesCounterDays'
                                                                     ? <CaloriesIntakeCard actionButtonFunction={() => {
                                                                         this.props.navigation.navigate("CaloriesIntake", {

@@ -51,11 +51,14 @@ export default class WeightTrackerCard extends Component {
             <View style={globalStyles.cardTopbar}>
                 <FaWeight size={25} color={cardColors.weightTracker} />
                 <Text style={globalStyles.cardTitle}>{i18n.t('components')['cards']['weightTracker']['cardTitle']}</Text>
-                <View style={globalStyles.cardTopbarIcon}>
-                    <AiFillDelete size={25} color="#ddd" onClick={() => {
-                        this.setState({ showConfirmationBox: true })
-                    }} />
-                </View>
+                {
+                    !this.props.client
+                    && <View style={globalStyles.cardTopbarIcon}>
+                        <AiFillDelete size={25} color="#ddd" onClick={() => {
+                            this.setState({ showConfirmationBox: true })
+                        }} />
+                    </View>
+                }
             </View>
             <View>
                 <Text style={styles.weight}>
@@ -98,14 +101,17 @@ export default class WeightTrackerCard extends Component {
                             </View>
                         : null
                 }
-                <TouchableOpacity style={[globalStyles.authPageActionButton, {
-                    backgroundColor: cardColors.weightTracker,
-                    marginTop: 16
-                }]} onPress={() => {
-                    this.props.actionButtonFunction();
-                }}>
-                    <Text style={globalStyles.authPageActionButtonText}>{i18n.t('components')['cards']['weightTracker']['redirectButton']}</Text>
-                </TouchableOpacity>
+                {
+                    !this.props.client
+                    && <TouchableOpacity style={[globalStyles.authPageActionButton, {
+                        backgroundColor: cardColors.weightTracker,
+                        marginTop: 16
+                    }]} onPress={() => {
+                        this.props.actionButtonFunction();
+                    }}>
+                        <Text style={globalStyles.authPageActionButtonText}>{i18n.t('components')['cards']['weightTracker']['redirectButton']}</Text>
+                    </TouchableOpacity>
+                }
             </View>
         </View>;
     }

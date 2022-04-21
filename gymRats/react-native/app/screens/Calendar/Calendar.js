@@ -195,7 +195,7 @@ export default class Calendar extends Component {
                 </View>
                 <ScrollView style={styles.cardsContainer}>
                     {
-                        this.state.doNotShow.length == 2
+                        this.state.doNotShow.length == 3
                             ? <Text style={globalStyles.notation}>{i18n.t('screens')['calendar']['bottomSheetNoCards']}</Text>
                             : null
                     }

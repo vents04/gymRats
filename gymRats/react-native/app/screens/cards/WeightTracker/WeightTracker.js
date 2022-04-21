@@ -37,7 +37,7 @@ export default class WeightTracker extends Component {
     }
 
     getWeightUnit = () => {
-        ApiRequests.get("user/profile", {}, true).then((response) => {
+        ApiRequests.get("user", {}, true).then((response) => {
             this.setState({ weightUnit: response.data.weightUnit });
         }).catch((error) => {
             if (error.response) {
@@ -56,23 +56,21 @@ export default class WeightTracker extends Component {
 
     postWeight = () => {
         this.setState({ showSaving: true });
-        setTimeout(() => {
-            ApiRequests.post(`weight-tracker/daily-weight?date=${this.props.route.params.date.getDate()}&month=${this.props.route.params.date.getMonth() + 1}&year=${this.props.route.params.date.getFullYear()}`, false, {
-                weight: this.state.weight,
-                unit: this.state.weightUnit,
-            }, true).then((response) => {
-                this.setState({ showSaving: false });
-                this.props.navigation.navigate("Calendar", { reloadDate: true, date: this.props.route.params.date });
-            }).catch((error) => {
-                this.setState({
-                    showError: true,
-                    showSaving: false,
-                    error: error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR
-                        ? error.response.data
-                        : "Internal server error"
-                })
+        ApiRequests.post(`weight-tracker/daily-weight?date=${this.props.route.params.date.getDate()}&month=${this.props.route.params.date.getMonth() + 1}&year=${this.props.route.params.date.getFullYear()}`, false, {
+            weight: this.state.weight,
+            unit: this.state.weightUnit
+        }, true).then((response) => {
+            this.setState({ showSaving: false });
+            this.props.navigation.navigate("Calendar", { reloadDate: true, date: this.props.route.params.date });
+        }).catch((error) => {
+            this.setState({
+                showError: true,
+                showSaving: false,
+                error: error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR
+                    ? error.response.data
+                    : "Internal server error"
             })
-        }, 1000);
+        })
     }
 
     deleteWeight = () => {

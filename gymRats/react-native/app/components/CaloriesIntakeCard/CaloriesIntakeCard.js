@@ -102,9 +102,7 @@ export default class CaloriesIntakeCard extends Component {
     }
 
     render() {
-        return <View style={[globalStyles.card, {
-            marginTop: this.props.client ? 0 : 32
-        }]}>
+        return <View style={globalStyles.card}>
             {this.state.showConfirmationBox && <ConfirmationBox deleteCard={this.deleteCard} toggleShowConfirmationBox={this.toggleShowConfirmationBox} />}
             <View style={globalStyles.cardTopbar}>
                 <GiMeal size={25} color={cardColors.caloriesIntake} />
