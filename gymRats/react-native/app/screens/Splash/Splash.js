@@ -12,15 +12,17 @@ export default class Splash extends Component {
         setTimeout(async () => {
             const token = await Auth.getToken();
             if (!token) return this.props.navigation.replace('Auth');
+            console.log("sdasdas")
             try {
                 const isTokenValid = await User.validateToken(token);
                 this.props.navigation.replace(
                     !isTokenValid ? 'Auth' : 'NavigationRoutes'
                 )
             } catch (err) {
+                console.log(err);
                 this.props.navigation.replace('Auth');
             }
-        }, 0);
+        }, 2500);
     }
 
     render() {

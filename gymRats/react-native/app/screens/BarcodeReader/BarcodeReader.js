@@ -1,59 +1,75 @@
 import React, { useState, useEffect } from 'react';
-import { Dimensions, StyleSheet, Text, View } from 'react-native';
-import { Camera } from 'expo-camera';
-import { useRef } from 'react';
+import { Text, View, StyleSheet, Button } from 'react-native';
+import { BarCodeScanner } from 'expo-barcode-scanner';
 
-import { IoMdClose } from 'react-icons/io';
-
-export default function App() {
+export default function BarcodeScanner() {
     const [hasPermission, setHasPermission] = useState(null);
-    const cameraRef = useRef(null);
+    const [scanned, setScanned] = useState(false);
+    const [text, setText] = useState('Not yet scanned')
 
-    useEffect(() => {
+    const askForCameraPermission = () => {
         (async () => {
-            const { status } = await Camera.requestCameraPermissionsAsync();
+            const { status } = await BarCodeScanner.requestPermissionsAsync();
             setHasPermission(status === 'granted');
-        })();
-    }, []);
-
-    if (hasPermission === null) {
-        return <View />;
+        })()
     }
 
+    useEffect(() => {
+        askForCameraPermission();
+    }, []);
+
+    const handleBarCodeScanned = ({ type, data }) => {
+        setScanned(true);
+        setText(data)
+        console.log('Type: ' + type + '\nData: ' + data)
+    };
+
+    if (hasPermission === null) {
+        return (
+            <View style={styles.container}>
+                <Text>Requesting for camera permission</Text>
+            </View>)
+    }
     if (hasPermission === false) {
-        return <Text>No access to camera</Text>;
+        return (
+            <View style={styles.container}>
+                <Text style={{ margin: 10 }}>No access to camera</Text>
+                <Button title={'Allow Camera'} onPress={() => askForCameraPermission()} />
+            </View>)
     }
 
     return (
-        <>
-            <IoMdClose size={24} style={styles.closeIcon} />
-            <Text style={styles.title}>Scan a barcode</Text>
-            <Camera ref={cameraRef} style={styles.camera} type={Camera.Constants.Type.front} />
-        </>
+        <View style={styles.container}>
+            <View style={styles.barcodebox}>
+                <BarCodeScanner
+                    onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+                    style={{ height: 400, width: 400 }} />
+            </View>
+            <Text style={styles.maintext}>{text}</Text>
+
+            {scanned && <Button title={'Scan again?'} onPress={() => setScanned(false)} color='tomato' />}
+        </View>
     );
 }
 
 const styles = StyleSheet.create({
-    closeIcon: {
-        color: "#fff",
-        position: "absolute",
-        top: 16,
-        left: 16,
-        zIndex: 99999,
+    container: {
+        flex: 1,
+        backgroundColor: '#fff',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
-    title: {
-        fontFamily: "SpartanBold",
-        fontSize: 18,
-        color: "#fff",
-        top: 16,
-        left: "50%",
-        transform: "translateX(-50%)",
-        zIndex: 99999,
+    maintext: {
+        fontSize: 16,
+        margin: 20,
     },
-    camera: {
-        position: "absolute",
-        zIndex: 1,
-        height: "100%",
-        width: "100%",
+    barcodebox: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: 300,
+        width: 300,
+        overflow: 'hidden',
+        borderRadius: 30,
+        backgroundColor: 'tomato'
     }
-})
+});
