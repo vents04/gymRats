@@ -31,6 +31,7 @@ import SearchCaloriesIntake from '../screens/cards/SearchCaloriesIntake/SearchCa
 import AddCaloriesIntakeItem from '../screens/cards/AddCaloriesIntakeItem/AddCaloriesIntakeItem';
 import BarcodeReader from '../screens/BarcodeReader/BarcodeReader';
 import AddFood from '../screens/cards/AddFood/AddFood';
+import Client from '../screens/Client/Client';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -149,6 +150,13 @@ const coachingScreenStack = ({ navigation }) => {
                     headerShown: false
                 }}
                 component={CoachProfileEdit}
+            />
+            <Stack.Screen
+                name="Client"
+                options={{
+                    headerShown: false
+                }}
+                component={Client}
             />
         </Stack.Navigator>
     )

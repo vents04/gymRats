@@ -33,14 +33,11 @@ export default class Calendar extends Component {
     focusListener;
 
     onFocusFunction = () => {
-        console.log("TUAKAKSLAKSL:2")
         if (this.props && this.props.route && this.props.route.params && this.props.route.params.reloadDate) {
-            console.log("TUAKAKSLAKSL:1")
             this.setState({
                 selectedDate: this.props.route.params.date,
                 timezoneOffset: new Date(this.props.route.params.date).getTimezoneOffset()
             }, () => {
-                console.log("TUAKAKSLAKSL:")
                 this.getDate(this.state.selectedDate, this.state.timezoneOffset);
             })
         } else {
@@ -49,7 +46,6 @@ export default class Calendar extends Component {
     }
 
     async componentDidMount() {
-        console.log(this.props)
         this.focusListener = this.props.navigation.addListener('focus', () => {
             this.onFocusFunction()
         })
@@ -80,7 +76,7 @@ export default class Calendar extends Component {
             dates.push({ date: selectedDate, cards: response.data.cards });
             this.setState({ dates: dates, doNotShow: response.data.doNotShow });
         }).catch((error) => {
-            throw new Error(error);
+            console.log(error);
         })
     }
 
@@ -162,7 +158,7 @@ export default class Calendar extends Component {
                                                                 weightUnit: card.data.unit,
                                                                 _id: card.data._id
                                                             });
-                                                        }} key={card.data._id} rerender={this.reloadDateAfterDelete} date={this.state.selectedDate} />
+                                                        }} rerender={this.reloadDateAfterDelete} date={this.state.selectedDate} />
                                                         : card.card == 'workoutSessions'
                                                             ? <LogbookCard actionButtonFunction={() => {
                                                                 this.props.navigation.navigate("Logbook", {

@@ -14,7 +14,7 @@ const ResponseError = require('../errors/responseError');
 
 const { authenticate } = require('../middlewares/authenticate');
 
-const { HTTP_STATUS_CODES, COLLECTIONS, PERSONAL_TRAINER_STATUSES, RELATION_STATUSES, CONTENT_VISIBILITY_SCOPES, DEFAULT_ERROR_MESSAGE } = require('../global');
+const { HTTP_STATUS_CODES, COLLECTIONS, PERSONAL_TRAINER_STATUSES, RELATION_STATUSES, CONTENT_VISIBILITY_SCOPES, DEFAULT_ERROR_MESSAGE, CARD_COLLECTIONS } = require('../global');
 const { relationValidation, relationStatusUpdateValidation, coachApplicationPostValidation, contentPostValidation, contentUpdateValidation, coachingReviewPostValidation } = require('../validation/hapi');
 
 router.get('/', authenticate, async (req, res, next) => {
@@ -292,7 +292,7 @@ router.get("/coach/search", authenticate, async (req, res, next) => {
                 for (let i = 0; i < users.length; i++) {
                     const trainer = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, { "$or": [{ userId: users[i]._id }, { userId: mongoose.Types.ObjectId(users[i]._id) }] });
                     if (trainer) {
-                        const clients = await DbService.getMany(COLLECTIONS.CLIENTS, { "$or": [{ personalTrainerId: trainer._id }, { personalTrainerId: mongoose.Types.ObjectId(trainer._id) }] });
+                        const clients = await DbService.getMany(COLLECTIONS.RELATIONS, { "$or": [{ personalTrainerId: trainer._id }, { personalTrainerId: mongoose.Types.ObjectId(trainer._id) }] });
                         Object.assign(trainer, { criteriasMet: 0 }, { clients: clients.length });
                         if (trainer.status == PERSONAL_TRAINER_STATUSES.ACTIVE && trainer.userId.toString() != req.user._id.toString()) {
                             const relation = await DbService.getOne(COLLECTIONS.RELATIONS, { personalTrainerId: trainer._id, clientId: req.user._id })
@@ -305,7 +305,7 @@ router.get("/coach/search", authenticate, async (req, res, next) => {
         } else {
             const trainers = await DbService.getMany(COLLECTIONS.PERSONAL_TRAINERS, {})
             for (let trainer of trainers) {
-                const clients = await DbService.getMany(COLLECTIONS.CLIENTS, { "$or": [{ personalTrainerId: trainer._id }, { personalTrainerId: mongoose.Types.ObjectId(trainer._id) }] });
+                const clients = await DbService.getMany(COLLECTIONS.RELATIONS, { "$or": [{ personalTrainerId: trainer._id }, { personalTrainerId: mongoose.Types.ObjectId(trainer._id) }] });
                 Object.assign(trainer, { criteriasMet: 0 }, { clients: clients.length });
                 if (trainer.status == PERSONAL_TRAINER_STATUSES.ACTIVE && trainer.userId.toString() != req.user._id.toString()) {
                     const relation = await DbService.getOne(COLLECTIONS.RELATIONS, { personalTrainerId: trainer._id, clientId: req.user._id })
@@ -538,5 +538,109 @@ router.get('/content/:personalTrainerId', authenticate, async (req, res, next) =
         return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
     }
 });
+
+router.get('/client/:id', authenticate, async (req, res, next) => {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) return next(new ResponseError("Invalid client id", HTTP_STATUS_CODES.BAD_REQUEST));
+
+    try {
+        const client = await DbService.getById(COLLECTIONS.USERS, req.params.id);
+        if (!client) return next(new ResponseError("Client not found", HTTP_STATUS_CODES.NOT_FOUND));
+
+        const personalTrainer = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, { userId: mongoose.Types.ObjectId(req.user._id) });
+        if (!personalTrainer) return next(new ResponseError("Personal trainer not found", HTTP_STATUS_CODES.NOT_FOUND));
+
+        const relation = await DbService.getOne(COLLECTIONS.RELATIONS, { personalTrainerId: mongoose.Types.ObjectId(personalTrainer._id), clientId: mongoose.Types.ObjectId(client._id), status: RELATION_STATUSES.ACTIVE });
+        if (!relation) return next(new ResponseError("Cannot get clients if you do not have an active relation with them", HTTP_STATUS_CODES.CONFLICT));
+
+        return res.status(HTTP_STATUS_CODES.OK).send({
+            client
+        })
+    } catch (err) {
+        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+    }
+});
+
+router.get('/client/:id/date', authenticate, async (req, res, next) => {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) return next(new ResponseError("Invalid client id", HTTP_STATUS_CODES.BAD_REQUEST));
+    if (!req.query.date || !req.query.month || !req.query.year
+        || !Date.parse(req.query.year + "-" + req.query.month + "-" + req.query.date)) {
+        return next(new ResponseError("Invalid date parameters", HTTP_STATUS_CODES.BAD_REQUEST));
+    }
+
+    try {
+        const client = await DbService.getById(COLLECTIONS.USERS, req.params.id);
+        if (!client) return next(new ResponseError("Client not found", HTTP_STATUS_CODES.NOT_FOUND));
+
+        let cards = [];
+
+        for (let card of CARD_COLLECTIONS) {
+            const currentUserRecord = await DbService.getOne(card, {
+                userId: mongoose.Types.ObjectId(req.params.id),
+                date: +req.query.date,
+                month: +req.query.month,
+                year: +req.query.year,
+            });
+
+            if (currentUserRecord) {
+                switch (card) {
+                    case COLLECTIONS.DAILY_WEIGHTS:
+                        const trend = await WeightTrackerService.getDailyTrend(currentUserRecord._id);
+                        currentUserRecord.trend = trend ? trend : 0;
+                        currentUserRecord.weight = parseFloat(currentUserRecord.weight).toFixed(2);
+                        break;
+                    case COLLECTIONS.WORKOUT_SESSIONS:
+                        let exercises = [];
+                        for (let exercise of currentUserRecord.exercises) {
+                            exercises.push({ exerciseId: exercise.exerciseId });
+                            const exerciseInstance = await DbService.getById(COLLECTIONS.EXERCISES, exercise.exerciseId);
+                            exercise.exerciseName = exerciseInstance.title;
+                            exercise.translations = exerciseInstance.translations;
+                        }
+                        const userTemplates = await DbService.getMany(COLLECTIONS.WORKOUTS, { userId: mongoose.Types.ObjectId(req.params.id) });
+                        let hasWorkoutTemplateName = false;
+                        for (let userTemplate of userTemplates) {
+                            let match = true;
+                            for (let exercise of userTemplate.exercises) {
+                                let innerMatch = false;
+                                for (let bodyExercise of exercises) {
+                                    if (bodyExercise.exerciseId.toString() == exercise.toString()) {
+                                        innerMatch = true;
+                                        break;
+                                    }
+                                }
+                                if (!innerMatch) {
+                                    match = false;
+                                    break;
+                                }
+                            }
+                            if (match && exercises.length == userTemplate.exercises.length) {
+                                hasWorkoutTemplateName = true;
+                                currentUserRecord.hasWorkoutTemplateName = true;
+                                currentUserRecord.workoutTemplateName = userTemplate.name;
+                                break;
+                            }
+                        }
+                        if (!hasWorkoutTemplateName) {
+                            currentUserRecord.hasWorkoutTemplateName = false;
+                        }
+                        break;
+                    case COLLECTIONS.CALORIES_COUNTER_DAYS:
+                        for (let item of currentUserRecord.items) {
+                            const itemInstance = await DbService.getById(COLLECTIONS.CALORIES_COUNTER_ITEMS, item.itemId);
+                            item.itemInstance = itemInstance;
+                        }
+                        break;
+                }
+                cards.push({ card: card, data: currentUserRecord });
+            }
+        }
+
+        return res.status(HTTP_STATUS_CODES.OK).send({
+            cards
+        });
+    } catch (err) {
+        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+    }
+})
 
 module.exports = router;

@@ -7768,3 +7768,19 @@
 {"level":"error","message":"Please double check the calories and the macros because there was a mismatch found"}
 {"level":"error","message":"Please double check the calories and the macros because there was a mismatch found"}
 {"level":"error","message":"Please double check the calories and the macros because there was a mismatch found"}
+{"level":"error","message":"User with this email was not found"}
+{"level":"error","message":"Invalid password"}
+{"level":"error","message":"Invalid password"}
+{"level":"error","message":"Invalid password"}
+{"level":"error","message":"Invalid collection"}
+{"level":"error","message":"CARD_COLLECTIONS is not defined"}
+{"level":"error","message":"CARD_COLLECTIONS is not defined"}
+{"level":"error","message":"CARD_COLLECTIONS is not defined"}
+{"level":"error","message":"CARD_COLLECTIONS is not defined"}
+{"level":"error","message":"CARD_COLLECTIONS is not defined"}
+{"level":"error","message":"CARD_COLLECTIONS is not defined"}
+{"level":"error","message":"CARD_COLLECTIONS is not defined"}
+{"level":"error","message":"CARD_COLLECTIONS is not defined"}
+{"level":"error","message":"\"unit\" is required"}
+{"level":"error","message":"Invalid client id"}
+{"level":"error","message":"RELATION_STATUSES is not defined"}

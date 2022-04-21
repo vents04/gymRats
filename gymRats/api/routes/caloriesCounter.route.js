@@ -11,7 +11,7 @@ const ResponseError = require('../errors/responseError');
 
 const { authenticate } = require('../middlewares/authenticate');
 
-const { HTTP_STATUS_CODES, COLLECTIONS, DEFAULT_ERROR_MESSAGE } = require('../global');
+const { HTTP_STATUS_CODES, COLLECTIONS, DEFAULT_ERROR_MESSAGE, RELATION_STATUSES } = require('../global');
 const { itemPostValidation, dailyItemPostValidation, dailyItemUpdateValidation } = require('../validation/hapi');
 const checkCaloriesAndMacros = require('../helperFunctions/checkCaloriesAndMacros');
 const NutritionixService = require('../services/nutritionix.service');
@@ -174,13 +174,28 @@ router.get('/day', authenticate, async (req, res, next) => {
         return next(new ResponseError("Invalid date parameters", HTTP_STATUS_CODES.BAD_REQUEST));
     }
 
+    if (req.query.clientId && !mongoose.Types.ObjectId.isValid(req.query.clientId))
+        return next(new ResponseError("Invalid client id", HTTP_STATUS_CODES.BAD_REQUEST));
+
     try {
+        if (req.query.clientId) {
+            const client = await DbService.getById(COLLECTIONS.USERS, req.query.clientId);
+            if (!client) return next(new ResponseError("Client not found", HTTP_STATUS_CODES.NOT_FOUND));
+
+            const personalTrainer = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, { userId: mongoose.Types.ObjectId(req.user._id) });
+            if (!personalTrainer) return next(new ResponseError("Personal trainer not found", HTTP_STATUS_CODES.NOT_FOUND));
+
+            const relation = await DbService.getOne(COLLECTIONS.RELATIONS, { personalTrainerId: mongoose.Types.ObjectId(personalTrainer._id), clientId: mongoose.Types.ObjectId(client._id), status: RELATION_STATUSES.ACTIVE });
+            if (!relation) return next(new ResponseError("Cannot get clients' data if you do not have an active relation with them", HTTP_STATUS_CODES.CONFLICT));
+        }
+
         const calorieCounterDay = await DbService.getOne(COLLECTIONS.CALORIES_COUNTER_DAYS, {
-            userId: mongoose.Types.ObjectId(req.user._id),
+            userId: req.query.clientId ? mongoose.Types.ObjectId(req.query.clientId) : mongoose.Types.ObjectId(req.user._id),
             date: +req.query.date,
             month: +req.query.month,
             year: +req.query.year,
         });
+
         if (calorieCounterDay) {
             for (let item of calorieCounterDay.items) {
                 const itemInstance = await DbService.getById(COLLECTIONS.CALORIES_COUNTER_ITEMS, item.itemId);
