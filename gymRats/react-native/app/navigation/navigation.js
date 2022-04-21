@@ -30,6 +30,7 @@ import CaloriesIntake from '../screens/cards/CaloriesIntake/CaloriesIntake';
 import SearchCaloriesIntake from '../screens/cards/SearchCaloriesIntake/SearchCaloriesIntake';
 import AddCaloriesIntakeItem from '../screens/cards/AddCaloriesIntakeItem/AddCaloriesIntakeItem';
 import BarcodeReader from '../screens/BarcodeReader/BarcodeReader';
+import AddFood from '../screens/cards/AddFood/AddFood';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -92,6 +93,13 @@ const calendarScreenStack = ({ navigation }) => {
                     headerShown: false
                 }}
                 component={BarcodeReader}
+            />
+            <Stack.Screen
+                name="AddFood"
+                options={{
+                    headerShown: false
+                }}
+                component={AddFood}
             />
         </Stack.Navigator>
     );

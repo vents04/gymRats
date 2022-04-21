@@ -34,6 +34,10 @@ router.post('/item', authenticate, async (req, res, next) => {
         if (!validCaloriesAndMacros) return next(new ResponseError("Please double check the calories and the macros because there was a mismatch found", HTTP_STATUS_CODES.BAD_REQUEST));
 
         const item = new CaloriesCounterItem(req.body);
+        item.calories = parseFloat(item.calories / 100).toFixed(2);
+        item.protein = parseFloat(item.protein / 100).toFixed(2);
+        item.carbs = parseFloat(item.carbs / 100).toFixed(2);
+        item.fats = parseFloat(item.fats / 100).toFixed(2);
         // add userId before production
         await DbService.create(COLLECTIONS.CALORIES_COUNTER_ITEMS, item);
 
@@ -213,7 +217,7 @@ router.get("/search/food", async (req, res, next) => {
         and add such to the results until you fill the max size of 20 results
         */
 
-        const results = await DbService.getManyWithSortAndLimit(COLLECTIONS.CALORIES_COUNTER_ITEMS, { keywords: { $all: Object.values(req.query) } }, { usedTimes: -1, searchedTimes: -1 }, 20);
+        const results = await DbService.getManyWithSortAndLimit(COLLECTIONS.CALORIES_COUNTER_ITEMS, { keywords: { $all: Object.values(req.query) } }, { usedTimes: -1, searchedTimes: -1 }, 40);
         for (let result of results) {
             if (result.userId) {
                 const user = await DbService.getById(COLLECTIONS.USERS, result.userId);

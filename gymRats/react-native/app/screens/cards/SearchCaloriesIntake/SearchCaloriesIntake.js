@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Dimensions, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { BiArrowBack, BiBarcodeReader } from 'react-icons/bi';
+import { MdOutlineLibraryAdd } from 'react-icons/md';
 import ApiRequests from '../../../classes/ApiRequests';
 import { CALORIES_COUNTER_SCREEN_INTENTS, HTTP_STATUS_CODES } from '../../../../global';
 
@@ -19,7 +20,7 @@ export default class SearchCaloriesIntake extends Component {
     focusListener;
 
     onFocusFunction = () => {
-        this.setState({ timezoneOffset: this.props.route.params.timezoneOffset || new Date().getTimezoneOffset(), date: this.props.route.params.date }, () => {
+        this.setState({ timezoneOffset: this.props.route.params.timezoneOffset || new Date().getTimezoneOffset(), date: this.props.route.params.date, query: this.props.route.params.query || "" }, () => {
             this.searchFood();
         })
     }
@@ -59,6 +60,15 @@ export default class SearchCaloriesIntake extends Component {
                         <Text style={globalStyles.followUpScreenTitle}>Search food</Text>
                     </View>
                     <View style={globalStyles.topbarIconContainer}>
+                        <MdOutlineLibraryAdd color="#1f6cb0" size={25} style={{ marginRight: 12 }} onClick={() => {
+                            this.props.navigation.navigate("AddFood", {
+                                timezoneOffset: this.state.timezoneOffset,
+                                date: this.state.date,
+                                onGoBack: () => {
+                                    this.props.navigation.navigate("SearchCaloriesIntake", { date: this.props.route.params.date, timezoneOffset: this.props.route.params.timezoneOffset })
+                                }
+                            })
+                        }} />
                         <BiBarcodeReader color="#1f6cb0" size={25} onClick={() => {
                             this.props.navigation.navigate("BarcodeReader", {
                                 timezoneOffset: this.state.timezoneOffset,
