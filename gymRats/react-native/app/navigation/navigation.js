@@ -347,19 +347,13 @@ const NavigationRoutes = ({ navigation, route }) => {
 };
 
 const getTabBarVisibility = route => {
-    console.log(getFocusedRouteNameFromRoute(route));
     const routeName = getFocusedRouteNameFromRoute(route) ?? "Calendar";
-    console.log(routeName);
 
     const match = Object.values(SHOW_MAIN_TAB_NAVIGATION_ON_SCREENS).find(element => {
         if (element == routeName) return true;
     });
 
-    if (match) {
-        return 'flex';
-    }
-
-    return 'none';
+    return match ? 'flex' : 'none';
 };
 
 const styles = StyleSheet.create({
