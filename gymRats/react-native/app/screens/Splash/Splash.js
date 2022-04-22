@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ActivityIndicator, Image, View, Text } from 'react-native';
+import { ActivityIndicator, Image, View, Text, Alert } from 'react-native';
 import Auth from '../../classes/Auth';
 import User from '../../classes/User';
 
@@ -9,20 +9,23 @@ const styles = require('./Splash.styles');
 export default class Splash extends Component {
 
     componentDidMount() {
-        setTimeout(async () => {
-            const token = await Auth.getToken();
-            if (!token) return this.props.navigation.replace('Auth');
-            console.log("sdasdas")
+        let isAuthenticated = false;
+        (async () => {
             try {
-                const isTokenValid = await User.validateToken(token);
-                this.props.navigation.replace(
-                    !isTokenValid ? 'Auth' : 'NavigationRoutes'
-                )
+                Alert.alert("Verifying user...");
+                const token = await Auth.getToken();
+                Alert.alert("tokena", token);
+                if (token) {
+                    Alert.alert("TULAAA");
+                    isAuthenticated = await User.validateToken(token);
+                    Alert.alert("proverih validnost", isTokenValid);
+                }
             } catch (err) {
-                console.log(err);
-                this.props.navigation.replace('Auth');
+                Alert.alert("greshka");
+                this.props.navigation.navigate('Auth');
             }
-        }, 2500);
+            this.props.navigation.navigate(isAuthenticated ? 'NavigationRoutes' : 'Auth');
+        })();
     }
 
     render() {

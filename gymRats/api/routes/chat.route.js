@@ -13,22 +13,23 @@ const { HTTP_STATUS_CODES, COLLECTIONS, DEFAULT_ERROR_MESSAGE } = require('../gl
 router.get('/', authenticate, async (req, res, next) => {
     try {
         let errors = [];
+        let chats = [];
+
+        chats.push(...await DbService.getMany(COLLECTIONS.CHATS, { clientId: mongoose.Types.ObjectId(req.user._id) }));
 
         const personalTrainer = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, { userId: mongoose.Types.ObjectId(req.user._id) })
-
-        let chats = (personalTrainer)
-            ? await DbService.getMany(COLLECTIONS.CHATS, { personalTrainerId: mongoose.Types.ObjectId(personalTrainer._id) })
-            : await DbService.getMany(COLLECTIONS.CHATS, { clientId: mongoose.Types.ObjectId(req.user._id) });
+        if (personalTrainer)
+            chats.push(...await DbService.getMany(COLLECTIONS.CHATS, { personalTrainerId: mongoose.Types.ObjectId(personalTrainer._id) }))
 
         for (let chat of chats) {
             let oppositeUser = null;
-            if (personalTrainer && (chat.personalTrainerId.toString() == personalTrainer._id.toString())) {
-                oppositeUser = await DbService.getById(COLLECTIONS.USERS, chat.clientId);
-            }
             if (chat.clientId.toString() == req.user._id.toString()) {
                 const coach = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, { _id: mongoose.Types.ObjectId(chat.personalTrainerId) });
                 oppositeUser = await DbService.getOne(COLLECTIONS.USERS, { _id: mongoose.Types.ObjectId(coach.userId) });
+            } else {
+                oppositeUser = await DbService.getById(COLLECTIONS.USERS, chat.clientId);
             }
+
             if (!oppositeUser) {
                 errors.push({ message: `Cannot find opposite user for chat ${chat._id}`, dt: new Date().getTime() });
                 continue;

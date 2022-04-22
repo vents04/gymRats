@@ -27,10 +27,10 @@ export default class Chat extends Component {
     }
 
     sendTextMessage = (messageInfo) => {
-        socket.emit("send-text-message", {messageInfo})
-        this.setState({ message: "", showError: false }, ()=>{
+        socket.emit("send-text-message", { messageInfo })
+        this.setState({ message: "", showError: false }, () => {
             this.getChat(this.state.chatId);
-        }); 
+        });
         //socket.emit("update-last-message", {})
     }
 
@@ -47,8 +47,8 @@ export default class Chat extends Component {
 
     getChat = (id) => {
         ApiRequests.get(`chat/${id}`, {}, true).then((response) => {
-            this.setState({chat: response.data.chat}, ()=>{
-                this.scrollView.current.scrollToEnd({animated: true});
+            this.setState({ chat: response.data.chat }, () => {
+                this.scrollView.current.scrollToEnd({ animated: true });
             });
         }).catch((error) => {
             if (error.response) {
@@ -84,16 +84,16 @@ export default class Chat extends Component {
 
     componentDidMount() {
         const chatId = this.props.route.params.chatId
-        this.setState({chatId: this.props.route.params.chatId}, ()=>{
+        this.setState({ chatId: this.props.route.params.chatId }, () => {
             socket.open()
-            socket.emit("join-chat", {chatId})
+            socket.emit("join-chat", { chatId })
             this.updateSeenStatus(chatId)
             this.getChat(chatId)
             this.receiveTextMessage()
         });
     }
 
-    componentWillUnmount(){
+    componentWillUnmount() {
         this.disconnectUserFromChat()
     }
 
@@ -101,14 +101,14 @@ export default class Chat extends Component {
         return (
             <View style={globalStyles.safeAreaView}>
                 {
-                    this.state.chat && 
+                    this.state.chat &&
                     <>
                         <View style={styles.chatTopbarContainer}>
                             <BiArrowBack size={25} onClick={() => {
-                                    this.props.navigation.navigate("Chats")
-                                }} />
-                                {
-                                    !this.state.chat.user.profilePicture
+                                this.props.navigation.navigate("Chats")
+                            }} />
+                            {
+                                !this.state.chat.user.profilePicture
                                     ? <View style={styles.chatProfilePicture}>
                                         <Text style={styles.noProfilePictureText}>
                                             {this.state.chat.user.firstName.charAt(0)}
@@ -116,13 +116,13 @@ export default class Chat extends Component {
                                         </Text>
                                     </View>
                                     : <Image style={styles.chatProfilePicture} />
-                                }
+                            }
                             <Text style={styles.chatProfileNames}>{this.state.chat.oppositeUser.firstName}</Text>
                         </View>
                         <ScrollView ref={this.scrollView} style={styles.chatMessagesContainer}>
                             {
                                 this.state.chat.messages.map((message) =>
-                                    <Message message={message.message} user={this.state.chat.user} oppositeUser={this.state.chat.oppositeUser} />
+                                    <Message message={message} user={this.state.chat.user} oppositeUser={this.state.chat.oppositeUser} />
                                 )
                             }
                         </ScrollView>
@@ -133,8 +133,8 @@ export default class Chat extends Component {
                                 placeholder="Type a message"
                                 onChangeText={(val) => { this.setState({ message: val, showError: false }) }} />
                             <View style={styles.chatActionButtonContainer}>
-                                <IoIosSend onClick={() => {this.sendTextMessage({senderId: this.state.chat.user._id, message: this.state.message})}} size={24} style={styles.chatInputButton} color="#1f6cb0"/>
-                            </View>                
+                                <IoIosSend onClick={() => { this.sendTextMessage({ senderId: this.state.chat.user._id, message: this.state.message }) }} size={24} style={styles.chatInputButton} color="#1f6cb0" />
+                            </View>
                         </View>
                     </>
                 }

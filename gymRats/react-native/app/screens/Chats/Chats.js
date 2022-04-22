@@ -19,12 +19,13 @@ export default class Chats extends Component {
     focusListener;
 
     onFocusFunction = () => {
-        this.getChats()
+        this.getChats();
+        this.updateLastMessage()
     }
 
     getChats = () => {
         ApiRequests.get("chat", {}, true).then((response) => {
-            this.setState({chats: response.data.chats});
+            this.setState({ chats: response.data.chats });
         }).catch((error) => {
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
@@ -51,9 +52,8 @@ export default class Chats extends Component {
         this.focusListener = this.props.navigation.addListener('focus', () => {
             this.onFocusFunction()
         })
-        this.updateLastMessage()
     }
-    
+
     render() {
         return (
             <View style={globalStyles.safeAreaView}>
@@ -64,20 +64,20 @@ export default class Chats extends Component {
                     </View>
                     {
                         this.state.chats?.length > 0
-                        ? <ScrollView
-                            contentContainerStyle={{
-                                flexGrow: 1,
-                                flexShrink: 1,
-                            }}>
+                            ? <ScrollView
+                                contentContainerStyle={{
+                                    flexGrow: 1,
+                                    flexShrink: 1,
+                                }}>
                                 {
-                                    this.state.chats.map((chat) => 
+                                    this.state.chats.map((chat) =>
                                         <ChatsItem onClick={() => {
-                                            this.props.navigation.navigate("Chat", {chatId: chat._id})
-                                        }} chat={chat} {...this.props}/>                                    
+                                            this.props.navigation.navigate("Chat", { chatId: chat._id })
+                                        }} chat={chat} {...this.props} />
                                     )
                                 }
-                        </ScrollView>
-                        : <Text style={globalStyles.notation}>Chats with clients and coaches will appear here</Text>
+                            </ScrollView>
+                            : <Text style={globalStyles.notation}>Chats with clients and coaches will appear here</Text>
                     }
                 </View>
             </View>
