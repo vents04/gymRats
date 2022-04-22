@@ -100,7 +100,15 @@ export default class Calendar extends Component {
         return <View style={globalStyles.safeAreaView}>
             <View style={[globalStyles.pageContainer, {
                 flexGrow: 1,
-                flexShrink: 1
+                flexShrink: 1,
+                position: 'absolute',
+                top: 0,
+                bottom: 0,
+                left: 0,
+                right: 0,
+                width: '100%',
+                height: "100%",
+                zIndex: 9999999999
             }]}>
                 <View style={globalStyles.pageLogoContainer}>
                     <Image style={globalStyles.pageLogo} source={require('../../../assets/img/icon.png')} />

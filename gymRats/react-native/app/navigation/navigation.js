@@ -32,11 +32,12 @@ import AddCaloriesIntakeItem from '../screens/cards/AddCaloriesIntakeItem/AddCal
 import BarcodeReader from '../screens/BarcodeReader/BarcodeReader';
 import AddFood from '../screens/cards/AddFood/AddFood';
 import Client from '../screens/Client/Client';
+import { SHOW_MAIN_TAB_NAVIGATION_ON_SCREENS } from '../../global';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
-const calendarScreenStack = ({ navigation }) => {
+const calendarScreenStack = ({ navigation, route }) => {
     return (
         <Stack.Navigator initialRouteName="Calendar">
             <Stack.Screen
@@ -162,7 +163,6 @@ const coachingScreenStack = ({ navigation }) => {
     )
 }
 
-
 const chatsScreenStack = ({ navigation }) => {
     return (
         <Stack.Navigator initialRouteName="Chats">
@@ -222,7 +222,7 @@ const Auth = () => {
     );
 };
 
-const NavigationRoutes = (props) => {
+const NavigationRoutes = ({ navigation, route }) => {
     return (
         <Tab.Navigator
             screenOptions={({ route }) => ({
@@ -232,18 +232,21 @@ const NavigationRoutes = (props) => {
                 tabBarStyle: {
                     display: 'flex',
                     position: 'absolute',
-                    bottom: 25,
-                    paddingTop: 25,
+                    bottom: 0,
                     elevation: 0,
                     borderColor: "#ddd",
-                    height: 60,
+                    height: 75,
                     ...styles.shadow
                 },
             })}
         >
             <Tab.Screen
                 name="calendarScreenStack"
-                options={{
+                options={({ route }) => ({
+                    tabBarStyle: {
+                        display: getTabBarVisibility(route),
+                        height: 75,
+                    },
                     tabBarLabel: 'Calendar',
                     headerShown: false,
                     tabBarActiveTintColor: "#ccc",
@@ -260,12 +263,16 @@ const NavigationRoutes = (props) => {
                         </View>
                     )
 
-                }}
+                })}
                 component={calendarScreenStack}
             />
             <Tab.Screen
                 name="coachingScreenStack"
-                options={{
+                options={({ route }) => ({
+                    tabBarStyle: {
+                        display: getTabBarVisibility(route),
+                        height: 75,
+                    },
                     tabBarLabel: 'Coaching',
                     headerShown: false,
                     tabBarActiveTintColor: "#ccc",
@@ -282,12 +289,16 @@ const NavigationRoutes = (props) => {
                         </View>
                     )
 
-                }}
+                })}
                 component={coachingScreenStack}
             />
             <Tab.Screen
                 name="chatsScreenStack"
                 options={({ route }) => ({
+                    tabBarStyle: {
+                        display: getTabBarVisibility(route),
+                        height: 75,
+                    },
                     tabBarLabel: 'Chats',
                     headerShown: false,
                     tabBarActiveTintColor: "#ccc",
@@ -308,7 +319,11 @@ const NavigationRoutes = (props) => {
             />
             <Tab.Screen
                 name="profileScreenStack"
-                options={{
+                options={({ route }) => ({
+                    tabBarStyle: {
+                        display: getTabBarVisibility(route),
+                        height: 75,
+                    },
                     tabBarLabel: 'Profile',
                     headerShown: false,
                     tabBarActiveTintColor: "#ccc",
@@ -324,11 +339,27 @@ const NavigationRoutes = (props) => {
                             }]}>{i18n.t('navigation')['profile']}</Text>
                         </View>
                     )
-                }}
+                })}
                 component={profileScreenStack}
             />
         </Tab.Navigator>
     );
+};
+
+const getTabBarVisibility = route => {
+    console.log(getFocusedRouteNameFromRoute(route));
+    const routeName = getFocusedRouteNameFromRoute(route) ?? "Calendar";
+    console.log(routeName);
+
+    const match = Object.values(SHOW_MAIN_TAB_NAVIGATION_ON_SCREENS).find(element => {
+        if (element == routeName) return true;
+    });
+
+    if (match) {
+        return 'flex';
+    }
+
+    return 'none';
 };
 
 const styles = StyleSheet.create({
