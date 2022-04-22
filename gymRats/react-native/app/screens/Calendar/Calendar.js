@@ -158,7 +158,7 @@ export default class Calendar extends Component {
                                             ? date.cards.length > 0
                                                 ? date.cards.map((card) =>
                                                     card.card == "dailyWeights"
-                                                        ? <WeightTrackerCard data={card.data} actionButtonFunction={() => {
+                                                        ? <WeightTrackerCard key={`${date}${card._id}`} data={card.data} actionButtonFunction={() => {
                                                             this.props.navigation.navigate("WeightTracker", {
                                                                 date: this.state.selectedDate,
                                                                 timezoneOffset: this.state.timezoneOffset,
@@ -168,7 +168,7 @@ export default class Calendar extends Component {
                                                             });
                                                         }} rerender={this.reloadDateAfterDelete} date={this.state.selectedDate} />
                                                         : card.card == 'workoutSessions'
-                                                            ? <LogbookCard actionButtonFunction={() => {
+                                                            ? <LogbookCard key={`${date}${card._id}`} actionButtonFunction={() => {
                                                                 this.props.navigation.navigate("Logbook", {
                                                                     date: this.state.selectedDate,
                                                                     timezoneOffset: this.state.timezoneOffset,
@@ -176,7 +176,7 @@ export default class Calendar extends Component {
                                                                 });
                                                             }} data={card.data} rerender={this.reloadDateAfterDelete} date={this.state.selectedDate} />
                                                             : card.card == 'caloriesCounterDays'
-                                                                ? <CaloriesIntakeCard actionButtonFunction={() => {
+                                                                ? <CaloriesIntakeCard key={`${date}${card._id}`} actionButtonFunction={() => {
                                                                     this.props.navigation.navigate("CaloriesIntake", {
                                                                         date: this.state.selectedDate,
                                                                         timezoneOffset: this.state.timezoneOffset,
@@ -185,7 +185,7 @@ export default class Calendar extends Component {
                                                                 }} data={card.data} rerender={this.reloadDateAfterDelete} date={this.state.selectedDate} {...this.props} />
                                                                 : null
                                                 )
-                                                : <Text style={globalStyles.notation}>{i18n.t('screens')['calendar']['noData']}</Text>
+                                                : <Text key={date} style={globalStyles.notation}>{i18n.t('screens')['calendar']['noData']}</Text>
                                             : null
                                     )
                                 }

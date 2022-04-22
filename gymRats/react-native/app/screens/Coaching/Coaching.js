@@ -225,8 +225,8 @@ export default class Coaching extends Component {
                                                     <>
                                                         <Text style={styles.coachingSectionTitle}>Coaches</Text>
                                                         {
-                                                            this.state.coaching.myCoach.coaches.map((coach) =>
-                                                                <View style={styles.requestItem}>
+                                                            this.state.coaching.myCoach.coaches.map((coach, index) =>
+                                                                <View key={index} style={styles.requestItem}>
                                                                     <View style={styles.requestItemProfile}>
                                                                         {
                                                                             !coach.coachUser.profilePicture
@@ -257,8 +257,8 @@ export default class Coaching extends Component {
                                                     <>
                                                         <Text style={styles.coachingSectionTitle}>Unanswered requests</Text>
                                                         {
-                                                            this.state.coaching.myCoach.relations.map((relation) =>
-                                                                <View style={styles.requestItem}>
+                                                            this.state.coaching.myCoach.relations.map((relation, index) =>
+                                                                <View key={index} style={styles.requestItem}>
                                                                     <View style={styles.requestItemProfile}>
                                                                         {
                                                                             !relation.coach.profilePicture
@@ -334,8 +334,8 @@ export default class Coaching extends Component {
                                                         ? <>
                                                             <Text style={styles.coachingSectionTitle}>Clients</Text>
                                                             {
-                                                                this.state.coaching.myClients.clients.map((client) =>
-                                                                    <View style={styles.requestItem} onClick={() => {
+                                                                this.state.coaching.myClients.clients.map((client, index) =>
+                                                                    <View key={index} style={styles.requestItem} onClick={() => {
                                                                         this.props.navigation.navigate("Client", {
                                                                             client
                                                                         })

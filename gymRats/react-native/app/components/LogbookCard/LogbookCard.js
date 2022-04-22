@@ -107,8 +107,8 @@ export default class LogbookCard extends Component {
                                 </Text>
                                 {
                                     this.props.client
-                                    && exercise.sets.map(set =>
-                                        <Text style={styles.setInfo}>
+                                    && exercise.sets.map((set, setIndex) =>
+                                        <Text key={`${index}${setIndex}`} style={styles.setInfo}>
                                             {
                                                 set.reps
                                                 && <>

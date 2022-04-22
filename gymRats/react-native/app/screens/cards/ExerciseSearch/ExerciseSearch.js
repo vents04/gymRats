@@ -69,8 +69,8 @@ export default class ExerciseSearch extends Component {
                             flexShrink: 1
                         }}>
                             {
-                                this.state.queryResults.map((exercise) =>
-                                    <View style={styles.searchResult} onClick={() => {
+                                this.state.queryResults.map((exercise, index) =>
+                                    <View key={index} style={styles.searchResult} onClick={() => {
                                         this.props.navigation.navigate("Logbook", {
                                             exercise: exercise,
                                             date: this.props.route.params.date,

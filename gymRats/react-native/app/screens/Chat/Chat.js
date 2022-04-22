@@ -121,8 +121,8 @@ export default class Chat extends Component {
                         </View>
                         <ScrollView ref={this.scrollView} style={styles.chatMessagesContainer}>
                             {
-                                this.state.chat.messages.map((message) =>
-                                    <Message message={message} user={this.state.chat.user} oppositeUser={this.state.chat.oppositeUser} />
+                                this.state.chat.messages.map((message, index) =>
+                                    <Message key={index} message={message} user={this.state.chat.user} oppositeUser={this.state.chat.oppositeUser} />
                                 )
                             }
                         </ScrollView>

@@ -23,7 +23,7 @@ export default class CoachRequests extends Component {
     getRequests = () => {
         ApiRequests.get("coaching/requests", {}, true).then((response) => {
             console.log(response);
-            this.setState({relations: response.data.relations});
+            this.setState({ relations: response.data.relations });
         }).catch((error) => {
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
@@ -69,20 +69,20 @@ export default class CoachRequests extends Component {
                         }} />
                         <Text style={globalStyles.followUpScreenTitle}>Unanswered requests</Text>
                     </View>
-                    { this.state.showError && <Text style={globalStyles.errorBox}>{this.state.error}</Text> }
+                    {this.state.showError && <Text style={globalStyles.errorBox}>{this.state.error}</Text>}
                     {
                         this.state.relations?.length > 0
-                        ? <>
-                            <Text style={[globalStyles.notation, {marginTop: 24}]}>Users that have requested to be coached by you:</Text>
-                            <ScrollView style={{marginTop: 14}}>
-                                {
-                                    this.state.relations.map((relation) => 
-                                        <CoachRequestsItem relation={relation} updateRelationStatus={this.updateRelationStatus}/>                                    
-                                    )
-                                }
-                            </ScrollView>
-                        </>
-                        : <Text style={globalStyles.notation}>You do not have any requests from potential clients</Text>
+                            ? <>
+                                <Text style={[globalStyles.notation, { marginTop: 24 }]}>Users that have requested to be coached by you:</Text>
+                                <ScrollView style={{ marginTop: 14 }}>
+                                    {
+                                        this.state.relations.map((relation, index) =>
+                                            <CoachRequestsItem key={index} relation={relation} updateRelationStatus={this.updateRelationStatus} />
+                                        )
+                                    }
+                                </ScrollView>
+                            </>
+                            : <Text style={globalStyles.notation}>You do not have any requests from potential clients</Text>
                     }
                 </View>
             </View>

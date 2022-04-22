@@ -115,8 +115,8 @@ export default class CoachingApplicationSubmission extends Component {
                         }} />
                     {
                         !this.state.selectedLocation &&
-                        this.state.results.map((result) =>
-                            <TouchableOpacity style={styles.resultContainer} onPress={() => {
+                        this.state.results.map((result, index) =>
+                            <TouchableOpacity key={index} style={styles.resultContainer} onPress={() => {
                                 this.setState({ selectedLocation: result, query: result.description });
                             }}>
                                 <Text style={styles.result}>{result.description}</Text>

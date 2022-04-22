@@ -70,8 +70,8 @@ export default class Chats extends Component {
                                     flexShrink: 1,
                                 }}>
                                 {
-                                    this.state.chats.map((chat) =>
-                                        <ChatsItem onClick={() => {
+                                    this.state.chats.map((chat, index) =>
+                                        <ChatsItem key={index} onClick={() => {
                                             this.props.navigation.navigate("Chat", { chatId: chat._id })
                                         }} chat={chat} {...this.props} />
                                     )

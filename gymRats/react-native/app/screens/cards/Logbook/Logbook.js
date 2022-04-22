@@ -315,7 +315,7 @@ export default class Logbook extends Component {
                                         }>
                                         {
                                             this.state.templates.map((template, index) =>
-                                                <Picker.Item label={template.name} value={template._id} />
+                                                <Picker.Item key={index} label={template.name} value={template._id} />
                                             )
                                         }
                                     </Picker>
@@ -375,14 +375,14 @@ export default class Logbook extends Component {
                                     ? <Text style={globalStyles.notation}>No exercises added</Text>
                                     : <>
                                         {
-                                            this.state.exercises.map((exercise, exerciseIndex) =>
+                                            this.state.exercises.map((exercise, index) =>
                                                 <>
-                                                    <View style={styles.exerciseContainerTopbar}>
+                                                    <View key={index} style={styles.exerciseContainerTopbar}>
                                                         <View style={styles.exerciseContainerLeft}>
                                                             {
                                                                 this.state.exercises.length > 1
                                                                     ? <CgArrowsExchangeAltV color="#777" style={{ marginRight: 10, minWidth: 25, height: 25 }} onClick={() => {
-                                                                        this.swapExercises(exerciseIndex);
+                                                                        this.swapExercises(index);
                                                                     }} />
                                                                     : null
                                                             }
@@ -395,10 +395,10 @@ export default class Logbook extends Component {
                                                             <IoIosAdd size={25} color={cardColors.logbook} />
                                                         </View>
                                                     </View>
-                                                    <View style={styles.setsContainer}>
+                                                    <View style={styles.setsContainer} key={`_${index}`}>
                                                         {
                                                             exercise.sets.map((set, index) =>
-                                                                <>
+                                                                <View key={index}>
                                                                     <Text style={styles.setContainerTitle}>Set No. {index + 1}</Text>
                                                                     <ScrollView
                                                                         showsHorizontalScrollIndicator={false}
@@ -437,7 +437,7 @@ export default class Logbook extends Component {
                                                                             this.deleteSet(exercise.exerciseId, index);
                                                                         }} />
                                                                     </ScrollView>
-                                                                </>
+                                                                </View>
                                                             )
                                                         }
                                                     </View>

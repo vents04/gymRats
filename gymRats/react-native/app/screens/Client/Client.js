@@ -178,7 +178,7 @@ export default class Client extends Component {
                                                                         timezoneOffset: this.state.timezoneOffset,
                                                                         data: card.data
                                                                     });
-                                                                }} client={this.state.client} data={card.data} rerender={this.reloadDateAfterDelete} date={this.state.selectedDate} />
+                                                                }} client={this.state.client} key={card.data._id} data={card.data} rerender={this.reloadDateAfterDelete} date={this.state.selectedDate} />
                                                                 : card.card == 'caloriesCounterDays'
                                                                     ? <CaloriesIntakeCard actionButtonFunction={() => {
                                                                         this.props.navigation.navigate("CaloriesIntake", {
@@ -186,10 +186,10 @@ export default class Client extends Component {
                                                                             timezoneOffset: this.state.timezoneOffset,
                                                                             data: card.data,
                                                                         });
-                                                                    }} client={this.state.client} data={card.data} date={this.state.selectedDate} {...this.props} />
+                                                                    }} client={this.state.client} key={card.data._id} data={card.data} date={this.state.selectedDate} {...this.props} />
                                                                     : null
                                                     )
-                                                    : <Text style={[globalStyles.notation, {
+                                                    : <Text key={date} style={[globalStyles.notation, {
                                                         marginTop: 16
                                                     }]}>{i18n.t('screens')['calendar']['noData']}</Text>
                                                 : null

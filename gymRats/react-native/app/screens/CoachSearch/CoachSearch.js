@@ -108,8 +108,8 @@ export default class CoachSearch extends Component {
                                 ref={this.scrollView}>
                                 {
                                     this.state.searchResults?.length > 0
-                                        ? this.state.searchResults.map((result) => {
-                                            return <View style={styles.coachResult} onClick={() => {
+                                        ? this.state.searchResults.map((result, index) => {
+                                            <View key={index} style={styles.coachResult} onClick={() => {
                                                 this.props.navigation.navigate("CoachPage", { coach: result })
                                             }}>
                                                 <View style={styles.coachResultInline}>
