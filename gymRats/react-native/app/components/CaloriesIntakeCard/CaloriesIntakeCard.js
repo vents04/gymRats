@@ -31,9 +31,6 @@ export default class CaloriesIntakeCard extends Component {
     componentDidMount() {
         this.calculateMacros();
         if (this.props.client) this.getClientCaloriesCounterDay();
-        setTimeout(() => {
-            console.log(this.state)
-        }, 2000);
     }
 
     calculateMacros = () => {
@@ -55,8 +52,6 @@ export default class CaloriesIntakeCard extends Component {
             carbs,
             fats,
             protein
-        }, () => {
-            console.log(this.state)
         })
     }
 
@@ -130,7 +125,6 @@ export default class CaloriesIntakeCard extends Component {
                         }
                         rotation={0}
                         tintColor={cardColors.caloriesIntake}
-                        onAnimationComplete={() => console.log('onAnimationComplete')}
                         backgroundColor="#3d5875"
                         children={(fill) => {
                             return (
@@ -154,7 +148,6 @@ export default class CaloriesIntakeCard extends Component {
                         }
                         rotation={0}
                         tintColor={cardColors.caloriesIntake}
-                        onAnimationComplete={() => console.log('onAnimationComplete')}
                         backgroundColor="#3d5875"
                         children={(fill) => {
                             return (
@@ -178,7 +171,6 @@ export default class CaloriesIntakeCard extends Component {
                         }
                         rotation={0}
                         tintColor={cardColors.caloriesIntake}
-                        onAnimationComplete={() => console.log('onAnimationComplete')}
                         backgroundColor="#3d5875"
                         children={(fill) => {
                             return (

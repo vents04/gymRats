@@ -46,7 +46,6 @@ export default class CoachSearch extends Component {
             animated: true
         });
         ApiRequests.get(`coaching/coach/search?name=${this.query.toLowerCase()}&lat=${this.state.lat}&lng=${this.state.lng}`, {}, true).then((response) => {
-            console.log(response);
             this.setState({ searchResults: response.data.results })
         }).catch((error) => {
             if (error.response) {

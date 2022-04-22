@@ -16,19 +16,15 @@ export default class CoachPage extends Component {
         coach: {}
     }
 
-    componentDidMount() {
-        console.log(this.props)
-    }
-
     sendRequest = () => {
-        this.setState({showError: false, error: "", isLoading: true});
+        this.setState({ showError: false, error: "", isLoading: true });
         ApiRequests.post("coaching/relation", {}, {
             coachId: this.props.route.params.coach._id
         }, true).then((response) => {
-            this.setState({isLoading: false});
-            this.props.navigation.navigate("Coaching", {tab: "myCoach"})
+            this.setState({ isLoading: false });
+            this.props.navigation.navigate("Coaching", { tab: "myCoach" })
         }).catch((error) => {
-            this.setState({isLoading: false});
+            this.setState({ isLoading: false });
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
                     this.setState({ showError: true, error: error.response.data });

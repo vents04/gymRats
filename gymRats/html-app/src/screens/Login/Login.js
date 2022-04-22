@@ -31,7 +31,6 @@ class Login extends React.Component {
             this.setState({ navigateToHome: true });
         }).catch((error) => {
             this.setState({ isLoading: false });
-            console.log(error);
             if (error.response) {
                 this.setState({ error: error.response.data, showError: true });
             } else if (error.request) {

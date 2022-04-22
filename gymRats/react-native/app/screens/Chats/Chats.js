@@ -43,7 +43,6 @@ export default class Chats extends Component {
 
     updateLastMessage = () => {
         socket.on("last-message-to-be-updated", () => {
-            console.log("here213")
             this.getChats()
         });
     }

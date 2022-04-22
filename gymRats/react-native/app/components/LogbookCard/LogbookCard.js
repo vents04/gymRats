@@ -25,9 +25,6 @@ export default class LogbookCard extends Component {
     componentDidMount() {
         this.setState({ data: this.props.data })
         if (this.props.client) this.getClientWorkoutSession();
-        setTimeout(() => {
-            console.log(this.state);
-        }, 2000)
     }
 
     toggleShowConfirmationBox = (state) => {

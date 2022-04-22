@@ -5,10 +5,6 @@ const styles = require('./Message.styles');
 
 export default class Message extends Component {
 
-    componentDidMount() {
-        console.log("message", this.props)
-    }
-
     render() {
         return (
             <View style={[styles.messageContainer, {

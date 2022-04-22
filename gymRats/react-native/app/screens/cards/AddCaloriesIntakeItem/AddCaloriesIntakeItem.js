@@ -180,7 +180,6 @@ export default class AddCaloriesIntakeItem extends Component {
                                         }
                                         rotation={0}
                                         tintColor={cardColors.caloriesIntake}
-                                        onAnimationComplete={() => console.log('onAnimationComplete')}
                                         backgroundColor="#3d5875"
                                         children={(fill) => {
                                             return (
@@ -204,7 +203,6 @@ export default class AddCaloriesIntakeItem extends Component {
                                         }
                                         rotation={0}
                                         tintColor={cardColors.caloriesIntake}
-                                        onAnimationComplete={() => console.log('onAnimationComplete')}
                                         backgroundColor="#3d5875"
                                         children={(fill) => {
                                             return (
@@ -228,7 +226,6 @@ export default class AddCaloriesIntakeItem extends Component {
                                         }
                                         rotation={0}
                                         tintColor={cardColors.caloriesIntake}
-                                        onAnimationComplete={() => console.log('onAnimationComplete')}
                                         backgroundColor="#3d5875"
                                         children={(fill) => {
                                             return (

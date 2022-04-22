@@ -108,7 +108,6 @@ export default class Coaching extends Component {
 
     getRequests = () => {
         ApiRequests.get("coaching/requests", {}, true).then((response) => {
-            console.log(response);
             this.setState({ requests: response.data.requests });
         }).catch((error) => {
             if (error.response) {

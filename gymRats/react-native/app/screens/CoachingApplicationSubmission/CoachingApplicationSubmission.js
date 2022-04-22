@@ -22,7 +22,6 @@ export default class CoachingApplicationSubmission extends Component {
     searchLocation = () => {
         ApiRequests.get(`google/search-places?query=${this.state.query}`, {}, true).then((response) => {
             this.setState({ results: response.data.results })
-            console.log(response.data.results)
         }).catch((error) => {
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
