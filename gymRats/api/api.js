@@ -23,14 +23,6 @@ app
 
 mongo.connect();
 
-var now = new Date();
-for (var d = new Date(1970, 0, 1); d <= now; d.setDate(d.getDate() + 1)) {
-    const date = new Date(d);
-    if (date.getFullYear() * 1000 + date.getMonth() * 100 + date.getDate() * 10 == 202230) {
-        console.log(date);
-    }
-}
-
 (async function () {
     const users = await DbService.getMany(COLLECTIONS.USERS, {});
     for (let user of users) {
@@ -42,13 +34,11 @@ for (var d = new Date(1970, 0, 1); d <= now; d.setDate(d.getDate() + 1)) {
 })();
 
 io.on("connection", (socket) => {
-    //console.log("connection established", socket.id);
     socket.on("join-chat", (payload) => {
         try {
             const chatId = payload.chatId;
 
             socket.join(chatId);
-            //console.log(socket.id , " is now connected to the chat")
 
             socket.on("send-text-message", async (messageInfo) => {
                 await MessagingService.sendTextMessage(chatId, messageInfo.messageInfo.senderId, messageInfo.messageInfo.message);
