@@ -1,19 +1,27 @@
-import React, { useEffect, useState } from 'react';
-import { useRoute, getFocusedRouteNameFromRoute } from '@react-navigation/native';
+import React from 'react';
+import { Text, View } from 'react-native';
 
+import i18n from 'i18n-js';
+
+import { SHOW_MAIN_TAB_NAVIGATION_ON_SCREENS } from '../../global';
+
+import styles from './navigation.styles.js';
+
+// Navigation //
+import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
+// Icons //
+import { BiCalendar, BiUserCircle, BiMessageSquareDetail } from 'react-icons/bi';
+import { GiRat } from 'react-icons/gi';
+
+// Screens //
 import Login from '../screens/Login/Login';
 import Signup from '../screens/Signup/Signup';
 import Calendar from '../screens/Calendar/Calendar';
 import Profile from '../screens/Profile/Profile';
 import ProfileDetailsEdit from '../screens/ProfileDetailsEdit/ProfileDetailsEdit';
-
-import { BsCalendarWeek } from 'react-icons/bs';
-import { BiCalendar, BiUserCircle, BiMessageSquareDetail } from 'react-icons/bi';
-import { GiRat } from 'react-icons/gi';
-import { Keyboard, StyleSheet, Text, View } from 'react-native';
 import WeightTracker from '../screens/cards/WeightTracker/WeightTracker';
 import Logbook from '../screens/cards/Logbook/Logbook';
 import ExerciseSearch from '../screens/cards/ExerciseSearch/ExerciseSearch';
@@ -23,7 +31,6 @@ import CoachSearch from '../screens/CoachSearch/CoachSearch';
 import CoachPage from '../screens/CoachPage/CoachPage';
 import Chats from '../screens/Chats/Chats';
 import Chat from '../screens/Chat/Chat';
-import i18n from 'i18n-js';
 import CoachRequests from '../screens/CoachRequests/CoachRequests';
 import CoachProfileEdit from '../screens/CoachProfileEdit/CoachProfileEdit';
 import CaloriesIntake from '../screens/cards/CaloriesIntake/CaloriesIntake';
@@ -32,12 +39,21 @@ import AddCaloriesIntakeItem from '../screens/cards/AddCaloriesIntakeItem/AddCal
 import BarcodeReader from '../screens/BarcodeReader/BarcodeReader';
 import AddFood from '../screens/cards/AddFood/AddFood';
 import Client from '../screens/Client/Client';
-import { SHOW_MAIN_TAB_NAVIGATION_ON_SCREENS } from '../../global';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
-const calendarScreenStack = ({ navigation, route }) => {
+const getTabBarVisibility = route => {
+    const routeName = getFocusedRouteNameFromRoute(route) ?? "Calendar";
+
+    const match = Object.values(SHOW_MAIN_TAB_NAVIGATION_ON_SCREENS).find(element => {
+        if (element == routeName) return true;
+    });
+
+    return match ? 'flex' : 'none';
+};
+
+const calendarScreenStack = () => {
     return (
         <Stack.Navigator initialRouteName="Calendar">
             <Stack.Screen
@@ -107,7 +123,7 @@ const calendarScreenStack = ({ navigation, route }) => {
     );
 };
 
-const coachingScreenStack = ({ navigation }) => {
+const coachingScreenStack = () => {
     return (
         <Stack.Navigator initialRouteName="Coaching">
             <Stack.Screen
@@ -161,9 +177,9 @@ const coachingScreenStack = ({ navigation }) => {
             />
         </Stack.Navigator>
     )
-}
+};
 
-const chatsScreenStack = ({ navigation }) => {
+const chatsScreenStack = () => {
     return (
         <Stack.Navigator initialRouteName="Chats">
             <Stack.Screen
@@ -182,9 +198,9 @@ const chatsScreenStack = ({ navigation }) => {
             />
         </Stack.Navigator>
     )
-}
+};
 
-const profileScreenStack = ({ navigation }) => {
+const profileScreenStack = () => {
     return (
         <Stack.Navigator initialRouteName="Profile">
             <Stack.Screen
@@ -203,7 +219,7 @@ const profileScreenStack = ({ navigation }) => {
             />
         </Stack.Navigator>
     )
-}
+};
 
 const Auth = () => {
     return (
@@ -222,10 +238,10 @@ const Auth = () => {
     );
 };
 
-const NavigationRoutes = ({ navigation, route }) => {
+const NavigationRoutes = () => {
     return (
         <Tab.Navigator
-            screenOptions={({ route }) => ({
+            screenOptions={() => ({
                 headerShown: false,
                 tabBarShowLabel: false,
                 tabBarHideOnKeyboard: true,
@@ -345,39 +361,5 @@ const NavigationRoutes = ({ navigation, route }) => {
         </Tab.Navigator>
     );
 };
-
-const getTabBarVisibility = route => {
-    const routeName = getFocusedRouteNameFromRoute(route) ?? "Calendar";
-
-    const match = Object.values(SHOW_MAIN_TAB_NAVIGATION_ON_SCREENS).find(element => {
-        if (element == routeName) return true;
-    });
-
-    return match ? 'flex' : 'none';
-};
-
-const styles = StyleSheet.create({
-    shadow: {
-        shadowColor: "#ddd",
-        shadowOffset: {
-            width: 0,
-            height: 0
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.5,
-        elevation: 10
-    },
-    tabBarIconContainer: {
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-    },
-    tabBarIconText: {
-        fontFamily: "SpartanRegular",
-        fontSize: 10,
-        marginTop: 10
-    }
-})
 
 export { NavigationRoutes, Auth };
