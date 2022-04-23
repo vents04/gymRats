@@ -1,10 +1,9 @@
-import { Image, Text, View } from 'react-native'
 import React, { Component } from 'react'
+import { Image, Text, View } from 'react-native'
 
-const styles = require('./Message.styles');
+import styles from './Message.styles';
 
 export default class Message extends Component {
-
     render() {
         return (
             <View style={[styles.messageContainer, {

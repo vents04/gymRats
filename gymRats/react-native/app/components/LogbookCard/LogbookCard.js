@@ -1,25 +1,32 @@
 import React, { Component } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
-import { BsJournalBookmarkFill } from 'react-icons/bs';
-import { AiFillDelete } from 'react-icons/ai';
-import ConfirmationBox from '../ConfirmationBox/ConfirmationBox';
+
 import ApiRequests from '../../classes/ApiRequests';
+
 import i18n from 'i18n-js';
 
-const { cardColors } = require('../../../assets/styles/cardColors');
-const globalStyles = require('../../../assets/styles/global.styles');
-const styles = require('./LogbookCard.styles');
+import ConfirmationBox from '../ConfirmationBox/ConfirmationBox';
+
+import { BsJournalBookmarkFill } from 'react-icons/bs';
+import { AiFillDelete } from 'react-icons/ai';
+
+import { WEIGHT_UNITS_LABELS } from '../../../global';
+import { cardColors } from '../../../assets/styles/cardColors';
+
+import globalStyles from '../../../assets/styles/global.styles';
+import styles from './LogbookCard.styles';
 
 export default class LogbookCard extends Component {
 
-    state = {
-        showConfirmationBox: false,
-        data: null
-    }
+    constructor(props) {
+        super(props);
 
-    WEIGHT_UNITS_LABELS = {
-        KILOGRAMS: "kgs",
-        POUNDS: "lbs"
+        this.state = {
+            showConfirmationBox: false,
+            data: null,
+            showError: false,
+            error: ""
+        }
     }
 
     componentDidMount() {
@@ -85,62 +92,70 @@ export default class LogbookCard extends Component {
             </View>
             <View>
                 {
-                    this.props.data.hasWorkoutTemplateName
-                        ? <Text style={styles.workoutName}>{this.props.data.workoutTemplateName}</Text>
-                        : <Text style={styles.workoutName}>{i18n.t('components')['cards']['logbook']['cardTitle']}</Text>
-                }
-                <View style={styles.exercisesContainer}>
-                    {
-                        this.props.data.exercises.map((exercise, index) =>
-                            <>
-                                <Text key={index} style={[styles.exercise, {
-                                    fontFamily: this.props.client ? "SpartanBold" : "SpartanRegular",
-                                    fontSize: this.props.client ? 16 : 12
-                                }]}>{exercise.sets.length} {this.props.client && (exercise.sets.length != 1 ? "sets " : "set ")}x {
-                                        exercise.translations.hasOwnProperty(i18n.locale)
-                                            ? exercise.translations[i18n.locale]
-                                            : exercise.exerciseName
-                                    }
-                                </Text>
+                    this.state.showError
+                        ? <Text style={[globalStyles.errorBox, {
+                            marginTop: 16
+                        }]}>{this.state.error}</Text>
+                        : <>
+                            {
+                                this.props.data.hasWorkoutTemplateName
+                                    ? <Text style={styles.workoutName}>{this.props.data.workoutTemplateName}</Text>
+                                    : <Text style={styles.workoutName}>{i18n.t('components')['cards']['logbook']['cardTitle']}</Text>
+                            }
+                            <View style={styles.exercisesContainer}>
                                 {
-                                    this.props.client
-                                    && exercise.sets.map((set, setIndex) =>
-                                        <Text key={`${index}${setIndex}`} style={styles.setInfo}>
+                                    this.props.data.exercises.map((exercise, index) =>
+                                        <>
+                                            <Text key={index} style={[styles.exercise, {
+                                                fontFamily: this.props.client ? "SpartanBold" : "SpartanRegular",
+                                                fontSize: this.props.client ? 16 : 12
+                                            }]}>{exercise.sets.length} {this.props.client && (exercise.sets.length != 1 ? "sets " : "set ")}x {
+                                                    exercise.translations.hasOwnProperty(i18n.locale)
+                                                        ? exercise.translations[i18n.locale]
+                                                        : exercise.exerciseName
+                                                }
+                                            </Text>
                                             {
-                                                set.reps
-                                                && <>
-                                                    {set.reps} {set.reps != 1 ? "reps " : "rep "}
-                                                </>
+                                                this.props.client
+                                                && exercise.sets.map((set, setIndex) =>
+                                                    <Text key={`${index}${setIndex}`} style={styles.setInfo}>
+                                                        {
+                                                            set.reps
+                                                            && <>
+                                                                {set.reps} {set.reps != 1 ? "reps " : "rep "}
+                                                            </>
+                                                        }
+                                                        {
+                                                            set.weight && set.weight.amount
+                                                            && <>
+                                                                with {set.weight.amount}{WEIGHT_UNITS_LABELS[set.weight.unit]}&nbsp;
+                                                            </>
+                                                        }
+                                                        {
+                                                            set.duration
+                                                            && <>
+                                                                for {set.duration} seconds&nbsp;
+                                                            </>
+                                                        }
+                                                    </Text>
+                                                )
                                             }
-                                            {
-                                                set.weight && set.weight.amount
-                                                && <>
-                                                    with {set.weight.amount}{this.WEIGHT_UNITS_LABELS[set.weight.unit]}&nbsp;
-                                                </>
-                                            }
-                                            {
-                                                set.duration
-                                                && <>
-                                                    for {set.duration} seconds&nbsp;
-                                                </>
-                                            }
-                                        </Text>
+                                        </>
                                     )
                                 }
-                            </>
-                        )
-                    }
-                </View>
-                {
-                    !this.props.client
-                    && <TouchableOpacity style={[globalStyles.authPageActionButton, {
-                        backgroundColor: cardColors.logbook,
-                        marginTop: 16
-                    }]} onPress={() => {
-                        this.props.actionButtonFunction();
-                    }}>
-                        <Text style={globalStyles.authPageActionButtonText}>{i18n.t('components')['cards']['logbook']['redirectButton']}</Text>
-                    </TouchableOpacity>
+                            </View>
+                            {
+                                !this.props.client
+                                && <TouchableOpacity style={[globalStyles.authPageActionButton, {
+                                    backgroundColor: cardColors.logbook,
+                                    marginTop: 16
+                                }]} onPress={() => {
+                                    this.props.actionButtonFunction();
+                                }}>
+                                    <Text style={globalStyles.authPageActionButtonText}>{i18n.t('components')['cards']['logbook']['redirectButton']}</Text>
+                                </TouchableOpacity>
+                            }
+                        </>
                 }
             </View>
         </View>;

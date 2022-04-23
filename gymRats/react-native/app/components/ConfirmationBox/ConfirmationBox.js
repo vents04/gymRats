@@ -1,12 +1,9 @@
 import React, { Component } from 'react'
-import { Text, View, Modal, Pressable } from 'react-native'
-import { cardColors } from '../../../assets/styles/cardColors';
-import { HTTP_STATUS_CODES } from '../../../global';
-import ApiRequests from '../../classes/ApiRequests';
+import { Text, View, Modal } from 'react-native'
+
 import i18n from 'i18n-js';
 
-const globalStyles = require('../../../assets/styles/global.styles');
-const styles = require('./ConfirmationBox.styles');
+import globalStyles from '../../../assets/styles/global.styles';
 
 export default class ConfirmationBox extends Component {
 
@@ -18,8 +15,7 @@ export default class ConfirmationBox extends Component {
                 visible={true}
                 onRequestClose={() => {
                     this.props.toggleShowConfirmationBox(false);
-                }}
-            >
+                }}>
                 <View style={globalStyles.centeredView}>
                     <View style={globalStyles.modalView}>
                         <Text style={globalStyles.modalText}>{i18n.t('components')['confirmationBox']['question']}</Text>

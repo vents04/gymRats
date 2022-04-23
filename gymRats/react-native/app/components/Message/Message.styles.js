@@ -1,6 +1,6 @@
-const StyleSheet = require('react-native').StyleSheet;
+import { StyleSheet } from 'react-native';
 
-module.exports = StyleSheet.create({
+export default StyleSheet.create({
     messageContainer: {
         display: 'flex',
         flexDirection: 'row',

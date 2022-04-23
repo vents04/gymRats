@@ -1,18 +1,21 @@
 import React, { Component } from 'react'
 import { Image, Text, TouchableOpacity, View } from 'react-native';
+
 import { IoMdClose } from 'react-icons/io';
 
-const globalStyles = require('../../../assets/styles/global.styles');
-const styles = require('./CoachRequestsItem.styles');
+import { RELATION_STATUSES } from '../../../global';
+
+import globalStyles from '../../../assets/styles/global.styles';
+import styles from './CoachRequestsItem.styles';
 
 export default class CoachRequestsItem extends Component {
     render() {
         return (
             <View style={styles.chatItemContainer} onClick={this.navigateToChat}>
                 <View style={styles.coachRequestInfoContainer}>
-                    <IoMdClose size={18} color="#aaa" style={{marginRight: 8}} onClick={() => {
-                        this.props.updateRelationStatus(this.props.relation._id, "DECLINED");
-                    }}/>
+                    <IoMdClose size={18} color="#aaa" style={{ marginRight: 8 }} onClick={() => {
+                        this.props.updateRelationStatus(this.props.relation._id, RELATION_STATUSES.DECLINED);
+                    }} />
                     {
                         !this.props.relation.client.profilePicture
                             ? <View style={styles.profilePictureContainer}>
@@ -31,7 +34,7 @@ export default class CoachRequestsItem extends Component {
                 <TouchableOpacity style={[globalStyles.authPageActionButton, {
                     marginTop: 14
                 }]} onPress={() => {
-                    this.props.updateRelationStatus(this.props.relation._id, "ACTIVE");
+                    this.props.updateRelationStatus(this.props.relation._id, RELATION_STATUSES.ACTIVE);
                 }}>
                     <Text style={globalStyles.authPageActionButtonText}>Accept request</Text>
                 </TouchableOpacity>

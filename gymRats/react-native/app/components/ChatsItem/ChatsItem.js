@@ -1,19 +1,13 @@
 import React, { Component } from 'react'
 import { Image, Text, View } from 'react-native';
 
-const globalStyles = require('../../../assets/styles/global.styles');
-const styles = require('./ChatsItem.styles');
+import styles from './ChatsItem.styles';
 
 export default class ChatsItem extends Component {
-
-    navigateToChat = () => {
-        this.props.navigation.navigate("Chat", { chatId: this.props.chat._id })
-    }
-
     render() {
         return (
             <View style={styles.chatItemContainer} onClick={() => {
-                this.navigateToChat();
+                this.props.navigation.navigate("Chat", { chatId: this.props.chat._id })
             }}>
                 {
                     this.props.chat
@@ -30,7 +24,7 @@ export default class ChatsItem extends Component {
                                     source={{ uri: this.props.chat.oppositeUser.profilePicture }} />
                         }
                         <View style={styles.chatsItemDetailsContainer}>
-                            <Text style={styles.chatsItemNames}>{this.props.chat.oppositeUser.firstName} {this.props.chat.oppositeUser.lastName}</Text>
+                            <Text style={styles.chatsItemNames}>{this.props.chat.oppositeUser.firstName}&nbsp;{this.props.chat.oppositeUser.lastName}</Text>
                             {
                                 this.props.chat.lastMessage
                                     && (this.props.chat.lastMessage.text || this.props.chat.lastMessage.file)
