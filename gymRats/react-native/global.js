@@ -37,6 +37,13 @@ const ACTIVE_CARDS = {
     LOGBOOK: "LOGBOOK",
 }
 
+const MEAL_TITLES = {
+    BREAKFAST: "Breakfast",
+    LUNCH: "Lunch",
+    DINNER: "Dinner",
+    SNACKS: "Snacks",
+}
+
 module.exports = {
     AUTHENTICATION_TOKEN_KEY,
     ROOT_URL_API,
@@ -44,5 +51,6 @@ module.exports = {
     CALORIES_COUNTER_MEALS,
     CALORIES_COUNTER_SCREEN_INTENTS,
     SHOW_MAIN_TAB_NAVIGATION_ON_SCREENS,
-    ACTIVE_CARDS
+    ACTIVE_CARDS,
+    MEAL_TITLES
 }

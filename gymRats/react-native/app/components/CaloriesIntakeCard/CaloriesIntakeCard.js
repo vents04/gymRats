@@ -1,17 +1,19 @@
 import React, { Component } from 'react';
 import { Dimensions, Text, TouchableOpacity, View } from 'react-native';
-import { FaWeight, FaLongArrowAltUp, FaLongArrowAltDown } from 'react-icons/fa';
+import { AnimatedCircularProgress } from 'react-native-circular-progress';
+
+import ApiRequests from '../../classes/ApiRequests';
+
+import ConfirmationBox from '../ConfirmationBox/ConfirmationBox';
+
 import { GiMeal } from 'react-icons/gi';
 import { AiFillDelete } from 'react-icons/ai';
-import ApiRequests from '../../classes/ApiRequests';
-import ConfirmationBox from '../ConfirmationBox/ConfirmationBox';
-import { HTTP_STATUS_CODES, CALORIES_COUNTER_MEALS } from '../../../global';
-import { AnimatedCircularProgress } from 'react-native-circular-progress';
-import i18n from 'i18n-js';
 
-const { cardColors } = require('../../../assets/styles/cardColors');
-const globalStyles = require('../../../assets/styles/global.styles');
-const styles = require('./CaloriesIntakeCard.styles');
+import { HTTP_STATUS_CODES, CALORIES_COUNTER_MEALS, MEAL_TITLES } from '../../../global';
+import { cardColors } from '../../../assets/styles/cardColors';
+
+import globalStyles from '../../../assets/styles/global.styles';
+import styles from './CaloriesIntakeCard.styles';
 
 export default class CaloriesIntakeCard extends Component {
 
@@ -22,13 +24,8 @@ export default class CaloriesIntakeCard extends Component {
             showConfirmationBox: false,
             data: null,
             calorieCounterDay: null,
-        }
-
-        this.mealTitles = {
-            BREAKFAST: "Breakfast",
-            LUNCH: "Lunch",
-            DINNER: "Dinner",
-            SNACKS: "Snacks"
+            showError: false,
+            error: ""
         }
     }
 
@@ -39,10 +36,8 @@ export default class CaloriesIntakeCard extends Component {
 
     calculateMacros = () => {
         this.setState({ data: this.props.data });
-        let calories = 0;
-        let carbs = 0;
-        let fats = 0;
-        let protein = 0;
+
+        let calories = 0, carbs = 0, fats = 0, protein = 0;
 
         for (let data of this.props.data.items) {
             calories += parseInt(data.amount * data.itemInstance.calories);
@@ -51,12 +46,7 @@ export default class CaloriesIntakeCard extends Component {
             protein += parseInt(data.amount * data.itemInstance.protein);
         }
 
-        this.setState({
-            calories,
-            carbs,
-            fats,
-            protein
-        })
+        this.setState({ calories, carbs, fats, protein })
     }
 
     toggleShowConfirmationBox = (state) => {
@@ -115,119 +105,127 @@ export default class CaloriesIntakeCard extends Component {
                     </View>
                 }
             </View>
-            <Text style={styles.calories}>{this.state.calories} calories</Text>
-            <View style={[styles.inline, styles.macronutrientsCircles]}>
-                <View style={styles.macronutrientsCirclesContainer}>
-                    <AnimatedCircularProgress
-                        ref={(ref) => this.circularProgress = ref}
-                        size={Dimensions.get('window').width * 0.2}
-                        width={Dimensions.get('window').width * 0.2 * 0.1}
-                        fill={
-                            (this.state.carbs * 4) /
-                            this.state.calories
-                            * 100
-                        }
-                        rotation={0}
-                        tintColor={cardColors.caloriesIntake}
-                        backgroundColor="#3d5875"
-                        children={(fill) => {
-                            return (
-                                <Text style={styles.macronutrientsRatioCircleTitle}>
-                                    {this.state.carbs}g
-                                </Text>
-                            )
-                        }}
-                    />
-                    <Text style={styles.macroCircleTitle}>carbs</Text>
-                </View>
-                <View style={styles.macronutrientsCirclesContainer}>
-                    <AnimatedCircularProgress
-                        ref={(ref) => this.circularProgress = ref}
-                        size={Dimensions.get('window').width * 0.2}
-                        width={Dimensions.get('window').width * 0.2 * 0.1}
-                        fill={
-                            (this.state.protein * 4) /
-                            this.state.calories
-                            * 100
-                        }
-                        rotation={0}
-                        tintColor={cardColors.caloriesIntake}
-                        backgroundColor="#3d5875"
-                        children={(fill) => {
-                            return (
-                                <Text style={styles.macronutrientsRatioCircleTitle}>
-                                    {this.state.protein}g
-                                </Text>
-                            )
-                        }}
-                    />
-                    <Text style={styles.macroCircleTitle}>proteins</Text>
-                </View>
-                <View style={styles.macronutrientsCirclesContainer}>
-                    <AnimatedCircularProgress
-                        ref={(ref) => this.circularProgress = ref}
-                        size={Dimensions.get('window').width * 0.2}
-                        width={Dimensions.get('window').width * 0.2 * 0.1}
-                        fill={
-                            (this.state.fats * 9) /
-                            this.state.calories
-                            * 100
-                        }
-                        rotation={0}
-                        tintColor={cardColors.caloriesIntake}
-                        backgroundColor="#3d5875"
-                        children={(fill) => {
-                            return (
-                                <Text style={styles.macronutrientsRatioCircleTitle}>
-                                    {this.state.fats}g
-                                </Text>
-                            )
-                        }}
-                    />
-                    <Text style={styles.macroCircleTitle}>fats</Text>
-                </View>
-            </View>
             {
-                this.props.client
-                && Object.keys(CALORIES_COUNTER_MEALS).map(key =>
-                    <View key={key} style={styles.mealContainer}>
-                        <View style={styles.mealTopBar}>
-                            <Text style={styles.mealTitle}>{this.mealTitles[key]}</Text>
+                this.state.showError
+                    ? <Text style={[globalStyles.errorBox, {
+                        marginTop: 16
+                    }]}>{this.state.error}</Text>
+                    : <>
+                        <Text style={styles.calories}>{this.state.calories} calories</Text>
+                        <View style={[styles.inline, styles.macronutrientsCircles]}>
+                            <View style={styles.macronutrientsCirclesContainer}>
+                                <AnimatedCircularProgress
+                                    ref={(ref) => this.circularProgress = ref}
+                                    size={Dimensions.get('window').width * 0.2}
+                                    width={Dimensions.get('window').width * 0.2 * 0.1}
+                                    fill={
+                                        (this.state.carbs * 4) /
+                                        this.state.calories
+                                        * 100
+                                    }
+                                    rotation={0}
+                                    tintColor={cardColors.caloriesIntake}
+                                    backgroundColor="#3d5875"
+                                    children={() => {
+                                        return (
+                                            <Text style={styles.macronutrientsRatioCircleTitle}>
+                                                {this.state.carbs}g
+                                            </Text>
+                                        )
+                                    }}
+                                />
+                                <Text style={styles.macroCircleTitle}>carbs</Text>
+                            </View>
+                            <View style={styles.macronutrientsCirclesContainer}>
+                                <AnimatedCircularProgress
+                                    ref={(ref) => this.circularProgress = ref}
+                                    size={Dimensions.get('window').width * 0.2}
+                                    width={Dimensions.get('window').width * 0.2 * 0.1}
+                                    fill={
+                                        (this.state.protein * 4) /
+                                        this.state.calories
+                                        * 100
+                                    }
+                                    rotation={0}
+                                    tintColor={cardColors.caloriesIntake}
+                                    backgroundColor="#3d5875"
+                                    children={() => {
+                                        return (
+                                            <Text style={styles.macronutrientsRatioCircleTitle}>
+                                                {this.state.protein}g
+                                            </Text>
+                                        )
+                                    }}
+                                />
+                                <Text style={styles.macroCircleTitle}>proteins</Text>
+                            </View>
+                            <View style={styles.macronutrientsCirclesContainer}>
+                                <AnimatedCircularProgress
+                                    ref={(ref) => this.circularProgress = ref}
+                                    size={Dimensions.get('window').width * 0.2}
+                                    width={Dimensions.get('window').width * 0.2 * 0.1}
+                                    fill={
+                                        (this.state.fats * 9) /
+                                        this.state.calories
+                                        * 100
+                                    }
+                                    rotation={0}
+                                    tintColor={cardColors.caloriesIntake}
+                                    backgroundColor="#3d5875"
+                                    children={() => {
+                                        return (
+                                            <Text style={styles.macronutrientsRatioCircleTitle}>
+                                                {this.state.fats}g
+                                            </Text>
+                                        )
+                                    }}
+                                />
+                                <Text style={styles.macroCircleTitle}>fats</Text>
+                            </View>
                         </View>
                         {
-                            this.state.calorieCounterDay &&
-                                this.state.calorieCounterDay.items.some(item => item.meal == key)
-                                ? this.state.calorieCounterDay.items.map(item =>
-                                    item.meal == key &&
-                                    <View key={item._id} style={styles.itemContainer}>
-                                        <View style={styles.itemContainerLeft}>
-                                            <Text style={styles.itemTitle}>{item.itemInstance.title}</Text>
-                                            <Text style={styles.itemAmount}>{item.amount}&nbsp;{item.itemInstance.unit.toLowerCase()}
-                                                &nbsp;&middot;&nbsp;{parseFloat(item.itemInstance.calories * item.amount).toFixed()}&nbsp;calories
-                                                &nbsp;&middot;&nbsp;{parseFloat(item.itemInstance.carbs * item.amount).toFixed()}g&nbsp;carbs
-                                                &nbsp;&middot;&nbsp;{parseFloat(item.itemInstance.protein * item.amount).toFixed()}g&nbsp;protein
-                                                &nbsp;&middot;&nbsp;{parseFloat(item.itemInstance.fats * item.amount).toFixed()}g&nbsp;fats
-                                            </Text>
-                                        </View>
+                            this.props.client
+                            && Object.keys(CALORIES_COUNTER_MEALS).map(key =>
+                                <View key={key} style={styles.mealContainer}>
+                                    <View style={styles.mealTopBar}>
+                                        <Text style={styles.mealTitle}>{MEAL_TITLES[key]}</Text>
                                     </View>
-                                )
-                                : <Text style={globalStyles.notation}>No food added for {this.mealTitles[key]}</Text>
+                                    {
+                                        this.state.calorieCounterDay &&
+                                            this.state.calorieCounterDay.items.some(item => item.meal == key)
+                                            ? this.state.calorieCounterDay.items.map(item =>
+                                                item.meal == key &&
+                                                <View key={item._id} style={styles.itemContainer}>
+                                                    <View style={styles.itemContainerLeft}>
+                                                        <Text style={styles.itemTitle}>{item.itemInstance.title}</Text>
+                                                        <Text style={styles.itemAmount}>{item.amount}&nbsp;{item.itemInstance.unit.toLowerCase()}
+                                                            &nbsp;&middot;&nbsp;{parseFloat(item.itemInstance.calories * item.amount).toFixed()}&nbsp;calories
+                                                            &nbsp;&middot;&nbsp;{parseFloat(item.itemInstance.carbs * item.amount).toFixed()}g&nbsp;carbs
+                                                            &nbsp;&middot;&nbsp;{parseFloat(item.itemInstance.protein * item.amount).toFixed()}g&nbsp;protein
+                                                            &nbsp;&middot;&nbsp;{parseFloat(item.itemInstance.fats * item.amount).toFixed()}g&nbsp;fats
+                                                        </Text>
+                                                    </View>
+                                                </View>
+                                            )
+                                            : <Text style={globalStyles.notation}>No food added</Text>
+                                    }
+                                </View>
+                            )
                         }
-                    </View>
-                )
-            }
-            {
-                !this.props.client
-                && <View>
-                    <TouchableOpacity style={[globalStyles.authPageActionButton, {
-                        backgroundColor: cardColors.caloriesIntake,
-                        marginTop: 16
-                    }]} onPress={() => {
-                        this.props.actionButtonFunction();
-                    }}>
-                        <Text style={globalStyles.authPageActionButtonText}>Add or update food</Text>
-                    </TouchableOpacity>
-                </View>
+                        {
+                            !this.props.client
+                            && <View>
+                                <TouchableOpacity style={[globalStyles.authPageActionButton, {
+                                    backgroundColor: cardColors.caloriesIntake,
+                                    marginTop: 16
+                                }]} onPress={() => {
+                                    this.props.actionButtonFunction();
+                                }}>
+                                    <Text style={globalStyles.authPageActionButtonText}>Add or update food</Text>
+                                </TouchableOpacity>
+                            </View>
+                        }
+                    </>
             }
         </View>;
     }

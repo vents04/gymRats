@@ -7,10 +7,10 @@ import ApiRequests from '../../classes/ApiRequests';
 
 import i18n from 'i18n-js';
 
+import LogoBar from '../../components/LogoBar/LogoBar';
 import WeightTrackerCard from '../../components/WeightTrackerCard/WeightTrackerCard';
 import CaloriesIntakeCard from '../../components/CaloriesIntakeCard/CaloriesIntakeCard';
 import LogbookCard from '../../components/LogbookCard/LogbookCard';
-import LogoBar from '../../components/LogoBar/LogoBar';
 
 import { IoIosArrowBack, IoIosArrowForward, IoMdClose } from 'react-icons/io';
 import { FaWeight } from 'react-icons/fa';
@@ -152,23 +152,36 @@ export default class Calendar extends Component {
                                 this.state.dates.map((date) =>
                                     date.date.getTime() == this.state.selectedDate.getTime()
                                         ? date.cards.length > 0
-                                            ? date.cards.map((card) =>
-                                                card.card == "dailyWeights"
-                                                    ? <WeightTrackerCard key={`${date}${card._id}`} actionButtonFunction={() => {
-                                                        this.props.navigation.navigate("WeightTracker");
+                                        && date.cards.map((card) =>
+                                            card.card == "dailyWeights"
+                                                ? <WeightTrackerCard key={`${date}${card._id}`} actionButtonFunction={() => {
+                                                    this.props.navigation.navigate("WeightTracker", {
+                                                        date: this.state.selectedDate,
+                                                        timezoneOffset: this.state.timezoneOffset,
+                                                        weight: card.data.weight,
+                                                        weightUnit: card.data.unit,
+                                                        _id: card.data._id
+                                                    });
+                                                }} data={card.data} rerender={this.reloadDateAfterDelete} date={this.state.selectedDate} {...this.props} />
+                                                : card.card == 'workoutSessions'
+                                                    ? <LogbookCard key={`${date}${card._id}`} actionButtonFunction={() => {
+                                                        this.props.navigation.navigate("Logbook", {
+                                                            date: this.state.selectedDate,
+                                                            timezoneOffset: this.state.timezoneOffset,
+                                                            data: card.data
+                                                        });
                                                     }} data={card.data} rerender={this.reloadDateAfterDelete} date={this.state.selectedDate} {...this.props} />
-                                                    : card.card == 'workoutSessions'
-                                                        ? <LogbookCard key={`${date}${card._id}`} actionButtonFunction={() => {
-                                                            this.props.navigation.navigate("Logbook");
+                                                    : card.card == 'caloriesCounterDays'
+                                                        ? <CaloriesIntakeCard key={`${date}${card._id}`} actionButtonFunction={() => {
+                                                            this.props.navigation.navigate("CaloriesIntake", {
+                                                                date: this.state.selectedDate,
+                                                                timezoneOffset: this.state.timezoneOffset,
+                                                                data: card.data
+                                                            });
                                                         }} data={card.data} rerender={this.reloadDateAfterDelete} date={this.state.selectedDate} {...this.props} />
-                                                        : card.card == 'caloriesCounterDays'
-                                                            ? <CaloriesIntakeCard key={`${date}${card._id}`} actionButtonFunction={() => {
-                                                                this.props.navigation.navigate("CaloriesIntake");
-                                                            }} data={card.data} rerender={this.reloadDateAfterDelete} date={this.state.selectedDate} {...this.props} />
-                                                            : null
-                                            )
-                                            : <Text key={date} style={globalStyles.notation}>{i18n.t('screens')['calendar']['noData']}</Text>
-                                        : null
+                                                        : null
+                                        )
+                                        : <Text key={date} style={globalStyles.notation}>{i18n.t('screens')['calendar']['noData']}</Text>
                                 )
                             }
                         </ScrollView>

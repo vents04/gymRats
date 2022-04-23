@@ -87,7 +87,7 @@ export default class CaloriesIntake extends Component {
                         marginBottom: 32
                     }]}>
                         <BiArrowBack size={25} onClick={() => {
-                            this.props.navigation.navigate("Calendar", { reloadDate: true, date: this.state.date || this.props.route.params.date })
+                            this.props.navigation.navigate("Calendar", { reloadDate: true, date: this.props.route.params.date })
                         }} />
                         <Text style={globalStyles.followUpScreenTitle}>Calories intake</Text>
                     </View>
@@ -131,7 +131,7 @@ export default class CaloriesIntake extends Component {
                                                 }} />
                                             </View>
                                         )
-                                        : <Text style={globalStyles.notation}>No food added for {this.mealTitles[key]}</Text>
+                                        : <Text style={globalStyles.notation}>No food added</Text>
                                 }
                             </View>
                         )
