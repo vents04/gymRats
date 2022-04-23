@@ -15,17 +15,21 @@ const styles = require('./CaloriesIntakeCard.styles');
 
 export default class CaloriesIntakeCard extends Component {
 
-    state = {
-        showConfirmationBox: false,
-        calorieCounterDay: null,
-        data: null
-    }
+    constructor(props) {
+        super(props);
 
-    mealTitles = {
-        BREAKFAST: "Breakfast",
-        LUNCH: "Lunch",
-        DINNER: "Dinner",
-        SNACKS: "Snacks"
+        this.state = {
+            showConfirmationBox: false,
+            data: null,
+            calorieCounterDay: null,
+        }
+
+        this.mealTitles = {
+            BREAKFAST: "Breakfast",
+            LUNCH: "Lunch",
+            DINNER: "Dinner",
+            SNACKS: "Snacks"
+        }
     }
 
     componentDidMount() {

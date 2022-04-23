@@ -9,7 +9,6 @@ module.exports = StyleSheet.create({
         top: 0,
         right: 0,
         bottom: 0,
-        paddingBottom: 75
     },
     tabsBg: {
         backgroundColor: "#1f6cb0"
@@ -17,27 +16,9 @@ module.exports = StyleSheet.create({
     pageContainer: {
         paddingTop: 32,
         paddingHorizontal: 32,
-        paddingBottom: 16,
+        paddingBottom: 12,
         flex: 1,
         maxHeight: "100%",
-    },
-    pageLogoContainer: {
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center",
-        marginBottom: "2rem"
-    },
-    pageLogo: {
-        width: 32,
-        height: 32
-    },
-    pageLogoText: {
-        fontFamily: "Logo",
-        fontSize: 25,
-        marginTop: 2,
-        marginLeft: 5,
-        textTransform: "uppercase",
-        color: "#1f6cb0"
     },
     authPageTitle: {
         fontFamily: "SpartanBlack",
@@ -236,5 +217,9 @@ module.exports = StyleSheet.create({
         borderColor: "#1f6cb0",
         borderWidth: 1,
         backgroundColor: "#a2d2fc"
+    },
+    fillEmptySpace: {
+        flexGrow: 1,
+        flexShrink: 1
     }
 });
