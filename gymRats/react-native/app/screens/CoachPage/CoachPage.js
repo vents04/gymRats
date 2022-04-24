@@ -1,19 +1,26 @@
 import React, { Component } from 'react'
-import { BiArrowBack } from 'react-icons/bi';
 import { ActivityIndicator, Image, Linking, ScrollView, Text, TouchableOpacity, View } from 'react-native';
-import { HTTP_STATUS_CODES } from '../../../global';
+
 import ApiRequests from '../../classes/ApiRequests';
 
-const globalStyles = require('../../../assets/styles/global.styles');
-const styles = require('./CoachPage.styles');
+import { BiArrowBack } from 'react-icons/bi';
+
+import { HTTP_STATUS_CODES } from '../../../global';
+
+import globalStyles from '../../../assets/styles/global.styles';
+import styles from './CoachPage.styles';
 
 export default class CoachPage extends Component {
 
-    state = {
-        showError: false,
-        error: "",
-        isLoading: false,
-        coach: {}
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            showError: false,
+            error: "",
+            isLoading: false,
+            coach: {}
+        }
     }
 
     sendRequest = () => {
@@ -52,10 +59,7 @@ export default class CoachPage extends Component {
                     {
                         this.state.showError && <Text style={globalStyles.errorBox}>{this.state.error}</Text>
                     }
-                    <ScrollView contentContainerStyle={{
-                        flexGrow: 1,
-                        flexShrink: 1
-                    }}>
+                    <ScrollView contentContainerStyle={globalStyles.fillEmptySpace}>
                         {
                             this.props.route.params.coach
                             && <>

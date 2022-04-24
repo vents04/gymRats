@@ -17,14 +17,14 @@ export default StyleSheet.create({
         flex: 1
     },
     calendarControllerText: {
-        fontFamily: "SpartanBold",
+        fontFamily: "MainBold",
         fontSize: 11,
         color: "#999",
         textTransform: "uppercase",
         marginTop: 3
     },
     calendarCurrentDate: {
-        fontFamily: "SpartanBold",
+        fontFamily: "MainBold",
         fontSize: 12,
         flex: 1,
         textAlign: "center",
@@ -38,7 +38,7 @@ export default StyleSheet.create({
         justifyContent: "space-between"
     },
     bottomSheetTitle: {
-        fontFamily: "SpartanBold",
+        fontFamily: "MainBold",
         fontSize: 16,
     },
     cardsContainer: {
@@ -58,7 +58,7 @@ export default StyleSheet.create({
         alignItems: "center",
     },
     cardTitle: {
-        fontFamily: "SpartanBold",
+        fontFamily: "MainBold",
         fontSize: 16,
         color: "#fff",
         marginTop: 3,

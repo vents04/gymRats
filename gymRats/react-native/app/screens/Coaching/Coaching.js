@@ -1,37 +1,46 @@
 import React, { Component } from 'react'
-import { ActivityIndicator, Image, Text, TouchableOpacity, View } from 'react-native';
-import { HTTP_STATUS_CODES } from '../../../global';
+import { Image, Text, TouchableOpacity, View } from 'react-native';
+import { Badge } from 'react-native-elements';
+
 import ApiRequests from '../../classes/ApiRequests';
+
+import ConfirmationBox from '../../components/ConfirmationBox/ConfirmationBox';
+
 import { MdOutlineFitnessCenter } from 'react-icons/md';
 import { BsShieldFillCheck } from 'react-icons/bs';
 import { HiInbox } from 'react-icons/hi';
-import { Badge } from 'react-native-elements';
 import { AiFillDelete } from 'react-icons/ai';
-import ConfirmationBox from '../../components/ConfirmationBox/ConfirmationBox';
 
-const globalStyles = require('../../../assets/styles/global.styles');
-const styles = require('./Coaching.styles')
+import { HTTP_STATUS_CODES } from '../../../global';
+
+import globalStyles from '../../../assets/styles/global.styles';
+import styles from './Coaching.styles';
+import LogoBar from '../../components/LogoBar/LogoBar';
 
 export default class Coaching extends Component {
 
-    state = {
-        activeTab: "myClients",
-        showError: false,
-        error: "",
-        coaching: null,
-        relations: [],
-        showEndRelationModal: false,
-        relationToBeEndedId: null,
-        statusToBeUpdated: "CANCELED"
-    }
+    constructor(props) {
+        super(props);
 
-    personalTrainerStatusMessages = {
-        "PENDING": "Your coach account is being reviewed by our team and will become active soon",
-        "ACTIVE": "You do not have any clients, yet",
-        "BLOCKED": "You have been blocked by our team. Contact us at support@uploy.app for more information",
-    }
+        this.state = {
+            activeTab: "myClients",
+            showError: false,
+            error: "",
+            coaching: null,
+            relations: [],
+            showEndRelationModal: false,
+            relationToBeEndedId: null,
+            statusToBeUpdated: "CANCELED"
+        }
 
-    focusListener;
+        this.personalTrainerStatusMessages = {
+            "PENDING": "Your coach account is being reviewed by our team and will become active soon",
+            "ACTIVE": "You do not have any clients, yet",
+            "BLOCKED": "You have been blocked by our team. Contact us at support@uploy.app for more information",
+        }
+
+        this.focusListener;
+    }
 
     onFocusFunction = () => {
         if (this.props && this.props.route && this.props.route.params && this.props.route.params.tab) {
@@ -136,10 +145,7 @@ export default class Coaching extends Component {
                     && <ConfirmationBox deleteCard={() => { this.updateStatus(this.state.relationToBeEndedId, this.state.statusToBeUpdated) }} toggleShowConfirmationBox={this.toggleShowEndRelationModal} />
                 }
                 <View style={globalStyles.pageContainer}>
-                    <View style={globalStyles.pageLogoContainer}>
-                        <Image style={globalStyles.pageLogo} source={require('../../../assets/img/icon.png')} />
-                        <Text style={globalStyles.pageLogoText}>Gym Rats</Text>
-                    </View>
+                    <LogoBar />
                     {
                         this.state.coaching &&
                         this.state.coaching.myClients.requests.length > 0 &&
@@ -150,7 +156,7 @@ export default class Coaching extends Component {
                             <Badge
                                 status="error"
                                 value={this.state.coaching.myClients.requests.length}
-                                textStyle={{ fontFamily: "SpartanMedium" }}
+                                textStyle={{ fontFamily: "MainMedium" }}
                                 containerStyle={{ position: 'absolute', top: 8, right: 8, height: 12, width: 12 }}
                             />
                         </View>
@@ -377,9 +383,4 @@ export default class Coaching extends Component {
             </View>
         )
     }
-
-    /*
-Be able to have access to your clients' data in Gym Rats. You can check what they are eating, what they are training and many more
-Get the most of what you have earned. Gym Rats will get only 5% cut from your earnings through the app. We do not require you to receive payments through our system
-    */
 }

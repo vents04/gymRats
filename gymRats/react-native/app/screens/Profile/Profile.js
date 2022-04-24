@@ -1,32 +1,39 @@
 import React, { Component } from 'react';
 import { Image, Text, View, ActivityIndicator } from 'react-native';
-import { HTTP_STATUS_CODES } from '../../../global';
+import * as ImagePicker from 'expo-image-picker';
+
+import ApiRequests from '../../classes/ApiRequests';
+
 import { BiEdit } from 'react-icons/bi';
 import { MdEdit } from 'react-icons/md';
-import ApiRequests from '../../classes/ApiRequests';
-import * as ImagePicker from 'expo-image-picker';
-import i18n from 'i18n-js';
 
-const globalStyles = require('../../../assets/styles/global.styles');
-const styles = require('./Profile.styles');
+import { HTTP_STATUS_CODES, WEIGHT_UNITS } from '../../../global';
+
+import globalStyles from '../../../assets/styles/global.styles';
+import styles from './Profile.styles';
+import LogoBar from '../../components/LogoBar/LogoBar';
 
 export default class Profile extends Component {
 
-    state = {
-        showLoadProfileError: false,
-        profile: null,
-        showSaving: false,
-        showError: false,
-        error: ""
-    }
+    constructor(props) {
+        super(props);
 
-    focusListener;
+        this.state = {
+            showLoadProfileError: false,
+            profile: null,
+            showSaving: false,
+            showError: false,
+            error: ""
+        }
+
+        this.focusListener;
+    }
 
     onFocusFunction = () => {
         this.loadProfile();
     }
 
-    async componentDidMount() {
+    componentDidMount() {
         this.focusListener = this.props.navigation.addListener('focus', () => {
             this.onFocusFunction()
         })
@@ -81,10 +88,7 @@ export default class Profile extends Component {
     render() {
         return <View style={[globalStyles.safeAreaView]}>
             <View style={globalStyles.pageContainer}>
-                <View style={globalStyles.pageLogoContainer}>
-                    <Image style={globalStyles.pageLogo} source={require('../../../assets/img/icon.png')} />
-                    <Text style={globalStyles.pageLogoText}>Gym Rats</Text>
-                </View>
+                <LogoBar />
                 <View style={globalStyles.topbarIconContainer} onClick={() => { this.navigateToProfileDetailsEdit() }}>
                     <BiEdit size={30} color="#1f6cb0" />
                 </View>
@@ -146,7 +150,7 @@ export default class Profile extends Component {
                                         <Text style={styles.commonDataSectionTitle}>Weight unit</Text>
                                         <Text style={styles.commonDataSectionValue}>
                                             {
-                                                this.state.profile.weightUnit == "KILOGRAMS"
+                                                this.state.profile.weightUnit == WEIGHT_UNITS.KILOGRAMS
                                                     ? "Metric system (kilograms)"
                                                     : "Imperial system (pounds)"
                                             }

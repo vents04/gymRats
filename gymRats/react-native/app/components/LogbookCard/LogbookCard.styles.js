@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
     workoutName: {
-        fontFamily: 'SpartanBold',
+        fontFamily: 'MainBold',
         fontSize: 20,
         marginTop: 16,
     },
@@ -12,12 +12,12 @@ export default StyleSheet.create({
         marginTop: 16
     },
     exercise: {
-        fontFamily: "SpartanRegular",
+        fontFamily: "MainRegular",
         fontSize: 12,
         marginVertical: 3
     },
     setInfo: {
-        fontFamily: "SpartanRegular",
+        fontFamily: "MainRegular",
         fontSize: 13,
         marginVertical: 3
     }

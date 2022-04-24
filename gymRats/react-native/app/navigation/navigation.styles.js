@@ -18,7 +18,7 @@ export default StyleSheet.create({
         justifyContent: "center",
     },
     tabBarIconText: {
-        fontFamily: "SpartanRegular",
+        fontFamily: "MainRegular",
         fontSize: 10,
         marginTop: 10
     }

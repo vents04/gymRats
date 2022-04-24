@@ -1,12 +1,12 @@
-const { StyleSheet } = require('react-native');
+import { StyleSheet } from 'react-native';
 
-module.exports = StyleSheet.create({
+export default StyleSheet.create({
     resultContainer: {
         paddingVertical: 10,
         width: "100%",
     },
     result: {
-        fontFamily: "SpartanMedium",
+        fontFamily: "MainMedium",
         fontSize: 14,
     }
 });

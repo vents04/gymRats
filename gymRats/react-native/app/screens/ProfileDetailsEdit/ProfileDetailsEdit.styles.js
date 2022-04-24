@@ -1,6 +1,6 @@
-const { StyleSheet } = require('react-native');
+import { StyleSheet } from 'react-native';
 
-module.exports = StyleSheet.create({
+export default StyleSheet.create({
     editSectionContainer: {
         marginTop: 32
     },
@@ -13,14 +13,14 @@ module.exports = StyleSheet.create({
         marginVertical: 16,
     },
     editSectionTitle: {
-        fontFamily: "SpartanBold",
+        fontFamily: "MainBold",
         color: "#ccc",
         fontSize: 11,
         textTransform: "uppercase",
         marginBottom: 12
     },
     editSectionInput: {
-        fontFamily: "SpartanRegular",
+        fontFamily: "MainRegular",
         fontSize: 14,
         borderRadius: 3,
         borderColor: "#ccc",

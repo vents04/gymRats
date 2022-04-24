@@ -1,24 +1,31 @@
 import React, { Component } from 'react';
 import { ActivityIndicator, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import { BiArrowBack, BiCheck } from 'react-icons/bi';
 import { Picker } from '@react-native-picker/picker';
-import ApiRequests from '../../classes/ApiRequests';
-import { HTTP_STATUS_CODES } from '../../../global';
 
-const globalStyles = require('../../../assets/styles/global.styles');
-const styles = require('./ProfileDetailsEdit.styles');
+import ApiRequests from '../../classes/ApiRequests';
+
+import { BiArrowBack, BiCheck } from 'react-icons/bi';
+
+import { HTTP_STATUS_CODES, WEIGHT_UNITS } from '../../../global';
+
+import globalStyles from '../../../assets/styles/global.styles';
+import styles from './ProfileDetailsEdit.styles';
 
 export default class ProfileDetailsEdit extends Component {
 
-    state = {
-        weightUnit: "POUNDS",
-        firstName: "Ventsislav",
-        lastName: "Dimitrov",
-        profile: {},
-        showError: false,
-        error: "",
-        hasChanges: false,
-        showSaving: false
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            weightUnit: WEIGHT_UNITS.POUNDS,
+            firstName: "Ventsislav",
+            lastName: "Dimitrov",
+            profile: {},
+            showError: false,
+            error: "",
+            hasChanges: false,
+            showSaving: false
+        }
     }
 
     componentDidMount() {
@@ -129,10 +136,7 @@ export default class ProfileDetailsEdit extends Component {
                         marginTop: 48
                     }]}>{this.state.error}</Text>
                 }
-                <ScrollView style={styles.editSectionContainer} contentContainerStyle={{
-                    flexGrow: 1,
-                    flexShrink: 1
-                }}>
+                <ScrollView style={styles.editSectionContainer} contentContainerStyle={globalStyles.fillEmptySpace}>
                     <View style={styles.editSection}>
                         <Text style={styles.editSectionTitle}>First name</Text>
                         <TextInput

@@ -1,19 +1,26 @@
 import React, { Component } from 'react'
-import { BiArrowBack } from 'react-icons/bi';
-import { ActivityIndicator, Image, Linking, ScrollView, Switch, Text, TouchableOpacity, View } from 'react-native';
-import { HTTP_STATUS_CODES } from '../../../global';
+import { Image, Linking, ScrollView, Switch, Text, View } from 'react-native';
+
 import ApiRequests from '../../classes/ApiRequests';
 
-const globalStyles = require('../../../assets/styles/global.styles');
-const styles = require('./CoachProfileEdit.styles');
+import { BiArrowBack } from 'react-icons/bi';
+
+import { HTTP_STATUS_CODES } from '../../../global';
+
+import globalStyles from '../../../assets/styles/global.styles';
+import styles from './CoachProfileEdit.styles';
 
 export default class CoachPage extends Component {
 
-    state = {
-        showError: false,
-        error: "",
-        isLoading: false,
-        coach: null
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            showError: false,
+            error: "",
+            isLoading: false,
+            coach: null
+        }
     }
 
     componentDidMount() {
@@ -21,8 +28,8 @@ export default class CoachPage extends Component {
     }
 
     getCoach = () => {
-        ApiRequests.get('coaching/me-as-coach', {}, true).then((response) => { 
-            this.setState({coach: response.data.coach})
+        ApiRequests.get('coaching/me-as-coach', {}, true).then((response) => {
+            this.setState({ coach: response.data.coach })
         }).catch((error) => {
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
@@ -51,10 +58,7 @@ export default class CoachPage extends Component {
                     {
                         this.state.showError && <Text style={globalStyles.errorBox}>{this.state.error}</Text>
                     }
-                    <ScrollView contentContainerStyle={{
-                        flexGrow: 1,
-                        flexShrink: 1
-                    }}>
+                    <ScrollView contentContainerStyle={globalStyles.fillEmptySpace}>
                         {
                             this.state.coach
                             && <>
@@ -106,7 +110,7 @@ export default class CoachPage extends Component {
                                     onValueChange={() => {
                                         let coach = this.state.coach;
                                         coach.prefersOfflineCoaching = !coach.prefersOfflineCoaching;
-                                        this.setState({coach});
+                                        this.setState({ coach });
                                     }}
                                     value={this.state.coach.prefersOfflineCoaching}
                                 />

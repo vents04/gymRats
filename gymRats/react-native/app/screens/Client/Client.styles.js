@@ -1,6 +1,6 @@
-const { StyleSheet } = require('react-native');
+import { StyleSheet } from 'react-native';
 
-module.exports = StyleSheet.create({
+export default StyleSheet.create({
     clientContainer: {
         display: 'flex',
         flexDirection: 'row',
@@ -21,7 +21,7 @@ module.exports = StyleSheet.create({
         justifyContent: "center"
     },
     noProfilePictureText: {
-        fontFamily: "SpartanBold",
+        fontFamily: "MainBold",
         fontSize: 8,
         color: "#777",
     },
@@ -32,7 +32,7 @@ module.exports = StyleSheet.create({
         marginLeft: 16,
     },
     names: {
-        fontFamily: "SpartanBold",
+        fontFamily: "MainBold",
         fontSize: 16,
         color: "#222",
     },
@@ -52,14 +52,14 @@ module.exports = StyleSheet.create({
         flex: 1
     },
     calendarControllerText: {
-        fontFamily: "SpartanBold",
+        fontFamily: "MainBold",
         fontSize: 11,
         color: "#999",
         textTransform: "uppercase",
         marginTop: 3
     },
     calendarCurrentDate: {
-        fontFamily: "SpartanBold",
+        fontFamily: "MainBold",
         fontSize: 12,
         flex: 1,
         textAlign: "center",

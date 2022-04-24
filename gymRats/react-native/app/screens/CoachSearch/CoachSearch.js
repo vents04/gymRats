@@ -1,32 +1,38 @@
 import React, { Component } from 'react'
-import { BiArrowBack } from 'react-icons/bi';
-import { Image, ScrollView, Text, TextInput, View } from 'react-native';
 import axios from 'axios';
-import ApiRequests from '../../classes/ApiRequests';
-import { HTTP_STATUS_CODES } from '../../../global';
+import { Image, ScrollView, Text, TextInput, View } from 'react-native';
 import Rating from 'react-star-review';
 
-const globalStyles = require('../../../assets/styles/global.styles');
-const styles = require('./CoachSearch.styles')
+import ApiRequests from '../../classes/ApiRequests';
+
+import { BiArrowBack } from 'react-icons/bi';
+
+import { HTTP_STATUS_CODES } from '../../../global';
+
+import globalStyles from '../../../assets/styles/global.styles';
+import styles from './CoachSearch.styles';
 
 export default class CoachSearch extends Component {
 
     constructor(props) {
         super(props);
-        this.scrollView = React.createRef();
-        this.query = "";
-        this.typingTimeout = null
-    }
 
-    state = {
-        showError: false,
-        error: "",
-        query: "",
-        maxDistance: 30,
-        minRating: 2,
-        lat: null,
-        lng: null,
-        searchResults: [],
+        this.scrollView = React.createRef();
+
+        this.query = "";
+
+        this.typingTimeout = null
+
+        this.state = {
+            showError: false,
+            error: "",
+            query: "",
+            maxDistance: 30,
+            minRating: 2,
+            lat: null,
+            lng: null,
+            searchResults: [],
+        }
     }
 
     async componentDidMount() {
@@ -100,10 +106,7 @@ export default class CoachSearch extends Component {
                             ? <ScrollView style={{
                                 marginTop: 16
                             }}
-                                contentContainerStyle={{
-                                    flexGrow: 1,
-                                    flexShrink: 1,
-                                }}
+                                contentContainerStyle={globalStyles.fillEmptySpace}
                                 ref={this.scrollView}>
                                 {
                                     this.state.searchResults?.length > 0

@@ -8,7 +8,7 @@ export default StyleSheet.create({
         alignItems: 'center',
     },
     calories: {
-        fontFamily: 'SpartanBold',
+        fontFamily: 'MainBold',
         fontSize: 20,
         marginTop: 24
     },
@@ -28,11 +28,11 @@ export default StyleSheet.create({
         marginTop: 32
     },
     macronutrientsRatioCircleTitle: {
-        fontFamily: "SpartanBold",
+        fontFamily: "MainBold",
         fontSize: 16,
     },
     macroCircleTitle: {
-        fontFamily: "SpartanBold",
+        fontFamily: "MainBold",
         fontSize: 12,
         textTransform: "uppercase",
         color: "#ccc",
@@ -49,7 +49,7 @@ export default StyleSheet.create({
         marginBottom: 8
     },
     mealTitle: {
-        fontFamily: 'SpartanBold',
+        fontFamily: 'MainBold',
         fontSize: 16,
         marginBottom: 8
     },
@@ -71,12 +71,12 @@ export default StyleSheet.create({
         width: "80%"
     },
     itemTitle: {
-        fontFamily: 'SpartanBold',
+        fontFamily: 'MainBold',
         fontSize: 16,
         marginBottom: 8,
     },
     itemAmount: {
-        fontFamily: 'SpartanRegular',
+        fontFamily: 'MainRegular',
         fontSize: 12,
     }
 })

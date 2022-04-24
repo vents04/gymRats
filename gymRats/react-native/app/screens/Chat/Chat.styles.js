@@ -1,6 +1,6 @@
-const { StyleSheet } = require('react-native');
+import { StyleSheet } from 'react-native';
 
-module.exports = StyleSheet.create({
+export default StyleSheet.create({
     chatTopbarContainer: {
         width: '100%',
         display: 'flex',
@@ -23,13 +23,13 @@ module.exports = StyleSheet.create({
         marginLeft: 16
     },
     chatProfileNames: {
-        fontFamily: "SpartanBold",
+        fontFamily: "MainBold",
         fontSize: 20,
         color: "#222",
         marginLeft: 12
     },
     noProfilePictureText: {
-        fontFamily: "SpartanBold",
+        fontFamily: "MainBold",
         fontSize: 10,
         color: "#777",
     },
@@ -46,7 +46,7 @@ module.exports = StyleSheet.create({
     chatInput: {
         width: "90%",
         padding: "16px",
-        fontFamily: "SpartanRegular",
+        fontFamily: "MainRegular",
         fontSize: 16
     },
     chatActionButtonContainer: {

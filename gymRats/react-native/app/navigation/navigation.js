@@ -274,7 +274,7 @@ const NavigationRoutes = () => {
                                 color={tabInfo.focused ? "#1f6cb0" : "#ccc"}
                             />
                             <Text style={[styles.tabBarIconText, {
-                                fontFamily: (tabInfo.focused ? "SpartanBold" : "SpartanRegular")
+                                fontFamily: (tabInfo.focused ? "MainBold" : "MainRegular")
                             }]}>{i18n.t('navigation')['calendar']}</Text>
                         </View>
                     )
@@ -300,7 +300,7 @@ const NavigationRoutes = () => {
                                 color={tabInfo.focused ? "#1f6cb0" : "#ccc"}
                             />
                             <Text style={[styles.tabBarIconText, {
-                                fontFamily: (tabInfo.focused ? "SpartanBold" : "SpartanRegular")
+                                fontFamily: (tabInfo.focused ? "MainBold" : "MainRegular")
                             }]}>{i18n.t('navigation')['coaching']}</Text>
                         </View>
                     )
@@ -326,7 +326,7 @@ const NavigationRoutes = () => {
                                 color={tabInfo.focused ? "#1f6cb0" : "#ccc"}
                             />
                             <Text style={[styles.tabBarIconText, {
-                                fontFamily: (tabInfo.focused ? "SpartanBold" : "SpartanRegular")
+                                fontFamily: (tabInfo.focused ? "MainBold" : "MainRegular")
                             }]}>{i18n.t('navigation')['chats']}</Text>
                         </View>
                     )
@@ -351,7 +351,7 @@ const NavigationRoutes = () => {
                                 color={tabInfo.focused ? "#1f6cb0" : "#ccc"}
                             />
                             <Text style={[styles.tabBarIconText, {
-                                fontFamily: (tabInfo.focused ? "SpartanBold" : "SpartanRegular")
+                                fontFamily: (tabInfo.focused ? "MainBold" : "MainRegular")
                             }]}>{i18n.t('navigation')['profile']}</Text>
                         </View>
                     )

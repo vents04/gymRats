@@ -22,7 +22,7 @@ export default StyleSheet.create({
         justifyContent: "center"
     },
     noProfilePictureText: {
-        fontFamily: "SpartanBold",
+        fontFamily: "MainBold",
         fontSize: 10,
         color: "#777",
         marginTop: 2
@@ -33,11 +33,11 @@ export default StyleSheet.create({
         flexDirection: "column",
     },
     chatsItemNames: {
-        fontFamily: "SpartanBold",
+        fontFamily: "MainBold",
         fontSize: 14
     },
     chatsItemLastMessage: {
-        fontFamily: "SpartanRegular",
+        fontFamily: "MainRegular",
         fontSize: 10,
         color: "#aaa",
         marginTop: 4

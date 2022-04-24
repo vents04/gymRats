@@ -1,22 +1,30 @@
 import React, { Component } from 'react'
 import { Image, ScrollView, Text, View } from 'react-native';
-import { HTTP_STATUS_CODES } from '../../../global';
-import ApiRequests from '../../classes/ApiRequests';
-import ChatsItem from '../../components/ChatsItem/ChatsItem';
-import socket from '../Chat/Socket';
 
-const globalStyles = require('../../../assets/styles/global.styles');
-const styles = require('./Chats.styles');
+import socket from '../../classes/Socket';
+
+import ApiRequests from '../../classes/ApiRequests';
+
+import ChatsItem from '../../components/ChatsItem/ChatsItem';
+
+import { HTTP_STATUS_CODES } from '../../../global';
+
+import globalStyles from '../../../assets/styles/global.styles';
+import LogoBar from '../../components/LogoBar/LogoBar';
 
 export default class Chats extends Component {
 
-    state = {
-        chats: [],
-        showError: true,
-        error: "",
-    }
+    constructor(props) {
+        super(props);
 
-    focusListener;
+        this.state = {
+            chats: [],
+            showError: true,
+            error: "",
+        }
+
+        this.focusListener;
+    }
 
     onFocusFunction = () => {
         this.getChats();
@@ -57,17 +65,11 @@ export default class Chats extends Component {
         return (
             <View style={globalStyles.safeAreaView}>
                 <View style={globalStyles.pageContainer}>
-                    <View style={globalStyles.pageLogoContainer}>
-                        <Image style={globalStyles.pageLogo} source={require('../../../assets/img/icon.png')} />
-                        <Text style={globalStyles.pageLogoText}>Gym Rats</Text>
-                    </View>
+                    <LogoBar />
                     {
                         this.state.chats?.length > 0
                             ? <ScrollView
-                                contentContainerStyle={{
-                                    flexGrow: 1,
-                                    flexShrink: 1,
-                                }}>
+                                contentContainerStyle={globalStyles.fillEmptySpace}>
                                 {
                                     this.state.chats.map((chat, index) =>
                                         <ChatsItem key={index} onClick={() => {

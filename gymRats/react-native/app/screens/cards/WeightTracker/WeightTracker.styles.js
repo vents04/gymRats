@@ -10,7 +10,7 @@ export default StyleSheet.create({
         marginTop: 32
     },
     editSectionInput: {
-        fontFamily: "SpartanMedium",
+        fontFamily: "MainMedium",
         fontSize: 16,
         borderWidth: 0
     },

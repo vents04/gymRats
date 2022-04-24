@@ -107,7 +107,7 @@ export default class LogbookCard extends Component {
                                     this.props.data.exercises.map((exercise, index) =>
                                         <>
                                             <Text key={index} style={[styles.exercise, {
-                                                fontFamily: this.props.client ? "SpartanBold" : "SpartanRegular",
+                                                fontFamily: this.props.client ? "MainBold" : "MainRegular",
                                                 fontSize: this.props.client ? 16 : 12
                                             }]}>{exercise.sets.length} {this.props.client && (exercise.sets.length != 1 ? "sets " : "set ")}x {
                                                     exercise.translations.hasOwnProperty(i18n.locale)

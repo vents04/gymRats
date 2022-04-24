@@ -1,6 +1,6 @@
-const { StyleSheet, Dimensions } = require('react-native');
+const { StyleSheet } = require('react-native');
 
-module.exports = StyleSheet.create({
+export default StyleSheet.create({
     profileTop: {
         marginVertical: 32,
         display: 'flex',
@@ -34,13 +34,13 @@ module.exports = StyleSheet.create({
         justifyContent: "center",
     },
     noProfilePictureText: {
-        fontFamily: "SpartanBold",
+        fontFamily: "MainBold",
         fontSize: 25,
         color: "#777",
         marginTop: 5
     },
     names: {
-        fontFamily: "SpartanBold",
+        fontFamily: "MainBold",
         fontSize: 20,
         color: "#222",
         marginTop: 32,
@@ -48,18 +48,18 @@ module.exports = StyleSheet.create({
         textAlign: "center",
     },
     statValue: {
-        fontFamily: "SpartanMedium",
+        fontFamily: "MainMedium",
         fontSize: 18
     },
     statTitle: {
-        fontFamily: "SpartanMedium",
+        fontFamily: "MainMedium",
         color: "#777",
         textTransform: "uppercase",
         fontSize: 10,
         marginTop: 4
     },
     location: {
-        fontFamily: "SpartanMedium",
+        fontFamily: "MainMedium",
         fontSize: 16,
         marginTop: 32,
         color: "#1f6cb0"

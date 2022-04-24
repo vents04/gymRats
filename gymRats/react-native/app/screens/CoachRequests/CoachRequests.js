@@ -1,19 +1,26 @@
 import React, { Component } from 'react'
 import { ScrollView, Text, View } from 'react-native'
-import { BiArrowBack } from 'react-icons/bi';
-import CoachRequestsItem from '../../components/CoachRequestsItem/CoachRequestsItem';
+
 import ApiRequests from '../../classes/ApiRequests';
+
+import CoachRequestsItem from '../../components/CoachRequestsItem/CoachRequestsItem';
+
+import { BiArrowBack } from 'react-icons/bi';
+
 import { HTTP_STATUS_CODES } from '../../../global';
 
-const globalStyles = require('../../../assets/styles/global.styles');
-const styles = require('./CoachRequests.styles');
+import globalStyles from '../../../assets/styles/global.styles';
 
 export default class CoachRequests extends Component {
 
-    state = {
-        showError: false,
-        error: "",
-        relations: []
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            showError: false,
+            error: "",
+            relations: []
+        }
     }
 
     componentDidMount() {

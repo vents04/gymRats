@@ -32,12 +32,12 @@ export default StyleSheet.create({
         justifyContent: "center"
     },
     noProfilePictureText: {
-        fontFamily: "SpartanBold",
+        fontFamily: "MainBold",
         fontSize: 7,
         color: "#777",
     },
     textMessage: {
-        fontFamily: "SpartanRegular",
+        fontFamily: "MainRegular",
         fontSize: 14
     }
 });

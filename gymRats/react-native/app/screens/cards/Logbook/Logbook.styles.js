@@ -17,11 +17,11 @@ export default StyleSheet.create({
         marginBottom: 16
     },
     sectionTitle: {
-        fontFamily: "SpartanBold",
+        fontFamily: "MainBold",
         fontSize: 16
     },
     exerciseTitle: {
-        fontFamily: "SpartanMedium",
+        fontFamily: "MainMedium",
         fontSize: 14
     },
     exerciseContainerTopbar: {
@@ -45,7 +45,7 @@ export default StyleSheet.create({
         marginLeft: 20
     },
     exerciseContainerAddContainerTitle: {
-        fontFamily: "SpartanRegular",
+        fontFamily: "MainRegular",
         marginRight: 5,
         marginTop: 3,
         fontSize: 12,
@@ -60,7 +60,7 @@ export default StyleSheet.create({
         overflow: "hidden",
     },
     setContainerTitle: {
-        fontFamily: "SpartanRegular",
+        fontFamily: "MainRegular",
         fontSize: 12,
         color: "#777",
         marginTop: 5
@@ -81,16 +81,16 @@ export default StyleSheet.create({
     setContainerItemInput: {
         width: "100%",
         textAlign: "center",
-        fontFamily: "SpartanMedium",
+        fontFamily: "MainMedium",
         fontSize: 14
     },
     setContainerItemDescriptor: {
-        fontFamily: "SpartanRegular",
+        fontFamily: "MainRegular",
         fontSize: 10,
         color: "#777",
     },
     notes: {
-        fontFamily: "SpartanRegular",
+        fontFamily: "MainRegular",
         fontSize: 12,
         color: "#777",
     },
@@ -99,6 +99,6 @@ export default StyleSheet.create({
         borderRadius: 4,
         borderColor: "#ccc",
         padding: 6,
-        fontFamily: "SpartanRegular",
+        fontFamily: "MainRegular",
     }
 })

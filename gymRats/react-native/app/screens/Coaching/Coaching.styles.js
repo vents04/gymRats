@@ -1,6 +1,6 @@
-const { StyleSheet } = require('react-native');
+import { StyleSheet } from 'react-native';
 
-module.exports = StyleSheet.create({
+export default StyleSheet.create({
     tabsContainer: {
         display: 'flex',
         flexDirection: 'row',
@@ -10,7 +10,7 @@ module.exports = StyleSheet.create({
     },
     tabTitle: {
         width: '50%',
-        fontFamily: 'SpartanBold',
+        fontFamily: 'MainBold',
         fontSize: 16,
         textTransform: "uppercase",
         paddingVertical: 20,
@@ -32,12 +32,12 @@ module.exports = StyleSheet.create({
         marginBottom: 20
     },
     noCoachTitle: {
-        fontFamily: 'SpartanBold',
+        fontFamily: 'MainBold',
         fontSize: 16,
         marginLeft: 12
     },
     noCoachDescription: {
-        fontFamily: 'SpartanMedium',
+        fontFamily: 'MainMedium',
         fontSize: 14,
         color: "#aaa"
     },
@@ -49,7 +49,7 @@ module.exports = StyleSheet.create({
         flex: 100
     },
     noCoachPro: {
-        fontFamily: 'SpartanRegular',
+        fontFamily: 'MainRegular',
         fontSize: 16,
         marginLeft: 8,
         flex: 95
@@ -59,7 +59,7 @@ module.exports = StyleSheet.create({
         flex: 5
     },
     coachingSectionTitle: {
-        fontFamily: "SpartanBold",
+        fontFamily: "MainBold",
         fontSize: 16,
         marginTop: 16
     },
@@ -91,12 +91,12 @@ module.exports = StyleSheet.create({
         justifyContent: "center"
     },
     noProfilePictureText: {
-        fontFamily: "SpartanBold",
+        fontFamily: "MainBold",
         fontSize: 10,
         color: "#777",
     },
     names: {
-        fontFamily: "SpartanBold",
+        fontFamily: "MainBold",
         fontSize: 16,
         color: "#222",
         marginLeft: 16,

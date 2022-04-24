@@ -1,22 +1,28 @@
 import React, { Component } from 'react'
-import { BiArrowBack } from 'react-icons/bi';
 import { Text, TextInput, View, TouchableOpacity, Switch } from 'react-native';
-import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
-import { HTTP_STATUS_CODES } from '../../../global';
+
 import ApiRequests from '../../classes/ApiRequests';
 
-const globalStyles = require('../../../assets/styles/global.styles');
-const styles = require('./CoachingApplicationSubmission.styles');
+import { BiArrowBack } from 'react-icons/bi';
+
+import { HTTP_STATUS_CODES } from '../../../global';
+
+import globalStyles from '../../../assets/styles/global.styles';
+import styles from './CoachingApplicationSubmission.styles';
 
 export default class CoachingApplicationSubmission extends Component {
 
-    state = {
-        query: "",
-        results: [],
-        selectedLocation: "",
-        prefersOfflineCoaching: false,
-        showError: false,
-        error: ""
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            query: "",
+            results: [],
+            selectedLocation: "",
+            prefersOfflineCoaching: false,
+            showError: false,
+            error: ""
+        }
     }
 
     searchLocation = () => {

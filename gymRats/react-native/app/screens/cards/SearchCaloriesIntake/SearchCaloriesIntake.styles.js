@@ -7,7 +7,7 @@ export default StyleSheet.create({
         marginTop: 16
     },
     searchResultsTitle: {
-        fontFamily: "SpartanBold",
+        fontFamily: "MainBold",
         fontSize: 12,
         paddingBottom: 16,
         color: "#ccc",
@@ -16,7 +16,7 @@ export default StyleSheet.create({
         borderBottomColor: "#e7e7e7"
     },
     searchResultBrand: {
-        fontFamily: "SpartanRegular",
+        fontFamily: "MainRegular",
         fontSize: 12,
         marginTop: 4,
         color: "#aaa"
@@ -25,11 +25,11 @@ export default StyleSheet.create({
         paddingVertical: 12
     },
     searchResultTitle: {
-        fontFamily: "SpartanBold",
+        fontFamily: "MainBold",
         fontSize: 18,
     },
     searchResultStats: {
-        fontFamily: "SpartanLight",
+        fontFamily: "MainLight",
         fontSize: 12,
         color: "#262626",
         marginTop: 8
@@ -51,13 +51,13 @@ export default StyleSheet.create({
         justifyContent: "center"
     },
     noProfilePictureText: {
-        fontFamily: "SpartanBold",
+        fontFamily: "MainBold",
         fontSize: 6,
         color: "#777",
         marginTop: 1.2
     },
     names: {
-        fontFamily: "SpartanMedium",
+        fontFamily: "MainMedium",
         fontSize: 12,
         color: "#777",
         marginLeft: 6,

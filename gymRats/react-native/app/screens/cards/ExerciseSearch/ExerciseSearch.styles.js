@@ -7,7 +7,7 @@ export default StyleSheet.create({
         marginTop: 16
     },
     searchResultsTitle: {
-        fontFamily: "SpartanBold",
+        fontFamily: "MainBold",
         fontSize: 12,
         paddingBottom: 16,
         color: "#ccc",
@@ -19,11 +19,11 @@ export default StyleSheet.create({
         paddingVertical: 12
     },
     searchResultTitle: {
-        fontFamily: "SpartanBold",
+        fontFamily: "MainBold",
         fontSize: 16,
     },
     searchResultStats: {
-        fontFamily: "SpartanLight",
+        fontFamily: "MainLight",
         fontSize: 12,
         color: "#262626",
         marginTop: 8

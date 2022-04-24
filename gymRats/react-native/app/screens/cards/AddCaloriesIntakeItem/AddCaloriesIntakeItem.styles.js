@@ -15,12 +15,12 @@ export default StyleSheet.create({
         marginBottom: 32
     },
     foodTitle: {
-        fontFamily: "SpartanBold",
+        fontFamily: "MainBold",
         fontSize: 24,
         color: "#fff",
     },
     foodBrand: {
-        fontFamily: "SpartanRegular",
+        fontFamily: "MainRegular",
         fontSize: 16,
         marginTop: 6,
         color: "#fafafa",
@@ -42,12 +42,12 @@ export default StyleSheet.create({
         justifyContent: "center"
     },
     noProfilePictureText: {
-        fontFamily: "SpartanBold",
+        fontFamily: "MainBold",
         fontSize: 10,
         color: "#fff",
     },
     names: {
-        fontFamily: "SpartanMedium",
+        fontFamily: "MainMedium",
         fontSize: 12,
         color: "#fafafa",
         marginLeft: 6,
@@ -56,7 +56,7 @@ export default StyleSheet.create({
         marginVertical: 16
     },
     statsTitle: {
-        fontFamily: "SpartanBold",
+        fontFamily: "MainBold",
         fontSize: 14,
         marginBottom: 16
     },
@@ -76,11 +76,11 @@ export default StyleSheet.create({
         marginTop: 32
     },
     macronutrientsRatioCircleTitle: {
-        fontFamily: "SpartanBold",
+        fontFamily: "MainBold",
         fontSize: 16,
     },
     macroCircleTitle: {
-        fontFamily: "SpartanBold",
+        fontFamily: "MainBold",
         fontSize: 12,
         textTransform: "uppercase",
         color: "#ccc",
@@ -94,11 +94,11 @@ export default StyleSheet.create({
         marginVertical: 4
     },
     nutritionalInfoTitle: {
-        fontFamily: "SpartanRegular",
+        fontFamily: "MainRegular",
         fontSize: 12
     },
     nutritionalInfoValue: {
-        fontFamily: "SpartanMedium",
+        fontFamily: "MainMedium",
         fontSize: 14,
     },
     inputContainer: {
@@ -115,11 +115,11 @@ export default StyleSheet.create({
     },
     amountInput: {
         width: "50%",
-        fontFamily: "SpartanRegular",
+        fontFamily: "MainRegular",
         fontSize: 14,
     },
     editSectionInput: {
-        fontFamily: "SpartanRegular",
+        fontFamily: "MainRegular",
         fontSize: 14,
         borderRadius: 3,
         borderColor: "#ccc",

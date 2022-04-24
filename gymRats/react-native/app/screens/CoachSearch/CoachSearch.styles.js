@@ -1,6 +1,6 @@
-const { StyleSheet } = require('react-native');
+import { StyleSheet } from 'react-native';
 
-module.exports = StyleSheet.create({
+export default StyleSheet.create({
     coachResult: {
         display: "flex",
         borderWidth: 1,
@@ -26,20 +26,20 @@ module.exports = StyleSheet.create({
         justifyContent: "center"
     },
     noProfilePictureText: {
-        fontFamily: "SpartanBold",
+        fontFamily: "MainBold",
         fontSize: 10,
         color: "#777",
         marginTop: 2
     },
     names: {
-        fontFamily: "SpartanBold",
+        fontFamily: "MainBold",
         fontSize: 16,
         color: "#222",
         marginLeft: 16,
         marginTop: 4
     },
     coachResultReviews: {
-        fontFamily: "SpartanRegular",
+        fontFamily: "MainRegular",
         fontSize: 12,
         marginLeft: 8,
         marginTop: 4

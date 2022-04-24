@@ -5,14 +5,14 @@ export default StyleSheet.create({
         marginVertical: 16,
     },
     inputSectionTitle: {
-        fontFamily: "SpartanBold",
+        fontFamily: "MainBold",
         color: "#aaa",
         fontSize: 12,
         textTransform: "uppercase",
         marginBottom: 6
     },
     inputSectionInput: {
-        fontFamily: "SpartanRegular",
+        fontFamily: "MainRegular",
         fontSize: 14,
         borderRadius: 3,
         borderColor: "#ccc",
@@ -24,7 +24,7 @@ export default StyleSheet.create({
         width: "100%"
     },
     optional: {
-        fontFamily: "SpartanRegular",
+        fontFamily: "MainRegular",
         fontSize: 10,
         fontStyle: "italic"
     }

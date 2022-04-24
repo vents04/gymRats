@@ -1,22 +1,29 @@
 import React, { Component } from 'react';
 import { Text, View, Image, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
-import { HTTP_STATUS_CODES } from '../../../global';
+
 import ApiRequests from '../../classes/ApiRequests';
 import Auth from '../../classes/Auth';
+
 import i18n from 'i18n-js';
 
-const globalStyles = require('../../../assets/styles/global.styles');
+import { HTTP_STATUS_CODES } from '../../../global';
+
+import globalStyles from '../../../assets/styles/global.styles';
 
 export default class Signup extends Component {
 
-    state = {
-        firstName: "",
-        lastName: "",
-        email: "",
-        password: "",
-        showError: false,
-        error: "",
-        isLoading: false
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            firstName: "",
+            lastName: "",
+            email: "",
+            password: "",
+            showError: false,
+            error: "",
+            isLoading: false
+        }
     }
 
     signup = () => {

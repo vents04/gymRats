@@ -1,30 +1,39 @@
 import React, { Component } from 'react'
-import { Dimensions, ScrollView, Text, TextInput, TouchableOpacity, View, Image } from 'react-native'
-import { BiArrowBack } from 'react-icons/bi';
+import { ScrollView, Text, View, Image } from 'react-native'
+
 import ApiRequests from '../../classes/ApiRequests';
-import { HTTP_STATUS_CODES } from '../../../global';
+
 import i18n from 'i18n-js';
-import { IoIosArrowBack, IoIosArrowForward, IoMdClose } from 'react-icons/io';
+
 import WeightTrackerCard from '../../components/WeightTrackerCard/WeightTrackerCard';
 import CaloriesIntakeCard from '../../components/CaloriesIntakeCard/CaloriesIntakeCard';
 import LogbookCard from '../../components/LogbookCard/LogbookCard';
 
-const globalStyles = require('../../../assets/styles/global.styles');
-const styles = require('./Client.styles');
+import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
+import { BiArrowBack } from 'react-icons/bi';
+
+import { HTTP_STATUS_CODES } from '../../../global';
+
+import globalStyles from '../../../assets/styles/global.styles';
+import styles from './Client.styles';
 
 export default class Client extends Component {
 
-    state = {
-        client: null,
-        from: null,
-        dates: [],
-        selectedDate: null,
-        timezoneOffset: null,
-        showError: false,
-        error: ""
-    }
+    constructor(props) {
+        super(props);
 
-    focusListener;
+        this.state = {
+            client: null,
+            from: null,
+            dates: [],
+            selectedDate: null,
+            timezoneOffset: null,
+            showError: false,
+            error: ""
+        }
+
+        this.focusListener;
+    }
 
     onFocusFunction = () => {
         this.setState({ client: this.props.route.params.client.clientInstance, from: this.props.route.params.client.from }, () => {
@@ -69,17 +78,16 @@ export default class Client extends Component {
 
     getCurrentDate = () => {
         const currentDate = new Date();
-        this.setState({ selectedDate: currentDate, timezoneOffset: new Date().getTimezoneOffset() }, () => {
-            this.getDate(this.state.selectedDate, this.state.timezoneOffset);
-        });
+        const timezoneOffset = currentDate.getTimezoneOffset();
+        this.setState({ selectedDate: currentDate, timezoneOffset });
+        this.getDate(currentDate, this.state.timezoneOffset);
     }
 
     incrementDate = (amount) => {
         const incrementedDate = new Date(this.state.selectedDate);
         incrementedDate.setDate(incrementedDate.getDate() + amount);
-        this.setState({ selectedDate: incrementedDate }, () => {
-            this.getDate(this.state.selectedDate, this.state.timezoneOffset)
-        })
+        this.setState({ selectedDate: incrementedDate });
+        this.getDate(incrementedDate, this.state.timezoneOffset);
     }
 
     render() {
@@ -129,10 +137,7 @@ export default class Client extends Component {
                     }
                     {
                         this.state.selectedDate
-                            ? <View style={{
-                                flexGrow: 1,
-                                flexShrink: 1
-                            }}>
+                            ? <View style={globalStyles.fillEmptySpace}>
                                 <View style={styles.calendarControllersContainer}>
                                     <View style={styles.calendarController} onClick={() => { this.incrementDate(-1) }}>
                                         <IoIosArrowBack style={{ marginRight: 5 }} size={14} color="#999" />
@@ -152,10 +157,7 @@ export default class Client extends Component {
                                         <IoIosArrowForward style={{ marginLeft: 5 }} size={14} color="#999" />
                                     </View>
                                 </View>
-                                <ScrollView contentContainerStyle={{
-                                    flexGrow: 1,
-                                    flexShrink: 1
-                                }}>
+                                <ScrollView contentContainerStyle={globalStyles.fillEmptySpace}>
                                     {
                                         this.state.dates.map((date) =>
                                             date.date.getTime() == this.state.selectedDate.getTime()

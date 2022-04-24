@@ -1,29 +1,34 @@
 import React, { Component } from 'react'
 import { Image, Text, View, ScrollView, TextInput } from 'react-native';
-import { BiArrowBack } from 'react-icons/bi';
 
-const globalStyles = require('../../../assets/styles/global.styles');
-const styles = require('./Chat.styles');
+import socket from '../../classes/Socket';
 
-import { IoIosSend } from 'react-icons/io';
-import Message from '../../components/Message/Message';
 import ApiRequests from '../../classes/ApiRequests';
+
+import Message from '../../components/Message/Message';
+
+import { BiArrowBack } from 'react-icons/bi';
+import { IoIosSend } from 'react-icons/io';
+
 import { HTTP_STATUS_CODES } from '../../../global';
-import socket from './Socket';
+
+import globalStyles from '../../../assets/styles/global.styles';
+import styles from './Chat.styles';
 
 export default class Chat extends Component {
 
     constructor(props) {
         super(props)
-        this.scrollView = React.createRef();
-    }
 
-    state = {
-        message: "",
-        showError: false,
-        error: "",
-        chat: null,
-        chatId: null
+        this.scrollView = React.createRef();
+
+        this.state = {
+            message: "",
+            showError: false,
+            error: "",
+            chat: null,
+            chatId: null
+        }
     }
 
     sendTextMessage = (messageInfo) => {

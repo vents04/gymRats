@@ -1,6 +1,6 @@
-const { StyleSheet, StatusBar } = require('react-native');
+import { StyleSheet, StatusBar } from 'react-native';
 
-module.exports = StyleSheet.create({
+export default StyleSheet.create({
     safeAreaView: {
         marginTop: StatusBar.currentHeight,
         backgroundColor: "#fff",
@@ -21,14 +21,14 @@ module.exports = StyleSheet.create({
         maxHeight: "100%",
     },
     authPageTitle: {
-        fontFamily: "SpartanBlack",
+        fontFamily: "MainBlack",
         fontSize: 36
     },
     authPageInputs: {
         marginVertical: 24
     },
     authPageInput: {
-        fontFamily: "SpartanRegular",
+        fontFamily: "MainRegular",
         fontSize: 14,
         borderRadius: 4,
         borderColor: "#ccc",
@@ -48,7 +48,7 @@ module.exports = StyleSheet.create({
         textAlign: "center"
     },
     authPageActionButtonText: {
-        fontFamily: "SpartanBlack",
+        fontFamily: "MainBlack",
         fontSize: 14,
         color: "#fff",
     },
@@ -58,23 +58,23 @@ module.exports = StyleSheet.create({
         marginTop: 16
     },
     authPageRedirectText: {
-        fontFamily: "SpartanMedium",
+        fontFamily: "MainMedium",
         fontSize: 14,
     },
     authPageRedirectHighlightText: {
-        fontFamily: "SpartanBold",
+        fontFamily: "MainBold",
         fontSize: 14,
         color: "#1f6cb0"
     },
     authPageError: {
-        fontFamily: "SpartanBold",
+        fontFamily: "MainBold",
         color: "red",
         fontSize: 14,
         marginBottom: 24
     },
     errorBox: {
         borderColor: "#eb0202",
-        fontFamily: "SpartanMedium",
+        fontFamily: "MainMedium",
         color: "#eb0202",
         fontSize: 14,
         padding: 16,
@@ -85,7 +85,7 @@ module.exports = StyleSheet.create({
     },
     notation: {
         color: "#aaa",
-        fontFamily: "SpartanRegular",
+        fontFamily: "MainRegular",
         fontSize: 14,
     },
     followUpScreenTopbar: {
@@ -96,7 +96,7 @@ module.exports = StyleSheet.create({
     },
     followUpScreenTitle: {
         marginLeft: 10,
-        fontFamily: "SpartanBold",
+        fontFamily: "MainBold",
         fontSize: 18
     },
     topbarIconContainer: {
@@ -110,7 +110,7 @@ module.exports = StyleSheet.create({
         alignItems: "center",
     },
     topbarIconTitle: {
-        fontFamily: "SpartanBold",
+        fontFamily: "MainBold",
         fontSize: 14,
         marginRight: 4,
         marginTop: 2
@@ -130,7 +130,7 @@ module.exports = StyleSheet.create({
         position: "relative"
     },
     cardTitle: {
-        fontFamily: "SpartanBold",
+        fontFamily: "MainBold",
         fontSize: 12.8,
         marginTop: 2,
         color: "#aaa",
@@ -142,7 +142,7 @@ module.exports = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 4,
         padding: 16,
-        fontFamily: "SpartanLight",
+        fontFamily: "MainLight",
         fontSize: 14,
         color: "#262626"
     },
@@ -192,7 +192,7 @@ module.exports = StyleSheet.create({
     modalText: {
         marginBottom: 15,
         textAlign: "center",
-        fontFamily: "SpartanBold",
+        fontFamily: "MainBold",
         fontSize: 16
     },
     modalActionsContainer: {
@@ -206,12 +206,12 @@ module.exports = StyleSheet.create({
     modalActionTitle: {
         width: "50%",
         textAlign: "center",
-        fontFamily: "SpartanMedium",
+        fontFamily: "MainMedium",
         fontSize: 14
     },
     important: {
         padding: 16,
-        fontFamily: "SpartanMedium",
+        fontFamily: "MainMedium",
         fontSize: 14,
         borderRadius: 4,
         borderColor: "#1f6cb0",

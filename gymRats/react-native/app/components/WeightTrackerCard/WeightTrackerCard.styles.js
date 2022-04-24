@@ -8,12 +8,12 @@ module.exports = StyleSheet.create({
         alignItems: 'center',
     },
     weight: {
-        fontFamily: 'SpartanBold',
+        fontFamily: 'MainBold',
         fontSize: 20,
         marginTop: 24
     },
     weightTrend: {
-        fontFamily: 'SpartanMedium',
+        fontFamily: 'MainMedium',
         fontSize: 12,
         marginTop: 3,
         marginLeft: 10,

@@ -1,6 +1,6 @@
-const { StyleSheet } = require('react-native');
+import { StyleSheet } from 'react-native';
 
-module.exports = StyleSheet.create({
+export default StyleSheet.create({
     profileContainer: {
         display: 'flex',
         flexDirection: 'column',
@@ -24,25 +24,25 @@ module.exports = StyleSheet.create({
         justifyContent: "center"
     },
     noProfilePictureText: {
-        fontFamily: "SpartanBold",
+        fontFamily: "MainBold",
         fontSize: 25,
         color: "#777",
         marginTop: 5
     },
     names: {
-        fontFamily: "SpartanBold",
+        fontFamily: "MainBold",
         fontSize: 20,
         color: "#222",
         marginTop: 16
     },
     email: {
-        fontFamily: "SpartanRegular",
+        fontFamily: "MainRegular",
         fontSize: 14,
         color: "#aaa",
         marginTop: 8
     },
     highlightedText: {
-        fontFamily: "SpartanRegular",
+        fontFamily: "MainRegular",
         fontSize: 14,
         color: "#1f6cb0",
         marginTop: 8
@@ -61,13 +61,13 @@ module.exports = StyleSheet.create({
         justifyContent: "space-between",
     },
     commonDataSectionTitle: {
-        fontFamily: "SpartanBold",
+        fontFamily: "MainBold",
         color: "#1f6cb0",
         fontSize: 11,
         textTransform: "uppercase",
     },
     commonDataSectionValue: {
-        fontFamily: "SpartanRegular",
+        fontFamily: "MainRegular",
         marginTop: 10
     },
     loadingContainer: {

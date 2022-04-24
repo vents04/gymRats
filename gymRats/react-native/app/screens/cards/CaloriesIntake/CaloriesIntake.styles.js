@@ -12,7 +12,7 @@ export default StyleSheet.create({
         marginBottom: 8
     },
     mealTitle: {
-        fontFamily: 'SpartanBold',
+        fontFamily: 'MainBold',
         fontSize: 16,
         marginBottom: 8
     },
@@ -34,12 +34,12 @@ export default StyleSheet.create({
         width: "80%"
     },
     itemTitle: {
-        fontFamily: 'SpartanBold',
+        fontFamily: 'MainBold',
         fontSize: 16,
         marginBottom: 8,
     },
     itemAmount: {
-        fontFamily: 'SpartanRegular',
+        fontFamily: 'MainRegular',
         fontSize: 12,
         color: "#ccc"
     }
