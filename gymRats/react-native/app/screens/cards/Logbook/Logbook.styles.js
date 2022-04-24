@@ -1,7 +1,7 @@
-const { StyleSheet } = require('react-native');
-const { cardColors } = require('../../../../assets/styles/cardColors');
+import { StyleSheet } from 'react-native';
+import { cardColors } from '../../../../assets/styles/cardColors';
 
-module.exports = StyleSheet.create({
+export default StyleSheet.create({
     exercisesListContainer: {
         marginTop: 30,
         display: 'flex',

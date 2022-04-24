@@ -1,23 +1,30 @@
 import React, { Component } from 'react'
-import { Dimensions, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { ScrollView, Text, TextInput, View } from 'react-native'
+
+import ApiRequests from '../../../classes/ApiRequests';
+
 import { BiArrowBack, BiBarcodeReader } from 'react-icons/bi';
 import { MdOutlineLibraryAdd } from 'react-icons/md';
-import ApiRequests from '../../../classes/ApiRequests';
+
 import { CALORIES_COUNTER_SCREEN_INTENTS, HTTP_STATUS_CODES } from '../../../../global';
 
-const globalStyles = require('../../../../assets/styles/global.styles');
-const styles = require('./SearchCaloriesIntake.styles');
+import globalStyles from '../../../../assets/styles/global.styles';
+import styles from './SearchCaloriesIntake.styles';
 
 export default class SearchCaloriesIntake extends Component {
 
-    state = {
-        query: "",
-        queryResults: [],
-        showError: false,
-        error: ""
-    }
+    constructor(props) {
+        super(props);
 
-    focusListener;
+        this.state = {
+            query: "",
+            queryResults: [],
+            showError: false,
+            error: ""
+        }
+
+        this.focusListener;
+    }
 
     onFocusFunction = () => {
         this.setState({ timezoneOffset: this.props.route.params.timezoneOffset || new Date().getTimezoneOffset(), date: this.props.route.params.date, query: this.props.route.params.query || "" }, () => {
@@ -91,10 +98,7 @@ export default class SearchCaloriesIntake extends Component {
                             })
                         }} />
                     <View style={styles.searchResultsContainer}>
-                        <ScrollView contentContainerStyle={{
-                            flexGrow: 1,
-                            flexShrink: 1
-                        }}>
+                        <ScrollView contentContainerStyle={globalStyles.fillEmptySpace}>
                             {
                                 this.state.queryResults?.length > 0
                                     ? this.state.queryResults.map((item) =>

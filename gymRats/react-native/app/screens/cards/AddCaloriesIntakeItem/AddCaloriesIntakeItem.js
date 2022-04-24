@@ -1,29 +1,34 @@
 import React, { Component } from 'react'
-import { BiArrowBack } from 'react-icons/bi';
 import { Dimensions, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
-import { cardColors } from '../../../../assets/styles/cardColors';
 import { Picker } from '@react-native-picker/picker';
 
-import globalStyles from '../../../../assets/styles/global.styles';
-import { CALORIES_COUNTER_SCREEN_INTENTS, HTTP_STATUS_CODES } from '../../../../global';
 import ApiRequests from '../../../classes/ApiRequests';
 
-const styles = require('./AddCaloriesIntakeItem.styles');
+import { BiArrowBack } from 'react-icons/bi';
+
+import { CALORIES_COUNTER_SCREEN_INTENTS, HTTP_STATUS_CODES } from '../../../../global';
+import { cardColors } from '../../../../assets/styles/cardColors';
+
+import globalStyles from '../../../../assets/styles/global.styles';
+import styles from './AddCaloriesIntakeItem.styles';
 
 export default class AddCaloriesIntakeItem extends Component {
 
-    state = {
-        amount: 100,
-        meal: this.props.route.params.meal,
-        showError: false,
-        error: ""
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            amount: 100,
+            meal: this.props.route.params.meal,
+            showError: false,
+            error: ""
+        }
     }
 
     componentDidMount() {
-        if (this.props.route.params.intent == CALORIES_COUNTER_SCREEN_INTENTS.UPDATE) {
+        if (this.props.route.params.intent == CALORIES_COUNTER_SCREEN_INTENTS.UPDATE)
             this.setState({ amount: parseInt(this.props.route.params.amount) });
-        }
     }
 
     addFood = () => {
@@ -97,10 +102,7 @@ export default class AddCaloriesIntakeItem extends Component {
                                 : "Update"
                         }&nbsp;food</Text>
                     </View>
-                    <ScrollView contentContainerStyle={{
-                        flexGrow: 1,
-                        flexShrink: 1
-                    }}>
+                    <ScrollView contentContainerStyle={globalStyles.fillEmptySpace}>
                         <View style={styles.foodTitleContainer}>
                             <Text style={styles.foodTitle}>{this.props.route.params.item.title}</Text>
                             {

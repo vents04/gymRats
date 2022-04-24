@@ -1,25 +1,32 @@
 import React, { Component } from 'react'
-import { Dimensions, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import { BiArrowBack, BiBarcodeReader } from 'react-icons/bi';
+import { ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { Picker } from '@react-native-picker/picker';
-import ApiRequests from '../../../classes/ApiRequests';
-import { HTTP_STATUS_CODES } from '../../../../global';
 
-const globalStyles = require('../../../../assets/styles/global.styles');
-const styles = require('./AddFood.styles');
+import ApiRequests from '../../../classes/ApiRequests';
+
+import { BiArrowBack } from 'react-icons/bi';
+
+import { CALORIES_COUNTER_UNITS, HTTP_STATUS_CODES } from '../../../../global';
+
+import globalStyles from '../../../../assets/styles/global.styles';
+import styles from './AddFood.styles';
 
 export default class AddFood extends Component {
 
-    state = {
-        title: "",
-        brand: "",
-        unit: "GRAMS",
-        calories: 0,
-        protein: 0,
-        carbs: 0,
-        fats: 0,
-        showError: false,
-        error: ""
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            title: "",
+            brand: "",
+            unit: CALORIES_COUNTER_UNITS.GRAMS,
+            calories: 0,
+            protein: 0,
+            carbs: 0,
+            fats: 0,
+            showError: false,
+            error: ""
+        }
     }
 
     addFood = () => {
@@ -91,8 +98,8 @@ export default class AddFood extends Component {
                                 onValueChange={(value) =>
                                     this.setState({ meal: value, showError: false })
                                 }>
-                                <Picker.Item label="Grams" value="GRAMS" />
-                                <Picker.Item label="Milliliters" value="MILLILITERS" />
+                                <Picker.Item label="Grams" value={CALORIES_COUNTER_UNITS.GRAMS} />
+                                <Picker.Item label="Milliliters" value={CALORIES_COUNTER_UNITS.MILLILITERS} />
                             </Picker>
                         </View>
                         <View style={styles.inputSection}>

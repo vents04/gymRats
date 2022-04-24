@@ -1,6 +1,6 @@
-const { StyleSheet } = require('react-native');
+import { StyleSheet } from 'react-native';
 
-module.exports = StyleSheet.create({
+export default StyleSheet.create({
     weightInputContainer: {
         width: '100%',
         display: 'flex',

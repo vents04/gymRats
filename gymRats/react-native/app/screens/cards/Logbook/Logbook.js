@@ -1,40 +1,47 @@
 import React, { Component } from 'react'
-import { BackHandler, Dimensions, Modal, ScrollView, Text, TextInput, View } from 'react-native'
+import { Modal, ScrollView, Text, TextInput, View } from 'react-native'
+import { Picker } from '@react-native-picker/picker';
+
+import ApiRequests from '../../../classes/ApiRequests';
+
 import { BiArrowBack, BiCheck } from 'react-icons/bi';
 import { IoIosAdd } from 'react-icons/io';
 import { MdRemoveCircleOutline } from 'react-icons/md';
-import { cardColors } from '../../../../assets/styles/cardColors';
-import ApiRequests from '../../../classes/ApiRequests';
-import { HTTP_STATUS_CODES } from '../../../../global';
-import { Picker } from '@react-native-picker/picker';
 import { CgArrowsExchangeAltV } from 'react-icons/cg';
 
-const globalStyles = require('../../../../assets/styles/global.styles');
-const styles = require('./Logbook.styles');
+import { HTTP_STATUS_CODES, WEIGHT_UNITS, WEIGHT_UNITS_LABELS } from '../../../../global';
+import { cardColors } from '../../../../assets/styles/cardColors';
+
+import globalStyles from '../../../../assets/styles/global.styles';
+import styles from './Logbook.styles';
 
 export default class Logbook extends Component {
 
-    state = {
-        exercises: [],
-        weightUnit: "KILOGRAMS",
-        showError: false,
-        error: "",
-        timezoneOffset: 0,
-        date: undefined,
-        hasChanges: false,
-        hasMatchingTemplate: true,
-        showWorkoutTemplateModal: false,
-        showModalError: false,
-        modalError: "",
-        templateTitle: "",
-        hasDeniedWorkoutTemplateCreation: false,
-        showTemplatePickerModal: false,
-        selectedTemplateId: null,
-        templates: [],
-        hasDeniedWorkoutTemplateReplication: false
-    }
+    constructor(props) {
+        super(props);
 
-    focusListener;
+        this.state = {
+            exercises: [],
+            weightUnit: WEIGHT_UNITS.KILOGRAMS,
+            showError: false,
+            error: "",
+            timezoneOffset: 0,
+            date: undefined,
+            hasChanges: false,
+            hasMatchingTemplate: true,
+            showWorkoutTemplateModal: false,
+            showModalError: false,
+            modalError: "",
+            templateTitle: "",
+            hasDeniedWorkoutTemplateCreation: false,
+            showTemplatePickerModal: false,
+            selectedTemplateId: null,
+            templates: [],
+            hasDeniedWorkoutTemplateReplication: false
+        }
+
+        this.focusListener;
+    }
 
     onFocusFunction = () => {
         this.setState({ timezoneOffset: this.props.route.params.timezoneOffset || new Date().getTimezoneOffset(), date: this.props.route.params.date }, () => {
@@ -100,7 +107,7 @@ export default class Logbook extends Component {
         })
     }
 
-    getSession = (date) => {
+    getSession = () => {
         ApiRequests.get(`logbook/workout-session?date=${this.state.date.getDate()}&month=${this.state.date.getMonth() + 1}&year=${this.state.date.getFullYear()}`, {}, true).then((response) => {
             this.setState({ exercises: response.data.session.exercises })
         }).catch((error) => {
@@ -366,10 +373,7 @@ export default class Logbook extends Component {
                                 this.props.navigation.navigate("ExerciseSearch", { date: this.state.date, timezoneOffset: this.state.timezoneOffset })
                             }} />
                         </View>
-                        <ScrollView contentContainerStyle={{
-                            flexGrow: 1,
-                            flexShrink: 1
-                        }}>
+                        <ScrollView contentContainerStyle={globalStyles.fillEmptySpace}>
                             {
                                 this.state.exercises.length == 0
                                     ? <Text style={globalStyles.notation}>No exercises added</Text>
@@ -411,11 +415,7 @@ export default class Logbook extends Component {
                                                                                 onChangeText={(val) => {
                                                                                     this.changeSetVariable(exercise.exerciseId, index, "weight", val)
                                                                                 }} />
-                                                                            <Text style={styles.setContainerItemDescriptor}>
-                                                                                {
-                                                                                    set.weight.unit == "KILOGRAMS" ? "kgs" : "lbs"
-                                                                                }
-                                                                            </Text>
+                                                                            <Text style={styles.setContainerItemDescriptor}>{WEIGHT_UNITS_LABELS[set.weight.unit]}</Text>
                                                                         </View>
                                                                         <View style={styles.setContainerItem}>
                                                                             <TextInput style={styles.setContainerItemInput} value={set.reps}

@@ -1,8 +1,7 @@
-const { StyleSheet } = require('react-native');
+import { StyleSheet } from 'react-native';
+import { cardColors } from '../../../../assets/styles/cardColors';
 
-const { cardColors } = require('../../../../assets/styles/cardColors');
-
-module.exports = StyleSheet.create({
+export default StyleSheet.create({
     foodTitleContainer: {
         backgroundColor: cardColors.caloriesIntake,
         height: '30%',

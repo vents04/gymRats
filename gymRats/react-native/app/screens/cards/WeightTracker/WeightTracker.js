@@ -1,23 +1,29 @@
 import React, { Component } from 'react';
 import { ActivityIndicator, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import { BiArrowBack, BiCheck } from 'react-icons/bi';
-import { Picker } from '@react-native-picker/picker';
-import { cardColors } from '../../../../assets/styles/cardColors';
-import ApiRequests from '../../../classes/ApiRequests';
-import { HTTP_STATUS_CODES } from '../../../../global';
 
-const globalStyles = require('../../../../assets/styles/global.styles');
-const styles = require('./WeightTracker.styles');
+import ApiRequests from '../../../classes/ApiRequests';
+
+import { BiArrowBack } from 'react-icons/bi';
+
+import { HTTP_STATUS_CODES, WEIGHT_UNITS, WEIGHT_UNITS_LABELS } from '../../../../global';
+import { cardColors } from '../../../../assets/styles/cardColors';
+
+import globalStyles from '../../../../assets/styles/global.styles';
+import styles from './WeightTracker.styles';
 
 export default class WeightTracker extends Component {
 
-    state = {
-        weight: null,
-        weightUnit: "KILOGRAMS",
-        showSaving: false,
-        showError: false,
-        error: "",
-        originalRecord: null
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            weight: null,
+            weightUnit: WEIGHT_UNITS.KILOGRAMS,
+            showSaving: false,
+            showError: false,
+            error: "",
+            originalRecord: null
+        }
     }
 
     componentDidMount() {
@@ -109,7 +115,7 @@ export default class WeightTracker extends Component {
                         placeholder="Weight:"
                         editable={!this.state.showSaving}
                         onChangeText={(val) => { this.setState({ weight: val, showError: false }) }} />
-                    <Text style={styles.editSectionInput}>{this.state.weightUnit == "KILOGRAMS" ? "kgs" : "lbs"}</Text>
+                    <Text style={styles.editSectionInput}>{WEIGHT_UNITS_LABELS[this.state.weightUnit]}</Text>
                 </View>
                 {
                     this.state.showError
