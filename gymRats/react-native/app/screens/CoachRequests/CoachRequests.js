@@ -75,7 +75,11 @@ export default class CoachRequests extends Component {
                         }} />
                         <Text style={globalStyles.followUpScreenTitle}>Unanswered requests</Text>
                     </View>
-                    {this.state.showError && <Text style={globalStyles.errorBox}>{this.state.error}</Text>}
+                    {
+                        this.state.showError
+                            ? <Text style={globalStyles.errorBox}>{this.state.error}</Text>
+                            : null
+                    }
                     {
                         this.state.relations?.length > 0
                             ? <>

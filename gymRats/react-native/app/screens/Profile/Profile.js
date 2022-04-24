@@ -4,6 +4,8 @@ import * as ImagePicker from 'expo-image-picker';
 
 import ApiRequests from '../../classes/ApiRequests';
 
+import LogoBar from '../../components/LogoBar/LogoBar';
+
 import { BiEdit } from 'react-icons/bi';
 import { MdEdit } from 'react-icons/md';
 
@@ -11,7 +13,6 @@ import { HTTP_STATUS_CODES, WEIGHT_UNITS } from '../../../global';
 
 import globalStyles from '../../../assets/styles/global.styles';
 import styles from './Profile.styles';
-import LogoBar from '../../components/LogoBar/LogoBar';
 
 export default class Profile extends Component {
 
@@ -94,11 +95,13 @@ export default class Profile extends Component {
                 </View>
                 {
                     this.state.showError
-                    && <Text style={globalStyles.errorBox}>{this.state.error}</Text>
+                        ? <Text style={globalStyles.errorBox}>{this.state.error}</Text>
+                        : null
                 }
                 {
                     this.state.showLoadProfileError
-                    && <Text style={globalStyles.errorBox}>There was a problem loading your profile. Try again or contact support on office@uploy.app</Text>
+                        ? <Text style={globalStyles.errorBox}>There was a problem loading your profile. Try again or contact support on office@uploy.app</Text>
+                        : null
                 }
                 {
                     this.state.profile != null

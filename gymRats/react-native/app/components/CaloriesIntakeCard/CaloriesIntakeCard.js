@@ -92,17 +92,22 @@ export default class CaloriesIntakeCard extends Component {
 
     render() {
         return <View style={globalStyles.card}>
-            {this.state.showConfirmationBox && <ConfirmationBox deleteCard={this.deleteCard} toggleShowConfirmationBox={this.toggleShowConfirmationBox} />}
+            {
+                this.state.showConfirmationBox
+                    ? <ConfirmationBox deleteCard={this.deleteCard} toggleShowConfirmationBox={this.toggleShowConfirmationBox} />
+                    : null
+            }
             <View style={globalStyles.cardTopbar}>
                 <GiMeal size={25} color={cardColors.caloriesIntake} />
                 <Text style={globalStyles.cardTitle}>Calories intake</Text>
                 {
                     !this.props.client
-                    && <View style={globalStyles.cardTopbarIcon}>
-                        <AiFillDelete size={25} color="#ddd" onClick={() => {
-                            this.setState({ showConfirmationBox: true })
-                        }} />
-                    </View>
+                        ? <View style={globalStyles.cardTopbarIcon}>
+                            <AiFillDelete size={25} color="#ddd" onClick={() => {
+                                this.setState({ showConfirmationBox: true })
+                            }} />
+                        </View>
+                        : null
                 }
             </View>
             {
@@ -128,9 +133,7 @@ export default class CaloriesIntakeCard extends Component {
                                     backgroundColor="#3d5875"
                                     children={() => {
                                         return (
-                                            <Text style={styles.macronutrientsRatioCircleTitle}>
-                                                {this.state.carbs}g
-                                            </Text>
+                                            <Text style={styles.macronutrientsRatioCircleTitle}>{this.state.carbs}g</Text>
                                         )
                                     }}
                                 />
@@ -151,9 +154,7 @@ export default class CaloriesIntakeCard extends Component {
                                     backgroundColor="#3d5875"
                                     children={() => {
                                         return (
-                                            <Text style={styles.macronutrientsRatioCircleTitle}>
-                                                {this.state.protein}g
-                                            </Text>
+                                            <Text style={styles.macronutrientsRatioCircleTitle}>{this.state.protein}g</Text>
                                         )
                                     }}
                                 />
@@ -174,9 +175,7 @@ export default class CaloriesIntakeCard extends Component {
                                     backgroundColor="#3d5875"
                                     children={() => {
                                         return (
-                                            <Text style={styles.macronutrientsRatioCircleTitle}>
-                                                {this.state.fats}g
-                                            </Text>
+                                            <Text style={styles.macronutrientsRatioCircleTitle}>{this.state.fats}g</Text>
                                         )
                                     }}
                                 />
@@ -185,45 +184,48 @@ export default class CaloriesIntakeCard extends Component {
                         </View>
                         {
                             this.props.client
-                            && Object.keys(CALORIES_COUNTER_MEALS).map(key =>
-                                <View key={key} style={styles.mealContainer}>
-                                    <View style={styles.mealTopBar}>
-                                        <Text style={styles.mealTitle}>{MEAL_TITLES[key]}</Text>
+                                ? Object.keys(CALORIES_COUNTER_MEALS).map(key =>
+                                    <View key={key} style={styles.mealContainer}>
+                                        <View style={styles.mealTopBar}>
+                                            <Text style={styles.mealTitle}>{MEAL_TITLES[key]}</Text>
+                                        </View>
+                                        {
+                                            this.state.calorieCounterDay &&
+                                                this.state.calorieCounterDay.items.some(item => item.meal == key)
+                                                ? this.state.calorieCounterDay.items.map(item =>
+                                                    item.meal == key
+                                                        ? <View key={item._id} style={styles.itemContainer}>
+                                                            <View style={styles.itemContainerLeft}>
+                                                                <Text style={styles.itemTitle}>{item.itemInstance.title}</Text>
+                                                                <Text style={styles.itemAmount}>{item.amount}&nbsp;{item.itemInstance.unit.toLowerCase()}
+                                                                    &nbsp;&middot;&nbsp;{parseFloat(item.itemInstance.calories * item.amount).toFixed()}&nbsp;calories
+                                                                    &nbsp;&middot;&nbsp;{parseFloat(item.itemInstance.carbs * item.amount).toFixed()}g&nbsp;carbs
+                                                                    &nbsp;&middot;&nbsp;{parseFloat(item.itemInstance.protein * item.amount).toFixed()}g&nbsp;protein
+                                                                    &nbsp;&middot;&nbsp;{parseFloat(item.itemInstance.fats * item.amount).toFixed()}g&nbsp;fats
+                                                                </Text>
+                                                            </View>
+                                                        </View>
+                                                        : null
+                                                )
+                                                : <Text style={globalStyles.notation}>No food added</Text>
+                                        }
                                     </View>
-                                    {
-                                        this.state.calorieCounterDay &&
-                                            this.state.calorieCounterDay.items.some(item => item.meal == key)
-                                            ? this.state.calorieCounterDay.items.map(item =>
-                                                item.meal == key &&
-                                                <View key={item._id} style={styles.itemContainer}>
-                                                    <View style={styles.itemContainerLeft}>
-                                                        <Text style={styles.itemTitle}>{item.itemInstance.title}</Text>
-                                                        <Text style={styles.itemAmount}>{item.amount}&nbsp;{item.itemInstance.unit.toLowerCase()}
-                                                            &nbsp;&middot;&nbsp;{parseFloat(item.itemInstance.calories * item.amount).toFixed()}&nbsp;calories
-                                                            &nbsp;&middot;&nbsp;{parseFloat(item.itemInstance.carbs * item.amount).toFixed()}g&nbsp;carbs
-                                                            &nbsp;&middot;&nbsp;{parseFloat(item.itemInstance.protein * item.amount).toFixed()}g&nbsp;protein
-                                                            &nbsp;&middot;&nbsp;{parseFloat(item.itemInstance.fats * item.amount).toFixed()}g&nbsp;fats
-                                                        </Text>
-                                                    </View>
-                                                </View>
-                                            )
-                                            : <Text style={globalStyles.notation}>No food added</Text>
-                                    }
-                                </View>
-                            )
+                                )
+                                : null
                         }
                         {
                             !this.props.client
-                            && <View>
-                                <TouchableOpacity style={[globalStyles.authPageActionButton, {
-                                    backgroundColor: cardColors.caloriesIntake,
-                                    marginTop: 16
-                                }]} onPress={() => {
-                                    this.props.actionButtonFunction();
-                                }}>
-                                    <Text style={globalStyles.authPageActionButtonText}>Add or update food</Text>
-                                </TouchableOpacity>
-                            </View>
+                                ? <View>
+                                    <TouchableOpacity style={[globalStyles.authPageActionButton, {
+                                        backgroundColor: cardColors.caloriesIntake,
+                                        marginTop: 16
+                                    }]} onPress={() => {
+                                        this.props.actionButtonFunction();
+                                    }}>
+                                        <Text style={globalStyles.authPageActionButtonText}>Add or update food</Text>
+                                    </TouchableOpacity>
+                                </View>
+                                : null
                         }
                     </>
             }

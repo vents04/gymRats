@@ -119,9 +119,10 @@ export default class WeightTracker extends Component {
                 </View>
                 {
                     this.state.showError
-                    && <Text style={[globalStyles.errorBox, {
-                        marginTop: 48
-                    }]}>{this.state.error}</Text>
+                        ? <Text style={[globalStyles.errorBox, {
+                            marginTop: 48
+                        }]}>{this.state.error}</Text>
+                        : null
                 }
                 <TouchableOpacity style={[globalStyles.authPageActionButton, {
                     backgroundColor: cardColors.weightTracker,

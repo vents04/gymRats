@@ -107,28 +107,30 @@ export default class AddCaloriesIntakeItem extends Component {
                             <Text style={styles.foodTitle}>{this.props.route.params.item.title}</Text>
                             {
                                 this.props.route.params.item.brand
-                                && <Text style={styles.foodBrand}>{this.props.route.params.item.brand}</Text>
+                                    ? <Text style={styles.foodBrand}>{this.props.route.params.item.brand}</Text>
+                                    : null
                             }
                             {
                                 this.props.route.params.item.userInstance
-                                && <View style={styles.user}>
-                                    {
-                                        !this.props.route.params.item.userInstance.profilePicture
-                                            ? <View style={styles.profilePictureContainer}>
-                                                <Text style={styles.noProfilePictureText}>
-                                                    {this.props.route.params.item.userInstance.firstName.charAt(0)}
-                                                    {this.props.route.params.item.userInstance.lastName.charAt(0)}
-                                                </Text>
-                                            </View>
-                                            : <Image style={styles.profilePictureContainer}
-                                                source={{ uri: this.props.route.params.item.userInstance.profilePicture }} />
-                                    }
-                                    <Text style={styles.names}>
-                                        {this.props.route.params.item.userInstance.firstName}
-                                        &nbsp;
-                                        {this.props.route.params.item.userInstance.lastName}
-                                    </Text>
-                                </View>
+                                    ? <View style={styles.user}>
+                                        {
+                                            !this.props.route.params.item.userInstance.profilePicture
+                                                ? <View style={styles.profilePictureContainer}>
+                                                    <Text style={styles.noProfilePictureText}>
+                                                        {this.props.route.params.item.userInstance.firstName.charAt(0)}
+                                                        {this.props.route.params.item.userInstance.lastName.charAt(0)}
+                                                    </Text>
+                                                </View>
+                                                : <Image style={styles.profilePictureContainer}
+                                                    source={{ uri: this.props.route.params.item.userInstance.profilePicture }} />
+                                        }
+                                        <Text style={styles.names}>
+                                            {this.props.route.params.item.userInstance.firstName}
+                                            &nbsp;
+                                            {this.props.route.params.item.userInstance.lastName}
+                                        </Text>
+                                    </View>
+                                    : null
                             }
                         </View>
                         <View style={styles.inputContainer}>

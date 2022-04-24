@@ -114,28 +114,30 @@ export default class SearchCaloriesIntake extends Component {
                                             <Text style={styles.searchResultTitle}>{item.title}</Text>
                                             {
                                                 item.brand
-                                                && <Text style={styles.searchResultBrand}>{item.brand}</Text>
+                                                    ? <Text style={styles.searchResultBrand}>{item.brand}</Text>
+                                                    : null
                                             }
                                             {
                                                 item.userInstance
-                                                && <View style={styles.user}>
-                                                    {
-                                                        !item.userInstance.profilePicture
-                                                            ? <View style={styles.profilePictureContainer}>
-                                                                <Text style={styles.noProfilePictureText}>
-                                                                    {item.userInstance.firstName.charAt(0)}
-                                                                    {item.userInstance.lastName.charAt(0)}
-                                                                </Text>
-                                                            </View>
-                                                            : <Image style={styles.profilePictureContainer}
-                                                                source={{ uri: item.userInstance.profilePicture }} />
-                                                    }
-                                                    <Text style={styles.names}>
-                                                        {item.userInstance.firstName}
-                                                        &nbsp;
-                                                        {item.userInstance.lastName}
-                                                    </Text>
-                                                </View>
+                                                    ? <View style={styles.user}>
+                                                        {
+                                                            !item.userInstance.profilePicture
+                                                                ? <View style={styles.profilePictureContainer}>
+                                                                    <Text style={styles.noProfilePictureText}>
+                                                                        {item.userInstance.firstName.charAt(0)}
+                                                                        {item.userInstance.lastName.charAt(0)}
+                                                                    </Text>
+                                                                </View>
+                                                                : <Image style={styles.profilePictureContainer}
+                                                                    source={{ uri: item.userInstance.profilePicture }} />
+                                                        }
+                                                        <Text style={styles.names}>
+                                                            {item.userInstance.firstName}
+                                                            &nbsp;
+                                                            {item.userInstance.lastName}
+                                                        </Text>
+                                                    </View>
+                                                    : null
                                             }
                                         </View>
                                     )

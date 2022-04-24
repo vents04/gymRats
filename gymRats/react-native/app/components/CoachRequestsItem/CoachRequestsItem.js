@@ -28,7 +28,7 @@ export default class CoachRequestsItem extends Component {
                                 source={{ uri: this.props.relation.client.profilePicture }} />
                     }
                     <View style={styles.chatsItemDetailsContainer}>
-                        <Text style={styles.chatsItemNames}>{this.props.relation.client.firstName} {this.props.relation.client.lastName}</Text>
+                        <Text style={styles.chatsItemNames}>{this.props.relation.client.firstName}&nbsp;{this.props.relation.client.lastName}</Text>
                     </View>
                 </View>
                 <TouchableOpacity style={[globalStyles.authPageActionButton, {

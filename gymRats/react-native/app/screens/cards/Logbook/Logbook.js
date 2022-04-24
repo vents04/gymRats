@@ -364,7 +364,9 @@ export default class Logbook extends Component {
                             : null
                     }
                     {
-                        this.state.showError && <Text style={globalStyles.errorBox}>{this.state.error}</Text>
+                        this.state.showError
+                            ? <Text style={globalStyles.errorBox}>{this.state.error}</Text>
+                            : null
                     }
                     <View style={styles.exercisesListContainer}>
                         <View style={styles.exercisesListContainerTopbar}>

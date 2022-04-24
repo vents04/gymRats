@@ -48,8 +48,11 @@ export default function BarcodeScanner() {
                     style={{ height: 400, width: 400 }} />
             </View>
             <Text style={styles.maintext}>{text}</Text>
-
-            {scanned && <Button title={'Scan again?'} onPress={() => setScanned(false)} color='tomato' />}
+            {
+                scanned
+                    ? <Button title={'Scan again?'} onPress={() => setScanned(false)} color='tomato' />
+                    : null
+            }
         </View>
     );
 }

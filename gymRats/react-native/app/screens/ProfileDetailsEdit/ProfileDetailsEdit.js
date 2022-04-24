@@ -132,9 +132,10 @@ export default class ProfileDetailsEdit extends Component {
                 }
                 {
                     this.state.showError
-                    && <Text style={[globalStyles.errorBox, {
-                        marginTop: 48
-                    }]}>{this.state.error}</Text>
+                        ? <Text style={[globalStyles.errorBox, {
+                            marginTop: 48
+                        }]}>{this.state.error}</Text>
+                        : null
                 }
                 <ScrollView style={styles.editSectionContainer} contentContainerStyle={globalStyles.fillEmptySpace}>
                     <View style={styles.editSection}>
@@ -172,7 +173,8 @@ export default class ProfileDetailsEdit extends Component {
                         this.state.profile.profilePicture
                             ? <TouchableOpacity style={globalStyles.authPageActionButton} disabled={this.state.showSaving} onPress={() => {
                                 this.saveChanges(true);
-                            }}><Text style={globalStyles.authPageActionButtonText}>Remove profile picture</Text>
+                            }}>
+                                <Text style={globalStyles.authPageActionButtonText}>Remove profile picture</Text>
                             </TouchableOpacity>
                             : null
                     }

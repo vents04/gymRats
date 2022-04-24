@@ -101,7 +101,9 @@ export default class CoachingApplicationSubmission extends Component {
                         <Text style={globalStyles.followUpScreenTitle}>Application submission</Text>
                     </View>
                     {
-                        this.state.showError && <Text style={globalStyles.errorBox}>{this.state.error}</Text>
+                        this.state.showError
+                            ? <Text style={globalStyles.errorBox}>{this.state.error}</Text>
+                            : null
                     }
                     <TextInput
                         value={this.state.query}
@@ -119,14 +121,15 @@ export default class CoachingApplicationSubmission extends Component {
                                 this.setState({ query: "", selectedLocation: "", showError: false })
                         }} />
                     {
-                        !this.state.selectedLocation &&
-                        this.state.results.map((result, index) =>
-                            <TouchableOpacity key={index} style={styles.resultContainer} onPress={() => {
-                                this.setState({ selectedLocation: result, query: result.description });
-                            }}>
-                                <Text style={styles.result}>{result.description}</Text>
-                            </TouchableOpacity>
-                        )
+                        !this.state.selectedLocation
+                            ? this.state.results.map((result, index) =>
+                                <TouchableOpacity key={index} style={styles.resultContainer} onPress={() => {
+                                    this.setState({ selectedLocation: result, query: result.description });
+                                }}>
+                                    <Text style={styles.result}>{result.description}</Text>
+                                </TouchableOpacity>
+                            )
+                            : null
                     }
                     <Text style={[globalStyles.notation, {
                         marginTop: 16
@@ -146,18 +149,19 @@ export default class CoachingApplicationSubmission extends Component {
                         />
                     </View>
                     {
-                        this.state.selectedLocation &&
-                        <>
-                            <Text style={[globalStyles.notation, {
-                                marginBottom: 10,
-                                marginTop: 16
-                            }]}>Our team will review your application as soon as possible.</Text>
-                            <TouchableOpacity style={globalStyles.authPageActionButton} onPress={() => {
-                                this.getPlace()
-                            }}>
-                                <Text style={globalStyles.authPageActionButtonText}>Submit application</Text>
-                            </TouchableOpacity>
-                        </>
+                        this.state.selectedLocation
+                            ? <>
+                                <Text style={[globalStyles.notation, {
+                                    marginBottom: 10,
+                                    marginTop: 16
+                                }]}>Our team will review your application as soon as possible.</Text>
+                                <TouchableOpacity style={globalStyles.authPageActionButton} onPress={() => {
+                                    this.getPlace()
+                                }}>
+                                    <Text style={globalStyles.authPageActionButtonText}>Submit application</Text>
+                                </TouchableOpacity>
+                            </>
+                            : null
                     }
                 </View>
             </View>

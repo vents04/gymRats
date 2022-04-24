@@ -142,24 +142,26 @@ export default class Coaching extends Component {
             <View style={globalStyles.safeAreaView}>
                 {
                     this.state.showEndRelationModal
-                    && <ConfirmationBox deleteCard={() => { this.updateStatus(this.state.relationToBeEndedId, this.state.statusToBeUpdated) }} toggleShowConfirmationBox={this.toggleShowEndRelationModal} />
+                        ? <ConfirmationBox deleteCard={() => { this.updateStatus(this.state.relationToBeEndedId, this.state.statusToBeUpdated) }} toggleShowConfirmationBox={this.toggleShowEndRelationModal} />
+                        : null
                 }
                 <View style={globalStyles.pageContainer}>
                     <LogoBar />
                     {
                         this.state.coaching &&
-                        this.state.coaching.myClients.requests.length > 0 &&
-                        <View style={globalStyles.topbarIconContainer} onClick={() => {
-                            this.props.navigation.navigate("CoachRequests", { relations: this.state.relations });
-                        }}>
-                            <HiInbox size={30} color="#1f6cb0" />
-                            <Badge
-                                status="error"
-                                value={this.state.coaching.myClients.requests.length}
-                                textStyle={{ fontFamily: "MainMedium" }}
-                                containerStyle={{ position: 'absolute', top: 8, right: 8, height: 12, width: 12 }}
-                            />
-                        </View>
+                            this.state.coaching.myClients.requests.length > 0
+                            ? <View style={globalStyles.topbarIconContainer} onClick={() => {
+                                this.props.navigation.navigate("CoachRequests", { relations: this.state.relations });
+                            }}>
+                                <HiInbox size={30} color="#1f6cb0" />
+                                <Badge
+                                    status="error"
+                                    value={this.state.coaching.myClients.requests.length}
+                                    textStyle={{ fontFamily: "MainMedium" }}
+                                    containerStyle={{ position: 'absolute', top: 8, right: 8, height: 12, width: 12 }}
+                                />
+                            </View>
+                            : null
                     }
                     {
                         this.state.showError
@@ -226,69 +228,71 @@ export default class Coaching extends Component {
                                                         : null
                                                 }
                                                 {
-                                                    this.state.coaching.myCoach.hasCoaches &&
-                                                    <>
-                                                        <Text style={styles.coachingSectionTitle}>Coaches</Text>
-                                                        {
-                                                            this.state.coaching.myCoach.coaches.map((coach, index) =>
-                                                                <View key={index} style={styles.requestItem}>
-                                                                    <View style={styles.requestItemProfile}>
-                                                                        {
-                                                                            !coach.coachUser.profilePicture
-                                                                                ? <View style={styles.profilePictureContainer}>
-                                                                                    <Text style={styles.noProfilePictureText}>
-                                                                                        {coach.coachUser.firstName.charAt(0)}
-                                                                                        {coach.coachUser.lastName.charAt(0)}
-                                                                                    </Text>
-                                                                                </View>
-                                                                                : <Image style={styles.profilePictureContainer}
-                                                                                    source={{ uri: coach.coachUser.profilePicture }} />
-                                                                        }
-                                                                        <Text style={styles.names}>
-                                                                            {coach.coachUser.firstName}
-                                                                            &nbsp;
-                                                                            {coach.coachUser.lastName}
-                                                                        </Text>
+                                                    this.state.coaching.myCoach.hasCoaches
+                                                        ? <>
+                                                            <Text style={styles.coachingSectionTitle}>Coaches</Text>
+                                                            {
+                                                                this.state.coaching.myCoach.coaches.map((coach, index) =>
+                                                                    <View key={index} style={styles.requestItem}>
+                                                                        <View style={styles.requestItemProfile}>
+                                                                            {
+                                                                                !coach.coachUser.profilePicture
+                                                                                    ? <View style={styles.profilePictureContainer}>
+                                                                                        <Text style={styles.noProfilePictureText}>
+                                                                                            {coach.coachUser.firstName.charAt(0)}
+                                                                                            {coach.coachUser.lastName.charAt(0)}
+                                                                                        </Text>
+                                                                                    </View>
+                                                                                    : <Image style={styles.profilePictureContainer}
+                                                                                        source={{ uri: coach.coachUser.profilePicture }} />
+                                                                            }
+                                                                            <Text style={styles.names}>
+                                                                                {coach.coachUser.firstName}
+                                                                                &nbsp;
+                                                                                {coach.coachUser.lastName}
+                                                                            </Text>
+                                                                        </View>
+                                                                        <AiFillDelete size={20} onClick={() => {
+                                                                            this.setState({ showEndRelationModal: true, relationToBeEndedId: coach._id, statusToBeUpdated: "CANCELED" })
+                                                                        }} />
                                                                     </View>
-                                                                    <AiFillDelete size={20} onClick={() => {
-                                                                        this.setState({ showEndRelationModal: true, relationToBeEndedId: coach._id, statusToBeUpdated: "CANCELED" })
-                                                                    }} />
-                                                                </View>
-                                                            )}
-                                                    </>
+                                                                )}
+                                                        </>
+                                                        : null
                                                 }
                                                 {
-                                                    this.state.coaching.myCoach.hasRelations &&
-                                                    <>
-                                                        <Text style={styles.coachingSectionTitle}>Unanswered requests</Text>
-                                                        {
-                                                            this.state.coaching.myCoach.relations.map((relation, index) =>
-                                                                <View key={index} style={styles.requestItem}>
-                                                                    <View style={styles.requestItemProfile}>
-                                                                        {
-                                                                            !relation.coach.profilePicture
-                                                                                ? <View style={styles.profilePictureContainer}>
-                                                                                    <Text style={styles.noProfilePictureText}>
-                                                                                        {relation.coach.firstName.charAt(0)}
-                                                                                        {relation.coach.lastName.charAt(0)}
-                                                                                    </Text>
-                                                                                </View>
-                                                                                : <Image style={styles.profilePictureContainer}
-                                                                                    source={{ uri: relation.coach.profilePicture }} />
-                                                                        }
-                                                                        <Text style={styles.names}>
-                                                                            {relation.coach.firstName}
-                                                                            &nbsp;
-                                                                            {relation.coach.lastName}
-                                                                        </Text>
+                                                    this.state.coaching.myCoach.hasRelations
+                                                        ? <>
+                                                            <Text style={styles.coachingSectionTitle}>Unanswered requests</Text>
+                                                            {
+                                                                this.state.coaching.myCoach.relations.map((relation, index) =>
+                                                                    <View key={index} style={styles.requestItem}>
+                                                                        <View style={styles.requestItemProfile}>
+                                                                            {
+                                                                                !relation.coach.profilePicture
+                                                                                    ? <View style={styles.profilePictureContainer}>
+                                                                                        <Text style={styles.noProfilePictureText}>
+                                                                                            {relation.coach.firstName.charAt(0)}
+                                                                                            {relation.coach.lastName.charAt(0)}
+                                                                                        </Text>
+                                                                                    </View>
+                                                                                    : <Image style={styles.profilePictureContainer}
+                                                                                        source={{ uri: relation.coach.profilePicture }} />
+                                                                            }
+                                                                            <Text style={styles.names}>
+                                                                                {relation.coach.firstName}
+                                                                                &nbsp;
+                                                                                {relation.coach.lastName}
+                                                                            </Text>
+                                                                        </View>
+                                                                        <AiFillDelete size={20} onClick={() => {
+                                                                            this.deleteRequest(relation._id);
+                                                                        }} />
                                                                     </View>
-                                                                    <AiFillDelete size={20} onClick={() => {
-                                                                        this.deleteRequest(relation._id);
-                                                                    }} />
-                                                                </View>
-                                                            )
-                                                        }
-                                                    </>
+                                                                )
+                                                            }
+                                                        </>
+                                                        : null
                                                 }
                                             </>
                                     }
@@ -296,13 +300,14 @@ export default class Coaching extends Component {
                                 : <View style={styles.tabContent}>
                                     {
                                         this.state.coaching.myClients.isPersonalTrainer
-                                        && <TouchableOpacity style={[globalStyles.authPageActionButton, {
-                                            marginBottom: 12
-                                        }]} onPress={() => {
-                                            this.props.navigation.navigate("CoachProfileEdit");
-                                        }}>
-                                            <Text style={globalStyles.authPageActionButtonText}>Open my coach profile</Text>
-                                        </TouchableOpacity>
+                                            ? <TouchableOpacity style={[globalStyles.authPageActionButton, {
+                                                marginBottom: 12
+                                            }]} onPress={() => {
+                                                this.props.navigation.navigate("CoachProfileEdit");
+                                            }}>
+                                                <Text style={globalStyles.authPageActionButtonText}>Open my coach profile</Text>
+                                            </TouchableOpacity>
+                                            : null
                                     }
                                     {
                                         !this.state.coaching.myClients.isPersonalTrainer

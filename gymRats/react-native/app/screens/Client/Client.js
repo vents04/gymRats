@@ -102,38 +102,41 @@ export default class Client extends Component {
                     </View>
                     {
                         this.state.showError
-                        && <Text style={[globalStyles.errorBox, {
-                            marginTop: 16
-                        }]}>{this.state.error}</Text>
+                            ? <Text style={[globalStyles.errorBox, {
+                                marginTop: 16
+                            }]}>{this.state.error}</Text>
+                            : null
                     }
                     {
                         this.state.client
-                        && <View style={styles.clientContainer}>
-                            {
-                                !this.state.client.profilePicture
-                                    ? <View style={styles.profilePictureContainer}>
-                                        <Text style={styles.noProfilePictureText}>
-                                            {this.state.client.firstName.charAt(0)}
-                                            {this.state.client.lastName.charAt(0)}
-                                        </Text>
-                                    </View>
-                                    : <Image style={styles.profilePictureContainer}
-                                        source={{ uri: this.state.client.profilePicture }} />
-                            }
-                            <View style={styles.clientInfoContainer}>
-                                <Text style={styles.names}>
-                                    {this.state.client.firstName}
-                                    &nbsp;
-                                    {this.state.client.lastName}
-                                </Text>
+                            ? <View style={styles.clientContainer}>
                                 {
-                                    this.state.from
-                                    && <Text style={[globalStyles.notation, {
-                                        fontSize: 12,
-                                    }]}>Client since {new Date(this.state.from).toLocaleDateString()}</Text>
+                                    !this.state.client.profilePicture
+                                        ? <View style={styles.profilePictureContainer}>
+                                            <Text style={styles.noProfilePictureText}>
+                                                {this.state.client.firstName.charAt(0)}
+                                                {this.state.client.lastName.charAt(0)}
+                                            </Text>
+                                        </View>
+                                        : <Image style={styles.profilePictureContainer}
+                                            source={{ uri: this.state.client.profilePicture }} />
                                 }
+                                <View style={styles.clientInfoContainer}>
+                                    <Text style={styles.names}>
+                                        {this.state.client.firstName}
+                                        &nbsp;
+                                        {this.state.client.lastName}
+                                    </Text>
+                                    {
+                                        this.state.from
+                                            ? <Text style={[globalStyles.notation, {
+                                                fontSize: 12,
+                                            }]}>Client since {new Date(this.state.from).toLocaleDateString()}</Text>
+                                            : null
+                                    }
+                                </View>
                             </View>
-                        </View>
+                            : null
                     }
                     {
                         this.state.selectedDate

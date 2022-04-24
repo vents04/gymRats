@@ -77,17 +77,22 @@ export default class LogbookCard extends Component {
 
     render() {
         return <View style={globalStyles.card}>
-            {this.state.showConfirmationBox && <ConfirmationBox deleteCard={this.deleteCard} toggleShowConfirmationBox={this.toggleShowConfirmationBox} />}
+            {
+                this.state.showConfirmationBox
+                    ? <ConfirmationBox deleteCard={this.deleteCard} toggleShowConfirmationBox={this.toggleShowConfirmationBox} />
+                    : null
+            }
             <View style={globalStyles.cardTopbar}>
                 <BsJournalBookmarkFill size={25} color={cardColors.logbook} />
                 <Text style={globalStyles.cardTitle}>{i18n.t('components')['cards']['logbook']['cardTitle']}</Text>
                 {
                     !this.props.client
-                    && <View style={globalStyles.cardTopbarIcon}>
-                        <AiFillDelete size={25} color="#ddd" onClick={() => {
-                            this.setState({ showConfirmationBox: true })
-                        }} />
-                    </View>
+                        ? <View style={globalStyles.cardTopbarIcon}>
+                            <AiFillDelete size={25} color="#ddd" onClick={() => {
+                                this.setState({ showConfirmationBox: true })
+                            }} />
+                        </View>
+                        : null
                 }
             </View>
             <View>
@@ -109,7 +114,7 @@ export default class LogbookCard extends Component {
                                             <Text key={index} style={[styles.exercise, {
                                                 fontFamily: this.props.client ? "MainBold" : "MainRegular",
                                                 fontSize: this.props.client ? 16 : 12
-                                            }]}>{exercise.sets.length} {this.props.client && (exercise.sets.length != 1 ? "sets " : "set ")}x {
+                                            }]}>{exercise.sets.length} {this.props.client ? (exercise.sets.length != 1 ? "sets " : "set ") : null}x {
                                                     exercise.translations.hasOwnProperty(i18n.locale)
                                                         ? exercise.translations[i18n.locale]
                                                         : exercise.exerciseName
@@ -117,28 +122,32 @@ export default class LogbookCard extends Component {
                                             </Text>
                                             {
                                                 this.props.client
-                                                && exercise.sets.map((set, setIndex) =>
-                                                    <Text key={`${index}${setIndex}`} style={styles.setInfo}>
-                                                        {
-                                                            set.reps
-                                                            && <>
-                                                                {set.reps} {set.reps != 1 ? "reps " : "rep "}
-                                                            </>
-                                                        }
-                                                        {
-                                                            set.weight && set.weight.amount
-                                                            && <>
-                                                                with {set.weight.amount}{WEIGHT_UNITS_LABELS[set.weight.unit]}&nbsp;
-                                                            </>
-                                                        }
-                                                        {
-                                                            set.duration
-                                                            && <>
-                                                                for {set.duration} seconds&nbsp;
-                                                            </>
-                                                        }
-                                                    </Text>
-                                                )
+                                                    ? exercise.sets.map((set, setIndex) =>
+                                                        <Text key={`${index}${setIndex}`} style={styles.setInfo}>
+                                                            {
+                                                                set.reps
+                                                                    ? <>
+                                                                        {set.reps} {set.reps != 1 ? "reps " : "rep "}
+                                                                    </>
+                                                                    : null
+                                                            }
+                                                            {
+                                                                set.weight && set.weight.amount
+                                                                    ? <>
+                                                                        with {set.weight.amount}{WEIGHT_UNITS_LABELS[set.weight.unit]}&nbsp;
+                                                                    </>
+                                                                    : null
+                                                            }
+                                                            {
+                                                                set.duration
+                                                                    ? <>
+                                                                        for {set.duration} seconds&nbsp;
+                                                                    </>
+                                                                    : null
+                                                            }
+                                                        </Text>
+                                                    )
+                                                    : null
                                             }
                                         </>
                                     )
@@ -146,14 +155,15 @@ export default class LogbookCard extends Component {
                             </View>
                             {
                                 !this.props.client
-                                && <TouchableOpacity style={[globalStyles.authPageActionButton, {
-                                    backgroundColor: cardColors.logbook,
-                                    marginTop: 16
-                                }]} onPress={() => {
-                                    this.props.actionButtonFunction();
-                                }}>
-                                    <Text style={globalStyles.authPageActionButtonText}>{i18n.t('components')['cards']['logbook']['redirectButton']}</Text>
-                                </TouchableOpacity>
+                                    ? <TouchableOpacity style={[globalStyles.authPageActionButton, {
+                                        backgroundColor: cardColors.logbook,
+                                        marginTop: 16
+                                    }]} onPress={() => {
+                                        this.props.actionButtonFunction();
+                                    }}>
+                                        <Text style={globalStyles.authPageActionButtonText}>{i18n.t('components')['cards']['logbook']['redirectButton']}</Text>
+                                    </TouchableOpacity>
+                                    : null
                             }
                         </>
                 }

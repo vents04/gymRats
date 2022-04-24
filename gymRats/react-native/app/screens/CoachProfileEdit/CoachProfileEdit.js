@@ -56,65 +56,68 @@ export default class CoachPage extends Component {
                         <Text style={globalStyles.followUpScreenTitle}>Coach profile edit</Text>
                     </View>
                     {
-                        this.state.showError && <Text style={globalStyles.errorBox}>{this.state.error}</Text>
+                        this.state.showError
+                            ? <Text style={globalStyles.errorBox}>{this.state.error}</Text>
+                            : null
                     }
                     <ScrollView contentContainerStyle={globalStyles.fillEmptySpace}>
                         {
                             this.state.coach
-                            && <>
-                                <View style={styles.profileTop}>
-                                    {
-                                        !this.state.coach.user.profilePicture
-                                            ? <View style={styles.profilePictureContainer}>
-                                                <Text style={styles.noProfilePictureText}>
-                                                    {this.state.coach.user.firstName.charAt(0)}
-                                                    {this.state.coach.user.lastName.charAt(0)}
-                                                </Text>
+                                ? <>
+                                    <View style={styles.profileTop}>
+                                        {
+                                            !this.state.coach.user.profilePicture
+                                                ? <View style={styles.profilePictureContainer}>
+                                                    <Text style={styles.noProfilePictureText}>
+                                                        {this.state.coach.user.firstName.charAt(0)}
+                                                        {this.state.coach.user.lastName.charAt(0)}
+                                                    </Text>
+                                                </View>
+                                                : <Image style={styles.profilePictureContainer}
+                                                    source={{ uri: this.state.coach.user.profilePicture }} />
+                                        }
+                                        <Text style={styles.names}>
+                                            {this.state.coach.user.firstName}
+                                            &nbsp;
+                                            {this.state.coach.user.lastName}
+                                        </Text>
+                                        <View style={styles.coachStats}>
+                                            <View style={styles.statContainer}>
+                                                <Text style={styles.statValue}>{this.state.coach.clients}</Text>
+                                                <Text style={styles.statTitle}>clients</Text>
                                             </View>
-                                            : <Image style={styles.profilePictureContainer}
-                                                source={{ uri: this.state.coach.user.profilePicture }} />
-                                    }
-                                    <Text style={styles.names}>
-                                        {this.state.coach.user.firstName}
-                                        &nbsp;
-                                        {this.state.coach.user.lastName}
-                                    </Text>
-                                    <View style={styles.coachStats}>
-                                        <View style={styles.statContainer}>
-                                            <Text style={styles.statValue}>{this.state.coach.clients}</Text>
-                                            <Text style={styles.statTitle}>clients</Text>
+                                            <View style={styles.statContainer}>
+                                                <Text style={styles.statValue}>{this.state.coach.rating}</Text>
+                                                <Text style={styles.statTitle}>rating</Text>
+                                            </View>
+                                            <View style={styles.statContainer}>
+                                                <Text style={styles.statValue}>{this.state.coach.experience ?? "-"}</Text>
+                                                <Text style={styles.statTitle}>experience</Text>
+                                            </View>
                                         </View>
-                                        <View style={styles.statContainer}>
-                                            <Text style={styles.statValue}>{this.state.coach.rating}</Text>
-                                            <Text style={styles.statTitle}>rating</Text>
-                                        </View>
-                                        <View style={styles.statContainer}>
-                                            <Text style={styles.statValue}>{this.state.coach.experience ?? "-"}</Text>
-                                            <Text style={styles.statTitle}>experience</Text>
-                                        </View>
+                                        <Text style={styles.location} onClick={() => {
+                                            Linking.openURL(`https://google.com/maps/@${this.state.coach.location.lat},${this.state.coach.location.lng},11z`)
+                                        }}>{this.state.coach.location.address}</Text>
                                     </View>
-                                    <Text style={styles.location} onClick={() => {
-                                        Linking.openURL(`https://google.com/maps/@${this.state.coach.location.lat},${this.state.coach.location.lng},11z`)
-                                    }}>{this.state.coach.location.address}</Text>
-                                </View>
-                                <Text style={[globalStyles.notation, {
-                                    marginTop: 16
-                                }]}>Do you prefer to work with clients only in person?</Text>
-                                <Switch
-                                    style={{
-                                        marginTop: 10
-                                    }}
-                                    trackColor={{ false: '#767577', true: '#53c7f0' }}
-                                    thumbColor={this.state.coach.prefersOfflineCoaching ? '#1f6cb0' : '#f4f3f4'}
-                                    ios_backgroundColor="#3e3e3e"
-                                    onValueChange={() => {
-                                        let coach = this.state.coach;
-                                        coach.prefersOfflineCoaching = !coach.prefersOfflineCoaching;
-                                        this.setState({ coach });
-                                    }}
-                                    value={this.state.coach.prefersOfflineCoaching}
-                                />
-                            </>
+                                    <Text style={[globalStyles.notation, {
+                                        marginTop: 16
+                                    }]}>Do you prefer to work with clients only in person?</Text>
+                                    <Switch
+                                        style={{
+                                            marginTop: 10
+                                        }}
+                                        trackColor={{ false: '#767577', true: '#53c7f0' }}
+                                        thumbColor={this.state.coach.prefersOfflineCoaching ? '#1f6cb0' : '#f4f3f4'}
+                                        ios_backgroundColor="#3e3e3e"
+                                        onValueChange={() => {
+                                            let coach = this.state.coach;
+                                            coach.prefersOfflineCoaching = !coach.prefersOfflineCoaching;
+                                            this.setState({ coach });
+                                        }}
+                                        value={this.state.coach.prefersOfflineCoaching}
+                                    />
+                                </>
+                                : null
                         }
                     </ScrollView>
                 </View>

@@ -9,6 +9,7 @@ import i18n from 'i18n-js';
 import { HTTP_STATUS_CODES } from '../../../global';
 
 import globalStyles from '../../../assets/styles/global.styles';
+import LogoBar from '../../components/LogoBar/LogoBar';
 
 export default class Signup extends Component {
 
@@ -57,10 +58,7 @@ export default class Signup extends Component {
         return (
             <View style={globalStyles.safeAreaView}>
                 <View style={globalStyles.pageContainer}>
-                    <View style={globalStyles.pageLogoContainer}>
-                        <Image style={globalStyles.pageLogo} source={require('../../../assets/img/icon.png')} />
-                        <Text style={globalStyles.pageLogoText}>Gym Rats</Text>
-                    </View>
+                    <LogoBar />
                     <Text style={globalStyles.authPageTitle}>{i18n.t('screens')['signup']['pageTitle']}</Text>
                     <View style={globalStyles.authPageInputs}>
                         <TextInput
@@ -86,7 +84,9 @@ export default class Signup extends Component {
                             onChangeText={(val) => { this.setState({ password: val }); this.setState({ showError: false }) }} />
                     </View>
                     {
-                        this.state.showError && <Text style={globalStyles.authPageError}>{this.state.error}</Text>
+                        this.state.showError
+                            ? <Text style={globalStyles.authPageError}>{this.state.error}</Text>
+                            : null
                     }
                     <TouchableOpacity style={globalStyles.authPageActionButton} onPress={() => {
                         if (!this.state.isLoading) this.signup();
@@ -104,8 +104,7 @@ export default class Signup extends Component {
                     <View style={globalStyles.authPageRedirectTextContainer} onClick={() => {
                         this.props.navigation.navigate("Login")
                     }}>
-                        <Text style={globalStyles.authPageRedirectText}>{i18n.t('screens')['signup']['haveAccount']}</Text>
-                        &nbsp;
+                        <Text style={globalStyles.authPageRedirectText}>{i18n.t('screens')['signup']['haveAccount']}&nbsp;</Text>
                         <Text style={globalStyles.authPageRedirectHighlightText}>{i18n.t('screens')['signup']['goToLogin']}</Text>
                     </View>
                 </View>

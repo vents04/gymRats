@@ -59,17 +59,22 @@ export default class WeightTrackerCard extends Component {
     render() {
         return (
             <View style={globalStyles.card}>
-                {this.state.showConfirmationBox && <ConfirmationBox deleteCard={this.deleteCard} toggleShowConfirmationBox={this.toggleShowConfirmationBox} />}
+                {
+                    this.state.showConfirmationBox
+                        ? <ConfirmationBox deleteCard={this.deleteCard} toggleShowConfirmationBox={this.toggleShowConfirmationBox} />
+                        : null
+                }
                 <View style={globalStyles.cardTopbar}>
                     <FaWeight size={25} color={cardColors.weightTracker} />
                     <Text style={globalStyles.cardTitle}>{i18n.t('components')['cards']['weightTracker']['cardTitle']}</Text>
                     {
                         !this.props.client
-                        && <View style={globalStyles.cardTopbarIcon}>
-                            <AiFillDelete size={25} color="#ddd" onClick={() => {
-                                this.setState({ showConfirmationBox: true })
-                            }} />
-                        </View>
+                            ? <View style={globalStyles.cardTopbarIcon}>
+                                <AiFillDelete size={25} color="#ddd" onClick={() => {
+                                    this.setState({ showConfirmationBox: true })
+                                }} />
+                            </View>
+                            : null
                     }
                 </View>
                 <View>
@@ -94,7 +99,8 @@ export default class WeightTrackerCard extends Component {
                                                     &nbsp;
                                                     {WEIGHT_UNITS_LABELS[this.props.data.unit]}
                                                     &nbsp;
-                                                    {i18n.t('components')['cards']['weightTracker']['lostWeight']}</Text>
+                                                    {i18n.t('components')['cards']['weightTracker']['lostWeight']}
+                                                </Text>
                                             </View>
                                             : <View style={styles.statsContainer}>
                                                 <FaLongArrowAltUp size={20} color={cardColors.weightTracker} />
@@ -103,20 +109,22 @@ export default class WeightTrackerCard extends Component {
                                                     &nbsp;
                                                     {WEIGHT_UNITS_LABELS[this.props.data.unit]}
                                                     &nbsp;
-                                                    {i18n.t('components')['cards']['weightTracker']['gainedWeight']}</Text>
+                                                    {i18n.t('components')['cards']['weightTracker']['gainedWeight']}
+                                                </Text>
                                             </View>
                                         : null
                                 }
                                 {
                                     !this.props.client
-                                    && <TouchableOpacity style={[globalStyles.authPageActionButton, {
-                                        backgroundColor: cardColors.weightTracker,
-                                        marginTop: 16
-                                    }]} onPress={() => {
-                                        this.props.actionButtonFunction();
-                                    }}>
-                                        <Text style={globalStyles.authPageActionButtonText}>{i18n.t('components')['cards']['weightTracker']['redirectButton']}</Text>
-                                    </TouchableOpacity>
+                                        ? <TouchableOpacity style={[globalStyles.authPageActionButton, {
+                                            backgroundColor: cardColors.weightTracker,
+                                            marginTop: 16
+                                        }]} onPress={() => {
+                                            this.props.actionButtonFunction();
+                                        }}>
+                                            <Text style={globalStyles.authPageActionButtonText}>{i18n.t('components')['cards']['weightTracker']['redirectButton']}</Text>
+                                        </TouchableOpacity>
+                                        : null
                                 }
                             </>
                     }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, Image, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { Text, View, Image, TextInput, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
 
 import ApiRequests from '../../classes/ApiRequests';
 import Auth from '../../classes/Auth';
@@ -9,6 +9,7 @@ import i18n from 'i18n-js';
 import { HTTP_STATUS_CODES } from '../../../global';
 
 import globalStyles from '../../../assets/styles/global.styles';
+import LogoBar from '../../components/LogoBar/LogoBar';
 
 export default class Login extends Component {
 
@@ -53,10 +54,7 @@ export default class Login extends Component {
         return (
             <View style={globalStyles.safeAreaView}>
                 <View style={globalStyles.pageContainer}>
-                    <View style={globalStyles.pageLogoContainer}>
-                        <Image style={globalStyles.pageLogo} source={require('../../../assets/img/icon.png')} />
-                        <Text style={globalStyles.pageLogoText}>Gym Rats</Text>
-                    </View>
+                    <LogoBar />
                     <Text style={globalStyles.authPageTitle}>{i18n.t('screens')['login']['pageTitle']}</Text>
                     <View style={globalStyles.authPageInputs}>
                         <TextInput
@@ -72,7 +70,9 @@ export default class Login extends Component {
                             onChangeText={(val) => { this.setState({ password: val, showError: false }) }} />
                     </View>
                     {
-                        this.state.showError && <Text style={globalStyles.authPageError}>{this.state.error}</Text>
+                        this.state.showError
+                            ? <Text style={globalStyles.authPageError}>{this.state.error}</Text>
+                            : null
                     }
                     <TouchableOpacity style={globalStyles.authPageActionButton} onPress={() => {
                         if (!this.state.isLoading) this.login();
@@ -90,8 +90,7 @@ export default class Login extends Component {
                     <View style={globalStyles.authPageRedirectTextContainer} onClick={() => {
                         this.props.navigation.navigate("Signup")
                     }}>
-                        <Text style={globalStyles.authPageRedirectText}>{i18n.t('screens')['login']['dontHaveAccount']}</Text>
-                        &nbsp;
+                        <Text style={globalStyles.authPageRedirectText}>{i18n.t('screens')['login']['dontHaveAccount']}&nbsp;</Text>
                         <Text style={globalStyles.authPageRedirectHighlightText}>{i18n.t('screens')['login']['goToSignup']}</Text>
                     </View>
                 </View>

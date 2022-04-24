@@ -5,7 +5,7 @@ export default StyleSheet.create({
         display: "flex",
         flexDirection: "row",
         alignItems: "center",
-        marginBottom: "2rem"
+        marginBottom: 32
     },
     pageLogo: {
         width: 32,

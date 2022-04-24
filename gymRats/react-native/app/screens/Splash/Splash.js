@@ -7,18 +7,26 @@ import User from '../../classes/User';
 import globalStyles from '../../../assets/styles/global.styles';
 import styles from './Splash.styles';
 
+import logo from '../../../assets/img/icon.png'
+
 export default class Splash extends Component {
     componentDidMount() {
-        let isAuthenticated = false;
-        (async () => {
+        setTimeout(async () => {
+            let isAuthenticated = false;
             try {
                 const token = await Auth.getToken();
                 if (token) isAuthenticated = await User.validateToken(token);
             } catch (err) {
-                this.props.navigation.navigate('Auth');
+                this.props.navigation.reset({
+                    index: 0,
+                    routes: [{ name: 'Auth' }],
+                });
             }
-            this.props.navigation.navigate(isAuthenticated ? 'NavigationRoutes' : 'Auth');
-        })();
+            this.props.navigation.reset({
+                index: 0,
+                routes: [{ name: isAuthenticated ? 'NavigationRoutes' : 'Auth' }],
+            });
+        }, 2500);
     }
 
     render() {
@@ -26,7 +34,7 @@ export default class Splash extends Component {
             <View style={globalStyles.safeAreaView}>
                 <View style={styles.centeredContent}>
                     <View style={styles.logoContainer}>
-                        <Image style={styles.logo} source={require('../../../assets/img/icon.png')} />
+                        <Image style={styles.logo} source={logo} />
                         <Text style={styles.logoText}>Gym Rats</Text>
                     </View>
                     <ActivityIndicator

@@ -68,9 +68,10 @@ export default class AddFood extends Component {
                     </View>
                     {
                         this.state.showError
-                        && <Text style={[globalStyles.errorBox, {
-                            marginTop: 16
-                        }]}>{this.state.error}</Text>
+                            ? <Text style={[globalStyles.errorBox, {
+                                marginTop: 16
+                            }]}>{this.state.error}</Text>
+                            : null
                     }
                     <ScrollView contentContainerStyle={{
                         flexGrow: 1,

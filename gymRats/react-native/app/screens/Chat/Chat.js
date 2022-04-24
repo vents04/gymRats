@@ -106,42 +106,43 @@ export default class Chat extends Component {
         return (
             <View style={globalStyles.safeAreaView}>
                 {
-                    this.state.chat &&
-                    <>
-                        <View style={styles.chatTopbarContainer}>
-                            <BiArrowBack size={25} onClick={() => {
-                                this.props.navigation.navigate("Chats")
-                            }} />
-                            {
-                                !this.state.chat.user.profilePicture
-                                    ? <View style={styles.chatProfilePicture}>
-                                        <Text style={styles.noProfilePictureText}>
-                                            {this.state.chat.user.firstName.charAt(0)}
-                                            {this.state.chat.user.lastName.charAt(0)}
-                                        </Text>
-                                    </View>
-                                    : <Image style={styles.chatProfilePicture} />
-                            }
-                            <Text style={styles.chatProfileNames}>{this.state.chat.oppositeUser.firstName}</Text>
-                        </View>
-                        <ScrollView ref={this.scrollView} style={styles.chatMessagesContainer}>
-                            {
-                                this.state.chat.messages.map((message, index) =>
-                                    <Message key={index} message={message} user={this.state.chat.user} oppositeUser={this.state.chat.oppositeUser} />
-                                )
-                            }
-                        </ScrollView>
-                        <View style={styles.chatInputContainer}>
-                            <TextInput
-                                value={this.state.message}
-                                style={styles.chatInput}
-                                placeholder="Type a message"
-                                onChangeText={(val) => { this.setState({ message: val, showError: false }) }} />
-                            <View style={styles.chatActionButtonContainer}>
-                                <IoIosSend onClick={() => { this.sendTextMessage({ senderId: this.state.chat.user._id, message: this.state.message }) }} size={24} style={styles.chatInputButton} color="#1f6cb0" />
+                    this.state.chat
+                        ? <>
+                            <View style={styles.chatTopbarContainer}>
+                                <BiArrowBack size={25} onClick={() => {
+                                    this.props.navigation.navigate("Chats")
+                                }} />
+                                {
+                                    !this.state.chat.user.profilePicture
+                                        ? <View style={styles.chatProfilePicture}>
+                                            <Text style={styles.noProfilePictureText}>
+                                                {this.state.chat.user.firstName.charAt(0)}
+                                                {this.state.chat.user.lastName.charAt(0)}
+                                            </Text>
+                                        </View>
+                                        : <Image style={styles.chatProfilePicture} />
+                                }
+                                <Text style={styles.chatProfileNames}>{this.state.chat.oppositeUser.firstName}</Text>
                             </View>
-                        </View>
-                    </>
+                            <ScrollView ref={this.scrollView} style={styles.chatMessagesContainer}>
+                                {
+                                    this.state.chat.messages.map((message, index) =>
+                                        <Message key={index} message={message} user={this.state.chat.user} oppositeUser={this.state.chat.oppositeUser} />
+                                    )
+                                }
+                            </ScrollView>
+                            <View style={styles.chatInputContainer}>
+                                <TextInput
+                                    value={this.state.message}
+                                    style={styles.chatInput}
+                                    placeholder="Type a message"
+                                    onChangeText={(val) => { this.setState({ message: val, showError: false }) }} />
+                                <View style={styles.chatActionButtonContainer}>
+                                    <IoIosSend onClick={() => { this.sendTextMessage({ senderId: this.state.chat.user._id, message: this.state.message }) }} size={24} style={styles.chatInputButton} color="#1f6cb0" />
+                                </View>
+                            </View>
+                        </>
+                        : null
                 }
             </View>
         )
