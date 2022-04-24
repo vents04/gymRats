@@ -117,76 +117,77 @@ export default class Calendar extends Component {
             <View style={globalStyles.pageContainer}>
                 <LogoBar />
                 {
-                    this.state.selectedDate &&
-                    <View style={globalStyles.fillEmptySpace}>
-                        <View style={styles.calendarControllersContainer}>
-                            <View style={styles.calendarController} onClick={() => { this.incrementDate(-1) }}>
-                                <IoIosArrowBack style={{ marginRight: 5 }} size={14} color="#999" />
-                                <Text style={styles.calendarControllerText}>{i18n.t('screens')['calendar']['calendarControllerBack']}</Text>
+                    this.state.selectedDate
+                        ? <View style={globalStyles.fillEmptySpace}>
+                            <View style={styles.calendarControllersContainer}>
+                                <View style={styles.calendarController} onClick={() => { this.incrementDate(-1) }}>
+                                    <IoIosArrowBack style={{ marginRight: 5 }} size={14} color="#999" />
+                                    <Text style={styles.calendarControllerText}>{i18n.t('screens')['calendar']['calendarControllerBack']}</Text>
+                                </View>
+                                <Text style={styles.calendarCurrentDate} onClick={() => { this.setState({ showDatePicker: true }) }}>
+                                    {this.state.selectedDate.getDate()}
+                                    .
+                                    {
+                                        this.state.selectedDate.getMonth() + 1 < 10
+                                            ? `0${(this.state.selectedDate.getMonth() + 1)}`
+                                            : (this.state.selectedDate.getMonth() + 1)
+                                    }
+                                </Text>
+                                <View style={[styles.calendarController, { justifyContent: 'flex-end' }]} onClick={() => { this.incrementDate(1) }}>
+                                    <Text style={styles.calendarControllerText}>{i18n.t('screens')['calendar']['calendarControllerNext']}</Text>
+                                    <IoIosArrowForward style={{ marginLeft: 5 }} size={14} color="#999" />
+                                </View>
                             </View>
-                            <Text style={styles.calendarCurrentDate} onClick={() => { this.setState({ showDatePicker: true }) }}>
-                                {this.state.selectedDate.getDate()}
-                                .
+                            <View>
+                                <TouchableOpacity style={[globalStyles.authPageActionButton, {
+                                    marginBottom: 16
+                                }]} onPress={() => {
+                                    this.bottomSheet.current.show()
+                                }}>
+                                    <Text style={globalStyles.authPageActionButtonText}>{i18n.t('screens')['calendar']['addData']}</Text>
+                                </TouchableOpacity>
+                            </View>
+                            <ScrollView contentContainerStyle={globalStyles.fillEmptySpace}>
                                 {
-                                    this.state.selectedDate.getMonth() + 1 < 10
-                                        ? `0${(this.state.selectedDate.getMonth() + 1)}`
-                                        : (this.state.selectedDate.getMonth() + 1)
-                                }
-                            </Text>
-                            <View style={[styles.calendarController, { justifyContent: 'flex-end' }]} onClick={() => { this.incrementDate(1) }}>
-                                <Text style={styles.calendarControllerText}>{i18n.t('screens')['calendar']['calendarControllerNext']}</Text>
-                                <IoIosArrowForward style={{ marginLeft: 5 }} size={14} color="#999" />
-                            </View>
-                        </View>
-                        <View>
-                            <TouchableOpacity style={[globalStyles.authPageActionButton, {
-                                marginBottom: 16
-                            }]} onPress={() => {
-                                this.bottomSheet.current.show()
-                            }}>
-                                <Text style={globalStyles.authPageActionButtonText}>{i18n.t('screens')['calendar']['addData']}</Text>
-                            </TouchableOpacity>
-                        </View>
-                        <ScrollView contentContainerStyle={globalStyles.fillEmptySpace}>
-                            {
-                                this.state.dates.map((date) =>
-                                    date.date.getTime() == this.state.selectedDate.getTime()
-                                        ? date.cards.length > 0
-                                            ? date.cards.map((card) =>
-                                                card.card == "dailyWeights"
-                                                    ? <WeightTrackerCard key={`${date}${card._id}`} actionButtonFunction={() => {
-                                                        this.props.navigation.navigate("WeightTracker", {
-                                                            date: this.state.selectedDate,
-                                                            timezoneOffset: this.state.timezoneOffset,
-                                                            weight: card.data.weight,
-                                                            weightUnit: card.data.unit,
-                                                            _id: card.data._id
-                                                        });
-                                                    }} data={card.data} rerender={this.reloadDateAfterDelete} date={this.state.selectedDate} {...this.props} />
-                                                    : card.card == 'workoutSessions'
-                                                        ? <LogbookCard key={`${date}${card._id}`} actionButtonFunction={() => {
-                                                            this.props.navigation.navigate("Logbook", {
+                                    this.state.dates.map((date) =>
+                                        date.date.getTime() == this.state.selectedDate.getTime()
+                                            ? date.cards.length > 0
+                                                ? date.cards.map((card) =>
+                                                    card.card == "dailyWeights"
+                                                        ? <WeightTrackerCard key={`${date}${card._id}`} actionButtonFunction={() => {
+                                                            this.props.navigation.navigate("WeightTracker", {
                                                                 date: this.state.selectedDate,
                                                                 timezoneOffset: this.state.timezoneOffset,
-                                                                data: card.data
+                                                                weight: card.data.weight,
+                                                                weightUnit: card.data.unit,
+                                                                _id: card.data._id
                                                             });
                                                         }} data={card.data} rerender={this.reloadDateAfterDelete} date={this.state.selectedDate} {...this.props} />
-                                                        : card.card == 'caloriesCounterDays'
-                                                            ? <CaloriesIntakeCard key={`${date}${card._id}`} actionButtonFunction={() => {
-                                                                this.props.navigation.navigate("CaloriesIntake", {
+                                                        : card.card == 'workoutSessions'
+                                                            ? <LogbookCard key={`${date}${card._id}`} actionButtonFunction={() => {
+                                                                this.props.navigation.navigate("Logbook", {
                                                                     date: this.state.selectedDate,
                                                                     timezoneOffset: this.state.timezoneOffset,
                                                                     data: card.data
                                                                 });
                                                             }} data={card.data} rerender={this.reloadDateAfterDelete} date={this.state.selectedDate} {...this.props} />
-                                                            : null
-                                            )
-                                            : <Text key={date} style={globalStyles.notation}>{i18n.t('screens')['calendar']['noData']}</Text>
-                                        : null
-                                )
-                            }
-                        </ScrollView>
-                    </View>
+                                                            : card.card == 'caloriesCounterDays'
+                                                                ? <CaloriesIntakeCard key={`${date}${card._id}`} actionButtonFunction={() => {
+                                                                    this.props.navigation.navigate("CaloriesIntake", {
+                                                                        date: this.state.selectedDate,
+                                                                        timezoneOffset: this.state.timezoneOffset,
+                                                                        data: card.data
+                                                                    });
+                                                                }} data={card.data} rerender={this.reloadDateAfterDelete} date={this.state.selectedDate} {...this.props} />
+                                                                : null
+                                                )
+                                                : <Text key={date} style={globalStyles.notation}>{i18n.t('screens')['calendar']['noData']}</Text>
+                                            : null
+                                    )
+                                }
+                            </ScrollView>
+                        </View>
+                        : null
                 }
             </View>
             <BottomSheet ref={this.bottomSheet} height={400} draggable={false}>
@@ -199,58 +200,62 @@ export default class Calendar extends Component {
                 <ScrollView style={styles.cardsContainer}>
                     {
                         this.state.doNotShow.length == Object.keys(ACTIVE_CARDS).length
-                        && <Text style={globalStyles.notation}>{i18n.t('screens')['calendar']['bottomSheetNoCards']}</Text>
+                            ? <Text style={globalStyles.notation}>{i18n.t('screens')['calendar']['bottomSheetNoCards']}</Text>
+                            : null
                     }
                     {
                         !this.state.doNotShow.includes("dailyWeights")
-                        && <View style={[styles.card, {
-                            backgroundColor: cardColors.weightTracker
-                        }]} onClick={() => {
-                            this.bottomSheet.current.close();
-                            this.props.navigation.navigate("WeightTracker", {
-                                date: this.state.selectedDate,
-                                timezoneOffset: this.state.timezoneOffset
-                            });
-                        }}>
-                            <View style={styles.cardTopbar}>
-                                <FaWeight color="#fff" size={25} />
-                                <Text style={styles.cardTitle}>{i18n.t('components')['cards']['weightTracker']['cardTitle']}</Text>
+                            ? <View style={[styles.card, {
+                                backgroundColor: cardColors.weightTracker
+                            }]} onClick={() => {
+                                this.bottomSheet.current.close();
+                                this.props.navigation.navigate("WeightTracker", {
+                                    date: this.state.selectedDate,
+                                    timezoneOffset: this.state.timezoneOffset
+                                });
+                            }}>
+                                <View style={styles.cardTopbar}>
+                                    <FaWeight color="#fff" size={25} />
+                                    <Text style={styles.cardTitle}>{i18n.t('components')['cards']['weightTracker']['cardTitle']}</Text>
+                                </View>
                             </View>
-                        </View>
+                            : null
                     }
                     {
                         !this.state.doNotShow.includes("workoutSessions")
-                        && <View style={[styles.card, {
-                            backgroundColor: cardColors.logbook
-                        }]} onClick={() => {
-                            this.bottomSheet.current.close();
-                            this.props.navigation.navigate("Logbook", {
-                                date: this.state.selectedDate,
-                                timezoneOffset: this.state.timezoneOffset
-                            });
-                        }}>
-                            <View style={styles.cardTopbar}>
-                                <BsJournalBookmarkFill color="#fff" size={25} />
-                                <Text style={styles.cardTitle}>{i18n.t('components')['cards']['logbook']['cardTitle']}</Text>
+                            ? <View style={[styles.card, {
+                                backgroundColor: cardColors.logbook
+                            }]} onClick={() => {
+                                this.bottomSheet.current.close();
+                                this.props.navigation.navigate("Logbook", {
+                                    date: this.state.selectedDate,
+                                    timezoneOffset: this.state.timezoneOffset
+                                });
+                            }}>
+                                <View style={styles.cardTopbar}>
+                                    <BsJournalBookmarkFill color="#fff" size={25} />
+                                    <Text style={styles.cardTitle}>{i18n.t('components')['cards']['logbook']['cardTitle']}</Text>
+                                </View>
                             </View>
-                        </View>
+                            : null
                     }
                     {
                         !this.state.doNotShow.includes("caloriesCounterDays")
-                        && <View style={[styles.card, {
-                            backgroundColor: cardColors.caloriesIntake
-                        }]} onClick={() => {
-                            this.bottomSheet.current.close();
-                            this.props.navigation.navigate("CaloriesIntake", {
-                                date: this.state.selectedDate,
-                                timezoneOffset: this.state.timezoneOffset
-                            });
-                        }}>
-                            <View style={styles.cardTopbar}>
-                                <GiMeal color="#fff" size={25} />
-                                <Text style={styles.cardTitle}>Calories intake</Text>
+                            ? <View style={[styles.card, {
+                                backgroundColor: cardColors.caloriesIntake
+                            }]} onClick={() => {
+                                this.bottomSheet.current.close();
+                                this.props.navigation.navigate("CaloriesIntake", {
+                                    date: this.state.selectedDate,
+                                    timezoneOffset: this.state.timezoneOffset
+                                });
+                            }}>
+                                <View style={styles.cardTopbar}>
+                                    <GiMeal color="#fff" size={25} />
+                                    <Text style={styles.cardTitle}>Calories intake</Text>
+                                </View>
                             </View>
-                        </View>
+                            : null
                     }
                 </ScrollView>
             </BottomSheet>
