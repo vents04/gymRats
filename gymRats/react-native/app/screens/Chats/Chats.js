@@ -72,10 +72,10 @@ export default class Chats extends Component {
                                 contentContainerStyle={globalStyles.fillEmptySpace}>
                                 {
                                     this.state.chats.map((chat, index) =>
-                                        <TouchableOpacity onPress={() => {
+                                        <TouchableOpacity key={index} onPress={() => {
                                             this.props.navigation.navigate("Chat", { chatId: chat._id })
                                         }}>
-                                            <ChatsItem key={index} chat={chat} {...this.props} />
+                                            <ChatsItem chat={chat} {...this.props} />
                                         </TouchableOpacity>
                                     )
                                 }

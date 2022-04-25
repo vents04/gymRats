@@ -8,7 +8,6 @@ import ApiRequests from '../../classes/ApiRequests';
 import Message from '../../components/Message/Message';
 
 import { Ionicons } from '@expo/vector-icons';
-import { IoIosSend } from 'react-icons/io';
 
 import { HTTP_STATUS_CODES } from '../../../global';
 

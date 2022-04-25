@@ -7,7 +7,6 @@ export default StyleSheet.create({
         alignItems: 'flex-end',
         justifyContent: 'center',
         maxWidth: "80%",
-        width: "max-content",
         marginVertical: 12,
         alignSelf: "flex-end",
         marginHorizontal: 6
