@@ -7,16 +7,15 @@ import { SHOW_MAIN_TAB_NAVIGATION_ON_SCREENS } from '../../global';
 
 import styles from './navigation.styles.js';
 
-// Navigation //
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-// Icons //
+import { Ionicons } from '@expo/vector-icons';
+import { FontAwesome5 } from '@expo/vector-icons';
 import { BiCalendar, BiUserCircle, BiMessageSquareDetail } from 'react-icons/bi';
 import { GiRat } from 'react-icons/gi';
 
-// Screens //
 import Login from '../screens/Login/Login';
 import Signup from '../screens/Signup/Signup';
 import Calendar from '../screens/Calendar/Calendar';
@@ -269,10 +268,7 @@ const NavigationRoutes = () => {
                     tabBarIcon: (tabInfo) =>
                     (
                         <View style={styles.tabBarIconContainer}>
-                            <BiCalendar
-                                size={30}
-                                color={tabInfo.focused ? "#1f6cb0" : "#ccc"}
-                            />
+                            <Ionicons name="md-calendar-sharp" size={24} color={tabInfo.focused ? "#1f6cb0" : "#ccc"} />
                             <Text style={[styles.tabBarIconText, {
                                 fontFamily: (tabInfo.focused ? "MainBold" : "MainRegular")
                             }]}>{i18n.t('navigation')['calendar']}</Text>
@@ -295,10 +291,7 @@ const NavigationRoutes = () => {
                     tabBarIcon: (tabInfo) =>
                     (
                         <View style={styles.tabBarIconContainer}>
-                            <GiRat
-                                size={30}
-                                color={tabInfo.focused ? "#1f6cb0" : "#ccc"}
-                            />
+                            <FontAwesome5 name="dumbbell" size={24} color={tabInfo.focused ? "#1f6cb0" : "#ccc"} />
                             <Text style={[styles.tabBarIconText, {
                                 fontFamily: (tabInfo.focused ? "MainBold" : "MainRegular")
                             }]}>{i18n.t('navigation')['coaching']}</Text>
@@ -321,10 +314,7 @@ const NavigationRoutes = () => {
                     tabBarIcon: (tabInfo) =>
                     (
                         <View style={styles.tabBarIconContainer}>
-                            <BiMessageSquareDetail
-                                size={30}
-                                color={tabInfo.focused ? "#1f6cb0" : "#ccc"}
-                            />
+                            <Ionicons name="chatbubbles" size={24} color={tabInfo.focused ? "#1f6cb0" : "#ccc"} />
                             <Text style={[styles.tabBarIconText, {
                                 fontFamily: (tabInfo.focused ? "MainBold" : "MainRegular")
                             }]}>{i18n.t('navigation')['chats']}</Text>
@@ -346,10 +336,7 @@ const NavigationRoutes = () => {
                     tabBarIcon: (tabInfo) =>
                     (
                         <View style={styles.tabBarIconContainer}>
-                            <BiUserCircle
-                                size={30}
-                                color={tabInfo.focused ? "#1f6cb0" : "#ccc"}
-                            />
+                            <FontAwesome5 name="user-circle" size={24} color={tabInfo.focused ? "#1f6cb0" : "#ccc"} />
                             <Text style={[styles.tabBarIconText, {
                                 fontFamily: (tabInfo.focused ? "MainBold" : "MainRegular")
                             }]}>{i18n.t('navigation')['profile']}</Text>

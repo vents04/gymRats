@@ -7,8 +7,9 @@ import i18n from 'i18n-js';
 
 import ConfirmationBox from '../ConfirmationBox/ConfirmationBox';
 
-import { FaWeight, FaLongArrowAltUp, FaLongArrowAltDown } from 'react-icons/fa';
-import { AiFillDelete } from 'react-icons/ai';
+import { FontAwesome5 } from '@expo/vector-icons';
+import { FontAwesome } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { HTTP_STATUS_CODES, WEIGHT_UNITS_LABELS } from '../../../global';
 import { cardColors } from '../../../assets/styles/cardColors';
@@ -65,12 +66,12 @@ export default class WeightTrackerCard extends Component {
                         : null
                 }
                 <View style={globalStyles.cardTopbar}>
-                    <FaWeight size={25} color={cardColors.weightTracker} />
+                    <FontAwesome5 name="weight" size={25} color={cardColors.weightTracker} />
                     <Text style={globalStyles.cardTitle}>{i18n.t('components')['cards']['weightTracker']['cardTitle']}</Text>
                     {
                         !this.props.client
                             ? <View style={globalStyles.cardTopbarIcon}>
-                                <AiFillDelete size={25} color="#ddd" onClick={() => {
+                                <MaterialCommunityIcons name="delete" size={25} color="#ddd" onClick={() => {
                                     this.setState({ showConfirmationBox: true })
                                 }} />
                             </View>
@@ -93,7 +94,7 @@ export default class WeightTrackerCard extends Component {
                                     this.props.data.trend != 0
                                         ? this.props.data.trend < 0
                                             ? <View style={styles.statsContainer}>
-                                                <FaLongArrowAltDown size={20} color={cardColors.negative} />
+                                                <FontAwesome name="long-arrow-down" size={20} color={cardColors.negative} />
                                                 <Text style={styles.weightTrend}>
                                                     {Math.abs(this.props.data.trend)}
                                                     &nbsp;
@@ -103,7 +104,7 @@ export default class WeightTrackerCard extends Component {
                                                 </Text>
                                             </View>
                                             : <View style={styles.statsContainer}>
-                                                <FaLongArrowAltUp size={20} color={cardColors.weightTracker} />
+                                                <FontAwesome name="long-arrow-up" size={20} color={cardColors.weightTracker} />
                                                 <Text style={styles.weightTrend}>
                                                     {this.props.data.trend}
                                                     &nbsp;

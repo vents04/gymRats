@@ -6,8 +6,7 @@ import ApiRequests from '../../classes/ApiRequests';
 
 import ConfirmationBox from '../ConfirmationBox/ConfirmationBox';
 
-import { GiMeal } from 'react-icons/gi';
-import { AiFillDelete } from 'react-icons/ai';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { HTTP_STATUS_CODES, CALORIES_COUNTER_MEALS, MEAL_TITLES } from '../../../global';
 import { cardColors } from '../../../assets/styles/cardColors';
@@ -98,12 +97,12 @@ export default class CaloriesIntakeCard extends Component {
                     : null
             }
             <View style={globalStyles.cardTopbar}>
-                <GiMeal size={25} color={cardColors.caloriesIntake} />
+                <MaterialCommunityIcons name="food-variant" size={25} color={cardColors.caloriesIntake} />
                 <Text style={globalStyles.cardTitle}>Calories intake</Text>
                 {
                     !this.props.client
                         ? <View style={globalStyles.cardTopbarIcon}>
-                            <AiFillDelete size={25} color="#ddd" onClick={() => {
+                            <MaterialCommunityIcons name="delete" size={25} color="#ddd" onClick={() => {
                                 this.setState({ showConfirmationBox: true })
                             }} />
                         </View>

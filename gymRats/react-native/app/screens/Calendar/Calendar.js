@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, Text, TouchableHighlight, TouchableNativeFeedback, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import BottomSheet from "react-native-gesture-bottom-sheet";
 
 import ApiRequests from '../../classes/ApiRequests';
@@ -12,10 +12,10 @@ import WeightTrackerCard from '../../components/WeightTrackerCard/WeightTrackerC
 import CaloriesIntakeCard from '../../components/CaloriesIntakeCard/CaloriesIntakeCard';
 import LogbookCard from '../../components/LogbookCard/LogbookCard';
 
-import { IoIosArrowBack, IoIosArrowForward, IoMdClose } from 'react-icons/io';
-import { FaWeight } from 'react-icons/fa';
-import { BsJournalBookmarkFill } from 'react-icons/bs';
-import { GiMeal } from 'react-icons/gi';
+import { Entypo } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
+import { FontAwesome5 } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { ACTIVE_CARDS } from '../../../global';
 import { cardColors } from '../../../assets/styles/cardColors';
@@ -35,7 +35,6 @@ export default class Calendar extends Component {
             doNotShow: [],
             selectedDate: null,
             timezoneOffset: null,
-            showDatePicker: true,
         }
 
         this.focusListener;
@@ -120,11 +119,13 @@ export default class Calendar extends Component {
                     this.state.selectedDate
                         ? <View style={globalStyles.fillEmptySpace}>
                             <View style={styles.calendarControllersContainer}>
-                                <View style={styles.calendarController} onClick={() => { this.incrementDate(-1) }}>
-                                    <IoIosArrowBack style={{ marginRight: 5 }} size={14} color="#999" />
-                                    <Text style={styles.calendarControllerText}>{i18n.t('screens')['calendar']['calendarControllerBack']}</Text>
-                                </View>
-                                <Text style={styles.calendarCurrentDate} onClick={() => { this.setState({ showDatePicker: true }) }}>
+                                <TouchableWithoutFeedback onPress={() => { this.incrementDate(-1) }}>
+                                    <View style={styles.calendarController}>
+                                        <Entypo name="chevron-left" size={14} color="#999" style={{ marginRight: 5 }} />
+                                        <Text style={styles.calendarControllerText}>{i18n.t('screens')['calendar']['calendarControllerBack']}</Text>
+                                    </View>
+                                </TouchableWithoutFeedback>
+                                <Text style={styles.calendarCurrentDate}>
                                     {this.state.selectedDate.getDate()}
                                     .
                                     {
@@ -133,10 +134,12 @@ export default class Calendar extends Component {
                                             : (this.state.selectedDate.getMonth() + 1)
                                     }
                                 </Text>
-                                <View style={[styles.calendarController, { justifyContent: 'flex-end' }]} onClick={() => { this.incrementDate(1) }}>
-                                    <Text style={styles.calendarControllerText}>{i18n.t('screens')['calendar']['calendarControllerNext']}</Text>
-                                    <IoIosArrowForward style={{ marginLeft: 5 }} size={14} color="#999" />
-                                </View>
+                                <TouchableWithoutFeedback onPress={() => { this.incrementDate(1) }}>
+                                    <View style={[styles.calendarController, { justifyContent: 'flex-end' }]}>
+                                        <Text style={styles.calendarControllerText}>{i18n.t('screens')['calendar']['calendarControllerNext']}</Text>
+                                        <Entypo name="chevron-right" style={{ marginLeft: 5 }} size={14} color="#999" />
+                                    </View>
+                                </TouchableWithoutFeedback>
                             </View>
                             <View>
                                 <TouchableOpacity style={[globalStyles.authPageActionButton, {
@@ -193,9 +196,11 @@ export default class Calendar extends Component {
             <BottomSheet ref={this.bottomSheet} height={400} draggable={false}>
                 <View style={styles.bottomSheetTopbar}>
                     <Text style={styles.bottomSheetTitle}>{i18n.t('screens')['calendar']['bottomSheetTitle']}</Text>
-                    <IoMdClose size={30} onClick={() => {
+                    <TouchableOpacity onPress={() => {
                         this.bottomSheet.current.close();
-                    }} />
+                    }}>
+                        <Ionicons name="close" size={30} />
+                    </TouchableOpacity>
                 </View>
                 <ScrollView style={styles.cardsContainer}>
                     {
@@ -205,56 +210,62 @@ export default class Calendar extends Component {
                     }
                     {
                         !this.state.doNotShow.includes("dailyWeights")
-                            ? <View style={[styles.card, {
-                                backgroundColor: cardColors.weightTracker
-                            }]} onClick={() => {
+                            ? <TouchableOpacity onPress={() => {
                                 this.bottomSheet.current.close();
                                 this.props.navigation.navigate("WeightTracker", {
                                     date: this.state.selectedDate,
                                     timezoneOffset: this.state.timezoneOffset
                                 });
                             }}>
-                                <View style={styles.cardTopbar}>
-                                    <FaWeight color="#fff" size={25} />
-                                    <Text style={styles.cardTitle}>{i18n.t('components')['cards']['weightTracker']['cardTitle']}</Text>
+                                <View style={[styles.card, {
+                                    backgroundColor: cardColors.weightTracker
+                                }]}>
+                                    <View style={styles.cardTopbar}>
+                                        <FontAwesome5 name="weight" size={25} color="#fff" />
+                                        <Text style={styles.cardTitle}>{i18n.t('components')['cards']['weightTracker']['cardTitle']}</Text>
+                                    </View>
                                 </View>
-                            </View>
+                            </TouchableOpacity>
                             : null
                     }
                     {
                         !this.state.doNotShow.includes("workoutSessions")
-                            ? <View style={[styles.card, {
-                                backgroundColor: cardColors.logbook
-                            }]} onClick={() => {
+                            ? <TouchableOpacity onPress={() => {
                                 this.bottomSheet.current.close();
                                 this.props.navigation.navigate("Logbook", {
                                     date: this.state.selectedDate,
                                     timezoneOffset: this.state.timezoneOffset
                                 });
                             }}>
-                                <View style={styles.cardTopbar}>
-                                    <BsJournalBookmarkFill color="#fff" size={25} />
-                                    <Text style={styles.cardTitle}>{i18n.t('components')['cards']['logbook']['cardTitle']}</Text>
+                                <View style={[styles.card, {
+                                    backgroundColor: cardColors.logbook
+                                }]}>
+                                    <View style={styles.cardTopbar}>
+                                        <FontAwesome5 name="book-open" size={25} color="#fff" />
+                                        <Text style={styles.cardTitle}>{i18n.t('components')['cards']['logbook']['cardTitle']}</Text>
+                                    </View>
                                 </View>
-                            </View>
+                            </TouchableOpacity>
                             : null
                     }
                     {
                         !this.state.doNotShow.includes("caloriesCounterDays")
-                            ? <View style={[styles.card, {
-                                backgroundColor: cardColors.caloriesIntake
-                            }]} onClick={() => {
+                            ? <TouchableOpacity onPress={() => {
                                 this.bottomSheet.current.close();
                                 this.props.navigation.navigate("CaloriesIntake", {
                                     date: this.state.selectedDate,
                                     timezoneOffset: this.state.timezoneOffset
                                 });
                             }}>
-                                <View style={styles.cardTopbar}>
-                                    <GiMeal color="#fff" size={25} />
-                                    <Text style={styles.cardTitle}>Calories intake</Text>
+                                <View style={[styles.card, {
+                                    backgroundColor: cardColors.caloriesIntake
+                                }]}>
+                                    <View style={styles.cardTopbar}>
+                                        <MaterialCommunityIcons name="food-variant" size={25} color="#fff" />
+                                        <Text style={styles.cardTitle}>Calories intake</Text>
+                                    </View>
                                 </View>
-                            </View>
+                            </TouchableOpacity>
                             : null
                     }
                 </ScrollView>

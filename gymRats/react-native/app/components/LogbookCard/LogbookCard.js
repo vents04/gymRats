@@ -7,8 +7,8 @@ import i18n from 'i18n-js';
 
 import ConfirmationBox from '../ConfirmationBox/ConfirmationBox';
 
-import { BsJournalBookmarkFill } from 'react-icons/bs';
-import { AiFillDelete } from 'react-icons/ai';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { FontAwesome5 } from '@expo/vector-icons';
 
 import { WEIGHT_UNITS_LABELS } from '../../../global';
 import { cardColors } from '../../../assets/styles/cardColors';
@@ -83,12 +83,12 @@ export default class LogbookCard extends Component {
                     : null
             }
             <View style={globalStyles.cardTopbar}>
-                <BsJournalBookmarkFill size={25} color={cardColors.logbook} />
+                <FontAwesome5 name="book-open" size={25} color={cardColors.logbook} />
                 <Text style={globalStyles.cardTitle}>{i18n.t('components')['cards']['logbook']['cardTitle']}</Text>
                 {
                     !this.props.client
                         ? <View style={globalStyles.cardTopbarIcon}>
-                            <AiFillDelete size={25} color="#ddd" onClick={() => {
+                            <MaterialCommunityIcons name="delete" size={25} color="#ddd" onClick={() => {
                                 this.setState({ showConfirmationBox: true })
                             }} />
                         </View>

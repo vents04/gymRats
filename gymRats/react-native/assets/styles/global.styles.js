@@ -51,6 +51,7 @@ export default StyleSheet.create({
         fontFamily: "MainBlack",
         fontSize: 14,
         color: "#fff",
+        textAlign: "center"
     },
     authPageRedirectTextContainer: {
         display: "flex",
