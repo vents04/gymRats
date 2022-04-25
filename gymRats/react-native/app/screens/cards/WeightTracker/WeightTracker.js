@@ -3,8 +3,6 @@ import { ActivityIndicator, Text, TextInput, TouchableOpacity, View } from 'reac
 
 import ApiRequests from '../../../classes/ApiRequests';
 
-import { BiArrowBack } from 'react-icons/bi';
-
 import { HTTP_STATUS_CODES, WEIGHT_UNITS, WEIGHT_UNITS_LABELS } from '../../../../global';
 import { cardColors } from '../../../../assets/styles/cardColors';
 
@@ -101,9 +99,11 @@ export default class WeightTracker extends Component {
         return <View style={globalStyles.safeAreaView}>
             <View style={globalStyles.pageContainer}>
                 <View style={globalStyles.followUpScreenTopbar}>
-                    <BiArrowBack size={25} onClick={() => {
+                    <TouchableOpacity onPress={() => {
                         this.props.navigation.navigate("Calendar", { reloadDate: true, date: this.props.route.params.date })
-                    }} />
+                    }}>
+                        <Ionicons name="md-arrow-back-sharp" size={25} />
+                    </TouchableOpacity>
                     <Text style={globalStyles.followUpScreenTitle}>Weight</Text>
                 </View>
                 <View style={[styles.weightInputContainer, globalStyles.authPageInput]}>

@@ -5,7 +5,7 @@ import { Picker } from '@react-native-picker/picker';
 
 import ApiRequests from '../../../classes/ApiRequests';
 
-import { BiArrowBack } from 'react-icons/bi';
+import { Ionicons } from '@expo/vector-icons';
 
 import { CALORIES_COUNTER_SCREEN_INTENTS, HTTP_STATUS_CODES } from '../../../../global';
 import { cardColors } from '../../../../assets/styles/cardColors';
@@ -91,11 +91,13 @@ export default class AddCaloriesIntakeItem extends Component {
             <View style={globalStyles.safeAreaView}>
                 <View style={globalStyles.pageContainer}>
                     <View style={globalStyles.followUpScreenTopbar}>
-                        <BiArrowBack size={25} onClick={() => {
+                        <TouchableOpacity onPress={() => {
                             (!this.props.route.params.previousScreen)
                                 ? this.props.navigation.navigate("SearchCaloriesIntake", { date: this.props.route.params.date, timezoneOffset: this.props.route.params.timezoneOffset, meal: this.state.meal })
                                 : this.props.navigation.navigate(this.props.route.params.previousScreen, { date: this.props.route.params.date, timezoneOffset: this.props.route.params.timezoneOffset, meal: this.state.meal })
-                        }} />
+                        }}>
+                            <Ionicons name="md-arrow-back-sharp" size={25} />
+                        </TouchableOpacity>
                         <Text style={globalStyles.followUpScreenTitle}>{
                             this.props.route.params.meal == CALORIES_COUNTER_SCREEN_INTENTS.ADD
                                 ? "Add"

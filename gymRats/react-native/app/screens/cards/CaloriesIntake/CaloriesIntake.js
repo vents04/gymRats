@@ -1,11 +1,9 @@
 import React, { Component } from 'react'
-import { Text, View, ScrollView } from 'react-native'
+import { Text, View, ScrollView, TouchableOpacity } from 'react-native'
 
 import ApiRequests from '../../../classes/ApiRequests';
 
-import { BiArrowBack } from 'react-icons/bi';
-import { IoIosAdd } from 'react-icons/io';
-import { IoMdClose } from 'react-icons/io';
+import { Ionicons } from '@expo/vector-icons';
 
 import { CALORIES_COUNTER_MEALS, CALORIES_COUNTER_SCREEN_INTENTS, HTTP_STATUS_CODES, MEAL_TITLES } from '../../../../global';
 import { cardColors } from '../../../../assets/styles/cardColors';
@@ -83,9 +81,11 @@ export default class CaloriesIntake extends Component {
                     <View style={[globalStyles.followUpScreenTopbar, {
                         marginBottom: 32
                     }]}>
-                        <BiArrowBack size={25} onClick={() => {
+                        <TouchableOpacity onPress={() => {
                             this.props.navigation.navigate("Calendar", { reloadDate: true, date: this.props.route.params.date })
-                        }} />
+                        }}>
+                            <Ionicons name="md-arrow-back-sharp" size={25} />
+                        </TouchableOpacity>
                         <Text style={globalStyles.followUpScreenTitle}>Calories intake</Text>
                     </View>
                     {
@@ -99,9 +99,11 @@ export default class CaloriesIntake extends Component {
                                 <View key={key} style={styles.mealContainer}>
                                     <View style={styles.mealTopBar}>
                                         <Text style={styles.mealTitle}>{MEAL_TITLES[key]}</Text>
-                                        <IoIosAdd color={cardColors.caloriesIntake} size={25} onClick={() => {
+                                        <TouchableOpacity onPress={() => {
                                             this.props.navigation.navigate("SearchCaloriesIntake", { meal: key, date: this.props.route.params.date, timezoneOffset: this.state.timezoneOffset })
-                                        }} />
+                                        }}>
+                                            <Ionicons name="add-sharp" size={25} color={cardColors.caloriesIntake} />
+                                        </TouchableOpacity>
                                     </View>
                                     {
                                         this.state.calorieCounterDay &&
@@ -125,9 +127,11 @@ export default class CaloriesIntake extends Component {
                                                             <Text style={styles.itemTitle}>{item.itemInstance.title}</Text>
                                                             <Text style={styles.itemAmount}>{item.amount}&nbsp;{item.itemInstance.unit.toLowerCase()}</Text>
                                                         </View>
-                                                        <IoMdClose size={20} onClick={() => {
+                                                        <TouchableOpacity onPress={() => {
                                                             this.removeItem(item._id)
-                                                        }} />
+                                                        }}>
+                                                            <Ionicons name="close" size={20} />
+                                                        </TouchableOpacity>
                                                     </View>
                                                     : null
                                             )

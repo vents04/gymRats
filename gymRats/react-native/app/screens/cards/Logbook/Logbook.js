@@ -1,13 +1,11 @@
 import React, { Component } from 'react'
-import { Modal, ScrollView, Text, TextInput, View } from 'react-native'
+import { Modal, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { Picker } from '@react-native-picker/picker';
 
 import ApiRequests from '../../../classes/ApiRequests';
 
-import { BiArrowBack, BiCheck } from 'react-icons/bi';
-import { IoIosAdd } from 'react-icons/io';
-import { MdRemoveCircleOutline } from 'react-icons/md';
-import { CgArrowsExchangeAltV } from 'react-icons/cg';
+import { Ionicons } from '@expo/vector-icons';
+import { FontAwesome } from '@expo/vector-icons';
 
 import { HTTP_STATUS_CODES, WEIGHT_UNITS, WEIGHT_UNITS_LABELS } from '../../../../global';
 import { cardColors } from '../../../../assets/styles/cardColors';
@@ -348,19 +346,24 @@ export default class Logbook extends Component {
                 }
                 <View style={globalStyles.pageContainer}>
                     <View style={globalStyles.followUpScreenTopbar}>
-                        <BiArrowBack size={25} onClick={() => {
+                        <TouchableOpacity onPress={() => {
                             this.props.navigation.navigate("Calendar", { reloadDate: true, date: this.props.route.params.date })
-                        }} />
+                        }}>
+                            <Ionicons name="md-arrow-back-sharp" size={25} />
+                        </TouchableOpacity>
                         <Text style={globalStyles.followUpScreenTitle}>Logbook</Text>
                     </View>
                     {
                         this.state.exercises.length > 0 && this.state.hasChanges
-                            ? <View style={globalStyles.topbarIconContainer} onClick={() => { (!this.state.hasDeniedWorkoutTemplateCreation) ? this.checkWorkoutTemplate() : this.saveChanges() }}>
-                                <Text style={[globalStyles.topbarIconTitle, {
-                                    color: cardColors.logbook
-                                }]}>Save</Text>
-                                <BiCheck size={20} color={cardColors.logbook} />
-                            </View>
+                            ? <TouchableOpacity onPress={() => {
+                                (!this.state.hasDeniedWorkoutTemplateCreation) ? this.checkWorkoutTemplate() : this.saveChanges()
+                            }}><View style={globalStyles.topbarIconContainer} >
+                                    <Text style={[globalStyles.topbarIconTitle, {
+                                        color: cardColors.logbook
+                                    }]}>Save</Text>
+                                    <FontAwesome name="check" size={20} color={cardColors.logbook} />
+                                </View>
+                            </TouchableOpacity>
                             : null
                     }
                     {
@@ -371,9 +374,11 @@ export default class Logbook extends Component {
                     <View style={styles.exercisesListContainer}>
                         <View style={styles.exercisesListContainerTopbar}>
                             <Text style={styles.sectionTitle}>Exercises</Text>
-                            <IoIosAdd size={35} color={cardColors.logbook} onClick={() => {
+                            <TouchableOpacity onPress={() => {
                                 this.props.navigation.navigate("ExerciseSearch", { date: this.state.date, timezoneOffset: this.state.timezoneOffset })
-                            }} />
+                            }}>
+                                <Ionicons name="add-sharp" size={35} color={cardColors.logbook} />
+                            </TouchableOpacity>
                         </View>
                         <ScrollView contentContainerStyle={globalStyles.fillEmptySpace}>
                             {
@@ -387,19 +392,23 @@ export default class Logbook extends Component {
                                                         <View style={styles.exerciseContainerLeft}>
                                                             {
                                                                 this.state.exercises.length > 1
-                                                                    ? <CgArrowsExchangeAltV color="#777" style={{ marginRight: 10, minWidth: 25, height: 25 }} onClick={() => {
+                                                                    ? <TouchableOpacity onPress={() => {
                                                                         this.swapExercises(index);
-                                                                    }} />
+                                                                    }}>
+                                                                        <Ionicons name="swap-vertical" size={20} color="#777" style={{ marginRight: 10, minWidth: 25, height: 25 }} />
+                                                                    </TouchableOpacity>
                                                                     : null
                                                             }
                                                             <Text style={styles.exerciseTitle}>{exercise.exerciseName}</Text>
                                                         </View>
-                                                        <View style={styles.exerciseContainerAddContainer} onClick={() => {
+                                                        <TouchableOpacity onPress={() => {
                                                             this.addSet(exercise.exerciseId)
                                                         }}>
-                                                            <Text style={styles.exerciseContainerAddContainerTitle}>Add set</Text>
-                                                            <IoIosAdd size={25} color={cardColors.logbook} />
-                                                        </View>
+                                                            <View style={styles.exerciseContainerAddContainer}>
+                                                                <Text style={styles.exerciseContainerAddContainerTitle}>Add set</Text>
+                                                                <Ionicons name="add-sharp" size={25} color={cardColors.logbook} />
+                                                            </View>
+                                                        </TouchableOpacity>
                                                     </View>
                                                     <View style={styles.setsContainer} key={`_${index}`}>
                                                         {
@@ -435,9 +444,11 @@ export default class Logbook extends Component {
                                                                                 }} />
                                                                             <Text style={styles.setContainerItemDescriptor}>duration</Text>
                                                                         </View>
-                                                                        <MdRemoveCircleOutline color={cardColors.logbook} size={20} onClick={() => {
+                                                                        <TouchableOpacity onPress={() => {
                                                                             this.deleteSet(exercise.exerciseId, index);
-                                                                        }} />
+                                                                        }}>
+                                                                            <Ionicons name="remove" size={20} color={cardColors.logbook} />
+                                                                        </TouchableOpacity>
                                                                     </ScrollView>
                                                                 </View>
                                                             )

@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
-import { ScrollView, Text, TextInput, View } from 'react-native'
+import { ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native'
 
 import ApiRequests from '../../../classes/ApiRequests';
 
-import { BiArrowBack, BiBarcodeReader } from 'react-icons/bi';
-import { MdOutlineLibraryAdd } from 'react-icons/md';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons';
 
 import { CALORIES_COUNTER_SCREEN_INTENTS, HTTP_STATUS_CODES } from '../../../../global';
 
@@ -61,13 +62,15 @@ export default class SearchCaloriesIntake extends Component {
             <View style={globalStyles.safeAreaView}>
                 <View style={globalStyles.pageContainer}>
                     <View style={globalStyles.followUpScreenTopbar}>
-                        <BiArrowBack size={25} onClick={() => {
+                        <TouchableOpacity onPress={() => {
                             this.props.navigation.navigate("CaloriesIntake", { date: this.props.route.params.date, timezoneOffset: this.props.route.params.timezoneOffset })
-                        }} />
+                        }}>
+                            <Ionicons name="md-arrow-back-sharp" size={25} />
+                        </TouchableOpacity>
                         <Text style={globalStyles.followUpScreenTitle}>Search food</Text>
                     </View>
                     <View style={globalStyles.topbarIconContainer}>
-                        <MdOutlineLibraryAdd color="#1f6cb0" size={25} style={{ marginRight: 12 }} onClick={() => {
+                        <TouchableOpacity onPress={() => {
                             this.props.navigation.navigate("AddFood", {
                                 timezoneOffset: this.state.timezoneOffset,
                                 date: this.state.date,
@@ -75,8 +78,10 @@ export default class SearchCaloriesIntake extends Component {
                                     this.props.navigation.navigate("SearchCaloriesIntake", { date: this.props.route.params.date, timezoneOffset: this.props.route.params.timezoneOffset })
                                 }
                             })
-                        }} />
-                        <BiBarcodeReader color="#1f6cb0" size={25} onClick={() => {
+                        }}>
+                            <MaterialIcons name="library-add" size={25} color="#1f6cb0" style={{ marginRight: 12 }} />
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => {
                             this.props.navigation.navigate("BarcodeReader", {
                                 timezoneOffset: this.state.timezoneOffset,
                                 date: this.state.date,
@@ -84,7 +89,9 @@ export default class SearchCaloriesIntake extends Component {
                                     this.props.navigation.navigate("SearchCaloriesIntake", { date: this.props.route.params.date, timezoneOffset: this.props.route.params.timezoneOffset })
                                 }
                             })
-                        }} />
+                        }}>
+                            <MaterialCommunityIcons name="barcode-scan" size={25} color="#1f6cb0" />
+                        </TouchableOpacity>
                     </View>
                     <TextInput
                         value={this.state.query}

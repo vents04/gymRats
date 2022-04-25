@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Image, Text, TouchableOpacity, View } from 'react-native';
 
-import { IoMdClose } from 'react-icons/io';
+import { Ionicons } from '@expo/vector-icons';
 
 import { RELATION_STATUSES } from '../../../global';
 
@@ -13,9 +13,11 @@ export default class CoachRequestsItem extends Component {
         return (
             <View style={styles.chatItemContainer} onClick={this.navigateToChat}>
                 <View style={styles.coachRequestInfoContainer}>
-                    <IoMdClose size={18} color="#aaa" style={{ marginRight: 8 }} onClick={() => {
+                    <TouchableOpacity onPress={() => {
                         this.props.updateRelationStatus(this.props.relation._id, RELATION_STATUSES.DECLINED);
-                    }} />
+                    }} >
+                        <Ionicons size={18} color="#aaa" style={{ marginRight: 8 }} />
+                    </TouchableOpacity>
                     {
                         !this.props.relation.client.profilePicture
                             ? <View style={styles.profilePictureContainer}>
