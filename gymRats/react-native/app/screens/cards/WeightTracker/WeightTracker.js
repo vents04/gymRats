@@ -8,6 +8,7 @@ import { cardColors } from '../../../../assets/styles/cardColors';
 
 import globalStyles from '../../../../assets/styles/global.styles';
 import styles from './WeightTracker.styles';
+import { Ionicons } from '@expo/vector-icons';
 
 export default class WeightTracker extends Component {
 

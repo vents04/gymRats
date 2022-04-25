@@ -109,7 +109,7 @@ export default class SearchCaloriesIntake extends Component {
                             {
                                 this.state.queryResults?.length > 0
                                     ? this.state.queryResults.map((item) =>
-                                        <View style={styles.searchResult} onClick={() => {
+                                        <TouchableOpacity onPress={() => {
                                             this.props.navigation.navigate("AddCaloriesIntakeItem", {
                                                 intent: CALORIES_COUNTER_SCREEN_INTENTS.ADD,
                                                 item: item,
@@ -117,36 +117,38 @@ export default class SearchCaloriesIntake extends Component {
                                                 date: this.props.route.params.date,
                                                 timezoneOffset: this.props.route.params.timezoneOffset
                                             })
-                                        }} key={item._id}>
-                                            <Text style={styles.searchResultTitle}>{item.title}</Text>
-                                            {
-                                                item.brand
-                                                    ? <Text style={styles.searchResultBrand}>{item.brand}</Text>
-                                                    : null
-                                            }
-                                            {
-                                                item.userInstance
-                                                    ? <View style={styles.user}>
-                                                        {
-                                                            !item.userInstance.profilePicture
-                                                                ? <View style={styles.profilePictureContainer}>
-                                                                    <Text style={styles.noProfilePictureText}>
-                                                                        {item.userInstance.firstName.charAt(0)}
-                                                                        {item.userInstance.lastName.charAt(0)}
-                                                                    </Text>
-                                                                </View>
-                                                                : <Image style={styles.profilePictureContainer}
-                                                                    source={{ uri: item.userInstance.profilePicture }} />
-                                                        }
-                                                        <Text style={styles.names}>
-                                                            {item.userInstance.firstName}
-                                                            &nbsp;
-                                                            {item.userInstance.lastName}
-                                                        </Text>
-                                                    </View>
-                                                    : null
-                                            }
-                                        </View>
+                                        }}>
+                                            <View style={styles.searchResult} key={item._id}>
+                                                <Text style={styles.searchResultTitle}>{item.title}</Text>
+                                                {
+                                                    item.brand
+                                                        ? <Text style={styles.searchResultBrand}>{item.brand}</Text>
+                                                        : null
+                                                }
+                                                {
+                                                    item.userInstance
+                                                        ? <View style={styles.user}>
+                                                            {
+                                                                !item.userInstance.profilePicture
+                                                                    ? <View style={styles.profilePictureContainer}>
+                                                                        <Text style={styles.noProfilePictureText}>
+                                                                            {item.userInstance.firstName.charAt(0)}
+                                                                            {item.userInstance.lastName.charAt(0)}
+                                                                        </Text>
+                                                                    </View>
+                                                                    : <Image style={styles.profilePictureContainer}
+                                                                        source={{ uri: item.userInstance.profilePicture }} />
+                                                            }
+                                                            <Text style={styles.names}>
+                                                                {item.userInstance.firstName}
+                                                                &nbsp;
+                                                                {item.userInstance.lastName}
+                                                            </Text>
+                                                        </View>
+                                                        : null
+                                                }
+                                            </View>
+                                        </TouchableOpacity>
                                     )
                                     : <Text style={globalStyles.notation}>No results found</Text>
                             }

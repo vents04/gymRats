@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
-import { Image, Linking, ScrollView, Switch, Text, View } from 'react-native';
+import { Image, Linking, ScrollView, Switch, Text, TouchableOpacity, View } from 'react-native';
 
 import ApiRequests from '../../classes/ApiRequests';
 
-import { BiArrowBack } from 'react-icons/bi';
+import { Ionicons } from '@expo/vector-icons';
 
 import { HTTP_STATUS_CODES } from '../../../global';
 
@@ -50,9 +50,11 @@ export default class CoachPage extends Component {
             <View style={globalStyles.safeAreaView}>
                 <View style={globalStyles.pageContainer}>
                     <View style={globalStyles.followUpScreenTopbar}>
-                        <BiArrowBack size={25} onClick={() => {
+                        <TouchableOpacity onPress={() => {
                             this.props.navigation.navigate("Coaching", { tab: "myClients" })
-                        }} />
+                        }}>
+                            <Ionicons name="md-arrow-back-sharp" size={25} />
+                        </TouchableOpacity>
                         <Text style={globalStyles.followUpScreenTitle}>Coach profile edit</Text>
                     </View>
                     {
@@ -95,9 +97,11 @@ export default class CoachPage extends Component {
                                                 <Text style={styles.statTitle}>experience</Text>
                                             </View>
                                         </View>
-                                        <Text style={styles.location} onClick={() => {
+                                        <TouchableOpacity onPress={() => {
                                             Linking.openURL(`https://google.com/maps/@${this.state.coach.location.lat},${this.state.coach.location.lng},11z`)
-                                        }}>{this.state.coach.location.address}</Text>
+                                        }}>
+                                            <Text style={styles.location}>{this.state.coach.location.address}</Text>
+                                        </TouchableOpacity>
                                     </View>
                                     <Text style={[globalStyles.notation, {
                                         marginTop: 16

@@ -4,7 +4,7 @@ import { Picker } from '@react-native-picker/picker';
 
 import ApiRequests from '../../classes/ApiRequests';
 
-import { BiArrowBack, BiCheck } from 'react-icons/bi';
+import { Ionicons } from '@expo/vector-icons';
 
 import { HTTP_STATUS_CODES, WEIGHT_UNITS } from '../../../global';
 
@@ -105,16 +105,22 @@ export default class ProfileDetailsEdit extends Component {
         return <View style={globalStyles.safeAreaView}>
             <View style={globalStyles.pageContainer}>
                 <View style={globalStyles.followUpScreenTopbar}>
-                    <BiArrowBack size={25} onClick={() => {
+                    <TouchableOpacity onPress={() => {
                         this.props.navigation.navigate("Profile")
-                    }} />
+                    }}>
+                        <Ionicons name="md-arrow-back-sharp" size={25} />
+                    </TouchableOpacity>
                     <Text style={globalStyles.followUpScreenTitle}>Profile edit</Text>
                 </View>
                 {
                     this.state.hasChanges
-                        ? <View style={globalStyles.topbarIconContainer} onClick={() => { this.saveChanges() }}>
-                            <BiCheck size={30} color="#1f6cb0" />
-                        </View>
+                        ? <TouchableOpacity onPress={() => {
+                            this.saveChanges()
+                        }}>
+                            <View style={globalStyles.topbarIconContainer}>
+                                <Ionicons name="add-sharp" size={25} color={cardColors.caloriesIntake} />
+                            </View>
+                        </TouchableOpacity>
                         : null
                 }
                 {

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { ScrollView, Text, TextInput, View } from 'react-native'
+import { ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native'
 
 import ApiRequests from '../../../classes/ApiRequests';
 
@@ -72,16 +72,18 @@ export default class ExerciseSearch extends Component {
                         <ScrollView contentContainerStyle={globalStyles.fillEmptySpace}>
                             {
                                 this.state.queryResults.map((exercise, index) =>
-                                    <View key={index} style={styles.searchResult} onClick={() => {
+                                    <TouchableOpacity onPress={() => {
                                         this.props.navigation.navigate("Logbook", {
                                             exercise: exercise,
                                             date: this.props.route.params.date,
                                             timezoneOffset: this.props.route.params.timezoneOffset
                                         })
                                     }}>
-                                        <Text style={styles.searchResultTitle}>{exercise.title}</Text>
-                                        <Text style={styles.searchResultStats}>Used in {exercise.sessionsCount} workout sessions</Text>
-                                    </View>
+                                        <View key={index} style={styles.searchResult}>
+                                            <Text style={styles.searchResultTitle}>{exercise.title}</Text>
+                                            <Text style={styles.searchResultStats}>Used in {exercise.sessionsCount} workout sessions</Text>
+                                        </View>
+                                    </TouchableOpacity>
                                 )
                             }
                         </ScrollView>

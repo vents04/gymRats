@@ -3,7 +3,7 @@ import { ActivityIndicator, Image, Linking, ScrollView, Text, TouchableOpacity, 
 
 import ApiRequests from '../../classes/ApiRequests';
 
-import { BiArrowBack } from 'react-icons/bi';
+import { Ionicons } from '@expo/vector-icons';
 
 import { HTTP_STATUS_CODES } from '../../../global';
 
@@ -51,9 +51,11 @@ export default class CoachPage extends Component {
             <View style={globalStyles.safeAreaView}>
                 <View style={globalStyles.pageContainer}>
                     <View style={globalStyles.followUpScreenTopbar}>
-                        <BiArrowBack size={25} onClick={() => {
+                        <TouchableOpacity onPress={() => {
                             this.props.navigation.navigate("CoachSearch")
-                        }} />
+                        }}>
+                            <Ionicons name="md-arrow-back-sharp" size={25} />
+                        </TouchableOpacity>
                         <Text style={globalStyles.followUpScreenTitle}>Coach</Text>
                     </View>
                     {
@@ -96,9 +98,11 @@ export default class CoachPage extends Component {
                                                 <Text style={styles.statTitle}>experience</Text>
                                             </View>
                                         </View>
-                                        <Text style={styles.location} onClick={() => {
+                                        <TouchableOpacity onPress={() => {
                                             Linking.openURL(`https://google.com/maps/@${this.props.route.params.coach.location.lat},${this.props.route.params.coach.location.lng},11z`)
-                                        }}>{this.props.route.params.coach.location.address}</Text>
+                                        }}>
+                                            <Text style={styles.location}>{this.props.route.params.coach.location.address}</Text>
+                                        </TouchableOpacity>
                                     </View>
                                     {
                                         this.props.route.params.coach.prefersOfflineCoaching

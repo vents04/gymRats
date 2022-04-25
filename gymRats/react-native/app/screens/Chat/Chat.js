@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Image, Text, View, ScrollView, TextInput } from 'react-native';
+import { Image, Text, View, ScrollView, TextInput, TouchableOpacity } from 'react-native';
 
 import socket from '../../classes/Socket';
 
@@ -7,7 +7,7 @@ import ApiRequests from '../../classes/ApiRequests';
 
 import Message from '../../components/Message/Message';
 
-import { BiArrowBack } from 'react-icons/bi';
+import { Ionicons } from '@expo/vector-icons';
 import { IoIosSend } from 'react-icons/io';
 
 import { HTTP_STATUS_CODES } from '../../../global';
@@ -109,9 +109,11 @@ export default class Chat extends Component {
                     this.state.chat
                         ? <>
                             <View style={styles.chatTopbarContainer}>
-                                <BiArrowBack size={25} onClick={() => {
+                                <TouchableOpacity onPress={() => {
                                     this.props.navigation.navigate("Chats")
-                                }} />
+                                }}>
+                                    <Ionicons name="md-arrow-back-sharp" size={25} />
+                                </TouchableOpacity>
                                 {
                                     !this.state.chat.user.profilePicture
                                         ? <View style={styles.chatProfilePicture}>
@@ -138,7 +140,11 @@ export default class Chat extends Component {
                                     placeholder="Type a message"
                                     onChangeText={(val) => { this.setState({ message: val, showError: false }) }} />
                                 <View style={styles.chatActionButtonContainer}>
-                                    <IoIosSend onClick={() => { this.sendTextMessage({ senderId: this.state.chat.user._id, message: this.state.message }) }} size={24} style={styles.chatInputButton} color="#1f6cb0" />
+                                    <TouchableOpacity onPress={() => {
+                                        this.sendTextMessage({ senderId: this.state.chat.user._id, message: this.state.message })
+                                    }}>
+                                        <Ionicons name="md-arrow-back-sharp" size={24} style={styles.chatInputButton} color="#1f6cb0" />
+                                    </TouchableOpacity>
                                 </View>
                             </View>
                         </>

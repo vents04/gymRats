@@ -13,8 +13,6 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import { Ionicons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
-import { BiCalendar, BiUserCircle, BiMessageSquareDetail } from 'react-icons/bi';
-import { GiRat } from 'react-icons/gi';
 
 import Login from '../screens/Login/Login';
 import Signup from '../screens/Signup/Signup';

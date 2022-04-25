@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View, Modal } from 'react-native'
+import { Text, View, Modal, TouchableOpacity } from 'react-native'
 
 import i18n from 'i18n-js';
 
@@ -20,15 +20,19 @@ export default class ConfirmationBox extends Component {
                     <View style={globalStyles.modalView}>
                         <Text style={globalStyles.modalText}>{i18n.t('components')['confirmationBox']['question']}</Text>
                         <View style={globalStyles.modalActionsContainer}>
-                            <Text style={globalStyles.modalActionTitle} onClick={() => {
+                            <TouchableOpacity onPress={() => {
                                 this.props.deleteCard();
                                 this.props.toggleShowConfirmationBox(false);
-                            }}>{i18n.t('components')['confirmationBox']['affirmation']}</Text>
-                            <Text style={[globalStyles.modalActionTitle, {
-                                color: "#1f6cb0"
-                            }]} onClick={() => {
+                            }}>
+                                <Text style={globalStyles.modalActionTitle}>{i18n.t('components')['confirmationBox']['affirmation']}</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={() => {
                                 this.props.toggleShowConfirmationBox(false);
-                            }}>{i18n.t('components')['confirmationBox']['denial']}</Text>
+                            }}>
+                                <Text style={[globalStyles.modalActionTitle, {
+                                    color: "#1f6cb0"
+                                }]}>{i18n.t('components')['confirmationBox']['denial']}</Text>
+                            </TouchableOpacity>
                         </View>
                     </View>
                 </View>

@@ -11,7 +11,7 @@ import styles from './CoachRequestsItem.styles';
 export default class CoachRequestsItem extends Component {
     render() {
         return (
-            <View style={styles.chatItemContainer} onClick={this.navigateToChat}>
+            <View style={styles.chatItemContainer}>
                 <View style={styles.coachRequestInfoContainer}>
                     <TouchableOpacity onPress={() => {
                         this.props.updateRelationStatus(this.props.relation._id, RELATION_STATUSES.DECLINED);

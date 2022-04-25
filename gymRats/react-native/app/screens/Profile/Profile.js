@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
-import { Image, Text, View, ActivityIndicator } from 'react-native';
+import { Image, Text, View, ActivityIndicator, TouchableOpacity } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 
 import ApiRequests from '../../classes/ApiRequests';
 
 import LogoBar from '../../components/LogoBar/LogoBar';
 
-import { BiEdit } from 'react-icons/bi';
-import { MdEdit } from 'react-icons/md';
+import { Feather } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons';
 
 import { HTTP_STATUS_CODES, WEIGHT_UNITS } from '../../../global';
 
@@ -90,9 +90,13 @@ export default class Profile extends Component {
         return <View style={[globalStyles.safeAreaView]}>
             <View style={globalStyles.pageContainer}>
                 <LogoBar />
-                <View style={globalStyles.topbarIconContainer} onClick={() => { this.navigateToProfileDetailsEdit() }}>
-                    <BiEdit size={30} color="#1f6cb0" />
-                </View>
+                <TouchableOpacity onPress={() => {
+                    this.navigateToProfileDetailsEdit();
+                }}>
+                    <View style={globalStyles.topbarIconContainer}>
+                        <Feather name="edit" size={30} color="#1f6cb0" />
+                    </View>
+                </TouchableOpacity>
                 {
                     this.state.showError
                         ? <Text style={globalStyles.errorBox}>{this.state.error}</Text>
@@ -107,22 +111,21 @@ export default class Profile extends Component {
                     this.state.profile != null
                         ? <View style={styles.profileContainer}>
                             <View style={styles.profileContainerTopbar}>
-                                {
-                                    !this.state.profile.profilePicture
-                                        ? <View style={styles.profilePictureContainer} onClick={() => {
-                                            if (!this.state.showSaving) this.pickImage()
-                                        }}>
-                                            <Text style={styles.noProfilePictureText}>
-                                                {this.state.profile.firstName.charAt(0)}
-                                                {this.state.profile.lastName.charAt(0)}
-                                            </Text>
-                                        </View>
-                                        : <Image style={styles.profilePictureContainer}
-                                            source={{ uri: this.state.profile.profilePicture }}
-                                            onClick={() => {
-                                                if (!this.state.showSaving) this.pickImage()
-                                            }} />
-                                }
+                                <TouchableOpacity onPress={() => {
+                                    if (!this.state.showSaving) this.pickImage()
+                                }}>
+                                    {
+                                        !this.state.profile.profilePicture
+                                            ? <View style={styles.profilePictureContainer}>
+                                                <Text style={styles.noProfilePictureText}>
+                                                    {this.state.profile.firstName.charAt(0)}
+                                                    {this.state.profile.lastName.charAt(0)}
+                                                </Text>
+                                            </View>
+                                            : <Image style={styles.profilePictureContainer}
+                                                source={{ uri: this.state.profile.profilePicture }} />
+                                    }
+                                </TouchableOpacity>
                                 {
                                     this.state.showSaving
                                         ? <View style={styles.loadingContainer}>
@@ -142,10 +145,12 @@ export default class Profile extends Component {
                                     {this.state.profile.lastName}
                                 </Text>
                                 <Text style={styles.email}>{this.state.profile.email}</Text>
-                                <Text style={styles.highlightedText} onClick={() => {
+                                <TouchableOpacity onPress={() => {
                                     localStorage.removeItem("x-auth-token");
                                     this.props.navigation.navigate("Auth");
-                                }}>Logout</Text>
+                                }}>
+                                    <Text style={styles.highlightedText}>Logout</Text>
+                                </TouchableOpacity>
                             </View>
                             <View style={styles.commonDataContainer}>
                                 <View style={styles.commonDataSection}>
@@ -159,7 +164,11 @@ export default class Profile extends Component {
                                             }
                                         </Text>
                                     </View>
-                                    <MdEdit size={25} color="#1f6cb0" onClick={() => { this.navigateToProfileDetailsEdit() }} />
+                                    <TouchableOpacity onPress={() => {
+                                        this.navigateToProfileDetailsEdit();
+                                    }}>
+                                        <MaterialIcons name="edit" size={25} color="#1f6cb0" />
+                                    </TouchableOpacity>
                                 </View>
                             </View>
                         </View>

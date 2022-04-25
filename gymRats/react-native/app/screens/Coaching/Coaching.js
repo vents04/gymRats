@@ -6,10 +6,9 @@ import ApiRequests from '../../classes/ApiRequests';
 
 import ConfirmationBox from '../../components/ConfirmationBox/ConfirmationBox';
 
-import { MdOutlineFitnessCenter } from 'react-icons/md';
-import { BsShieldFillCheck } from 'react-icons/bs';
-import { HiInbox } from 'react-icons/hi';
-import { AiFillDelete } from 'react-icons/ai';
+import { FontAwesome5 } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 
 import { HTTP_STATUS_CODES } from '../../../global';
 
@@ -150,17 +149,19 @@ export default class Coaching extends Component {
                     {
                         this.state.coaching &&
                             this.state.coaching.myClients.requests.length > 0
-                            ? <View style={globalStyles.topbarIconContainer} onClick={() => {
+                            ? <TouchableOpacity onPress={() => {
                                 this.props.navigation.navigate("CoachRequests", { relations: this.state.relations });
                             }}>
-                                <HiInbox size={30} color="#1f6cb0" />
-                                <Badge
-                                    status="error"
-                                    value={this.state.coaching.myClients.requests.length}
-                                    textStyle={{ fontFamily: "MainMedium" }}
-                                    containerStyle={{ position: 'absolute', top: 8, right: 8, height: 12, width: 12 }}
-                                />
-                            </View>
+                                <View style={globalStyles.topbarIconContainer}>
+                                    <MaterialCommunityIcons name="inbox" size={30} color="#1f6cb0" />
+                                    <Badge
+                                        status="error"
+                                        value={this.state.coaching.myClients.requests.length}
+                                        textStyle={{ fontFamily: "MainMedium" }}
+                                        containerStyle={{ position: 'absolute', top: 8, right: 8, height: 12, width: 12 }}
+                                    />
+                                </View>
+                            </TouchableOpacity>
                             : null
                     }
                     {
@@ -169,18 +170,22 @@ export default class Coaching extends Component {
                             : null
                     }
                     <View style={styles.tabsContainer}>
-                        <Text style={[styles.tabTitle, {
-                            color: this.state.activeTab == "myCoach" ? "#1f6cb0" : "#aaa"
-                        }]} onClick={() => {
+                        <TouchableOpacity onPress={() => {
                             this.setState({ activeTab: "myCoach" });
                             this.getCoachingPageState();
-                        }}>Me as client</Text>
-                        <Text style={[styles.tabTitle, {
-                            color: this.state.activeTab == "myClients" ? "#1f6cb0" : "#aaa"
-                        }]} onClick={() => {
+                        }}>
+                            <Text style={[styles.tabTitle, {
+                                color: this.state.activeTab == "myCoach" ? "#1f6cb0" : "#aaa"
+                            }]}>Me as client</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => {
                             this.setState({ activeTab: "myClients" });
                             this.getCoachingPageState();
-                        }}>Me as coach</Text>
+                        }}>
+                            <Text style={[styles.tabTitle, {
+                                color: this.state.activeTab == "myClients" ? "#1f6cb0" : "#aaa"
+                            }]}>Me as coach</Text>
+                        </TouchableOpacity>
                     </View>
                     {
                         this.state.coaching
@@ -190,20 +195,20 @@ export default class Coaching extends Component {
                                         !this.state.coaching.myCoach.hasCoaches && !this.state.coaching.myCoach.hasRelations
                                             ? <View style={styles.noCoachContainer}>
                                                 <View style={styles.noCoachTopbar}>
-                                                    <MdOutlineFitnessCenter size={25} color="#1f6cb0" />
+                                                    <FontAwesome5 name="dumbbell" size={25} color="#1f6cb0" />
                                                     <Text style={styles.noCoachTitle}>Get in shape with Gym Rats</Text>
                                                 </View>
                                                 <Text style={styles.noCoachDescription}>All of our coaches are:</Text>
                                                 <View style={styles.noCoachProContainer}>
-                                                    <BsShieldFillCheck color="#1f6cb0" style={styles.noCoachProIcon} />
+                                                    <Ionicons name="shield-checkmark" size={24} color="#1f6cb0" style={styles.noCoachProIcon} />
                                                     <Text style={styles.noCoachPro}>Single handedly approved by us</Text>
                                                 </View>
                                                 <View style={styles.noCoachProContainer}>
-                                                    <BsShieldFillCheck color="#1f6cb0" style={styles.noCoachProIcon} />
+                                                    <Ionicons name="shield-checkmark" size={24} color="#1f6cb0" style={styles.noCoachProIcon} />
                                                     <Text style={styles.noCoachPro}>Motivated and ready to help</Text>
                                                 </View>
                                                 <View style={styles.noCoachProContainer}>
-                                                    <BsShieldFillCheck color="#1f6cb0" style={styles.noCoachProIcon} />
+                                                    <Ionicons name="shield-checkmark" size={24} color="#1f6cb0" style={styles.noCoachProIcon} />
                                                     <Text style={styles.noCoachPro}>Capable of training people with different goals</Text>
                                                 </View>
                                                 <TouchableOpacity style={[globalStyles.authPageActionButton, {
@@ -252,9 +257,11 @@ export default class Coaching extends Component {
                                                                                 {coach.coachUser.lastName}
                                                                             </Text>
                                                                         </View>
-                                                                        <AiFillDelete size={20} onClick={() => {
+                                                                        <TouchableOpacity onPress={() => {
                                                                             this.setState({ showEndRelationModal: true, relationToBeEndedId: coach._id, statusToBeUpdated: "CANCELED" })
-                                                                        }} />
+                                                                        }}>
+                                                                            <MaterialCommunityIcons name="delete" size={25} color="#ddd" />
+                                                                        </TouchableOpacity>
                                                                     </View>
                                                                 )}
                                                         </>
@@ -285,9 +292,11 @@ export default class Coaching extends Component {
                                                                                 {relation.coach.lastName}
                                                                             </Text>
                                                                         </View>
-                                                                        <AiFillDelete size={20} onClick={() => {
+                                                                        <TouchableOpacity onPress={() => {
                                                                             this.deleteRequest(relation._id);
-                                                                        }} />
+                                                                        }}>
+                                                                            <MaterialCommunityIcons name="delete" size={20} color="#ddd" />
+                                                                        </TouchableOpacity>
                                                                     </View>
                                                                 )
                                                             }
@@ -313,20 +322,20 @@ export default class Coaching extends Component {
                                         !this.state.coaching.myClients.isPersonalTrainer
                                             ? <View style={styles.noCoachContainer}>
                                                 <View style={styles.noCoachTopbar}>
-                                                    <MdOutlineFitnessCenter size={25} color="#1f6cb0" />
+                                                    <FontAwesome5 name="dumbbell" size={25} color="#1f6cb0" />
                                                     <Text style={styles.noCoachTitle}>Be a couch at Gym Rats</Text>
                                                 </View>
                                                 <Text style={styles.noCoachDescription}>Catch the opportunity to:</Text>
                                                 <View style={styles.noCoachProContainer}>
-                                                    <BsShieldFillCheck color="#1f6cb0" style={styles.noCoachProIcon} />
+                                                    <Ionicons name="shield-checkmark" size={24} color="#1f6cb0" style={styles.noCoachProIcon} />
                                                     <Text style={styles.noCoachPro}>Work with people locally and internationally</Text>
                                                 </View>
                                                 <View style={styles.noCoachProContainer}>
-                                                    <BsShieldFillCheck color="#1f6cb0" style={styles.noCoachProIcon} />
+                                                    <Ionicons name="shield-checkmark" size={24} color="#1f6cb0" style={styles.noCoachProIcon} />
                                                     <Text style={styles.noCoachPro}>Get access to your clients' Gym Rats data (logbooks, diet, weight and etc.)</Text>
                                                 </View>
                                                 <View style={styles.noCoachProContainer}>
-                                                    <BsShieldFillCheck color="#1f6cb0" style={styles.noCoachProIcon} />
+                                                    <Ionicons name="shield-checkmark" size={24} color="#1f6cb0" style={styles.noCoachProIcon} />
                                                     <Text style={styles.noCoachPro}>Get the most out of what you have earned through Gym Rats</Text>
                                                 </View>
                                                 <TouchableOpacity style={[globalStyles.authPageActionButton, {
@@ -345,33 +354,37 @@ export default class Coaching extends Component {
                                                             <Text style={styles.coachingSectionTitle}>Clients</Text>
                                                             {
                                                                 this.state.coaching.myClients.clients.map((client, index) =>
-                                                                    <View key={index} style={styles.requestItem} onClick={() => {
+                                                                    <TouchableOpacity key={index} onPress={() => {
                                                                         this.props.navigation.navigate("Client", {
                                                                             client
                                                                         })
                                                                     }}>
-                                                                        <View style={styles.requestItemProfile}>
-                                                                            {
-                                                                                !client.clientInstance.profilePicture
-                                                                                    ? <View style={styles.profilePictureContainer}>
-                                                                                        <Text style={styles.noProfilePictureText}>
-                                                                                            {client.clientInstance.firstName.charAt(0)}
-                                                                                            {client.clientInstance.lastName.charAt(0)}
-                                                                                        </Text>
-                                                                                    </View>
-                                                                                    : <Image style={styles.profilePictureContainer}
-                                                                                        source={{ uri: client.clientInstance.profilePicture }} />
-                                                                            }
-                                                                            <Text style={styles.names}>
-                                                                                {client.clientInstance.firstName}
-                                                                                &nbsp;
-                                                                                {client.clientInstance.lastName}
-                                                                            </Text>
+                                                                        <View style={styles.requestItem}>
+                                                                            <View style={styles.requestItemProfile}>
+                                                                                {
+                                                                                    !client.clientInstance.profilePicture
+                                                                                        ? <View style={styles.profilePictureContainer}>
+                                                                                            <Text style={styles.noProfilePictureText}>
+                                                                                                {client.clientInstance.firstName.charAt(0)}
+                                                                                                {client.clientInstance.lastName.charAt(0)}
+                                                                                            </Text>
+                                                                                        </View>
+                                                                                        : <Image style={styles.profilePictureContainer}
+                                                                                            source={{ uri: client.clientInstance.profilePicture }} />
+                                                                                }
+                                                                                <Text style={styles.names}>
+                                                                                    {client.clientInstance.firstName}
+                                                                                    &nbsp;
+                                                                                    {client.clientInstance.lastName}
+                                                                                </Text>
+                                                                            </View>
+                                                                            <TouchableOpacity onPress={() => {
+                                                                                this.setState({ showEndRelationModal: true, relationToBeEndedId: client._id, statusToBeUpdated: "CANCELED" })
+                                                                            }}>
+                                                                                <MaterialCommunityIcons name="delete" size={20} color="#ddd" />
+                                                                            </TouchableOpacity>
                                                                         </View>
-                                                                        <AiFillDelete size={20} onClick={() => {
-                                                                            this.setState({ showEndRelationModal: true, relationToBeEndedId: client._id, statusToBeUpdated: "CANCELED" })
-                                                                        }} />
-                                                                    </View>
+                                                                    </TouchableOpacity>
                                                                 )
                                                             }
                                                         </>

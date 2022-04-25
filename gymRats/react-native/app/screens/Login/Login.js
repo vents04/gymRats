@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, Image, TextInput, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
+import { Text, View, Image, TextInput, TouchableOpacity, ActivityIndicator, Alert, TouchableWithoutFeedback } from 'react-native';
 
 import ApiRequests from '../../classes/ApiRequests';
 import Auth from '../../classes/Auth';
@@ -87,12 +87,14 @@ export default class Login extends Component {
                                 />
                         }
                     </TouchableOpacity>
-                    <View style={globalStyles.authPageRedirectTextContainer} onClick={() => {
+                    <TouchableWithoutFeedback onPress={() => {
                         this.props.navigation.navigate("Signup")
                     }}>
-                        <Text style={globalStyles.authPageRedirectText}>{i18n.t('screens')['login']['dontHaveAccount']}&nbsp;</Text>
-                        <Text style={globalStyles.authPageRedirectHighlightText}>{i18n.t('screens')['login']['goToSignup']}</Text>
-                    </View>
+                        <View style={globalStyles.authPageRedirectTextContainer}>
+                            <Text style={globalStyles.authPageRedirectText}>{i18n.t('screens')['login']['dontHaveAccount']}&nbsp;</Text>
+                            <Text style={globalStyles.authPageRedirectHighlightText}>{i18n.t('screens')['login']['goToSignup']}</Text>
+                        </View>
+                    </TouchableWithoutFeedback>
                 </View>
             </View>
         );

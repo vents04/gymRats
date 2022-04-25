@@ -70,11 +70,13 @@ export default class WeightTrackerCard extends Component {
                     <Text style={globalStyles.cardTitle}>{i18n.t('components')['cards']['weightTracker']['cardTitle']}</Text>
                     {
                         !this.props.client
-                            ? <View style={globalStyles.cardTopbarIcon}>
-                                <MaterialCommunityIcons name="delete" size={25} color="#ddd" onClick={() => {
-                                    this.setState({ showConfirmationBox: true })
-                                }} />
-                            </View>
+                            ? <TouchableOpacity onPress={() => {
+                                this.setState({ showConfirmationBox: true })
+                            }}>
+                                <View style={globalStyles.cardTopbarIcon}>
+                                    <MaterialCommunityIcons name="delete" size={25} color="#ddd" />
+                                </View>
+                            </TouchableOpacity>
                             : null
                     }
                 </View>

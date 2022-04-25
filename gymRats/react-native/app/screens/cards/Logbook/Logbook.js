@@ -288,15 +288,19 @@ export default class Logbook extends Component {
                                             : null
                                     }
                                     <View style={globalStyles.modalActionsContainer}>
-                                        <Text style={[globalStyles.modalActionTitle, {
-                                            color: "#1f6cb0"
-                                        }]} onClick={() => {
+                                        <TouchableOpacity onPress={() => {
                                             this.setState({ hasDeniedWorkoutTemplateCreation: true, showWorkoutTemplateModal: false })
                                             this.saveChanges();
-                                        }}>Skip</Text>
-                                        <Text style={globalStyles.modalActionTitle} onClick={() => {
+                                        }}>
+                                            <Text style={[globalStyles.modalActionTitle, {
+                                                color: "#1f6cb0"
+                                            }]}>Skip</Text>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={() => {
                                             this.addWorkoutTemplate();
-                                        }}>Add</Text>
+                                        }}>
+                                            <Text style={globalStyles.modalActionTitle}>Add</Text>
+                                        </TouchableOpacity>
                                     </View>
                                 </View>
                             </View>
@@ -330,14 +334,18 @@ export default class Logbook extends Component {
                                             : null
                                     }
                                     <View style={globalStyles.modalActionsContainer}>
-                                        <Text style={[globalStyles.modalActionTitle, {
-                                            color: "#1f6cb0"
-                                        }]} onClick={() => {
+                                        <TouchableOpacity onPress={() => {
                                             this.setState({ showTemplatePickerModal: false, hasDeniedWorkoutTemplateReplication: true })
-                                        }}>Skip</Text>
-                                        <Text style={globalStyles.modalActionTitle} onClick={() => {
+                                        }}>
+                                            <Text style={[globalStyles.modalActionTitle, {
+                                                color: "#1f6cb0"
+                                            }]}>Skip</Text>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={() => {
                                             this.loadWorkoutTemplate();
-                                        }}>Add</Text>
+                                        }}>
+                                            <Text style={globalStyles.modalActionTitle}>Add</Text>
+                                        </TouchableOpacity>
                                     </View>
                                 </View>
                             </View>

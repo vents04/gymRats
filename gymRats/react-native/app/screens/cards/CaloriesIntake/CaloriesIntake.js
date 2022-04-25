@@ -111,7 +111,7 @@ export default class CaloriesIntake extends Component {
                                             ? this.state.calorieCounterDay.items.map(item =>
                                                 item.meal == key
                                                     ? <View key={item._id} style={styles.itemContainer}>
-                                                        <View style={styles.itemContainerLeft} onClick={() => {
+                                                        <TouchableOpacity onPress={() => {
                                                             this.props.navigation.navigate("AddCaloriesIntakeItem", {
                                                                 dayId: this.state.calorieCounterDay._id,
                                                                 intent: CALORIES_COUNTER_SCREEN_INTENTS.UPDATE,
@@ -124,9 +124,11 @@ export default class CaloriesIntake extends Component {
                                                                 previousScreen: "CaloriesIntake"
                                                             })
                                                         }}>
-                                                            <Text style={styles.itemTitle}>{item.itemInstance.title}</Text>
-                                                            <Text style={styles.itemAmount}>{item.amount}&nbsp;{item.itemInstance.unit.toLowerCase()}</Text>
-                                                        </View>
+                                                            <View style={styles.itemContainerLeft}>
+                                                                <Text style={styles.itemTitle}>{item.itemInstance.title}</Text>
+                                                                <Text style={styles.itemAmount}>{item.amount}&nbsp;{item.itemInstance.unit.toLowerCase()}</Text>
+                                                            </View>
+                                                        </TouchableOpacity>
                                                         <TouchableOpacity onPress={() => {
                                                             this.removeItem(item._id)
                                                         }}>

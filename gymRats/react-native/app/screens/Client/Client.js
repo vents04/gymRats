@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { ScrollView, Text, View, Image } from 'react-native'
+import { ScrollView, Text, View, Image, TouchableWithoutFeedback } from 'react-native'
 
 import ApiRequests from '../../classes/ApiRequests';
 
@@ -9,8 +9,8 @@ import WeightTrackerCard from '../../components/WeightTrackerCard/WeightTrackerC
 import CaloriesIntakeCard from '../../components/CaloriesIntakeCard/CaloriesIntakeCard';
 import LogbookCard from '../../components/LogbookCard/LogbookCard';
 
-import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
-import { BiArrowBack } from 'react-icons/bi';
+import { Entypo } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 
 import { HTTP_STATUS_CODES } from '../../../global';
 
@@ -95,9 +95,11 @@ export default class Client extends Component {
             <View style={globalStyles.safeAreaView}>
                 <View style={globalStyles.pageContainer}>
                     <View style={globalStyles.followUpScreenTopbar}>
-                        <BiArrowBack size={25} onClick={() => {
+                        <TouchableOpacity onPress={() => {
                             this.props.navigation.navigate("Coaching", { tab: "myClients" })
-                        }} />
+                        }}>
+                            <Ionicons name="md-arrow-back-sharp" size={25} />
+                        </TouchableOpacity>
                         <Text style={globalStyles.followUpScreenTitle}>Client profile</Text>
                     </View>
                     {
@@ -142,11 +144,13 @@ export default class Client extends Component {
                         this.state.selectedDate
                             ? <View style={globalStyles.fillEmptySpace}>
                                 <View style={styles.calendarControllersContainer}>
-                                    <View style={styles.calendarController} onClick={() => { this.incrementDate(-1) }}>
-                                        <IoIosArrowBack style={{ marginRight: 5 }} size={14} color="#999" />
-                                        <Text style={styles.calendarControllerText}>Previous</Text>
-                                    </View>
-                                    <Text style={styles.calendarCurrentDate} onClick={() => { this.setState({ showDatePicker: true }) }}>
+                                    <TouchableWithoutFeedback onPress={() => { this.incrementDate(-1) }}>
+                                        <View style={styles.calendarController}>
+                                            <Entypo name="chevron-left" size={14} color="#999" style={{ marginRight: 5 }} />
+                                            <Text style={styles.calendarControllerText}>Previous</Text>
+                                        </View>
+                                    </TouchableWithoutFeedback>
+                                    <Text style={styles.calendarCurrentDate}>
                                         {this.state.selectedDate.getDate()}
                                         .
                                         {
@@ -155,10 +159,12 @@ export default class Client extends Component {
                                                 : (this.state.selectedDate.getMonth() + 1)
                                         }
                                     </Text>
-                                    <View style={[styles.calendarController, { justifyContent: 'flex-end' }]} onClick={() => { this.incrementDate(1) }}>
-                                        <Text style={styles.calendarControllerText}>Next</Text>
-                                        <IoIosArrowForward style={{ marginLeft: 5 }} size={14} color="#999" />
-                                    </View>
+                                    <TouchableWithoutFeedback onPress={() => { this.incrementDate(1) }}>
+                                        <View style={styles.calendarController}>
+                                            <Text style={styles.calendarControllerText}>Next</Text>
+                                            <Entypo name="chevron-right" style={{ marginLeft: 5 }} size={14} color="#999" />
+                                        </View>
+                                    </TouchableWithoutFeedback>
                                 </View>
                                 <ScrollView contentContainerStyle={globalStyles.fillEmptySpace}>
                                     {
