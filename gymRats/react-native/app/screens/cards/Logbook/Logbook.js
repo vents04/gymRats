@@ -42,6 +42,9 @@ export default class Logbook extends Component {
     }
 
     onFocusFunction = () => {
+        if (!this.props.route.params.date) {
+            return this.props.navigation.navigate("Calendar");
+        }
         this.setState({ timezoneOffset: this.props.route.params.timezoneOffset || new Date().getTimezoneOffset(), date: this.props.route.params.date }, () => {
             if (this.props.route.params) {
                 if (this.props.route.params.exercise) {
@@ -68,11 +71,11 @@ export default class Logbook extends Component {
                     });
                     this.setState({ exercises: exercises, hasChanges: true });
                 } else if (this.props.route.params.data) {
-                    this.getSession(this.state.date);
-                } else {
-                    if (this.state.exercises.length == 0) {
-                        this.getTemplates();
-                    }
+                    this.getSession(this.props.route.params.date);
+                }
+            } else {
+                if (this.state.exercises.length == 0) {
+                    this.getTemplates();
                 }
             }
         })
@@ -106,7 +109,7 @@ export default class Logbook extends Component {
     }
 
     getSession = () => {
-        ApiRequests.get(`logbook/workout-session?date=${this.state.date.getDate()}&month=${this.state.date.getMonth() + 1}&year=${this.state.date.getFullYear()}`, {}, true).then((response) => {
+        ApiRequests.get(`logbook/workout-session?date=${this.props.route.params.date.getDate()}&month=${this.props.route.params.date.getMonth() + 1}&year=${this.props.route.params.date.getFullYear()}`, {}, true).then((response) => {
             this.setState({ exercises: response.data.session.exercises })
         }).catch((error) => {
             if (error.response) {
@@ -232,9 +235,10 @@ export default class Logbook extends Component {
         for (let exercise of payload.exercises) {
             if (exercise.hasOwnProperty("exerciseName")) delete exercise.exerciseName;
         }
-        ApiRequests.post(`logbook/workout-session?date=${this.state.date.getDate()}&month=${this.state.date.getMonth() + 1}&year=${this.state.date.getFullYear()}`, {}, payload, true).then((response) => {
-            this.getSession(this.state.date);
-            this.setState({ hasChanges: false });
+        ApiRequests.post(`logbook/workout-session?date=${this.props.route.params.date.getDate()}&month=${this.props.route.params.date.getMonth() + 1}&year=${this.props.route.params.date.getFullYear()}`, {}, payload, true).then((response) => {
+            this.setState({ hasChanges: false }, () => {
+                this.getSession(this.props.route.params.date);
+            });
         }).catch((error) => {
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
@@ -276,7 +280,7 @@ export default class Logbook extends Component {
                             visible={true}>
                             <View style={globalStyles.centeredView}>
                                 <View style={globalStyles.modalView}>
-                                    <Text style={globalStyles.modalText}>It looks like this is a new kind of workout to you. You may add it as a workout template by giving it a name.</Text>
+                                    <Text style={globalStyles.modalText}>You may add this workout template for future use by giving it a name.</Text>
                                     <TextInput
                                         value={this.state.templateTitle}
                                         style={globalStyles.authPageInput}
@@ -288,7 +292,7 @@ export default class Logbook extends Component {
                                             : null
                                     }
                                     <View style={globalStyles.modalActionsContainer}>
-                                        <TouchableOpacity onPress={() => {
+                                        <TouchableOpacity style={styles.option} onPress={() => {
                                             this.setState({ hasDeniedWorkoutTemplateCreation: true, showWorkoutTemplateModal: false })
                                             this.saveChanges();
                                         }}>
@@ -296,7 +300,7 @@ export default class Logbook extends Component {
                                                 color: "#1f6cb0"
                                             }]}>Skip</Text>
                                         </TouchableOpacity>
-                                        <TouchableOpacity onPress={() => {
+                                        <TouchableOpacity style={styles.option} onPress={() => {
                                             this.addWorkoutTemplate();
                                         }}>
                                             <Text style={globalStyles.modalActionTitle}>Add</Text>
@@ -363,14 +367,13 @@ export default class Logbook extends Component {
                     </View>
                     {
                         this.state.exercises.length > 0 && this.state.hasChanges
-                            ? <TouchableOpacity onPress={() => {
+                            ? <TouchableOpacity style={globalStyles.topbarIconContainer} onPress={() => {
                                 (!this.state.hasDeniedWorkoutTemplateCreation) ? this.checkWorkoutTemplate() : this.saveChanges()
-                            }}><View style={globalStyles.topbarIconContainer} >
-                                    <Text style={[globalStyles.topbarIconTitle, {
-                                        color: cardColors.logbook
-                                    }]}>Save</Text>
-                                    <FontAwesome name="check" size={20} color={cardColors.logbook} />
-                                </View>
+                            }}>
+                                <Text style={[globalStyles.topbarIconTitle, {
+                                    color: cardColors.logbook
+                                }]}>Save</Text>
+                                <FontAwesome name="check" size={20} color={cardColors.logbook} />
                             </TouchableOpacity>
                             : null
                     }
@@ -383,7 +386,7 @@ export default class Logbook extends Component {
                         <View style={styles.exercisesListContainerTopbar}>
                             <Text style={styles.sectionTitle}>Exercises</Text>
                             <TouchableOpacity onPress={() => {
-                                this.props.navigation.navigate("ExerciseSearch", { date: this.state.date, timezoneOffset: this.state.timezoneOffset })
+                                this.props.navigation.navigate("ExerciseSearch", { date: this.props.route.params.date, timezoneOffset: this.props.route.params.timezoneOffset })
                             }}>
                                 <Ionicons name="add-sharp" size={35} color={cardColors.logbook} />
                             </TouchableOpacity>
@@ -421,7 +424,7 @@ export default class Logbook extends Component {
                                                     <View style={styles.setsContainer} key={`_${index}`}>
                                                         {
                                                             exercise.sets.map((set, index) =>
-                                                                <View key={index}>
+                                                                <View key={set._id}>
                                                                     <Text style={styles.setContainerTitle}>Set No. {index + 1}</Text>
                                                                     <ScrollView
                                                                         showsHorizontalScrollIndicator={false}
@@ -429,24 +432,27 @@ export default class Logbook extends Component {
                                                                         horizontal={true}
                                                                         contentContainerStyle={{ alignItems: "center", paddingVertical: 5 }}>
                                                                         <View style={styles.setContainerItem}>
-                                                                            <TextInput style={styles.setContainerItemInput} value={set.weight.amount}
-                                                                                defaultValue={0}
+                                                                            <TextInput style={styles.setContainerItemInput}
+                                                                                value={set.weight.amount && set.weight.amount != undefined ? set.weight.amount.toString() : null}
+                                                                                defaultValue={set.weight.amount && set.weight.amount != undefined ? set.weight.amount.toString() : null}
                                                                                 onChangeText={(val) => {
                                                                                     this.changeSetVariable(exercise.exerciseId, index, "weight", val)
                                                                                 }} />
                                                                             <Text style={styles.setContainerItemDescriptor}>{WEIGHT_UNITS_LABELS[set.weight.unit]}</Text>
                                                                         </View>
                                                                         <View style={styles.setContainerItem}>
-                                                                            <TextInput style={styles.setContainerItemInput} value={set.reps}
-                                                                                defaultValue={0}
+                                                                            <TextInput style={styles.setContainerItemInput}
+                                                                                value={set.reps && set.reps != undefined ? set.reps.toString() : null}
+                                                                                defaultValue={set.reps && set.reps != undefined ? set.reps.toString() : null}
                                                                                 onChangeText={(val) => {
                                                                                     this.changeSetVariable(exercise.exerciseId, index, "reps", val)
                                                                                 }} />
                                                                             <Text style={styles.setContainerItemDescriptor}>reps</Text>
                                                                         </View>
                                                                         <View style={styles.setContainerItem}>
-                                                                            <TextInput style={styles.setContainerItemInput} value={set.duration}
-                                                                                defaultValue={0}
+                                                                            <TextInput style={styles.setContainerItemInput}
+                                                                                value={set.duration && set.duration != undefined ? set.duration.toString() : null}
+                                                                                defaultValue={set.duration && set.duration != undefined ? set.duration.toString() : null}
                                                                                 onChangeText={(val) => {
                                                                                     this.changeSetVariable(exercise.exerciseId, index, "duration", val)
                                                                                 }} />

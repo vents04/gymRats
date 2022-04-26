@@ -87,12 +87,10 @@ export default class LogbookCard extends Component {
                 <Text style={globalStyles.cardTitle}>{i18n.t('components')['cards']['logbook']['cardTitle']}</Text>
                 {
                     !this.props.client
-                        ? <TouchableOpacity onPress={() => {
+                        ? <TouchableOpacity style={globalStyles.cardTopbarIcon} onPress={() => {
                             this.setState({ showConfirmationBox: true })
                         }}>
-                            <View style={globalStyles.cardTopbarIcon}>
-                                <MaterialCommunityIcons name="delete" size={25} color="#ddd" />
-                            </View>
+                            <MaterialCommunityIcons name="delete" size={25} color="#ddd" />
                         </TouchableOpacity>
                         : null
                 }

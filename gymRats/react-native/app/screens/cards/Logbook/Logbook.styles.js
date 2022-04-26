@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { Dimensions, StyleSheet } from 'react-native';
 import { cardColors } from '../../../../assets/styles/cardColors';
 
 export default StyleSheet.create({
@@ -69,7 +69,7 @@ export default StyleSheet.create({
         borderWidth: 1,
         borderColor: "#ccc",
         borderRadius: 4,
-        width: 100,
+        width: (Dimensions.get('window').width - 32) / 4,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -100,5 +100,10 @@ export default StyleSheet.create({
         borderColor: "#ccc",
         padding: 6,
         fontFamily: "MainRegular",
+    },
+    option: {
+        width: '50%',
+        display: 'flex',
+        alignItems: 'center'
     }
 })

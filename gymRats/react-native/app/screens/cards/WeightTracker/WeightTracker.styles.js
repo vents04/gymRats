@@ -6,13 +6,13 @@ export default StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'center',
-        marginTop: 32
+        marginTop: 32,
     },
     editSectionInput: {
         fontFamily: "MainMedium",
         fontSize: 16,
-        borderWidth: 0
+        borderWidth: 0,
+        width: '100%',
     },
     loadingContainer: {
         display: "flex",

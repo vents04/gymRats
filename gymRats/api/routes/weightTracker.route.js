@@ -59,7 +59,7 @@ router.delete("/daily-weight/:id", authenticate, async (req, res, next) => {
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) return next(new ResponseError("Invalid daily weight id", HTTP_STATUS_CODES.BAD_REQUEST));
 
     try {
-        const dailyWeight = await DbService.get(COLLECTIONS.DAILY_WEIGHTS, { _id: mongoose.Types.ObjectId(req.params.id) });
+        const dailyWeight = await DbService.getOne(COLLECTIONS.DAILY_WEIGHTS, { _id: mongoose.Types.ObjectId(req.params.id) });
         if (!dailyWeight) return next(new ResponseError("Daily weight not found", HTTP_STATUS_CODES.NOT_FOUND));
         if (dailyWeight.userId.toString() != req.user._id.toString()) return next(new ResponseError("You cannot delete this daily weight", HTTP_STATUS_CODES.FORBIDDEN));
 

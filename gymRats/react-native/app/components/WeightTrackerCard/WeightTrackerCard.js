@@ -39,10 +39,12 @@ export default class WeightTrackerCard extends Component {
     }
 
     deleteCard = () => {
-        ApiRequests.delete(`weight-tracker/daily-weight?date=${this.state.data.date}&month=${this.state.data.month}&year=${this.state.data.year}`, {}, true).then((response) => {
+        console.log(this.state.data);
+        ApiRequests.delete(`weight-tracker/daily-weight/${this.props.data._id}`, {}, true).then((response) => {
             this.toggleShowConfirmationBox(false);
             this.props.rerender(this.props.date);
         }).catch((error) => {
+            console.log(error.response);
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
                     this.setState({ showError: true, error: error.response.data });
@@ -70,12 +72,10 @@ export default class WeightTrackerCard extends Component {
                     <Text style={globalStyles.cardTitle}>{i18n.t('components')['cards']['weightTracker']['cardTitle']}</Text>
                     {
                         !this.props.client
-                            ? <TouchableOpacity onPress={() => {
+                            ? <TouchableOpacity style={globalStyles.cardTopbarIcon} onPress={() => {
                                 this.setState({ showConfirmationBox: true })
                             }}>
-                                <View style={globalStyles.cardTopbarIcon}>
-                                    <MaterialCommunityIcons name="delete" size={25} color="#ddd" />
-                                </View>
+                                <MaterialCommunityIcons name="delete" size={25} color="#ddd" />
                             </TouchableOpacity>
                             : null
                     }

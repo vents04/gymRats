@@ -43,7 +43,7 @@ export default class WeightTracker extends Component {
 
     getWeightUnit = () => {
         ApiRequests.get("user", {}, true).then((response) => {
-            this.setState({ weightUnit: response.data.weightUnit });
+            this.setState({ weightUnit: response.data.user.weightUnit });
         }).catch((error) => {
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
@@ -111,7 +111,7 @@ export default class WeightTracker extends Component {
                     <TextInput
                         value={this.state.weight}
                         style={[styles.editSectionInput, {
-                            width: "80%"
+                            width: "80%",
                         }]}
                         placeholder="Weight:"
                         editable={!this.state.showSaving}

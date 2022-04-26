@@ -101,12 +101,10 @@ export default class CaloriesIntakeCard extends Component {
                 <Text style={globalStyles.cardTitle}>Calories intake</Text>
                 {
                     !this.props.client
-                        ? <TouchableOpacity onPress={() => {
+                        ? <TouchableOpacity style={globalStyles.cardTopbarIcon} onPress={() => {
                             this.setState({ showConfirmationBox: true })
                         }}>
-                            <View style={globalStyles.cardTopbarIcon}>
-                                <MaterialCommunityIcons name="delete" size={25} color="#ddd" />
-                            </View>
+                            <MaterialCommunityIcons name="delete" size={25} color="#ddd" />
                         </TouchableOpacity>
                         : null
                 }

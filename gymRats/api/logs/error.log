@@ -7794,3 +7794,8 @@
 {"level":"error","message":"Cannot read properties of undefined (reading 'toString')"}
 {"level":"error","message":"Cannot read properties of undefined (reading 'toString')"}
 {"level":"error","message":"\"unit\" is required"}
+{"level":"error","message":"\"unit\" is required"}
+{"level":"error","message":"\"weight\" must be a number"}
+{"level":"error","message":"DbService.get is not a function"}
+{"level":"error","message":"DbService.get is not a function"}
+{"level":"error","message":"DbService.get is not a function"}

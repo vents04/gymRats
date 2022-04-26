@@ -10,6 +10,7 @@ import { useFonts } from 'expo-font';
 import * as Localization from 'expo-localization';
 import i18n from 'i18n-js';
 import translations from './translations';
+import { useEffect } from 'react';
 
 
 const Stack = createStackNavigator();

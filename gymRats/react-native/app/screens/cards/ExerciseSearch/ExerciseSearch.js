@@ -72,14 +72,14 @@ export default class ExerciseSearch extends Component {
                         <ScrollView contentContainerStyle={globalStyles.fillEmptySpace}>
                             {
                                 this.state.queryResults.map((exercise, index) =>
-                                    <TouchableOpacity onPress={() => {
+                                    <TouchableOpacity key={index} onPress={() => {
                                         this.props.navigation.navigate("Logbook", {
                                             exercise: exercise,
                                             date: this.props.route.params.date,
                                             timezoneOffset: this.props.route.params.timezoneOffset
                                         })
                                     }}>
-                                        <View key={index} style={styles.searchResult}>
+                                        <View style={styles.searchResult}>
                                             <Text style={styles.searchResultTitle}>{exercise.title}</Text>
                                             <Text style={styles.searchResultStats}>Used in {exercise.sessionsCount} workout sessions</Text>
                                         </View>
