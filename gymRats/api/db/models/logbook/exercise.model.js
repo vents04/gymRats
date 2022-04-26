@@ -20,9 +20,8 @@ const exerciseSchema = mongoose.Schema({
         required: true,
     },
     targetMuscles: [{
-        type: mongoose.Types.ObjectId,
-        ref: DATABASE_MODELS.MUSCLE,
-        optional: true,
+        type: String,
+        required: true,
     }],
     translations: {
         en: {
@@ -33,6 +32,10 @@ const exerciseSchema = mongoose.Schema({
             type: String,
             default: null
         }
+    },
+    video: {
+        type: String,
+        optional: true,
     },
     keywords: [{
         type: String,

@@ -7799,3 +7799,4 @@
 {"level":"error","message":"DbService.get is not a function"}
 {"level":"error","message":"DbService.get is not a function"}
 {"level":"error","message":"DbService.get is not a function"}
+{"level":"error","message":"User with this email was not found"}

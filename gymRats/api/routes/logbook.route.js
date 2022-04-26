@@ -283,7 +283,7 @@ router.get("/search", authenticate, async (req, res, next) => {
             exercise.sessionsCount = workoutSessions.length;
         }
         return res.status(HTTP_STATUS_CODES.OK).send({
-            results: exercises
+            results: exercises.splice(0, 50)
         })
     }
     try {
@@ -342,7 +342,7 @@ router.get("/search", authenticate, async (req, res, next) => {
         }
 
         return res.status(HTTP_STATUS_CODES.OK).send({
-            results: sorted
+            results: sorted.splice(0, 50)
         })
     } catch (error) {
         return next(new ResponseError(error.message || "Internal server error", error.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));

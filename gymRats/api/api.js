@@ -10,6 +10,7 @@ const { PORT, COLLECTIONS } = require('./global');
 const DbService = require('./services/db.service');
 const MessagingService = require('./services/messaging.service');
 const mongoose = require('mongoose');
+const Exercise = require('./db/models/logbook/exercise.model');
 const io = require("socket.io")(httpServer, { cors: { origin: "*" } });
 
 app
@@ -24,12 +25,25 @@ app
 mongo.connect();
 
 (async function () {
-    const users = await DbService.getMany(COLLECTIONS.USERS, {});
-    for (let user of users) {
-        await DbService.update(COLLECTIONS.USERS, { _id: mongoose.Types.ObjectId(user._id) }, {
-            weightUnit: "KILOGRAMS",
-            verifiedEmail: false
+    const fs = require('fs');
+
+    let rawdata = fs.readFileSync('e.json');
+    let exercises = JSON.parse(rawdata).exercises;
+    for (let exercise of exercises) {
+        const keywords = [...exercise.name.split(' '), ...exercise.equipment.split(' ')];
+        const exerciseInstance = new Exercise({
+            title: exercise.name.charAt(0).toUpperCase() + exercise.name.slice(1),
+            userId: null,
+            targetMuscles: [exercise.target],
+            translations: {
+                en: exercise.name.charAt(0).toUpperCase() + exercise.name.slice(1),
+                bg: null,
+            },
+            video: exercise.gifUrl,
+            keywords,
+            isPublic: true
         });
+        await DbService.create(COLLECTIONS.EXERCISES, exerciseInstance);
     }
 })();
 
