@@ -252,9 +252,9 @@ router.get("/search/barcode", async (req, res, next) => {
     if (!req.query.barcode) return next(new ResponseError("Provide a barcode to search for", HTTP_STATUS_CODES.BAD_REQUEST));
     if (!validbarcode(req.query.barcode)) return next(new ResponseError("Invalid barcode", HTTP_STATUS_CODES.BAD_REQUEST));
     try {
-        const results = await NutritionixService.searchBarcode(req.query.barcode);
+        const result = await DbService.getOne(COLLECTIONS.CALORIES_COUNTER_ITEMS, { barcode: req.query.barcode });
         return res.status(HTTP_STATUS_CODES.OK).send({
-            results
+            result
         })
     } catch (err) {
         return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));

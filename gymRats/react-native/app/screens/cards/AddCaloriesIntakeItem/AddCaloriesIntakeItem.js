@@ -27,6 +27,7 @@ export default class AddCaloriesIntakeItem extends Component {
     }
 
     componentDidMount() {
+        console.log(this.props.route.params.intent == CALORIES_COUNTER_SCREEN_INTENTS.ADD)
         if (this.props.route.params.intent == CALORIES_COUNTER_SCREEN_INTENTS.UPDATE)
             this.setState({ amount: parseInt(this.props.route.params.amount) });
     }
@@ -99,7 +100,7 @@ export default class AddCaloriesIntakeItem extends Component {
                             <Ionicons name="md-arrow-back-sharp" size={25} />
                         </TouchableOpacity>
                         <Text style={globalStyles.followUpScreenTitle}>{
-                            this.props.route.params.meal == CALORIES_COUNTER_SCREEN_INTENTS.ADD
+                            this.props.route.params.intent == CALORIES_COUNTER_SCREEN_INTENTS.ADD
                                 ? "Add"
                                 : "Update"
                         }&nbsp;food</Text>
@@ -138,6 +139,7 @@ export default class AddCaloriesIntakeItem extends Component {
                         <View style={styles.inputContainer}>
                             <View style={[globalStyles.authPageInput, styles.amountInputContainer]}>
                                 <TextInput
+                                    defaultValue={this.state.amount.toString()}
                                     value={this.state.amount}
                                     style={styles.amountInput}
                                     onChangeText={(val) => { this.setState({ amount: val, showError: false }) }} />

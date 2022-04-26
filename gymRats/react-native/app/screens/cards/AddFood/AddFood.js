@@ -27,6 +27,27 @@ export default class AddFood extends Component {
             showError: false,
             error: ""
         }
+
+        this.focusListener;
+    }
+
+    onFocusFunction = () => {
+        if (this.props?.route?.params?.barcode) {
+            this.setState({
+                barcode: this.props.route.params.barcode
+            })
+            console.log("slozhih")
+        }
+    }
+
+    componentDidMount() {
+        this.focusListener = this.props.navigation.addListener('focus', () => {
+            this.onFocusFunction()
+        })
+    }
+
+    componentWillUnmount() {
+        if (this.focusListener) this.focusListener()
     }
 
     addFood = () => {

@@ -7,6 +7,16 @@ export default StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
+    title: {
+        fontFamily: "MainBold",
+        fontSize: 24,
+        marginBottom: 16
+    },
+    text: {
+        fontFamily: "MainRegular",
+        fontSize: 16,
+        color: '#000'
+    },
     maintext: {
         fontSize: 16,
         margin: 20,

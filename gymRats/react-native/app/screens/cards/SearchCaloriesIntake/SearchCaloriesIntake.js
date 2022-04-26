@@ -83,8 +83,9 @@ export default class SearchCaloriesIntake extends Component {
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => {
                             this.props.navigation.navigate("BarcodeReader", {
-                                timezoneOffset: this.state.timezoneOffset,
-                                date: this.state.date,
+                                meal: this.props.route.params.meal,
+                                date: this.props.route.params.date,
+                                timezoneOffset: this.props.route.params.timezoneOffset,
                                 onGoBack: () => {
                                     this.props.navigation.navigate("SearchCaloriesIntake", { date: this.props.route.params.date, timezoneOffset: this.props.route.params.timezoneOffset })
                                 }

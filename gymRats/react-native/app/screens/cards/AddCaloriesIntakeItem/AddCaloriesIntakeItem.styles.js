@@ -8,8 +8,8 @@ export default StyleSheet.create({
         width: '100%',
         display: 'flex',
         justifyContent: 'flex-end',
-        paddingHorizontal: "2rem",
-        paddingVertical: "2rem",
+        paddingHorizontal: 32,
+        paddingVertical: 32,
         borderRadius: 4,
         marginTop: 12,
         marginBottom: 32
