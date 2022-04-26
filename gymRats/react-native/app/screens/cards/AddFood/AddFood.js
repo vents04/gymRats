@@ -92,10 +92,7 @@ export default class AddFood extends Component {
                             }]}>{this.state.error}</Text>
                             : null
                     }
-                    <ScrollView contentContainerStyle={{
-                        flexGrow: 1,
-                        flexShrink: 1
-                    }}>
+                    <ScrollView contentContainerStyle={globalStyles.fillEmptySpace}>
                         <View style={styles.inputSection}>
                             <Text style={styles.inputSectionTitle}>Title</Text>
                             <TextInput

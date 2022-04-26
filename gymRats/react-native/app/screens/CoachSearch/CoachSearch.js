@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios';
 import { Image, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import Rating from 'react-star-review';
 
 import ApiRequests from '../../classes/ApiRequests';
 
@@ -52,6 +51,7 @@ export default class CoachSearch extends Component {
             animated: true
         });
         ApiRequests.get(`coaching/coach/search?name=${this.query.toLowerCase()}&lat=${this.state.lat}&lng=${this.state.lng}`, {}, true).then((response) => {
+            console.log(response.data.results.length);
             this.setState({ searchResults: response.data.results })
         }).catch((error) => {
             if (error.response) {
@@ -111,39 +111,36 @@ export default class CoachSearch extends Component {
                                 contentContainerStyle={globalStyles.fillEmptySpace}
                                 ref={this.scrollView}>
                                 {
-                                    this.state.searchResults?.length > 0
-                                        ? this.state.searchResults.map((result, index) => {
-                                            <TouchableOpacity key={index} onPress={() => {
-                                                this.props.navigation.navigate("CoachPage", { coach: result })
-                                            }}>
-                                                <View style={styles.coachResult}>
-                                                    <View style={styles.coachResultInline}>
-                                                        {
-                                                            !result.user.profilePicture
-                                                                ? <View style={styles.profilePictureContainer}>
-                                                                    <Text style={styles.noProfilePictureText}>
-                                                                        {result.user.firstName.charAt(0)}
-                                                                        {result.user.lastName.charAt(0)}
-                                                                    </Text>
-                                                                </View>
-                                                                : <Image style={styles.profilePictureContainer}
-                                                                    source={{ uri: result.user.profilePicture }} />
-                                                        }
-                                                        <Text style={styles.names}>
-                                                            {result.user.firstName}
-                                                            &nbsp;
-                                                            {result.user.lastName}
-                                                        </Text>
-                                                    </View>
-                                                    <View style={[styles.coachResultInline, { marginTop: 8 }]}>
-                                                        <Rating rating={result.rating} interactive={false} count={5} size={20} filledColor="#1f6cb0" borderColor="#1f6cb0" />
-                                                        <Text style={styles.coachResultReviews}>({result.reviews} reviews)</Text>
-                                                    </View>
+                                    this.state.searchResults.map((result, index) =>
+                                        <TouchableOpacity key={index} onPress={() => {
+                                            this.props.navigation.navigate("CoachPage", { coach: result })
+                                        }}>
+                                            <View style={styles.coachResult}>
+                                                <View style={styles.coachResultInline}>
+                                                    {
+                                                        !result.user.profilePicture
+                                                            ? <View style={styles.profilePictureContainer}>
+                                                                <Text style={styles.noProfilePictureText}>
+                                                                    {result.user.firstName.charAt(0)}
+                                                                    {result.user.lastName.charAt(0)}
+                                                                </Text>
+                                                            </View>
+                                                            : <Image style={styles.profilePictureContainer}
+                                                                source={{ uri: result.user.profilePicture }} />
+                                                    }
+                                                    <Text style={styles.names}>
+                                                        {result.user.firstName}
+                                                        &nbsp;
+                                                        {result.user.lastName}
+                                                    </Text>
                                                 </View>
-                                            </TouchableOpacity>
-                                        }
-                                        )
-                                        : <Text style={globalStyles.notation}>No coaches found for that search</Text>
+                                                <View style={[styles.coachResultInline, { marginTop: 8 }]}>
+                                                    <Ionicons name="md-star" size={20} color="#1f6cb0" />
+                                                    <Text style={styles.coachResultReviews}>{result.rating}/5 ({result.reviews} reviews)</Text>
+                                                </View>
+                                            </View>
+                                        </TouchableOpacity>
+                                    )
                                 }
                             </ScrollView>
                             : <Text style={[globalStyles.notation, {

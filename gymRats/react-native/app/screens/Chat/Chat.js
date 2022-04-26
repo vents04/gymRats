@@ -52,6 +52,7 @@ export default class Chat extends Component {
     getChat = (id) => {
         ApiRequests.get(`chat/${id}`, {}, true).then((response) => {
             this.setState({ chat: response.data.chat }, () => {
+                console.log(this.state.chat)
                 this.scrollView.current.scrollToEnd({ animated: true });
             });
         }).catch((error) => {
@@ -114,11 +115,11 @@ export default class Chat extends Component {
                                     <Ionicons name="md-arrow-back-sharp" size={25} />
                                 </TouchableOpacity>
                                 {
-                                    !this.state.chat.user.profilePicture
+                                    !this.state.chat.oppositeUser.profilePicture
                                         ? <View style={styles.chatProfilePicture}>
                                             <Text style={styles.noProfilePictureText}>
-                                                {this.state.chat.user.firstName.charAt(0)}
-                                                {this.state.chat.user.lastName.charAt(0)}
+                                                {this.state.chat.oppositeUser.firstName.charAt(0)}
+                                                {this.state.chat.oppositeUser.lastName.charAt(0)}
                                             </Text>
                                         </View>
                                         : <Image style={styles.chatProfilePicture} />
@@ -136,15 +137,16 @@ export default class Chat extends Component {
                                 <TextInput
                                     value={this.state.message}
                                     style={styles.chatInput}
-                                    placeholder="Type a message"
+                                    placeholder="Type a message..."
                                     onChangeText={(val) => { this.setState({ message: val, showError: false }) }} />
                                 <View style={styles.chatActionButtonContainer}>
                                     <TouchableOpacity onPress={() => {
                                         this.sendTextMessage({ senderId: this.state.chat.user._id, message: this.state.message })
                                     }}>
-                                        <Ionicons name="md-arrow-back-sharp" size={24} style={styles.chatInputButton} color="#1f6cb0" />
+                                        <Ionicons name="ios-send" size={24} style={styles.chatInputButton} color="#1f6cb0" />
                                     </TouchableOpacity>
                                 </View>
+
                             </View>
                         </>
                         : null

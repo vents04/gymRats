@@ -45,7 +45,7 @@ export default StyleSheet.create({
     },
     chatInput: {
         width: "90%",
-        padding: "16px",
+        padding: 16,
         fontFamily: "MainRegular",
         fontSize: 16
     },
