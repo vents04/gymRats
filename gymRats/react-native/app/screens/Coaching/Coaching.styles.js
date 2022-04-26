@@ -8,8 +8,10 @@ export default StyleSheet.create({
         justifyContent: 'space-between',
         width: '100%',
     },
-    tabTitle: {
+    tabTitleContainer: {
         width: '50%',
+    },
+    tabTitle: {
         fontFamily: 'MainBold',
         fontSize: 16,
         textTransform: "uppercase",
@@ -52,7 +54,7 @@ export default StyleSheet.create({
         fontFamily: 'MainRegular',
         fontSize: 16,
         marginLeft: 8,
-        flex: 95
+        flex: 95,
     },
     noCoachProIcon: {
         color: "#1f6cb0",

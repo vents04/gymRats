@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { ScrollView, Text, View, Image, TouchableWithoutFeedback } from 'react-native'
+import { ScrollView, Text, View, Image, TouchableWithoutFeedback, TouchableOpacity } from 'react-native'
 
 import ApiRequests from '../../classes/ApiRequests';
 
@@ -45,10 +45,6 @@ export default class Client extends Component {
         this.focusListener = this.props.navigation.addListener('focus', () => {
             this.onFocusFunction()
         })
-    }
-
-    componentWillUnmount() {
-        if (this.focusListener) this.focusListener()
     }
 
     getDate = (selectedDate) => {

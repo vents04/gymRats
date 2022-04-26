@@ -9,6 +9,10 @@ const Auth = {
     getToken: async () => {
         return AsyncStorage.getItem(AUTHENTICATION_TOKEN_KEY);
     },
+
+    removeToken: async () => {
+        return AsyncStorage.removeItem(AUTHENTICATION_TOKEN_KEY);
+    }
 }
 
 module.exports = Auth;

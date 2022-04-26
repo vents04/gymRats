@@ -59,10 +59,6 @@ export default class Calendar extends Component {
         })
     }
 
-    componentWillUnmount() {
-        if (this.focusListener) this.focusListener()
-    }
-
     reloadDateAfterDelete = (date) => {
         this.setState({
             selectedDate: date,

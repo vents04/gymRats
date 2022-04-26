@@ -55,10 +55,6 @@ export default class Coaching extends Component {
         })
     }
 
-    componentWillUnmount() {
-        if (this.focusListener) this.focusListener()
-    }
-
     getCoachingPageState = () => {
         ApiRequests.get("coaching", {}, true).then((response) => {
             this.setState({ coaching: response.data.coaching });
@@ -170,7 +166,7 @@ export default class Coaching extends Component {
                             : null
                     }
                     <View style={styles.tabsContainer}>
-                        <TouchableOpacity onPress={() => {
+                        <TouchableOpacity style={styles.tabTitleContainer} onPress={() => {
                             this.setState({ activeTab: "myCoach" });
                             this.getCoachingPageState();
                         }}>
@@ -178,7 +174,7 @@ export default class Coaching extends Component {
                                 color: this.state.activeTab == "myCoach" ? "#1f6cb0" : "#aaa"
                             }]}>Me as client</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => {
+                        <TouchableOpacity style={styles.tabTitleContainer} onPress={() => {
                             this.setState({ activeTab: "myClients" });
                             this.getCoachingPageState();
                         }}>

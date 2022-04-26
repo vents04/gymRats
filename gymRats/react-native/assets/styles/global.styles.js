@@ -221,6 +221,5 @@ export default StyleSheet.create({
     },
     fillEmptySpace: {
         flexGrow: 1,
-        flexShrink: 1
     }
 });

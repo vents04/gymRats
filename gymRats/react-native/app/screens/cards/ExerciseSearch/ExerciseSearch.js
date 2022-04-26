@@ -21,10 +21,16 @@ export default class ExerciseSearch extends Component {
             showError: false,
             error: ""
         }
+
+        this.scrollV = React.createRef();
     }
 
     componentDidMount() {
         this.searchExercises();
+        setTimeout(() => {
+            console.log(this.scrollV.current.offsetWidth)
+            console.log(this.scrollV.current.offsetHeight)
+        }, 5000);
     }
 
     searchExercises = () => {
@@ -69,7 +75,7 @@ export default class ExerciseSearch extends Component {
                             })
                         }} />
                     <View style={styles.searchResultsContainer}>
-                        <ScrollView contentContainerStyle={globalStyles.fillEmptySpace}>
+                        <ScrollView ref={this.scrollV} contentContainerStyle={globalStyles.fillEmptySpace}>
                             {
                                 this.state.queryResults.map((exercise, index) =>
                                     <TouchableOpacity key={index} onPress={() => {

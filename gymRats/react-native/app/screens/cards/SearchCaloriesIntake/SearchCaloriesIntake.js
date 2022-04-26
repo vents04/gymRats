@@ -109,8 +109,8 @@ export default class SearchCaloriesIntake extends Component {
                         <ScrollView contentContainerStyle={globalStyles.fillEmptySpace}>
                             {
                                 this.state.queryResults?.length > 0
-                                    ? this.state.queryResults.map((item) =>
-                                        <TouchableOpacity onPress={() => {
+                                    ? this.state.queryResults.map((item, index) =>
+                                        <TouchableOpacity key={index} onPress={() => {
                                             this.props.navigation.navigate("AddCaloriesIntakeItem", {
                                                 intent: CALORIES_COUNTER_SCREEN_INTENTS.ADD,
                                                 item: item,

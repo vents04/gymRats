@@ -46,10 +46,6 @@ export default class AddFood extends Component {
         })
     }
 
-    componentWillUnmount() {
-        if (this.focusListener) this.focusListener()
-    }
-
     addFood = () => {
         const payload = {
             title: this.state.title,

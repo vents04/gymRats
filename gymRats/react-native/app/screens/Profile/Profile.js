@@ -13,6 +13,7 @@ import { HTTP_STATUS_CODES, WEIGHT_UNITS } from '../../../global';
 
 import globalStyles from '../../../assets/styles/global.styles';
 import styles from './Profile.styles';
+import Auth from '../../classes/Auth';
 
 export default class Profile extends Component {
 
@@ -38,10 +39,6 @@ export default class Profile extends Component {
         this.focusListener = this.props.navigation.addListener('focus', () => {
             this.onFocusFunction()
         })
-    }
-
-    componentWillUnmount() {
-        this.focusListener.remove()
     }
 
     loadProfile = () => {
@@ -86,16 +83,22 @@ export default class Profile extends Component {
         })
     }
 
+    logout = async () => {
+        await Auth.removeToken();
+        this.props.navigation.reset({
+            index: 0,
+            routes: [{ name: "Auth" }],
+        });
+    }
+
     render() {
         return <View style={[globalStyles.safeAreaView]}>
             <View style={globalStyles.pageContainer}>
                 <LogoBar />
-                <TouchableOpacity onPress={() => {
+                <TouchableOpacity style={globalStyles.topbarIconContainer} onPress={() => {
                     this.navigateToProfileDetailsEdit();
                 }}>
-                    <View style={globalStyles.topbarIconContainer}>
-                        <Feather name="edit" size={30} color="#1f6cb0" />
-                    </View>
+                    <Feather name="edit" size={30} color="#1f6cb0" />
                 </TouchableOpacity>
                 {
                     this.state.showError
@@ -146,8 +149,7 @@ export default class Profile extends Component {
                                 </Text>
                                 <Text style={styles.email}>{this.state.profile.email}</Text>
                                 <TouchableOpacity onPress={() => {
-                                    localStorage.removeItem("x-auth-token");
-                                    this.props.navigation.navigate("Auth");
+                                    this.logout();
                                 }}>
                                     <Text style={styles.highlightedText}>Logout</Text>
                                 </TouchableOpacity>

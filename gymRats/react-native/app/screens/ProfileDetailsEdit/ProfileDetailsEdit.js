@@ -5,8 +5,10 @@ import { Picker } from '@react-native-picker/picker';
 import ApiRequests from '../../classes/ApiRequests';
 
 import { Ionicons } from '@expo/vector-icons';
+import { FontAwesome } from '@expo/vector-icons';
 
 import { HTTP_STATUS_CODES, WEIGHT_UNITS } from '../../../global';
+import { cardColors } from '../../../assets/styles/cardColors'
 
 import globalStyles from '../../../assets/styles/global.styles';
 import styles from './ProfileDetailsEdit.styles';
@@ -114,12 +116,10 @@ export default class ProfileDetailsEdit extends Component {
                 </View>
                 {
                     this.state.hasChanges
-                        ? <TouchableOpacity onPress={() => {
+                        ? <TouchableOpacity style={globalStyles.topbarIconContainer} onPress={() => {
                             this.saveChanges()
                         }}>
-                            <View style={globalStyles.topbarIconContainer}>
-                                <Ionicons name="add-sharp" size={25} color={cardColors.caloriesIntake} />
-                            </View>
+                            <FontAwesome name="check" size={25} color={cardColors.caloriesIntake} />
                         </TouchableOpacity>
                         : null
                 }
