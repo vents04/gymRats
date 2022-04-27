@@ -14,6 +14,7 @@ const { authenticate } = require('../middlewares/authenticate');
 
 const { HTTP_STATUS_CODES, COLLECTIONS, APP_EMAIL, RELATION_STATUSES } = require('../global');
 const { workoutPostValidation, workoutSessionValidation, exercisePostValidation, workoutTemplateCheckValidation } = require('../validation/hapi');
+const { quicksort } = require('../helperFunctions/quickSortForCoaches')
 
 router.post("/exercise", authenticate, async (req, res, next) => {
     const { error } = exercisePostValidation(req.body);
@@ -281,19 +282,15 @@ router.post('/check-template', authenticate, async (req, res, next) => {
 router.get("/search", authenticate, async (req, res, next) => {
     let words = req.query.words;
     if (!words) {
-        const exercises = await DbService.getMany(COLLECTIONS.EXERCISES, {});
-        for (let exercise of exercises) {
-            const workoutSessions = await DbService.getMany(COLLECTIONS.WORKOUT_SESSIONS, { exercises: { $elemMatch: { exerciseId: mongoose.Types.ObjectId(exercise._id) } } });
-            exercise.sessionsCount = workoutSessions.length;
-        }
+        const exercises = await DbService.getManyWithSortAndLimit(COLLECTIONS.EXERCISES, {}, {timesUsed: -1}, 50);
         return res.status(HTTP_STATUS_CODES.OK).send({
-            results: exercises.splice(0, 50)
+            results: exercises
         })
     }
     try {
         words = words.split(" ");
         let sorted = [];
-        if (words) {
+        if(words && words != ""){
             for (let word of words) {
                 const exercises = await DbService.getMany(COLLECTIONS.EXERCISES, { keywords: { "$regex": word } });
 
@@ -308,42 +305,13 @@ router.get("/search", authenticate, async (req, res, next) => {
                     }
                     if (shouldContinue) continue;
 
-                    const finalResult = Object.assign(exercises[i], { timesFound: 1 });
-                    sorted.push(finalResult);
-                }
-            }
-        }
-        for (let i = 0; i < sorted.length; i++) {
-            for (let j = 0; j < (sorted.length - i - 1); j++) {
-                var temp = sorted[j]
-                if (sorted[j].timesFound < sorted[j + 1].timesFound) {
-                    sorted[j] = sorted[j + 1]
-                    sorted[j + 1] = temp
-                }
-                if (sorted[j].timesFound == sorted[j + 1].timesFound) {
-                    if (sorted[j].keywords.length > sorted[j + 1].keywords.length) {
-                        sorted[j] = sorted[j + 1];
-                        sorted[j + 1] = temp;
-                    }
+                    Object.assign(exercises[i], { timesFound: 1 });
+                    sorted.push(exercises[i]);
                 }
             }
         }
 
-        const allExercises = await DbService.getMany(COLLECTIONS.EXERCISES, {});
-        for (let i = 0; i < allExercises.length; i++) {
-            let alreadyAdded = false;
-            for (let j = 0; j < sorted.length; j++) {
-                if (allExercises[i].title == sorted[j].title) {
-                    alreadyAdded = true;
-                }
-            }
-            if (!alreadyAdded) sorted.push(allExercises[i]);
-        }
-
-        for (let exercise of sorted) {
-            const workoutSessions = await DbService.getMany(COLLECTIONS.WORKOUT_SESSIONS, { exercises: { $elemMatch: { exerciseId: mongoose.Types.ObjectId(exercise._id) } } });
-            exercise.sessionsCount = workoutSessions.length;
-        }
+        quicksort(sorted, 0, sorted.length - 1)
 
         return res.status(HTTP_STATUS_CODES.OK).send({
             results: sorted.splice(0, 50)
