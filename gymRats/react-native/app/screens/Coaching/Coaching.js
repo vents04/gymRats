@@ -22,7 +22,7 @@ export default class Coaching extends Component {
         super(props);
 
         this.state = {
-            activeTab: "myClients",
+            activeTab: "myCoach",
             showError: false,
             error: "",
             coaching: null,

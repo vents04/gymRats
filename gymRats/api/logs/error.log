@@ -7800,3 +7800,9 @@
 {"level":"error","message":"DbService.get is not a function"}
 {"level":"error","message":"DbService.get is not a function"}
 {"level":"error","message":"User with this email was not found"}
+{"level":"error","message":"\"meal\" is required"}
+{"level":"error","message":"\"title\" is not allowed to be empty"}
+{"level":"error","message":"Assignment to constant variable."}
+{"level":"error","message":"Assignment to constant variable."}
+{"level":"error","message":"Assignment to constant variable."}
+{"level":"error","message":"Assignment to constant variable."}

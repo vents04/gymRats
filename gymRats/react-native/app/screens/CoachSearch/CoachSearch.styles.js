@@ -46,5 +46,47 @@ export default StyleSheet.create({
     },
     rating: {
         borderWidth: 0
+    },
+    bottomSheetTopbar: {
+        padding: 32,
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between"
+    },
+    bottomSheetTitle: {
+        fontFamily: "MainBold",
+        fontSize: 16,
+    },
+    cardsContainer: {
+        paddingHorizontal: 32,
+        paddingBottom: 16,
+        display: "flex",
+        flexDirection: "column",
+    },
+    card: {
+        padding: 16,
+        borderRadius: 4,
+        marginBottom: 16
+    },
+    cardTopbar: {
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+    },
+    cardTitle: {
+        fontFamily: "MainBold",
+        fontSize: 16,
+        color: "#fff",
+        marginTop: 3,
+        marginLeft: 10
+    },
+    cards: {
+        display: "flex",
+        flexDirection: "column",
+    },
+    sheetSectionTitle: {
+        fontFamily: "MainMedium",
+        fontSize: 16
     }
 });

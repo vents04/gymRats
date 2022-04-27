@@ -277,8 +277,8 @@ router.get("/coach/search", authenticate, async (req, res, next) => {
     }
 
     try {
-        const minRating = 0;
-        const distanceForCheck = 30;
+        let minRating = 0;
+        let distanceForCheck = 30;
         let allTrainers = [];
         const reviews = await DbService.getMany(COLLECTIONS.REVIEWS, {});
 

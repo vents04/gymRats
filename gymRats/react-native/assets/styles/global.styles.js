@@ -221,5 +221,10 @@ export default StyleSheet.create({
     },
     fillEmptySpace: {
         flexGrow: 1,
+    },
+    actionText: {
+        fontFamily: "MainMedium",
+        fontSize: 14,
+        color: "#1f6cb0"
     }
 });
