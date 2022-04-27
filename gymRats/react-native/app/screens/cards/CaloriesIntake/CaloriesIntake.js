@@ -123,11 +123,9 @@ export default class CaloriesIntake extends Component {
                                                                 timezoneOffset: this.props.route.params.timezoneOffset,
                                                                 previousScreen: "CaloriesIntake"
                                                             })
-                                                        }}>
-                                                            <View style={styles.itemContainerLeft}>
-                                                                <Text style={styles.itemTitle}>{item.itemInstance.title}</Text>
-                                                                <Text style={styles.itemAmount}>{item.amount}&nbsp;{item.itemInstance.unit.toLowerCase()}</Text>
-                                                            </View>
+                                                        }} style={styles.itemContainerLeft}>
+                                                            <Text style={styles.itemTitle}>{item.itemInstance.title}</Text>
+                                                            <Text style={styles.itemAmount}>{item.amount}&nbsp;{item.itemInstance.unit.toLowerCase()}</Text>
                                                         </TouchableOpacity>
                                                         <TouchableOpacity onPress={() => {
                                                             this.removeItem(item._id)

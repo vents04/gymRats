@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import axios from 'axios';
 import { Image, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import BottomSheet from "react-native-gesture-bottom-sheet";
+import Slider from '@react-native-community/slider';
 
 import ApiRequests from '../../classes/ApiRequests';
 
@@ -26,12 +28,15 @@ export default class CoachSearch extends Component {
             showError: false,
             error: "",
             query: "",
-            maxDistance: 30,
-            minRating: 2,
+            maxDistance: 0,
+            minRating: 1,
             lat: null,
             lng: null,
             searchResults: [],
+            filtersChanged: false
         }
+
+        this.filterSheet = React.createRef();
     }
 
     async componentDidMount() {
@@ -50,10 +55,18 @@ export default class CoachSearch extends Component {
             y: 0,
             animated: true
         });
-        ApiRequests.get(`coaching/coach/search?name=${this.query.toLowerCase()}&lat=${this.state.lat}&lng=${this.state.lng}`, {}, true).then((response) => {
+        let searchQuery = `coaching/coach/search?name=${this.query.toLowerCase()}&lat=${this.state.lat}&lng=${this.state.lng}`;
+        if (this.state.maxDistance > 0) {
+            searchQuery += `&maxDistance=${this.state.maxDistance}`;
+        }
+        if (this.state.minRating > 1) {
+            searchQuery += `&minRating=${this.state.minRating}`;
+        }
+        ApiRequests.get(searchQuery, {}, true).then((response) => {
             console.log(response.data.results.length);
             this.setState({ searchResults: response.data.results })
         }).catch((error) => {
+            console.log(error.response);
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
                     this.setState({ showError: true, error: error.response.data });
@@ -92,6 +105,11 @@ export default class CoachSearch extends Component {
                         </TouchableOpacity>
                         <Text style={globalStyles.followUpScreenTitle}>Coach search</Text>
                     </View>
+                    <TouchableOpacity style={globalStyles.topbarIconContainer} onPress={() => {
+                        this.filterSheet.current.show();
+                    }}>
+                        <Text style={globalStyles.actionText}>Filters</Text>
+                    </TouchableOpacity>
                     {
                         this.state.showError
                             ? <Text style={globalStyles.errorBox}>{this.state.error}</Text>
@@ -148,6 +166,95 @@ export default class CoachSearch extends Component {
                             }]}>No coaches found</Text>
                     }
                 </View>
+                <BottomSheet ref={this.filterSheet} height={400} draggable={false}>
+                    <View style={styles.bottomSheetTopbar}>
+                        <Text style={styles.bottomSheetTitle}>Filters</Text>
+                        <TouchableOpacity onPress={() => {
+                            this.filterSheet.current.close();
+                        }}>
+                            <Ionicons name="close" size={30} />
+                        </TouchableOpacity>
+                    </View>
+                    <ScrollView style={styles.cardsContainer}>
+                        <TouchableOpacity onPress={() => {
+                            this.filterSheet.current.close();
+
+                        }}>
+                            <Text style={styles.sheetSectionTitle}>Minimum rating is {this.state.minRating}/5</Text>
+                            <Slider
+                                style={{ width: "100%", height: 40 }}
+                                step={1}
+                                value={this.state.minRating}
+                                thumbTintColor="#1f6cb0"
+                                minimumValue={1}
+                                maximumValue={5}
+                                minimumTrackTintColor="#1f6cb0"
+                                maximumTrackTintColor="#000000"
+                                onSlidingComplete={(value) => {
+                                    this.setState({ minRating: value, filtersChanged: true });
+                                }}
+                            />
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => {
+                            this.filterSheet.current.close();
+                        }} style={{ marginTop: 32 }}>
+                            <Text style={styles.sheetSectionTitle}>Maximum distance is {
+                                this.state.maxDistance != 0
+                                    ? `${this.state.maxDistance}km`
+                                    : 'not set'
+                            }</Text>
+                            {
+                                this.state.maxDistance != 0
+                                    ? <>
+                                        <Slider
+                                            style={{ width: "100%", height: 40 }}
+                                            step={1}
+                                            value={this.state.maxDistance}
+                                            thumbTintColor="#1f6cb0"
+                                            minimumValue={1}
+                                            maximumValue={30}
+                                            minimumTrackTintColor="#1f6cb0"
+                                            maximumTrackTintColor="#000000"
+                                            onSlidingComplete={(value) => {
+                                                this.setState({ maxDistance: value, filtersChanged: true });
+                                            }}
+                                        />
+                                        <TouchableOpacity onPress={() => {
+                                            this.filterSheet.current.show();
+                                            this.setState({ maxDistance: 0 });
+                                        }}>
+                                            <Text style={[globalStyles.actionText, {
+                                                fontFamily: "MainBold",
+                                                marginTop: 8
+                                            }]}>Unset maximum distance</Text>
+                                        </TouchableOpacity>
+                                    </>
+                                    : <TouchableOpacity onPress={() => {
+                                        this.filterSheet.current.show();
+                                        this.setState({ maxDistance: 30, filtersChanged: true });
+                                    }}>
+                                        <Text style={[globalStyles.actionText, {
+                                            fontFamily: "MainBold",
+                                            marginTop: 8
+                                        }]}>Set maximum distance</Text>
+                                    </TouchableOpacity>
+                            }
+                        </TouchableOpacity>
+                        {
+                            this.state.filtersChanged
+                                ? <TouchableOpacity style={[globalStyles.authPageActionButton, {
+                                    marginTop: 16
+                                }]} onPress={() => {
+                                    this.filterSheet.current.close();
+                                    this.setState({ hasChanges: false });
+                                    this.searchCoaches();
+                                }}>
+                                    <Text style={globalStyles.authPageActionButtonText}>Apply filters</Text>
+                                </TouchableOpacity>
+                                : null
+                        }
+                    </ScrollView>
+                </BottomSheet>
             </View>
         )
     }

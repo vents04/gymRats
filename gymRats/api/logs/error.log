@@ -7804,3 +7804,9 @@
 {"level":"error","message":"quickSort is not a function"}
 {"level":"error","message":"array is not defined"}
 {"level":"error","message":"highIndex is not defined"}
+{"level":"error","message":"\"meal\" is required"}
+{"level":"error","message":"\"title\" is not allowed to be empty"}
+{"level":"error","message":"Assignment to constant variable."}
+{"level":"error","message":"Assignment to constant variable."}
+{"level":"error","message":"Assignment to constant variable."}
+{"level":"error","message":"Assignment to constant variable."}

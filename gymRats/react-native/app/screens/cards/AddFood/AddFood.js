@@ -6,7 +6,7 @@ import ApiRequests from '../../../classes/ApiRequests';
 
 import { Ionicons } from '@expo/vector-icons';
 
-import { CALORIES_COUNTER_UNITS, HTTP_STATUS_CODES } from '../../../../global';
+import { CALORIES_COUNTER_SCREEN_INTENTS, CALORIES_COUNTER_UNITS, HTTP_STATUS_CODES } from '../../../../global';
 
 import globalStyles from '../../../../assets/styles/global.styles';
 import styles from './AddFood.styles';
@@ -19,6 +19,7 @@ export default class AddFood extends Component {
         this.state = {
             title: "",
             brand: "",
+            barcode: "",
             unit: CALORIES_COUNTER_UNITS.GRAMS,
             calories: 0,
             protein: 0,
@@ -32,11 +33,15 @@ export default class AddFood extends Component {
     }
 
     onFocusFunction = () => {
-        if (this.props?.route?.params?.barcode) {
+        console.log(this.props.route.params)
+        if (this.props.route.params.barcode) {
             this.setState({
                 barcode: this.props.route.params.barcode
+            }, () => {
+                setTimeout(() => {
+                    console.log(this.state)
+                }, 5000)
             })
-            console.log("slozhih")
         }
     }
 
@@ -55,9 +60,16 @@ export default class AddFood extends Component {
             protein: this.state.protein,
             fats: this.state.fats
         }
+        if (this.state.barcode?.length > 0) payload.barcode = this.state.barcode;
         if (this.state.brand?.length > 0) payload.brand = this.state.brand;
         ApiRequests.post('calories-counter/item', {}, payload, true).then((response) => {
-            this.props.navigation.navigate("SearchCaloriesIntake", { date: this.props.route.params.date, timezoneOffset: this.props.route.params.timezoneOffset, query: this.state.title })
+            this.props.navigation.navigate("AddCaloriesIntakeItem", {
+                intent: CALORIES_COUNTER_SCREEN_INTENTS.ADD,
+                item: response.data.item,
+                meal: this.props.route.params.meal,
+                date: this.props.route.params.date,
+                timezoneOffset: this.props.route.params.timezoneOffset
+            })
         }).catch((error) => {
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
@@ -108,6 +120,21 @@ export default class AddFood extends Component {
                                 onChangeText={(val) => { this.setState({ brand: val, showError: false }) }} />
                         </View>
                         <View style={styles.inputSection}>
+                            <Text style={styles.inputSectionTitle}>Barcode<Text style={styles.optional}>&nbsp;&middot;&nbsp;optional</Text></Text>
+                            {
+                                this.state.barcode &&
+                                    this.state.barcode.length > 0
+                                    ? <Text style={globalStyles.notation}>Already linked</Text>
+                                    : <TouchableOpacity style={[globalStyles.authPageActionButton, {
+                                        width: "50%"
+                                    }]} onPress={() => {
+                                        this.props.navigation.navigate("BarcodeReader", { isAddingBarcodeToFood: true, date: this.props.route.params.date, timezoneOffset: this.props.route.params.timezoneOffset, meal: this.props.route.params.meal })
+                                    }}>
+                                        <Text style={globalStyles.authPageActionButtonText}>Add barcode</Text>
+                                    </TouchableOpacity>
+                            }
+                        </View>
+                        <View style={styles.inputSection}>
                             <Text style={styles.inputSectionTitle}>Serving unit</Text>
                             <Picker
                                 style={styles.inputSectionInput}
@@ -153,7 +180,7 @@ export default class AddFood extends Component {
                         </View>
                     </ScrollView>
                     <TouchableOpacity style={[globalStyles.authPageActionButton, {
-                        marginTop: 16
+                        marginTop: 16,
                     }]} onPress={() => { this.addFood() }}>
                         <Text style={globalStyles.authPageActionButtonText}>Submit</Text>
                     </TouchableOpacity>

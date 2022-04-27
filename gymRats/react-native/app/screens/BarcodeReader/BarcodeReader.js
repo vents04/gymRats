@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, Button, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { Text, View, Button, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 
 import ApiRequests from '../../classes/ApiRequests';
@@ -27,17 +27,21 @@ export default function BarcodeScanner(props) {
         setScanned(true);
         console.log('Type: ' + type + '\nData: ' + data);
         ApiRequests.get('calories-counter/search/barcode?barcode=' + data).then(response => {
-            props.navigation.pop();
             if (!response.data.result) {
                 props.navigation.navigate("AddFood", { barcode: data, date: props.route.params.date, timezoneOffset: props.route.params.timezoneOffset, meal: props.route.params.meal });
             } else {
-                props.navigation.navigate("AddCaloriesIntakeItem", {
-                    intent: CALORIES_COUNTER_SCREEN_INTENTS.ADD,
-                    item: response.data.result,
-                    meal: props.route.params.meal,
-                    date: props.route.params.date,
-                    timezoneOffset: props.route.params.timezoneOffset
-                })
+                if (props.route.params.isAddingBarcodeToFood) {
+                    Alert.alert("Barcode already exists", "This barcode is already associated with a food item. Please scan a different barcode.");
+                    setScanned(false);
+                } else {
+                    props.navigation.navigate("AddCaloriesIntakeItem", {
+                        intent: CALORIES_COUNTER_SCREEN_INTENTS.ADD,
+                        item: response.data.result,
+                        meal: props.route.params.meal,
+                        date: props.route.params.date,
+                        timezoneOffset: props.route.params.timezoneOffset
+                    })
+                }
             }
             console.log(response.data);
         }).catch((error) => {

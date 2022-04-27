@@ -20,7 +20,7 @@ export default class AddCaloriesIntakeItem extends Component {
 
         this.state = {
             amount: 100,
-            meal: this.props.route.params.meal,
+            meal: this.props.route.params.meal || "BREAKFAST",
             showError: false,
             error: ""
         }
@@ -105,7 +105,9 @@ export default class AddCaloriesIntakeItem extends Component {
                                 : "Update"
                         }&nbsp;food</Text>
                     </View>
-                    <ScrollView contentContainerStyle={globalStyles.fillEmptySpace}>
+                    <ScrollView contentContainerStyle={[globalStyles.fillEmptySpace, {
+                        paddingBottom: 150
+                    }]}>
                         <View style={styles.foodTitleContainer}>
                             <Text style={styles.foodTitle}>{this.props.route.params.item.title}</Text>
                             {
