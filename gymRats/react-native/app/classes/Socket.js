@@ -1,3 +1,5 @@
-import io from 'socket.io-client/dist/socket.io'
-const ENDPOINT = 'http://192.168.0.184:4056';
-export default io(ENDPOINT);
+/*import io from 'socket.io-client/dist/socket.io'
+import { ROOT_URL_API } from '../../global';
+
+const ENDPOINT = ROOT_URL_API;
+export default io(ENDPOINT);*/
