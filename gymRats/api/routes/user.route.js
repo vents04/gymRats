@@ -126,4 +126,31 @@ router.get("/", authenticate, async (req, res, next) => {
     })
 });
 
+router.post("/suggestion", authenticate, async (req, res, next) => {
+    const { error } = suggestionPostValidation(req.body);
+    if (error) return next(new ResponseError(error.details[0].message, HTTP_STATUS_CODES.BAD_REQUEST));
+
+    try {
+        const suggestion = new Suggestion(req.body);
+        suggestion.userId = mongoose.Types.ObjectId(req.user._id);
+
+        await DbService.create(COLLECTIONS.SUGGESTIONS, suggestion);
+
+        return res.sendStatus(HTTP_STATUS_CODES.OK);
+    } catch (err) {
+        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+    }
+});
+
+router.get("/suggestion", authenticate, async (req, res, next) => {
+    try {
+        const suggestions = await DbService.getMany(COLLECTIONS.SUGGESTIONS, { userId: mongoose.Types.ObjectId(req.user._id) });
+        return res.status(HTTP_STATUS_CODES.OK).send({
+            suggestions
+        })
+    } catch (err) {
+        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+    }
+});
+
 module.exports = router;
