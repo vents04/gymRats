@@ -55,7 +55,10 @@ export default class CoachSearch extends Component {
             y: 0,
             animated: true
         });
-        let searchQuery = `coaching/coach/search?name=${this.query.toLowerCase()}&lat=${this.state.lat}&lng=${this.state.lng}`;
+        let searchQuery = `coaching/coach/search?lat=${this.state.lat}&lng=${this.state.lng}`;
+        if (this.query.length > 0) {
+            searchQuery += `name=${this.state.query};`
+        }
         if (this.state.maxDistance > 0) {
             searchQuery += `&maxDistance=${this.state.maxDistance}`;
         }
