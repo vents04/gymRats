@@ -7800,3 +7800,7 @@
 {"level":"error","message":"DbService.get is not a function"}
 {"level":"error","message":"DbService.get is not a function"}
 {"level":"error","message":"User with this email was not found"}
+{"level":"error","message":"Collection method find is synchronous"}
+{"level":"error","message":"quickSort is not a function"}
+{"level":"error","message":"array is not defined"}
+{"level":"error","message":"highIndex is not defined"}

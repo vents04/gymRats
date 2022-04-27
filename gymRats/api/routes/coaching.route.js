@@ -17,6 +17,8 @@ const { authenticate } = require('../middlewares/authenticate');
 const { HTTP_STATUS_CODES, COLLECTIONS, PERSONAL_TRAINER_STATUSES, RELATION_STATUSES, CONTENT_VISIBILITY_SCOPES, DEFAULT_ERROR_MESSAGE, CARD_COLLECTIONS } = require('../global');
 const { relationValidation, relationStatusUpdateValidation, coachApplicationPostValidation, contentPostValidation, contentUpdateValidation, coachingReviewPostValidation } = require('../validation/hapi');
 const WeightTrackerService = require('../services/cards/weightTracker.service');
+const { func } = require('@hapi/joi');
+const { quicksort } = require('../helperFunctions/quickSort')
 
 router.get('/', authenticate, async (req, res, next) => {
     try {
@@ -70,7 +72,7 @@ router.get('/', authenticate, async (req, res, next) => {
             coaching
         })
     } catch (err) {
-        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.letERNAL_SERVER_ERROR));
     }
 });
 
@@ -102,7 +104,7 @@ router.get('/me-as-coach', authenticate, async (req, res, next) => {
             coach
         })
     } catch (err) {
-        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.letERNAL_SERVER_ERROR));
     }
 });
 
@@ -120,7 +122,7 @@ router.post('/application', authenticate, async (req, res, next) => {
 
         return res.sendStatus(HTTP_STATUS_CODES.OK);
     } catch (error) {
-        return next(new ResponseError(error.message || DEFAULT_ERROR_MESSAGE, error.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+        return next(new ResponseError(error.message || DEFAULT_ERROR_MESSAGE, error.status || HTTP_STATUS_CODES.letERNAL_SERVER_ERROR));
     }
 });
 
@@ -154,7 +156,7 @@ router.post('/relation', authenticate, async (req, res, next) => {
 
         return res.sendStatus(HTTP_STATUS_CODES.OK);
     } catch (err) {
-        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.letERNAL_SERVER_ERROR));
     }
 });
 
@@ -171,7 +173,7 @@ router.delete("/relation/:id", authenticate, async (req, res, next) => {
 
         return res.sendStatus(HTTP_STATUS_CODES.OK);
     } catch (err) {
-        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.letERNAL_SERVER_ERROR));
     }
 });
 
@@ -217,7 +219,7 @@ router.put('/relation/:id/status', authenticate, async (req, res, next) => {
 
         return res.sendStatus(HTTP_STATUS_CODES.OK);
     } catch (err) {
-        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.letERNAL_SERVER_ERROR));
     }
 });
 
@@ -236,7 +238,7 @@ router.get('/requests', authenticate, async (req, res, next) => {
             relations
         })
     } catch (err) {
-        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.letERNAL_SERVER_ERROR));
     }
 });
 
@@ -261,7 +263,7 @@ router.post('/relation/:id/review', authenticate, async (req, res, next) => {
 
         return res.sendStatus(HTTP_STATUS_CODES.CREATED);
     } catch (error) {
-        return next(new ResponseError(error.message || DEFAULT_ERROR_MESSAGE, error.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+        return next(new ResponseError(error.message || DEFAULT_ERROR_MESSAGE, error.status || HTTP_STATUS_CODES.letERNAL_SERVER_ERROR));
     }
 });
 
@@ -291,26 +293,26 @@ router.get("/coach/search", authenticate, async (req, res, next) => {
             for (let name of names) {
                 const users = await DbService.getMany(COLLECTIONS.USERS, { "$or": [{ firstName: { "$regex": name, "$options": "i" } }, { lastName: { "$regex": name, "$options": "i" } }] });
                 for (let i = 0; i < users.length; i++) {
-                    const trainer = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, { "$or": [{ userId: users[i]._id }, { userId: mongoose.Types.ObjectId(users[i]._id) }] });
+                    const trainer = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, { "$and": [{"$or": [{ userId: users[i]._id }, { userId: mongoose.Types.ObjectId(users[i]._id) }]}, {status: PERSONAL_TRAINER_STATUSES.ACTIVE}] });
                     if (trainer) {
                         const clients = await DbService.getMany(COLLECTIONS.RELATIONS, { "$or": [{ personalTrainerId: trainer._id }, { personalTrainerId: mongoose.Types.ObjectId(trainer._id) }] });
-                        Object.assign(trainer, { criteriasMet: 0 }, { clients: clients.length });
-                        if (trainer.status == PERSONAL_TRAINER_STATUSES.ACTIVE && trainer.userId.toString() != req.user._id.toString()) {
-                            const relation = await DbService.getOne(COLLECTIONS.RELATIONS, { personalTrainerId: trainer._id, clientId: req.user._id })
-                            if (relation && relation.status == RELATION_STATUSES.PENDING_APPROVAL) continue;
+                        if (trainer.userId.toString() != req.user._id.toString()) {
+                            const relation = await DbService.getOne(COLLECTIONS.RELATIONS, { personalTrainerId: trainer._id, clientId: req.user._id, status: RELATION_STATUSES.PENDING_APPROVAL})
+                            if (relation) continue;
+                            Object.assign(trainer, { criteriasMet: 0 }, { clients: clients.length });
                             allTrainers.push(trainer);
                         }
                     }
                 }
             }
         } else {
-            const trainers = await DbService.getMany(COLLECTIONS.PERSONAL_TRAINERS, {})
+            const trainers = await DbService.getMany(COLLECTIONS.PERSONAL_TRAINERS, {status: PERSONAL_TRAINER_STATUSES.ACTIVE})
             for (let trainer of trainers) {
                 const clients = await DbService.getMany(COLLECTIONS.RELATIONS, { "$or": [{ personalTrainerId: trainer._id }, { personalTrainerId: mongoose.Types.ObjectId(trainer._id) }] });
-                Object.assign(trainer, { criteriasMet: 0 }, { clients: clients.length });
-                if (trainer.status == PERSONAL_TRAINER_STATUSES.ACTIVE && trainer.userId.toString() != req.user._id.toString()) {
-                    const relation = await DbService.getOne(COLLECTIONS.RELATIONS, { personalTrainerId: trainer._id, clientId: req.user._id })
-                    if (relation && relation.status == RELATION_STATUSES.PENDING_APPROVAL) continue;
+                if (trainer.userId.toString() != req.user._id.toString()) {
+                    const relation = await DbService.getOne(COLLECTIONS.RELATIONS, { personalTrainerId: trainer._id, clientId: req.user._id, status: RELATION_STATUSES.PENDING_APPROVAL})
+                    if (relation) continue;
+                    Object.assign(trainer, { criteriasMet: 0 }, { clients: clients.length });
                     allTrainers.push(trainer);
                 }
             }
@@ -375,6 +377,7 @@ router.get("/coach/search", authenticate, async (req, res, next) => {
                 }
                 Object.assign(allTrainers[i], { rating: overallRating, reviews: counter });
 
+
                 if (allTrainers[i].distance <= distanceForCheck
                     && allTrainers[i].rating >= (5 - minRating) / 2 + minRating) {
                     allTrainers[i].criteriasMet += 4
@@ -401,21 +404,8 @@ router.get("/coach/search", authenticate, async (req, res, next) => {
             return next(new ResponseError("We cannot search for max distance when we don't know your location", HTTP_STATUS_CODES.BAD_REQUEST));
         }
 
-        for (let i = 0; i < allTrainers.length; i++) {
-            for (let j = 0; j < (allTrainers.length - i - 1); j++) {
-                var temp = allTrainers[j]
-                if (allTrainers[j].criteriasMet < allTrainers[j + 1].criteriasMet) {
-                    allTrainers[j] = allTrainers[j + 1]
-                    allTrainers[j + 1] = temp
-                }
-                if (allTrainers[j].criteriasMet == allTrainers[j + 1].criteriasMet) {
-                    if (allTrainers[j].distance > allTrainers[j + 1].distance) {
-                        allTrainers[j] = allTrainers[j + 1];
-                        allTrainers[j + 1] = temp;
-                    }
-                }
-            }
-        }
+        quicksort(allTrainers, 0, allTrainers.length - 1)
+
 
         for (let index = 0; index < allTrainers.length; index++) {
             let user = await DbService.getById(COLLECTIONS.USERS, allTrainers[index].userId.toString());
@@ -430,11 +420,12 @@ router.get("/coach/search", authenticate, async (req, res, next) => {
         }
 
         const dt2 = new Date().getTime();
+        //console.log(dt - dt2)
         return res.status(HTTP_STATUS_CODES.OK).send({
             results: allTrainers.slice(0, 50)
         })
     } catch (error) {
-        return next(new ResponseError(error.message || "Internal server error", error.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+        return next(new ResponseError(error.message || "leternal server error", error.status || HTTP_STATUS_CODES.letERNAL_SERVER_ERROR));
     }
 });
 
@@ -453,7 +444,7 @@ router.post('/content', authenticate, async (req, res, next) => {
 
         return res.sendStatus(HTTP_STATUS_CODES.CREATED);
     } catch (err) {
-        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.letERNAL_SERVER_ERROR));
     }
 });
 
@@ -475,7 +466,7 @@ router.put('/content/:id', authenticate, async (req, res, next) => {
 
         return res.sendStatus(HTTP_STATUS_CODES.OK);
     } catch (err) {
-        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.letERNAL_SERVER_ERROR));
     }
 });
 
@@ -494,7 +485,7 @@ router.delete('/content/:id', authenticate, async (req, res, next) => {
 
         return res.sendStatus(HTTP_STATUS_CODES.OK);
     } catch (err) {
-        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.letERNAL_SERVER_ERROR));
     }
 });
 
@@ -536,7 +527,7 @@ router.get('/content/:personalTrainerId', authenticate, async (req, res, next) =
             finalContents
         })
     } catch (err) {
-        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.letERNAL_SERVER_ERROR));
     }
 });
 
@@ -557,7 +548,7 @@ router.get('/client/:id', authenticate, async (req, res, next) => {
             client
         })
     } catch (err) {
-        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.letERNAL_SERVER_ERROR));
     }
 });
 
@@ -640,7 +631,7 @@ router.get('/client/:id/date', authenticate, async (req, res, next) => {
             cards
         });
     } catch (err) {
-        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.letERNAL_SERVER_ERROR));
     }
 })
 
