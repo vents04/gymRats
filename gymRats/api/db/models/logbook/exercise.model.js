@@ -44,6 +44,10 @@ const exerciseSchema = mongoose.Schema({
     isPublic: {
         type: Boolean,
         default: false
+    },
+    timesUsed: {
+        type: Number,
+        default: 0
     }
 });
 

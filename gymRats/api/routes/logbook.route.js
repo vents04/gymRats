@@ -167,7 +167,11 @@ router.post("/workout-session", authenticate, async (req, res, next) => {
         });
         await DbService.create(COLLECTIONS.WORKOUT_SESSIONS, workoutSession);
 
-        res.sendStatus(HTTP_STATUS_CODES.OK);
+        for(let exercise of workoutSession.exercises){
+            await DbService.updateWithInc(COLLECTIONS.EXERCISES, {_id: mongoose.Types.ObjectId(exercise.exerciseId)}, {timesUsed: +1});
+        }
+
+        return res.sendStatus(HTTP_STATUS_CODES.OK);
     } catch (error) {
         return next(new ResponseError(error.message || "Internal server error", error.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
     }

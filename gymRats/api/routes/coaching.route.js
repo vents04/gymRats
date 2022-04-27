@@ -18,7 +18,7 @@ const { HTTP_STATUS_CODES, COLLECTIONS, PERSONAL_TRAINER_STATUSES, RELATION_STAT
 const { relationValidation, relationStatusUpdateValidation, coachApplicationPostValidation, contentPostValidation, contentUpdateValidation, coachingReviewPostValidation } = require('../validation/hapi');
 const WeightTrackerService = require('../services/cards/weightTracker.service');
 const { func } = require('@hapi/joi');
-const { quicksort } = require('../helperFunctions/quickSort')
+const { quicksort } = require('../helperFunctions/quickSortForCoaches')
 
 router.get('/', authenticate, async (req, res, next) => {
     try {

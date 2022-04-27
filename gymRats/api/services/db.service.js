@@ -65,6 +65,15 @@ const DbService = {
         })
     },
 
+    updateWithInc: function (collection, filter, data) {
+        return new Promise((resolve, reject) => {
+            validateCollection(collection, reject);
+            db.collection(collection).findOneAndUpdate(filter, { "$inc": data }).then(resolve).catch((error) => {
+                reject(new ResponseError(error.message, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+            });
+        })
+    },
+
     updateMany: function (collection, filter, data) {
         return new Promise((resolve, reject) => {
             validateCollection(collection, reject);
