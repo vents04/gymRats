@@ -288,7 +288,7 @@ router.get("/coach/search", authenticate, async (req, res, next) => {
             distanceForCheck = req.query.maxDistance / 4;
         }
 
-        if (names) {
+        if (names && names != "") {
             names = names.split(" ");
             for (let name of names) {
                 const users = await DbService.getMany(COLLECTIONS.USERS, { "$or": [{ firstName: { "$regex": name, "$options": "i" } }, { lastName: { "$regex": name, "$options": "i" } }] });
@@ -406,7 +406,6 @@ router.get("/coach/search", authenticate, async (req, res, next) => {
 
         quicksort(allTrainers, 0, allTrainers.length - 1)
 
-
         for (let index = 0; index < allTrainers.length; index++) {
             let user = await DbService.getById(COLLECTIONS.USERS, allTrainers[index].userId.toString());
             // remove below line when in production
@@ -420,7 +419,7 @@ router.get("/coach/search", authenticate, async (req, res, next) => {
         }
 
         const dt2 = new Date().getTime();
-        //console.log(dt - dt2)
+        console.log(dt - dt2)
         return res.status(HTTP_STATUS_CODES.OK).send({
             results: allTrainers.slice(0, 50)
         })
