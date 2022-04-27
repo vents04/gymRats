@@ -53,7 +53,7 @@ export default StyleSheet.create({
         marginLeft: 6,
     },
     statsContainer: {
-        marginVertical: 16
+        marginVertical: 16,
     },
     statsTitle: {
         fontFamily: "MainBold",

@@ -34,14 +34,35 @@ router.post('/item', authenticate, async (req, res, next) => {
         if (!validCaloriesAndMacros) return next(new ResponseError("Please double check the calories and the macros because there was a mismatch found", HTTP_STATUS_CODES.BAD_REQUEST));
 
         const item = new CaloriesCounterItem(req.body);
+        item.userId = req.user._id;
         item.calories = parseFloat(item.calories / 100).toFixed(2);
         item.protein = parseFloat(item.protein / 100).toFixed(2);
         item.carbs = parseFloat(item.carbs / 100).toFixed(2);
         item.fats = parseFloat(item.fats / 100).toFixed(2);
-        // add userId before production
+        item.keywords = [...item.title.split(" ")];
+        if (req.body.brand) item.keywords.push(...req.body.brand.split(" "));
         await DbService.create(COLLECTIONS.CALORIES_COUNTER_ITEMS, item);
 
-        return res.sendStatus(HTTP_STATUS_CODES.CREATED);
+        const newItem = await DbService.getById(COLLECTIONS.CALORIES_COUNTER_ITEMS, item._id);
+
+        return res.status(HTTP_STATUS_CODES.CREATED).send({
+            item: newItem
+        });
+    } catch (err) {
+        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+    }
+});
+
+router.get("/item/:id", authenticate, async (req, res, next) => {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) return next(new ResponseError("Invalid item id", HTTP_STATUS_CODES.BAD_REQUEST));
+
+    try {
+        const item = await DbService.getById(COLLECTIONS.CALORIES_COUNTER_ITEMS, req.params.id);
+        if (!item) return next(new ResponseError("Item not found", HTTP_STATUS_CODES.NOT_FOUND));
+
+        return res.status(HTTP_STATUS_CODES.OK).send({
+            item
+        })
     } catch (err) {
         return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
     }

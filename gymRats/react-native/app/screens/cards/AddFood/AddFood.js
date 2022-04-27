@@ -6,7 +6,7 @@ import ApiRequests from '../../../classes/ApiRequests';
 
 import { Ionicons } from '@expo/vector-icons';
 
-import { CALORIES_COUNTER_UNITS, HTTP_STATUS_CODES } from '../../../../global';
+import { CALORIES_COUNTER_SCREEN_INTENTS, CALORIES_COUNTER_UNITS, HTTP_STATUS_CODES } from '../../../../global';
 
 import globalStyles from '../../../../assets/styles/global.styles';
 import styles from './AddFood.styles';
@@ -19,6 +19,7 @@ export default class AddFood extends Component {
         this.state = {
             title: "",
             brand: "",
+            barcode: "",
             unit: CALORIES_COUNTER_UNITS.GRAMS,
             calories: 0,
             protein: 0,
@@ -36,7 +37,6 @@ export default class AddFood extends Component {
             this.setState({
                 barcode: this.props.route.params.barcode
             })
-            console.log("slozhih")
         }
     }
 
@@ -55,9 +55,16 @@ export default class AddFood extends Component {
             protein: this.state.protein,
             fats: this.state.fats
         }
+        if (this.state.barcode?.length > 0) payload.barcode = this.state.barcode;
         if (this.state.brand?.length > 0) payload.brand = this.state.brand;
         ApiRequests.post('calories-counter/item', {}, payload, true).then((response) => {
-            this.props.navigation.navigate("SearchCaloriesIntake", { date: this.props.route.params.date, timezoneOffset: this.props.route.params.timezoneOffset, query: this.state.title })
+            this.props.navigation.navigate("AddCaloriesIntakeItem", {
+                intent: CALORIES_COUNTER_SCREEN_INTENTS.ADD,
+                item: response.data.item,
+                meal: this.props.route.params.meal,
+                date: this.props.route.params.date,
+                timezoneOffset: this.props.route.params.timezoneOffset
+            })
         }).catch((error) => {
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
