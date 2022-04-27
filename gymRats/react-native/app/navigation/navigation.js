@@ -37,6 +37,7 @@ import BarcodeReader from '../screens/BarcodeReader/BarcodeReader';
 import AddFood from '../screens/cards/AddFood/AddFood';
 import Client from '../screens/Client/Client';
 import Suggestions from '../screens/Suggestions/Suggestions';
+import PostReview from '../screens/PostReview/PostReview';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -172,6 +173,13 @@ const coachingScreenStack = () => {
                     headerShown: false
                 }}
                 component={Client}
+            />
+            <Stack.Screen
+                name="PostReview"
+                options={{
+                    headerShown: false
+                }}
+                component={PostReview}
             />
         </Stack.Navigator>
     )
