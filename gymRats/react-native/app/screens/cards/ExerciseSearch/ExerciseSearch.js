@@ -17,8 +17,9 @@ export default class ExerciseSearch extends Component {
 
         this.typingTimeout = null
 
+        this.query = ""
+
         this.state = {
-            query: "",
             queryResults: [],
             showError: false,
             error: ""
@@ -36,7 +37,7 @@ export default class ExerciseSearch extends Component {
     }
 
     searchExercises = () => {
-        ApiRequests.get(`logbook/search?words=${this.state.query.toLowerCase()}`, {}, true).then((response) => {
+        ApiRequests.get(`logbook/search?words=${this.query.toLowerCase()}`, {}, true).then((response) => {
             if (response.data.results) this.setState({ queryResults: response.data.results });
         }).catch((error) => {
             if (error.response) {
@@ -78,7 +79,6 @@ export default class ExerciseSearch extends Component {
                         <Text style={globalStyles.followUpScreenTitle}>Exercise search</Text>
                     </View>
                     <TextInput
-                        value={this.state.query}
                         style={[globalStyles.authPageInput, {
                             marginTop: 20
                         }]}
@@ -97,7 +97,7 @@ export default class ExerciseSearch extends Component {
                                     }}>
                                         <View style={styles.searchResult}>
                                             <Text style={styles.searchResultTitle}>{exercise.title}</Text>
-                                            <Text style={styles.searchResultStats}>Used in {exercise.sessionsCount} workout sessions</Text>
+                                            <Text style={styles.searchResultStats}>Used in {exercise.timesUsed} workout sessions</Text>
                                         </View>
                                     </TouchableOpacity>
                                 )
