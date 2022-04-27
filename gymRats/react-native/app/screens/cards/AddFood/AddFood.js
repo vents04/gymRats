@@ -33,9 +33,14 @@ export default class AddFood extends Component {
     }
 
     onFocusFunction = () => {
-        if (this.props?.route?.params?.barcode) {
+        console.log(this.props.route.params)
+        if (this.props.route.params.barcode) {
             this.setState({
                 barcode: this.props.route.params.barcode
+            }, () => {
+                setTimeout(() => {
+                    console.log(this.state)
+                }, 5000)
             })
         }
     }
@@ -115,6 +120,21 @@ export default class AddFood extends Component {
                                 onChangeText={(val) => { this.setState({ brand: val, showError: false }) }} />
                         </View>
                         <View style={styles.inputSection}>
+                            <Text style={styles.inputSectionTitle}>Barcode<Text style={styles.optional}>&nbsp;&middot;&nbsp;optional</Text></Text>
+                            {
+                                this.state.barcode &&
+                                    this.state.barcode.length > 0
+                                    ? <Text style={globalStyles.notation}>Already linked</Text>
+                                    : <TouchableOpacity style={[globalStyles.authPageActionButton, {
+                                        width: "50%"
+                                    }]} onPress={() => {
+                                        this.props.navigation.navigate("BarcodeReader", { isAddingBarcodeToFood: true, date: this.props.route.params.date, timezoneOffset: this.props.route.params.timezoneOffset, meal: this.props.route.params.meal })
+                                    }}>
+                                        <Text style={globalStyles.authPageActionButtonText}>Add barcode</Text>
+                                    </TouchableOpacity>
+                            }
+                        </View>
+                        <View style={styles.inputSection}>
                             <Text style={styles.inputSectionTitle}>Serving unit</Text>
                             <Picker
                                 style={styles.inputSectionInput}
@@ -160,7 +180,7 @@ export default class AddFood extends Component {
                         </View>
                     </ScrollView>
                     <TouchableOpacity style={[globalStyles.authPageActionButton, {
-                        marginTop: 16
+                        marginTop: 16,
                     }]} onPress={() => { this.addFood() }}>
                         <Text style={globalStyles.authPageActionButtonText}>Submit</Text>
                     </TouchableOpacity>
