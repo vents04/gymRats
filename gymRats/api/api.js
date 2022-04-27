@@ -24,29 +24,6 @@ app
 
 mongo.connect();
 
-(async function () {
-    const fs = require('fs');
-
-    let rawdata = fs.readFileSync('e.json');
-    let exercises = JSON.parse(rawdata).exercises;
-    for (let exercise of exercises) {
-        const keywords = [...exercise.name.split(' '), ...exercise.equipment.split(' ')];
-        const exerciseInstance = new Exercise({
-            title: exercise.name.charAt(0).toUpperCase() + exercise.name.slice(1),
-            userId: null,
-            targetMuscles: [exercise.target],
-            translations: {
-                en: exercise.name.charAt(0).toUpperCase() + exercise.name.slice(1),
-                bg: null,
-            },
-            video: exercise.gifUrl,
-            keywords,
-            isPublic: true
-        });
-        await DbService.create(COLLECTIONS.EXERCISES, exerciseInstance);
-    }
-})();
-
 io.on("connection", (socket) => {
     socket.on("join-chat", (payload) => {
         try {
