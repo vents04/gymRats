@@ -15,6 +15,8 @@ export default class ExerciseSearch extends Component {
     constructor(props) {
         super(props);
 
+        this.typingTimeout = null
+
         this.state = {
             query: "",
             queryResults: [],
@@ -51,6 +53,18 @@ export default class ExerciseSearch extends Component {
         });
     }
 
+    changeQuery = (value) => {
+        this.query = value;
+
+        if (this.typingTimeout) {
+            clearTimeout(this.typingTimeout);
+        }
+
+        this.typingTimeout = setTimeout(() => {
+            this.searchExercises();
+        }, 1500);
+    }
+
     render() {
         return (
             <View style={globalStyles.safeAreaView}>
@@ -69,11 +83,7 @@ export default class ExerciseSearch extends Component {
                             marginTop: 20
                         }]}
                         placeholder="Type your search here"
-                        onChangeText={(val) => {
-                            this.setState({ query: val, showError: false }, () => {
-                                this.searchExercises();
-                            })
-                        }} />
+                        onChangeText={this.changeQuery} />
                     <View style={styles.searchResultsContainer}>
                         <ScrollView ref={this.scrollV} contentContainerStyle={globalStyles.fillEmptySpace}>
                             {
