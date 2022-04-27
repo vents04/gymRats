@@ -7806,3 +7806,6 @@
 {"level":"error","message":"Assignment to constant variable."}
 {"level":"error","message":"Assignment to constant variable."}
 {"level":"error","message":"Assignment to constant variable."}
+{"level":"error","message":"\"suggestion\" is not allowed to be empty"}
+{"level":"error","message":"\"suggestion\" is not allowed to be empty"}
+{"level":"error","message":"\"suggestion\" is not allowed to be empty"}
