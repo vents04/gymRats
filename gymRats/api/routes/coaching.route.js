@@ -374,6 +374,7 @@ router.get("/coach/search", authenticate, async (req, res, next) => {
                     if (!coach) continue;
                     if (coach.userId.toString() == allTrainers[i].userId.toString()) {
                         sumOfAllRatings += review.rating;
+                        coach.reviews.push(review);
                         counter++;
                     }
                 }
