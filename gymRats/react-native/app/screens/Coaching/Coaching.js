@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Image, Text, TouchableOpacity, View } from 'react-native';
+import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { Badge } from 'react-native-elements';
 
 import ApiRequests from '../../classes/ApiRequests';
@@ -186,35 +186,89 @@ export default class Coaching extends Component {
                     {
                         this.state.coaching
                             ? this.state.activeTab == "myCoach"
-                                ? <View style={styles.tabContent}>
+                                ? <ScrollView style={styles.tabContent}>
                                     {
                                         !this.state.coaching.myCoach.hasCoaches && !this.state.coaching.myCoach.hasRelations
-                                            ? <View style={styles.noCoachContainer}>
-                                                <View style={styles.noCoachTopbar}>
-                                                    <FontAwesome5 name="dumbbell" size={25} color="#1f6cb0" />
-                                                    <Text style={styles.noCoachTitle}>Get in shape with Gym Rats</Text>
+                                            ? <>
+                                                <View style={styles.noCoachContainer}>
+                                                    <View style={styles.noCoachTopbar}>
+                                                        <FontAwesome5 name="dumbbell" size={25} color="#1f6cb0" />
+                                                        <Text style={styles.noCoachTitle}>Get in shape with Gym Rats</Text>
+                                                    </View>
+                                                    <Text style={styles.noCoachDescription}>All of our coaches are:</Text>
+                                                    <View style={styles.noCoachProContainer}>
+                                                        <Ionicons name="shield-checkmark" size={24} color="#1f6cb0" style={styles.noCoachProIcon} />
+                                                        <Text style={styles.noCoachPro}>Single handedly approved by us</Text>
+                                                    </View>
+                                                    <View style={styles.noCoachProContainer}>
+                                                        <Ionicons name="shield-checkmark" size={24} color="#1f6cb0" style={styles.noCoachProIcon} />
+                                                        <Text style={styles.noCoachPro}>Motivated and ready to help</Text>
+                                                    </View>
+                                                    <View style={styles.noCoachProContainer}>
+                                                        <Ionicons name="shield-checkmark" size={24} color="#1f6cb0" style={styles.noCoachProIcon} />
+                                                        <Text style={styles.noCoachPro}>Capable of training people with different goals</Text>
+                                                    </View>
+                                                    <TouchableOpacity style={[globalStyles.authPageActionButton, {
+                                                        marginTop: 30
+                                                    }]} onPress={() => {
+                                                        this.props.navigation.navigate("CoachSearch");
+                                                    }}>
+                                                        <Text style={globalStyles.authPageActionButtonText}>Search coaches</Text>
+                                                    </TouchableOpacity>
                                                 </View>
-                                                <Text style={styles.noCoachDescription}>All of our coaches are:</Text>
-                                                <View style={styles.noCoachProContainer}>
-                                                    <Ionicons name="shield-checkmark" size={24} color="#1f6cb0" style={styles.noCoachProIcon} />
-                                                    <Text style={styles.noCoachPro}>Single handedly approved by us</Text>
-                                                </View>
-                                                <View style={styles.noCoachProContainer}>
-                                                    <Ionicons name="shield-checkmark" size={24} color="#1f6cb0" style={styles.noCoachProIcon} />
-                                                    <Text style={styles.noCoachPro}>Motivated and ready to help</Text>
-                                                </View>
-                                                <View style={styles.noCoachProContainer}>
-                                                    <Ionicons name="shield-checkmark" size={24} color="#1f6cb0" style={styles.noCoachProIcon} />
-                                                    <Text style={styles.noCoachPro}>Capable of training people with different goals</Text>
-                                                </View>
-                                                <TouchableOpacity style={[globalStyles.authPageActionButton, {
-                                                    marginTop: 30
-                                                }]} onPress={() => {
-                                                    this.props.navigation.navigate("CoachSearch");
-                                                }}>
-                                                    <Text style={globalStyles.authPageActionButtonText}>Search coaches</Text>
-                                                </TouchableOpacity>
-                                            </View>
+                                                {
+                                                    this.state.coaching.myCoach.canceledRelations.length > 0
+                                                        ? <>
+                                                            <Text style={styles.coachingSectionTitle}>Relations without reviews</Text>
+                                                            {
+                                                                this.state.coaching.myCoach.canceledRelations.map((relation, index) =>
+                                                                    <View key={index} style={[styles.requestItem, {
+                                                                        flexDirection: "column",
+                                                                        alignItems: "flex-start",
+                                                                    }]}>
+                                                                        <View style={styles.requestItemProfile}>
+                                                                            {
+                                                                                !relation.coach.profilePicture
+                                                                                    ? <View style={styles.profilePictureContainer}>
+                                                                                        <Text style={styles.noProfilePictureText}>
+                                                                                            {relation.coach.firstName.charAt(0)}
+                                                                                            {relation.coach.lastName.charAt(0)}
+                                                                                        </Text>
+                                                                                    </View>
+                                                                                    : <Image style={styles.profilePictureContainer}
+                                                                                        source={{ uri: relation.coach.profilePicture }} />
+                                                                            }
+                                                                            <Text style={styles.names}>
+                                                                                {relation.coach.firstName}
+                                                                                &nbsp;
+                                                                                {relation.coach.lastName}
+                                                                            </Text>
+                                                                        </View>
+                                                                        <Text style={[globalStyles.notation, {
+                                                                            marginTop: 12
+                                                                        }]}>This relation started at {new Date(relation.from).toLocaleDateString()}
+                                                                            {
+                                                                                relation.to
+                                                                                    ? ` and ended at ${new Date(relation.to).toLocaleDateString()}`
+                                                                                    : null
+                                                                            }</Text>
+                                                                        {
+                                                                            !relation.hasReview
+                                                                                ? <TouchableOpacity style={[globalStyles.authPageActionButton, {
+                                                                                    marginTop: 12
+                                                                                }]} onPress={() => {
+                                                                                    this.props.navigation.navigate("PostReview", { relation })
+                                                                                }}>
+                                                                                    <Text style={globalStyles.authPageActionButtonText}>Leave a review</Text>
+                                                                                </TouchableOpacity>
+                                                                                : null
+                                                                        }
+                                                                    </View>
+                                                                )}
+                                                        </>
+                                                        : null
+                                                }
+                                            </>
                                             : <>
                                                 <TouchableOpacity style={[globalStyles.authPageActionButton, {
                                                     marginBottom: 20
@@ -301,7 +355,7 @@ export default class Coaching extends Component {
                                                 }
                                             </>
                                     }
-                                </View>
+                                </ScrollView>
                                 : <View style={styles.tabContent}>
                                     {
                                         this.state.coaching.myClients.isPersonalTrainer

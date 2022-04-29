@@ -58,19 +58,22 @@ export default class Profile extends Component {
     pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            base64: true,
             allowsEditing: true,
             aspect: [1, 1],
             quality: 1,
         });
 
+        console.log(result.uri);
+
         if (!result.cancelled) {
-            this.uploadProfilePicture(result);
+            this.uploadProfilePicture(result.base64);
         }
     };
 
-    uploadProfilePicture = (result) => {
+    uploadProfilePicture = (base64) => {
         ApiRequests.put('user', {}, {
-            profilePicture: result.uri,
+            profilePicture: `data:image/jpg;base64,${base64}`,
         }, true).then((response) => {
             this.loadProfile();
         }).catch((error) => {

@@ -7813,6 +7813,7 @@
 {"level":"error","message":"\"suggestion\" is not allowed to be empty"}
 {"level":"error","message":"\"suggestion\" is not allowed to be empty"}
 {"level":"error","message":"\"suggestion\" is not allowed to be empty"}
+<<<<<<< HEAD
 {"level":"error","message":"Unrecognized pipeline stage name: '$or'"}
 {"level":"error","message":"Unrecognized pipeline stage name: '$or'"}
 {"level":"error","message":"Unrecognized pipeline stage name: '$or'"}
@@ -7840,3 +7841,32 @@
 {"level":"error","message":"Cannot read properties of undefined (reading '_id')"}
 {"level":"error","message":"checkForDistanceAndReviews is not a function"}
 {"level":"error","message":"checkForDistanceAndReviews is not a function"}
+=======
+{"level":"error","message":"finishedRelations is not defined"}
+{"level":"error","message":"finishedRelations is not defined"}
+{"level":"error","message":"finishedRelations is not defined"}
+{"level":"error","message":"finishedRelations is not defined"}
+{"level":"error","message":"finishedRelations is not defined"}
+{"level":"error","message":"finishedRelations is not defined"}
+{"level":"error","message":"finishedRelations is not defined"}
+{"level":"error","message":"finishedRelations is not defined"}
+{"level":"error","message":"finishedRelations is not defined"}
+{"level":"error","message":"finishedRelations is not defined"}
+{"level":"error","message":"finishedRelations is not defined"}
+{"level":"error","message":"finishedRelations is not defined"}
+{"level":"error","message":"\"review\" is not allowed to be empty"}
+{"level":"error","message":"Review is not a constructor"}
+{"level":"error","message":"Review is not a constructor"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'push')"}
+{"level":"error","message":"Token not provided"}
+{"level":"error","message":"Cannot read properties of undefined (reading '_id')"}
+{"level":"error","message":"Token not provided"}
+{"level":"error","message":"Cannot read properties of undefined (reading '_id')"}
+{"level":"error","message":"Token not provided"}
+{"level":"error","message":"Cannot read properties of undefined (reading '_id')"}
+{"level":"error","message":"Token not provided"}
+{"level":"error","message":"Cannot read properties of undefined (reading '_id')"}
+{"level":"error","message":"Token not provided"}
+{"level":"error","message":"Cannot read properties of undefined (reading '_id')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'push')"}
+>>>>>>> 383d6130135e98f52e68be229ad69ce06a3cd85d

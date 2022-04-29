@@ -69,6 +69,18 @@ router.get('/', authenticate, async (req, res, next) => {
         coaching.myCoach.hasRelations = pendingRelations.length > 0;
         coaching.myCoach.relations = pendingRelations;
 
+        let finalCanceledRelations = [];
+        const canceledRelations = await DbService.getMany(COLLECTIONS.RELATIONS, { clientId: mongoose.Types.ObjectId(req.user._id), status: RELATION_STATUSES.CANCELED });
+        for (let canceledRelation of canceledRelations) {
+            const coach = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, canceledRelation.personalTrainerId);
+            const coachUser = await DbService.getOne(COLLECTIONS.USERS, { _id: coach.userId });
+            canceledRelation.coach = coachUser;
+            const review = await DbService.getOne(COLLECTIONS.REVIEWS, { relationId: mongoose.Types.ObjectId(canceledRelation._id) });
+            canceledRelation.hasReview = false;
+            if (!review) finalCanceledRelations.push(canceledRelation);
+        }
+        coaching.myCoach.canceledRelations = finalCanceledRelations;
+
         return res.status(HTTP_STATUS_CODES.OK).send({
             coaching
         })
@@ -308,11 +320,11 @@ router.get("/coach/search", authenticate, async (req, res, next) => {
                 }
             }
         } else {
-            const trainers = await DbService.getMany(COLLECTIONS.PERSONAL_TRAINERS, {status: PERSONAL_TRAINER_STATUSES.ACTIVE})
+            const trainers = await DbService.getMany(COLLECTIONS.PERSONAL_TRAINERS, { status: PERSONAL_TRAINER_STATUSES.ACTIVE })
             for (let trainer of trainers) {
                 const clients = await DbService.getMany(COLLECTIONS.RELATIONS, { "$or": [{ personalTrainerId: trainer._id }, { personalTrainerId: mongoose.Types.ObjectId(trainer._id) }] });
                 if (trainer.userId.toString() != req.user._id.toString()) {
-                    const relation = await DbService.getOne(COLLECTIONS.RELATIONS, { personalTrainerId: trainer._id, clientId: req.user._id, status: RELATION_STATUSES.PENDING_APPROVAL})
+                    const relation = await DbService.getOne(COLLECTIONS.RELATIONS, { personalTrainerId: trainer._id, clientId: req.user._id, status: RELATION_STATUSES.PENDING_APPROVAL })
                     if (relation) continue;
                     Object.assign(trainer, { criteriasMet: 0 }, { clients: clients.length });
                     allTrainers.push(trainer);

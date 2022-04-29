@@ -69,7 +69,7 @@ export default class CoachSearch extends Component {
             console.log(response.data.results.length);
             this.setState({ searchResults: response.data.results })
         }).catch((error) => {
-            console.log(error.response);
+            console.log(error);
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
                     this.setState({ showError: true, error: error.response.data });
@@ -136,30 +136,57 @@ export default class CoachSearch extends Component {
                                         <TouchableOpacity key={index} onPress={() => {
                                             this.props.navigation.navigate("CoachPage", { coach: result })
                                         }}>
-                                            <View style={styles.coachResult}>
-                                                <View style={styles.coachResultInline}>
-                                                    {
-                                                        !result.user.profilePicture
-                                                            ? <View style={styles.profilePictureContainer}>
-                                                                <Text style={styles.noProfilePictureText}>
-                                                                    {result.user.firstName.charAt(0)}
-                                                                    {result.user.lastName.charAt(0)}
-                                                                </Text>
-                                                            </View>
-                                                            : <Image style={styles.profilePictureContainer}
-                                                                source={{ uri: result.user.profilePicture }} />
-                                                    }
-                                                    <Text style={styles.names}>
-                                                        {result.user.firstName}
-                                                        &nbsp;
-                                                        {result.user.lastName}
-                                                    </Text>
-                                                </View>
-                                                <View style={[styles.coachResultInline, { marginTop: 8 }]}>
-                                                    <Ionicons name="md-star" size={20} color="#1f6cb0" />
-                                                    <Text style={styles.coachResultReviews}>{result.rating}/5 ({result.reviews} reviews)</Text>
-                                                </View>
-                                            </View>
+                                            {
+                                                coach.hasOwnProperty("user")
+                                                    ? <View style={styles.coachResult}>
+                                                        <View style={styles.coachResultInline}>
+                                                            {
+                                                                !result.user.profilePicture
+                                                                    ? <View style={styles.profilePictureContainer}>
+                                                                        <Text style={styles.noProfilePictureText}>
+                                                                            {result.user.firstName.charAt(0)}
+                                                                            {result.user.lastName.charAt(0)}
+                                                                        </Text>
+                                                                    </View>
+                                                                    : <Image style={styles.profilePictureContainer}
+                                                                        source={{ uri: result.user.profilePicture }} />
+                                                            }
+                                                            <Text style={styles.names}>
+                                                                {result.user.firstName}
+                                                                &nbsp;
+                                                                {result.user.lastName}
+                                                            </Text>
+                                                        </View>
+                                                        <View style={[styles.coachResultInline, { marginTop: 8 }]}>
+                                                            <Ionicons name="md-star" size={20} color="#1f6cb0" />
+                                                            <Text style={styles.coachResultReviews}>{result.rating}/5 ({result.reviews} reviews)</Text>
+                                                        </View>
+                                                    </View>
+                                                    : <View style={styles.coachResult}>
+                                                        <View style={styles.coachResultInline}>
+                                                            {
+                                                                !result.profilePicture
+                                                                    ? <View style={styles.profilePictureContainer}>
+                                                                        <Text style={styles.noProfilePictureText}>
+                                                                            {result.firstName.charAt(0)}
+                                                                            {result.lastName.charAt(0)}
+                                                                        </Text>
+                                                                    </View>
+                                                                    : <Image style={styles.profilePictureContainer}
+                                                                        source={{ uri: result.profilePicture }} />
+                                                            }
+                                                            <Text style={styles.names}>
+                                                                {result.firstName}
+                                                                &nbsp;
+                                                                {result.lastName}
+                                                            </Text>
+                                                        </View>
+                                                        <View style={[styles.coachResultInline, { marginTop: 8 }]}>
+                                                            <Ionicons name="md-star" size={20} color="#1f6cb0" />
+                                                            <Text style={styles.coachResultReviews}>{result.rating}/5 ({result.reviews} reviews)</Text>
+                                                        </View>
+                                                    </View>
+                                            }
                                         </TouchableOpacity>
                                     )
                                 }
