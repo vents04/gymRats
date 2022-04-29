@@ -69,7 +69,7 @@ export default class CoachSearch extends Component {
             console.log(response.data.results.length);
             this.setState({ searchResults: response.data.results })
         }).catch((error) => {
-            console.log(error.response);
+            console.log(error);
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
                     this.setState({ showError: true, error: error.response.data });
