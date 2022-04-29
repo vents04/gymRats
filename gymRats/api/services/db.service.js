@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const db = mongoose.connection;
-const { COLLECTIONS, HTTP_STATUS_CODES } = require('../global');
+const { COLLECTIONS, HTTP_STATUS_CODES, PERSONAL_TRAINER_STATUSES} = require('../global');
 
 const ResponseError = require('../errors/responseError');
 
@@ -128,6 +128,75 @@ const DbService = {
         return new Promise((resolve, reject) => {
             validateCollection(collection, reject);
             db.collection(collection).find(filter).sort(sort).limit(limit).toArray(function (err, cursor) {
+                if (err) return reject(new ResponseError(err.message || HTTP_STATUS_CODES.INTERNAL_SERVER));
+                resolve(cursor);
+            });
+        })
+    },
+
+    lookUpAndMergeCoachesNames: function(toCollection, fromCollection, _id, userId, asField, name){
+        return new Promise((resolve, reject) => {
+            validateCollection(fromCollection, reject);
+            db.collection(toCollection).aggregate( [
+                {$match:
+                    {$or: 
+                        [{ firstName: { $regex: name, $options: "i" } }, 
+                        { lastName: { $regex: name, $options: "i" } }] 
+                    },
+                   
+                },
+                {
+                  $lookup:
+                    {
+                      from: fromCollection,
+                      as: asField,
+                      let: {id: "$_id"},
+                      pipeline: [
+                        { 
+                            $match: { 
+                              $expr: { $eq: ["$$id", "$userId"] },
+                              status: PERSONAL_TRAINER_STATUSES.ACTIVE
+                            } 
+                        }
+                      ]
+                    }
+               },
+               { 
+                $unwind: 
+                    { path: "$trainer", preserveNullAndEmptyArrays: false } 
+               }
+             ]).toArray(function (err, cursor) {
+                if (err) return reject(new ResponseError(err.message || HTTP_STATUS_CODES.INTERNAL_SERVER));
+                resolve(cursor);
+            });
+        })
+    },
+
+    lookUpAndMergeCoaches: function(toCollection, fromCollection, _id, userId, asField){
+        return new Promise((resolve, reject) => {
+            validateCollection(fromCollection, reject);
+            db.collection(toCollection).aggregate( [
+                {
+                  $lookup:
+                    {
+                      from: fromCollection,
+                      as: asField,
+                      let: {id: "$_id"},
+                      pipeline: [
+                        { 
+                            $match: { 
+                              $expr: { $eq: ["$$id", "$userId"] },
+                              status: PERSONAL_TRAINER_STATUSES.ACTIVE
+                            } 
+                        }
+                      ]
+                    }
+               },
+               { 
+                $unwind: 
+                    { path: "$trainer", preserveNullAndEmptyArrays: false } 
+               }
+             ]).toArray(function (err, cursor) {
                 if (err) return reject(new ResponseError(err.message || HTTP_STATUS_CODES.INTERNAL_SERVER));
                 resolve(cursor);
             });

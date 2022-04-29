@@ -7813,3 +7813,30 @@
 {"level":"error","message":"\"suggestion\" is not allowed to be empty"}
 {"level":"error","message":"\"suggestion\" is not allowed to be empty"}
 {"level":"error","message":"\"suggestion\" is not allowed to be empty"}
+{"level":"error","message":"Unrecognized pipeline stage name: '$or'"}
+{"level":"error","message":"Unrecognized pipeline stage name: '$or'"}
+{"level":"error","message":"Unrecognized pipeline stage name: '$or'"}
+{"level":"error","message":"unrecognized option to $unwind stage: $and"}
+{"level":"error","message":"unrecognized option to $unwind stage: status"}
+{"level":"error","message":"unrecognized option to $unwind stage: $match"}
+{"level":"error","message":"A pipeline stage specification object must contain exactly one field."}
+{"level":"error","message":"unrecognized option to $unwind stage: $match"}
+{"level":"error","message":"unrecognized option to $unwind stage: $match"}
+{"level":"error","message":"unrecognized option to $unwind stage: $match"}
+{"level":"error","message":"$lookup with 'pipeline' may not specify 'localField' or 'foreignField'"}
+{"level":"error","message":"$lookup with 'pipeline' may not specify 'localField' or 'foreignField'"}
+{"level":"error","message":"A pipeline stage specification object must contain exactly one field."}
+{"level":"error","message":"$lookup with 'pipeline' may not specify 'localField' or 'foreignField'"}
+{"level":"error","message":"'_id' starts with an invalid character for a user variable name"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'location')"}
+{"level":"error","message":"$regex has to be a string"}
+{"level":"error","message":"$regex has to be a string"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'toString')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'lat')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'pretty')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'prettyPrint')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'location')"}
+{"level":"error","message":"Token not provided"}
+{"level":"error","message":"Cannot read properties of undefined (reading '_id')"}
+{"level":"error","message":"checkForDistanceAndReviews is not a function"}
+{"level":"error","message":"checkForDistanceAndReviews is not a function"}

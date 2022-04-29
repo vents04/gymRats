@@ -19,6 +19,7 @@ const { relationValidation, relationStatusUpdateValidation, coachApplicationPost
 const WeightTrackerService = require('../services/cards/weightTracker.service');
 const { func } = require('@hapi/joi');
 const { quicksort } = require('../helperFunctions/quickSortForCoaches')
+const { checkForDistanceAndReviews } = require('../helperFunctions/checkDistanceAndReviews')
 
 router.get('/', authenticate, async (req, res, next) => {
     try {
@@ -282,6 +283,7 @@ router.get("/coach/search", authenticate, async (req, res, next) => {
         let minRating = 0;
         let distanceForCheck = 30;
         let allTrainers = [];
+        let users;
         const reviews = await DbService.getMany(COLLECTIONS.REVIEWS, {});
 
         if (req.query.maxDistance && req.query.maxDistance <= 120) {
@@ -291,18 +293,18 @@ router.get("/coach/search", authenticate, async (req, res, next) => {
         if (names && names != "") {
             names = names.split(" ");
             for (let name of names) {
-                const users = await DbService.getMany(COLLECTIONS.USERS, { "$or": [{ firstName: { "$regex": name, "$options": "i" } }, { lastName: { "$regex": name, "$options": "i" } }] });
+                users = await DbService.lookUpAndMergeCoachesNames(COLLECTIONS.USERS, COLLECTIONS.PERSONAL_TRAINERS, "_id", "userId", "trainer", name);
                 for (let i = 0; i < users.length; i++) {
-                    const trainer = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, { "$and": [{"$or": [{ userId: users[i]._id }, { userId: mongoose.Types.ObjectId(users[i]._id) }]}, {status: PERSONAL_TRAINER_STATUSES.ACTIVE}] });
-                    if (trainer) {
-                        const clients = await DbService.getMany(COLLECTIONS.RELATIONS, { "$or": [{ personalTrainerId: trainer._id }, { personalTrainerId: mongoose.Types.ObjectId(trainer._id) }] });
-                        if (trainer.userId.toString() != req.user._id.toString()) {
-                            const relation = await DbService.getOne(COLLECTIONS.RELATIONS, { personalTrainerId: trainer._id, clientId: req.user._id, status: RELATION_STATUSES.PENDING_APPROVAL})
-                            if (relation) continue;
-                            Object.assign(trainer, { criteriasMet: 0 }, { clients: clients.length });
-                            allTrainers.push(trainer);
+                    const clients = await DbService.getMany(COLLECTIONS.RELATIONS, { "$or": [{ personalTrainerId: users[i].trainer._id }, { personalTrainerId: mongoose.Types.ObjectId(users[i].trainer._id) }] });
+                    if (users[i]._id.toString() != req.user._id.toString()) {
+                        const relation = await DbService.getOne(COLLECTIONS.RELATIONS, { personalTrainerId: users[i].trainer._id, clientId: req.user._id, status: RELATION_STATUSES.PENDING_APPROVAL})
+                        if (relation) continue;
+                        Object.assign(users[i], { criteriasMet: 0 }, { clients: clients.length });
+                        if(checkForDistanceAndReviews(users[i], users[i].trainer.location, reviews, req.query.lat, req.query.lng, req.query.maxDistance, req.query.minRating, distanceForCheck)){
+                            allTrainers.push(users[i]);
                         }
                     }
+                    
                 }
             }
         } else {
@@ -320,103 +322,11 @@ router.get("/coach/search", authenticate, async (req, res, next) => {
 
 
         if (req.query.lat && req.query.lng) {
-            for (let i = 0; i < allTrainers.length; i++) {
-                let lat1 = allTrainers[i].location.lat;
-                let lat2 = req.query.lat;
-                let lng1 = allTrainers[i].location.lng;
-                let lng2 = req.query.lng;
-
-                lng1 = lng1 * Math.PI / 180;
-                lng2 = lng2 * Math.PI / 180;
-
-                lat1 = lat1 * Math.PI / 180;
-                lat2 = lat2 * Math.PI / 180;
-
-                let dlon = lng2 - lng1;
-                let dlat = lat2 - lat1;
-                let a = Math.pow(Math.sin(dlat / 2), 2)
-                    + Math.cos(lat1) * Math.cos(lat2)
-                    * Math.pow(Math.sin(dlon / 2), 2);
-
-                let c = 2 * Math.asin(Math.sqrt(a));
-
-                let radius = 6371;
-
-                let distance = c * radius;
-
-                if (req.query.maxDistance) {
-                    if (distance > req.query.maxDistance) {
-                        allTrainers.splice(i, 1);
-                        i--;
-                        continue;
-                    }
-                    allTrainers[i].criteriasMet++;
-                }
-                Object.assign(allTrainers[i], { distance: distance });
-
-
-                let sumOfAllRatings = 0, counter = 0, overallRating = 0;
-                for (let review of reviews) {
-                    const relation = await DbService.getOne(COLLECTIONS.RELATIONS, { "$or": [{ _id: review.relationId }, { _id: mongoose.Types.ObjectId(review.relationId) }] });
-                    if (relation.personalTrainerId.toString() == allTrainers[i].userId.toString()) {
-                        sumOfAllRatings += review.rating;
-                        counter++;
-                    }
-                }
-                if (counter != 0) {
-                    overallRating = Number.parseFloat(sumOfAllRatings / counter).toFixed(1);
-                }
-                if (req.query.minRating) {
-                    minRating = req.query.minRating
-                    if (overallRating < minRating) {
-                        allTrainers.splice(i, 1);
-                        i--;
-                        continue;
-                    }
-                    allTrainers[i].criteriasMet++;
-                }
-                Object.assign(allTrainers[i], { rating: overallRating, reviews: counter });
-
-
-                if (allTrainers[i].distance <= distanceForCheck
-                    && allTrainers[i].rating >= (5 - minRating) / 2 + minRating) {
-                    allTrainers[i].criteriasMet += 4
-                    continue;
-                }
-                if (allTrainers[i].distance > distanceForCheck
-                    && allTrainers[i].rating >= (5 - minRating) / 2 + minRating) {
-                    allTrainers[i].criteriasMet += 3
-                    continue;
-                }
-                if (allTrainers[i].distance <= distanceForCheck
-                    && allTrainers[i].rating < (5 - minRating) / 2 + minRating) {
-                    allTrainers[i].criteriasMet += 2;
-                    continue;
-                }
-                if (allTrainers[i].distance > distanceForCheck
-                    && allTrainers[i].rating < (5 - minRating) / 2 + minRating) {
-                    allTrainers[i].criteriasMet += 1;
-                    continue;
-                }
-
-            }
         } else if (req.query.maxDistance) {
             return next(new ResponseError("We cannot search for max distance when we don't know your location", HTTP_STATUS_CODES.BAD_REQUEST));
         }
 
         quicksort(allTrainers, 0, allTrainers.length - 1)
-
-        for (let index = 0; index < allTrainers.length; index++) {
-            let user = await DbService.getById(COLLECTIONS.USERS, allTrainers[index].userId.toString());
-            // remove below line when in production
-            if (!user) user = await DbService.getOne(COLLECTIONS.USERS, { _id: allTrainers[index].userId.toString() });
-            if (!user) {
-                allTrainers.splice(index, 1);
-                index--;
-                continue;
-            }
-            allTrainers[index].user = user;
-        }
 
         const dt2 = new Date().getTime();
         console.log(dt - dt2)
