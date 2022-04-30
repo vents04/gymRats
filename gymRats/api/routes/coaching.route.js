@@ -309,14 +309,14 @@ router.get("/coach/search", authenticate, async (req, res, next) => {
                 for (let i = 0; i < users.length; i++) {
                     const clients = await DbService.getMany(COLLECTIONS.RELATIONS, { "$or": [{ personalTrainerId: users[i].trainer._id }, { personalTrainerId: mongoose.Types.ObjectId(users[i].trainer._id) }] });
                     if (users[i]._id.toString() != req.user._id.toString()) {
-                        const relation = await DbService.getOne(COLLECTIONS.RELATIONS, { personalTrainerId: users[i].trainer._id, clientId: req.user._id, status: RELATION_STATUSES.PENDING_APPROVAL})
+                        const relation = await DbService.getOne(COLLECTIONS.RELATIONS, { personalTrainerId: users[i].trainer._id, clientId: req.user._id, status: RELATION_STATUSES.PENDING_APPROVAL })
                         if (relation) continue;
                         Object.assign(users[i], { criteriasMet: 0 }, { clients: clients.length });
-                        if(checkForDistanceAndReviews(users[i], users[i].trainer.location, reviews, req.query.lat, req.query.lng, req.query.maxDistance, req.query.minRating, distanceForCheck)){
+                        if (checkForDistanceAndReviews(users[i], users[i].trainer.location, reviews, req.query.lat, req.query.lng, req.query.maxDistance, req.query.minRating, distanceForCheck)) {
                             allTrainers.push(users[i]);
                         }
                     }
-                    
+
                 }
             }
         } else {
