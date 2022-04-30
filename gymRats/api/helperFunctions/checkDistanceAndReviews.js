@@ -1,4 +1,6 @@
-async function checkForDistanceAndReviews(trainer, location, reviews, reqLat, reqLng, maxDistance, minRating, distanceForCheck){
+async function checkForDistanceAndReviews(trainer, location, reviews, reqLat, reqLng, maxDistance, minRating, distanceForCheck, trainerId){
+    
+    let reviewsForPush = [];
     let minRatingCopy = 0;
     let lat1 = location.lat;
     let lat2 = reqLat;
@@ -35,9 +37,10 @@ async function checkForDistanceAndReviews(trainer, location, reviews, reqLat, re
     let sumOfAllRatings = 0, counter = 0, overallRating = 0;
     for (let review of reviews) {
         const relation = await DbService.getOne(COLLECTIONS.RELATIONS, { "$or": [{ _id: review.relationId }, { _id: mongoose.Types.ObjectId(review.relationId) }] });
-        if (relation.personalTrainerId.toString() == trainer.trainer._id.toString()) {
+        if (relation.personalTrainerId.toString() == trainerId.toString()) {
             sumOfAllRatings += review.rating;
             counter++;
+            reviewsForPush.push(review);
         }
     }
     if (counter != 0) {
@@ -50,10 +53,9 @@ async function checkForDistanceAndReviews(trainer, location, reviews, reqLat, re
         }
         trainer.criteriasMet++;
     }
-    Object.assign(trainer, { rating: overallRating, reviews: counter });
+    Object.assign(trainer, { rating: overallRating}, { reviews: reviewsForPush }, {dasd: "das"});
 
 
-    console.log(trainer.distance, " ", distanceForCheck, " ", );
     if (trainer.distance <= distanceForCheck
         && trainer.rating >= (5 - minRatingCopy) / 2 + minRatingCopy) {
         trainer.criteriasMet += 4
