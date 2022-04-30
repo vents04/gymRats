@@ -7870,3 +7870,11 @@
 {"level":"error","message":"Cannot read properties of undefined (reading '_id')"}
 {"level":"error","message":"Cannot read properties of undefined (reading 'push')"}
 >>>>>>> 383d6130135e98f52e68be229ad69ce06a3cd85d
+{"level":"error","message":"i is not defined"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'location')"}
+{"level":"error","message":"i is not defined"}
+{"level":"error","message":"Token not provided"}
+{"level":"error","message":"Cannot read properties of undefined (reading '_id')"}
+{"level":"error","message":"i is not defined"}
+{"level":"error","message":"i is not defined"}
+{"level":"error","message":"user is not defined"}

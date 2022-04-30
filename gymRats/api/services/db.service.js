@@ -170,37 +170,6 @@ const DbService = {
                 resolve(cursor);
             });
         })
-    },
-
-    lookUpAndMergeCoaches: function(toCollection, fromCollection, _id, userId, asField){
-        return new Promise((resolve, reject) => {
-            validateCollection(fromCollection, reject);
-            db.collection(toCollection).aggregate( [
-                {
-                  $lookup:
-                    {
-                      from: fromCollection,
-                      as: asField,
-                      let: {id: "$_id"},
-                      pipeline: [
-                        { 
-                            $match: { 
-                              $expr: { $eq: ["$$id", "$userId"] },
-                              status: PERSONAL_TRAINER_STATUSES.ACTIVE
-                            } 
-                        }
-                      ]
-                    }
-               },
-               { 
-                $unwind: 
-                    { path: "$trainer", preserveNullAndEmptyArrays: false } 
-               }
-             ]).toArray(function (err, cursor) {
-                if (err) return reject(new ResponseError(err.message || HTTP_STATUS_CODES.INTERNAL_SERVER));
-                resolve(cursor);
-            });
-        })
     }
 }
 

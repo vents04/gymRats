@@ -291,11 +291,13 @@ router.get("/coach/search", authenticate, async (req, res, next) => {
         })
     }
 
+    if ((req.query.lat && req.query.lng) && req.query.maxDistance) {
+        return next(new ResponseError("We cannot search for max distance when we don't know your location", HTTP_STATUS_CODES.BAD_REQUEST));
+    }
+
     try {
-        let minRating = 0;
         let distanceForCheck = 30;
-        let allTrainers = [];
-        let users;
+        let users= [];
         const reviews = await DbService.getMany(COLLECTIONS.REVIEWS, {});
 
         if (req.query.maxDistance && req.query.maxDistance <= 120) {
@@ -306,44 +308,70 @@ router.get("/coach/search", authenticate, async (req, res, next) => {
             names = names.split(" ");
             for (let name of names) {
                 users = await DbService.lookUpAndMergeCoachesNames(COLLECTIONS.USERS, COLLECTIONS.PERSONAL_TRAINERS, "_id", "userId", "trainer", name);
+
+                /* Code if the trainer model had names in it
+                 users = await DbService.getMany(COLLECTIONS.TRAINERS, {{$or: 
+                        [{ firstName: { $regex: name, $options: "i" } }, 
+                        { lastName: { $regex: name, $options: "i" } }] 
+                    }})
+                
+                */
+
                 for (let i = 0; i < users.length; i++) {
+
                     const clients = await DbService.getMany(COLLECTIONS.RELATIONS, { "$or": [{ personalTrainerId: users[i].trainer._id }, { personalTrainerId: mongoose.Types.ObjectId(users[i].trainer._id) }] });
-                    if (users[i]._id.toString() != req.user._id.toString()) {
-                        const relation = await DbService.getOne(COLLECTIONS.RELATIONS, { personalTrainerId: users[i].trainer._id, clientId: req.user._id, status: RELATION_STATUSES.PENDING_APPROVAL})
-                        if (relation) continue;
-                        Object.assign(users[i], { criteriasMet: 0 }, { clients: clients.length });
-                        if(checkForDistanceAndReviews(users[i], users[i].trainer.location, reviews, req.query.lat, req.query.lng, req.query.maxDistance, req.query.minRating, distanceForCheck)){
-                            allTrainers.push(users[i]);
-                        }
+
+                    if (users[i]._id.toString() == req.user._id.toString()) {
+                        users.splice(i, 1);
+                        i--;
+                        continue;
                     }
-                    
-                }
-            }
-        } else {
-            const trainers = await DbService.getMany(COLLECTIONS.PERSONAL_TRAINERS, { status: PERSONAL_TRAINER_STATUSES.ACTIVE })
-            for (let trainer of trainers) {
-                const clients = await DbService.getMany(COLLECTIONS.RELATIONS, { "$or": [{ personalTrainerId: trainer._id }, { personalTrainerId: mongoose.Types.ObjectId(trainer._id) }] });
-                if (trainer.userId.toString() != req.user._id.toString()) {
-                    const relation = await DbService.getOne(COLLECTIONS.RELATIONS, { personalTrainerId: trainer._id, clientId: req.user._id, status: RELATION_STATUSES.PENDING_APPROVAL })
+
+                    const relation = await DbService.getOne(COLLECTIONS.RELATIONS, { personalTrainerId: users[i].trainer._id, clientId: req.user._id, status: RELATION_STATUSES.PENDING_APPROVAL})
                     if (relation) continue;
-                    Object.assign(trainer, { criteriasMet: 0 }, { clients: clients.length });
-                    allTrainers.push(trainer);
+
+                    Object.assign(users[i], { criteriasMet: 0 }, { clients: clients.length });
+                    if(!checkForDistanceAndReviews(users[i], users[i].trainer.location, reviews, req.query.lat, req.query.lng, req.query.maxDistance, req.query.minRating, distanceForCheck, users[i].trainer._id)){
+                        users.splice(i, 1);
+                        i--;
+                        continue;
+                    }
                 }
             }
+            quicksort(users, 0, users.length - 1)
+
+        } else {
+            users = await DbService.getMany(COLLECTIONS.PERSONAL_TRAINERS, { status: PERSONAL_TRAINER_STATUSES.ACTIVE })
+            for (let i = 0; i < users.length; i++) {
+
+                const clients = await DbService.getMany(COLLECTIONS.RELATIONS, { "$or": [{ personalTrainerId: users[i]._id }, { personalTrainerId: mongoose.Types.ObjectId(users[i]._id) }] });
+
+                if (users[i].userId.toString() == req.user._id.toString()) {
+                    users.splice(i, 1);
+                    i--;
+                    continue;
+                }
+                
+                const relation = await DbService.getOne(COLLECTIONS.RELATIONS, { personalTrainerId: users[i]._id, clientId: req.user._id, status: RELATION_STATUSES.PENDING_APPROVAL })
+                if (relation) continue;
+
+                Object.assign(users[i], { criteriasMet: 0 }, { clients: clients.length });
+                if(!checkForDistanceAndReviews(users[i], users[i].location, reviews, req.query.lat, req.query.lng, req.query.maxDistance, req.query.minRating, distanceForCheck, users[i]._id)){
+                    users.splice(i, 1);
+                    i--;
+                    continue;
+                }
+
+                const assignUser = await DbService.getOne(COLLECTIONS.USERS, {_id: users[i].userId})
+                Object.assign(users[i], { user: assignUser });
+            }
+            quicksort(users, 0, users.length - 1)
+
         }
-
-
-        if (req.query.lat && req.query.lng) {
-        } else if (req.query.maxDistance) {
-            return next(new ResponseError("We cannot search for max distance when we don't know your location", HTTP_STATUS_CODES.BAD_REQUEST));
-        }
-
-        quicksort(allTrainers, 0, allTrainers.length - 1)
-
         const dt2 = new Date().getTime();
         console.log(dt - dt2)
         return res.status(HTTP_STATUS_CODES.OK).send({
-            results: allTrainers.slice(0, 50)
+            results: users.slice(0, 50)
         })
     } catch (error) {
         return next(new ResponseError(error.message || "leternal server error", error.status || HTTP_STATUS_CODES.letERNAL_SERVER_ERROR));
