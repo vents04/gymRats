@@ -6,7 +6,7 @@ const mongo = require("./db/mongo");
 const indexRoute = require('./routes/index.route');
 const errorHandler = require('./errors/errorHandler');
 
-const { PORT, COLLECTIONS } = require('./global');
+const { PORT, COLLECTIONS, PERSONAL_TRAINER_STATUSES } = require('./global');
 const DbService = require('./services/db.service');
 const MessagingService = require('./services/messaging.service');
 const mongoose = require('mongoose');

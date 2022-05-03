@@ -291,7 +291,7 @@ router.get("/coach/search", authenticate, async (req, res, next) => {
         })
     }
 
-    if ((req.query.lat && req.query.lng) && req.query.maxDistance) {
+    if ((!req.query.lat || !req.query.lng) && req.query.maxDistance) {
         return next(new ResponseError("We cannot search for max distance when we don't know your location", HTTP_STATUS_CODES.BAD_REQUEST));
     }
 
@@ -307,35 +307,37 @@ router.get("/coach/search", authenticate, async (req, res, next) => {
         if (names && names != "") {
             names = names.split(" ");
             for (let name of names) {
-                users = await DbService.lookUpAndMergeCoachesNames(COLLECTIONS.USERS, COLLECTIONS.PERSONAL_TRAINERS, "_id", "userId", "trainer", name);
-
-                /* Code if the trainer model had names in it
-                 users = await DbService.getMany(COLLECTIONS.TRAINERS, {{$or: 
-                        [{ firstName: { $regex: name, $options: "i" } }, 
-                        { lastName: { $regex: name, $options: "i" } }] 
-                    }})
+                users = await DbService.getMany(COLLECTIONS.PERSONAL_TRAINERS, { "$and":[{"$or": [{ firstName: { "$regex": name, "$options": "i" } }, { lastName: { "$regex": name, "$options": "i" } }]}, {status: PERSONAL_TRAINER_STATUSES.ACTIVE}] })
                 
-                */
 
                 for (let i = 0; i < users.length; i++) {
 
-                    const clients = await DbService.getMany(COLLECTIONS.RELATIONS, { "$or": [{ personalTrainerId: users[i].trainer._id }, { personalTrainerId: mongoose.Types.ObjectId(users[i].trainer._id) }] });
+                    const clients = await DbService.getMany(COLLECTIONS.RELATIONS, { "$or": [{ personalTrainerId: users[i]._id }, { personalTrainerId: mongoose.Types.ObjectId(users[i]._id) }] });
 
-                    if (users[i]._id.toString() == req.user._id.toString()) {
+                    const relation = await DbService.getOne(COLLECTIONS.RELATIONS, { personalTrainerId: users[i]._id, clientId: req.user._id, status: RELATION_STATUSES.PENDING_APPROVAL })
+                    if (users[i].userId.toString() == req.user._id.toString() || relation) {
                         users.splice(i, 1);
                         i--;
                         continue;
                     }
 
-                    const relation = await DbService.getOne(COLLECTIONS.RELATIONS, { personalTrainerId: users[i].trainer._id, clientId: req.user._id, status: RELATION_STATUSES.PENDING_APPROVAL})
-                    if (relation) continue;
+                    Object.assign(users[i], { criteriasMet: 0 });
 
-                    Object.assign(users[i], { criteriasMet: 0 }, { clients: clients.length });
-                    if(!checkForDistanceAndReviews(users[i], users[i].trainer.location, reviews, req.query.lat, req.query.lng, req.query.maxDistance, req.query.minRating, distanceForCheck, users[i].trainer._id)){
+                    let check = false;
+                    await checkForDistanceAndReviews(users[i], users[i].location, reviews, req.query.lat, req.query.lng, req.query.maxDistance, req.query.minRating, distanceForCheck).then(function(result){
+                        if(result == -1){
+                            check = true
+                        }
+                    })
+                    if(check){
                         users.splice(i, 1);
                         i--;
                         continue;
                     }
+
+                    const assignUser = await DbService.getOne(COLLECTIONS.USERS, {_id: users[i].userId})
+                    Object.assign(users[i], { user: assignUser }, { clients: clients.length });
+                    
                 }
             }
             quicksort(users, 0, users.length - 1)
@@ -346,24 +348,29 @@ router.get("/coach/search", authenticate, async (req, res, next) => {
 
                 const clients = await DbService.getMany(COLLECTIONS.RELATIONS, { "$or": [{ personalTrainerId: users[i]._id }, { personalTrainerId: mongoose.Types.ObjectId(users[i]._id) }] });
 
-                if (users[i].userId.toString() == req.user._id.toString()) {
-                    users.splice(i, 1);
-                    i--;
-                    continue;
-                }
-                
                 const relation = await DbService.getOne(COLLECTIONS.RELATIONS, { personalTrainerId: users[i]._id, clientId: req.user._id, status: RELATION_STATUSES.PENDING_APPROVAL })
-                if (relation) continue;
-
-                Object.assign(users[i], { criteriasMet: 0 }, { clients: clients.length });
-                if(!checkForDistanceAndReviews(users[i], users[i].location, reviews, req.query.lat, req.query.lng, req.query.maxDistance, req.query.minRating, distanceForCheck, users[i]._id)){
+                if (users[i].userId.toString() == req.user._id.toString() || relation) {
                     users.splice(i, 1);
                     i--;
                     continue;
                 }
+
+                Object.assign(users[i], { criteriasMet: 0 });
+                
+                let check = false;
+                    await checkForDistanceAndReviews(users[i], users[i].location, reviews, req.query.lat, req.query.lng, req.query.maxDistance, req.query.minRating, distanceForCheck).then(function(result){
+                        if(result == -1){
+                            check = true
+                        }
+                    })
+                    if(check){
+                        users.splice(i, 1);
+                        i--;
+                        continue;
+                    }
 
                 const assignUser = await DbService.getOne(COLLECTIONS.USERS, {_id: users[i].userId})
-                Object.assign(users[i], { user: assignUser });
+                Object.assign(users[i], { user: assignUser }, { clients: clients.length });
             }
             quicksort(users, 0, users.length - 1)
 

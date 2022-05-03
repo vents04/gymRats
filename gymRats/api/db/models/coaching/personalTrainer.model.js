@@ -8,6 +8,18 @@ const personalTrainerSchema = mongoose.Schema({
         ref: DATABASE_MODELS.USER,
         unique: true
     },
+    firstName: {
+        type: String,
+        minLength: 1,
+        maxLength: 200,
+        required: true
+    },
+    lastName: {
+        type: String,
+        minLength: 1,
+        maxLength: 200,
+        required: true
+    },
     location: {
         address: {
             type: String,
