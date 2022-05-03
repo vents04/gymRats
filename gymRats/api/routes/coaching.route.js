@@ -297,7 +297,7 @@ router.get("/coach/search", authenticate, async (req, res, next) => {
 
     try {
         let distanceForCheck = 30;
-        let users= [];
+        let users = [];
         const reviews = await DbService.getMany(COLLECTIONS.REVIEWS, {});
 
         if (req.query.maxDistance && req.query.maxDistance <= 120) {
