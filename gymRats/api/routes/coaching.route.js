@@ -281,7 +281,6 @@ router.post('/relation/:id/review', authenticate, async (req, res, next) => {
 });
 
 router.get("/coach/search", authenticate, async (req, res, next) => {
-    const dt = new Date().getTime();
     let names = req.query.name;
 
     if (((req.query.lat && !req.query.lng) || (!req.query.lat && req.query.lng)) && !names) {
@@ -375,8 +374,6 @@ router.get("/coach/search", authenticate, async (req, res, next) => {
             quicksort(users, 0, users.length - 1)
 
         }
-        const dt2 = new Date().getTime();
-        console.log(dt - dt2)
         return res.status(HTTP_STATUS_CODES.OK).send({
             results: users.slice(0, 50)
         })

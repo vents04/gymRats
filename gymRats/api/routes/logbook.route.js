@@ -14,7 +14,7 @@ const { authenticate } = require('../middlewares/authenticate');
 
 const { HTTP_STATUS_CODES, COLLECTIONS, APP_EMAIL, RELATION_STATUSES } = require('../global');
 const { workoutPostValidation, workoutSessionValidation, exercisePostValidation, workoutTemplateCheckValidation } = require('../validation/hapi');
-const { quicksort } = require('../helperFunctions/quickSortForCoaches')
+const { quicksort } = require('../helperFunctions/quickSortForExercises');
 
 router.post("/exercise", authenticate, async (req, res, next) => {
     const { error } = exercisePostValidation(req.body);
@@ -292,7 +292,7 @@ router.get("/search", authenticate, async (req, res, next) => {
         let sorted = [];
         if(words && words != ""){
             for (let word of words) {
-                const exercises = await DbService.getMany(COLLECTIONS.EXERCISES, { keywords: { "$regex": word } });
+                const exercises = await DbService.getMany(COLLECTIONS.EXERCISES, { keywords: { "$regex": word, "$options": "i" } });
 
                 for (let i = 0; i < exercises.length; i++) {
                     let shouldContinue = false;

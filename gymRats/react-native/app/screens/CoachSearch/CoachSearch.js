@@ -57,7 +57,7 @@ export default class CoachSearch extends Component {
         });
         let searchQuery = `coaching/coach/search?lat=${this.state.lat}&lng=${this.state.lng}`;
         if (this.query.length > 0) {
-            searchQuery += `name=${this.state.query};`
+            searchQuery += `&name=${this.query}`
         }
         if (this.state.maxDistance > 0) {
             searchQuery += `&maxDistance=${this.state.maxDistance}`;
@@ -93,7 +93,7 @@ export default class CoachSearch extends Component {
 
         this.typingTimeout = setTimeout(() => {
             this.searchCoaches();
-        }, 1500);
+        }, 600);
     }
 
     render() {
@@ -137,7 +137,7 @@ export default class CoachSearch extends Component {
                                             this.props.navigation.navigate("CoachPage", { coach: result })
                                         }}>
                                             {
-                                                coach.hasOwnProperty("user")
+                                                result.hasOwnProperty("user")
                                                     ? <View style={styles.coachResult}>
                                                         <View style={styles.coachResultInline}>
                                                             {

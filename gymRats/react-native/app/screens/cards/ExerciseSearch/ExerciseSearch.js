@@ -33,7 +33,7 @@ export default class ExerciseSearch extends Component {
         setTimeout(() => {
             console.log(this.scrollV.current.offsetWidth)
             console.log(this.scrollV.current.offsetHeight)
-        }, 5000);
+        }, 700);
     }
 
     searchExercises = () => {
