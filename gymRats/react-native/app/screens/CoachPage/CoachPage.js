@@ -67,7 +67,9 @@ export default class CoachPage extends Component {
                             ? <Text style={globalStyles.errorBox}>{this.state.error}</Text>
                             : null
                     }
-                    <ScrollView contentContainerStyle={globalStyles.fillEmptySpace}>
+                    <View style={{
+                        flex: 1
+                    }}>
                         {
                             this.props.route.params.coach
                                 ? <>
@@ -126,10 +128,50 @@ export default class CoachPage extends Component {
                                                 />
                                         }
                                     </TouchableOpacity>
+                                    {
+                                        this.props.route.params.coach.reviews.length > 0
+                                            ? <ScrollView style={{ marginTop: 32 }} contentContainerStyle={globalStyles.fillEmptySpace}>
+                                                <Text style={[globalStyles.modalText, { textAlign: 'left' }]}>Reviews</Text>
+                                                {
+                                                    this.props.route.params.coach.reviews.map((review, index) =>
+                                                        <View key={index} style={styles.coachResult}>
+                                                            <View style={styles.coachResultInline}>
+                                                                {
+                                                                    !review.clientInstance.profilePicture
+                                                                        ? <View style={styles.reviewProfilePictureContainer}>
+                                                                            <Text style={styles.reviewNoProfilePictureText}>
+                                                                                {review.clientInstance.firstName.charAt(0)}
+                                                                                {review.clientInstance.lastName.charAt(0)}
+                                                                            </Text>
+                                                                        </View>
+                                                                        : <Image style={styles.reviewProfilePictureContainer}
+                                                                            source={{ uri: review.clientInstance.profilePicture }} />
+                                                                }
+                                                                <Text style={styles.reviewNames}>
+                                                                    {review.clientInstance.firstName}
+                                                                    &nbsp;
+                                                                    {review.clientInstance.lastName}
+                                                                </Text>
+                                                            </View>
+                                                            <View style={[styles.coachResultInline, { marginTop: 8 }]}>
+                                                                <Ionicons name="md-star" size={20} color="#1f6cb0" />
+                                                                <Text style={styles.coachResultReviews}>{review.rating}/5</Text>
+                                                            </View>
+                                                            {
+                                                                review.review && review.review.length > 0
+                                                                    ? <Text style={[globalStyles.notation, { marginTop: 8 }]}>{review.review}</Text>
+                                                                    : null
+                                                            }
+                                                        </View>
+                                                    )
+                                                }
+                                            </ScrollView>
+                                            : null
+                                    }
                                 </>
                                 : null
                         }
-                    </ScrollView>
+                    </View>
                 </View>
             </View>
         )

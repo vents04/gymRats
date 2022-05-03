@@ -67,9 +67,9 @@ export default class CoachSearch extends Component {
         }
         ApiRequests.get(searchQuery, {}, true).then((response) => {
             console.log(response.data.results.length);
+            console.log(response.data.results.length);
             this.setState({ searchResults: response.data.results })
         }).catch((error) => {
-            console.log(error);
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
                     this.setState({ showError: true, error: error.response.data });
@@ -159,7 +159,7 @@ export default class CoachSearch extends Component {
                                                         </View>
                                                         <View style={[styles.coachResultInline, { marginTop: 8 }]}>
                                                             <Ionicons name="md-star" size={20} color="#1f6cb0" />
-                                                            <Text style={styles.coachResultReviews}>{result.rating}/5 ({result.reviews} reviews)</Text>
+                                                            <Text style={styles.coachResultReviews}>{result.rating}/5 ({result.reviews.length} reviews)</Text>
                                                         </View>
                                                     </View>
                                                     : <View style={styles.coachResult}>
@@ -183,7 +183,7 @@ export default class CoachSearch extends Component {
                                                         </View>
                                                         <View style={[styles.coachResultInline, { marginTop: 8 }]}>
                                                             <Ionicons name="md-star" size={20} color="#1f6cb0" />
-                                                            <Text style={styles.coachResultReviews}>{result.rating}/5 ({result.reviews} reviews)</Text>
+                                                            <Text style={styles.coachResultReviews}>{result.rating}/5 ({result.reviews.length} reviews)</Text>
                                                         </View>
                                                     </View>
                                             }

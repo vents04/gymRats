@@ -306,8 +306,7 @@ router.get("/coach/search", authenticate, async (req, res, next) => {
         if (names && names != "") {
             names = names.split(" ");
             for (let name of names) {
-                users = await DbService.getMany(COLLECTIONS.PERSONAL_TRAINERS, { "$and":[{"$or": [{ firstName: { "$regex": name, "$options": "i" } }, { lastName: { "$regex": name, "$options": "i" } }]}, {status: PERSONAL_TRAINER_STATUSES.ACTIVE}] })
-                
+                users = await DbService.getMany(COLLECTIONS.PERSONAL_TRAINERS, { "$and": [{ "$or": [{ firstName: { "$regex": name, "$options": "i" } }, { lastName: { "$regex": name, "$options": "i" } }] }, { status: PERSONAL_TRAINER_STATUSES.ACTIVE }] })
 
                 for (let i = 0; i < users.length; i++) {
 
@@ -323,20 +322,20 @@ router.get("/coach/search", authenticate, async (req, res, next) => {
                     Object.assign(users[i], { criteriasMet: 0 });
 
                     let check = false;
-                    await checkForDistanceAndReviews(users[i], users[i].location, reviews, req.query.lat, req.query.lng, req.query.maxDistance, req.query.minRating, distanceForCheck).then(function(result){
-                        if(result == -1){
+                    await checkForDistanceAndReviews(users[i], users[i].location, reviews, req.query.lat, req.query.lng, req.query.maxDistance, req.query.minRating, distanceForCheck).then(function (result) {
+                        if (result == -1) {
                             check = true
                         }
                     })
-                    if(check){
+                    if (check) {
                         users.splice(i, 1);
                         i--;
                         continue;
                     }
 
-                    const assignUser = await DbService.getOne(COLLECTIONS.USERS, {_id: users[i].userId})
+                    const assignUser = await DbService.getOne(COLLECTIONS.USERS, { _id: users[i].userId })
                     Object.assign(users[i], { user: assignUser }, { clients: clients.length });
-                    
+
                 }
             }
             quicksort(users, 0, users.length - 1)
@@ -355,20 +354,20 @@ router.get("/coach/search", authenticate, async (req, res, next) => {
                 }
 
                 Object.assign(users[i], { criteriasMet: 0 });
-                
-                let check = false;
-                    await checkForDistanceAndReviews(users[i], users[i].location, reviews, req.query.lat, req.query.lng, req.query.maxDistance, req.query.minRating, distanceForCheck).then(function(result){
-                        if(result == -1){
-                            check = true
-                        }
-                    })
-                    if(check){
-                        users.splice(i, 1);
-                        i--;
-                        continue;
-                    }
 
-                const assignUser = await DbService.getOne(COLLECTIONS.USERS, {_id: users[i].userId})
+                let check = false;
+                await checkForDistanceAndReviews(users[i], users[i].location, reviews, req.query.lat, req.query.lng, req.query.maxDistance, req.query.minRating, distanceForCheck).then(function (result) {
+                    if (result == -1) {
+                        check = true
+                    }
+                })
+                if (check) {
+                    users.splice(i, 1);
+                    i--;
+                    continue;
+                }
+
+                const assignUser = await DbService.getOne(COLLECTIONS.USERS, { _id: users[i].userId })
                 Object.assign(users[i], { user: assignUser }, { clients: clients.length });
             }
             quicksort(users, 0, users.length - 1)
@@ -378,7 +377,7 @@ router.get("/coach/search", authenticate, async (req, res, next) => {
             results: users.slice(0, 50)
         })
     } catch (error) {
-        return next(new ResponseError(error.message || "leternal server error", error.status || HTTP_STATUS_CODES.letERNAL_SERVER_ERROR));
+        return next(new ResponseError(error.message || DEFAULT_ERROR_MESSAGE, error.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
     }
 });
 

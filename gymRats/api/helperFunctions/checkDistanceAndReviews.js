@@ -1,5 +1,9 @@
-async function checkForDistanceAndReviews(trainer, location, reviews, reqLat, reqLng, maxDistance, minRating, distanceForCheck){
-    
+const mongoose = require('mongoose');
+const { COLLECTIONS } = require("../global");
+const DbService = require("../services/db.service");
+
+async function checkForDistanceAndReviews(trainer, location, reviews, reqLat, reqLng, maxDistance, minRating, distanceForCheck) {
+
     let reviewsForPush = [];
     let minRatingCopy = 0;
     let lat1 = location.lat;
@@ -40,6 +44,8 @@ async function checkForDistanceAndReviews(trainer, location, reviews, reqLat, re
         if (relation.personalTrainerId.toString() == trainer._id.toString()) {
             sumOfAllRatings += review.rating;
             counter++;
+            const clientInstance = await DbService.getById(COLLECTIONS.USERS, relation.clientId);
+            review.clientInstance = clientInstance;
             reviewsForPush.push(review);
         }
     }
@@ -53,7 +59,7 @@ async function checkForDistanceAndReviews(trainer, location, reviews, reqLat, re
         }
         trainer.criteriasMet++;
     }
-    Object.assign(trainer, { rating: overallRating}, { reviews: reviewsForPush });
+    Object.assign(trainer, { rating: overallRating }, { reviews: reviewsForPush });
 
 
     if (trainer.distance <= distanceForCheck
