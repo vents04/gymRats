@@ -15,6 +15,7 @@ const { HTTP_STATUS_CODES, COLLECTIONS, DEFAULT_ERROR_MESSAGE, RELATION_STATUSES
 const { itemPostValidation, dailyItemPostValidation, dailyItemUpdateValidation } = require('../validation/hapi');
 const checkCaloriesAndMacros = require('../helperFunctions/checkCaloriesAndMacros');
 const NutritionixService = require('../services/nutritionix.service');
+const { quicksort } = require('../helperFunctions/quickSortForFoods');
 
 router.post('/item', authenticate, async (req, res, next) => {
     const { error } = itemPostValidation(req.body);
@@ -234,35 +235,48 @@ router.get('/day', authenticate, async (req, res, next) => {
 
 router.get("/search/food", async (req, res, next) => {
 
-    // IMPORTANT: DO NOT USE KEYWORDS FOR MATCHING WITH THE USER QUERY. USE ONLY ITEMS' titles //
 
-    if (!req.query.query) {
-        /* 
-        return user's most used items (max 20 items in results) 
-        otherwise if they do not have enough data add the most used and most searched items in the platform
-        */
+    if (!req.query.words) {
         return res.status(HTTP_STATUS_CODES.OK).send({
-            results: await DbService.getManyWithSortAndLimit(COLLECTIONS.CALORIES_COUNTER_ITEMS, {}, { usedTimes: -1, searchedTimes: -1 }, 20)
+            results: await DbService.getManyWithSortAndLimit(COLLECTIONS.CALORIES_COUNTER_ITEMS, {}, { usedTimes: -1, searchedTimes: -1 }, 50)
         })
     }
 
     try {
-        /*
-        first of all loop through the user's most used and add all
-        items matching with their search. Then loop through the most used and most searched items
-        and add such to the results until you fill the max size of 20 results
-        */
+        let words = req.query.words;
+        let sorted = [];
 
-        const results = await DbService.getManyWithSortAndLimit(COLLECTIONS.CALORIES_COUNTER_ITEMS, { keywords: { $all: Object.values(req.query) } }, { usedTimes: -1, searchedTimes: -1 }, 40);
-        for (let result of results) {
-            if (result.userId) {
-                const user = await DbService.getById(COLLECTIONS.USERS, result.userId);
-                result.userInstance = user;
+        if(words && words != ""){
+            words = words.split(" ");
+            for(let word of words){
+                const foods = await DbService.getMany(COLLECTIONS.CALORIES_COUNTER_ITEMS, { keywords: { "$regex": word, "$options": "i" } });
+
+                for(let food of foods){
+                    let shouldContinue = false;
+
+                    for (let i = 0; j < sorted.length; j++) {
+                        if (sorted[i].title == food.title) {
+                            sorted[i].timesFound++;
+                            shouldContinue = true;
+                        }
+                        if (sorted[i].userId) {
+                            const user = await DbService.getById(COLLECTIONS.USERS, sorted[i].userId);
+                            sorted[i].userInstance = user;
+                        }
+                    }
+                    if (shouldContinue) continue;
+
+                    Object.assign(food, { timesFound: 1 });
+                    food.searchedTimes++;
+                    sorted.push(food);
+                }
             }
+
+            quicksort(sorted, 0, sorted.length - 1);
         }
 
         return res.status(HTTP_STATUS_CODES.OK).send({
-            results
+            results: sorted.splice(0, 50)
         })
     } catch (err) {
         return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));

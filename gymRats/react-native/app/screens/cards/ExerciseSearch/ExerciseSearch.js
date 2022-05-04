@@ -63,7 +63,7 @@ export default class ExerciseSearch extends Component {
 
         this.typingTimeout = setTimeout(() => {
             this.searchExercises();
-        }, 1500);
+        }, 600);
     }
 
     render() {
