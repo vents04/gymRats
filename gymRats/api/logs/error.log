@@ -7888,3 +7888,11 @@
 {"level":"error","message":"Invalid collection"}
 {"level":"error","message":"Invalid collection"}
 {"level":"error","message":"Invalid collection"}
+{"level":"error","message":"DbService is not defined"}
+{"level":"error","message":"DbService is not defined"}
+{"level":"error","message":"DbService is not defined"}
+{"level":"error","message":"DbService is not defined"}
+{"level":"error","message":"DbService is not defined"}
+{"level":"error","message":"COLLECTIONS is not defined"}
+{"level":"error","message":"mongoose is not defined"}
+{"level":"error","message":"mongoose is not defined"}
