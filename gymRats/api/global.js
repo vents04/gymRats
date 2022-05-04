@@ -73,11 +73,11 @@ const CARD_COLLECTIONS = [
     COLLECTIONS.CALORIES_COUNTER_DAYS
 ]
 
-const DB_URI = "mongodb://127.0.0.1:27017/GYM";
+const DB_URI = "mongodb://127.0.0.1:27017/FOUNDATIONAL";
 
 const JWT_SECRET = "lj1ds21idpk2]312d's[23123q";
 
-const PORT = 4056;
+const PORT = 4057;
 
 const NODE_ENVIRONMENTS = {
     DEVELOPMENT: "DEVELOPMENT",
