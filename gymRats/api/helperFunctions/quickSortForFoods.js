@@ -5,16 +5,16 @@ function swap(arr, i, j) {
 }
 function partition(arr, low, high, pivot) {
     let i = (low - 1);
- 
+
     for (let j = low; j <= high - 1; j++) {
-        if(arr[j].usedTimes > pivot.usedTimes) {
+        if (arr[j].usedTimes > pivot.usedTimes) {
             i++;
             swap(arr, i, j);
-        }else if (arr[j].usedTimes == pivot.usedTimes) {
+        } else if (arr[j].usedTimes == pivot.usedTimes) {
             if (arr[j].timesFound > pivot.timesFound) {
                 i++;
                 swap(arr, i, j);
-            }else if(arr[j].timesFound == pivot.timesFound){
+            } else if (arr[j].timesFound == pivot.timesFound) {
                 if (arr[j].keywords.length < pivot.keywords.length) {
                     i++;
                     swap(arr, i, j);

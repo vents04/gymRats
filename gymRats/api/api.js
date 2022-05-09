@@ -6,11 +6,9 @@ const mongo = require("./db/mongo");
 const indexRoute = require('./routes/index.route');
 const errorHandler = require('./errors/errorHandler');
 
-const { PORT, COLLECTIONS, PERSONAL_TRAINER_STATUSES } = require('./global');
-const DbService = require('./services/db.service');
+const { PORT, HTTP_STATUS_CODES } = require('./global');
 const MessagingService = require('./services/messaging.service');
-const mongoose = require('mongoose');
-const Exercise = require('./db/models/logbook/exercise.model');
+const ResponseError = require('./errors/responseError');
 const io = require("socket.io")(httpServer, { cors: { origin: "*" } });
 
 app

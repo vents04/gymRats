@@ -234,8 +234,6 @@ router.get('/day', authenticate, async (req, res, next) => {
 });
 
 router.get("/search/food", async (req, res, next) => {
-
-
     if (!req.query.words) {
         return res.status(HTTP_STATUS_CODES.OK).send({
             results: await DbService.getManyWithSortAndLimit(COLLECTIONS.CALORIES_COUNTER_ITEMS, {}, { usedTimes: -1, searchedTimes: -1 }, 50)
@@ -246,15 +244,19 @@ router.get("/search/food", async (req, res, next) => {
         let words = req.query.words;
         let sorted = [];
 
-        if(words && words != ""){
+        if (words && words != "") {
             words = words.split(" ");
-            for(let word of words){
+            for (let word of words) {
                 const foods = await DbService.getMany(COLLECTIONS.CALORIES_COUNTER_ITEMS, { keywords: { "$regex": word, "$options": "i" } });
 
-                for(let food of foods){
+                for (let food of foods) {
                     let shouldContinue = false;
 
-                    for (let i = 0; j < sorted.length; j++) {
+                    if (food.title == "กล้วยตากเคลือบครีมสตอเบอรี่") {
+                        console.log(food);
+                    }
+
+                    for (let i = 0; i < sorted.length; i++) {
                         if (sorted[i].title == food.title) {
                             sorted[i].timesFound++;
                             shouldContinue = true;
