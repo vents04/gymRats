@@ -7899,3 +7899,15 @@
 {"level":"error","message":"j is not defined"}
 {"level":"error","message":"User with this email already exists"}
 {"level":"error","message":"Password should have at least 8 characters"}
+{"level":"error","message":"user.lastPasswordReset.getTime is not a function"}
+{"level":"error","message":"user.lastPasswordReset.getTime is not a function"}
+{"level":"error","message":"Invalid barcode"}
+{"level":"error","message":"Invalid barcode"}
+{"level":"error","message":"Invalid barcode"}
+{"level":"error","message":"Invalid barcode"}
+{"level":"error","message":"Invalid barcode"}
+{"level":"error","message":"Invalid barcode"}
+{"level":"error","message":"Invalid barcode"}
+{"level":"error","message":"Invalid barcode"}
+{"level":"error","message":"user.lastPasswordReset.getTime is not a function"}
+{"level":"error","message":"user.lastPasswordReset.getTime is not a function"}
