@@ -91,7 +91,7 @@ router.post("/validate-token", async (req, res, next) => {
             user = await DbService.getById(COLLECTIONS.USERS, verified._id);
             if (!user) valid = false;
             else {
-                if (verified.iat <= user.lastPasswordReset.getTime() / 1000) valid = false;
+                if (verified.iat <= new Date(user.lastPasswordReset).getTime() / 1000) valid = false;
             }
         }
 
