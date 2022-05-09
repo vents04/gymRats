@@ -10,8 +10,6 @@ import { useFonts } from 'expo-font';
 import * as Localization from 'expo-localization';
 import i18n from 'i18n-js';
 import translations from './translations';
-import { useEffect } from 'react';
-import _Keywords from './app/screens/_Keywords/_Keywords';
 
 
 const Stack = createStackNavigator();
@@ -38,12 +36,7 @@ const App = () => {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="_Keywords">
-        <Stack.Screen
-          name="_Keywords"
-          component={_Keywords}
-          options={{ headerShown: false }}
-        />
+      <Stack.Navigator initialRouteName="Splash">
         <Stack.Screen
           name="Splash"
           component={Splash}
