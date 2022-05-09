@@ -85,6 +85,7 @@
     }
 
     .home-container-mockup{
+        max-height: 400px;
         max-width: 90%;
     }
     
@@ -115,8 +116,7 @@
     }
     
     .page-container{
-        padding-left: 0px;
-        padding-right: 0px;
+        padding: 24px 0px
     }
 }
 
