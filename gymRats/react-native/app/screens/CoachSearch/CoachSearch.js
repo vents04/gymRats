@@ -40,7 +40,14 @@ export default class CoachSearch extends Component {
     }
 
     async componentDidMount() {
+        await this.getLocationByIp();
         this.searchCoaches();
+    }
+
+    getLocationByIp = async () => {
+        const geolocationByIp = await axios.get('https://geolocation-db.com/json/');
+        this.setState({ lat: geolocationByIp.data.latitude, lng: geolocationByIp.data.longitude });
+        return;
     }
 
     searchCoaches = () => {
