@@ -7897,3 +7897,5 @@
 {"level":"error","message":"mongoose is not defined"}
 {"level":"error","message":"mongoose is not defined"}
 {"level":"error","message":"j is not defined"}
+{"level":"error","message":"User with this email already exists"}
+{"level":"error","message":"Password should have at least 8 characters"}
