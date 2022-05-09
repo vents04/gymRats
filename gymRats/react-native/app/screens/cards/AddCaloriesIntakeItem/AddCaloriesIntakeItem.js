@@ -107,7 +107,8 @@ export default class AddCaloriesIntakeItem extends Component {
                     </View>
                     <ScrollView contentContainerStyle={[globalStyles.fillEmptySpace, {
                         paddingBottom: 150
-                    }]}>
+                    }]}
+                        showsVerticalScrollIndicator={false}>
                         <View style={styles.foodTitleContainer}>
                             <Text style={styles.foodTitle}>{this.props.route.params.item.title}</Text>
                             {
