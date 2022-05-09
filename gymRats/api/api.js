@@ -5,10 +5,12 @@ const cors = require('cors');
 const mongo = require("./db/mongo");
 const indexRoute = require('./routes/index.route');
 const errorHandler = require('./errors/errorHandler');
+const mongoose = require('mongoose');
 
-const { PORT, HTTP_STATUS_CODES } = require('./global');
+const { PORT, HTTP_STATUS_CODES, COLLECTIONS, FOOD_TYPES } = require('./global');
 const MessagingService = require('./services/messaging.service');
 const ResponseError = require('./errors/responseError');
+const DbService = require('./services/db.service');
 const io = require("socket.io")(httpServer, { cors: { origin: "*" } });
 
 app
@@ -21,6 +23,10 @@ app
     .use(errorHandler);
 
 mongo.connect();
+
+(async function () {
+
+})()
 
 io.on("connection", (socket) => {
     socket.on("join-chat", (payload) => {

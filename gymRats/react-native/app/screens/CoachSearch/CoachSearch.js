@@ -202,7 +202,6 @@ export default class CoachSearch extends Component {
                     <ScrollView style={styles.cardsContainer}>
                         <TouchableOpacity onPress={() => {
                             this.filterSheet.current.close();
-
                         }}>
                             <Text style={styles.sheetSectionTitle}>Minimum rating is {this.state.minRating}/5</Text>
                             <Slider
@@ -270,7 +269,7 @@ export default class CoachSearch extends Component {
                                     marginTop: 16
                                 }]} onPress={() => {
                                     this.filterSheet.current.close();
-                                    this.setState({ hasChanges: false });
+                                    this.setState({ hasChanges: false, showError: false, error: "" });
                                     this.searchCoaches();
                                 }}>
                                     <Text style={globalStyles.authPageActionButtonText}>Apply filters</Text>

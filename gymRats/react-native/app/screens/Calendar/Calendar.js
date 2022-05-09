@@ -41,6 +41,7 @@ export default class Calendar extends Component {
     }
 
     onFocusFunction = () => {
+        console.log(this.props.route)
         if (this.props && this.props.route && this.props.route.params && this.props.route.params.reloadDate) {
             this.setState({
                 selectedDate: this.props.route.params.date,
@@ -113,7 +114,7 @@ export default class Calendar extends Component {
                 <LogoBar />
                 {
                     this.state.selectedDate
-                        ? <View style={globalStyles.fillEmptySpace}>
+                        ? <View style={[globalStyles.fillEmptySpace, { flexShrink: 1 }]}>
                             <View style={styles.calendarControllersContainer}>
                                 <TouchableWithoutFeedback onPress={() => { this.incrementDate(-1) }}>
                                     <View style={styles.calendarController}>
@@ -139,7 +140,7 @@ export default class Calendar extends Component {
                             </View>
                             <View>
                                 <TouchableOpacity style={[globalStyles.authPageActionButton, {
-                                    marginBottom: 16
+                                    marginBottom: 16,
                                 }]} onPress={() => {
                                     this.bottomSheet.current.show()
                                 }}>
@@ -151,9 +152,9 @@ export default class Calendar extends Component {
                                     this.state.dates.map((date) =>
                                         date.date.getTime() == this.state.selectedDate.getTime()
                                             ? date.cards.length > 0
-                                                ? date.cards.map((card) =>
+                                                ? date.cards.map((card, index) =>
                                                     card.card == "dailyWeights"
-                                                        ? <WeightTrackerCard key={`${date}${card._id}`} actionButtonFunction={() => {
+                                                        ? <WeightTrackerCard key={"_" + index} actionButtonFunction={() => {
                                                             this.props.navigation.navigate("WeightTracker", {
                                                                 date: this.state.selectedDate,
                                                                 timezoneOffset: this.state.timezoneOffset,
@@ -163,7 +164,7 @@ export default class Calendar extends Component {
                                                             });
                                                         }} data={card.data} rerender={this.reloadDateAfterDelete} date={this.state.selectedDate} {...this.props} />
                                                         : card.card == 'workoutSessions'
-                                                            ? <LogbookCard key={`${date}${card._id}`} actionButtonFunction={() => {
+                                                            ? <LogbookCard key={"_" + index} actionButtonFunction={() => {
                                                                 this.props.navigation.navigate("Logbook", {
                                                                     date: this.state.selectedDate,
                                                                     timezoneOffset: this.state.timezoneOffset,
@@ -171,7 +172,7 @@ export default class Calendar extends Component {
                                                                 });
                                                             }} data={card.data} rerender={this.reloadDateAfterDelete} date={this.state.selectedDate} {...this.props} />
                                                             : card.card == 'caloriesCounterDays'
-                                                                ? <CaloriesIntakeCard key={`${date}${card._id}`} actionButtonFunction={() => {
+                                                                ? <CaloriesIntakeCard key={"_" + index} actionButtonFunction={() => {
                                                                     this.props.navigation.navigate("CaloriesIntake", {
                                                                         date: this.state.selectedDate,
                                                                         timezoneOffset: this.state.timezoneOffset,
