@@ -17,6 +17,10 @@ export default class SearchCaloriesIntake extends Component {
     constructor(props) {
         super(props);
 
+        this.query = "";
+
+        this.typingTimeout = null
+
         this.state = {
             query: "",
             queryResults: [],
@@ -40,7 +44,7 @@ export default class SearchCaloriesIntake extends Component {
     }
 
     searchFood = () => {
-        ApiRequests.get(`calories-counter/search/food?query=${this.state.query.toLowerCase()}`, {}, true).then((response) => {
+        ApiRequests.get(`calories-counter/search/food?query=${this.query.toLowerCase()}`, {}, true).then((response) => {
             if (response.data.results) this.setState({ queryResults: response.data.results });
         }).catch((error) => {
             if (error.response) {
@@ -55,6 +59,18 @@ export default class SearchCaloriesIntake extends Component {
                 ApiRequests.showRequestSettingError();
             }
         });
+    }
+
+    changeQuery = (value) => {
+        this.query = value;
+
+        if (this.typingTimeout) {
+            clearTimeout(this.typingTimeout);
+        }
+
+        this.typingTimeout = setTimeout(() => {
+            this.searchFood();
+        }, 600);
     }
 
     render() {
@@ -95,16 +111,11 @@ export default class SearchCaloriesIntake extends Component {
                         </TouchableOpacity>
                     </View>
                     <TextInput
-                        value={this.state.query}
                         style={[globalStyles.authPageInput, {
                             marginTop: 20
                         }]}
                         placeholder="Type your search here"
-                        onChangeText={(val) => {
-                            this.setState({ query: val, showError: false }, () => {
-                                this.searchFood();
-                            })
-                        }} />
+                        onChangeText={this.changeQuery} />
                     <View style={styles.searchResultsContainer}>
                         <ScrollView contentContainerStyle={globalStyles.fillEmptySpace}>
                             {
