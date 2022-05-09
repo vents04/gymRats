@@ -250,6 +250,7 @@ router.get("/search/food", async (req, res, next) => {
                 const foods = await DbService.getMany(COLLECTIONS.CALORIES_COUNTER_ITEMS, { keywords: { "$regex": word, "$options": "i" } });
 
                 for (let food of foods) {
+
                     let shouldContinue = false;
 
                     for (let i = 0; i < sorted.length; i++) {

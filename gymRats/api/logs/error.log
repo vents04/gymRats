@@ -7911,3 +7911,6 @@
 {"level":"error","message":"Invalid barcode"}
 {"level":"error","message":"user.lastPasswordReset.getTime is not a function"}
 {"level":"error","message":"user.lastPasswordReset.getTime is not a function"}
+{"level":"error","message":"We cannot search for max distance when we don't know your location"}
+{"level":"error","message":"We cannot search for max distance when we don't know your location"}
+{"level":"error","message":"We cannot search for max distance when we don't know your location"}

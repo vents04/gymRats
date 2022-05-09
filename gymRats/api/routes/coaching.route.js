@@ -290,7 +290,7 @@ router.get("/coach/search", authenticate, async (req, res, next) => {
         })
     }
 
-    if ((!req.query.lat || !req.query.lng) && req.query.maxDistance) {
+    if (req.query.maxDistance && (req.query.lat == "null" || req.query.lng == "null")) {
         return next(new ResponseError("We cannot search for max distance when we don't know your location", HTTP_STATUS_CODES.BAD_REQUEST));
     }
 

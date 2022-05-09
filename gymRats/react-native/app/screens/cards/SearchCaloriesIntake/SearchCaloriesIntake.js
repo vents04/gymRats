@@ -44,7 +44,7 @@ export default class SearchCaloriesIntake extends Component {
     }
 
     searchFood = () => {
-        ApiRequests.get(`calories-counter/search/food?query=${this.query.toLowerCase()}`, {}, true).then((response) => {
+        ApiRequests.get(`calories-counter/search/food?words=${this.query.toLowerCase()}`, {}, true).then((response) => {
             if (response.data.results) this.setState({ queryResults: response.data.results });
         }).catch((error) => {
             if (error.response) {
