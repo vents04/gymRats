@@ -252,10 +252,6 @@ router.get("/search/food", async (req, res, next) => {
                 for (let food of foods) {
                     let shouldContinue = false;
 
-                    if (food.title == "กล้วยตากเคลือบครีมสตอเบอรี่") {
-                        console.log(food);
-                    }
-
                     for (let i = 0; i < sorted.length; i++) {
                         if (sorted[i].title == food.title) {
                             sorted[i].timesFound++;
