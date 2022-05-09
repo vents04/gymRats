@@ -17,7 +17,7 @@ const DATABASE_MODELS = {
     REVIEW: "Review",
     CHAT: "Chat",
     MESSAGE: "Message",
-    CONTENT: "Content"
+    CONTENT: "Content",
 }
 
 const COLLECTIONS = {
@@ -39,6 +39,9 @@ const COLLECTIONS = {
     CHATS: "chats",
     MESSAGES: "messages",
     CONTENTS: "contents",
+    VALUES_MAPS: "valuesMaps",
+    NEW_FOODS: "newFoods",
+    FINAL_FOODS: "finalFoods",
 }
 
 const PERSONAL_TRAINER_STATUSES = {
@@ -73,7 +76,7 @@ const CARD_COLLECTIONS = [
     COLLECTIONS.CALORIES_COUNTER_DAYS
 ]
 
-const DB_URI = "mongodb://127.0.0.1:27017/FOUNDATIONAL";
+const DB_URI = "mongodb://127.0.0.1:27017/GYM";
 
 const JWT_SECRET = "lj1ds21idpk2]312d's[23123q";
 
@@ -149,6 +152,12 @@ const SUGGESTIONS_STATUSES = {
     ANSWERED: "ANSWERED"
 }
 
+const FOOD_TYPES = {
+    FOUNDATIONAL: "FOUNDATIONAL",
+    BRANDED: "BRANDED",
+    USER_ADDED: "USER_ADDED",
+}
+
 module.exports = {
     DATABASE_MODELS: DATABASE_MODELS,
     DB_URI: DB_URI,
@@ -174,5 +183,6 @@ module.exports = {
     CHAT_STATUSES: CHAT_STATUSES,
     CONTENT_VISIBILITY_SCOPES: CONTENT_VISIBILITY_SCOPES,
     DEFAULT_ERROR_MESSAGE: DEFAULT_ERROR_MESSAGE,
-    SUGGESTIONS_STATUSES: SUGGESTIONS_STATUSES
+    SUGGESTIONS_STATUSES: SUGGESTIONS_STATUSES,
+    FOOD_TYPES: FOOD_TYPES
 }

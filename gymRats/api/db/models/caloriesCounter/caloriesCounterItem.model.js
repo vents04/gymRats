@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { DATABASE_MODELS, CALORIES_COUNTER_UNITS } = require('../../../global');
+const { DATABASE_MODELS, CALORIES_COUNTER_UNITS, FOOD_TYPES } = require('../../../global');
 
 // Calories and macros are per one unit //
 
@@ -61,6 +61,11 @@ const caloriesCounterItem = mongoose.Schema({
     createdDt: {
         type: Number,
         default: Date.now
+    },
+    foodType: {
+        type: String,
+        enum: Object.values(FOOD_TYPES),
+        default: FOOD_TYPES.USER_ADDED
     }
 });
 
