@@ -39,9 +39,6 @@ const COLLECTIONS = {
     CHATS: "chats",
     MESSAGES: "messages",
     CONTENTS: "contents",
-    VALUES_MAPS: "valuesMaps",
-    NEW_FOODS: "newFoods",
-    FINAL_FOODS: "finalFoods",
 }
 
 const PERSONAL_TRAINER_STATUSES = {
