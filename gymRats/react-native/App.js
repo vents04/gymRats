@@ -1,7 +1,11 @@
 import 'react-native-gesture-handler';
-import React from 'react';
+import React, { useRef, useState, useEffect } from 'react';
+import { default as AsyncStorage } from '@react-native-async-storage/async-storage';
+import { AUTHENTICATION_TOKEN_KEY } from './global';
+import { AppState } from 'react-native';
+import ApiRequests from "./app/classes/ApiRequests";
 
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import Splash from './app/screens/Splash/Splash';
@@ -11,10 +15,33 @@ import * as Localization from 'expo-localization';
 import i18n from 'i18n-js';
 import translations from './translations';
 
-
 const Stack = createStackNavigator();
 
 const App = () => {
+  useEffect(() => {
+    const subscription = AppState.addEventListener("change", async nextAppState => {
+      if (nextAppState == 'background') {
+        // publish analytics
+        const navAnalytics = await AsyncStorage.getItem('@gymRats:navAnalytics');
+        if (navAnalytics) {
+          const navigationAnalytics = JSON.parse(navAnalytics);
+          ApiRequests.post("analytics/navigation", {}, { navigationAnalytics }, false).then(() => {
+            AsyncStorage.setItem('@gymRats:navAnalytics', "[]");
+          }).catch((error) => {
+            throw new Error(error);
+          })
+        }
+      }
+    });
+
+    return () => {
+      subscription.remove();
+    };
+  }, []);
+
+  const navigationRef = useNavigationContainerRef();
+  const routeNameRef = useRef();
+  const [screenOpenDt, setScreenOpenDt] = useState(new Date().getTime());
 
   i18n.defaultLocale = "en";
   i18n.translations = translations;
@@ -35,7 +62,45 @@ const App = () => {
   }
 
   return (
-    <NavigationContainer>
+    <NavigationContainer
+      ref={navigationRef}
+      onReady={() => {
+        routeNameRef.current = navigationRef.getCurrentRoute().name;
+      }}
+      onStateChange={async () => {
+        const previousRouteName = routeNameRef.current;
+        const currentRouteName = navigationRef.getCurrentRoute().name;
+
+        if (previousRouteName !== currentRouteName) {
+          // The line below uses the expo-firebase-analytics tracker
+          // https://docs.expo.io/versions/latest/sdk/firebase-analytics/
+          // Change this line to use another Mobile analytics SDK
+          if (previousRouteName != "Splash") {
+            const previousScreenData = {
+              name: previousRouteName,
+              time: new Date().getTime() - screenOpenDt,
+              toDt: new Date().getTime(),
+              token: null
+            }
+            let currentNavAnalytics = await AsyncStorage.getItem('@gymRats:navAnalytics');
+            //add previousScreenData to currentNavAnalytics
+            if (currentNavAnalytics) {
+              currentNavAnalytics = JSON.parse(currentNavAnalytics);
+              currentNavAnalytics.push(previousScreenData);
+            } else {
+              currentNavAnalytics = [previousScreenData];
+            }
+            let token = await AsyncStorage.getItem(AUTHENTICATION_TOKEN_KEY);
+            if (token) previousScreenData.token = token;
+            console.log(currentNavAnalytics)
+            await AsyncStorage.setItem('@gymRats:navAnalytics', JSON.stringify(currentNavAnalytics));
+          }
+          setScreenOpenDt(new Date().getTime());
+        }
+
+        // Save the current route name for later comparison
+        routeNameRef.current = currentRouteName;
+      }}>
       <Stack.Navigator initialRouteName="Splash">
         <Stack.Screen
           name="Splash"

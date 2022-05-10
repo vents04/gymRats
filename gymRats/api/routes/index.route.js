@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
+const analyticsRoute = require("./analytics.route");
 const userRoute = require("./user.route");
 const caloriesCounterRoute = require("./caloriesCounter.route");
 const weightTrackerRoute = require("./weightTracker.route");
@@ -10,6 +11,7 @@ const coachingRoute = require("./coaching.route");
 const googleRoute = require("./google.route");
 const chatRoute = require("./chat.route");
 
+router.use("/analytics", analyticsRoute);
 router.use("/user", userRoute);
 router.use("/calories-counter", caloriesCounterRoute);
 router.use("/weight-tracker", weightTrackerRoute);
