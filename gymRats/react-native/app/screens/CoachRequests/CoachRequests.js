@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { ScrollView, Text, View } from 'react-native'
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native'
 
 import ApiRequests from '../../classes/ApiRequests';
 
@@ -31,6 +31,7 @@ export default class CoachRequests extends Component {
         ApiRequests.get("coaching/requests", {}, true).then((response) => {
             this.setState({ relations: response.data.relations });
         }).catch((error) => {
+            console.log("ABE TKA e", error.response.data)
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
                     this.setState({ showError: true, error: error.response.data });
@@ -85,7 +86,6 @@ export default class CoachRequests extends Component {
                     {
                         this.state.relations?.length > 0
                             ? <>
-                                <Text style={[globalStyles.notation, { marginTop: 24 }]}>Users that have requested to be coached by you:</Text>
                                 <ScrollView style={{ marginTop: 14 }}>
                                     {
                                         this.state.relations.map((relation, index) =>

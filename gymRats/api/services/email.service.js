@@ -4,10 +4,10 @@ const { SENDGRID_API_KEY } = require("../global");
 sendgridMail.setApiKey(SENDGRID_API_KEY);
 
 class EmailService {
-    static send = (recipient, subject, message, html) => {
+    static send = (subject, message, html) => {
         return new Promise((resolve, reject) => {
             const data = {
-                to: recipient,
+                to: "office@uploy.app",
                 from: "noreply@uploy.app",
                 subject: subject,
                 text: message,

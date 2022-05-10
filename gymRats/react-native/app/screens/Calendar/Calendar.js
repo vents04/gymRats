@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { ScrollView, Text, TouchableHighlight, TouchableNativeFeedback, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
+import { Dimensions, ScrollView, Text, TouchableHighlight, TouchableNativeFeedback, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import BottomSheet from "react-native-gesture-bottom-sheet";
 
 import ApiRequests from '../../classes/ApiRequests';
@@ -41,7 +41,6 @@ export default class Calendar extends Component {
     }
 
     onFocusFunction = () => {
-        console.log(this.props.route)
         if (this.props && this.props.route && this.props.route.params && this.props.route.params.reloadDate) {
             this.setState({
                 selectedDate: this.props.route.params.date,
@@ -109,7 +108,14 @@ export default class Calendar extends Component {
     }
 
     render() {
-        return <View style={globalStyles.safeAreaView}>
+        return <View style={globalStyles.safeAreaView}
+            onTouchStart={e => this.touchX = e.nativeEvent.pageX}
+            onTouchEnd={e => {
+                if (this.touchX - e.nativeEvent.pageX > 30)
+                    this.incrementDate(1);
+                else if (this.touchX - e.nativeEvent.pageX < -30)
+                    this.incrementDate(-1)
+            }} >
             <View style={globalStyles.pageContainer}>
                 <LogoBar />
                 {
@@ -147,7 +153,8 @@ export default class Calendar extends Component {
                                     <Text style={globalStyles.authPageActionButtonText}>{i18n.t('screens')['calendar']['addData']}</Text>
                                 </TouchableOpacity>
                             </View>
-                            <ScrollView contentContainerStyle={globalStyles.fillEmptySpace}>
+                            <ScrollView
+                                contentContainerStyle={globalStyles.fillEmptySpace}>
                                 {
                                     this.state.dates.map((date) =>
                                         date.date.getTime() == this.state.selectedDate.getTime()

@@ -41,7 +41,7 @@ async function checkForDistanceAndReviews(trainer, location, reviews, reqLat, re
     let sumOfAllRatings = 0, counter = 0, overallRating = 0;
     for (let review of reviews) {
         const relation = await DbService.getOne(COLLECTIONS.RELATIONS, { "$or": [{ _id: review.relationId }, { _id: mongoose.Types.ObjectId(review.relationId) }] });
-        if (relation.personalTrainerId.toString() == trainer._id.toString()) {
+        if (relation && relation.personalTrainerId.toString() == trainer._id.toString()) {
             sumOfAllRatings += review.rating;
             counter++;
             const clientInstance = await DbService.getById(COLLECTIONS.USERS, relation.clientId);
@@ -51,6 +51,8 @@ async function checkForDistanceAndReviews(trainer, location, reviews, reqLat, re
     }
     if (counter != 0) {
         overallRating = Number.parseFloat(sumOfAllRatings / counter).toFixed(1);
+    } else {
+        overallRating = 3.0;
     }
     if (minRating) {
         minRatingCopy = minRating;

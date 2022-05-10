@@ -7916,3 +7916,24 @@
 {"level":"error","message":"We cannot search for max distance when we don't know your location"}
 {"level":"error","message":"We cannot search for max distance when we don't know your location"}
 {"level":"error","message":"We cannot search for max distance when we don't know your location"}
+{"level":"error","message":"Cannot read properties of null (reading 'userId')"}
+{"level":"error","message":"Cannot read properties of null (reading 'userId')"}
+{"level":"error","message":"Cannot read properties of null (reading 'userId')"}
+{"level":"error","message":"Cannot read properties of null (reading 'userId')"}
+{"level":"error","message":"Cannot read properties of null (reading 'userId')"}
+{"level":"error","message":"Cannot read properties of null (reading 'userId')"}
+{"level":"error","message":"Cannot read properties of null (reading 'personalTrainerId')"}
+{"level":"error","message":"Cannot read properties of null (reading 'personalTrainerId')"}
+{"level":"error","message":"Cannot read properties of null (reading 'personalTrainerId')"}
+{"level":"error","message":"Cannot read properties of null (reading 'personalTrainerId')"}
+{"level":"error","message":"Cannot read properties of null (reading 'personalTrainerId')"}
+{"level":"error","message":"Invalid password"}
+{"level":"error","message":"There is no active relation between these people"}
+{"level":"error","message":"Cannot perform this status update"}
+{"level":"error","message":"Cannot perform this status update"}
+{"level":"error","message":"Cannot perform this status update"}
+{"level":"error","message":"There is no active relation between these people"}
+{"level":"error","message":"There is no active relation between these people"}
+{"level":"error","message":"There is no active relation between these people"}
+{"level":"error","message":"There is no active relation between these people"}
+{"level":"error","message":"There is no active relation between these people"}

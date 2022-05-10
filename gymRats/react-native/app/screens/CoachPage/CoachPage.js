@@ -24,7 +24,7 @@ export default class CoachPage extends Component {
     }
 
     componentDidMount() {
-        console.log(this.props)
+        console.log(this.props);
     }
 
     sendRequest = () => {
@@ -99,10 +99,14 @@ export default class CoachPage extends Component {
                                                 <Text style={styles.statValue}>{this.props.route.params.coach.rating}</Text>
                                                 <Text style={styles.statTitle}>rating</Text>
                                             </View>
+                                            {
+                                                /*
                                             <View style={styles.statContainer}>
                                                 <Text style={styles.statValue}>{this.props.route.params.coach.experience ?? "-"}</Text>
                                                 <Text style={styles.statTitle}>experience</Text>
                                             </View>
+                                                */
+                                            }
                                         </View>
                                         <TouchableOpacity onPress={() => {
                                             Linking.openURL(`https://google.com/maps/@${this.props.route.params.coach.location.lat},${this.props.route.params.coach.location.lng},11z`)
@@ -112,7 +116,7 @@ export default class CoachPage extends Component {
                                     </View>
                                     {
                                         this.props.route.params.coach.prefersOfflineCoaching
-                                            ? <Text style={globalStyles.important}>This coach prefers to work with clients in person (offline).</Text>
+                                            ? <Text style={[globalStyles.important, { marginBottom: 32 }]}>This coach prefers to work with clients in person (offline).</Text>
                                             : null
                                     }
                                     <TouchableOpacity style={globalStyles.authPageActionButton} onPress={() => {

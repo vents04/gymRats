@@ -9,28 +9,15 @@ const MessagingService = {
     createChat: (personalTrainerId, clientId) => {
         return new Promise(async (resolve, reject) => {
             try {
-                const client = await DbService.getById(COLLECTIONS.USERS, clientId);
-                const trainer = await DbService.getById(COLLECTIONS.PERSONAL_TRAINERS, personalTrainerId);
-
-                if (trainer && client) {
-                    const relation = await DbService.getOne(COLLECTIONS.RELATIONS, { personalTrainerId: mongoose.Types.ObjectId(trainer._id), clientId: mongoose.Types.ObjectId(client._id) });
-                    if (relation && relation.status == RELATION_STATUSES.ACTIVE) {
-                        const chat = await DbService.getOne(COLLECTIONS.CHATS, { personalTrainerId: mongoose.Types.ObjectId(trainer._id), clientId: mongoose.Types.ObjectId(client._id) });
-                        if (!chat) {
-                            const chat = new Chat({
-                                personalTrainerId: mongoose.Types.ObjectId(trainer._id),
-                                clientId: mongoose.Types.ObjectId(client._id)
-                            })
-
-                            await DbService.create(COLLECTIONS.CHATS, chat);
-                            resolve();
-                        }
-                        reject(new ResponseError("There is already a chat between these people", HTTP_STATUS_CODES.BAD_REQUEST));
-                    }
-                    reject(new ResponseError("There is no active relation between these people", HTTP_STATUS_CODES.CONFLICT));
+                const chat = await DbService.getOne(COLLECTIONS.CHATS, { personalTrainerId: mongoose.Types.ObjectId(personalTrainerId), clientId: mongoose.Types.ObjectId(clientId) });
+                if (!chat) {
+                    const chat = new Chat({
+                        personalTrainerId: mongoose.Types.ObjectId(personalTrainerId),
+                        clientId: mongoose.Types.ObjectId(clientId)
+                    })
+                    await DbService.create(COLLECTIONS.CHATS, chat);
                 }
-                reject(new ResponseError("Client or trainer not found", HTTP_STATUS_CODES.NOT_FOUND));
-
+                resolve();
             } catch (err) {
                 reject(new ResponseError("Internal server error", err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
             }

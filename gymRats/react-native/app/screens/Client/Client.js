@@ -156,7 +156,7 @@ export default class Client extends Component {
                                         }
                                     </Text>
                                     <TouchableWithoutFeedback onPress={() => { this.incrementDate(1) }}>
-                                        <View style={styles.calendarController}>
+                                        <View style={[styles.calendarController, { justifyContent: 'flex-end' }]}>
                                             <Text style={styles.calendarControllerText}>Next</Text>
                                             <Entypo name="chevron-right" style={{ marginLeft: 5 }} size={14} color="#999" />
                                         </View>

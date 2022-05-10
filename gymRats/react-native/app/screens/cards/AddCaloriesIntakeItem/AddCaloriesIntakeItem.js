@@ -27,7 +27,6 @@ export default class AddCaloriesIntakeItem extends Component {
     }
 
     componentDidMount() {
-        console.log(this.props.route.params.intent == CALORIES_COUNTER_SCREEN_INTENTS.ADD)
         if (this.props.route.params.intent == CALORIES_COUNTER_SCREEN_INTENTS.UPDATE)
             this.setState({ amount: parseInt(this.props.route.params.amount) });
     }

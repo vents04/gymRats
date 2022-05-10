@@ -13,7 +13,6 @@ export default StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        flex: 3,
         width: "100%",
         marginTop: 32
     },

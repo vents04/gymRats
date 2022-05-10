@@ -145,16 +145,16 @@ export default class Coaching extends Component {
                     {
                         this.state.coaching &&
                             this.state.coaching.myClients.requests.length > 0
-                            ? <TouchableOpacity onPress={() => {
+                            ? <TouchableOpacity style={globalStyles.topbarIconContainer} onPress={() => {
                                 this.props.navigation.navigate("CoachRequests", { relations: this.state.relations });
                             }}>
-                                <View style={globalStyles.topbarIconContainer}>
+                                <View>
                                     <MaterialCommunityIcons name="inbox" size={30} color="#1f6cb0" />
                                     <Badge
                                         status="error"
                                         value={this.state.coaching.myClients.requests.length}
                                         textStyle={{ fontFamily: "MainMedium" }}
-                                        containerStyle={{ position: 'absolute', top: 8, right: 8, height: 12, width: 12 }}
+                                        containerStyle={{ position: 'absolute', left: 20, height: 12, width: 12 }}
                                     />
                                 </View>
                             </TouchableOpacity>

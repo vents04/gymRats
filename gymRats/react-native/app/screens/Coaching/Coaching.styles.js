@@ -48,17 +48,16 @@ export default StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         marginTop: 18,
-        flex: 100
     },
     noCoachPro: {
         fontFamily: 'MainRegular',
         fontSize: 16,
         marginLeft: 8,
-        flex: 95,
+        width: "100%"
     },
     noCoachProIcon: {
         color: "#1f6cb0",
-        flex: 5
+        width: 32
     },
     coachingSectionTitle: {
         fontFamily: "MainBold",

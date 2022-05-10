@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, TouchableOpacity, View, ScrollView, TextInput } from 'react-native';
+import { Text, TouchableOpacity, View, ScrollView, TextInput, Image } from 'react-native';
 import { Rating, AirbnbRating } from 'react-native-ratings';
 
 import ApiRequests from '../../classes/ApiRequests';
@@ -34,7 +34,6 @@ export default class PostReview extends Component {
         ApiRequests.post(`coaching/relation/${this.props.route.params.relation._id}/review`, {}, payload, true).then((response) => {
             this.props.navigation.navigate('Coaching', { tab: "myCoach" });
         }).catch((error) => {
-            console.log(error.response)
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
                     this.setState({ showError: true, error: error.response.data });

@@ -30,10 +30,6 @@ export default class ExerciseSearch extends Component {
 
     componentDidMount() {
         this.searchExercises();
-        setTimeout(() => {
-            console.log(this.scrollV.current.offsetWidth)
-            console.log(this.scrollV.current.offsetHeight)
-        }, 700);
     }
 
     searchExercises = () => {
