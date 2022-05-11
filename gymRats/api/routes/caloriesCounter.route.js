@@ -234,7 +234,7 @@ router.get('/day', authenticate, async (req, res, next) => {
 });
 
 router.get("/search/food", async (req, res, next) => {
-    if (!req.query.words) {
+    if (!req.query.words || req.query.words == "") {
         return res.status(HTTP_STATUS_CODES.OK).send({
             results: await DbService.getManyWithSortAndLimit(COLLECTIONS.CALORIES_COUNTER_ITEMS, {}, { usedTimes: -1, searchedTimes: -1 }, 50)
         })
@@ -242,40 +242,46 @@ router.get("/search/food", async (req, res, next) => {
 
     try {
         let words = req.query.words;
-        let sorted = [];
+        let foods;
 
         if (words && words != "") {
             words = words.split(" ");
-            for (let word of words) {
-                const foods = await DbService.getMany(COLLECTIONS.CALORIES_COUNTER_ITEMS, { keywords: { "$regex": word, "$options": "i" } });
-
-                for (let food of foods) {
-
-                    let shouldContinue = false;
-
-                    for (let i = 0; i < sorted.length; i++) {
-                        if (sorted[i].title == food.title) {
-                            sorted[i].timesFound++;
-                            shouldContinue = true;
-                        }
-                        if (sorted[i].userId) {
-                            const user = await DbService.getById(COLLECTIONS.USERS, sorted[i].userId);
-                            sorted[i].userInstance = user;
-                        }
-                    }
-                    if (shouldContinue) continue;
-
-                    Object.assign(food, { timesFound: 1 });
-                    food.searchedTimes++;
-                    sorted.push(food);
-                }
+            var regex = [];
+            for (let i = 0; i < words.length; i++) {
+                regex[i] = new RegExp(words[i].toLowerCase());
             }
 
-            quicksort(sorted, 0, sorted.length - 1);
+            foods = await DbService.getMany(COLLECTIONS.CALORIES_COUNTER_ITEMS, { keywords: { "$in": regex} });
+
+            if(words.length > 1){
+                for (let food of foods) {
+                    newWords = req.query.words.split(" ");
+                    
+                    Object.assign(food, { timesFound: 0 });
+
+                    for(let keyword of food.keywords){
+                        for(let i = 0; i < newWords.length; i++){
+                            if(keyword.includes(newWords[i].toLowerCase())){
+                                food.timesFound++;
+                                newWords[i] = "can't use again!";
+                            }
+                        }
+                    }
+
+                    if (food.userId) {
+                        const user = await DbService.getById(COLLECTIONS.USERS, food.userId);
+                        food.userInstance = user;
+                    }
+                }
+                quicksort(foods, 0, foods.length - 1, false);
+            }else{
+                quicksort(foods, 0, foods.length - 1, true);
+            }
+
         }
 
         return res.status(HTTP_STATUS_CODES.OK).send({
-            results: sorted.splice(0, 50)
+            results: foods.splice(0, 50)
         })
     } catch (err) {
         return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));

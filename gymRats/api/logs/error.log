@@ -7914,3 +7914,14 @@
 {"level":"error","message":"We cannot search for max distance when we don't know your location"}
 {"level":"error","message":"We cannot search for max distance when we don't know your location"}
 {"level":"error","message":"We cannot search for max distance when we don't know your location"}
+{"level":"error","message":"words.join is not a function"}
+{"level":"error","message":"words.join is not a function"}
+{"level":"error","message":"words.join is not a function"}
+{"level":"error","message":"foods is not defined"}
+{"level":"error","message":"foods is not defined"}
+{"level":"error","message":"words.map is not a function"}
+{"level":"error","message":"Maximum call stack size exceeded"}
+{"level":"error","message":"sea is not defined"}
+{"level":"error","message":"sea is not defined"}
+{"level":"error","message":"sea is not defined"}
+{"level":"error","message":"food.keywords.match is not a function"}
