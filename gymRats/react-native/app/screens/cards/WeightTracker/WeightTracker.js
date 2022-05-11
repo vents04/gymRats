@@ -110,9 +110,7 @@ export default class WeightTracker extends Component {
                 <View style={[styles.weightInputContainer, globalStyles.authPageInput]}>
                     <TextInput
                         value={this.state.weight}
-                        style={[styles.editSectionInput, {
-                            width: "80%",
-                        }]}
+                        style={styles.editSectionInput}
                         placeholder="Weight:"
                         editable={!this.state.showSaving}
                         onChangeText={(val) => { this.setState({ weight: val, showError: false }) }} />

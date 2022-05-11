@@ -195,10 +195,10 @@ const workoutSessionValidation = (data) => {
                         return helper.message("Invalid reps value");
                     }
                     return true;
-                }).required(), Joi.number()).optional(),
-                duration: Joi.number().optional(),
+                }).required(), Joi.number().positive()).optional(),
+                duration: Joi.number().optional().positive().max(10000),
                 weight: Joi.object({
-                    amount: Joi.number().required(),
+                    amount: Joi.number().required().positive().max(3000),
                     unit: Joi.string().valid(...Object.values(WEIGHT_UNITS)).required()
                 }).optional(),
                 _id: Joi.string().optional(),
