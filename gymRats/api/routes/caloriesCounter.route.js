@@ -29,6 +29,10 @@ router.get("/recent", authenticate, async (req, res, next) => {
                 if (!existingItem) {
                     const itemInstance = await DbService.getById(COLLECTIONS.CALORIES_COUNTER_ITEMS, item.itemId);
                     item.itemInstance = itemInstance;
+                    if (itemInstance.userId) {
+                        const userInstance = await DbService.getById(COLLECTIONS.USERS, itemInstance.userId);
+                        item.userInstance = userInstance;
+                    }
                     items.push(item);
                     if (items.length == 25) break;
                     continue;
