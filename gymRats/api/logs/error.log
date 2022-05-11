@@ -7953,3 +7953,4 @@
 {"level":"error","message":"Please double check the calories and the macros because there was a mismatch found"}
 {"level":"error","message":"Please double check the calories and the macros because there was a mismatch found"}
 {"level":"error","message":"Please double check the calories and the macros because there was a mismatch found"}
+{"level":"error","message":"keyword.includes.toLowerCase is not a function"}
