@@ -17,6 +17,33 @@ const checkCaloriesAndMacros = require('../helperFunctions/checkCaloriesAndMacro
 const NutritionixService = require('../services/nutritionix.service');
 const { quicksort } = require('../helperFunctions/quickSortForFoods');
 
+router.get("/recent", authenticate, async (req, res, next) => {
+    try {
+        let items = [];
+        let days = await DbService.getManyWithSort(COLLECTIONS.CALORIES_COUNTER_DAYS, { userId: mongoose.Types.ObjectId(req.user._id) }, { createdDt: -1 });
+        for (let day of days) {
+            for (let item of day.items) {
+                let existingItem = items.find(el => {
+                    return el.itemId.toString() === item.itemId.toString()
+                })
+                if (!existingItem) {
+                    const itemInstance = await DbService.getById(COLLECTIONS.CALORIES_COUNTER_ITEMS, item.itemId);
+                    item.itemInstance = itemInstance;
+                    items.push(item);
+                    if (items.length == 25) break;
+                    continue;
+                }
+                existingItem.amount = item.amount;
+                existingItem.dt = item.dt;
+                existingItem.meal = item.meal
+            }
+        }
+        return res.status(HTTP_STATUS_CODES.OK).send({ items });
+    } catch (error) {
+        return next(new ResponseError(error.message || DEFAULT_ERROR_MESSAGE, error.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR))
+    }
+});
+
 router.post('/item', authenticate, async (req, res, next) => {
     const { error } = itemPostValidation(req.body);
     if (error) return next(new ResponseError(error.details[0].message, HTTP_STATUS_CODES.BAD_REQUEST));
@@ -109,6 +136,8 @@ router.post("/daily-item", authenticate, async (req, res, next) => {
                 meal: req.body.meal
             }
         });
+
+        await DbService.updateWithInc(COLLECTIONS.CALORIES_COUNTER_ITEMS, { _id: mongoose.Types.ObjectId(req.body.itemId) }, { usedTimes: 1 })
 
         return res.sendStatus(HTTP_STATUS_CODES.CREATED);
     } catch (err) {
@@ -234,9 +263,12 @@ router.get('/day', authenticate, async (req, res, next) => {
 });
 
 router.get("/search/food", async (req, res, next) => {
+    let results = [];
+
     if (!req.query.words || req.query.words == "") {
+        results = await DbService.getManyWithSortAndLimit(COLLECTIONS.CALORIES_COUNTER_ITEMS, {}, { usedTimes: -1, searchedTimes: -1 }, 50)
         return res.status(HTTP_STATUS_CODES.OK).send({
-            results: await DbService.getManyWithSortAndLimit(COLLECTIONS.CALORIES_COUNTER_ITEMS, {}, { usedTimes: -1, searchedTimes: -1 }, 50)
+            results
         })
     }
 
@@ -251,17 +283,17 @@ router.get("/search/food", async (req, res, next) => {
                 regex[i] = new RegExp(words[i].toLowerCase());
             }
 
-            foods = await DbService.getMany(COLLECTIONS.CALORIES_COUNTER_ITEMS, { keywords: { "$in": regex} });
+            foods = await DbService.getMany(COLLECTIONS.CALORIES_COUNTER_ITEMS, { keywords: { "$in": regex } });
 
-            if(words.length > 1){
+            if (words.length > 1) {
                 for (let food of foods) {
                     newWords = req.query.words.split(" ");
-                    
+
                     Object.assign(food, { timesFound: 0 });
 
-                    for(let keyword of food.keywords){
-                        for(let i = 0; i < newWords.length; i++){
-                            if(keyword.includes(newWords[i].toLowerCase())){
+                    for (let keyword of food.keywords) {
+                        for (let i = 0; i < newWords.length; i++) {
+                            if (keyword.includes(newWords[i].toLowerCase())) {
                                 food.timesFound++;
                                 newWords[i] = "can't use again!";
                             }
@@ -274,14 +306,20 @@ router.get("/search/food", async (req, res, next) => {
                     }
                 }
                 quicksort(foods, 0, foods.length - 1, false);
-            }else{
+            } else {
                 quicksort(foods, 0, foods.length - 1, true);
             }
 
         }
 
+        results = foods.splice(0, 50);
+
+        for (let result of results) {
+            await DbService.updateWithIncrement(COLLECTIONS.CALORIES_COUNTER_ITEMS, { _id: mongoose.Types.ObjectId(result._id) }, { searchedTimes: 1 })
+        }
+
         return res.status(HTTP_STATUS_CODES.OK).send({
-            results: foods.splice(0, 50)
+            results
         })
     } catch (err) {
         return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
