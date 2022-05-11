@@ -87,10 +87,10 @@ const itemPostValidation = (data) => {
         brand: Joi.string().min(1).max(300).optional(),
         barcode: Joi.string().optional(),
         unit: Joi.string().valid(...Object.values(CALORIES_COUNTER_UNITS)).required(),
-        calories: Joi.number().required(),
-        protein: Joi.number().required(),
-        carbs: Joi.number().required(),
-        fats: Joi.number().required(),
+        calories: Joi.number().required().positive().allow(0),
+        protein: Joi.number().required().positive().allow(0),
+        carbs: Joi.number().required().positive().allow(0),
+        fats: Joi.number().required().positive().allow(0),
     })
     return schema.validate(data);
 }
@@ -106,7 +106,7 @@ const dailyItemPostValidation = (data) => {
             }
             return true;
         }),
-        amount: Joi.number().required(),
+        amount: Joi.number().required().positive(),
         dt: Joi.date().required(),
         meal: Joi.string().valid(...Object.values(CALORIES_COUNTER_MEALS)).required()
     })
@@ -115,7 +115,7 @@ const dailyItemPostValidation = (data) => {
 
 const dailyItemUpdateValidation = (data) => {
     const schema = Joi.object({
-        amount: Joi.number().optional(),
+        amount: Joi.number().optional().positive(),
         meal: Joi.string().valid(...Object.values(CALORIES_COUNTER_MEALS)).optional()
     })
     return schema.validate(data);
@@ -123,7 +123,7 @@ const dailyItemUpdateValidation = (data) => {
 
 const dailyWeightPostValidation = (data) => {
     const schema = Joi.object({
-        weight: Joi.number().required(),
+        weight: Joi.number().required().positive(),
         unit: Joi.string().valid(...Object.values(WEIGHT_UNITS)).required(),
     })
     return schema.validate(data);

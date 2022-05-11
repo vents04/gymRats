@@ -31,6 +31,10 @@ export default class AddCaloriesIntakeItem extends Component {
             this.setState({ amount: parseInt(this.props.route.params.amount) });
         if (this.props.route.params.amount)
             this.setState({ amount: parseInt(this.props.route.params.amount) })
+
+        console.log("asdaskdjlas;kd", Number.isNaN(this.props.route.params.item.carbs /
+            (this.props.route.params.item.carbs + this.props.route.params.item.fats + this.props.route.params.item.protein)
+            * 100))
     }
 
     addFood = () => {
@@ -186,9 +190,13 @@ export default class AddCaloriesIntakeItem extends Component {
                                         size={Dimensions.get('window').width * 0.2}
                                         width={Dimensions.get('window').width * 0.2 * 0.1}
                                         fill={
-                                            this.props.route.params.item.carbs /
-                                            (this.props.route.params.item.carbs + this.props.route.params.item.fats + this.props.route.params.item.protein)
-                                            * 100
+                                            !Number.isNaN(this.props.route.params.item.carbs /
+                                                (this.props.route.params.item.carbs + this.props.route.params.item.fats + this.props.route.params.item.protein)
+                                                * 100)
+                                                ? (this.props.route.params.item.carbs /
+                                                    (this.props.route.params.item.carbs + this.props.route.params.item.fats + this.props.route.params.item.protein)
+                                                    * 100)
+                                                : 33
                                         }
                                         rotation={0}
                                         tintColor={cardColors.caloriesIntake}
@@ -209,9 +217,13 @@ export default class AddCaloriesIntakeItem extends Component {
                                         size={Dimensions.get('window').width * 0.2}
                                         width={Dimensions.get('window').width * 0.2 * 0.1}
                                         fill={
-                                            this.props.route.params.item.protein /
-                                            (this.props.route.params.item.carbs + this.props.route.params.item.fats + this.props.route.params.item.protein)
-                                            * 100
+                                            !Number.isNaN(this.props.route.params.item.protein /
+                                                (this.props.route.params.item.carbs + this.props.route.params.item.fats + this.props.route.params.item.protein)
+                                                * 100)
+                                                ? this.props.route.params.item.protein /
+                                                (this.props.route.params.item.carbs + this.props.route.params.item.fats + this.props.route.params.item.protein)
+                                                * 100
+                                                : 33
                                         }
                                         rotation={0}
                                         tintColor={cardColors.caloriesIntake}
@@ -232,9 +244,13 @@ export default class AddCaloriesIntakeItem extends Component {
                                         size={Dimensions.get('window').width * 0.2}
                                         width={Dimensions.get('window').width * 0.2 * 0.1}
                                         fill={
-                                            this.props.route.params.item.fats /
-                                            (this.props.route.params.item.carbs + this.props.route.params.item.fats + this.props.route.params.item.protein)
-                                            * 100
+                                            !Number.isNaN(this.props.route.params.item.fats /
+                                                (this.props.route.params.item.carbs + this.props.route.params.item.fats + this.props.route.params.item.protein)
+                                                * 100)
+                                                ? this.props.route.params.item.fats /
+                                                (this.props.route.params.item.carbs + this.props.route.params.item.fats + this.props.route.params.item.protein)
+                                                * 100
+                                                : 33
                                         }
                                         rotation={0}
                                         tintColor={cardColors.caloriesIntake}
