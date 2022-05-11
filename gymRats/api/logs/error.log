@@ -7953,8 +7953,12 @@
 {"level":"error","message":"Please double check the calories and the macros because there was a mismatch found"}
 {"level":"error","message":"Please double check the calories and the macros because there was a mismatch found"}
 {"level":"error","message":"Please double check the calories and the macros because there was a mismatch found"}
+<<<<<<< HEAD
+{"level":"error","message":"keyword.includes.toLowerCase is not a function"}
+=======
 {"level":"error","message":"\"exercises[0].sets[0].reps\" must be a positive number"}
 {"level":"error","message":"\"exercises[0].sets[0].reps\" must be a positive number"}
 {"level":"error","message":"\"exercises[0].sets[0].reps\" must be a positive number"}
 {"level":"error","message":"\"exercises[0].sets[0].reps\" must be a positive number"}
 {"level":"error","message":"\"exercises[0].sets[0].reps\" must be a positive number"}
+>>>>>>> 07bfe9355e8622b74c47766f1ae00d410d60dd2a

@@ -294,13 +294,16 @@ router.get("/search/food", async (req, res, next) => {
 
             if (words.length > 1) {
                 for (let food of foods) {
+                    if(food.title == "Water"){
+                        console.log(food)
+                    }
                     newWords = req.query.words.split(" ");
 
                     Object.assign(food, { timesFound: 0 });
 
                     for (let keyword of food.keywords) {
                         for (let i = 0; i < newWords.length; i++) {
-                            if (keyword.includes(newWords[i].toLowerCase())) {
+                            if (keyword.toLowerCase().includes(newWords[i].toLowerCase())) {
                                 food.timesFound++;
                                 newWords[i] = "can't use again!";
                             }
@@ -314,7 +317,7 @@ router.get("/search/food", async (req, res, next) => {
                 }
                 quicksort(foods, 0, foods.length - 1, false);
             } else {
-                quicksort(foods, 0, foods.length - 1, true);
+                 quicksort(foods, 0, foods.length - 1, true);
             }
 
         }
