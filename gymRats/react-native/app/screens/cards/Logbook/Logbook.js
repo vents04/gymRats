@@ -285,7 +285,7 @@ export default class Logbook extends Component {
                                         value={this.state.templateTitle}
                                         style={globalStyles.authPageInput}
                                         placeholder="Title:"
-                                        onChangeText={(val) => { this.setState({ templateTitle: val, showModalError: false }) }} />
+                                        onChangeText={(val) => { this.setState({ templateTitle: val, showModalError: false, showError: false }) }} />
                                     {
                                         this.state.showModalError
                                             ? <Text style={globalStyles.errorBox}>{this.state.modalError}</Text>
@@ -324,7 +324,7 @@ export default class Logbook extends Component {
                                         style={globalStyles.authPageInput}
                                         selectedValue={this.state.selectedTemplateId}
                                         onValueChange={(itemValue, itemIndex) =>
-                                            this.setState({ selectedTemplateId: itemValue, showModalError: false })
+                                            this.setState({ selectedTemplateId: itemValue, showModalError: false, showError: false })
                                         }>
                                         {
                                             this.state.templates.map((template, index) =>
@@ -405,6 +405,7 @@ export default class Logbook extends Component {
                                                                 this.state.exercises.length > 1
                                                                     ? <TouchableOpacity onPress={() => {
                                                                         this.swapExercises(index);
+                                                                        this.setState({ showError: false })
                                                                     }}>
                                                                         <Ionicons name="swap-vertical" size={20} color="#777" style={{ marginRight: 10, minWidth: 25, height: 25 }} />
                                                                     </TouchableOpacity>
@@ -414,6 +415,7 @@ export default class Logbook extends Component {
                                                         </View>
                                                         <TouchableOpacity onPress={() => {
                                                             this.addSet(exercise.exerciseId)
+                                                            this.setState({ showError: false })
                                                         }}>
                                                             <View style={styles.exerciseContainerAddContainer}>
                                                                 <Text style={styles.exerciseContainerAddContainerTitle}>Add set</Text>
@@ -437,6 +439,7 @@ export default class Logbook extends Component {
                                                                                 defaultValue={set.weight.amount && set.weight.amount != undefined ? set.weight.amount.toString() : null}
                                                                                 onChangeText={(val) => {
                                                                                     this.changeSetVariable(exercise.exerciseId, index, "weight", val)
+                                                                                    this.setState({ showError: false })
                                                                                 }} />
                                                                             <Text style={styles.setContainerItemDescriptor}>{WEIGHT_UNITS_LABELS[set.weight.unit]}</Text>
                                                                         </View>
@@ -446,6 +449,7 @@ export default class Logbook extends Component {
                                                                                 defaultValue={set.reps && set.reps != undefined ? set.reps.toString() : null}
                                                                                 onChangeText={(val) => {
                                                                                     this.changeSetVariable(exercise.exerciseId, index, "reps", val)
+                                                                                    this.setState({ showError: false })
                                                                                 }} />
                                                                             <Text style={styles.setContainerItemDescriptor}>reps</Text>
                                                                         </View>
@@ -455,11 +459,13 @@ export default class Logbook extends Component {
                                                                                 defaultValue={set.duration && set.duration != undefined ? set.duration.toString() : null}
                                                                                 onChangeText={(val) => {
                                                                                     this.changeSetVariable(exercise.exerciseId, index, "duration", val)
+                                                                                    this.setState({ showError: false })
                                                                                 }} />
                                                                             <Text style={styles.setContainerItemDescriptor}>duration</Text>
                                                                         </View>
                                                                         <TouchableOpacity onPress={() => {
                                                                             this.deleteSet(exercise.exerciseId, index);
+                                                                            this.setState({ showError: false })
                                                                         }}>
                                                                             <Ionicons name="remove" size={20} color={cardColors.logbook} />
                                                                         </TouchableOpacity>
