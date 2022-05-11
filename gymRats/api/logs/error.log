@@ -7953,3 +7953,8 @@
 {"level":"error","message":"Please double check the calories and the macros because there was a mismatch found"}
 {"level":"error","message":"Please double check the calories and the macros because there was a mismatch found"}
 {"level":"error","message":"Please double check the calories and the macros because there was a mismatch found"}
+{"level":"error","message":"\"exercises[0].sets[0].reps\" must be a positive number"}
+{"level":"error","message":"\"exercises[0].sets[0].reps\" must be a positive number"}
+{"level":"error","message":"\"exercises[0].sets[0].reps\" must be a positive number"}
+{"level":"error","message":"\"exercises[0].sets[0].reps\" must be a positive number"}
+{"level":"error","message":"\"exercises[0].sets[0].reps\" must be a positive number"}

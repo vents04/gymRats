@@ -12,7 +12,6 @@ export default StyleSheet.create({
         fontFamily: "MainMedium",
         fontSize: 16,
         borderWidth: 0,
-        width: '100%',
     },
     loadingContainer: {
         display: "flex",
