@@ -24,6 +24,7 @@ export default class SearchCaloriesIntake extends Component {
         this.state = {
             query: "",
             queryResults: [],
+            recent: [],
             showError: false,
             error: ""
         }
@@ -33,6 +34,7 @@ export default class SearchCaloriesIntake extends Component {
 
     onFocusFunction = () => {
         this.setState({ timezoneOffset: this.props.route.params.timezoneOffset || new Date().getTimezoneOffset(), date: this.props.route.params.date, query: this.props.route.params.query || "" }, () => {
+            this.getRecent();
             this.searchFood();
         })
     }
@@ -59,6 +61,24 @@ export default class SearchCaloriesIntake extends Component {
                 ApiRequests.showRequestSettingError();
             }
         });
+    }
+
+    getRecent = () => {
+        ApiRequests.get(`calories-counter/recent`, {}, true).then((response) => {
+            this.setState({ recent: response.data.items });
+        }).catch((error) => {
+            if (error.response) {
+                if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
+                    this.setState({ showError: true, error: error.response.data });
+                } else {
+                    ApiRequests.showInternalServerError();
+                }
+            } else if (error.request) {
+                ApiRequests.showNoResponseError();
+            } else {
+                ApiRequests.showRequestSettingError();
+            }
+        })
     }
 
     changeQuery = (value) => {
@@ -119,6 +139,64 @@ export default class SearchCaloriesIntake extends Component {
                     <View style={styles.searchResultsContainer}>
                         <ScrollView contentContainerStyle={globalStyles.fillEmptySpace}>
                             {
+                                this.state.queryResults.length <= 0
+                                    ? <Text style={[globalStyles.notation, { marginBottom: 16 }]}>No results found</Text>
+                                    : null
+                            }
+                            {
+                                this.state.recent?.length > 0 && this.query.length <= 0
+                                    ? <>
+                                        <Text style={[globalStyles.modalText, { textAlign: "left", fontFamily: "MainBlack", color: "#1f6cb0" }]}>Recent foods</Text>
+                                        {
+                                            this.state.recent.map((item, index) =>
+                                                <TouchableOpacity key={"_" + index} onPress={() => {
+                                                    this.props.navigation.navigate("AddCaloriesIntakeItem", {
+                                                        intent: CALORIES_COUNTER_SCREEN_INTENTS.ADD,
+                                                        item: item.itemInstance,
+                                                        meal: this.props.route.params.meal,
+                                                        date: this.props.route.params.date,
+                                                        timezoneOffset: this.props.route.params.timezoneOffset,
+                                                        amount: item.amount
+                                                    })
+                                                }}>
+                                                    <View style={styles.searchResult} key={item._id}>
+                                                        <Text style={styles.searchResultTitle}>{item.itemInstance.title}</Text>
+                                                        {
+                                                            item.itemInstance.brand
+                                                                ? <Text style={styles.searchResultBrand}>{item.itemInstance.brand}</Text>
+                                                                : null
+                                                        }
+                                                        {
+                                                            item.itemInstance.userInstance
+                                                                ? <View style={styles.user}>
+                                                                    {
+                                                                        !item.itemInstance.userInstance.profilePicture
+                                                                            ? <View style={styles.profilePictureContainer}>
+                                                                                <Text style={styles.noProfilePictureText}>
+                                                                                    {item.itemInstance.userInstance.firstName.charAt(0)}
+                                                                                    {item.itemInstance.userInstance.lastName.charAt(0)}
+                                                                                </Text>
+                                                                            </View>
+                                                                            : <Image style={styles.profilePictureContainer}
+                                                                                source={{ uri: item.itemInstance.userInstance.profilePicture }} />
+                                                                    }
+                                                                    <Text style={styles.names}>
+                                                                        {item.itemInstance.userInstance.firstName}
+                                                                        &nbsp;
+                                                                        {item.itemInstance.userInstance.lastName}
+                                                                    </Text>
+                                                                </View>
+                                                                : null
+                                                        }
+                                                    </View>
+                                                </TouchableOpacity>
+                                            )
+                                        }
+                                        <View style={{ borderWidth: 0.75, borderColor: "#e7e7e7", marginVertical: 16 }}></View>
+                                    </>
+                                    : null
+                            }
+                            {
                                 this.state.queryResults?.length > 0
                                     ? this.state.queryResults.map((item, index) =>
                                         <TouchableOpacity key={index} onPress={() => {
@@ -162,7 +240,7 @@ export default class SearchCaloriesIntake extends Component {
                                             </View>
                                         </TouchableOpacity>
                                     )
-                                    : <Text style={globalStyles.notation}>No results found</Text>
+                                    : null
                             }
                         </ScrollView>
                     </View>

@@ -95,7 +95,7 @@ export default StyleSheet.create({
     },
     nutritionalInfoTitle: {
         fontFamily: "MainRegular",
-        fontSize: 12
+        fontSize: 12,
     },
     nutritionalInfoValue: {
         fontFamily: "MainMedium",
@@ -108,7 +108,7 @@ export default StyleSheet.create({
         width: "100%",
     },
     amountInputContainer: {
-        width: "33%",
+        width: "40%",
         display: "flex",
         flexDirection: "row",
         alignItems: "center"

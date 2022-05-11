@@ -135,7 +135,7 @@ export default class AddFood extends Component {
                                 style={styles.inputSectionInput}
                                 selectedValue={this.state.unit}
                                 onValueChange={(value) =>
-                                    this.setState({ meal: value, showError: false })
+                                    this.setState({ unit: value, showError: false })
                                 }>
                                 <Picker.Item label="Grams" value={CALORIES_COUNTER_UNITS.GRAMS} />
                                 <Picker.Item label="Milliliters" value={CALORIES_COUNTER_UNITS.MILLILITERS} />

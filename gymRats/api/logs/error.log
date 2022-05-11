@@ -7940,3 +7940,16 @@
 {"level":"error","message":"Cannot read properties of null (reading 'userId')"}
 {"level":"error","message":"Cannot read properties of null (reading 'userId')"}
 >>>>>>> 71cecd11006d15b29e8afec647a47b2af248fd82
+{"level":"error","message":"Plan executor error during findAndModify :: caused by :: The dollar ($) prefixed field '$inc' in '$inc' is not allowed in the context of an update's replacement document. Consider using an aggregation pipeline with $replaceWith."}
+{"level":"error","message":"Maximum call stack size exceeded"}
+{"level":"error","message":"\"amount\" must be a positive number"}
+{"level":"error","message":"\"amount\" must be a positive number"}
+{"level":"error","message":"\"weight\" must be a positive number"}
+{"level":"error","message":"\"weight\" must be a positive number"}
+{"level":"error","message":"\"calories\" must be a positive number"}
+{"level":"error","message":"Please double check the calories and the macros because there was a mismatch found"}
+{"level":"error","message":"Please double check the calories and the macros because there was a mismatch found"}
+{"level":"error","message":"Please double check the calories and the macros because there was a mismatch found"}
+{"level":"error","message":"Please double check the calories and the macros because there was a mismatch found"}
+{"level":"error","message":"Please double check the calories and the macros because there was a mismatch found"}
+{"level":"error","message":"Please double check the calories and the macros because there was a mismatch found"}
