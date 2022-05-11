@@ -52,7 +52,6 @@ export default class Chat extends Component {
     getChat = (id) => {
         ApiRequests.get(`chat/${id}`, {}, true).then((response) => {
             this.setState({ chat: response.data.chat }, () => {
-                console.log(this.state.chat)
                 this.scrollView.current.scrollToEnd({ animated: true });
             });
         }).catch((error) => {

@@ -18,6 +18,7 @@ const DATABASE_MODELS = {
     CHAT: "Chat",
     MESSAGE: "Message",
     CONTENT: "Content",
+    NAVIGATION: "Navigation",
 }
 
 const COLLECTIONS = {
@@ -39,6 +40,7 @@ const COLLECTIONS = {
     CHATS: "chats",
     MESSAGES: "messages",
     CONTENTS: "contents",
+    NAVIGATIONS: "navigations"
 }
 
 const PERSONAL_TRAINER_STATUSES = {

@@ -39,12 +39,10 @@ export default class WeightTrackerCard extends Component {
     }
 
     deleteCard = () => {
-        console.log(this.state.data);
         ApiRequests.delete(`weight-tracker/daily-weight/${this.props.data._id}`, {}, true).then((response) => {
             this.toggleShowConfirmationBox(false);
             this.props.rerender(this.props.date);
         }).catch((error) => {
-            console.log(error.response);
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
                     this.setState({ showError: true, error: error.response.data });

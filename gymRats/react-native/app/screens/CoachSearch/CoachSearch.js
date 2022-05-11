@@ -59,11 +59,8 @@ export default class CoachSearch extends Component {
             searchQuery += `&minRating=${this.state.minRating}`;
         }
         ApiRequests.get(searchQuery, {}, true).then((response) => {
-            console.log(response.data.results.length);
-            console.log(response.data.results.length);
             this.setState({ searchResults: response.data.results })
         }).catch((error) => {
-            console.log(error);
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
                     this.setState({ showError: true, error: error.response.data });
@@ -202,7 +199,6 @@ export default class CoachSearch extends Component {
                     <ScrollView style={styles.cardsContainer}>
                         <TouchableOpacity onPress={() => {
                             this.filterSheet.current.close();
-
                         }}>
                             <Text style={styles.sheetSectionTitle}>Minimum rating is {this.state.minRating}/5</Text>
                             <Slider
@@ -270,7 +266,7 @@ export default class CoachSearch extends Component {
                                     marginTop: 16
                                 }]} onPress={() => {
                                     this.filterSheet.current.close();
-                                    this.setState({ hasChanges: false });
+                                    this.setState({ hasChanges: false, showError: false, error: "" });
                                     this.searchCoaches();
                                 }}>
                                     <Text style={globalStyles.authPageActionButtonText}>Apply filters</Text>

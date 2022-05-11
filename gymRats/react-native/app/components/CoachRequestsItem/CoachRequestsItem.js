@@ -16,7 +16,7 @@ export default class CoachRequestsItem extends Component {
                     <TouchableOpacity onPress={() => {
                         this.props.updateRelationStatus(this.props.relation._id, RELATION_STATUSES.DECLINED);
                     }} >
-                        <Ionicons size={18} color="#aaa" style={{ marginRight: 8 }} />
+                        <Ionicons name="close" size={18} color="#aaa" style={{ marginRight: 8 }} />
                     </TouchableOpacity>
                     {
                         !this.props.relation.client.profilePicture

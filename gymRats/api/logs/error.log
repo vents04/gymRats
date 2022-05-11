@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {"level":"error","message":"results is not defined"}
 {"level":"error","message":"results is not defined"}
 {"level":"error","message":"Token not provided"}
@@ -7925,3 +7926,17 @@
 {"level":"error","message":"sea is not defined"}
 {"level":"error","message":"sea is not defined"}
 {"level":"error","message":"food.keywords.match is not a function"}
+=======
+{"level":"error","message":"Cannot read properties of null (reading 'userId')"}
+{"level":"error","message":"Cannot read properties of null (reading 'userId')"}
+{"level":"error","message":"Cannot read properties of null (reading 'userId')"}
+{"level":"error","message":"Cannot read properties of null (reading 'userId')"}
+{"level":"error","message":"Cannot read properties of null (reading 'userId')"}
+{"level":"error","message":"Cannot read properties of null (reading 'userId')"}
+{"level":"error","message":"\"navigationAnalytics[3].token\" must be a string"}
+{"level":"error","message":"\"navigationAnalytics[3].token\" must be a string"}
+{"level":"error","message":"DbService is not defined"}
+{"level":"error","message":"DbService is not defined"}
+{"level":"error","message":"Cannot read properties of null (reading 'userId')"}
+{"level":"error","message":"Cannot read properties of null (reading 'userId')"}
+>>>>>>> 71cecd11006d15b29e8afec647a47b2af248fd82

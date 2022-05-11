@@ -330,6 +330,18 @@ const contentUpdateValidation = (data) => {
     return schema.validate(data);
 }
 
+const navigationAnalyticsValidation = (data) => {
+    const schema = Joi.object({
+        navigationAnalytics: Joi.array().items(Joi.object({
+            name: Joi.string().required(),
+            time: Joi.number().required(),
+            toDt: Joi.number().required(),
+            token: Joi.string().optional().allow(null),
+        })).required()
+    })
+    return schema.validate(data);
+}
+
 
 module.exports = {
     signupValidation,
@@ -353,5 +365,6 @@ module.exports = {
     messageValidation,
     contentPostValidation,
     contentUpdateValidation,
-    dailyItemUpdateValidation
+    dailyItemUpdateValidation,
+    navigationAnalyticsValidation
 }

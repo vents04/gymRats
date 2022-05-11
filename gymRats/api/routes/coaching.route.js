@@ -19,7 +19,8 @@ const { relationValidation, relationStatusUpdateValidation, coachApplicationPost
 const WeightTrackerService = require('../services/cards/weightTracker.service');
 const { func } = require('@hapi/joi');
 const { quicksort } = require('../helperFunctions/quickSortForCoaches')
-const { checkForDistanceAndReviews } = require('../helperFunctions/checkDistanceAndReviews')
+const { checkForDistanceAndReviews } = require('../helperFunctions/checkDistanceAndReviews');
+const EmailService = require('../services/email.service');
 
 router.get('/', authenticate, async (req, res, next) => {
     try {
@@ -85,7 +86,7 @@ router.get('/', authenticate, async (req, res, next) => {
             coaching
         })
     } catch (err) {
-        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.letERNAL_SERVER_ERROR));
+        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
     }
 });
 
@@ -132,6 +133,8 @@ router.post('/application', authenticate, async (req, res, next) => {
         const personalTrainer = new PersonalTrainer(req.body);
         personalTrainer.userId = req.user._id;
         await DbService.create(COLLECTIONS.PERSONAL_TRAINERS, personalTrainer);
+
+        await EmailService.send("Coach request", `${req.user.firstName} ${req.user.lastName} with a personal trainer id ${personalTrainer._id} and user id ${req.user._id} requested to be a coach`);
 
         return res.sendStatus(HTTP_STATUS_CODES.OK);
     } catch (error) {
@@ -228,11 +231,16 @@ router.put('/relation/:id/status', authenticate, async (req, res, next) => {
             await DbService.update(COLLECTIONS.RELATIONS, { _id: mongoose.Types.ObjectId(req.params.id) }, {
                 to: new Date().getTime()
             })
+        } else if (req.body.status == RELATION_STATUSES.DECLINED) {
+            await DbService.update(COLLECTIONS.RELATIONS, { _id: mongoose.Types.ObjectId(req.params.id) }, {
+                from: new Date().getTime(),
+                to: new Date().getTime()
+            })
         }
 
         return res.sendStatus(HTTP_STATUS_CODES.OK);
     } catch (err) {
-        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.letERNAL_SERVER_ERROR));
+        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
     }
 });
 

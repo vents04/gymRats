@@ -28,6 +28,6 @@ export default StyleSheet.create({
         width: 300,
         overflow: 'hidden',
         borderRadius: 30,
-        backgroundColor: 'tomato'
+        backgroundColor: '#fff'
     }
 })

@@ -136,11 +136,8 @@ export default class CoachingApplicationSubmission extends Component {
                     <Text style={[globalStyles.notation, {
                         marginTop: 16
                     }]}>Do you prefer to work with clients only in person?</Text>
-                    <View style={styles.inline}>
+                    <View style={{ display: 'flex', flexDirection: "row", alignItems: "center", justifyContent: "flex-start", width: "100%", }}>
                         <Switch
-                            style={{
-                                marginTop: 10
-                            }}
                             trackColor={{ false: '#767577', true: '#53c7f0' }}
                             thumbColor={this.state.prefersOfflineCoaching ? '#1f6cb0' : '#f4f3f4'}
                             ios_backgroundColor="#3e3e3e"

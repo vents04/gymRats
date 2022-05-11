@@ -25,7 +25,6 @@ export default function BarcodeScanner(props) {
 
     const handleBarCodeScanned = ({ type, data }) => {
         setScanned(true);
-        console.log('Type: ' + type + '\nData: ' + data);
         ApiRequests.get('calories-counter/search/barcode?barcode=' + data).then(response => {
             if (!response.data.result) {
                 props.navigation.navigate("AddFood", { barcode: data, date: props.route.params.date, timezoneOffset: props.route.params.timezoneOffset, meal: props.route.params.meal });
@@ -43,9 +42,7 @@ export default function BarcodeScanner(props) {
                     })
                 }
             }
-            console.log(response.data);
         }).catch((error) => {
-            console.log("ERROR", error)
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
                     ApiRequests.alert("Error", error.response.data, [{ text: 'OK' }]);

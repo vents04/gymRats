@@ -33,6 +33,26 @@ export default class CaloriesIntakeCard extends Component {
         if (this.props.client) this.getClientCaloriesCounterDay();
     }
 
+    static getDerivedStateFromProps(props, state) {
+        let newState = {};
+        newState.data = props.data;
+
+        let calories = 0, carbs = 0, fats = 0, protein = 0;
+
+        for (let data of props.data.items) {
+            calories += parseInt(data.amount * data.itemInstance.calories);
+            carbs += parseInt(data.amount * data.itemInstance.carbs);
+            fats += parseInt(data.amount * data.itemInstance.fats);
+            protein += parseInt(data.amount * data.itemInstance.protein);
+        }
+
+        newState.calories = calories;
+        newState.carbs = carbs;
+        newState.fats = fats;
+        newState.protein = protein;
+        return newState;
+    }
+
     calculateMacros = () => {
         this.setState({ data: this.props.data });
 

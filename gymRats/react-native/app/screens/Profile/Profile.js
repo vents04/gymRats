@@ -64,8 +64,6 @@ export default class Profile extends Component {
             quality: 1,
         });
 
-        console.log(result.uri);
-
         if (!result.cancelled) {
             this.uploadProfilePicture(result.base64);
         }

@@ -92,10 +92,14 @@ export default class CoachPage extends Component {
                                                 <Text style={styles.statValue}>{this.state.coach.rating}</Text>
                                                 <Text style={styles.statTitle}>rating</Text>
                                             </View>
+                                            {
+                                                /*
                                             <View style={styles.statContainer}>
                                                 <Text style={styles.statValue}>{this.state.coach.experience ?? "-"}</Text>
                                                 <Text style={styles.statTitle}>experience</Text>
                                             </View>
+                                                */
+                                            }
                                         </View>
                                         <TouchableOpacity onPress={() => {
                                             Linking.openURL(`https://google.com/maps/@${this.state.coach.location.lat},${this.state.coach.location.lng},11z`)
@@ -106,20 +110,22 @@ export default class CoachPage extends Component {
                                     <Text style={[globalStyles.notation, {
                                         marginTop: 16
                                     }]}>Do you prefer to work with clients only in person?</Text>
-                                    <Switch
-                                        style={{
-                                            marginTop: 10
-                                        }}
-                                        trackColor={{ false: '#767577', true: '#53c7f0' }}
-                                        thumbColor={this.state.coach.prefersOfflineCoaching ? '#1f6cb0' : '#f4f3f4'}
-                                        ios_backgroundColor="#3e3e3e"
-                                        onValueChange={() => {
-                                            let coach = this.state.coach;
-                                            coach.prefersOfflineCoaching = !coach.prefersOfflineCoaching;
-                                            this.setState({ coach });
-                                        }}
-                                        value={this.state.coach.prefersOfflineCoaching}
-                                    />
+                                    <View style={{ display: 'flex', flexDirection: "row", alignItems: "center", justifyContent: "flex-start", width: "100%", }}>
+                                        <Switch
+                                            style={{
+                                                marginTop: 10
+                                            }}
+                                            trackColor={{ false: '#767577', true: '#53c7f0' }}
+                                            thumbColor={this.state.coach.prefersOfflineCoaching ? '#1f6cb0' : '#f4f3f4'}
+                                            ios_backgroundColor="#3e3e3e"
+                                            onValueChange={() => {
+                                                let coach = this.state.coach;
+                                                coach.prefersOfflineCoaching = !coach.prefersOfflineCoaching;
+                                                this.setState({ coach });
+                                            }}
+                                            value={this.state.coach.prefersOfflineCoaching}
+                                        />
+                                    </View>
                                 </>
                                 : null
                         }
