@@ -7965,3 +7965,13 @@
 {"level":"error","message":"\"firstName\" with value \"-1\" fails to match the required pattern: /^[A-Za-z]+$/"}
 {"level":"error","message":"\"firstName\" with value \"Alexand3r\" fails to match the required pattern: /^[A-Za-z]+$/"}
 {"level":"error","message":"\"exercises[0].sets[0].reps\" must be a positive number"}
+{"level":"error","message":"Cannot read properties of null (reading 'userId')"}
+{"level":"error","message":"Cannot read properties of null (reading 'userId')"}
+{"level":"error","message":"Cannot read properties of null (reading 'userId')"}
+{"level":"error","message":"Cannot read properties of null (reading 'userId')"}
+{"level":"error","message":"Cannot read properties of null (reading 'userId')"}
+{"level":"error","message":"Cannot read properties of null (reading 'userId')"}
+{"level":"error","message":"Cannot read properties of null (reading 'userId')"}
+{"level":"error","message":"Cannot read properties of null (reading 'userId')"}
+{"level":"error","message":"Cannot read properties of null (reading 'userId')"}
+{"level":"error","message":"Cannot read properties of null (reading 'userId')"}

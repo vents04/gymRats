@@ -328,7 +328,7 @@ export default class Logbook extends Component {
                                         }>
                                         {
                                             this.state.templates.map((template, index) =>
-                                                <Picker.Item key={index} label={template.name} value={template._id} />
+                                                <Picker.Item style={{ fontFamily: 'MainRegular' }} key={index} label={template.name} value={template._id} />
                                             )
                                         }
                                     </Picker>

@@ -30,6 +30,8 @@ export default class SearchCaloriesIntake extends Component {
         }
 
         this.focusListener;
+
+        this.searchInputRef = React.createRef();
     }
 
     onFocusFunction = () => {
@@ -130,12 +132,22 @@ export default class SearchCaloriesIntake extends Component {
                             <MaterialCommunityIcons name="barcode-scan" size={25} color="#1f6cb0" />
                         </TouchableOpacity>
                     </View>
-                    <TextInput
-                        style={[globalStyles.authPageInput, {
-                            marginTop: 20
-                        }]}
-                        placeholder="Type your search here"
-                        onChangeText={this.changeQuery} />
+                    <View style={styles.searchContainer}>
+                        <TextInput
+                            ref={this.searchInputRef}
+                            style={[globalStyles.authPageInput, {
+                                width: "90%"
+                            }]}
+                            placeholder="Type your search here"
+                            onChangeText={this.changeQuery} />
+                        <TouchableOpacity onPress={() => {
+                            this.query = "";
+                            this.searchInputRef.current.value = ""
+                            this.searchFood();
+                        }} style={{ width: "10%", marginLeft: 12 }}>
+                            <Ionicons name="close" size={24} color="#1f6cb0" />
+                        </TouchableOpacity>
+                    </View>
                     <View style={styles.searchResultsContainer}>
                         <ScrollView contentContainerStyle={globalStyles.fillEmptySpace}>
                             {
