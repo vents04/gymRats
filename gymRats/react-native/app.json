@@ -11,6 +11,14 @@
         {
           "photosPermission": "Gym Rats accesses your photos for you to track your visual progress and use profile pictures."
         }
+      ],
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/notifications/ic_stat-icon.png",
+          "color": "#ffffff",
+          "sounds": ["./assets/notifications/notification.wav"]
+        }
       ]
     ],
     "updates": {
@@ -39,6 +47,7 @@
         "android.permission.WRITE_EXTERNAL_STORAGE",
         "android.permission.RECORD_AUDIO"
       ],
+      "googleServicesFile": "./google-services.json",
       "package": "com.gymrats.android"
     },
     "web": {

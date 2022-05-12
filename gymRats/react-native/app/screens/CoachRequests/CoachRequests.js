@@ -31,7 +31,6 @@ export default class CoachRequests extends Component {
         ApiRequests.get("coaching/requests", {}, true).then((response) => {
             this.setState({ relations: response.data.relations });
         }).catch((error) => {
-            console.log("ABE TKA e", error.response.data)
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
                     this.setState({ showError: true, error: error.response.data });

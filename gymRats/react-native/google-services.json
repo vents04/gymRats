@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "705441606820",
+    "project_id": "gym-rats-5a84b",
+    "storage_bucket": "gym-rats-5a84b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:705441606820:android:7f1226841fcfbcd4cc8a31",
+        "android_client_info": {
+          "package_name": "com.gymrats.android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "705441606820-1vrugksfede8n6hf3tdira8q1bph19ak.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCRM0MLgS2uE063QMxVzi7rJjWoXdFW4kU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "705441606820-1vrugksfede8n6hf3tdira8q1bph19ak.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

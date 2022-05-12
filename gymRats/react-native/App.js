@@ -21,7 +21,6 @@ const App = () => {
   useEffect(() => {
     const subscription = AppState.addEventListener("change", async nextAppState => {
       if (nextAppState == 'background') {
-        // publish analytics
         const navAnalytics = await AsyncStorage.getItem('@gymRats:navAnalytics');
         if (navAnalytics) {
           const navigationAnalytics = JSON.parse(navAnalytics);
@@ -72,9 +71,6 @@ const App = () => {
         const currentRouteName = navigationRef.getCurrentRoute().name;
 
         if (previousRouteName !== currentRouteName) {
-          // The line below uses the expo-firebase-analytics tracker
-          // https://docs.expo.io/versions/latest/sdk/firebase-analytics/
-          // Change this line to use another Mobile analytics SDK
           if (previousRouteName != "Splash") {
             const previousScreenData = {
               name: previousRouteName,
@@ -83,7 +79,6 @@ const App = () => {
               token: null
             }
             let currentNavAnalytics = await AsyncStorage.getItem('@gymRats:navAnalytics');
-            //add previousScreenData to currentNavAnalytics
             if (currentNavAnalytics) {
               currentNavAnalytics = JSON.parse(currentNavAnalytics);
               currentNavAnalytics.push(previousScreenData);
@@ -92,13 +87,10 @@ const App = () => {
             }
             let token = await AsyncStorage.getItem(AUTHENTICATION_TOKEN_KEY);
             if (token) previousScreenData.token = token;
-            console.log(currentNavAnalytics)
             await AsyncStorage.setItem('@gymRats:navAnalytics', JSON.stringify(currentNavAnalytics));
           }
           setScreenOpenDt(new Date().getTime());
         }
-
-        // Save the current route name for later comparison
         routeNameRef.current = currentRouteName;
       }}>
       <Stack.Navigator initialRouteName="Splash">

@@ -31,10 +31,6 @@ export default class AddCaloriesIntakeItem extends Component {
             this.setState({ amount: parseInt(this.props.route.params.amount) });
         if (this.props.route.params.amount)
             this.setState({ amount: parseInt(this.props.route.params.amount) })
-
-        console.log("asdaskdjlas;kd", Number.isNaN(this.props.route.params.item.carbs /
-            (this.props.route.params.item.carbs + this.props.route.params.item.fats + this.props.route.params.item.protein)
-            * 100))
     }
 
     addFood = () => {

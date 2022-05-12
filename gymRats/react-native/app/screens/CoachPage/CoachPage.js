@@ -23,10 +23,6 @@ export default class CoachPage extends Component {
         }
     }
 
-    componentDidMount() {
-        console.log(this.props);
-    }
-
     sendRequest = () => {
         this.setState({ showError: false, error: "", isLoading: true });
         ApiRequests.post("coaching/relation", {}, {
