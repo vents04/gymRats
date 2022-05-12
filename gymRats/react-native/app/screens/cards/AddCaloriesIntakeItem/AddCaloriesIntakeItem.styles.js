@@ -128,7 +128,7 @@ export default StyleSheet.create({
         paddingBottom: 12,
         paddingHorizontal: 8,
         marginVertical: 4,
-        width: "65%",
+        width: "55%",
         marginLeft: 16
     }
 })

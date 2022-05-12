@@ -1,6 +1,6 @@
 const AUTHENTICATION_TOKEN_KEY = "x-auth-token";
 
-const ROOT_URL_API = "http://localhost:4057";
+const ROOT_URL_API = "http://192.168.0.184:4057";
 
 const HTTP_STATUS_CODES = {
     OK: 200,

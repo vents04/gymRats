@@ -44,16 +44,27 @@ export default StyleSheet.create({
         color: "#aaa"
     },
     noCoachProContainer: {
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
         marginTop: 18,
+    },
+    noCoachNumberContainer: {
+        width: 30,
+        height: 30,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderWidth: 2,
+        borderColor: '#262626',
+        borderRadius: 1000,
+    },
+    noCoachNumber: {
+        fontFamily: 'MainBold',
+        fontSize: 16,
     },
     noCoachPro: {
         fontFamily: 'MainRegular',
         fontSize: 16,
-        marginLeft: 8,
-        width: "100%"
+        marginTop: 8
     },
     noCoachProIcon: {
         color: "#1f6cb0",

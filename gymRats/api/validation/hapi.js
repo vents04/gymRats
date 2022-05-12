@@ -10,14 +10,14 @@ const signupValidation = (data) => {
             "string.min": `First name should have at least 1 character`,
             "string.max": `First name should have at most 200 characters`,
             "any.required": `First name is a required field`
-        }),
+        }).regex(/^[A-Za-z]+$/),
         lastName: Joi.string().min(1).max(200).required().messages({
             "string.base": `Last name should have at least 1 character`,
             "string.empty": `Last name should not be empty`,
             "string.min": `Last name should have at least 1 character`,
             "string.max": `Last name should have at most 200 characters`,
             "any.required": `Last name is a required field`
-        }),
+        }).regex(/^[A-Za-z]+$/),
         email: Joi.string().email().min(3).max(320).required().messages({
             "string.base": `Email should have at least 3 characters`,
             "string.empty": `Email should not be empty`,
@@ -64,13 +64,13 @@ const userUpdateValidation = (data) => {
             "string.min": `First name should have at least 1 character`,
             "string.max": `First name should have at most 200 characters`,
             "any.required": `First name is a required field`
-        }),
+        }).regex(/^[A-Za-z]+$/),
         lastName: Joi.string().min(1).max(200).messages({
             "string.base": `Last name should have at least 1 character`,
             "string.empty": `Last name should not be empty`,
             "string.min": `Last name should have at least 1 character`,
             "string.max": `Last name should have at most 200 characters`,
-        }),
+        }).regex(/^[A-Za-z]+$/),
         weightUnit: Joi.string().valid(...Object.values(WEIGHT_UNITS)).messages({
             "string.base": `Weight unit should have at least 1 character`,
             "string.empty": `Weight unit should not be empty`,

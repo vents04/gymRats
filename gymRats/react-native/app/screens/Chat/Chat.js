@@ -121,7 +121,7 @@ export default class Chat extends Component {
                                                 {this.state.chat.oppositeUser.lastName.charAt(0)}
                                             </Text>
                                         </View>
-                                        : <Image style={styles.chatProfilePicture} />
+                                        : <Image source={{ uri: this.state.chat.oppositeUser.profilePicture }} style={styles.chatProfilePicture} />
                                 }
                                 <Text style={styles.chatProfileNames}>{this.state.chat.oppositeUser.firstName}</Text>
                             </View>

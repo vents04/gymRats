@@ -147,6 +147,7 @@ export default class AddCaloriesIntakeItem extends Component {
                         <View style={styles.inputContainer}>
                             <View style={[globalStyles.authPageInput, styles.amountInputContainer]}>
                                 <TextInput
+                                    keyboardType='numeric'
                                     defaultValue={this.state.amount.toString()}
                                     value={this.state.amount}
                                     style={styles.amountInput}

@@ -158,7 +158,7 @@ export default class ProfileDetailsEdit extends Component {
                         <TextInput
                             value={this.state.lastName}
                             style={globalStyles.authPageInput}
-                            placeholder="First name:"
+                            placeholder="Last name:"
                             editable={!this.state.showSaving}
                             onChangeText={(val) => { this.setState({ lastName: val, showError: false }, () => { this.changedValue() }) }} />
                     </View>
@@ -171,8 +171,8 @@ export default class ProfileDetailsEdit extends Component {
                             onValueChange={(value, index) =>
                                 this.setState({ weightUnit: value, showError: false }, () => { this.changedValue() })
                             }>
-                            <Picker.Item label="Metric system (kilograms)" value="KILOGRAMS" />
-                            <Picker.Item label="Imperial system (pounds)" value="POUNDS" />
+                            <Picker.Item style={{ fontFamily: 'MainRegular' }} label="Metric system (kilograms)" value="KILOGRAMS" />
+                            <Picker.Item style={{ fontFamily: 'MainRegular' }} label="Imperial system (pounds)" value="POUNDS" />
                         </Picker>
                     </View>
                     {

@@ -137,8 +137,8 @@ export default class AddFood extends Component {
                                 onValueChange={(value) =>
                                     this.setState({ unit: value, showError: false })
                                 }>
-                                <Picker.Item label="Grams" value={CALORIES_COUNTER_UNITS.GRAMS} />
-                                <Picker.Item label="Milliliters" value={CALORIES_COUNTER_UNITS.MILLILITERS} />
+                                <Picker.Item style={{ fontFamily: 'MainRegular' }} label="Grams" value={CALORIES_COUNTER_UNITS.GRAMS} />
+                                <Picker.Item style={{ fontFamily: 'MainRegular' }} label="Milliliters" value={CALORIES_COUNTER_UNITS.MILLILITERS} />
                             </Picker>
                         </View>
                         <View style={styles.inputSection}>

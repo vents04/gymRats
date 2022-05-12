@@ -69,7 +69,7 @@ export default StyleSheet.create({
         borderWidth: 1,
         borderColor: "#ccc",
         borderRadius: 4,
-        width: (Dimensions.get('window').width - 32) / 4,
+        width: (Dimensions.get('window').width - 32) / 4.5,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
