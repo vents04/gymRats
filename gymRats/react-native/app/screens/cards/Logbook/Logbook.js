@@ -467,7 +467,7 @@ export default class Logbook extends Component {
                                                                             this.deleteSet(exercise.exerciseId, index);
                                                                             this.setState({ showError: false })
                                                                         }}>
-                                                                            <Ionicons name="remove" size={20} color={cardColors.logbook} />
+                                                                            <Ionicons name="remove" size={20} color={cardColors.logbook} style={{ padding: 12 }} />
                                                                         </TouchableOpacity>
                                                                     </ScrollView>
                                                                 </View>

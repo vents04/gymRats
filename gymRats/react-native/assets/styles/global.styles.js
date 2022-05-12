@@ -16,7 +16,6 @@ export default StyleSheet.create({
     pageContainer: {
         paddingTop: 32,
         paddingHorizontal: 32,
-        paddingBottom: 12,
         flex: 1,
         maxHeight: "100%",
     },
