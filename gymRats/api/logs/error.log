@@ -7962,3 +7962,6 @@
 {"level":"error","message":"\"exercises[0].sets[0].reps\" must be a positive number"}
 {"level":"error","message":"\"exercises[0].sets[0].reps\" must be a positive number"}
 >>>>>>> 07bfe9355e8622b74c47766f1ae00d410d60dd2a
+{"level":"error","message":"Token not provided"}
+{"level":"error","message":"Cannot read properties of undefined (reading '_id')"}
+{"level":"error","message":"We cannot search for max distance when we don't know your location"}

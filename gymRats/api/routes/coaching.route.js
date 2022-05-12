@@ -132,13 +132,15 @@ router.post('/application', authenticate, async (req, res, next) => {
 
         const personalTrainer = new PersonalTrainer(req.body);
         personalTrainer.userId = req.user._id;
+        personalTrainer.firstName = req.user.firstName;
+        personalTrainer.lastName = req.user.lastName;
         await DbService.create(COLLECTIONS.PERSONAL_TRAINERS, personalTrainer);
 
         await EmailService.send("Coach request", `${req.user.firstName} ${req.user.lastName} with a personal trainer id ${personalTrainer._id} and user id ${req.user._id} requested to be a coach`);
 
         return res.sendStatus(HTTP_STATUS_CODES.OK);
     } catch (error) {
-        return next(new ResponseError(error.message || DEFAULT_ERROR_MESSAGE, error.status || HTTP_STATUS_CODES.letERNAL_SERVER_ERROR));
+        return next(new ResponseError(error.message || DEFAULT_ERROR_MESSAGE, error.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
     }
 });
 
