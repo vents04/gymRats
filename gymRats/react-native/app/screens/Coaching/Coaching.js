@@ -197,15 +197,21 @@ export default class Coaching extends Component {
                                                     </View>
                                                     <Text style={styles.noCoachDescription}>All of our coaches are:</Text>
                                                     <View style={styles.noCoachProContainer}>
-                                                        <Text style={styles.noCoachNumber}>1</Text>
+                                                        <View style={styles.noCoachNumberContainer}>
+                                                            <Text style={styles.noCoachNumber}>1</Text>
+                                                        </View>
                                                         <Text style={styles.noCoachPro}>Single handedly approved by us</Text>
                                                     </View>
                                                     <View style={styles.noCoachProContainer}>
-                                                        <Text style={styles.noCoachNumber}>2</Text>
+                                                        <View style={styles.noCoachNumberContainer}>
+                                                            <Text style={styles.noCoachNumber}>2</Text>
+                                                        </View>
                                                         <Text style={styles.noCoachPro}>Motivated and ready to help</Text>
                                                     </View>
                                                     <View style={styles.noCoachProContainer}>
-                                                        <Text style={styles.noCoachNumber}>3</Text>
+                                                        <View style={styles.noCoachNumberContainer}>
+                                                            <Text style={styles.noCoachNumber}>3</Text>
+                                                        </View>
                                                         <Text style={styles.noCoachPro}>Capable of training people with different goals</Text>
                                                     </View>
                                                     <TouchableOpacity style={[globalStyles.authPageActionButton, {
@@ -377,15 +383,21 @@ export default class Coaching extends Component {
                                                 </View>
                                                 <Text style={styles.noCoachDescription}>Catch the opportunity to:</Text>
                                                 <View style={styles.noCoachProContainer}>
-                                                    <Text style={styles.noCoachNumber}>1</Text>
+                                                    <View style={styles.noCoachNumberContainer}>
+                                                        <Text style={styles.noCoachNumber}>1</Text>
+                                                    </View>
                                                     <Text style={styles.noCoachPro}>Work with people locally and internationally</Text>
                                                 </View>
                                                 <View style={styles.noCoachProContainer}>
-                                                    <Text style={styles.noCoachNumber}>2</Text>
+                                                    <View style={styles.noCoachNumberContainer}>
+                                                        <Text style={styles.noCoachNumber}>2</Text>
+                                                    </View>
                                                     <Text style={styles.noCoachPro}>Get access to your clients' Gym Rats data (logbooks, diet, weight and etc.)</Text>
                                                 </View>
                                                 <View style={styles.noCoachProContainer}>
-                                                    <Text style={styles.noCoachNumber}>3</Text>
+                                                    <View style={styles.noCoachNumberContainer}>
+                                                        <Text style={styles.noCoachNumber}>3</Text>
+                                                    </View>
                                                     <Text style={styles.noCoachPro}>Get the most out of what you have earned through Gym Rats</Text>
                                                 </View>
                                                 <TouchableOpacity style={[globalStyles.authPageActionButton, {

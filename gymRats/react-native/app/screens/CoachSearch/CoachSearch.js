@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
-import axios from 'axios';
-import { Image, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Alert, Image, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import BottomSheet from "react-native-gesture-bottom-sheet";
 import Slider from '@react-native-community/slider';
+import * as Location from "expo-location";
 
 import ApiRequests from '../../classes/ApiRequests';
 
@@ -41,6 +41,23 @@ export default class CoachSearch extends Component {
 
     async componentDidMount() {
         this.searchCoaches();
+        this.getLocation();
+    }
+
+    getLocation = async () => {
+        try {
+            let { status } = await Location.requestForegroundPermissionsAsync();
+            if (status !== 'granted') {
+                Alert.alert("Location permission needed", "In order to provide a more personalized experience Gym Rats needs access to your location.");
+                this.getLocation();
+            }
+            let location = await Location.getCurrentPositionAsync({});
+            this.setState({ lat: location.coords.latitude, lng: location.coords.longitude }, () => {
+                this.searchCoaches()
+            });
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     searchCoaches = () => {

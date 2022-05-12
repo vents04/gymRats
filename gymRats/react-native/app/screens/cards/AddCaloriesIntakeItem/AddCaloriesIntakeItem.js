@@ -160,10 +160,10 @@ export default class AddCaloriesIntakeItem extends Component {
                                 onValueChange={(value, index) =>
                                     this.setState({ meal: value, showError: false })
                                 }>
-                                <Picker.Item style={{ fontFamily: 'MainRegular' }} label="Breakfast" value="BREAKFAST" />
-                                <Picker.Item style={{ fontFamily: 'MainRegular' }} label="Lunch" value="LUNCH" />
-                                <Picker.Item style={{ fontFamily: 'MainRegular' }} label="Dinner" value="DINNER" />
-                                <Picker.Item style={{ fontFamily: 'MainRegular' }} label="Snacks" value="SNACKS" />
+                                <Picker.Item label="Breakfast" value="BREAKFAST" />
+                                <Picker.Item label="Lunch" value="LUNCH" />
+                                <Picker.Item label="Dinner" value="DINNER" />
+                                <Picker.Item label="Snacks" value="SNACKS" />
                             </Picker>
                         </View>
                         <TouchableOpacity style={[globalStyles.authPageActionButton, {
