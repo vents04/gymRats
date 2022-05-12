@@ -7965,3 +7965,6 @@
 {"level":"error","message":"Token not provided"}
 {"level":"error","message":"Cannot read properties of undefined (reading '_id')"}
 {"level":"error","message":"We cannot search for max distance when we don't know your location"}
+{"level":"error","message":"Cannot read properties of null (reading 'userId')"}
+{"level":"error","message":"Cannot read properties of null (reading 'userId')"}
+{"level":"error","message":"Cannot read properties of null (reading 'userId')"}
