@@ -109,6 +109,7 @@ export default class WeightTracker extends Component {
                 </View>
                 <View style={[styles.weightInputContainer, globalStyles.authPageInput]}>
                     <TextInput
+                        keyboardType='numeric'
                         value={this.state.weight}
                         style={styles.editSectionInput}
                         placeholder="Weight:"

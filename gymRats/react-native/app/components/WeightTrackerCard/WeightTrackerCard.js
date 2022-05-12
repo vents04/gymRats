@@ -59,78 +59,81 @@ export default class WeightTrackerCard extends Component {
 
     render() {
         return (
-            <View style={globalStyles.card}>
-                {
-                    this.state.showConfirmationBox
-                        ? <ConfirmationBox deleteCard={this.deleteCard} toggleShowConfirmationBox={this.toggleShowConfirmationBox} />
-                        : null
-                }
-                <View style={globalStyles.cardTopbar}>
-                    <FontAwesome5 name="weight" size={25} color={cardColors.weightTracker} />
-                    <Text style={globalStyles.cardTitle}>{i18n.t('components')['cards']['weightTracker']['cardTitle']}</Text>
+            <TouchableOpacity onPress={() => {
+                if (!this.state.showConfirmationBox) this.props.actionButtonFunction();
+            }}><View style={globalStyles.card}>
                     {
-                        !this.props.client
-                            ? <TouchableOpacity style={globalStyles.cardTopbarIcon} onPress={() => {
-                                this.setState({ showConfirmationBox: true })
-                            }}>
-                                <MaterialCommunityIcons name="delete" size={25} color="#ddd" />
-                            </TouchableOpacity>
+                        this.state.showConfirmationBox
+                            ? <ConfirmationBox deleteCard={this.deleteCard} toggleShowConfirmationBox={this.toggleShowConfirmationBox} />
                             : null
                     }
+                    <View style={globalStyles.cardTopbar}>
+                        <FontAwesome5 name="weight" size={25} color={cardColors.weightTracker} />
+                        <Text style={globalStyles.cardTitle}>{i18n.t('components')['cards']['weightTracker']['cardTitle']}</Text>
+                        {
+                            !this.props.client
+                                ? <TouchableOpacity style={globalStyles.cardTopbarIcon} onPress={() => {
+                                    this.setState({ showConfirmationBox: true })
+                                }}>
+                                    <MaterialCommunityIcons name="delete" size={25} color="#ddd" />
+                                </TouchableOpacity>
+                                : null
+                        }
+                    </View>
+                    <View>
+                        {
+                            this.state.showError
+                                ? <Text style={[globalStyles.errorBox, {
+                                    marginTop: 16
+                                }]}>{this.state.error}</Text>
+                                : <>
+                                    <Text style={styles.weight}>
+                                        {this.props.data.weight}
+                                        &nbsp;
+                                        {WEIGHT_UNITS_LABELS[this.props.data.unit]}
+                                    </Text>
+                                    {
+                                        this.props.data.trend != 0
+                                            ? this.props.data.trend < 0
+                                                ? <View style={styles.statsContainer}>
+                                                    <FontAwesome name="long-arrow-down" size={20} color={cardColors.negative} />
+                                                    <Text style={styles.weightTrend}>
+                                                        {Math.abs(this.props.data.trend)}
+                                                        &nbsp;
+                                                        {WEIGHT_UNITS_LABELS[this.props.data.unit]}
+                                                        &nbsp;
+                                                        {i18n.t('components')['cards']['weightTracker']['lostWeight']}
+                                                    </Text>
+                                                </View>
+                                                : <View style={styles.statsContainer}>
+                                                    <FontAwesome name="long-arrow-up" size={20} color={cardColors.weightTracker} />
+                                                    <Text style={styles.weightTrend}>
+                                                        {this.props.data.trend}
+                                                        &nbsp;
+                                                        {WEIGHT_UNITS_LABELS[this.props.data.unit]}
+                                                        &nbsp;
+                                                        {i18n.t('components')['cards']['weightTracker']['gainedWeight']}
+                                                    </Text>
+                                                </View>
+                                            : null
+                                    }
+                                    {
+                                        !this.props.client
+                                            ? <TouchableOpacity style={[globalStyles.authPageActionButton, {
+                                                backgroundColor: cardColors.weightTracker,
+                                                marginTop: 16
+                                            }]} onPress={() => {
+                                                this.props.actionButtonFunction();
+                                            }}>
+                                                <Text style={globalStyles.authPageActionButtonText}>{i18n.t('components')['cards']['weightTracker']['redirectButton']}</Text>
+                                            </TouchableOpacity>
+                                            : null
+                                    }
+                                </>
+                        }
+                    </View>
                 </View>
-                <View>
-                    {
-                        this.state.showError
-                            ? <Text style={[globalStyles.errorBox, {
-                                marginTop: 16
-                            }]}>{this.state.error}</Text>
-                            : <>
-                                <Text style={styles.weight}>
-                                    {this.props.data.weight}
-                                    &nbsp;
-                                    {WEIGHT_UNITS_LABELS[this.props.data.unit]}
-                                </Text>
-                                {
-                                    this.props.data.trend != 0
-                                        ? this.props.data.trend < 0
-                                            ? <View style={styles.statsContainer}>
-                                                <FontAwesome name="long-arrow-down" size={20} color={cardColors.negative} />
-                                                <Text style={styles.weightTrend}>
-                                                    {Math.abs(this.props.data.trend)}
-                                                    &nbsp;
-                                                    {WEIGHT_UNITS_LABELS[this.props.data.unit]}
-                                                    &nbsp;
-                                                    {i18n.t('components')['cards']['weightTracker']['lostWeight']}
-                                                </Text>
-                                            </View>
-                                            : <View style={styles.statsContainer}>
-                                                <FontAwesome name="long-arrow-up" size={20} color={cardColors.weightTracker} />
-                                                <Text style={styles.weightTrend}>
-                                                    {this.props.data.trend}
-                                                    &nbsp;
-                                                    {WEIGHT_UNITS_LABELS[this.props.data.unit]}
-                                                    &nbsp;
-                                                    {i18n.t('components')['cards']['weightTracker']['gainedWeight']}
-                                                </Text>
-                                            </View>
-                                        : null
-                                }
-                                {
-                                    !this.props.client
-                                        ? <TouchableOpacity style={[globalStyles.authPageActionButton, {
-                                            backgroundColor: cardColors.weightTracker,
-                                            marginTop: 16
-                                        }]} onPress={() => {
-                                            this.props.actionButtonFunction();
-                                        }}>
-                                            <Text style={globalStyles.authPageActionButtonText}>{i18n.t('components')['cards']['weightTracker']['redirectButton']}</Text>
-                                        </TouchableOpacity>
-                                        : null
-                                }
-                            </>
-                    }
-                </View>
-            </View>
+            </TouchableOpacity>
         )
     }
 }

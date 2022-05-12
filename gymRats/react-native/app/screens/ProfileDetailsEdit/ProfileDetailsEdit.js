@@ -158,7 +158,7 @@ export default class ProfileDetailsEdit extends Component {
                         <TextInput
                             value={this.state.lastName}
                             style={globalStyles.authPageInput}
-                            placeholder="First name:"
+                            placeholder="Last name:"
                             editable={!this.state.showSaving}
                             onChangeText={(val) => { this.setState({ lastName: val, showError: false }, () => { this.changedValue() }) }} />
                     </View>

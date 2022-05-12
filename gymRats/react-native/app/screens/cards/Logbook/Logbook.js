@@ -435,6 +435,7 @@ export default class Logbook extends Component {
                                                                         contentContainerStyle={{ alignItems: "center", paddingVertical: 5 }}>
                                                                         <View style={styles.setContainerItem}>
                                                                             <TextInput style={styles.setContainerItemInput}
+                                                                                keyboardType='numeric'
                                                                                 value={set.weight.amount && set.weight.amount != undefined ? set.weight.amount.toString() : null}
                                                                                 defaultValue={set.weight.amount && set.weight.amount != undefined ? set.weight.amount.toString() : null}
                                                                                 onChangeText={(val) => {
@@ -445,6 +446,7 @@ export default class Logbook extends Component {
                                                                         </View>
                                                                         <View style={styles.setContainerItem}>
                                                                             <TextInput style={styles.setContainerItemInput}
+                                                                                keyboardType='numeric'
                                                                                 value={set.reps && set.reps != undefined ? set.reps.toString() : null}
                                                                                 defaultValue={set.reps && set.reps != undefined ? set.reps.toString() : null}
                                                                                 onChangeText={(val) => {
@@ -455,6 +457,7 @@ export default class Logbook extends Component {
                                                                         </View>
                                                                         <View style={styles.setContainerItem}>
                                                                             <TextInput style={styles.setContainerItemInput}
+                                                                                keyboardType='numeric'
                                                                                 value={set.duration && set.duration != undefined ? set.duration.toString() : null}
                                                                                 defaultValue={set.duration && set.duration != undefined ? set.duration.toString() : null}
                                                                                 onChangeText={(val) => {

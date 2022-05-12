@@ -76,98 +76,101 @@ export default class LogbookCard extends Component {
     }
 
     render() {
-        return <View style={globalStyles.card}>
-            {
-                this.state.showConfirmationBox
-                    ? <ConfirmationBox deleteCard={this.deleteCard} toggleShowConfirmationBox={this.toggleShowConfirmationBox} />
-                    : null
-            }
-            <View style={globalStyles.cardTopbar}>
-                <FontAwesome5 name="book-open" size={25} color={cardColors.logbook} />
-                <Text style={globalStyles.cardTitle}>{i18n.t('components')['cards']['logbook']['cardTitle']}</Text>
+        return <TouchableOpacity onPress={() => {
+            if (!this.state.showConfirmationBox) this.props.actionButtonFunction();
+        }}><View style={globalStyles.card}>
                 {
-                    !this.props.client
-                        ? <TouchableOpacity style={globalStyles.cardTopbarIcon} onPress={() => {
-                            this.setState({ showConfirmationBox: true })
-                        }}>
-                            <MaterialCommunityIcons name="delete" size={25} color="#ddd" />
-                        </TouchableOpacity>
+                    this.state.showConfirmationBox
+                        ? <ConfirmationBox deleteCard={this.deleteCard} toggleShowConfirmationBox={this.toggleShowConfirmationBox} />
                         : null
                 }
-            </View>
-            <View>
-                {
-                    this.state.showError
-                        ? <Text style={[globalStyles.errorBox, {
-                            marginTop: 16
-                        }]}>{this.state.error}</Text>
-                        : <>
-                            {
-                                this.props.data.hasWorkoutTemplateName
-                                    ? <Text style={styles.workoutName}>{this.props.data.workoutTemplateName}</Text>
-                                    : <Text style={styles.workoutName}>{i18n.t('components')['cards']['logbook']['cardTitle']}</Text>
-                            }
-                            <View style={styles.exercisesContainer}>
+                <View style={globalStyles.cardTopbar}>
+                    <FontAwesome5 name="book-open" size={25} color={cardColors.logbook} />
+                    <Text style={globalStyles.cardTitle}>{i18n.t('components')['cards']['logbook']['cardTitle']}</Text>
+                    {
+                        !this.props.client
+                            ? <TouchableOpacity style={globalStyles.cardTopbarIcon} onPress={() => {
+                                this.setState({ showConfirmationBox: true })
+                            }}>
+                                <MaterialCommunityIcons name="delete" size={25} color="#ddd" />
+                            </TouchableOpacity>
+                            : null
+                    }
+                </View>
+                <View>
+                    {
+                        this.state.showError
+                            ? <Text style={[globalStyles.errorBox, {
+                                marginTop: 16
+                            }]}>{this.state.error}</Text>
+                            : <>
                                 {
-                                    this.props.data.exercises.map((exercise, index) =>
-                                        <>
-                                            <Text key={index} style={[styles.exercise, {
-                                                fontFamily: this.props.client ? "MainBold" : "MainRegular",
-                                                fontSize: this.props.client ? 16 : 12
-                                            }]}>{exercise.sets.length} {this.props.client ? (exercise.sets.length != 1 ? "sets " : "set ") : null}x {
-                                                    exercise.translations.hasOwnProperty(i18n.locale)
-                                                        ? exercise.translations[i18n.locale]
-                                                        : exercise.exerciseName
-                                                }
-                                            </Text>
-                                            {
-                                                this.props.client
-                                                    ? exercise.sets.map((set, setIndex) =>
-                                                        <Text key={`${index}${setIndex}`} style={styles.setInfo}>
-                                                            {
-                                                                set.reps
-                                                                    ? <>
-                                                                        {set.reps} {set.reps != 1 ? "reps " : "rep "}
-                                                                    </>
-                                                                    : null
-                                                            }
-                                                            {
-                                                                set.weight && set.weight.amount
-                                                                    ? <>
-                                                                        with {set.weight.amount}{WEIGHT_UNITS_LABELS[set.weight.unit]}&nbsp;
-                                                                    </>
-                                                                    : null
-                                                            }
-                                                            {
-                                                                set.duration
-                                                                    ? <>
-                                                                        for {set.duration} seconds&nbsp;
-                                                                    </>
-                                                                    : null
-                                                            }
-                                                        </Text>
-                                                    )
-                                                    : null
-                                            }
-                                        </>
-                                    )
+                                    this.props.data.hasWorkoutTemplateName
+                                        ? <Text style={styles.workoutName}>{this.props.data.workoutTemplateName}</Text>
+                                        : <Text style={styles.workoutName}>{i18n.t('components')['cards']['logbook']['cardTitle']}</Text>
                                 }
-                            </View>
-                            {
-                                !this.props.client
-                                    ? <TouchableOpacity style={[globalStyles.authPageActionButton, {
-                                        backgroundColor: cardColors.logbook,
-                                        marginTop: 16
-                                    }]} onPress={() => {
-                                        this.props.actionButtonFunction();
-                                    }}>
-                                        <Text style={globalStyles.authPageActionButtonText}>{i18n.t('components')['cards']['logbook']['redirectButton']}</Text>
-                                    </TouchableOpacity>
-                                    : null
-                            }
-                        </>
-                }
+                                <View style={styles.exercisesContainer}>
+                                    {
+                                        this.props.data.exercises.map((exercise, index) =>
+                                            <>
+                                                <Text key={index} style={[styles.exercise, {
+                                                    fontFamily: this.props.client ? "MainBold" : "MainRegular",
+                                                    fontSize: this.props.client ? 16 : 12
+                                                }]}>{exercise.sets.length} {this.props.client ? (exercise.sets.length != 1 ? "sets " : "set ") : null}x {
+                                                        exercise.translations.hasOwnProperty(i18n.locale)
+                                                            ? exercise.translations[i18n.locale]
+                                                            : exercise.exerciseName
+                                                    }
+                                                </Text>
+                                                {
+                                                    this.props.client
+                                                        ? exercise.sets.map((set, setIndex) =>
+                                                            <Text key={`${index}${setIndex}`} style={styles.setInfo}>
+                                                                {
+                                                                    set.reps
+                                                                        ? <>
+                                                                            {set.reps} {set.reps != 1 ? "reps " : "rep "}
+                                                                        </>
+                                                                        : null
+                                                                }
+                                                                {
+                                                                    set.weight && set.weight.amount
+                                                                        ? <>
+                                                                            with {set.weight.amount}{WEIGHT_UNITS_LABELS[set.weight.unit]}&nbsp;
+                                                                        </>
+                                                                        : null
+                                                                }
+                                                                {
+                                                                    set.duration
+                                                                        ? <>
+                                                                            for {set.duration} seconds&nbsp;
+                                                                        </>
+                                                                        : null
+                                                                }
+                                                            </Text>
+                                                        )
+                                                        : null
+                                                }
+                                            </>
+                                        )
+                                    }
+                                </View>
+                                {
+                                    !this.props.client
+                                        ? <TouchableOpacity style={[globalStyles.authPageActionButton, {
+                                            backgroundColor: cardColors.logbook,
+                                            marginTop: 16
+                                        }]} onPress={() => {
+                                            this.props.actionButtonFunction();
+                                        }}>
+                                            <Text style={globalStyles.authPageActionButtonText}>{i18n.t('components')['cards']['logbook']['redirectButton']}</Text>
+                                        </TouchableOpacity>
+                                        : null
+                                }
+                            </>
+                    }
+                </View>
             </View>
-        </View>;
+        </TouchableOpacity>;
     }
 }
