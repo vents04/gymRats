@@ -1,6 +1,6 @@
 const AUTHENTICATION_TOKEN_KEY = "x-auth-token";
 
-const ROOT_URL_API = "http://192.168.0.184:4057";
+const ROOT_URL_API = "http://172.17.3.138:4057";
 
 const HTTP_STATUS_CODES = {
     OK: 200,
@@ -26,6 +26,7 @@ const CALORIES_COUNTER_SCREEN_INTENTS = {
 
 const SHOW_MAIN_TAB_NAVIGATION_ON_SCREENS = {
     CALENDAR: "Calendar",
+    PROGRESS: "Progress",
     COACHING: "Coaching",
     SUGGESTIONS: "Suggestions",
     CHATS: "Chats",

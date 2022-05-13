@@ -12,6 +12,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import { Ionicons } from '@expo/vector-icons';
+import { Entypo } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 
 import Login from '../screens/Login/Login';
@@ -38,6 +39,7 @@ import AddFood from '../screens/cards/AddFood/AddFood';
 import Client from '../screens/Client/Client';
 import Suggestions from '../screens/Suggestions/Suggestions';
 import PostReview from '../screens/PostReview/PostReview';
+import Progress from '../screens/Progress/Progress';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -120,6 +122,20 @@ const calendarScreenStack = () => {
             />
         </Stack.Navigator>
     );
+};
+
+const progressScreenStack = () => {
+    return (
+        <Stack.Navigator initialRouteName="Progress">
+            <Stack.Screen
+                name="Progress"
+                options={{
+                    headerShown: false
+                }}
+                component={Progress}
+            />
+        </Stack.Navigator>
+    )
 };
 
 const coachingScreenStack = () => {
@@ -298,6 +314,29 @@ const NavigationRoutes = () => {
 
                 })}
                 component={calendarScreenStack}
+            />
+            <Tab.Screen
+                name="progressScreenStack"
+                options={({ route }) => ({
+                    tabBarStyle: {
+                        display: getTabBarVisibility(route),
+                        height: 75,
+                    },
+                    tabBarLabel: 'Progress',
+                    headerShown: false,
+                    tabBarActiveTintColor: "#ccc",
+                    tabBarIcon: (tabInfo) =>
+                    (
+                        <View style={styles.tabBarIconContainer}>
+                            <Entypo name="line-graph" size={24} color={tabInfo.focused ? "#1f6cb0" : "#ccc"} />
+                            <Text style={[styles.tabBarIconText, {
+                                fontFamily: (tabInfo.focused ? "MainBold" : "MainRegular")
+                            }]}>Progress</Text>
+                        </View>
+                    )
+
+                })}
+                component={progressScreenStack}
             />
             <Tab.Screen
                 name="coachingScreenStack"

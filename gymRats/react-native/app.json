@@ -2,9 +2,9 @@
   "expo": {
     "name": "Gym Rats",
     "slug": "gym-rats",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
-    "icon": "./assets/img/icon.png",
+    "icon": "./assets/img/ic_launcher.png",
     "plugins": [
       [
         "expo-image-picker",
@@ -37,10 +37,6 @@
       "bundleIdentifier": "com.gymrats.android"
     },
     "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/img/icon.png",
-        "backgroundColor": "#FFFFFF"
-      },
       "permissions": [
         "android.permission.CAMERA",
         "android.permission.READ_EXTERNAL_STORAGE",

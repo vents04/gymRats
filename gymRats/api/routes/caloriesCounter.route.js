@@ -294,7 +294,7 @@ router.get("/search/food", async (req, res, next) => {
 
             if (words.length > 1) {
                 for (let food of foods) {
-                    if(food.title == "Water"){
+                    if (food.title == "Water") {
                         console.log(food)
                     }
                     newWords = req.query.words.split(" ");
@@ -317,7 +317,7 @@ router.get("/search/food", async (req, res, next) => {
                 }
                 quicksort(foods, 0, foods.length - 1, false);
             } else {
-                 quicksort(foods, 0, foods.length - 1, true);
+                quicksort(foods, 0, foods.length - 1, true);
             }
 
         }
