@@ -73,7 +73,7 @@ router.post('/item', authenticate, async (req, res, next) => {
         item.fats = parseFloat(item.fats / 100).toFixed(2);
         item.keywords = item.title.split(" ");
         item.keywords[0] = item.keywords[0].toLowerCase();
-        for(let i = 0; i < item.keywords.length; i++) {
+        for (let i = 0; i < item.keywords.length; i++) {
             item.keywords[i] = item.keywords[i].toLowerCase();
         }
         if (req.body.brand) item.keywords.push(...req.body.brand.split(" "));
