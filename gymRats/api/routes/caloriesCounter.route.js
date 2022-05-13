@@ -71,11 +71,9 @@ router.post('/item', authenticate, async (req, res, next) => {
         item.protein = parseFloat(item.protein / 100).toFixed(2);
         item.carbs = parseFloat(item.carbs / 100).toFixed(2);
         item.fats = parseFloat(item.fats / 100).toFixed(2);
-        item.keywords = [...item.title.split(" ")];
-        for (let keyword of item.keywords) {
-            keyword = keyword.toLowerCase();
-        }
+        item.keywords = item.title.split(" ");
         if (req.body.brand) item.keywords.push(...req.body.brand.split(" "));
+        item.keywords.map(element => element.toLowerCase());
         await DbService.create(COLLECTIONS.CALORIES_COUNTER_ITEMS, item);
 
         const newItem = await DbService.getById(COLLECTIONS.CALORIES_COUNTER_ITEMS, item._id);
