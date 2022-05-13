@@ -71,9 +71,10 @@ router.post('/item', authenticate, async (req, res, next) => {
         item.protein = parseFloat(item.protein / 100).toFixed(2);
         item.carbs = parseFloat(item.carbs / 100).toFixed(2);
         item.fats = parseFloat(item.fats / 100).toFixed(2);
-        item.keywords = [...item.title.split(" ")];
-        for (let keyword of item.keywords) {
-            keyword = keyword.toLowerCase();
+        item.keywords = item.title.split(" ");
+        item.keywords[0] = item.keywords[0].toLowerCase();
+        for(let i = 0; i < item.keywords.length; i++) {
+            item.keywords[i] = item.keywords[i].toLowerCase();
         }
         if (req.body.brand) item.keywords.push(...req.body.brand.split(" "));
         await DbService.create(COLLECTIONS.CALORIES_COUNTER_ITEMS, item);
@@ -294,9 +295,6 @@ router.get("/search/food", async (req, res, next) => {
 
             if (words.length > 1) {
                 for (let food of foods) {
-                    if(food.title == "Water"){
-                        console.log(food)
-                    }
                     newWords = req.query.words.split(" ");
 
                     Object.assign(food, { timesFound: 0 });
