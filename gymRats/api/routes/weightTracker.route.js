@@ -71,15 +71,4 @@ router.delete("/daily-weight/:id", authenticate, async (req, res, next) => {
     }
 });
 
-router.get("/weight-graph", authenticate, async (req, res, next) => {
-    try {
-        const graphData = await WeightTrackerService.getWeightGraph(req.user._id, req.user.weightUnit);
-        return res.status(HTTP_STATUS_CODES.OK).send({
-            graphData
-        });
-    } catch (error) {
-        return next(new ResponseError(error.message || DEFAULT_ERROR_MESSAGE, error.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
-    }
-});
-
 module.exports = router;

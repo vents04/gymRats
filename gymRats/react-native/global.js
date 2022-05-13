@@ -26,6 +26,7 @@ const CALORIES_COUNTER_SCREEN_INTENTS = {
 
 const SHOW_MAIN_TAB_NAVIGATION_ON_SCREENS = {
     CALENDAR: "Calendar",
+    PROGRESS: "Progress",
     COACHING: "Coaching",
     SUGGESTIONS: "Suggestions",
     CHATS: "Chats",

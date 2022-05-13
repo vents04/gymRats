@@ -130,6 +130,19 @@ const WeightTrackerService = {
                 reject(new ResponseError(error.message || "Internal server error"));
             }
         })
+    },
+
+    getProgressNotation: (userId) => {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const weights = await DbService.getMany(COLLECTIONS.DAILY_WEIGHTS, { userId: mongoose.Types.ObjectId(userId) })
+                for (let weight of weights) {
+
+                }
+            } catch (error) {
+                reject(new ResponseError(error.message || "Internal server error"));
+            }
+        });
     }
 }
 

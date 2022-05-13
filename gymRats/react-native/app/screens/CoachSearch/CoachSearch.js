@@ -56,7 +56,7 @@ export default class CoachSearch extends Component {
                 this.searchCoaches()
             });
         } catch (error) {
-            console.log(error);
+            this.setState({ showError: true, error: error.message })
         }
     }
 

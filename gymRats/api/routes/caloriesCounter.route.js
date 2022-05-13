@@ -77,6 +77,7 @@ router.post('/item', authenticate, async (req, res, next) => {
             item.keywords[i] = item.keywords[i].toLowerCase();
         }
         if (req.body.brand) item.keywords.push(...req.body.brand.split(" "));
+        item.keywords.map(element => element.toLowerCase());
         await DbService.create(COLLECTIONS.CALORIES_COUNTER_ITEMS, item);
 
         const newItem = await DbService.getById(COLLECTIONS.CALORIES_COUNTER_ITEMS, item._id);
@@ -315,7 +316,7 @@ router.get("/search/food", async (req, res, next) => {
                 }
                 quicksort(foods, 0, foods.length - 1, false);
             } else {
-                 quicksort(foods, 0, foods.length - 1, true);
+                quicksort(foods, 0, foods.length - 1, true);
             }
 
         }
