@@ -58,6 +58,7 @@ export default StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         overflow: "hidden",
+        flex: 1
     },
     setContainerTitle: {
         fontFamily: "MainRegular",

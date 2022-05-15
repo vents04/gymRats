@@ -1,8 +1,7 @@
-const { HTTP_STATUS_CODES, COLLECTIONS, WEIGHT_UNITS, WEIGHT_UNIT_RELATIONS } = require("../../global");
+const { HTTP_STATUS_CODES, COLLECTIONS, WEIGHT_UNITS, WEIGHT_UNIT_RELATIONS, PROGRESS_NOTATION, WEEK_TO_MILLISECONDS } = require("../../global");
 const DbService = require("../db.service");
 const mongoose = require("mongoose");
 const ResponseError = require("../../errors/responseError");
-const { PROGRESS_NOTATION, WEEK_TO_MILLISECONDS } = require("../../../react-native/global");
 
 const WeightTrackerService = {
     getDailyTrend: (_id) => {
@@ -173,7 +172,7 @@ const WeightTrackerService = {
                 }
                 resolve(progressNotation)
             } catch (error) {
-                reject(new ResponseError(error.message || "Internal server error"));
+                reject(new ResponseError(error.message || "Internal server error", error.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
             }
         });
     }
