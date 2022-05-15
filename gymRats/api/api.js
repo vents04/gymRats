@@ -202,6 +202,7 @@ mongo.connect();
     }
     console.log(bulkOrms[3], bulkOrms[4], bulkOrms[5]);
     console.log(await LogbookService.getExerciseProgressNotation(bulkOrms.splice(3, 3)));
+    await LogbookService.getExercisesProgress("6239febd705e68e893aa2aa5");
 })();
 
 io.on("connection", (socket) => {

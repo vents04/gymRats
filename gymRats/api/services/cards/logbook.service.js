@@ -17,7 +17,8 @@ const LogbookService = {
                             exercises.push({
                                 _id: exercise.exerciseId,
                                 exerciseInstance,
-                                sessions: []
+                                sessions: [],
+                                progressNotation: null
                             })
                         }
                         let sessionOneRepMax = null;
@@ -39,6 +40,16 @@ const LogbookService = {
                                 })
                             }
                         }
+                    }
+                }
+                for (let exercise of exercises) {
+                    if (exercise.sessions.length >= 2) {
+                        let orms = [];
+                        for (let session of exercise.sessions) {
+                            orms.push(session.oneRepMax);
+                        }
+                        const progressNotation = await LogbookService.getExerciseProgressNotation(orms);
+                        exercise.progressNotation = progressNotation;
                     }
                 }
                 resolve(exercises);
