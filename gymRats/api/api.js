@@ -180,29 +180,29 @@ mongo.connect();
         }
         bulkOrms.push(orm);
     }
-    console.log("CUT ORMS:")
-    console.log(cutOrms);
+    //console.log("CUT ORMS:")
+    //console.log(cutOrms);
     for (let index = 0; index < cutOrms.length; index++) {
         if (index + 1 < cutOrms.length) {
             const percentageDifference = parseFloat(parseFloat((cutOrms[index + 1] - cutOrms[index]) / cutOrms[index] * 100).toFixed(2));
-            console.log("Percentage difference between " + cutOrms[index] + " and " + cutOrms[index + 1] + " is: " + percentageDifference);
+            //console.log("Percentage difference between " + cutOrms[index] + " and " + cutOrms[index + 1] + " is: " + percentageDifference);
         }
     }
-    console.log("BULK ORMS:")
-    console.log(bulkOrms);
+    //console.log("BULK ORMS:")
+    //console.log(bulkOrms);
     for (let index = 0; index < bulkOrms.length; index++) {
         try {
             if (index + 1 < bulkOrms.length) {
                 const percentageDifference = parseFloat(parseFloat((bulkOrms[index + 1] - bulkOrms[index]) / bulkOrms[index] * 100).toFixed(2));
-                console.log("Percentage difference between " + bulkOrms[index] + " and " + bulkOrms[index + 1] + " is: " + percentageDifference);
+                //console.log("Percentage difference between " + bulkOrms[index] + " and " + bulkOrms[index + 1] + " is: " + percentageDifference);
             }
         } catch (err) {
             console.log(err);
         }
     }
-    console.log(bulkOrms[3], bulkOrms[4], bulkOrms[5]);
-    console.log(await LogbookService.getExerciseProgressNotation(bulkOrms.splice(3, 3)));
-    await LogbookService.getExercisesProgress("6239febd705e68e893aa2aa5");
+    //console.log(bulkOrms[3], bulkOrms[4], bulkOrms[5]);
+    //console.log(await LogbookService.getExerciseProgressNotation(bulkOrms.splice(3, 3)));
+    //await LogbookService.getExercisesProgress("6239febd705e68e893aa2aa5");
 })();
 
 io.on("connection", (socket) => {
