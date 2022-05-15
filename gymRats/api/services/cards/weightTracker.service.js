@@ -2,6 +2,7 @@ const { HTTP_STATUS_CODES, COLLECTIONS, WEIGHT_UNITS, WEIGHT_UNIT_RELATIONS } = 
 const DbService = require("../db.service");
 const mongoose = require("mongoose");
 const ResponseError = require("../../errors/responseError");
+const { PROGRESS_NOTATION, WEEK_TO_MILLISECONDS } = require("../../../react-native/global");
 
 const WeightTrackerService = {
     getDailyTrend: (_id) => {
@@ -132,13 +133,45 @@ const WeightTrackerService = {
         })
     },
 
-    getProgressNotation: (userId) => {
+    getProgressNotation: (date, month, year, userId) => {
         return new Promise(async (resolve, reject) => {
             try {
+                const currentDate = new Date(year, month - 1, date);
+                let progressNotation = null;
+                let average = 0;
+                let weeklyWeights = [];
                 const weights = await DbService.getMany(COLLECTIONS.DAILY_WEIGHTS, { userId: mongoose.Types.ObjectId(userId) })
                 for (let weight of weights) {
-
+                    const weightDate = new Date(weight.year, weight.month - 1, weight.date);
+                    if (weightDate.getTime() < currentDate.getTime() && weightDate.getTime() + WEEK_TO_MILLISECONDS > currentDate.getTime()) {
+                        weeklyWeights.push(weight);
+                    }
                 }
+                if (weeklyWeights.length > 1) {
+                    let greatestWeight = 0;
+                    for (let weight of weeklyWeights) {
+                        if (weight.weight > greatestWeight) greatestWeight = weight.weight;
+                    }
+                    for (let weight of weeklyWeights) {
+                        if (weight.unit == WEIGHT_UNITS.KILOGRAMS) {
+                            average += ((weight.weight + greatestWeight) / 2);
+                            continue;
+                        }
+                        average += ((weight.weight * WEIGHT_UNIT_RELATIONS.KILOGRAMS.POUNDS + greatestWeight) / 2);
+                    }
+                    average /= weeklyWeights.length;
+                    const percentageDifference = (average - weeklyWeights[0]) / weeklyWeights[0] * 100;
+                    if (percentageDifference < 0) {
+                        if (percentageDifference > -0.5) progressNotation = PROGRESS_NOTATION.INSUFFICIENT_WEIGHT_LOSS
+                        else if (percentageDifference > -1) progressNotation = PROGRESS_NOTATION.SUFFICIENT_WEIGHT_LOSS
+                        else progressNotation = PROGRESS_NOTATION.RAPID_WEIGHT_LOSS
+                    } else {
+                        if (percentageDifference < 0.25) progressNotation = PROGRESS_NOTATION.INSUFFICIENT_WEIGHT_GAIN
+                        else if (percentageDifference < 0.75) progressNotation = PROGRESS_NOTATION.SUFFICIENT_WEIGHT_GAIN
+                        else progressNotation = PROGRESS_NOTATION.RAPID_WEIGHT_GAIN
+                    }
+                }
+                resolve(progressNotation)
             } catch (error) {
                 reject(new ResponseError(error.message || "Internal server error"));
             }

@@ -11,6 +11,7 @@ const { PORT, HTTP_STATUS_CODES, COLLECTIONS, FOOD_TYPES } = require('./global')
 const MessagingService = require('./services/messaging.service');
 const ResponseError = require('./errors/responseError');
 const DbService = require('./services/db.service');
+const WeightTrackerService = require('./services/cards/weightTracker.service');
 const io = require("socket.io")(httpServer, { cors: { origin: "*" } });
 
 app
@@ -25,7 +26,7 @@ app
 mongo.connect();
 
 (async function () {
-
+    await WeightTrackerService.getProgressNotation(15, 5, 2022, "6239febd705e68e893aa2aa5")
 })()
 
 io.on("connection", (socket) => {

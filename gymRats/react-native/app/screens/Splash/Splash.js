@@ -26,7 +26,7 @@ export default class Splash extends Component {
                 index: 0,
                 routes: [{ name: isAuthenticated ? 'NavigationRoutes' : 'Auth' }],
             });
-        }, 2500);
+        }, 1000);
     }
 
     render() {
