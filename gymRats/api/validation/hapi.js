@@ -123,7 +123,7 @@ const dailyItemUpdateValidation = (data) => {
 
 const dailyWeightPostValidation = (data) => {
     const schema = Joi.object({
-        weight: Joi.number().required().positive(),
+        weight: Joi.number().required().positive().min(2.1).max(635),
         unit: Joi.string().valid(...Object.values(WEIGHT_UNITS)).required(),
     })
     return schema.validate(data);

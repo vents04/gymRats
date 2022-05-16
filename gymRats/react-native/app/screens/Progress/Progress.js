@@ -45,6 +45,7 @@ export default class Progress extends Component {
             console.log(response)
             this.setState({ progress: response.data });
         }).catch((error) => {
+            console.log(error.response.data);
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
                     this.setState({ showError: true, error: error.response.data });
