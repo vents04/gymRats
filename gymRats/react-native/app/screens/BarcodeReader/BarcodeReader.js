@@ -25,12 +25,10 @@ export default function BarcodeScanner(props) {
     }, []);
 
     const handleBarCodeScanned = ({ type, data }) => {
-        console.log(data)
         setScanned(true);
+        setBarcode(data)
         ApiRequests.get('calories-counter/search/barcode?barcode=' + data).then(response => {
-            if (!response.data.result) {
-                props.navigation.replace("AddFood", { barcode: data, date: props.route.params.date, timezoneOffset: props.route.params.timezoneOffset, meal: props.route.params.meal });
-            } else {
+            if (response.data.result) {
                 if (props.route.params.isAddingBarcodeToFood) {
                     Alert.alert("Barcode already exists", "This barcode is already associated with a food item. Please scan a different barcode.");
                     setScanned(false);
@@ -45,6 +43,8 @@ export default function BarcodeScanner(props) {
                 }
             }
         }).catch((error) => {
+            setScanned(false)
+            setBarcode("")
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
                     ApiRequests.alert("Error", error.response.data, [{ text: 'OK' }]);
@@ -99,14 +99,24 @@ export default function BarcodeScanner(props) {
                 scanned
                     ? <>
                         <Text style={{ ...globalStyles.modalText, marginVertical: 24 }}>Barcode not found</Text>
-                        <TouchableOpacity style={[globalStyles.authPageActionButton, {
-                            maxWidth: 200,
-                            marginTop: 16,
-                            marginHorizontal: 16
-                        }]} onPress={() => {
+                        <TouchableOpacity style={{
+                            marginHorizontal: 16,
+                            padding: 8
+                        }} onPress={() => {
+                            setBarcode("")
                             setScanned(false)
                         }}>
-                            <Text style={globalStyles.authPageActionButtonText}>Scan / enter again</Text>
+                            <Text style={globalStyles.actionText}>Scan / enter again</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={[globalStyles.authPageActionButton, {
+                            maxWidth: "80%",
+                            marginTop: 64,
+                            marginHorizontal: 16
+                        }]} onPress={() => {
+                            setScanned(false);
+                            props.navigation.replace("AddFood", { barcode, date: props.route.params.date, timezoneOffset: props.route.params.timezoneOffset, meal: props.route.params.meal });
+                        }}>
+                            <Text style={globalStyles.authPageActionButtonText}>Let's add this food to Gym Rats</Text>
                         </TouchableOpacity>
                     </>
                     : <>

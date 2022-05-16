@@ -8039,3 +8039,7 @@
 {"level":"error","message":"\"exercises[0].sets[0].reps\" must be a positive number"}
 {"level":"error","message":"\"exercises[0].sets[0].reps\" must be a positive number"}
 {"level":"error","message":"\"exercises[0].sets[0].reps\" must be a positive number"}
+{"level":"error","message":"Invalid barcode"}
+{"level":"error","message":"Invalid barcode"}
+{"level":"error","message":"Invalid barcode"}
+{"level":"error","message":"Invalid barcode"}
