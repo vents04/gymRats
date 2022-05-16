@@ -30,7 +30,6 @@ export default StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         marginTop: 20,
-        height: 30
     },
     exerciseContainerLeft: {
         display: 'flex',

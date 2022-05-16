@@ -142,7 +142,7 @@ export default class SearchCaloriesIntake extends Component {
                             onChangeText={this.changeQuery} />
                         <TouchableOpacity onPress={() => {
                             this.query = "";
-                            this.searchInputRef.current.value = ""
+                            this.searchInputRef.current.clear();
                             this.searchFood();
                         }} style={{ width: "10%", marginLeft: 12 }}>
                             <Ionicons name="close" size={24} color="#1f6cb0" />

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ActivityIndicator, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 
 import ApiRequests from '../../../classes/ApiRequests';
 
@@ -23,6 +23,8 @@ export default class WeightTracker extends Component {
             error: "",
             originalRecord: null
         }
+
+        this.input = React.createRef();
     }
 
     componentDidMount() {
@@ -107,8 +109,11 @@ export default class WeightTracker extends Component {
                     </TouchableOpacity>
                     <Text style={globalStyles.followUpScreenTitle}>Weight</Text>
                 </View>
-                <View style={[styles.weightInputContainer, globalStyles.authPageInput]}>
+                <TouchableOpacity style={[styles.weightInputContainer, globalStyles.authPageInput]} onPress={() => {
+                    this.input.current.focus();
+                }}>
                     <TextInput
+                        ref={this.input}
                         keyboardType='decimal-pad'
                         value={this.state.weight}
                         style={styles.editSectionInput}
@@ -121,7 +126,7 @@ export default class WeightTracker extends Component {
                             if (!shouldNotBeAdded) this.setState({ weight: val, showError: false })
                         }} />
                     <Text style={styles.editSectionInput}>{WEIGHT_UNITS_LABELS[this.state.weightUnit]}</Text>
-                </View>
+                </TouchableOpacity>
                 {
                     this.state.showError
                         ? <Text style={[globalStyles.errorBox, {

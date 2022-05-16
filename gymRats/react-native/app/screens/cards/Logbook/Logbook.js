@@ -72,6 +72,8 @@ export default class Logbook extends Component {
                     this.setState({ exercises: exercises, hasChanges: true });
                 } else if (this.props.route.params.data) {
                     this.getSession(this.props.route.params.date);
+                } else if (this.state.exercises.length == 0) {
+                    this.getTemplates();
                 }
             } else {
                 if (this.state.exercises.length == 0) {
@@ -89,6 +91,7 @@ export default class Logbook extends Component {
 
     getTemplates = () => {
         ApiRequests.get("logbook/workout", {}, true).then((response) => {
+            console.log("response data", response.data)
             this.setState({ templates: response.data.templates });
             if (response.data.templates.length > 0) {
                 this.setState({ showTemplatePickerModal: !this.state.hasDeniedWorkoutTemplateReplication, selectedTemplateId: response.data.templates[0]._id });
@@ -132,12 +135,12 @@ export default class Logbook extends Component {
         for (let exercise of exercises) {
             if (exercise.exerciseId == exerciseId) {
                 exercise.sets.push({
-                    reps: 0,
+                    reps: exercise.sets.length > 0 ? exercise.sets[exercise.sets.length - 1].reps : 0,
                     weight: {
-                        amount: 0,
+                        amount: exercise.sets.length > 0 ? exercise.sets[exercise.sets.length - 1].weight.amount : 0,
                         unit: this.state.weightUnit,
                     },
-                    duration: undefined,
+                    duration: exercise.sets.length > 0 ? exercise.sets[exercise.sets.length - 1].duration : undefined,
                 })
                 this.setState({ exercises: exercises });
                 return;
@@ -231,15 +234,20 @@ export default class Logbook extends Component {
     }
 
     saveChanges = () => {
-        const payload = { exercises: this.state.exercises };
-        for (let exercise of payload.exercises) {
-            if (exercise.hasOwnProperty("exerciseName")) delete exercise.exerciseName;
+        let finalExercises = [];
+        const exercises = this.state.exercises;
+        for (let exercise of exercises) {
+            finalExercises.push({
+                exerciseId: exercise.exerciseId,
+                sets: exercise.sets,
+            })
         }
-        ApiRequests.post(`logbook/workout-session?date=${this.props.route.params.date.getDate()}&month=${this.props.route.params.date.getMonth() + 1}&year=${this.props.route.params.date.getFullYear()}`, {}, payload, true).then((response) => {
+        ApiRequests.post(`logbook/workout-session?date=${this.props.route.params.date.getDate()}&month=${this.props.route.params.date.getMonth() + 1}&year=${this.props.route.params.date.getFullYear()}`, {}, { exercises: finalExercises }, true).then((response) => {
             this.setState({ hasChanges: false }, () => {
                 this.getSession(this.props.route.params.date);
             });
         }).catch((error) => {
+            console.log("DSLKSKDLKSLDKSLD", error.response.data)
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
                     this.setState({ showError: true, error: error.response.data });
@@ -321,7 +329,9 @@ export default class Logbook extends Component {
                                 <View style={globalStyles.modalView}>
                                     <Text style={globalStyles.modalText}>You may choose a workout template for this workout session</Text>
                                     <Picker
-                                        style={globalStyles.authPageInput}
+                                        style={[globalStyles.authPageInput, {
+                                            backgroundColor: "#fafafa"
+                                        }]}
                                         selectedValue={this.state.selectedTemplateId}
                                         onValueChange={(itemValue, itemIndex) =>
                                             this.setState({ selectedTemplateId: itemValue, showModalError: false, showError: false })
@@ -338,14 +348,14 @@ export default class Logbook extends Component {
                                             : null
                                     }
                                     <View style={globalStyles.modalActionsContainer}>
-                                        <TouchableOpacity onPress={() => {
+                                        <TouchableOpacity style={styles.option} onPress={() => {
                                             this.setState({ showTemplatePickerModal: false, hasDeniedWorkoutTemplateReplication: true })
                                         }}>
                                             <Text style={[globalStyles.modalActionTitle, {
                                                 color: "#1f6cb0"
                                             }]}>Skip</Text>
                                         </TouchableOpacity>
-                                        <TouchableOpacity onPress={() => {
+                                        <TouchableOpacity style={styles.option} onPress={() => {
                                             this.loadWorkoutTemplate();
                                         }}>
                                             <Text style={globalStyles.modalActionTitle}>Add</Text>
