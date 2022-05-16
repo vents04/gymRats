@@ -135,12 +135,12 @@ export default class Logbook extends Component {
         for (let exercise of exercises) {
             if (exercise.exerciseId == exerciseId) {
                 exercise.sets.push({
-                    reps: 0,
+                    reps: exercise.sets.length > 0 ? exercise.sets[exercise.sets.length - 1].reps : 0,
                     weight: {
-                        amount: 0,
+                        amount: exercise.sets.length > 0 ? exercise.sets[exercise.sets.length - 1].weight.amount : 0,
                         unit: this.state.weightUnit,
                     },
-                    duration: undefined,
+                    duration: exercise.sets.length > 0 ? exercise.sets[exercise.sets.length - 1].duration : undefined,
                 })
                 this.setState({ exercises: exercises });
                 return;
