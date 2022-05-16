@@ -135,6 +135,13 @@ export default class Calendar extends Component {
                         : null
                 }
                 <LogoBar />
+                <View style={globalStyles.topbarIconContainer}>
+                    <TouchableOpacity onPress={() => {
+                        this.props.navigation.navigate("Suggestions")
+                    }}>
+                        <FontAwesome5 name="lightbulb" size={24} color={"#1f6cb0"} />
+                    </TouchableOpacity>
+                </View>
                 {
                     this.state.selectedDate
                         ? <View style={[globalStyles.fillEmptySpace, { flexShrink: 1 }]}>
