@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import { Dimensions, ScrollView, Text, TouchableHighlight, TouchableNativeFeedback, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import BottomSheet from "react-native-gesture-bottom-sheet";
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 import ApiRequests from '../../classes/ApiRequests';
 
@@ -33,15 +34,15 @@ export default class Calendar extends Component {
         this.state = {
             dates: [],
             doNotShow: [],
-            selectedDate: null,
+            selectedDate: new Date(),
             timezoneOffset: null,
+            showCalendarPicker: true
         }
 
         this.focusListener;
     }
 
     onFocusFunction = () => {
-        console.log(this.props)
         if (this.props && this.props.route && this.props.route.params && this.props.route.params.reloadDate) {
             this.setState({
                 selectedDate: this.props.route.params.date,
@@ -119,32 +120,44 @@ export default class Calendar extends Component {
                     this.incrementDate(-1)
             }} >
             <View style={globalStyles.pageContainer}>
+                {
+                    this.state.showCalendarPicker
+                        ? <DateTimePicker
+                            testID="dateTimePicker"
+                            value={new Date(this.state.selectedDate)}
+                            mode={"date"}
+                            onChange={(event, selectedDate) => {
+                                const currentDate = new Date(selectedDate);
+                                this.setState({ showCalendarPicker: false, selectedDate: currentDate });
+                                this.getDate(currentDate)
+                            }}
+                        />
+                        : null
+                }
                 <LogoBar />
                 {
                     this.state.selectedDate
                         ? <View style={[globalStyles.fillEmptySpace, { flexShrink: 1 }]}>
                             <View style={styles.calendarControllersContainer}>
-                                <TouchableWithoutFeedback onPress={() => { this.incrementDate(-1) }}>
-                                    <View style={styles.calendarController}>
-                                        <Entypo name="chevron-left" size={14} color="#999" style={{ marginRight: 5 }} />
-                                        <Text style={styles.calendarControllerText}>{i18n.t('screens')['calendar']['calendarControllerBack']}</Text>
-                                    </View>
+                                <TouchableOpacity style={styles.calendarController} onPress={() => { this.incrementDate(-1) }}>
+                                    <Entypo name="chevron-left" size={14} color="#999" style={{ marginRight: 5 }} />
+                                    <Text style={styles.calendarControllerText}>{i18n.t('screens')['calendar']['calendarControllerBack']}</Text>
+                                </TouchableOpacity>
+                                <TouchableWithoutFeedback onPress={() => { this.setState({ showCalendarPicker: true }) }}>
+                                    <Text style={styles.calendarCurrentDate}>
+                                        {this.state.selectedDate.getDate()}
+                                        .
+                                        {
+                                            this.state.selectedDate.getMonth() + 1 < 10
+                                                ? `0${(this.state.selectedDate.getMonth() + 1)}`
+                                                : (this.state.selectedDate.getMonth() + 1)
+                                        }
+                                    </Text>
                                 </TouchableWithoutFeedback>
-                                <Text style={styles.calendarCurrentDate}>
-                                    {this.state.selectedDate.getDate()}
-                                    .
-                                    {
-                                        this.state.selectedDate.getMonth() + 1 < 10
-                                            ? `0${(this.state.selectedDate.getMonth() + 1)}`
-                                            : (this.state.selectedDate.getMonth() + 1)
-                                    }
-                                </Text>
-                                <TouchableWithoutFeedback onPress={() => { this.incrementDate(1) }}>
-                                    <View style={[styles.calendarController, { justifyContent: 'flex-end' }]}>
-                                        <Text style={styles.calendarControllerText}>{i18n.t('screens')['calendar']['calendarControllerNext']}</Text>
-                                        <Entypo name="chevron-right" style={{ marginLeft: 5 }} size={14} color="#999" />
-                                    </View>
-                                </TouchableWithoutFeedback>
+                                <TouchableOpacity style={[styles.calendarController, { justifyContent: 'flex-end' }]} onPress={() => { this.incrementDate(1) }}>
+                                    <Text style={styles.calendarControllerText}>{i18n.t('screens')['calendar']['calendarControllerNext']}</Text>
+                                    <Entypo name="chevron-right" style={{ marginLeft: 5 }} size={14} color="#999" />
+                                </TouchableOpacity>
                             </View>
                             <View>
                                 <TouchableOpacity style={[globalStyles.authPageActionButton, {

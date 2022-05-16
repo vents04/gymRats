@@ -28,7 +28,7 @@ export default StyleSheet.create({
         fontSize: 12,
         flex: 1,
         textAlign: "center",
-        marginTop: 3
+        padding: 8
     },
     bottomSheetTopbar: {
         padding: 32,
