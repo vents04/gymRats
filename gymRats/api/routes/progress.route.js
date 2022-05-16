@@ -1,17 +1,19 @@
 const express = require('express');
+const mongoose = require("mongoose");
 const router = express.Router();
 
 const ResponseError = require('../errors/responseError');
-const { DEFAULT_ERROR_MESSAGE, HTTP_STATUS_CODES } = require('../global');
+const { DEFAULT_ERROR_MESSAGE, HTTP_STATUS_CODES, RELATION_STATUSES, COLLECTIONS } = require('../global');
 const { authenticate } = require('../middlewares/authenticate');
 const LogbookService = require('../services/cards/logbook.service');
 const WeightTrackerService = require('../services/cards/weightTracker.service');
+const DbService = require('../services/db.service');
 
 router.get("/page", authenticate, async (req, res, next) => {
     try {
         let message = false;
         
-        const relation = await DbService.getById(COLLECTIONS.RELATIONS, {clientId: mongoose.Types.ObjectId(req.user._id)});
+        const relation = await DbService.getOne(COLLECTIONS.RELATIONS, {clientId: mongoose.Types.ObjectId(req.user._id)});
         if(relation && relation.status == RELATION_STATUSES.ACTIVE){
             message = true; 
         }
