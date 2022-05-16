@@ -41,6 +41,7 @@ export default class Calendar extends Component {
     }
 
     onFocusFunction = () => {
+        console.log(this.props)
         if (this.props && this.props.route && this.props.route.params && this.props.route.params.reloadDate) {
             this.setState({
                 selectedDate: this.props.route.params.date,
@@ -104,6 +105,7 @@ export default class Calendar extends Component {
         const incrementedDate = new Date(this.state.selectedDate);
         incrementedDate.setDate(incrementedDate.getDate() + amount);
         this.setState({ selectedDate: incrementedDate });
+        console.log("INCREMENTED DATE", incrementedDate);
         this.getDate(incrementedDate, this.state.timezoneOffset);
     }
 

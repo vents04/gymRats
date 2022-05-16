@@ -72,6 +72,8 @@ export default class Logbook extends Component {
                     this.setState({ exercises: exercises, hasChanges: true });
                 } else if (this.props.route.params.data) {
                     this.getSession(this.props.route.params.date);
+                } else if (this.state.exercises.length == 0) {
+                    this.getTemplates();
                 }
             } else {
                 if (this.state.exercises.length == 0) {
@@ -89,6 +91,7 @@ export default class Logbook extends Component {
 
     getTemplates = () => {
         ApiRequests.get("logbook/workout", {}, true).then((response) => {
+            console.log("response data", response.data)
             this.setState({ templates: response.data.templates });
             if (response.data.templates.length > 0) {
                 this.setState({ showTemplatePickerModal: !this.state.hasDeniedWorkoutTemplateReplication, selectedTemplateId: response.data.templates[0]._id });
@@ -321,7 +324,9 @@ export default class Logbook extends Component {
                                 <View style={globalStyles.modalView}>
                                     <Text style={globalStyles.modalText}>You may choose a workout template for this workout session</Text>
                                     <Picker
-                                        style={globalStyles.authPageInput}
+                                        style={[globalStyles.authPageInput, {
+                                            backgroundColor: "#fafafa"
+                                        }]}
                                         selectedValue={this.state.selectedTemplateId}
                                         onValueChange={(itemValue, itemIndex) =>
                                             this.setState({ selectedTemplateId: itemValue, showModalError: false, showError: false })
@@ -338,14 +343,14 @@ export default class Logbook extends Component {
                                             : null
                                     }
                                     <View style={globalStyles.modalActionsContainer}>
-                                        <TouchableOpacity onPress={() => {
+                                        <TouchableOpacity style={styles.option} onPress={() => {
                                             this.setState({ showTemplatePickerModal: false, hasDeniedWorkoutTemplateReplication: true })
                                         }}>
                                             <Text style={[globalStyles.modalActionTitle, {
                                                 color: "#1f6cb0"
                                             }]}>Skip</Text>
                                         </TouchableOpacity>
-                                        <TouchableOpacity onPress={() => {
+                                        <TouchableOpacity style={styles.option} onPress={() => {
                                             this.loadWorkoutTemplate();
                                         }}>
                                             <Text style={globalStyles.modalActionTitle}>Add</Text>
