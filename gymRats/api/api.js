@@ -7,7 +7,7 @@ const indexRoute = require('./routes/index.route');
 const errorHandler = require('./errors/errorHandler');
 const mongoose = require('mongoose');
 
-const { PORT, HTTP_STATUS_CODES, COLLECTIONS, FOOD_TYPES } = require('./global');
+const { PORT, HTTP_STATUS_CODES, COLLECTIONS, FOOD_TYPES, PROGRESS_NOTATION, LOGBOOK_PROGRESS_NOTATIONS } = require('./global');
 const MessagingService = require('./services/messaging.service');
 const ResponseError = require('./errors/responseError');
 const DbService = require('./services/db.service');
@@ -201,12 +201,13 @@ mongo.connect();
         }
     }
     //console.log(bulkOrms[3], bulkOrms[4], bulkOrms[5]);
-    //console.log(await LogbookService.getExerciseProgressNotation(bulkOrms.splice(3, 3)));
-    //await LogbookService.getExercisesProgress("6239febd705e68e893aa2aa5");
+    //console.log(await LogbookService.getExerciseProgressNotation(bulkOrms.splice(3, 3)))
 })();
 
 io.on("connection", (socket) => {
     socket.on("join-chat", (payload) => {
+        // write everything
+
         try {
             const chatId = payload.chatId;
 
