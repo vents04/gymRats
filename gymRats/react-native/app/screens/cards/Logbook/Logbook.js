@@ -234,15 +234,20 @@ export default class Logbook extends Component {
     }
 
     saveChanges = () => {
-        const payload = { exercises: this.state.exercises };
-        for (let exercise of payload.exercises) {
-            if (exercise.hasOwnProperty("exerciseName")) delete exercise.exerciseName;
+        let finalExercises = [];
+        const exercises = this.state.exercises;
+        for (let exercise of exercises) {
+            finalExercises.push({
+                exerciseId: exercise.exerciseId,
+                sets: exercise.sets,
+            })
         }
-        ApiRequests.post(`logbook/workout-session?date=${this.props.route.params.date.getDate()}&month=${this.props.route.params.date.getMonth() + 1}&year=${this.props.route.params.date.getFullYear()}`, {}, payload, true).then((response) => {
+        ApiRequests.post(`logbook/workout-session?date=${this.props.route.params.date.getDate()}&month=${this.props.route.params.date.getMonth() + 1}&year=${this.props.route.params.date.getFullYear()}`, {}, { exercises: finalExercises }, true).then((response) => {
             this.setState({ hasChanges: false }, () => {
                 this.getSession(this.props.route.params.date);
             });
         }).catch((error) => {
+            console.log("DSLKSKDLKSLDKSLD", error.response.data)
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
                     this.setState({ showError: true, error: error.response.data });

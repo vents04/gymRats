@@ -8030,3 +8030,7 @@
 {"level":"error","message":"Argument passed in does not match the accepted types"}
 {"level":"error","message":"Argument passed in does not match the accepted types"}
 {"level":"error","message":"Argument passed in does not match the accepted types"}
+{"level":"error","message":"\"exercises[0].sets[0].reps\" must be a positive number"}
+{"level":"error","message":"\"name\" is not allowed to be empty"}
+{"level":"error","message":"\"exercises[0].sets[0].reps\" must be a positive number"}
+{"level":"error","message":"\"exercises[0].sets[0].reps\" must be a positive number"}
