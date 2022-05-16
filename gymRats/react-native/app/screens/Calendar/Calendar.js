@@ -139,7 +139,7 @@ export default class Calendar extends Component {
                     this.state.selectedDate
                         ? <View style={[globalStyles.fillEmptySpace, { flexShrink: 1 }]}>
                             <View style={styles.calendarControllersContainer}>
-                                <TouchableOpacity style={styles.calendarController} onPress={() => { this.incrementDate(-1) }}>
+                                <TouchableOpacity style={[styles.calendarController, { paddingVertical: 8 }]} onPress={() => { this.incrementDate(-1) }}>
                                     <Entypo name="chevron-left" size={14} color="#999" style={{ marginRight: 5 }} />
                                     <Text style={styles.calendarControllerText}>{i18n.t('screens')['calendar']['calendarControllerBack']}</Text>
                                 </TouchableOpacity>
@@ -154,7 +154,7 @@ export default class Calendar extends Component {
                                         }
                                     </Text>
                                 </TouchableWithoutFeedback>
-                                <TouchableOpacity style={[styles.calendarController, { justifyContent: 'flex-end' }]} onPress={() => { this.incrementDate(1) }}>
+                                <TouchableOpacity style={[styles.calendarController, { justifyContent: 'flex-end', paddingVertical: 8 }]} onPress={() => { this.incrementDate(1) }}>
                                     <Text style={styles.calendarControllerText}>{i18n.t('screens')['calendar']['calendarControllerNext']}</Text>
                                     <Entypo name="chevron-right" style={{ marginLeft: 5 }} size={14} color="#999" />
                                 </TouchableOpacity>
