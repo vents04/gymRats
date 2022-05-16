@@ -109,12 +109,17 @@ export default class WeightTracker extends Component {
                 </View>
                 <View style={[styles.weightInputContainer, globalStyles.authPageInput]}>
                     <TextInput
-                        keyboardType='numeric'
+                        keyboardType='decimal-pad'
                         value={this.state.weight}
                         style={styles.editSectionInput}
-                        placeholder="Weight:"
+                        placeholder="80"
                         editable={!this.state.showSaving}
-                        onChangeText={(val) => { this.setState({ weight: val, showError: false }) }} />
+                        onChangeText={(val) => {
+                            let shouldNotBeAdded = false;
+                            if (val.includes(".") && val.length > 5) shouldNotBeAdded = true;
+                            else if (parseInt(val) > 1000 || parseInt(val) < 2.1) shouldNotBeAdded = true;
+                            if (!shouldNotBeAdded) this.setState({ weight: val, showError: false })
+                        }} />
                     <Text style={styles.editSectionInput}>{WEIGHT_UNITS_LABELS[this.state.weightUnit]}</Text>
                 </View>
                 {
