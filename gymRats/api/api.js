@@ -205,8 +205,7 @@ mongo.connect();
 })();
 
 io.on("connection", (socket) => {
-    socket.on("join-chat", (payload) => {
-        // write everything
+    socket.on("join-chat-room", (payload) => {
 
         try {
             const chatId = payload.chatId;
@@ -226,6 +225,10 @@ io.on("connection", (socket) => {
             reject(new ResponseError("Internal server error", err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
             socket.disconnect();
         }
+    })
+    
+    socket.on("join-chats-room", () => {
+        console.log("joined chats room")
     })
 
     socket.on("update-last-message", () => {

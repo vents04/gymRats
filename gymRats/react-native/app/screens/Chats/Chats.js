@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 
-import socket from '../../classes/Socket';
+import socketClass from '../../classes/Socket';
+const socket = socketClass.initConnection();
 
 import ApiRequests from '../../classes/ApiRequests';
 
@@ -50,7 +51,9 @@ export default class Chats extends Component {
     }
 
     updateLastMessage = () => {
+        console.log("here")
         socket.on("last-message-to-be-updated", () => {
+            console.log("here1")
             this.getChats()
         });
     }

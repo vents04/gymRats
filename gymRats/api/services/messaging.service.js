@@ -9,7 +9,7 @@ const MessagingService = {
     createChat: (personalTrainerId, clientId) => {
         return new Promise(async (resolve, reject) => {
             try {
-                const chat = await DbService.getOne(COLLECTIONS.CHATS, { personalTrainerId: mongoose.Types.ObjectId(personalTrainerId), clientId: mongoose.Types.ObjectId(clientId) });
+                const chat = await DbService.getOne(COLLECTIONS.CHATS, {"$or": [{ personalTrainerId: mongoose.Types.ObjectId(personalTrainerId), clientId: mongoose.Types.ObjectId(clientId)}, { personalTrainerId: mongoose.Types.ObjectId(clientId), clientId: mongoose.Types.ObjectId(personalTrainerId)}]});
                 if (!chat) {
                     const chat = new Chat({
                         personalTrainerId: mongoose.Types.ObjectId(personalTrainerId),

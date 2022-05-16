@@ -4,6 +4,9 @@ import { ActivityIndicator, Image, View, Text, Alert } from 'react-native';
 import Auth from '../../classes/Auth';
 import User from '../../classes/User';
 
+import socketClass from '../../classes/Socket';
+const socket = socketClass.initConnection();
+
 import globalStyles from '../../../assets/styles/global.styles';
 import styles from './Splash.styles';
 
@@ -15,13 +18,14 @@ export default class Splash extends Component {
             let isAuthenticated = false;
             try {
                 const token = await Auth.getToken();
-                if (token) isAuthenticated = await User.validateToken(token);
+                if (token) isAuthenticated = (await User.validateToken(token)).valid;
             } catch (err) {
                 this.props.navigation.reset({
                     index: 0,
                     routes: [{ name: 'Auth' }],
                 });
             }
+            if(isAuthenticated) socketClass.joinChatsRoom(socket);
             this.props.navigation.reset({
                 index: 0,
                 routes: [{ name: isAuthenticated ? 'NavigationRoutes' : 'Auth' }],

@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import { Image, Text, View, ScrollView, TextInput, TouchableOpacity } from 'react-native';
 
-import socket from '../../classes/Socket';
+import socketClass from '../../classes/Socket';
+const socket = socketClass.initConnection();
 
 import ApiRequests from '../../classes/ApiRequests';
 
@@ -35,7 +36,7 @@ export default class Chat extends Component {
         this.setState({ message: "", showError: false }, () => {
             this.getChat(this.state.chatId);
         });
-        //socket.emit("update-last-message", {})
+        socket.emit("update-last-message", {})
     }
 
     receiveTextMessage = () => {
@@ -90,7 +91,7 @@ export default class Chat extends Component {
         const chatId = this.props.route.params.chatId
         this.setState({ chatId: this.props.route.params.chatId }, () => {
             socket.open()
-            socket.emit("join-chat", { chatId })
+            socket.emit("join-chat-room", { chatId })
             this.updateSeenStatus(chatId)
             this.getChat(chatId)
             this.receiveTextMessage()

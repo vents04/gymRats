@@ -6,7 +6,7 @@ const User = {
         return new Promise(async (resolve, reject) => {
             try {
                 let response = await ApiRequests.post('user/validate-token', {}, {}, true);
-                resolve(response.data.valid);
+                resolve(response.data);
             } catch (error) {
                 if (error.response) {
                     if (error.response.status == HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
