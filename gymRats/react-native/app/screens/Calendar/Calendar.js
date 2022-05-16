@@ -36,7 +36,7 @@ export default class Calendar extends Component {
             doNotShow: [],
             selectedDate: new Date(),
             timezoneOffset: null,
-            showCalendarPicker: true
+            showCalendarPicker: false
         }
 
         this.focusListener;

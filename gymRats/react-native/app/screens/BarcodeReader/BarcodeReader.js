@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, Button, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
+import { Text, View, Button, TouchableOpacity, ActivityIndicator, Alert, TextInput } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 
 import ApiRequests from '../../classes/ApiRequests';
@@ -11,6 +11,7 @@ import { CALORIES_COUNTER_SCREEN_INTENTS, HTTP_STATUS_CODES } from '../../../glo
 export default function BarcodeScanner(props) {
     const [hasPermission, setHasPermission] = useState(null);
     const [scanned, setScanned] = useState(false);
+    const [barcode, setBarcode] = useState("");
 
     const askForCameraPermission = () => {
         (async () => {
@@ -24,16 +25,17 @@ export default function BarcodeScanner(props) {
     }, []);
 
     const handleBarCodeScanned = ({ type, data }) => {
+        console.log(data)
         setScanned(true);
         ApiRequests.get('calories-counter/search/barcode?barcode=' + data).then(response => {
             if (!response.data.result) {
-                props.navigation.navigate("AddFood", { barcode: data, date: props.route.params.date, timezoneOffset: props.route.params.timezoneOffset, meal: props.route.params.meal });
+                props.navigation.replace("AddFood", { barcode: data, date: props.route.params.date, timezoneOffset: props.route.params.timezoneOffset, meal: props.route.params.meal });
             } else {
                 if (props.route.params.isAddingBarcodeToFood) {
                     Alert.alert("Barcode already exists", "This barcode is already associated with a food item. Please scan a different barcode.");
                     setScanned(false);
                 } else {
-                    props.navigation.navigate("AddCaloriesIntakeItem", {
+                    props.navigation.replace("AddCaloriesIntakeItem", {
                         intent: CALORIES_COUNTER_SCREEN_INTENTS.ADD,
                         item: response.data.result,
                         meal: props.route.params.meal,
@@ -95,17 +97,31 @@ export default function BarcodeScanner(props) {
             </View>
             {
                 scanned
-                    ? <TouchableOpacity style={[globalStyles.authPageActionButton, {
-                        maxWidth: 200,
-                        marginTop: 16,
-                        marginHorizontal: 16
-                    }]} onPress={() => {
-                        setScanned(false)
-                    }}>
-                        <Text style={globalStyles.authPageActionButtonText}>I want to scan again</Text>
-                    </TouchableOpacity>
-                    : null
+                    ? <>
+                        <Text style={{ ...globalStyles.modalText, marginVertical: 24 }}>Barcode not found</Text>
+                        <TouchableOpacity style={[globalStyles.authPageActionButton, {
+                            maxWidth: 200,
+                            marginTop: 16,
+                            marginHorizontal: 16
+                        }]} onPress={() => {
+                            setScanned(false)
+                        }}>
+                            <Text style={globalStyles.authPageActionButtonText}>Scan / enter again</Text>
+                        </TouchableOpacity>
+                    </>
+                    : <>
+                        <TextInput
+                            style={[globalStyles.authPageInput, { width: "80%", marginTop: 64 }]}
+                            placeholder="Enter barcode:"
+                            value={barcode}
+                            onChangeText={(val) => { setBarcode(val) }} />
+                        <TouchableOpacity style={[globalStyles.authPageActionButton, { width: "80%", marginTop: 16 }]} onPress={() => {
+                            handleBarCodeScanned({ type: "", data: barcode });
+                        }}>
+                            <Text style={globalStyles.authPageActionButtonText}>Submit barcode</Text>
+                        </TouchableOpacity>
+                    </>
             }
-        </View>
+        </View >
     );
 }
