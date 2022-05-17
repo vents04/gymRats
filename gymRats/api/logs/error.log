@@ -8047,3 +8047,5 @@
 {"level":"error","message":"Invalid barcode"}
 {"level":"error","message":"\"weight\" must be a number"}
 {"level":"error","message":"\"weight\" must be less than or equal to 635"}
+{"level":"error","message":"unknown operator: $or"}
+{"level":"error","message":"$or must be an array"}

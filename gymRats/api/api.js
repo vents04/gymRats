@@ -28,6 +28,7 @@ app
 mongo.connect();
 
 (async function () {
+    /*
     const cut = [
         [
             [74, 10],
@@ -166,6 +167,15 @@ mongo.connect();
     console.log("--------------------------------------------");
     let cutOrms = [];
     let bulkOrms = [];
+    let sessionOrms = [];
+    const sessions = await DbService.getMany(COLLECTIONS.WORKOUT_SESSIONS, { userId: mongoose.Types.ObjectId("622f8c4095e0bf7c3998ebc9") });
+    for(let session of sessions) {
+        let orm = 0;
+        for (let set of session) {
+            if (oneRepMax(set[0], set[1]) > orm) orm = parseFloat(parseFloat(oneRepMax(set[0], set[1])).toFixed(1));
+        }
+        sessionOrms.push(orm);
+    }
     for (let session of cut) {
         let orm = 0;
         for (let set of session) {
@@ -180,28 +190,33 @@ mongo.connect();
         }
         bulkOrms.push(orm);
     }
-    //console.log("CUT ORMS:")
-    //console.log(cutOrms);
+    console.log("CUT ORMS:")
+    console.log(cutOrms);
     for (let index = 0; index < cutOrms.length; index++) {
         if (index + 1 < cutOrms.length) {
             const percentageDifference = parseFloat(parseFloat((cutOrms[index + 1] - cutOrms[index]) / cutOrms[index] * 100).toFixed(2));
-            //console.log("Percentage difference between " + cutOrms[index] + " and " + cutOrms[index + 1] + " is: " + percentageDifference);
+            console.log("Percentage difference between " + cutOrms[index] + " and " + cutOrms[index + 1] + " is: " + percentageDifference);
         }
     }
-    //console.log("BULK ORMS:")
-    //console.log(bulkOrms);
+    console.log("BULK ORMS:")
+    console.log(bulkOrms);
     for (let index = 0; index < bulkOrms.length; index++) {
         try {
             if (index + 1 < bulkOrms.length) {
                 const percentageDifference = parseFloat(parseFloat((bulkOrms[index + 1] - bulkOrms[index]) / bulkOrms[index] * 100).toFixed(2));
-                //console.log("Percentage difference between " + bulkOrms[index] + " and " + bulkOrms[index + 1] + " is: " + percentageDifference);
+                console.log("Percentage difference between " + bulkOrms[index] + " and " + bulkOrms[index + 1] + " is: " + percentageDifference);
             }
         } catch (err) {
             console.log(err);
         }
     }
-    //console.log(bulkOrms[3], bulkOrms[4], bulkOrms[5]);
-    //console.log(await LogbookService.getExerciseProgressNotation(bulkOrms.splice(3, 3)))
+    console.log(bulkOrms[3], bulkOrms[4], bulkOrms[5]);
+    console.log(await LogbookService.getExerciseProgressNotation(bulkOrms.splice(3, 3)))
+    */
+    const weights = await DbService.getMany(COLLECTIONS.DAILY_WEIGHTS, { userId: mongoose.Types.ObjectId("622f8c4095e0bf7c3998ebc9") });
+    for (let weight of weights) {
+
+    }
 })();
 
 io.on("connection", (socket) => {
@@ -226,7 +241,7 @@ io.on("connection", (socket) => {
             socket.disconnect();
         }
     })
-    
+
     socket.on("join-chats-room", () => {
         console.log("joined chats room")
     })

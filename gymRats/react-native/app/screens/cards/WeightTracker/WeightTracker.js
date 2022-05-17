@@ -123,9 +123,14 @@ export default class WeightTracker extends Component {
                         placeholder="80"
                         editable={!this.state.showSaving}
                         onChangeText={(val) => {
+                            console.log(val)
                             let shouldNotBeAdded = false;
-                            if (val.includes(".") && val.length > 5) shouldNotBeAdded = true;
-                            else if (parseInt(val) > 1000 || parseInt(val) < 2.1) shouldNotBeAdded = true;
+                            if (val.includes(".")) {
+                                if (val.length > 5) {
+                                    shouldNotBeAdded = true;
+                                }
+                            }
+                            else if (parseInt(val) >= 10000 || parseInt(val) < 2.1) shouldNotBeAdded = true;
                             if (!shouldNotBeAdded) this.setState({ weight: val, showError: false })
                         }} />
                     <Text style={styles.editSectionInput}>{WEIGHT_UNITS_LABELS[this.state.weightUnit]}</Text>

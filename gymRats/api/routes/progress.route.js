@@ -12,7 +12,7 @@ const DbService = require('../services/db.service');
 router.get("/page", authenticate, async (req, res, next) => {
     try {
         let message = false;
-        
+
         const relation = await DbService.getOne(COLLECTIONS.RELATIONS, { clientId: mongoose.Types.ObjectId(req.user._id) });
         if (relation && relation.status == RELATION_STATUSES.ACTIVE) message = true;
 

@@ -138,14 +138,15 @@ const WeightTrackerService = {
                 const currentDate = new Date(year, month - 1, date);
                 let progressNotation = null;
                 let average = 0;
-                let weeklyWeights = [];
-                const weights = await DbService.getMany(COLLECTIONS.DAILY_WEIGHTS, { userId: mongoose.Types.ObjectId(userId) })
-                for (let weight of weights) {
-                    const weightDate = new Date(weight.year, weight.month - 1, weight.date);
-                    if (weightDate.getTime() < currentDate.getTime() && weightDate.getTime() + WEEK_TO_MILLISECONDS > currentDate.getTime()) {
-                        weeklyWeights.push(weight);
-                    }
-                }
+                let weeklyWeights = await DbService.getManyWithSortAndLimit(COLLECTIONS.DAILY_WEIGHTS, {
+                    userId: mongoose.Types.ObjectId(userId),
+                    "$and": [
+                        { "$or": [{ year: { "$lt": currentDate.getFullYear() } }, { year: { "$eq": currentDate.getFullYear() } }] },
+                        { "$or": [{ month: { "$lt": currentDate.getMonth() + 1 } }, { month: { "$eq": currentDate.getMonth() + 1 } }] },
+                        { "$or": [{ date: { "$lt": currentDate.getDate() } }, { date: { "$eq": currentDate.getDate() } }] }
+                    ]
+                }, { year: -1, month: -1, date: -1 }, 5);
+                console.log(weeklyWeights)
                 if (weeklyWeights.length > 1) {
                     let greatestWeight = 0;
                     for (let weight of weeklyWeights) {
@@ -159,7 +160,11 @@ const WeightTrackerService = {
                         average += ((weight.weight * WEIGHT_UNIT_RELATIONS.KILOGRAMS.POUNDS + greatestWeight) / 2);
                     }
                     average /= weeklyWeights.length;
-                    const percentageDifference = (average - weeklyWeights[0]) / weeklyWeights[0] * 100;
+                    const lowestEndRangeValue = weeklyWeights[0].weight > weeklyWeights[weeklyWeights.length - 1].weight ? weeklyWeights[weeklyWeights.length - 1].weight : weeklyWeights[0].weight;
+                    const percentageDifference = (average - lowestEndRangeValue) / lowestEndRangeValue * 100;
+                    console.log(average);
+                    console.log(lowestEndRangeValue)
+                    console.log(percentageDifference)
                     if (percentageDifference < 0) {
                         if (percentageDifference > -0.5) progressNotation = PROGRESS_NOTATION.INSUFFICIENT_WEIGHT_LOSS
                         else if (percentageDifference > -1) progressNotation = PROGRESS_NOTATION.SUFFICIENT_WEIGHT_LOSS
