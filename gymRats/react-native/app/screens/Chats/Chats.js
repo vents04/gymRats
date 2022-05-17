@@ -51,9 +51,7 @@ export default class Chats extends Component {
     }
 
     updateLastMessage = () => {
-        console.log("here")
         socket.on("last-message-to-be-updated", () => {
-            console.log("here1")
             this.getChats()
         });
     }

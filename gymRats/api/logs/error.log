@@ -8045,3 +8045,5 @@
 {"level":"error","message":"Invalid barcode"}
 {"level":"error","message":"Invalid barcode"}
 {"level":"error","message":"Invalid barcode"}
+{"level":"error","message":"\"weight\" must be a number"}
+{"level":"error","message":"\"weight\" must be less than or equal to 635"}

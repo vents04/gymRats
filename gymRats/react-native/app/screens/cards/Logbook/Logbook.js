@@ -91,7 +91,6 @@ export default class Logbook extends Component {
 
     getTemplates = () => {
         ApiRequests.get("logbook/workout", {}, true).then((response) => {
-            console.log("response data", response.data)
             this.setState({ templates: response.data.templates });
             if (response.data.templates.length > 0) {
                 this.setState({ showTemplatePickerModal: !this.state.hasDeniedWorkoutTemplateReplication, selectedTemplateId: response.data.templates[0]._id });
@@ -247,7 +246,6 @@ export default class Logbook extends Component {
                 this.getSession(this.props.route.params.date);
             });
         }).catch((error) => {
-            console.log("DSLKSKDLKSLDKSLD", error.response.data)
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
                     this.setState({ showError: true, error: error.response.data });

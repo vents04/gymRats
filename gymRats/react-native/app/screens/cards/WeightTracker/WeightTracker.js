@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { ActivityIndicator, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 
 import ApiRequests from '../../../classes/ApiRequests';
+import { DataManager } from "../../../classes/DataManager";
 
 import { HTTP_STATUS_CODES, WEIGHT_UNITS, WEIGHT_UNITS_LABELS } from '../../../../global';
 import { cardColors } from '../../../../assets/styles/cardColors';
@@ -68,7 +69,8 @@ export default class WeightTracker extends Component {
             unit: this.state.weightUnit
         }, true).then((response) => {
             this.setState({ showSaving: false });
-            this.props.navigation.navigate("Calendar", { reloadDate: true, date: this.props.route.params.date });
+            DataManager.onDateCardChanged(this.props.route.params.date);
+            this.props.navigation.navigate("Calendar");
         }).catch((error) => {
             this.setState({
                 showError: true,
@@ -103,7 +105,8 @@ export default class WeightTracker extends Component {
             <View style={globalStyles.pageContainer}>
                 <View style={globalStyles.followUpScreenTopbar}>
                     <TouchableOpacity onPress={() => {
-                        this.props.navigation.navigate("Calendar", { reloadDate: true, date: this.props.route.params.date })
+                        console.log({ reloadDate: true, date: this.props.route.params.date });
+                        this.props.navigation.navigate("Calendar");
                     }}>
                         <Ionicons name="md-arrow-back-sharp" size={25} />
                     </TouchableOpacity>

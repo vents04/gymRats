@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import { DataManager } from "../../classes/DataManager";
+
 import { Dimensions, ScrollView, Text, TouchableHighlight, TouchableNativeFeedback, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import BottomSheet from "react-native-gesture-bottom-sheet";
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -25,14 +27,16 @@ import globalStyles from '../../../assets/styles/global.styles';
 import styles from './Calendar.styles';
 
 export default class Calendar extends Component {
-
     constructor(props) {
         super(props);
 
         this.bottomSheet = React.createRef();
+        this.subscription = null;
+        this.mounted = false;
 
         this.state = {
-            dates: [],
+            _this: this,
+            cards: [],
             doNotShow: [],
             selectedDate: new Date(),
             timezoneOffset: null,
@@ -42,72 +46,66 @@ export default class Calendar extends Component {
         this.focusListener;
     }
 
-    onFocusFunction = () => {
-        if (this.props && this.props.route && this.props.route.params && this.props.route.params.reloadDate) {
-            this.setState({
-                selectedDate: this.props.route.params.date,
-                timezoneOffset: new Date(this.props.route.params.date).getTimezoneOffset()
-            }, () => {
-                this.getDate(this.state.selectedDate, this.state.timezoneOffset);
-            })
+    setDate = (date) => {
+        console.log("set date", date);
+        if (!this.state.selectedDate || (this.state.selectedDate.getTime() != date.getTime())) {
+            if (this.subscription) {
+                DataManager.unsubscribeForDateCards(this.subscription);
+                this.subscription = null;
+            }
+            if (this.mounted) {
+                this.subscription = DataManager.subscribeForDateCards(date, this.onData, this.onError);
+            }
+
+            this.setState((state, props) => {
+                if (!state.selectedDate || (state.selectedDate.getTime() !== date.getTime())) {
+                    return { selectedDate: date };
+                }
+            });
+        }
+    }
+
+    onData = (data) => {
+        this.setState({ cards: data.cards, doNotShow: data.doNotShow });
+    }
+
+    onError = (error) => {
+        if (error.response) {
+            if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
+                this.setState({ showError: true, error: error.response.data });
+            } else {
+                ApiRequests.showInternalServerError();
+            }
+        } else if (error.request) {
+            ApiRequests.showNoResponseError();
         } else {
-            this.getCurrentDate();
+            ApiRequests.showRequestSettingError();
         }
     }
 
     componentDidMount() {
-        this.focusListener = this.props.navigation.addListener('focus', () => {
-            this.onFocusFunction()
-        })
+        this.mounted = true;
+        if (this.state.selectedDate && !this.subscription) {
+            this.subscription = DataManager.subscribeForDateCards(this.state.selectedDate, this.onData, this.onError);
+        }
+    }
+
+    componentWillUnmount() {
+        this.mounted = false;
+        if (this.subscription) {
+            DataManager.unsubscribeForDateCards(this.subscription);
+            this.subscription = null;
+        }
     }
 
     reloadDateAfterDelete = (date) => {
-        this.setState({
-            selectedDate: date,
-            timezoneOffset: new Date(date).getTimezoneOffset()
-        }, () => {
-            this.getDate(this.state.selectedDate, this.state.timezoneOffset);
-        })
-    }
-
-    getDate = (selectedDate) => {
-        ApiRequests.get(`date?date=${selectedDate.getDate()}&month=${selectedDate.getMonth() + 1}&year=${selectedDate.getFullYear()}`, false, true).then((response) => {
-            const dates = [...this.state.dates];
-            for (let index = 0; index < dates.length; index++) {
-                if (dates[index].date.getTime() == selectedDate.getTime()) {
-                    dates.splice(index, 1);
-                }
-            }
-            dates.push({ date: selectedDate, cards: response.data.cards });
-            this.setState({ dates: dates, doNotShow: response.data.doNotShow });
-        }).catch((error) => {
-            if (error.response) {
-                if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
-                    this.setState({ showError: true, error: error.response.data });
-                } else {
-                    ApiRequests.showInternalServerError();
-                }
-            } else if (error.request) {
-                ApiRequests.showNoResponseError();
-            } else {
-                ApiRequests.showRequestSettingError();
-            }
-        })
-    }
-
-    getCurrentDate = () => {
-        const currentDate = new Date();
-        const timezoneOffset = currentDate.getTimezoneOffset();
-        this.setState({ selectedDate: currentDate, timezoneOffset });
-        this.getDate(currentDate, this.state.timezoneOffset);
+        DataManager.onDateCardChanged(date);
     }
 
     incrementDate = (amount) => {
         const incrementedDate = new Date(this.state.selectedDate);
         incrementedDate.setDate(incrementedDate.getDate() + amount);
-        this.setState({ selectedDate: incrementedDate });
-        console.log("INCREMENTED DATE", incrementedDate);
-        this.getDate(incrementedDate, this.state.timezoneOffset);
+        this.setDate(incrementedDate);
     }
 
     render() {
@@ -127,9 +125,7 @@ export default class Calendar extends Component {
                             value={new Date(this.state.selectedDate)}
                             mode={"date"}
                             onChange={(event, selectedDate) => {
-                                const currentDate = new Date(selectedDate);
-                                this.setState({ showCalendarPicker: false, selectedDate: currentDate });
-                                this.getDate(currentDate)
+                                this.setDate(new Date(selectedDate));
                             }}
                         />
                         : null
@@ -178,41 +174,37 @@ export default class Calendar extends Component {
                             <ScrollView
                                 contentContainerStyle={globalStyles.fillEmptySpace}>
                                 {
-                                    this.state.dates.map((date) =>
-                                        date.date.getTime() == this.state.selectedDate.getTime()
-                                            ? date.cards.length > 0
-                                                ? date.cards.map((card, index) =>
-                                                    card.card == "dailyWeights"
-                                                        ? <WeightTrackerCard key={"_" + index} actionButtonFunction={() => {
-                                                            this.props.navigation.navigate("WeightTracker", {
+                                    this.state.cards.length > 0
+                                        ? this.state.cards.map((card, index) =>
+                                            card.card == "dailyWeights"
+                                                ? <WeightTrackerCard key={"_" + index} actionButtonFunction={() => {
+                                                    this.props.navigation.navigate("WeightTracker", {
+                                                        date: this.state.selectedDate,
+                                                        timezoneOffset: this.state.timezoneOffset,
+                                                        weight: card.data.weight,
+                                                        weightUnit: card.data.unit,
+                                                        _id: card.data._id
+                                                    });
+                                                }} data={card.data} rerender={this.reloadDateAfterDelete} date={this.state.selectedDate} {...this.props} />
+                                                : card.card == 'workoutSessions'
+                                                    ? <LogbookCard key={"_" + index} actionButtonFunction={() => {
+                                                        this.props.navigation.navigate("Logbook", {
+                                                            date: this.state.selectedDate,
+                                                            timezoneOffset: this.state.timezoneOffset,
+                                                            data: card.data
+                                                        });
+                                                    }} data={card.data} rerender={this.reloadDateAfterDelete} date={this.state.selectedDate} {...this.props} />
+                                                    : card.card == 'caloriesCounterDays'
+                                                        ? <CaloriesIntakeCard key={"_" + index} actionButtonFunction={() => {
+                                                            this.props.navigation.navigate("CaloriesIntake", {
                                                                 date: this.state.selectedDate,
                                                                 timezoneOffset: this.state.timezoneOffset,
-                                                                weight: card.data.weight,
-                                                                weightUnit: card.data.unit,
-                                                                _id: card.data._id
+                                                                data: card.data
                                                             });
                                                         }} data={card.data} rerender={this.reloadDateAfterDelete} date={this.state.selectedDate} {...this.props} />
-                                                        : card.card == 'workoutSessions'
-                                                            ? <LogbookCard key={"_" + index} actionButtonFunction={() => {
-                                                                this.props.navigation.navigate("Logbook", {
-                                                                    date: this.state.selectedDate,
-                                                                    timezoneOffset: this.state.timezoneOffset,
-                                                                    data: card.data
-                                                                });
-                                                            }} data={card.data} rerender={this.reloadDateAfterDelete} date={this.state.selectedDate} {...this.props} />
-                                                            : card.card == 'caloriesCounterDays'
-                                                                ? <CaloriesIntakeCard key={"_" + index} actionButtonFunction={() => {
-                                                                    this.props.navigation.navigate("CaloriesIntake", {
-                                                                        date: this.state.selectedDate,
-                                                                        timezoneOffset: this.state.timezoneOffset,
-                                                                        data: card.data
-                                                                    });
-                                                                }} data={card.data} rerender={this.reloadDateAfterDelete} date={this.state.selectedDate} {...this.props} />
-                                                                : null
-                                                )
-                                                : <Text key={date} style={globalStyles.notation}>{i18n.t('screens')['calendar']['noData']}</Text>
-                                            : null
-                                    )
+                                                        : null
+                                        )
+                                        : <Text style={globalStyles.notation}>{i18n.t('screens')['calendar']['noData']}</Text>
                                 }
                             </ScrollView>
                         </View>
@@ -237,7 +229,6 @@ export default class Calendar extends Component {
                     {
                         !this.state.doNotShow.includes("dailyWeights")
                             ? <TouchableOpacity onPress={() => {
-                                this.bottomSheet.current.close();
                                 this.props.navigation.navigate("WeightTracker", {
                                     date: this.state.selectedDate,
                                     timezoneOffset: this.state.timezoneOffset
