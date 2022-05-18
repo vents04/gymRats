@@ -8050,3 +8050,22 @@
 {"level":"error","message":"unknown operator: $or"}
 {"level":"error","message":"$or must be an array"}
 {"level":"error","message":"period is not defined"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'sufficientWeightGainRanges')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'sufficientWeightGainRanges')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'sufficientWeightGainRanges')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'sufficientWeightGainRanges')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'sufficientWeightGainRanges')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'sufficientWeightGainRanges')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'sufficientWeightGainRanges')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'sufficientWeightGainRanges')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'sufficientWeightGainRanges')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'sufficientWeightGainRanges')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'sufficientWeightGainRanges')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'sufficientWeightGainRanges')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'sufficientWeightGainRanges')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'sufficientWeightGainRanges')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'sufficientWeightGainRanges')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'sufficientWeightGainRanges')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'sufficientWeightGainRanges')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'sufficientWeightGainRanges')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'sufficientWeightGainRanges')"}

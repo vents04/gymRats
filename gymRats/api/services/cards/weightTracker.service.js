@@ -146,7 +146,6 @@ const WeightTrackerService = {
                         { "$or": [{ date: { "$lt": currentDate.getDate() } }, { date: { "$eq": currentDate.getDate() } }] }
                     ]
                 }, { year: -1, month: -1, date: -1 }, 5);
-                console.log(weeklyWeights)
                 if (weeklyWeights.length > 1) {
                     let greatestWeight = 0;
                     for (let weight of weeklyWeights) {
@@ -162,14 +161,9 @@ const WeightTrackerService = {
                     average /= weeklyWeights.length;
                     const lowestEndRangeValue = weeklyWeights[0].weight > weeklyWeights[weeklyWeights.length - 1].weight ? weeklyWeights[weeklyWeights.length - 1].weight : weeklyWeights[0].weight;
                     const percentageDifference = (average - lowestEndRangeValue) / lowestEndRangeValue * 100;
-                    console.log(average);
-                    console.log(lowestEndRangeValue);
-                    console.log(percentageDifference);
-                    console.log(weeklyWeights[0]);
                     const lastDate = new Date(weeklyWeights[0].year, weeklyWeights[0].month - 1, weeklyWeights[0].date).getTime();
                     const firstDate = new Date(weeklyWeights[weeklyWeights.length - 1].year, weeklyWeights[weeklyWeights.length - 1].month - 1, weeklyWeights[weeklyWeights.length - 1].date).getTime();
                     const periodInDays = (lastDate - firstDate) / (1000 * 60 * 60 * 24);
-                    console.log(periodInDays);
                     if (percentageDifference < 0) {
                         if (percentageDifference > -0.5) progressNotation = PROGRESS_NOTATION.INSUFFICIENT_WEIGHT_LOSS
                         else if (percentageDifference > -1) progressNotation = PROGRESS_NOTATION.SUFFICIENT_WEIGHT_LOSS
@@ -188,6 +182,8 @@ const WeightTrackerService = {
     },
 
     getProgressGraphRanges: (weight, weeks) => {
+        console.log("WEIGHT", weight);
+        console.log("WEEKS", weeks)
         return new Promise(async (resolve, reject) => {
             try {
                 weight = parseFloat(parseFloat(weight).toFixed(2))
@@ -246,12 +242,28 @@ const WeightTrackerService = {
         })
     },
 
-    getProgressNotationNew: (weight, days, weightProgressGraph) => {
-        return new Promise((resolve, reject) => {
+    getProgressNotationNew: (date, month, year, userId) => {
+        return new Promise(async (resolve, reject) => {
             try {
+                const currentDate = new Date(year, month - 1, date);
+                let weights = await DbService.getManyWithSortAndLimit(COLLECTIONS.DAILY_WEIGHTS, {
+                    userId: mongoose.Types.ObjectId(userId),
+                    "$and": [
+                        { "$or": [{ year: { "$lt": currentDate.getFullYear() } }, { year: { "$eq": currentDate.getFullYear() } }] },
+                        { "$or": [{ month: { "$lt": currentDate.getMonth() + 1 } }, { month: { "$eq": currentDate.getMonth() + 1 } }] },
+                        { "$or": [{ date: { "$lt": currentDate.getDate() } }, { date: { "$eq": currentDate.getDate() } }] }
+                    ]
+                }, { year: -1, month: -1, date: -1 }, 3);
+                if (weights.length == 0) resolve(null);
+
+                const weight = weights[0].weight;
+                const days =
+                    (new Date(weights[0].year, weights[0].month - 1, weights[0].date)
+                        - new Date(weights[1].year, weights[1].month - 1, weights[1].date)) / (1000 * 60 * 60 * 24);
+
+                const weightProgressGraph = await WeightTrackerService.getProgressGraphRanges(weights[weights.length - 1].weight, Math.ceil(days / 7));
                 const week = days != 0 ? parseInt((days - 1) / 7) : 0;
                 const dayInWeek = (days % 7) == 0 ? 7 : (days % 7);
-                console.log(week, dayInWeek);
                 const weightProgressGraphWeek = weightProgressGraph[week];
                 let weightProgressDay = {
                     sufficientWeightGainRanges: [],
@@ -260,8 +272,8 @@ const WeightTrackerService = {
                     sufficientWeightLossRanges: []
                 }
                 for (let key in weightProgressGraphWeek) {
-                    const topDifference = Math.abs(weightProgressGraphWeek[key][0] - weightProgressGraph[week - 1][key][0]);
-                    const bottomDifference = Math.abs(weightProgressGraphWeek[key][1] - weightProgressGraph[week - 1][key][1]);
+                    const topDifference = Math.abs(week != 0 ? weightProgressGraphWeek[key][0] - weightProgressGraph[week - 1][key][0] : weightProgressGraphWeek[key][0] - weight);
+                    const bottomDifference = Math.abs(week != 0 ? weightProgressGraphWeek[key][1] - weightProgressGraph[week - 1][key][1] : weightProgressGraphWeek[key][1] - weight);
                     const topDifferencePerDay = topDifference / 7;
                     const bottomDifferencePerDay = bottomDifference / 7;
                     weightProgressDay[key].push(
@@ -275,13 +287,14 @@ const WeightTrackerService = {
                                 : weightProgressGraphWeek[key][1] + bottomDifferencePerDay * (dayInWeek != 7 ? 7 - dayInWeek : 1)).toFixed(2)),
                     )
                 }
-                console.log(weightProgressDay, "s")
+                console.log(weightProgressDay);
                 if (weight > weightProgressDay.sufficientWeightGainRanges[0]) {
                     resolve(PROGRESS_NOTATION.RAPID_WEIGHT_GAIN);
                 } else if (weight < weightProgressDay.sufficientWeightLossRanges[1]) {
                     resolve(PROGRESS_NOTATION.RAPID_WEIGHT_LOSS);
                 } else {
                     for (let key in weightProgressDay) {
+                        console.log(weight);
                         if (weightProgressDay[key][0] >= weight && weightProgressDay[key][1] <= weight) {
                             switch (key) {
                                 case "sufficientWeightGainRanges":
@@ -300,8 +313,8 @@ const WeightTrackerService = {
                         }
                     }
                 }
-                console.log(weightProgressGraphWeek)
             } catch (err) {
+                console.log(err)
                 reject(new ResponseError(err.message || "Internal server error", err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR))
             }
         })

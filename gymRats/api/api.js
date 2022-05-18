@@ -213,16 +213,6 @@ mongo.connect();
     console.log(bulkOrms[3], bulkOrms[4], bulkOrms[5]);
     console.log(await LogbookService.getExerciseProgressNotation(bulkOrms.splice(3, 3)))
     */
-    const weights = await DbService.getMany(COLLECTIONS.DAILY_WEIGHTS, { userId: mongoose.Types.ObjectId("622f8c4095e0bf7c3998ebc9") });
-    for (let weight of weights) {
-
-    }
-
-    const weightProgressGraph = await WeightTrackerService.getProgressGraphRanges(90.9, 2);
-    console.log("WEIGHT PROGRESS GRAPH FOR 90.9KGS:");
-    console.log(weightProgressGraph);
-    const progressNotation = await WeightTrackerService.getProgressNotationNew(91.5, 10, weightProgressGraph)
-    console.log(progressNotation);
 })();
 
 io.on("connection", (socket) => {
