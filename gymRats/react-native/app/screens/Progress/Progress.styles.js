@@ -21,18 +21,13 @@ export default StyleSheet.create({
         color: "#aaa"
     },
     progressFlagContainer: {
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "space-between",
-        width: "100%",
+        alignSelf: "flex-start",
         borderRadius: 4,
         padding: 8,
     },
     progressFlag: {
         fontFamily: "MainBold",
         fontSize: 10,
-        marginRight: 8,
         textTransform: "uppercase",
         color: "white"
     },

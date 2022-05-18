@@ -113,8 +113,8 @@ export default class LogbookCard extends Component {
                                 <View style={styles.exercisesContainer}>
                                     {
                                         this.props.data.exercises.map((exercise, index) =>
-                                            <>
-                                                <Text key={index} style={[styles.exercise, {
+                                            <View key={index}>
+                                                <Text style={[styles.exercise, {
                                                     fontFamily: this.props.client ? "MainBold" : "MainRegular",
                                                     fontSize: this.props.client ? 16 : 12
                                                 }]}>{exercise.sets.length} {this.props.client ? (exercise.sets.length != 1 ? "sets " : "set ") : null}x {
@@ -126,7 +126,7 @@ export default class LogbookCard extends Component {
                                                 {
                                                     this.props.client
                                                         ? exercise.sets.map((set, setIndex) =>
-                                                            <Text key={`${index}${setIndex}`} style={styles.setInfo}>
+                                                            <Text style={styles.setInfo}>
                                                                 {
                                                                     set.reps
                                                                         ? <>
@@ -152,7 +152,7 @@ export default class LogbookCard extends Component {
                                                         )
                                                         : null
                                                 }
-                                            </>
+                                            </View>
                                         )
                                     }
                                 </View>
