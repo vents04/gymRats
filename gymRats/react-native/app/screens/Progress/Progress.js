@@ -76,18 +76,19 @@ export default class Progress extends Component {
                                             <TouchableOpacity style={{ ...styles.progressFlagContainer, backgroundColor: cardColors.weightTracker }} onPress={() => { }}>
                                                 <Text style={styles.progressFlag}>
                                                     {
-                                                        this.state.progress.weightTrackerProgress == PROGRESS_NOTATION.INSUFFICIENT_WEIGHT_LOSS
-                                                            || this.state.progress.weightTrackerProgress == PROGRESS_NOTATION.INSUFFICIENT_WEIGHT_GAIN
-                                                            ? "No change"
-                                                            : this.state.progress.weightTrackerProgress == PROGRESS_NOTATION.SUFFICIENT_WEIGHT_LOSS
+                                                        this.state.progress.weightTrackerProgress.notation == PROGRESS_NOTATION.INSUFFICIENT_WEIGHT_LOSS
+                                                            ? "Minor weight loss"
+                                                            : this.state.progress.weightTrackerProgress.notation == PROGRESS_NOTATION.SUFFICIENT_WEIGHT_LOSS
                                                                 ? "Efficient weight loss"
-                                                                : this.state.progress.weightTrackerProgress == PROGRESS_NOTATION.SUFFICIENT_WEIGHT_GAIN
+                                                                : this.state.progress.weightTrackerProgress.notation == PROGRESS_NOTATION.SUFFICIENT_WEIGHT_GAIN
                                                                     ? "Efficient weight gain"
-                                                                    : this.state.progress.weightTrackerProgress == PROGRESS_NOTATION.RAPID_WEIGHT_LOSS
+                                                                    : this.state.progress.weightTrackerProgress.notation == PROGRESS_NOTATION.RAPID_WEIGHT_LOSS
                                                                         ? "Too rapid weight loss"
-                                                                        : this.state.progress.weightTrackerProgress == PROGRESS_NOTATION.RAPID_WEIGHT_GAIN
+                                                                        : this.state.progress.weightTrackerProgress.notation == PROGRESS_NOTATION.RAPID_WEIGHT_GAIN
                                                                             ? "Too rapid weight gain"
-                                                                            : null
+                                                                            : this.state.progress.weightTrackerProgress.notation == PROGRESS_NOTATION.INSUFFICIENT_WEIGHT_GAIN
+                                                                                ? "Minor weight gain"
+                                                                                : null
 
                                                     }
                                                 </Text>
@@ -95,10 +96,14 @@ export default class Progress extends Component {
                                             </TouchableOpacity>
                                             <View style={styles.progressCardTips}>
                                                 <Text style={styles.progressCardTipsTitle}>Tips to improve</Text>
-                                                <View style={styles.progressCardTipContainer}>
-                                                    <AntDesign style={styles.progressCardTipIcon} name="checkcircle" size={16} color={cardColors.weightTracker} />
-                                                    <Text style={styles.progressCardTip}>Fasting 16 hours a day may help you lose weight quicker</Text>
-                                                </View>
+                                                {
+                                                    this.state.progress.weightTrackerProgress.tips.map((tip, index) =>
+                                                        <View style={styles.progressCardTipContainer} key={"wtp" + index}>
+                                                            <AntDesign style={styles.progressCardTipIcon} name="checkcircle" size={16} color={cardColors.weightTracker} />
+                                                            <Text style={styles.progressCardTip}>{tip}</Text>
+                                                        </View>
+                                                    )
+                                                }
                                             </View>
                                         </View>
                                         : null

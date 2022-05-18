@@ -42,18 +42,22 @@ export default StyleSheet.create({
     progressCardTipsTitle: {
         fontFamily: "MainBlack",
         textTransform: "uppercase",
-        fontSize: 14,
-        color: "#262626"
+        fontSize: 16,
+        color: "#262626",
+        marginBottom: 8
     },
     progressCardTipContainer: {
         display: "flex",
         flexDirection: "row",
-        marginVertical: 8,
+        marginVertical: 10,
         marginRight: 16
     },
     progressCardTip: {
         fontFamily: "MainRegular",
-        fontSize: 12,
+        fontSize: 14,
         marginLeft: 8
+    },
+    progressCardTipIcon: {
+        marginTop: 4
     }
 })

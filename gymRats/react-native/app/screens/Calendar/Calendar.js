@@ -119,6 +119,7 @@ export default class Calendar extends Component {
                             mode={"date"}
                             onChange={(event, selectedDate) => {
                                 this.setDate(new Date(selectedDate));
+                                this.setState({ showCalendarPicker: false })
                             }}
                         />
                         : null

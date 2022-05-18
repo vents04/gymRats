@@ -182,8 +182,6 @@ const WeightTrackerService = {
     },
 
     getProgressGraphRanges: (weight, weeks) => {
-        console.log("WEIGHT", weight);
-        console.log("WEEKS", weeks)
         return new Promise(async (resolve, reject) => {
             try {
                 weight = parseFloat(parseFloat(weight).toFixed(2))
@@ -287,34 +285,83 @@ const WeightTrackerService = {
                                 : weightProgressGraphWeek[key][1] + bottomDifferencePerDay * (dayInWeek != 7 ? 7 - dayInWeek : 1)).toFixed(2)),
                     )
                 }
-                console.log(weightProgressDay);
+                let notation = null;
                 if (weight > weightProgressDay.sufficientWeightGainRanges[0]) {
-                    resolve(PROGRESS_NOTATION.RAPID_WEIGHT_GAIN);
+                    notation = PROGRESS_NOTATION.RAPID_WEIGHT_GAIN;
                 } else if (weight < weightProgressDay.sufficientWeightLossRanges[1]) {
-                    resolve(PROGRESS_NOTATION.RAPID_WEIGHT_LOSS);
+                    notation = PROGRESS_NOTATION.RAPID_WEIGHT_LOSS;
                 } else {
                     for (let key in weightProgressDay) {
-                        console.log(weight);
                         if (weightProgressDay[key][0] >= weight && weightProgressDay[key][1] <= weight) {
                             switch (key) {
                                 case "sufficientWeightGainRanges":
-                                    resolve(PROGRESS_NOTATION.SUFFICIENT_WEIGHT_GAIN);
+                                    notation = PROGRESS_NOTATION.SUFFICIENT_WEIGHT_GAIN;
                                     break;
                                 case "insufficientWeightGainRanges":
-                                    resolve(PROGRESS_NOTATION.INSUFFICIENT_WEIGHT_GAIN);
+                                    notation = PROGRESS_NOTATION.INSUFFICIENT_WEIGHT_GAIN;
                                     break;
                                 case "insufficientWeightLossRanges":
-                                    resolve(PROGRESS_NOTATION.INSUFFICIENT_WEIGHT_LOSS);
+                                    notation = PROGRESS_NOTATION.INSUFFICIENT_WEIGHT_LOSS;
                                     break;
                                 case "sufficientWeightLossRanges":
-                                    resolve(PROGRESS_NOTATION.SUFFICIENT_WEIGHT_LOSS);
+                                    notation = PROGRESS_NOTATION.SUFFICIENT_WEIGHT_LOSS;
                                     break;
                             }
                         }
                     }
                 }
+
+                let tips = [];
+                switch (notation) {
+                    case PROGRESS_NOTATION.RAPID_WEIGHT_GAIN:
+                        tips = [
+                            "Eat more saturating foods like fruits, vegetables, and whole grains",
+                            "Exercise more",
+                            "Try avoiding sugars and junk food if you have been consuming them",
+                        ]
+                        break;
+                    case PROGRESS_NOTATION.SUFFICIENT_WEIGHT_GAIN:
+                        tips = [
+                            "Keep eating protein and fiber rich foods",
+                            "Do not forget to get at least 8h of sleep every night",
+                            "Strength training is vital for keeping fat gain to a minimum during weight gaining",
+                        ]
+                        break;
+                    case PROGRESS_NOTATION.INSUFFICIENT_WEIGHT_GAIN:
+                        tips = [
+                            "Consume 100-150 calories more per day",
+                            "Eat more protein and fiber rich foods",
+                            "Do not forget to drink the recommended 2L water intake per day",
+                        ]
+                        break;
+                    case PROGRESS_NOTATION.INSUFFICIENT_WEIGHT_LOSS:
+                        tips = [
+                            "Drop your calories intake by 200-250 calories for a more prominent weight loss",
+                            "Eat more protein and fiber rich foods to keep you full for longer periods of time",
+                            "Start doing cardio to burn fat and for overall health",
+                        ]
+                        break;
+                    case PROGRESS_NOTATION.SUFFICIENT_WEIGHT_LOSS:
+                        tips = [
+                            "Keep doing what you are doing because you are dropping weight at the perfect pace",
+                            "Do strength training to preserve muscle mass",
+                            "A good water intake will not only be beneficial for your health but will make you feel full, too",
+                        ]
+                        break;
+                    case PROGRESS_NOTATION.RAPID_WEIGHT_LOSS:
+                        tips = [
+                            "Up your calories by 100-150 because you are loosing weight too quickly",
+                            "Try lowering the intensity of your workouts if that is causing the rapid weight loss",
+                            "Muscles are a healthy tissue that may be lost during aggressive weight loss phases for long periods of time",
+                        ]
+                        break;
+                }
+
+                resolve({
+                    notation,
+                    tips
+                })
             } catch (err) {
-                console.log(err)
                 reject(new ResponseError(err.message || "Internal server error", err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR))
             }
         })
