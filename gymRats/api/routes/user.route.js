@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const DbService = require('../services/db.service');
 const AuthenticationService = require('../services/authentication.service');
 const WeightTrackerService = require('../services/cards/weightTracker.service');
+const EmailService = require('../services/email.service');
 
 const User = require('../db/models/generic/user.model');
 const Suggestion = require('../db/models/generic/suggestion.model');
@@ -113,6 +114,8 @@ router.post("/suggestion", authenticate, async (req, res, next) => {
         const suggestion = new Suggestion(req.body);
         suggestion.userId = mongoose.Types.ObjectId(req.user._id);
         await DbService.create(COLLECTIONS.SUGGESTIONS, suggestion);
+
+        await EmailService.send("Suggestion posted", `${req.user.firstName} ${req.user.lastName} with an id ${req.user._id} wrote: ${req.body.suggestion}`);
 
         return res.sendStatus(HTTP_STATUS_CODES.OK);
     } catch (error) {

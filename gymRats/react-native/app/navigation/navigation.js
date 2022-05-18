@@ -120,6 +120,13 @@ const calendarScreenStack = () => {
                 }}
                 component={AddFood}
             />
+            <Stack.Screen
+                name="Suggestions"
+                options={{
+                    headerShown: false,
+                }}
+                component={Suggestions}
+            />
         </Stack.Navigator>
     );
 };
@@ -201,19 +208,6 @@ const coachingScreenStack = () => {
     )
 };
 
-const suggestionsScreenStack = () => {
-    return (
-        <Stack.Navigator initialRouteName="Suggestions">
-            <Stack.Screen
-                name="Suggestions"
-                options={{
-                    headerShown: false,
-                }}
-                component={Suggestions}
-            />
-        </Stack.Navigator>
-    )
-}
 
 const chatsScreenStack = () => {
     return (
@@ -360,29 +354,6 @@ const NavigationRoutes = () => {
 
                 })}
                 component={coachingScreenStack}
-            />
-            <Tab.Screen
-                name="suggestionsStackScreen"
-                options={({ route }) => ({
-                    tabBarStyle: {
-                        display: getTabBarVisibility(route),
-                        height: 75,
-                    },
-                    tabBarLabel: 'Suggestions',
-                    headerShown: false,
-                    tabBarActiveTintColor: "#ccc",
-                    tabBarIcon: (tabInfo) =>
-                    (
-                        <View style={styles.tabBarIconContainer}>
-                            <FontAwesome5 name="lightbulb" size={24} color={tabInfo.focused ? "#1f6cb0" : "#ccc"} />
-                            <Text style={[styles.tabBarIconText, {
-                                fontFamily: (tabInfo.focused ? "MainBold" : "MainRegular")
-                            }]}>Suggestions</Text>
-                        </View>
-                    )
-
-                })}
-                component={suggestionsScreenStack}
             />
             <Tab.Screen
                 name="chatsScreenStack"

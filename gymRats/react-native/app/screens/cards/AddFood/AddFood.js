@@ -175,7 +175,7 @@ export default class AddFood extends Component {
                         </View>
                     </ScrollView>
                     <TouchableOpacity style={[globalStyles.authPageActionButton, {
-                        marginTop: 16,
+                        marginVertical: 16,
                     }]} onPress={() => { this.addFood() }}>
                         <Text style={globalStyles.authPageActionButtonText}>Submit</Text>
                     </TouchableOpacity>

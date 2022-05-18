@@ -138,14 +138,14 @@ const WeightTrackerService = {
                 const currentDate = new Date(year, month - 1, date);
                 let progressNotation = null;
                 let average = 0;
-                let weeklyWeights = [];
-                const weights = await DbService.getMany(COLLECTIONS.DAILY_WEIGHTS, { userId: mongoose.Types.ObjectId(userId) })
-                for (let weight of weights) {
-                    const weightDate = new Date(weight.year, weight.month - 1, weight.date);
-                    if (weightDate.getTime() < currentDate.getTime() && weightDate.getTime() + WEEK_TO_MILLISECONDS > currentDate.getTime()) {
-                        weeklyWeights.push(weight);
-                    }
-                }
+                let weeklyWeights = await DbService.getManyWithSortAndLimit(COLLECTIONS.DAILY_WEIGHTS, {
+                    userId: mongoose.Types.ObjectId(userId),
+                    "$and": [
+                        { "$or": [{ year: { "$lt": currentDate.getFullYear() } }, { year: { "$eq": currentDate.getFullYear() } }] },
+                        { "$or": [{ month: { "$lt": currentDate.getMonth() + 1 } }, { month: { "$eq": currentDate.getMonth() + 1 } }] },
+                        { "$or": [{ date: { "$lt": currentDate.getDate() } }, { date: { "$eq": currentDate.getDate() } }] }
+                    ]
+                }, { year: -1, month: -1, date: -1 }, 5);
                 if (weeklyWeights.length > 1) {
                     let greatestWeight = 0;
                     for (let weight of weeklyWeights) {
@@ -159,7 +159,11 @@ const WeightTrackerService = {
                         average += ((weight.weight * WEIGHT_UNIT_RELATIONS.KILOGRAMS.POUNDS + greatestWeight) / 2);
                     }
                     average /= weeklyWeights.length;
-                    const percentageDifference = (average - weeklyWeights[0]) / weeklyWeights[0] * 100;
+                    const lowestEndRangeValue = weeklyWeights[0].weight > weeklyWeights[weeklyWeights.length - 1].weight ? weeklyWeights[weeklyWeights.length - 1].weight : weeklyWeights[0].weight;
+                    const percentageDifference = (average - lowestEndRangeValue) / lowestEndRangeValue * 100;
+                    const lastDate = new Date(weeklyWeights[0].year, weeklyWeights[0].month - 1, weeklyWeights[0].date).getTime();
+                    const firstDate = new Date(weeklyWeights[weeklyWeights.length - 1].year, weeklyWeights[weeklyWeights.length - 1].month - 1, weeklyWeights[weeklyWeights.length - 1].date).getTime();
+                    const periodInDays = (lastDate - firstDate) / (1000 * 60 * 60 * 24);
                     if (percentageDifference < 0) {
                         if (percentageDifference > -0.5) progressNotation = PROGRESS_NOTATION.INSUFFICIENT_WEIGHT_LOSS
                         else if (percentageDifference > -1) progressNotation = PROGRESS_NOTATION.SUFFICIENT_WEIGHT_LOSS
@@ -175,6 +179,145 @@ const WeightTrackerService = {
                 reject(new ResponseError(error.message || "Internal server error", error.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
             }
         });
+    },
+
+    getProgressGraphRanges: (weight, weeks) => {
+        console.log("WEIGHT", weight);
+        console.log("WEEKS", weeks)
+        return new Promise(async (resolve, reject) => {
+            try {
+                weight = parseFloat(parseFloat(weight).toFixed(2))
+                let ranges = {};
+                for (let index = 0; index < weeks; index++) {
+                    let sufficientWeightGainRanges = [];
+                    let insufficientWeightGainRanges = [];
+                    let insufficientWeightLossRanges = [];
+                    let sufficientWeightLossRanges = [];
+                    if (index == 0) {
+                        sufficientWeightGainRanges.push(
+                            parseFloat(parseFloat(weight + (0.0075 * weight)).toFixed(2)),
+                            parseFloat(parseFloat(weight + (0.0025 * weight)).toFixed(2)),
+                        )
+                        insufficientWeightGainRanges.push(
+                            parseFloat(parseFloat(sufficientWeightGainRanges[1] - 0.01).toFixed(2)),
+                            weight
+                        )
+                        insufficientWeightLossRanges.push(
+                            parseFloat(parseFloat(weight - 0.01).toFixed(2)),
+                            parseFloat(parseFloat(weight - (0.005 * weight)).toFixed(2)),
+                        )
+                        sufficientWeightLossRanges.push(
+                            parseFloat(parseFloat(insufficientWeightLossRanges[1] - 0.01).toFixed(2)),
+                            parseFloat(parseFloat(weight - (0.01 * weight)).toFixed(2)),
+                        )
+                    } else {
+                        sufficientWeightGainRanges.push(
+                            parseFloat(parseFloat(ranges[index - 1].sufficientWeightGainRanges[0] + (0.0075 * ranges[index - 1].sufficientWeightGainRanges[0])).toFixed(2)),
+                            parseFloat(parseFloat(ranges[index - 1].sufficientWeightGainRanges[1] + (0.0025 * ranges[index - 1].sufficientWeightGainRanges[1])).toFixed(2)),
+                        )
+                        insufficientWeightGainRanges.push(
+                            parseFloat(parseFloat(sufficientWeightGainRanges[1] - 0.01).toFixed(2)),
+                            weight
+                        )
+                        insufficientWeightLossRanges.push(
+                            parseFloat(parseFloat(weight - 0.01).toFixed(2)),
+                            parseFloat(parseFloat(ranges[index - 1].insufficientWeightLossRanges[1] - (0.005 * ranges[index - 1].insufficientWeightLossRanges[1])).toFixed(2)),
+                        )
+                        sufficientWeightLossRanges.push(
+                            parseFloat(parseFloat(insufficientWeightLossRanges[1] - 0.01).toFixed(2)),
+                            parseFloat(parseFloat(ranges[index - 1].sufficientWeightLossRanges[1] - (0.01 * ranges[index - 1].sufficientWeightLossRanges[1])).toFixed(2)),
+                        )
+                    }
+                    ranges[index] = {
+                        sufficientWeightGainRanges,
+                        insufficientWeightGainRanges,
+                        insufficientWeightLossRanges,
+                        sufficientWeightLossRanges
+                    }
+                }
+                resolve(ranges);
+            } catch (err) {
+                reject(new ResponseError(err.message || "Internal server error", err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR))
+            }
+        })
+    },
+
+    getProgressNotationNew: (date, month, year, userId) => {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const currentDate = new Date(year, month - 1, date);
+                let weights = await DbService.getManyWithSortAndLimit(COLLECTIONS.DAILY_WEIGHTS, {
+                    userId: mongoose.Types.ObjectId(userId),
+                    "$and": [
+                        { "$or": [{ year: { "$lt": currentDate.getFullYear() } }, { year: { "$eq": currentDate.getFullYear() } }] },
+                        { "$or": [{ month: { "$lt": currentDate.getMonth() + 1 } }, { month: { "$eq": currentDate.getMonth() + 1 } }] },
+                        { "$or": [{ date: { "$lt": currentDate.getDate() } }, { date: { "$eq": currentDate.getDate() } }] }
+                    ]
+                }, { year: -1, month: -1, date: -1 }, 3);
+                if (weights.length == 0) resolve(null);
+
+                const weight = weights[0].weight;
+                const days =
+                    (new Date(weights[0].year, weights[0].month - 1, weights[0].date)
+                        - new Date(weights[1].year, weights[1].month - 1, weights[1].date)) / (1000 * 60 * 60 * 24);
+
+                const weightProgressGraph = await WeightTrackerService.getProgressGraphRanges(weights[weights.length - 1].weight, Math.ceil(days / 7));
+                const week = days != 0 ? parseInt((days - 1) / 7) : 0;
+                const dayInWeek = (days % 7) == 0 ? 7 : (days % 7);
+                const weightProgressGraphWeek = weightProgressGraph[week];
+                let weightProgressDay = {
+                    sufficientWeightGainRanges: [],
+                    insufficientWeightGainRanges: [],
+                    insufficientWeightLossRanges: [],
+                    sufficientWeightLossRanges: []
+                }
+                for (let key in weightProgressGraphWeek) {
+                    const topDifference = Math.abs(week != 0 ? weightProgressGraphWeek[key][0] - weightProgressGraph[week - 1][key][0] : weightProgressGraphWeek[key][0] - weight);
+                    const bottomDifference = Math.abs(week != 0 ? weightProgressGraphWeek[key][1] - weightProgressGraph[week - 1][key][1] : weightProgressGraphWeek[key][1] - weight);
+                    const topDifferencePerDay = topDifference / 7;
+                    const bottomDifferencePerDay = bottomDifference / 7;
+                    weightProgressDay[key].push(
+                        parseFloat(parseFloat(
+                            key == "sufficientWeightGainRanges" || key == "insufficientWeightGainRanges"
+                                ? weightProgressGraphWeek[key][0] - topDifferencePerDay * (dayInWeek != 7 ? 7 - dayInWeek : 1)
+                                : weightProgressGraphWeek[key][0] + topDifferencePerDay * (dayInWeek != 7 ? 7 - dayInWeek : 1)).toFixed(2)),
+                        parseFloat(parseFloat(
+                            key == "sufficientWeightGainRanges" || key == "insufficientWeightGainRanges"
+                                ? weightProgressGraphWeek[key][1] - bottomDifferencePerDay * (dayInWeek != 7 ? 7 - dayInWeek : 1)
+                                : weightProgressGraphWeek[key][1] + bottomDifferencePerDay * (dayInWeek != 7 ? 7 - dayInWeek : 1)).toFixed(2)),
+                    )
+                }
+                console.log(weightProgressDay);
+                if (weight > weightProgressDay.sufficientWeightGainRanges[0]) {
+                    resolve(PROGRESS_NOTATION.RAPID_WEIGHT_GAIN);
+                } else if (weight < weightProgressDay.sufficientWeightLossRanges[1]) {
+                    resolve(PROGRESS_NOTATION.RAPID_WEIGHT_LOSS);
+                } else {
+                    for (let key in weightProgressDay) {
+                        console.log(weight);
+                        if (weightProgressDay[key][0] >= weight && weightProgressDay[key][1] <= weight) {
+                            switch (key) {
+                                case "sufficientWeightGainRanges":
+                                    resolve(PROGRESS_NOTATION.SUFFICIENT_WEIGHT_GAIN);
+                                    break;
+                                case "insufficientWeightGainRanges":
+                                    resolve(PROGRESS_NOTATION.INSUFFICIENT_WEIGHT_GAIN);
+                                    break;
+                                case "insufficientWeightLossRanges":
+                                    resolve(PROGRESS_NOTATION.INSUFFICIENT_WEIGHT_LOSS);
+                                    break;
+                                case "sufficientWeightLossRanges":
+                                    resolve(PROGRESS_NOTATION.SUFFICIENT_WEIGHT_LOSS);
+                                    break;
+                            }
+                        }
+                    }
+                }
+            } catch (err) {
+                console.log(err)
+                reject(new ResponseError(err.message || "Internal server error", err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR))
+            }
+        })
     }
 }
 

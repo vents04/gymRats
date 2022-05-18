@@ -12,12 +12,12 @@ const DbService = require('../services/db.service');
 router.get("/page", authenticate, async (req, res, next) => {
     try {
         let message = false;
-        
+
         const relation = await DbService.getOne(COLLECTIONS.RELATIONS, { clientId: mongoose.Types.ObjectId(req.user._id) });
         if (relation && relation.status == RELATION_STATUSES.ACTIVE) message = true;
 
         const date = new Date();
-        const weightTrackerProgress = await WeightTrackerService.getProgressNotation(date.getDate(), date.getMonth() + 1, date.getFullYear(), req.user._id);
+        const weightTrackerProgress = await WeightTrackerService.getProgressNotationNew(date.getDate(), date.getMonth() + 1, date.getFullYear(), req.user._id);
         const logbookProgress = await LogbookService.getExercisesProgress(req.user._id);
         return res.status(HTTP_STATUS_CODES.OK).send({
             weightTrackerProgress,

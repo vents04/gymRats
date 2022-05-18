@@ -85,7 +85,14 @@ export default class Suggestions extends Component {
         return (
             <View style={globalStyles.safeAreaView}>
                 <View style={globalStyles.pageContainer}>
-                    <LogoBar />
+                    <View style={globalStyles.followUpScreenTopbar}>
+                        <TouchableOpacity onPress={() => {
+                            this.props.navigation.goBack();
+                        }}>
+                            <Ionicons name="md-arrow-back-sharp" size={25} />
+                        </TouchableOpacity>
+                        <Text style={globalStyles.followUpScreenTitle}>Suggestions</Text>
+                    </View>
                     <Text style={styles.descriptionText}>Gym Rats values your opinion and that is why you can message us about bugs, suggestions and wanted features.</Text>
                     <ScrollView ref={this.scrollView} style={[styles.chatMessagesContainer, {
                         marginTop: 16

@@ -8039,3 +8039,33 @@
 {"level":"error","message":"\"exercises[0].sets[0].reps\" must be a positive number"}
 {"level":"error","message":"\"exercises[0].sets[0].reps\" must be a positive number"}
 {"level":"error","message":"\"exercises[0].sets[0].reps\" must be a positive number"}
+{"level":"error","message":"Invalid barcode"}
+{"level":"error","message":"Invalid barcode"}
+{"level":"error","message":"Invalid barcode"}
+{"level":"error","message":"Invalid barcode"}
+{"level":"error","message":"Invalid barcode"}
+{"level":"error","message":"Invalid barcode"}
+{"level":"error","message":"\"weight\" must be a number"}
+{"level":"error","message":"\"weight\" must be less than or equal to 635"}
+{"level":"error","message":"unknown operator: $or"}
+{"level":"error","message":"$or must be an array"}
+{"level":"error","message":"period is not defined"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'sufficientWeightGainRanges')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'sufficientWeightGainRanges')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'sufficientWeightGainRanges')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'sufficientWeightGainRanges')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'sufficientWeightGainRanges')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'sufficientWeightGainRanges')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'sufficientWeightGainRanges')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'sufficientWeightGainRanges')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'sufficientWeightGainRanges')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'sufficientWeightGainRanges')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'sufficientWeightGainRanges')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'sufficientWeightGainRanges')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'sufficientWeightGainRanges')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'sufficientWeightGainRanges')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'sufficientWeightGainRanges')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'sufficientWeightGainRanges')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'sufficientWeightGainRanges')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'sufficientWeightGainRanges')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'sufficientWeightGainRanges')"}
