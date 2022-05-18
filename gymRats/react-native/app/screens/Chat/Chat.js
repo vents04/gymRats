@@ -29,6 +29,19 @@ export default class Chat extends Component {
             chat: null,
             chatId: null
         }
+
+        this.focusListener;
+    }
+
+    onFocusFunction = () => {
+        const chatId = this.props.route.params.chatId
+        this.setState({ chatId: this.props.route.params.chatId }, () => {
+            socket.open()
+            socket.emit("join-chat-room", { chatId })
+            this.updateSeenStatus(chatId)
+            this.getChat(chatId)
+            this.receiveTextMessage()
+        });
     }
 
     sendTextMessage = (messageInfo) => {
@@ -88,14 +101,9 @@ export default class Chat extends Component {
     }
 
     componentDidMount() {
-        const chatId = this.props.route.params.chatId
-        this.setState({ chatId: this.props.route.params.chatId }, () => {
-            socket.open()
-            socket.emit("join-chat-room", { chatId })
-            this.updateSeenStatus(chatId)
-            this.getChat(chatId)
-            this.receiveTextMessage()
-        });
+        this.focusListener = this.props.navigation.addListener('focus', () => {
+            this.onFocusFunction();
+        })
     }
 
     componentWillUnmount() {
