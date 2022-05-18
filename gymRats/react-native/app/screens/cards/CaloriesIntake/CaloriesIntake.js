@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
-import { Text, View, ScrollView, TouchableOpacity } from 'react-native'
+import { Text, View, ScrollView, TouchableOpacity, BackHandler } from 'react-native'
 
 import ApiRequests from '../../../classes/ApiRequests';
-import { DataManager } from '../../../classes/DataManager';
+import { BackButtonHandler } from '../../../classes/BackButtonHandler';
 
 import { Ionicons } from '@expo/vector-icons';
 
@@ -24,6 +24,13 @@ export default class CaloriesIntake extends Component {
         }
 
         this.focusListener;
+
+        this.backHandler;
+    }
+
+    backAction = () => {
+        BackButtonHandler.goToPageWithDataManagerCardUpdate(this.props.navigation, "Calendar", this.props.route.params.date)
+        return true;
     }
 
     onFocusFunction = () => {
@@ -34,9 +41,17 @@ export default class CaloriesIntake extends Component {
     }
 
     componentDidMount = () => {
+        this.backHandler = BackHandler.addEventListener(
+            "hardwareBackPress",
+            this.backAction
+        );
         this.focusListener = this.props.navigation.addListener('focus', () => {
             this.onFocusFunction();
         })
+    }
+
+    componentWillUnmount = () => {
+        this.backHandler.remove();
     }
 
     getCaloriesIntake = () => {
@@ -83,8 +98,7 @@ export default class CaloriesIntake extends Component {
                         marginBottom: 32
                     }]}>
                         <TouchableOpacity onPress={() => {
-                            DataManager.onDateCardChanged(this.props.route.params.date);
-                            this.props.navigation.navigate("Calendar")
+                            this.backAction()
                         }}>
                             <Ionicons name="md-arrow-back-sharp" size={25} />
                         </TouchableOpacity>

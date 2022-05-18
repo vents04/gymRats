@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { ActivityIndicator, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
+import { ActivityIndicator, BackHandler, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 
 import ApiRequests from '../../../classes/ApiRequests';
-import { DataManager } from "../../../classes/DataManager";
+import { BackButtonHandler } from '../../../classes/BackButtonHandler';
 
 import { HTTP_STATUS_CODES, WEIGHT_UNITS, WEIGHT_UNITS_LABELS } from '../../../../global';
 import { cardColors } from '../../../../assets/styles/cardColors';
@@ -26,9 +26,20 @@ export default class WeightTracker extends Component {
         }
 
         this.input = React.createRef();
+
+        this.backHandler;
+    }
+
+    backAction = () => {
+        BackButtonHandler.goToPageWithDataManagerCardUpdate(this.props.navigation, "Calendar", this.props.route.params.date)
+        return true;
     }
 
     componentDidMount() {
+        this.backHandler = BackHandler.addEventListener(
+            "hardwareBackPress",
+            this.backAction
+        );
         this.setState({
             weightUnit: (this.props.route.params.weightUnit) ? this.props.route.params.weightUnit : this.getWeightUnit(),
             weight: (this.props.route.params.weight) ? this.props.route.params.weight : null
@@ -42,6 +53,10 @@ export default class WeightTracker extends Component {
                 })
             }
         });
+    }
+
+    componentWillUnmount = () => {
+        this.backHandler.remove();
     }
 
     getWeightUnit = () => {
@@ -69,8 +84,7 @@ export default class WeightTracker extends Component {
             unit: this.state.weightUnit
         }, true).then((response) => {
             this.setState({ showSaving: false });
-            DataManager.onDateCardChanged(this.props.route.params.date);
-            this.props.navigation.navigate("Calendar");
+            this.backAction();
         }).catch((error) => {
             this.setState({
                 showError: true,
@@ -87,8 +101,7 @@ export default class WeightTracker extends Component {
             <View style={globalStyles.pageContainer}>
                 <View style={globalStyles.followUpScreenTopbar}>
                     <TouchableOpacity onPress={() => {
-                        console.log({ reloadDate: true, date: this.props.route.params.date });
-                        this.props.navigation.navigate("Calendar");
+                        this.backAction();
                     }}>
                         <Ionicons name="md-arrow-back-sharp" size={25} />
                     </TouchableOpacity>
@@ -105,7 +118,6 @@ export default class WeightTracker extends Component {
                         placeholder="80"
                         editable={!this.state.showSaving}
                         onChangeText={(val) => {
-                            console.log(val)
                             let shouldNotBeAdded = false;
                             if (val.includes(".")) {
                                 if (val.split(".")[0].length > 3) {

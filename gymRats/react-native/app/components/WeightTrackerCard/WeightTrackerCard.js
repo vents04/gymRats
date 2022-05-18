@@ -44,7 +44,6 @@ export default class WeightTrackerCard extends Component {
             this.toggleShowConfirmationBox(false);
             DataManager.onDateCardChanged(this.props.date);
         }).catch((error) => {
-            console.log(error);
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
                     this.setState({ showError: true, error: error.response.data });

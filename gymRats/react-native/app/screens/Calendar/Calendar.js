@@ -47,7 +47,6 @@ export default class Calendar extends Component {
     }
 
     setDate = (date) => {
-        console.log("set date", date);
         if (!this.state.selectedDate || (this.state.selectedDate.getTime() != date.getTime())) {
             if (this.subscription) {
                 DataManager.unsubscribeForDateCards(this.subscription);
@@ -109,14 +108,7 @@ export default class Calendar extends Component {
     }
 
     render() {
-        return <View style={globalStyles.safeAreaView}
-            onTouchStart={e => this.touchX = e.nativeEvent.pageX}
-            onTouchEnd={e => {
-                if (this.touchX - e.nativeEvent.pageX > 30)
-                    this.incrementDate(1);
-                else if (this.touchX - e.nativeEvent.pageX < -30)
-                    this.incrementDate(-1)
-            }} >
+        return <View style={globalStyles.safeAreaView} >
             <View style={globalStyles.pageContainer}>
                 {
                     this.state.showCalendarPicker
