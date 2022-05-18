@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 
 import ApiRequests from '../../classes/ApiRequests';
+import { DataManager } from "../../classes/DataManager";
 
 import i18n from 'i18n-js';
 
@@ -41,8 +42,9 @@ export default class WeightTrackerCard extends Component {
     deleteCard = () => {
         ApiRequests.delete(`weight-tracker/daily-weight/${this.props.data._id}`, {}, true).then((response) => {
             this.toggleShowConfirmationBox(false);
-            this.props.rerender(this.props.date);
+            DataManager.onDateCardChanged(this.props.date);
         }).catch((error) => {
+            console.log(error);
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
                     this.setState({ showError: true, error: error.response.data });

@@ -185,7 +185,7 @@ export default class Calendar extends Component {
                                                         weightUnit: card.data.unit,
                                                         _id: card.data._id
                                                     });
-                                                }} data={card.data} rerender={this.reloadDateAfterDelete} date={this.state.selectedDate} {...this.props} />
+                                                }} data={card.data} date={this.state.selectedDate} {...this.props} />
                                                 : card.card == 'workoutSessions'
                                                     ? <LogbookCard key={"_" + index} actionButtonFunction={() => {
                                                         this.props.navigation.navigate("Logbook", {
@@ -193,7 +193,7 @@ export default class Calendar extends Component {
                                                             timezoneOffset: this.state.timezoneOffset,
                                                             data: card.data
                                                         });
-                                                    }} data={card.data} rerender={this.reloadDateAfterDelete} date={this.state.selectedDate} {...this.props} />
+                                                    }} data={card.data} date={this.state.selectedDate} {...this.props} />
                                                     : card.card == 'caloriesCounterDays'
                                                         ? <CaloriesIntakeCard key={"_" + index} actionButtonFunction={() => {
                                                             this.props.navigation.navigate("CaloriesIntake", {
@@ -201,7 +201,7 @@ export default class Calendar extends Component {
                                                                 timezoneOffset: this.state.timezoneOffset,
                                                                 data: card.data
                                                             });
-                                                        }} data={card.data} rerender={this.reloadDateAfterDelete} date={this.state.selectedDate} {...this.props} />
+                                                        }} data={card.data} date={this.state.selectedDate} {...this.props} />
                                                         : null
                                         )
                                         : <Text style={globalStyles.notation}>{i18n.t('screens')['calendar']['noData']}</Text>

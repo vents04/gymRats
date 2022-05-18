@@ -3,6 +3,7 @@ import { Dimensions, Text, TouchableOpacity, View } from 'react-native';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 
 import ApiRequests from '../../classes/ApiRequests';
+import { DataManager } from "../../classes/DataManager";
 
 import ConfirmationBox from '../ConfirmationBox/ConfirmationBox';
 
@@ -75,7 +76,7 @@ export default class CaloriesIntakeCard extends Component {
     deleteCard = () => {
         ApiRequests.delete(`calories-counter/${this.props.data._id}`, {}, true).then((response) => {
             this.toggleShowConfirmationBox(false);
-            this.props.rerender(this.props.date);
+            DataManager.onDateCardChanged(this.props.date);
         }).catch((error) => {
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {

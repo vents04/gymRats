@@ -82,24 +82,6 @@ export default class WeightTracker extends Component {
         })
     }
 
-    deleteWeight = () => {
-        this.setState({ showDeleting: true });
-        setTimeout(() => {
-            ApiRequests.delete(`weight-tracker/daily-weight/${this.props.route.params._id}`, false, true).then((response) => {
-                this.setState({ showDeleting: false });
-                this.props.navigation.navigate("Calendar", { reloadDate: true, date: this.props.route.params.date });
-            }).catch((error) => {
-                this.setState({
-                    showError: true,
-                    showDeleting: false,
-                    error: error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR
-                        ? error.response.data
-                        : "Internal server error"
-                })
-            })
-        }, 500);
-    }
-
     render() {
         return <View style={globalStyles.safeAreaView}>
             <View style={globalStyles.pageContainer}>
@@ -126,7 +108,7 @@ export default class WeightTracker extends Component {
                             console.log(val)
                             let shouldNotBeAdded = false;
                             if (val.includes(".")) {
-                                if (val.length > 5) {
+                                if (val.split(".")[0].length > 3) {
                                     shouldNotBeAdded = true;
                                 }
                             }

@@ -3,6 +3,7 @@ import { Modal, ScrollView, Text, TextInput, TouchableOpacity, View } from 'reac
 import { Picker } from '@react-native-picker/picker';
 
 import ApiRequests from '../../../classes/ApiRequests';
+import { DataManager } from '../../../classes/DataManager';
 
 import { Ionicons } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
@@ -367,7 +368,8 @@ export default class Logbook extends Component {
                 <View style={globalStyles.pageContainer}>
                     <View style={globalStyles.followUpScreenTopbar}>
                         <TouchableOpacity onPress={() => {
-                            this.props.navigation.navigate("Calendar", { reloadDate: true, date: this.props.route.params.date })
+                            DataManager.onDateCardChanged(this.props.route.params.date);
+                            this.props.navigation.navigate("Calendar")
                         }}>
                             <Ionicons name="md-arrow-back-sharp" size={25} />
                         </TouchableOpacity>

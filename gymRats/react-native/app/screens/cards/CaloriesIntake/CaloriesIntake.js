@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Text, View, ScrollView, TouchableOpacity } from 'react-native'
 
 import ApiRequests from '../../../classes/ApiRequests';
+import { DataManager } from '../../../classes/DataManager';
 
 import { Ionicons } from '@expo/vector-icons';
 
@@ -82,7 +83,8 @@ export default class CaloriesIntake extends Component {
                         marginBottom: 32
                     }]}>
                         <TouchableOpacity onPress={() => {
-                            this.props.navigation.navigate("Calendar", { reloadDate: true, date: this.props.route.params.date })
+                            DataManager.onDateCardChanged(this.props.route.params.date);
+                            this.props.navigation.navigate("Calendar")
                         }}>
                             <Ionicons name="md-arrow-back-sharp" size={25} />
                         </TouchableOpacity>

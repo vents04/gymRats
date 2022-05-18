@@ -38,8 +38,10 @@ const DataManager = {
         }
     },
     onDateCardChanged: function (date) {
+        console.log("DATATA 2", date);
         const time = date.getTime();
         let info = dateCardsSubscriptions[time];
+        console.log("DATATA 3", info);
         console.log(info);
         if (info) {
             DataManager.loadDateCards(date);
@@ -47,6 +49,7 @@ const DataManager = {
     },
     loadDateCards: function (selectedDate) {
         ApiRequests.get(`date?date=${selectedDate.getDate()}&month=${selectedDate.getMonth() + 1}&year=${selectedDate.getFullYear()}`, false, true).then((response) => {
+            console.log(response.data)
             const time = selectedDate.getTime();
             let info = dateCardsSubscriptions[time];
             if (info) {
