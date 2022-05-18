@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import { DataManager } from "../../classes/DataManager";
 
-import { Dimensions, ScrollView, Text, TouchableHighlight, TouchableNativeFeedback, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
+import { Dimensions, RefreshControl, ScrollView, Text, TouchableHighlight, TouchableNativeFeedback, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import BottomSheet from "react-native-gesture-bottom-sheet";
 import DateTimePicker from '@react-native-community/datetimepicker';
 
@@ -40,7 +40,8 @@ export default class Calendar extends Component {
             doNotShow: [],
             selectedDate: new Date(),
             timezoneOffset: null,
-            showCalendarPicker: false
+            showCalendarPicker: false,
+            cardsRefreshing: false,
         }
 
         this.focusListener;
@@ -164,39 +165,57 @@ export default class Calendar extends Component {
                                 </TouchableOpacity>
                             </View>
                             <ScrollView
-                                contentContainerStyle={globalStyles.fillEmptySpace}>
+                                contentContainerStyle={{ ...globalStyles.fillEmptySpace, paddingBottom: 25 }}
+                                refreshControl={
+                                    <RefreshControl
+                                        refreshing={this.state.cardsRefreshing}
+                                        onRefresh={() => {
+                                            this.setState({ cardsRefreshing: true });
+                                            DataManager.onDateCardChanged(this.state.selectedDate);
+                                            setTimeout(() => {
+                                                this.setState({ cardsRefreshing: false });
+                                            }, 1000)
+                                        }}
+                                    />
+                                }>
                                 {
-                                    this.state.cards.length > 0
-                                        ? this.state.cards.map((card, index) =>
-                                            card.card == "dailyWeights"
-                                                ? <WeightTrackerCard key={"_" + index} actionButtonFunction={() => {
-                                                    this.props.navigation.navigate("WeightTracker", {
-                                                        date: this.state.selectedDate,
-                                                        timezoneOffset: this.state.timezoneOffset,
-                                                        weight: card.data.weight,
-                                                        weightUnit: card.data.unit,
-                                                        _id: card.data._id
-                                                    });
-                                                }} data={card.data} date={this.state.selectedDate} {...this.props} />
-                                                : card.card == 'workoutSessions'
-                                                    ? <LogbookCard key={"_" + index} actionButtonFunction={() => {
-                                                        this.props.navigation.navigate("Logbook", {
-                                                            date: this.state.selectedDate,
-                                                            timezoneOffset: this.state.timezoneOffset,
-                                                            data: card.data
-                                                        });
-                                                    }} data={card.data} date={this.state.selectedDate} {...this.props} />
-                                                    : card.card == 'caloriesCounterDays'
-                                                        ? <CaloriesIntakeCard key={"_" + index} actionButtonFunction={() => {
-                                                            this.props.navigation.navigate("CaloriesIntake", {
-                                                                date: this.state.selectedDate,
-                                                                timezoneOffset: this.state.timezoneOffset,
-                                                                data: card.data
-                                                            });
-                                                        }} data={card.data} date={this.state.selectedDate} {...this.props} />
-                                                        : null
-                                        )
-                                        : <Text style={globalStyles.notation}>{i18n.t('screens')['calendar']['noData']}</Text>
+                                    !this.state.cardsRefreshing
+                                        ? <>
+                                            {
+                                                this.state.cards.length > 0
+                                                    ? this.state.cards.map((card, index) =>
+                                                        card.card == "dailyWeights"
+                                                            ? <WeightTrackerCard key={"_" + index} actionButtonFunction={() => {
+                                                                this.props.navigation.navigate("WeightTracker", {
+                                                                    date: this.state.selectedDate,
+                                                                    timezoneOffset: this.state.timezoneOffset,
+                                                                    weight: card.data.weight,
+                                                                    weightUnit: card.data.unit,
+                                                                    _id: card.data._id
+                                                                });
+                                                            }} data={card.data} date={this.state.selectedDate} {...this.props} />
+                                                            : card.card == 'workoutSessions'
+                                                                ? <LogbookCard key={"_" + index} actionButtonFunction={() => {
+                                                                    this.props.navigation.navigate("Logbook", {
+                                                                        date: this.state.selectedDate,
+                                                                        timezoneOffset: this.state.timezoneOffset,
+                                                                        data: card.data
+                                                                    });
+                                                                }} data={card.data} date={this.state.selectedDate} {...this.props} />
+                                                                : card.card == 'caloriesCounterDays'
+                                                                    ? <CaloriesIntakeCard key={"_" + index} actionButtonFunction={() => {
+                                                                        this.props.navigation.navigate("CaloriesIntake", {
+                                                                            date: this.state.selectedDate,
+                                                                            timezoneOffset: this.state.timezoneOffset,
+                                                                            data: card.data
+                                                                        });
+                                                                    }} data={card.data} date={this.state.selectedDate} {...this.props} />
+                                                                    : null
+                                                    )
+                                                    : <Text style={globalStyles.notation}>{i18n.t('screens')['calendar']['noData']}</Text>
+                                            }
+                                        </>
+                                        : <Text style={globalStyles.notation}>Cards refreshing...</Text>
                                 }
                             </ScrollView>
                         </View>
