@@ -163,8 +163,13 @@ const WeightTrackerService = {
                     const lowestEndRangeValue = weeklyWeights[0].weight > weeklyWeights[weeklyWeights.length - 1].weight ? weeklyWeights[weeklyWeights.length - 1].weight : weeklyWeights[0].weight;
                     const percentageDifference = (average - lowestEndRangeValue) / lowestEndRangeValue * 100;
                     console.log(average);
-                    console.log(lowestEndRangeValue)
-                    console.log(percentageDifference)
+                    console.log(lowestEndRangeValue);
+                    console.log(percentageDifference);
+                    console.log(weeklyWeights[0]);
+                    const lastDate = new Date(weeklyWeights[0].year, weeklyWeights[0].month - 1, weeklyWeights[0].date).getTime();
+                    const firstDate = new Date(weeklyWeights[weeklyWeights.length - 1].year, weeklyWeights[weeklyWeights.length - 1].month - 1, weeklyWeights[weeklyWeights.length - 1].date).getTime();
+                    const periodInDays = (lastDate - firstDate) / (1000 * 60 * 60 * 24);
+                    console.log(periodInDays);
                     if (percentageDifference < 0) {
                         if (percentageDifference > -0.5) progressNotation = PROGRESS_NOTATION.INSUFFICIENT_WEIGHT_LOSS
                         else if (percentageDifference > -1) progressNotation = PROGRESS_NOTATION.SUFFICIENT_WEIGHT_LOSS
@@ -180,6 +185,126 @@ const WeightTrackerService = {
                 reject(new ResponseError(error.message || "Internal server error", error.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
             }
         });
+    },
+
+    getProgressGraphRanges: (weight, weeks) => {
+        return new Promise(async (resolve, reject) => {
+            try {
+                weight = parseFloat(parseFloat(weight).toFixed(2))
+                let ranges = {};
+                for (let index = 0; index < weeks; index++) {
+                    let sufficientWeightGainRanges = [];
+                    let insufficientWeightGainRanges = [];
+                    let insufficientWeightLossRanges = [];
+                    let sufficientWeightLossRanges = [];
+                    if (index == 0) {
+                        sufficientWeightGainRanges.push(
+                            parseFloat(parseFloat(weight + (0.0075 * weight)).toFixed(2)),
+                            parseFloat(parseFloat(weight + (0.0025 * weight)).toFixed(2)),
+                        )
+                        insufficientWeightGainRanges.push(
+                            parseFloat(parseFloat(sufficientWeightGainRanges[1] - 0.01).toFixed(2)),
+                            weight
+                        )
+                        insufficientWeightLossRanges.push(
+                            parseFloat(parseFloat(weight - 0.01).toFixed(2)),
+                            parseFloat(parseFloat(weight - (0.005 * weight)).toFixed(2)),
+                        )
+                        sufficientWeightLossRanges.push(
+                            parseFloat(parseFloat(insufficientWeightLossRanges[1] - 0.01).toFixed(2)),
+                            parseFloat(parseFloat(weight - (0.01 * weight)).toFixed(2)),
+                        )
+                    } else {
+                        sufficientWeightGainRanges.push(
+                            parseFloat(parseFloat(ranges[index - 1].sufficientWeightGainRanges[0] + (0.0075 * ranges[index - 1].sufficientWeightGainRanges[0])).toFixed(2)),
+                            parseFloat(parseFloat(ranges[index - 1].sufficientWeightGainRanges[1] + (0.0025 * ranges[index - 1].sufficientWeightGainRanges[1])).toFixed(2)),
+                        )
+                        insufficientWeightGainRanges.push(
+                            parseFloat(parseFloat(sufficientWeightGainRanges[1] - 0.01).toFixed(2)),
+                            weight
+                        )
+                        insufficientWeightLossRanges.push(
+                            parseFloat(parseFloat(weight - 0.01).toFixed(2)),
+                            parseFloat(parseFloat(ranges[index - 1].insufficientWeightLossRanges[1] - (0.005 * ranges[index - 1].insufficientWeightLossRanges[1])).toFixed(2)),
+                        )
+                        sufficientWeightLossRanges.push(
+                            parseFloat(parseFloat(insufficientWeightLossRanges[1] - 0.01).toFixed(2)),
+                            parseFloat(parseFloat(ranges[index - 1].sufficientWeightLossRanges[1] - (0.01 * ranges[index - 1].sufficientWeightLossRanges[1])).toFixed(2)),
+                        )
+                    }
+                    ranges[index] = {
+                        sufficientWeightGainRanges,
+                        insufficientWeightGainRanges,
+                        insufficientWeightLossRanges,
+                        sufficientWeightLossRanges
+                    }
+                }
+                resolve(ranges);
+            } catch (err) {
+                reject(new ResponseError(err.message || "Internal server error", err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR))
+            }
+        })
+    },
+
+    getProgressNotationNew: (weight, days, weightProgressGraph) => {
+        return new Promise((resolve, reject) => {
+            try {
+                const week = days != 0 ? parseInt((days - 1) / 7) : 0;
+                const dayInWeek = (days % 7) == 0 ? 7 : (days % 7);
+                console.log(week, dayInWeek);
+                const weightProgressGraphWeek = weightProgressGraph[week];
+                let weightProgressDay = {
+                    sufficientWeightGainRanges: [],
+                    insufficientWeightGainRanges: [],
+                    insufficientWeightLossRanges: [],
+                    sufficientWeightLossRanges: []
+                }
+                for (let key in weightProgressGraphWeek) {
+                    const topDifference = Math.abs(weightProgressGraphWeek[key][0] - weightProgressGraph[week - 1][key][0]);
+                    const bottomDifference = Math.abs(weightProgressGraphWeek[key][1] - weightProgressGraph[week - 1][key][1]);
+                    const topDifferencePerDay = topDifference / 7;
+                    const bottomDifferencePerDay = bottomDifference / 7;
+                    weightProgressDay[key].push(
+                        parseFloat(parseFloat(
+                            key == "sufficientWeightGainRanges" || key == "insufficientWeightGainRanges"
+                                ? weightProgressGraphWeek[key][0] - topDifferencePerDay * (dayInWeek != 7 ? 7 - dayInWeek : 1)
+                                : weightProgressGraphWeek[key][0] + topDifferencePerDay * (dayInWeek != 7 ? 7 - dayInWeek : 1)).toFixed(2)),
+                        parseFloat(parseFloat(
+                            key == "sufficientWeightGainRanges" || key == "insufficientWeightGainRanges"
+                                ? weightProgressGraphWeek[key][1] - bottomDifferencePerDay * (dayInWeek != 7 ? 7 - dayInWeek : 1)
+                                : weightProgressGraphWeek[key][1] + bottomDifferencePerDay * (dayInWeek != 7 ? 7 - dayInWeek : 1)).toFixed(2)),
+                    )
+                }
+                console.log(weightProgressDay, "s")
+                if (weight > weightProgressDay.sufficientWeightGainRanges[0]) {
+                    resolve(PROGRESS_NOTATION.RAPID_WEIGHT_GAIN);
+                } else if (weight < weightProgressDay.sufficientWeightLossRanges[1]) {
+                    resolve(PROGRESS_NOTATION.RAPID_WEIGHT_LOSS);
+                } else {
+                    for (let key in weightProgressDay) {
+                        if (weightProgressDay[key][0] >= weight && weightProgressDay[key][1] <= weight) {
+                            switch (key) {
+                                case "sufficientWeightGainRanges":
+                                    resolve(PROGRESS_NOTATION.SUFFICIENT_WEIGHT_GAIN);
+                                    break;
+                                case "insufficientWeightGainRanges":
+                                    resolve(PROGRESS_NOTATION.INSUFFICIENT_WEIGHT_GAIN);
+                                    break;
+                                case "insufficientWeightLossRanges":
+                                    resolve(PROGRESS_NOTATION.INSUFFICIENT_WEIGHT_LOSS);
+                                    break;
+                                case "sufficientWeightLossRanges":
+                                    resolve(PROGRESS_NOTATION.SUFFICIENT_WEIGHT_LOSS);
+                                    break;
+                            }
+                        }
+                    }
+                }
+                console.log(weightProgressGraphWeek)
+            } catch (err) {
+                reject(new ResponseError(err.message || "Internal server error", err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR))
+            }
+        })
     }
 }
 

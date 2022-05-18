@@ -217,6 +217,12 @@ mongo.connect();
     for (let weight of weights) {
 
     }
+
+    const weightProgressGraph = await WeightTrackerService.getProgressGraphRanges(90.9, 2);
+    console.log("WEIGHT PROGRESS GRAPH FOR 90.9KGS:");
+    console.log(weightProgressGraph);
+    const progressNotation = await WeightTrackerService.getProgressNotationNew(91.5, 10, weightProgressGraph)
+    console.log(progressNotation);
 })();
 
 io.on("connection", (socket) => {

@@ -8049,3 +8049,4 @@
 {"level":"error","message":"\"weight\" must be less than or equal to 635"}
 {"level":"error","message":"unknown operator: $or"}
 {"level":"error","message":"$or must be an array"}
+{"level":"error","message":"period is not defined"}
