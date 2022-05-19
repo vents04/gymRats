@@ -111,11 +111,7 @@ export default class CaloriesIntakeCard extends Component {
     }
 
     render() {
-        return <Pressable style={({ pressed }) => [
-            {
-                opacity: pressed ? 0.1 : 1,
-            }
-        ]} onPress={() => {
+        return <Pressable onPress={() => {
             if (!this.state.showConfirmationBox) this.props.actionButtonFunction();
         }}>
             <View style={globalStyles.card}>
@@ -251,7 +247,6 @@ export default class CaloriesIntakeCard extends Component {
                                         <Pressable style={({ pressed }) => [
                                             globalStyles.authPageActionButton,
                                             {
-                                                opacity: pressed ? 0.1 : 1,
                                                 backgroundColor: cardColors.caloriesIntake,
                                                 marginTop: 16
                                             }

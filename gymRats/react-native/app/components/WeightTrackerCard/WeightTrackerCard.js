@@ -60,13 +60,9 @@ export default class WeightTrackerCard extends Component {
 
     render() {
         return (
-            <Pressable style={({ pressed }) => [
-                {
-                    opacity: pressed ? 0.1 : 1,
-                }
-            ]} onPress={() => {
+            <Pressable onPress={() => {
                 if (!this.state.showConfirmationBox) this.props.actionButtonFunction();
-            }}><View style={globalStyles.card}>
+            }} unstable_pressDelay={150}            ><View style={globalStyles.card}>
                     {
                         this.state.showConfirmationBox
                             ? <ConfirmationBox deleteCard={this.deleteCard} toggleShowConfirmationBox={this.toggleShowConfirmationBox} />
@@ -134,7 +130,6 @@ export default class WeightTrackerCard extends Component {
                                             }} style={({ pressed }) => [
                                                 globalStyles.authPageActionButton,
                                                 {
-                                                    opacity: pressed ? 0.1 : 1,
                                                     backgroundColor: cardColors.weightTracker,
                                                     marginTop: 16
                                                 }

@@ -189,6 +189,9 @@ export default class Calendar extends Component {
                                 </Pressable>
                             </View>
                             <ScrollView
+                                overScrollMode={"never"}
+                                fadingEdgeLength={150}
+                                showsVerticalScrollIndicator={false}
                                 contentContainerStyle={{ ...globalStyles.fillEmptySpace, paddingBottom: 25 }}
                                 refreshControl={
                                     <RefreshControl
