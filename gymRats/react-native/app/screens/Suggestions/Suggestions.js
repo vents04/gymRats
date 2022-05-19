@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Image, Text, View, ScrollView, TextInput, TouchableOpacity } from 'react-native';
+import { Image, Text, View, ScrollView, TextInput, Pressable } from 'react-native';
 
 import ApiRequests from '../../classes/ApiRequests';
 
@@ -86,11 +86,15 @@ export default class Suggestions extends Component {
             <View style={globalStyles.safeAreaView}>
                 <View style={globalStyles.pageContainer}>
                     <View style={globalStyles.followUpScreenTopbar}>
-                        <TouchableOpacity onPress={() => {
+                        <Pressable style={({ pressed }) => [
+                            {
+                                opacity: pressed ? 0.1 : 1,
+                            }
+                        ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
                             this.props.navigation.goBack();
                         }}>
                             <Ionicons name="md-arrow-back-sharp" size={25} />
-                        </TouchableOpacity>
+                        </Pressable>
                         <Text style={globalStyles.followUpScreenTitle}>Suggestions</Text>
                     </View>
                     <Text style={styles.descriptionText}>Gym Rats values your opinion and that is why you can message us about bugs, suggestions and wanted features.</Text>
@@ -114,11 +118,15 @@ export default class Suggestions extends Component {
                         placeholder="Type here..."
                         onChangeText={(val) => { this.setState({ suggestion: val }) }} />
                     <View style={styles.chatActionButtonContainer}>
-                        <TouchableOpacity onPress={() => {
+                        <Pressable style={({ pressed }) => [
+                            {
+                                opacity: pressed ? 0.1 : 1,
+                            }
+                        ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 15 }} onPress={() => {
                             this.postSuggestion();
                         }}>
                             <Ionicons name="ios-send" size={24} style={styles.chatInputButton} color="#1f6cb0" />
-                        </TouchableOpacity>
+                        </Pressable>
                     </View>
 
                 </View>

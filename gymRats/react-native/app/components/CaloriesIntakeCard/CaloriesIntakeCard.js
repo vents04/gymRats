@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Dimensions, Text, TouchableOpacity, View } from 'react-native';
+import { Dimensions, Text, Pressable, View } from 'react-native';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 
 import ApiRequests from '../../classes/ApiRequests';
@@ -111,7 +111,11 @@ export default class CaloriesIntakeCard extends Component {
     }
 
     render() {
-        return <TouchableOpacity onPress={() => {
+        return <Pressable style={({ pressed }) => [
+            {
+                opacity: pressed ? 0.1 : 1,
+            }
+        ]} onPress={() => {
             if (!this.state.showConfirmationBox) this.props.actionButtonFunction();
         }}>
             <View style={globalStyles.card}>
@@ -125,11 +129,16 @@ export default class CaloriesIntakeCard extends Component {
                     <Text style={globalStyles.cardTitle}>Calories intake</Text>
                     {
                         !this.props.client
-                            ? <TouchableOpacity style={globalStyles.cardTopbarIcon} onPress={() => {
+                            ? <Pressable style={({ pressed }) => [
+                                globalStyles.cardTopbarIcon,
+                                {
+                                    opacity: pressed ? 0.1 : 1,
+                                }
+                            ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
                                 this.setState({ showConfirmationBox: true })
                             }}>
                                 <MaterialCommunityIcons name="delete" size={25} color="#ddd" />
-                            </TouchableOpacity>
+                            </Pressable>
                             : null
                     }
                 </View>
@@ -239,20 +248,25 @@ export default class CaloriesIntakeCard extends Component {
                             {
                                 !this.props.client
                                     ? <View>
-                                        <TouchableOpacity style={[globalStyles.authPageActionButton, {
-                                            backgroundColor: cardColors.caloriesIntake,
-                                            marginTop: 16
-                                        }]} onPress={() => {
-                                            this.props.actionButtonFunction();
-                                        }}>
+                                        <Pressable style={({ pressed }) => [
+                                            globalStyles.authPageActionButton,
+                                            {
+                                                opacity: pressed ? 0.1 : 1,
+                                                backgroundColor: cardColors.caloriesIntake,
+                                                marginTop: 16
+                                            }
+                                        ]}
+                                            onPress={() => {
+                                                this.props.actionButtonFunction();
+                                            }}>
                                             <Text style={globalStyles.authPageActionButtonText}>Add or update food</Text>
-                                        </TouchableOpacity>
+                                        </Pressable>
                                     </View>
                                     : null
                             }
                         </>
                 }
             </View>
-        </TouchableOpacity>;
+        </Pressable>;
     }
 }

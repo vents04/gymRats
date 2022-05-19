@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, TouchableOpacity, View, ScrollView, TextInput, Image } from 'react-native';
+import { Text, Pressable, View, ScrollView, TextInput, Image } from 'react-native';
 import { Rating, AirbnbRating } from 'react-native-ratings';
 
 import ApiRequests from '../../classes/ApiRequests';
@@ -53,11 +53,15 @@ export default class PostReview extends Component {
             <View style={globalStyles.safeAreaView}>
                 <View style={globalStyles.pageContainer}>
                     <View style={globalStyles.followUpScreenTopbar}>
-                        <TouchableOpacity onPress={() => {
+                        <Pressable style={({ pressed }) => [
+                            {
+                                opacity: pressed ? 0.1 : 1,
+                            }
+                        ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
                             this.props.navigation.navigate("Coaching", { tab: "myCoach" })
                         }}>
                             <Ionicons name="md-arrow-back-sharp" size={25} />
-                        </TouchableOpacity>
+                        </Pressable>
                         <Text style={globalStyles.followUpScreenTitle}>Post a review</Text>
                     </View>
                     {
@@ -125,13 +129,17 @@ export default class PostReview extends Component {
                                 onChangeText={(val) => { this.setState({ review: val, showError: false }) }} />
                         </View>
                     </ScrollView>
-                    <TouchableOpacity style={[globalStyles.authPageActionButton, {
-                        marginVertical: 24
-                    }]} onPress={() => {
+                    <Pressable style={({ pressed }) => [
+                        globalStyles.authPageActionButton,
+                        {
+                            opacity: pressed ? 0.1 : 1,
+                            marginVertical: 24
+                        }
+                    ]} onPress={() => {
                         this.postReview()
                     }}>
                         <Text style={globalStyles.authPageActionButtonText}>Submit</Text>
-                    </TouchableOpacity>
+                    </Pressable>
                 </View>
             </View>
         )

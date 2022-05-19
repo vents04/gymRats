@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import { DataManager } from "../../classes/DataManager";
 
-import { Dimensions, RefreshControl, ScrollView, Text, TouchableHighlight, TouchableNativeFeedback, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
+import { Dimensions, Pressable, RefreshControl, ScrollView, Text, TouchableHighlight, TouchableNativeFeedback, TouchableWithoutFeedback, View } from 'react-native';
 import BottomSheet from "react-native-gesture-bottom-sheet";
 import DateTimePicker from '@react-native-community/datetimepicker';
 
@@ -126,20 +126,31 @@ export default class Calendar extends Component {
                 }
                 <LogoBar />
                 <View style={globalStyles.topbarIconContainer}>
-                    <TouchableOpacity onPress={() => {
+                    <Pressable onPress={() => {
                         this.props.navigation.navigate("Suggestions")
-                    }}>
+                    }} style={({ pressed }) => [
+                        {
+                            opacity: pressed ? 0.1 : 1,
+                        }
+                    ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }}>
                         <FontAwesome5 name="lightbulb" size={24} color={"#1f6cb0"} />
-                    </TouchableOpacity>
+                    </Pressable>
                 </View>
                 {
                     this.state.selectedDate
                         ? <View style={[globalStyles.fillEmptySpace, { flexShrink: 1 }]}>
                             <View style={styles.calendarControllersContainer}>
-                                <TouchableOpacity style={[styles.calendarController, { paddingVertical: 8 }]} onPress={() => { this.incrementDate(-1) }}>
+                                <Pressable style={({ pressed }) => [
+                                    styles.calendarController,
+                                    {
+                                        opacity: pressed ? 0.1 : 1,
+                                        paddingVertical: 8
+                                    }
+                                ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }}
+                                    onPress={() => { this.incrementDate(-1) }}>
                                     <Entypo name="chevron-left" size={14} color="#999" style={{ marginRight: 5 }} />
                                     <Text style={styles.calendarControllerText}>{i18n.t('screens')['calendar']['calendarControllerBack']}</Text>
-                                </TouchableOpacity>
+                                </Pressable>
                                 <TouchableWithoutFeedback onPress={() => { this.setState({ showCalendarPicker: true }) }}>
                                     <Text style={styles.calendarCurrentDate}>
                                         {this.state.selectedDate.getDate()}
@@ -151,19 +162,31 @@ export default class Calendar extends Component {
                                         }
                                     </Text>
                                 </TouchableWithoutFeedback>
-                                <TouchableOpacity style={[styles.calendarController, { justifyContent: 'flex-end', paddingVertical: 8 }]} onPress={() => { this.incrementDate(1) }}>
+                                <Pressable style={({ pressed }) => [
+                                    styles.calendarController,
+                                    {
+                                        opacity: pressed ? 0.1 : 1,
+                                        justifyContent: 'flex-end',
+                                        paddingVertical: 8
+                                    }
+                                ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }}
+                                    onPress={() => { this.incrementDate(1) }}>
                                     <Text style={styles.calendarControllerText}>{i18n.t('screens')['calendar']['calendarControllerNext']}</Text>
                                     <Entypo name="chevron-right" style={{ marginLeft: 5 }} size={14} color="#999" />
-                                </TouchableOpacity>
+                                </Pressable>
                             </View>
                             <View>
-                                <TouchableOpacity style={[globalStyles.authPageActionButton, {
-                                    marginBottom: 16,
-                                }]} onPress={() => {
+                                <Pressable style={({ pressed }) => [
+                                    globalStyles.authPageActionButton,
+                                    {
+                                        opacity: pressed ? 0.1 : 1,
+                                        marginBottom: 16
+                                    }
+                                ]} onPress={() => {
                                     this.bottomSheet.current.show()
                                 }}>
                                     <Text style={globalStyles.authPageActionButtonText}>{i18n.t('screens')['calendar']['addData']}</Text>
-                                </TouchableOpacity>
+                                </Pressable>
                             </View>
                             <ScrollView
                                 contentContainerStyle={{ ...globalStyles.fillEmptySpace, paddingBottom: 25 }}
@@ -226,11 +249,15 @@ export default class Calendar extends Component {
             <BottomSheet ref={this.bottomSheet} height={400} draggable={false}>
                 <View style={styles.bottomSheetTopbar}>
                     <Text style={styles.bottomSheetTitle}>{i18n.t('screens')['calendar']['bottomSheetTitle']}</Text>
-                    <TouchableOpacity onPress={() => {
+                    <Pressable style={({ pressed }) => [
+                        {
+                            opacity: pressed ? 0.1 : 1,
+                        }
+                    ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
                         this.bottomSheet.current.close();
                     }}>
                         <Ionicons name="close" size={30} />
-                    </TouchableOpacity>
+                    </Pressable>
                 </View>
                 <ScrollView style={styles.cardsContainer}>
                     {
@@ -240,7 +267,11 @@ export default class Calendar extends Component {
                     }
                     {
                         !this.state.doNotShow.includes("dailyWeights")
-                            ? <TouchableOpacity onPress={() => {
+                            ? <Pressable style={({ pressed }) => [
+                                {
+                                    opacity: pressed ? 0.1 : 1,
+                                }
+                            ]} onPress={() => {
                                 this.props.navigation.navigate("WeightTracker", {
                                     date: this.state.selectedDate,
                                     timezoneOffset: this.state.timezoneOffset
@@ -254,12 +285,16 @@ export default class Calendar extends Component {
                                         <Text style={styles.cardTitle}>{i18n.t('components')['cards']['weightTracker']['cardTitle']}</Text>
                                     </View>
                                 </View>
-                            </TouchableOpacity>
+                            </Pressable>
                             : null
                     }
                     {
                         !this.state.doNotShow.includes("workoutSessions")
-                            ? <TouchableOpacity onPress={() => {
+                            ? <Pressable style={({ pressed }) => [
+                                {
+                                    opacity: pressed ? 0.1 : 1,
+                                }
+                            ]} onPress={() => {
                                 this.bottomSheet.current.close();
                                 this.props.navigation.navigate("Logbook", {
                                     date: this.state.selectedDate,
@@ -274,12 +309,16 @@ export default class Calendar extends Component {
                                         <Text style={styles.cardTitle}>{i18n.t('components')['cards']['logbook']['cardTitle']}</Text>
                                     </View>
                                 </View>
-                            </TouchableOpacity>
+                            </Pressable>
                             : null
                     }
                     {
                         !this.state.doNotShow.includes("caloriesCounterDays")
-                            ? <TouchableOpacity onPress={() => {
+                            ? <Pressable style={({ pressed }) => [
+                                {
+                                    opacity: pressed ? 0.1 : 1,
+                                }
+                            ]} onPress={() => {
                                 this.bottomSheet.current.close();
                                 this.props.navigation.navigate("CaloriesIntake", {
                                     date: this.state.selectedDate,
@@ -294,7 +333,7 @@ export default class Calendar extends Component {
                                         <Text style={styles.cardTitle}>Calories intake</Text>
                                     </View>
                                 </View>
-                            </TouchableOpacity>
+                            </Pressable>
                             : null
                     }
                 </ScrollView>

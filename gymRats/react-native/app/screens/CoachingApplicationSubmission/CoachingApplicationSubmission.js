@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, TextInput, View, TouchableOpacity, Switch } from 'react-native';
+import { Text, TextInput, View, Pressable, Switch } from 'react-native';
 
 import ApiRequests from '../../classes/ApiRequests';
 
@@ -95,11 +95,15 @@ export default class CoachingApplicationSubmission extends Component {
             <View style={globalStyles.safeAreaView}>
                 <View style={globalStyles.pageContainer}>
                     <View style={globalStyles.followUpScreenTopbar}>
-                        <TouchableOpacity onPress={() => {
+                        <Pressable style={({ pressed }) => [
+                            {
+                                opacity: pressed ? 0.1 : 1,
+                            }
+                        ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
                             this.props.navigation.navigate("Coaching")
                         }}>
                             <Ionicons name="md-arrow-back-sharp" size={25} />
-                        </TouchableOpacity>
+                        </Pressable>
                         <Text style={globalStyles.followUpScreenTitle}>Application submission</Text>
                     </View>
                     {
@@ -125,11 +129,16 @@ export default class CoachingApplicationSubmission extends Component {
                     {
                         !this.state.selectedLocation
                             ? this.state.results.map((result, index) =>
-                                <TouchableOpacity key={index} style={styles.resultContainer} onPress={() => {
+                                <Pressable style={({ pressed }) => [
+                                    styles.resultContainer,
+                                    {
+                                        opacity: pressed ? 0.1 : 1,
+                                    }
+                                ]} hitSlop={{ top: 10, right: 10, bottom: 10, left: 10 }} key={index} onPress={() => {
                                     this.setState({ selectedLocation: result, query: result.description });
                                 }}>
                                     <Text style={styles.result}>{result.description}</Text>
-                                </TouchableOpacity>
+                                </Pressable>
                             )
                             : null
                     }
@@ -154,11 +163,16 @@ export default class CoachingApplicationSubmission extends Component {
                                     marginBottom: 10,
                                     marginTop: 16
                                 }]}>Our team will review your application as soon as possible.</Text>
-                                <TouchableOpacity style={globalStyles.authPageActionButton} onPress={() => {
+                                <Pressable style={({ pressed }) => [
+                                    globalStyles.authPageActionButton,
+                                    {
+                                        opacity: pressed ? 0.1 : 1,
+                                    }
+                                ]} onPress={() => {
                                     this.getPlace()
                                 }}>
                                     <Text style={globalStyles.authPageActionButtonText}>Submit application</Text>
-                                </TouchableOpacity>
+                                </Pressable>
                             </>
                             : null
                     }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { ScrollView, Text, TextInput, Pressable, View } from 'react-native'
 
 import ApiRequests from '../../../classes/ApiRequests';
 
@@ -67,11 +67,15 @@ export default class ExerciseSearch extends Component {
             <View style={globalStyles.safeAreaView}>
                 <View style={globalStyles.pageContainer}>
                     <View style={globalStyles.followUpScreenTopbar}>
-                        <TouchableOpacity onPress={() => {
+                        <Pressable style={({ pressed }) => [
+                            {
+                                opacity: pressed ? 0.1 : 1,
+                            }
+                        ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
                             this.props.navigation.navigate("Logbook", { date: this.props.route.params.date, timezoneOffset: this.props.route.params.timezoneOffset })
                         }}>
                             <Ionicons name="md-arrow-back-sharp" size={25} />
-                        </TouchableOpacity>
+                        </Pressable>
                         <Text style={globalStyles.followUpScreenTitle}>Exercise search</Text>
                     </View>
                     <TextInput
@@ -84,7 +88,11 @@ export default class ExerciseSearch extends Component {
                         <ScrollView ref={this.scrollV} contentContainerStyle={globalStyles.fillEmptySpace}>
                             {
                                 this.state.queryResults.map((exercise, index) =>
-                                    <TouchableOpacity key={index} onPress={() => {
+                                    <Pressable style={({ pressed }) => [
+                                        {
+                                            opacity: pressed ? 0.1 : 1,
+                                        }
+                                    ]} key={index} onPress={() => {
                                         this.props.navigation.navigate("Logbook", {
                                             exercise: exercise,
                                             date: this.props.route.params.date,
@@ -95,7 +103,7 @@ export default class ExerciseSearch extends Component {
                                             <Text style={styles.searchResultTitle}>{exercise.title}</Text>
                                             <Text style={styles.searchResultStats}>Used in {exercise.timesUsed} workout sessions</Text>
                                         </View>
-                                    </TouchableOpacity>
+                                    </Pressable>
                                 )
                             }
                         </ScrollView>

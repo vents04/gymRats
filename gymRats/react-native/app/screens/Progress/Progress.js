@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Dimensions, Image, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Dimensions, Image, ScrollView, Text, TextInput, Pressable, View } from 'react-native';
 
 import ApiRequests from '../../classes/ApiRequests';
 
@@ -93,7 +93,13 @@ export default class Progress extends Component {
                                                     <FontAwesome5 name="weight" size={20} color={cardColors.weightTracker} />
                                                     <Text style={styles.progressCardHeader}>Weight tracker</Text>
                                                 </View>
-                                                <TouchableOpacity style={{ ...styles.progressFlagContainer, backgroundColor: cardColors.weightTracker }} onPress={() => { }}>
+                                                <Pressable style={({ pressed }) => [
+                                                    styles.progressFlagContainer,
+                                                    {
+                                                        opacity: pressed ? 0.1 : 1,
+                                                        backgroundColor: cardColors.weightTracker
+                                                    }
+                                                ]} onPress={() => { }}>
                                                     <Text style={styles.progressFlag}>
                                                         {
                                                             this.state.progress.weightTrackerProgress.notation == PROGRESS_NOTATION.INSUFFICIENT_WEIGHT_LOSS
@@ -113,7 +119,7 @@ export default class Progress extends Component {
                                                         }
                                                     </Text>
                                                     {/*<Entypo name="info-with-circle" size={18} color="white" />*/}
-                                                </TouchableOpacity>
+                                                </Pressable>
                                                 <View style={styles.progressCardTips}>
                                                     <Text style={styles.progressCardTipsTitle}>Tips to improve</Text>
                                                     {

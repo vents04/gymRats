@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { Image, ScrollView, Text, Pressable, View } from 'react-native';
 
 import socketClass from '../../classes/Socket';
 const socket = socketClass.initConnection();
@@ -73,11 +73,15 @@ export default class Chats extends Component {
                                 contentContainerStyle={globalStyles.fillEmptySpace}>
                                 {
                                     this.state.chats.map((chat, index) =>
-                                        <TouchableOpacity key={index} onPress={() => {
+                                        <Pressable style={({ pressed }) => [
+                                            {
+                                                opacity: pressed ? 0.1 : 1,
+                                            }
+                                        ]} key={index} onPress={() => {
                                             this.props.navigation.navigate("Chat", { chatId: chat._id })
                                         }}>
                                             <ChatsItem chat={chat} {...this.props} />
-                                        </TouchableOpacity>
+                                        </Pressable>
                                     )
                                 }
                             </ScrollView>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { ScrollView, Text, TextInput, Pressable, View } from 'react-native'
 import { Picker } from '@react-native-picker/picker';
 
 import ApiRequests from '../../../classes/ApiRequests';
@@ -85,11 +85,15 @@ export default class AddFood extends Component {
             <View style={globalStyles.safeAreaView}>
                 <View style={globalStyles.pageContainer}>
                     <View style={globalStyles.followUpScreenTopbar}>
-                        <TouchableOpacity onPress={() => {
+                        <Pressable style={({ pressed }) => [
+                            {
+                                opacity: pressed ? 0.1 : 1,
+                            }
+                        ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
                             this.props.navigation.navigate("SearchCaloriesIntake", { date: this.props.route.params.date, timezoneOffset: this.props.route.params.timezoneOffset })
                         }}>
                             <Ionicons name="md-arrow-back-sharp" size={25} />
-                        </TouchableOpacity>
+                        </Pressable>
                         <Text style={globalStyles.followUpScreenTitle}>Create food item</Text>
                     </View>
                     {
@@ -120,13 +124,17 @@ export default class AddFood extends Component {
                                 this.state.barcode &&
                                     this.state.barcode.length > 0
                                     ? <Text style={globalStyles.notation}>Already linked</Text>
-                                    : <TouchableOpacity style={[globalStyles.authPageActionButton, {
-                                        width: "50%"
-                                    }]} onPress={() => {
+                                    : <Pressable style={({ pressed }) => [
+                                        globalStyles.authPageActionButton,
+                                        {
+                                            opacity: pressed ? 0.1 : 1,
+                                            width: "50%"
+                                        }
+                                    ]} onPress={() => {
                                         this.props.navigation.navigate("BarcodeReader", { isAddingBarcodeToFood: true, date: this.props.route.params.date, timezoneOffset: this.props.route.params.timezoneOffset, meal: this.props.route.params.meal })
                                     }}>
                                         <Text style={globalStyles.authPageActionButtonText}>Add barcode</Text>
-                                    </TouchableOpacity>
+                                    </Pressable>
                             }
                         </View>
                         <View style={styles.inputSection}>
@@ -174,11 +182,15 @@ export default class AddFood extends Component {
                                 onChangeText={(val) => { this.setState({ fats: val, showError: false }) }} />
                         </View>
                     </ScrollView>
-                    <TouchableOpacity style={[globalStyles.authPageActionButton, {
-                        marginVertical: 16,
-                    }]} onPress={() => { this.addFood() }}>
+                    <Pressable style={({ pressed }) => [
+                        globalStyles.authPageActionButton,
+                        {
+                            opacity: pressed ? 0.1 : 1,
+                            marginVertical: 16
+                        }
+                    ]} onPress={() => { this.addFood() }}>
                         <Text style={globalStyles.authPageActionButtonText}>Submit</Text>
-                    </TouchableOpacity>
+                    </Pressable>
                 </View>
             </View>
         )

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ActivityIndicator, BackHandler, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
+import { ActivityIndicator, BackHandler, Text, TextInput, Pressable, TouchableWithoutFeedback, View } from 'react-native';
 
 import ApiRequests from '../../../classes/ApiRequests';
 import { BackButtonHandler } from '../../../classes/BackButtonHandler';
@@ -100,14 +100,18 @@ export default class WeightTracker extends Component {
         return <View style={globalStyles.safeAreaView}>
             <View style={globalStyles.pageContainer}>
                 <View style={globalStyles.followUpScreenTopbar}>
-                    <TouchableOpacity onPress={() => {
+                    <Pressable style={({ pressed }) => [
+                        {
+                            opacity: pressed ? 0.1 : 1,
+                        }
+                    ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
                         this.backAction();
                     }}>
                         <Ionicons name="md-arrow-back-sharp" size={25} />
-                    </TouchableOpacity>
+                    </Pressable>
                     <Text style={globalStyles.followUpScreenTitle}>Weight</Text>
                 </View>
-                <TouchableOpacity style={[styles.weightInputContainer, globalStyles.authPageInput]} onPress={() => {
+                <Pressable style={[styles.weightInputContainer, globalStyles.authPageInput]} onPress={() => {
                     this.input.current.focus();
                 }}>
                     <TextInput
@@ -128,7 +132,7 @@ export default class WeightTracker extends Component {
                             if (!shouldNotBeAdded) this.setState({ weight: val, showError: false })
                         }} />
                     <Text style={styles.editSectionInput}>{WEIGHT_UNITS_LABELS[this.state.weightUnit]}</Text>
-                </TouchableOpacity>
+                </Pressable>
                 {
                     this.state.showError
                         ? <Text style={[globalStyles.errorBox, {
@@ -136,7 +140,11 @@ export default class WeightTracker extends Component {
                         }]}>{this.state.error}</Text>
                         : null
                 }
-                <TouchableOpacity style={[globalStyles.authPageActionButton, {
+                <Pressable style={({ pressed }) => [
+                    {
+                        opacity: pressed ? 0.1 : 1,
+                    }
+                ]} style={[globalStyles.authPageActionButton, {
                     backgroundColor: cardColors.weightTracker,
                     marginTop: 16
                 }]} onPress={() => {
@@ -156,7 +164,7 @@ export default class WeightTracker extends Component {
                                 }
                             </Text>
                     }
-                </TouchableOpacity>
+                </Pressable>
             </View>
         </View >;
     }

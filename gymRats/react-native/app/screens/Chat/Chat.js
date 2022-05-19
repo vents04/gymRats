@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Image, Text, View, ScrollView, TextInput, TouchableOpacity } from 'react-native';
+import { Image, Text, View, ScrollView, TextInput, Pressable } from 'react-native';
 
 import socketClass from '../../classes/Socket';
 const socket = socketClass.initConnection();
@@ -117,11 +117,15 @@ export default class Chat extends Component {
                     this.state.chat
                         ? <>
                             <View style={styles.chatTopbarContainer}>
-                                <TouchableOpacity onPress={() => {
+                                <Pressable style={({ pressed }) => [
+                                    {
+                                        opacity: pressed ? 0.1 : 1,
+                                    }
+                                ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
                                     this.props.navigation.navigate("Chats")
                                 }}>
                                     <Ionicons name="md-arrow-back-sharp" size={25} />
-                                </TouchableOpacity>
+                                </Pressable>
                                 {
                                     !this.state.chat.oppositeUser.profilePicture
                                         ? <View style={styles.chatProfilePicture}>
@@ -148,11 +152,15 @@ export default class Chat extends Component {
                                     placeholder="Type a message..."
                                     onChangeText={(val) => { this.setState({ message: val, showError: false }) }} />
                                 <View style={styles.chatActionButtonContainer}>
-                                    <TouchableOpacity onPress={() => {
+                                    <Pressable style={({ pressed }) => [
+                                        {
+                                            opacity: pressed ? 0.1 : 1,
+                                        }
+                                    ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 15 }} onPress={() => {
                                         this.sendTextMessage({ senderId: this.state.chat.user._id, message: this.state.message })
                                     }}>
                                         <Ionicons name="ios-send" size={24} style={styles.chatInputButton} color="#1f6cb0" />
-                                    </TouchableOpacity>
+                                    </Pressable>
                                 </View>
 
                             </View>

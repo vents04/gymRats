@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View, ScrollView, TouchableOpacity, BackHandler } from 'react-native'
+import { Text, View, ScrollView, Pressable, BackHandler } from 'react-native'
 
 import ApiRequests from '../../../classes/ApiRequests';
 import { BackButtonHandler } from '../../../classes/BackButtonHandler';
@@ -97,11 +97,15 @@ export default class CaloriesIntake extends Component {
                     <View style={[globalStyles.followUpScreenTopbar, {
                         marginBottom: 32
                     }]}>
-                        <TouchableOpacity onPress={() => {
+                        <Pressable style={({ pressed }) => [
+                            {
+                                opacity: pressed ? 0.1 : 1,
+                            }
+                        ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
                             this.backAction()
                         }}>
                             <Ionicons name="md-arrow-back-sharp" size={25} />
-                        </TouchableOpacity>
+                        </Pressable>
                         <Text style={globalStyles.followUpScreenTitle}>Calories intake</Text>
                     </View>
                     {
@@ -115,11 +119,15 @@ export default class CaloriesIntake extends Component {
                                 <View key={key} style={styles.mealContainer}>
                                     <View style={styles.mealTopBar}>
                                         <Text style={styles.mealTitle}>{MEAL_TITLES[key]}</Text>
-                                        <TouchableOpacity onPress={() => {
+                                        <Pressable style={({ pressed }) => [
+                                            {
+                                                opacity: pressed ? 0.1 : 1,
+                                            }
+                                        ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
                                             this.props.navigation.navigate("SearchCaloriesIntake", { meal: key, date: this.props.route.params.date, timezoneOffset: this.state.timezoneOffset })
                                         }}>
                                             <Ionicons name="add-sharp" size={25} color={cardColors.caloriesIntake} />
-                                        </TouchableOpacity>
+                                        </Pressable>
                                     </View>
                                     {
                                         this.state.calorieCounterDay &&
@@ -127,7 +135,12 @@ export default class CaloriesIntake extends Component {
                                             ? this.state.calorieCounterDay.items.map(item =>
                                                 item.meal == key
                                                     ? <View key={item._id} style={styles.itemContainer}>
-                                                        <TouchableOpacity onPress={() => {
+                                                        <Pressable style={({ pressed }) => [
+                                                            styles.itemContainerLeft,
+                                                            {
+                                                                opacity: pressed ? 0.1 : 1,
+                                                            }
+                                                        ]} onPress={() => {
                                                             this.props.navigation.navigate("AddCaloriesIntakeItem", {
                                                                 dayId: this.state.calorieCounterDay._id,
                                                                 intent: CALORIES_COUNTER_SCREEN_INTENTS.UPDATE,
@@ -139,15 +152,19 @@ export default class CaloriesIntake extends Component {
                                                                 timezoneOffset: this.props.route.params.timezoneOffset,
                                                                 previousScreen: "CaloriesIntake"
                                                             })
-                                                        }} style={styles.itemContainerLeft}>
+                                                        }}>
                                                             <Text style={styles.itemTitle}>{item.itemInstance.title}</Text>
                                                             <Text style={styles.itemAmount}>{item.amount}&nbsp;{item.itemInstance.unit.toLowerCase()}</Text>
-                                                        </TouchableOpacity>
-                                                        <TouchableOpacity onPress={() => {
+                                                        </Pressable>
+                                                        <Pressable style={({ pressed }) => [
+                                                            {
+                                                                opacity: pressed ? 0.1 : 1,
+                                                            }
+                                                        ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
                                                             this.removeItem(item._id)
                                                         }}>
                                                             <Ionicons name="close" size={20} />
-                                                        </TouchableOpacity>
+                                                        </Pressable>
                                                     </View>
                                                     : null
                                             )

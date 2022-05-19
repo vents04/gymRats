@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { ScrollView, Text, TextInput, Pressable, View } from 'react-native'
 
 import ApiRequests from '../../../classes/ApiRequests';
 
@@ -100,15 +100,23 @@ export default class SearchCaloriesIntake extends Component {
             <View style={globalStyles.safeAreaView}>
                 <View style={globalStyles.pageContainer}>
                     <View style={globalStyles.followUpScreenTopbar}>
-                        <TouchableOpacity onPress={() => {
+                        <Pressable style={({ pressed }) => [
+                            {
+                                opacity: pressed ? 0.1 : 1,
+                            }
+                        ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
                             this.props.navigation.navigate("CaloriesIntake", { date: this.props.route.params.date, timezoneOffset: this.props.route.params.timezoneOffset })
                         }}>
                             <Ionicons name="md-arrow-back-sharp" size={25} />
-                        </TouchableOpacity>
+                        </Pressable>
                         <Text style={globalStyles.followUpScreenTitle}>Search food</Text>
                     </View>
                     <View style={globalStyles.topbarIconContainer}>
-                        <TouchableOpacity onPress={() => {
+                        <Pressable style={({ pressed }) => [
+                            {
+                                opacity: pressed ? 0.1 : 1,
+                            }
+                        ]} hitSlop={{ top: 30, right: 15, bottom: 30, left: 15 }} onPress={() => {
                             this.props.navigation.navigate("AddFood", {
                                 timezoneOffset: this.state.timezoneOffset,
                                 date: this.state.date,
@@ -118,8 +126,12 @@ export default class SearchCaloriesIntake extends Component {
                             })
                         }}>
                             <MaterialIcons name="library-add" size={25} color="#1f6cb0" style={{ marginRight: 12 }} />
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => {
+                        </Pressable>
+                        <Pressable style={({ pressed }) => [
+                            {
+                                opacity: pressed ? 0.1 : 1,
+                            }
+                        ]} hitSlop={{ top: 30, right: 15, bottom: 30, left: 15 }} onPress={() => {
                             this.props.navigation.navigate("BarcodeReader", {
                                 meal: this.props.route.params.meal,
                                 date: this.props.route.params.date,
@@ -130,7 +142,7 @@ export default class SearchCaloriesIntake extends Component {
                             })
                         }}>
                             <MaterialCommunityIcons name="barcode-scan" size={25} color="#1f6cb0" />
-                        </TouchableOpacity>
+                        </Pressable>
                     </View>
                     <View style={styles.searchContainer}>
                         <TextInput
@@ -140,13 +152,19 @@ export default class SearchCaloriesIntake extends Component {
                             }]}
                             placeholder="Type your search here"
                             onChangeText={this.changeQuery} />
-                        <TouchableOpacity onPress={() => {
+                        <Pressable style={({ pressed }) => [
+                            {
+                                opacity: pressed ? 0.1 : 1,
+                                width: "10%",
+                                marginLeft: 12
+                            }
+                        ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
                             this.query = "";
                             this.searchInputRef.current.clear();
                             this.searchFood();
-                        }} style={{ width: "10%", marginLeft: 12 }}>
+                        }}>
                             <Ionicons name="close" size={24} color="#1f6cb0" />
-                        </TouchableOpacity>
+                        </Pressable>
                     </View>
                     <View style={styles.searchResultsContainer}>
                         <ScrollView contentContainerStyle={globalStyles.fillEmptySpace}>
@@ -161,7 +179,11 @@ export default class SearchCaloriesIntake extends Component {
                                         <Text style={[globalStyles.modalText, { textAlign: "left", fontFamily: "MainBlack", color: "#1f6cb0" }]}>Recent foods</Text>
                                         {
                                             this.state.recent.map((item, index) =>
-                                                <TouchableOpacity key={"_" + index} onPress={() => {
+                                                <Pressable style={({ pressed }) => [
+                                                    {
+                                                        opacity: pressed ? 0.1 : 1,
+                                                    }
+                                                ]} key={"_" + index} onPress={() => {
                                                     this.props.navigation.navigate("AddCaloriesIntakeItem", {
                                                         intent: CALORIES_COUNTER_SCREEN_INTENTS.ADD,
                                                         item: item.itemInstance,
@@ -201,7 +223,7 @@ export default class SearchCaloriesIntake extends Component {
                                                                 : null
                                                         }
                                                     </View>
-                                                </TouchableOpacity>
+                                                </Pressable>
                                             )
                                         }
                                         <View style={{ borderWidth: 0.75, borderColor: "#e7e7e7", marginVertical: 16 }}></View>
@@ -211,7 +233,11 @@ export default class SearchCaloriesIntake extends Component {
                             {
                                 this.state.queryResults?.length > 0
                                     ? this.state.queryResults.map((item, index) =>
-                                        <TouchableOpacity key={index} onPress={() => {
+                                        <Pressable style={({ pressed }) => [
+                                            {
+                                                opacity: pressed ? 0.1 : 1,
+                                            }
+                                        ]} key={index} onPress={() => {
                                             this.props.navigation.navigate("AddCaloriesIntakeItem", {
                                                 intent: CALORIES_COUNTER_SCREEN_INTENTS.ADD,
                                                 item: item,
@@ -250,7 +276,7 @@ export default class SearchCaloriesIntake extends Component {
                                                         : null
                                                 }
                                             </View>
-                                        </TouchableOpacity>
+                                        </Pressable>
                                     )
                                     : null
                             }

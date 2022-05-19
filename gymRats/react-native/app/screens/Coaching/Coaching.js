@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { Image, ScrollView, Text, Pressable, View } from 'react-native';
 import { Badge } from 'react-native-elements';
 
 import ApiRequests from '../../classes/ApiRequests';
@@ -145,7 +145,12 @@ export default class Coaching extends Component {
                     {
                         this.state.coaching &&
                             this.state.coaching.myClients.requests.length > 0
-                            ? <TouchableOpacity style={globalStyles.topbarIconContainer} onPress={() => {
+                            ? <Pressable style={({ pressed }) => [
+                                globalStyles.topbarIconContainer,
+                                {
+                                    opacity: pressed ? 0.1 : 1,
+                                }
+                            ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
                                 this.props.navigation.navigate("CoachRequests", { relations: this.state.relations });
                             }}>
                                 <View>
@@ -157,7 +162,7 @@ export default class Coaching extends Component {
                                         containerStyle={{ position: 'absolute', left: 20, height: 12, width: 12 }}
                                     />
                                 </View>
-                            </TouchableOpacity>
+                            </Pressable>
                             : null
                     }
                     {
@@ -166,22 +171,32 @@ export default class Coaching extends Component {
                             : null
                     }
                     <View style={styles.tabsContainer}>
-                        <TouchableOpacity style={styles.tabTitleContainer} onPress={() => {
+                        <Pressable style={({ pressed }) => [
+                            styles.tabTitleContainer,
+                            {
+                                opacity: pressed ? 0.1 : 1,
+                            }
+                        ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
                             this.setState({ activeTab: "myCoach" });
                             this.getCoachingPageState();
                         }}>
                             <Text style={[styles.tabTitle, {
                                 color: this.state.activeTab == "myCoach" ? "#1f6cb0" : "#aaa"
                             }]}>Me as client</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.tabTitleContainer} onPress={() => {
+                        </Pressable>
+                        <Pressable style={({ pressed }) => [
+                            styles.tabTitleContainer,
+                            {
+                                opacity: pressed ? 0.1 : 1,
+                            }
+                        ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
                             this.setState({ activeTab: "myClients" });
                             this.getCoachingPageState();
                         }}>
                             <Text style={[styles.tabTitle, {
                                 color: this.state.activeTab == "myClients" ? "#1f6cb0" : "#aaa"
                             }]}>Me as coach</Text>
-                        </TouchableOpacity>
+                        </Pressable>
                     </View>
                     {
                         this.state.coaching
@@ -214,13 +229,17 @@ export default class Coaching extends Component {
                                                         </View>
                                                         <Text style={styles.noCoachPro}>Capable of training people with different goals</Text>
                                                     </View>
-                                                    <TouchableOpacity style={[globalStyles.authPageActionButton, {
-                                                        marginTop: 30
-                                                    }]} onPress={() => {
+                                                    <Pressable style={({ pressed }) => [
+                                                        globalStyles.authPageActionButton,
+                                                        {
+                                                            opacity: pressed ? 0.1 : 1,
+                                                            marginTop: 30
+                                                        }
+                                                    ]} onPress={() => {
                                                         this.props.navigation.navigate("CoachSearch");
                                                     }}>
                                                         <Text style={globalStyles.authPageActionButtonText}>Search coaches</Text>
-                                                    </TouchableOpacity>
+                                                    </Pressable>
                                                 </View>
                                                 {
                                                     this.state.coaching.myCoach.canceledRelations.length > 0
@@ -260,13 +279,17 @@ export default class Coaching extends Component {
                                                                             }</Text>
                                                                         {
                                                                             !relation.hasReview
-                                                                                ? <TouchableOpacity style={[globalStyles.authPageActionButton, {
-                                                                                    marginTop: 12
-                                                                                }]} onPress={() => {
+                                                                                ? <Pressable style={({ pressed }) => [
+                                                                                    globalStyles.authPageActionButton,
+                                                                                    {
+                                                                                        opacity: pressed ? 0.1 : 1,
+                                                                                        marginTop: 12
+                                                                                    }
+                                                                                ]} onPress={() => {
                                                                                     this.props.navigation.navigate("PostReview", { relation })
                                                                                 }}>
                                                                                     <Text style={globalStyles.authPageActionButtonText}>Leave a review</Text>
-                                                                                </TouchableOpacity>
+                                                                                </Pressable>
                                                                                 : null
                                                                         }
                                                                     </View>
@@ -276,13 +299,17 @@ export default class Coaching extends Component {
                                                 }
                                             </>
                                             : <>
-                                                <TouchableOpacity style={[globalStyles.authPageActionButton, {
-                                                    marginBottom: 20
-                                                }]} onPress={() => {
+                                                <Pressable style={({ pressed }) => [
+                                                    globalStyles.authPageActionButton,
+                                                    {
+                                                        opacity: pressed ? 0.1 : 1,
+                                                        marginBottom: 20
+                                                    }
+                                                ]} onPress={() => {
                                                     this.props.navigation.navigate("CoachSearch");
                                                 }}>
                                                     <Text style={globalStyles.authPageActionButtonText}>Search coaches</Text>
-                                                </TouchableOpacity>
+                                                </Pressable>
                                                 {
                                                     !this.state.coaching.myCoach.hasCoaches
                                                         ? <Text style={globalStyles.notation}>You still do not have any coaches</Text>
@@ -313,11 +340,15 @@ export default class Coaching extends Component {
                                                                                 {coach.coachUser.lastName}
                                                                             </Text>
                                                                         </View>
-                                                                        <TouchableOpacity onPress={() => {
+                                                                        <Pressable style={({ pressed }) => [
+                                                                            {
+                                                                                opacity: pressed ? 0.1 : 1,
+                                                                            }
+                                                                        ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
                                                                             this.setState({ showEndRelationModal: true, relationToBeEndedId: coach._id, statusToBeUpdated: "CANCELED" })
                                                                         }}>
                                                                             <MaterialCommunityIcons name="delete" size={25} color="#ddd" />
-                                                                        </TouchableOpacity>
+                                                                        </Pressable>
                                                                     </View>
                                                                 )}
                                                         </>
@@ -348,11 +379,15 @@ export default class Coaching extends Component {
                                                                                 {relation.coach.lastName}
                                                                             </Text>
                                                                         </View>
-                                                                        <TouchableOpacity onPress={() => {
+                                                                        <Pressable style={({ pressed }) => [
+                                                                            {
+                                                                                opacity: pressed ? 0.1 : 1,
+                                                                            }
+                                                                        ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
                                                                             this.deleteRequest(relation._id);
                                                                         }}>
                                                                             <MaterialCommunityIcons name="delete" size={20} color="#ddd" />
-                                                                        </TouchableOpacity>
+                                                                        </Pressable>
                                                                     </View>
                                                                 )
                                                             }
@@ -365,13 +400,17 @@ export default class Coaching extends Component {
                                 : <View style={styles.tabContent}>
                                     {
                                         this.state.coaching.myClients.isPersonalTrainer
-                                            ? <TouchableOpacity style={[globalStyles.authPageActionButton, {
-                                                marginBottom: 12
-                                            }]} onPress={() => {
+                                            ? <Pressable style={({ pressed }) => [
+                                                globalStyles.authPageActionButton,
+                                                {
+                                                    opacity: pressed ? 0.1 : 1,
+                                                    marginBottom: 12
+                                                }
+                                            ]} onPress={() => {
                                                 this.props.navigation.navigate("CoachProfileEdit");
                                             }}>
                                                 <Text style={globalStyles.authPageActionButtonText}>Open my coach profile</Text>
-                                            </TouchableOpacity>
+                                            </Pressable>
                                             : null
                                     }
                                     {
@@ -400,13 +439,17 @@ export default class Coaching extends Component {
                                                     </View>
                                                     <Text style={styles.noCoachPro}>Get the most out of what you have earned through Gym Rats</Text>
                                                 </View>
-                                                <TouchableOpacity style={[globalStyles.authPageActionButton, {
-                                                    marginTop: 30
-                                                }]} onPress={() => {
+                                                <Pressable style={({ pressed }) => [
+                                                    globalStyles.authPageActionButton,
+                                                    {
+                                                        opacity: pressed ? 0.1 : 1,
+                                                        marginTop: 30
+                                                    }
+                                                ]} onPress={() => {
                                                     this.props.navigation.navigate("CoachingApplicationSubmission");
                                                 }}>
                                                     <Text style={globalStyles.authPageActionButtonText}>Submit application</Text>
-                                                </TouchableOpacity>
+                                                </Pressable>
                                             </View>
                                             : <>
                                                 {
@@ -416,7 +459,11 @@ export default class Coaching extends Component {
                                                             <Text style={styles.coachingSectionTitle}>Clients</Text>
                                                             {
                                                                 this.state.coaching.myClients.clients.map((client, index) =>
-                                                                    <TouchableOpacity key={index} onPress={() => {
+                                                                    <Pressable style={({ pressed }) => [
+                                                                        {
+                                                                            opacity: pressed ? 0.1 : 1,
+                                                                        }
+                                                                    ]} key={index} onPress={() => {
                                                                         this.props.navigation.navigate("Client", {
                                                                             client
                                                                         })
@@ -440,13 +487,17 @@ export default class Coaching extends Component {
                                                                                     {client.clientInstance.lastName}
                                                                                 </Text>
                                                                             </View>
-                                                                            <TouchableOpacity onPress={() => {
+                                                                            <Pressable style={({ pressed }) => [
+                                                                                {
+                                                                                    opacity: pressed ? 0.1 : 1,
+                                                                                }
+                                                                            ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
                                                                                 this.setState({ showEndRelationModal: true, relationToBeEndedId: client._id, statusToBeUpdated: "CANCELED" })
                                                                             }}>
                                                                                 <MaterialCommunityIcons name="delete" size={20} color="#ddd" />
-                                                                            </TouchableOpacity>
+                                                                            </Pressable>
                                                                         </View>
-                                                                    </TouchableOpacity>
+                                                                    </Pressable>
                                                                 )
                                                             }
                                                         </>

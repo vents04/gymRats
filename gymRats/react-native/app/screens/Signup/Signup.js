@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, Image, TextInput, TouchableOpacity, ActivityIndicator, TouchableWithoutFeedback } from 'react-native';
+import { Text, View, Image, TextInput, Pressable, ActivityIndicator, TouchableWithoutFeedback } from 'react-native';
 
 import ApiRequests from '../../classes/ApiRequests';
 import Auth from '../../classes/Auth';
@@ -92,7 +92,12 @@ export default class Signup extends Component {
                             ? <Text style={globalStyles.authPageError}>{this.state.error}</Text>
                             : null
                     }
-                    <TouchableOpacity style={globalStyles.authPageActionButton} onPress={() => {
+                    <Pressable style={({ pressed }) => [
+                        globalStyles.authPageActionButton,
+                        {
+                            opacity: pressed ? 0.1 : 1,
+                        }
+                    ]} onPress={() => {
                         if (!this.state.isLoading) this.signup();
                     }}>
                         {
@@ -104,7 +109,7 @@ export default class Signup extends Component {
                                     size="small"
                                 />
                         }
-                    </TouchableOpacity>
+                    </Pressable>
                     <TouchableWithoutFeedback onPress={() => {
                         this.props.navigation.navigate("Login")
                     }}>

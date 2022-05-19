@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { Text, Pressable, View } from 'react-native';
 
 import ApiRequests from '../../classes/ApiRequests';
 import { DataManager } from "../../classes/DataManager";
@@ -77,7 +77,11 @@ export default class LogbookCard extends Component {
     }
 
     render() {
-        return <TouchableOpacity onPress={() => {
+        return <Pressable style={({ pressed }) => [
+            {
+                opacity: pressed ? 0.1 : 1,
+            }
+        ]} onPress={() => {
             if (!this.state.showConfirmationBox) this.props.actionButtonFunction();
         }}><View style={globalStyles.card}>
                 {
@@ -90,11 +94,16 @@ export default class LogbookCard extends Component {
                     <Text style={globalStyles.cardTitle}>{i18n.t('components')['cards']['logbook']['cardTitle']}</Text>
                     {
                         !this.props.client
-                            ? <TouchableOpacity style={globalStyles.cardTopbarIcon} onPress={() => {
+                            ? <Pressable style={({ pressed }) => [
+                                globalStyles.cardTopbarIcon,
+                                {
+                                    opacity: pressed ? 0.1 : 1,
+                                }
+                            ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
                                 this.setState({ showConfirmationBox: true })
                             }}>
                                 <MaterialCommunityIcons name="delete" size={25} color="#ddd" />
-                            </TouchableOpacity>
+                            </Pressable>
                             : null
                     }
                 </View>
@@ -158,20 +167,25 @@ export default class LogbookCard extends Component {
                                 </View>
                                 {
                                     !this.props.client
-                                        ? <TouchableOpacity style={[globalStyles.authPageActionButton, {
-                                            backgroundColor: cardColors.logbook,
-                                            marginTop: 16
-                                        }]} onPress={() => {
+                                        ? <Pressable onPress={() => {
                                             this.props.actionButtonFunction();
-                                        }}>
+                                        }}
+                                            style={({ pressed }) => [
+                                                {
+                                                    opacity: pressed ? 0.1 : 1,
+                                                    backgroundColor: cardColors.logbook,
+                                                    marginTop: 16
+                                                },
+                                                globalStyles.authPageActionButton
+                                            ]}>
                                             <Text style={globalStyles.authPageActionButtonText}>{i18n.t('components')['cards']['logbook']['redirectButton']}</Text>
-                                        </TouchableOpacity>
+                                        </Pressable>
                                         : null
                                 }
                             </>
                     }
                 </View>
             </View>
-        </TouchableOpacity>;
+        </Pressable>;
     }
 }

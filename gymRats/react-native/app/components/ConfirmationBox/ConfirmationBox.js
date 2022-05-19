@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View, Modal, TouchableOpacity } from 'react-native'
+import { Text, View, Modal, Pressable } from 'react-native'
 
 import i18n from 'i18n-js';
 
@@ -21,19 +21,30 @@ export default class ConfirmationBox extends Component {
                     <View style={globalStyles.modalView}>
                         <Text style={globalStyles.modalText}>{i18n.t('components')['confirmationBox']['question']}</Text>
                         <View style={globalStyles.modalActionsContainer}>
-                            <TouchableOpacity style={styles.confirmationBoxOption} onPress={() => {
+                            <Pressable onPress={() => {
                                 this.props.deleteCard();
                                 this.props.toggleShowConfirmationBox(false);
-                            }}>
+                            }} style={({ pressed }) => [
+                                styles.confirmationBoxOption,
+                                {
+                                    opacity: pressed ? 0.1 : 1,
+                                }
+                            ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }}>
                                 <Text style={globalStyles.modalActionTitle}>{i18n.t('components')['confirmationBox']['affirmation']}</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={styles.confirmationBoxOption} onPress={() => {
-                                this.props.toggleShowConfirmationBox(false);
-                            }}>
+                            </Pressable>
+                            <Pressable style={({ pressed }) => [
+                                styles.confirmationBoxOption,
+                                {
+                                    opacity: pressed ? 0.1 : 1,
+                                }
+                            ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }}
+                                onPress={() => {
+                                    this.props.toggleShowConfirmationBox(false);
+                                }}>
                                 <Text style={[globalStyles.modalActionTitle, {
                                     color: "#1f6cb0"
                                 }]}>{i18n.t('components')['confirmationBox']['denial']}</Text>
-                            </TouchableOpacity>
+                            </Pressable>
                         </View>
                     </View>
                 </View>

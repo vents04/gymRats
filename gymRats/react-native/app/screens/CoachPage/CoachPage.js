@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { ActivityIndicator, Image, Linking, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Image, Linking, ScrollView, Text, Pressable, View } from 'react-native';
 
 import ApiRequests from '../../classes/ApiRequests';
 
@@ -51,11 +51,15 @@ export default class CoachPage extends Component {
             <View style={globalStyles.safeAreaView}>
                 <View style={globalStyles.pageContainer}>
                     <View style={globalStyles.followUpScreenTopbar}>
-                        <TouchableOpacity onPress={() => {
+                        <Pressable style={({ pressed }) => [
+                            {
+                                opacity: pressed ? 0.1 : 1,
+                            }
+                        ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
                             this.props.navigation.navigate("CoachSearch")
                         }}>
                             <Ionicons name="md-arrow-back-sharp" size={25} />
-                        </TouchableOpacity>
+                        </Pressable>
                         <Text style={globalStyles.followUpScreenTitle}>Coach</Text>
                     </View>
                     {
@@ -104,18 +108,27 @@ export default class CoachPage extends Component {
                                                 */
                                             }
                                         </View>
-                                        <TouchableOpacity onPress={() => {
+                                        <Pressable style={({ pressed }) => [
+                                            {
+                                                opacity: pressed ? 0.1 : 1,
+                                            }
+                                        ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
                                             Linking.openURL(`https://google.com/maps/@${this.props.route.params.coach.location.lat},${this.props.route.params.coach.location.lng},11z`)
                                         }}>
                                             <Text style={styles.location}>{this.props.route.params.coach.location.address}</Text>
-                                        </TouchableOpacity>
+                                        </Pressable>
                                     </View>
                                     {
                                         this.props.route.params.coach.prefersOfflineCoaching
                                             ? <Text style={[globalStyles.important, { marginBottom: 32 }]}>This coach prefers to work with clients in person (offline).</Text>
                                             : null
                                     }
-                                    <TouchableOpacity style={globalStyles.authPageActionButton} onPress={() => {
+                                    <Pressable style={({ pressed }) => [
+                                        globalStyles.authPageActionButton,
+                                        {
+                                            opacity: pressed ? 0.1 : 1,
+                                        }
+                                    ]} onPress={() => {
                                         if (!this.state.isLoading) this.sendRequest();
                                     }}>
                                         {
@@ -127,7 +140,7 @@ export default class CoachPage extends Component {
                                                     size="small"
                                                 />
                                         }
-                                    </TouchableOpacity>
+                                    </Pressable>
                                     {
                                         this.props.route.params.coach.reviews.length > 0
                                             ? <ScrollView style={{ marginTop: 32 }} contentContainerStyle={globalStyles.fillEmptySpace}>
