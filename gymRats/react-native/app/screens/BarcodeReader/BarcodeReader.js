@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, Button, Pressable, ActivityIndicator, Alert, TextInput } from 'react-native';
+import { Text, View, Button, Pressable, ActivityIndicator, Alert, TextInput, BackHandler } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 
 import ApiRequests from '../../classes/ApiRequests';
+import { BackButtonHandler } from '../../classes/BackButtonHandler';
 
 import globalStyles from '../../../assets/styles/global.styles';
 import styles from './BarcodeReader.styles';
@@ -20,8 +21,21 @@ export default function BarcodeScanner(props) {
         })()
     }
 
+    const backAction = () => {
+        props.navigation.navigate("SearchCaloriesIntake", {
+            meal: props.route.params.meal,
+            date: props.route.params.date,
+            timezoneOffset: props.route.params.timezoneOffset
+        });
+        return true;
+    }
+
     useEffect(() => {
         askForCameraPermission();
+        BackHandler.addEventListener("hardwareBackPress", backAction);
+
+        return () =>
+            BackHandler.removeEventListener("hardwareBackPress", backAction);
     }, []);
 
     const handleBarCodeScanned = ({ type, data }) => {
