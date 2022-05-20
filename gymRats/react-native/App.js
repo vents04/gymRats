@@ -4,6 +4,7 @@ import { default as AsyncStorage } from '@react-native-async-storage/async-stora
 import { AUTHENTICATION_TOKEN_KEY } from './global';
 import { AppState } from 'react-native';
 import ApiRequests from "./app/classes/ApiRequests";
+import { ABTesting, campaigns } from './app/classes/ABTesting';
 
 import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -36,10 +37,20 @@ const App = () => {
       }
     });
 
+    initABTestingCampaigns();
+
     return () => {
       subscription.remove();
     };
   }, []);
+
+  const initABTestingCampaigns = () => {
+    Object.keys(campaigns).forEach(async campaign => {
+      if (!(await ABTesting.getBucketByCampaign(campaign))) {
+        await ABTesting.assignBucketByCampaign(campaign);
+      }
+    });
+  }
 
   const navigationRef = useNavigationContainerRef();
   const routeNameRef = useRef();

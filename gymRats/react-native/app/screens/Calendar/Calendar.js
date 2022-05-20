@@ -25,6 +25,7 @@ import { cardColors } from '../../../assets/styles/cardColors';
 
 import globalStyles from '../../../assets/styles/global.styles';
 import styles from './Calendar.styles';
+import { ABTesting, campaigns } from '../../classes/ABTesting';
 
 export default class Calendar extends Component {
     constructor(props) {
@@ -42,9 +43,23 @@ export default class Calendar extends Component {
             timezoneOffset: null,
             showCalendarPicker: false,
             cardsRefreshing: false,
+            calendarActionButtonBucket: null
         }
 
         this.focusListener;
+    }
+
+    getCalendarActionButtonBucket = async () => {
+        let calendarActionButtonBucket = campaigns.calendarActionButton[1]
+        ABTesting.getBucketByCampaign('calendarActionButton').then(bucket => {
+            console.log("bucketa", bucket)
+            calendarActionButtonBucket = bucket;
+        }).catch(error => {
+            console.log(error);
+        }).finally(() => {
+            console.log("BUCKET", calendarActionButtonBucket);
+            this.setState({ calendarActionButtonBucket });
+        });
     }
 
     setDate = (date) => {
@@ -88,6 +103,7 @@ export default class Calendar extends Component {
         if (this.state.selectedDate && !this.subscription) {
             this.subscription = DataManager.subscribeForDateCards(this.state.selectedDate, this.onData, this.onError);
         }
+        this.getCalendarActionButtonBucket();
     }
 
     componentWillUnmount() {
@@ -175,19 +191,122 @@ export default class Calendar extends Component {
                                     <Entypo name="chevron-right" style={{ marginLeft: 5 }} size={14} color="#999" />
                                 </Pressable>
                             </View>
-                            <View>
-                                <Pressable style={({ pressed }) => [
-                                    globalStyles.authPageActionButton,
-                                    {
-                                        opacity: pressed ? 0.1 : 1,
-                                        marginBottom: 16
-                                    }
-                                ]} onPress={() => {
-                                    this.bottomSheet.current.show()
-                                }}>
-                                    <Text style={globalStyles.authPageActionButtonText}>{i18n.t('screens')['calendar']['addData']}</Text>
-                                </Pressable>
-                            </View>
+                            {
+                                this.state.calendarActionButtonBucket
+                                    ? this.state.calendarActionButtonBucket == campaigns.calendarActionButton[1]
+                                        ? <View>
+                                            <Pressable style={({ pressed }) => [
+                                                globalStyles.authPageActionButton,
+                                                {
+                                                    opacity: pressed ? 0.1 : 1,
+                                                    marginBottom: 16
+                                                }
+                                            ]} onPress={() => {
+                                                this.bottomSheet.current.show()
+                                            }}>
+                                                <Text style={globalStyles.authPageActionButtonText}>{i18n.t('screens')['calendar']['addData']}</Text>
+                                            </Pressable>
+                                        </View>
+                                        : this.state.calendarActionButtonBucket == campaigns.calendarActionButton[0]
+                                            ? <View style={{ marginBottom: 16 }}>
+                                                <View style={{
+                                                    flexDirection: 'row',
+                                                }}>
+                                                    {
+                                                        !this.state.doNotShow.includes("dailyWeights")
+                                                            ? <Pressable style={({ pressed }) => [
+                                                                {
+                                                                    opacity: pressed ? 0.1 : 1,
+                                                                    flex: 1,
+                                                                    display: "flex",
+                                                                    flexDirection: "row",
+                                                                    justifyContent: "center"
+                                                                }
+                                                            ]} onPress={() => {
+                                                                this.props.navigation.navigate("WeightTracker", {
+                                                                    date: this.state.selectedDate,
+                                                                    timezoneOffset: this.state.timezoneOffset
+                                                                });
+                                                            }}>
+                                                                <View style={{
+                                                                    ...globalStyles.authPageActionButton,
+                                                                    width: "95%",
+                                                                    display: "flex",
+                                                                    flexDirection: "row",
+                                                                    alignItems: "center",
+                                                                    justifyContent: "center",
+                                                                    backgroundColor: cardColors.weightTracker
+                                                                }}>
+                                                                    <FontAwesome5 name="weight" size={18} color="#fff" />
+                                                                </View>
+                                                            </Pressable>
+                                                            : null
+                                                    }
+                                                    {
+                                                        !this.state.doNotShow.includes("workoutSessions")
+                                                            ? <Pressable style={({ pressed }) => [
+                                                                {
+                                                                    opacity: pressed ? 0.1 : 1,
+                                                                    flex: 1,
+                                                                    display: "flex",
+                                                                    flexDirection: "row",
+                                                                    justifyContent: "center",
+                                                                }
+                                                            ]} onPress={() => {
+                                                                this.props.navigation.navigate("Logbook", {
+                                                                    date: this.state.selectedDate,
+                                                                    timezoneOffset: this.state.timezoneOffset
+                                                                });
+                                                            }}>
+                                                                <View style={{
+                                                                    ...globalStyles.authPageActionButton,
+                                                                    width: "95%",
+                                                                    display: "flex",
+                                                                    flexDirection: "row",
+                                                                    alignItems: "center",
+                                                                    justifyContent: "center",
+                                                                    backgroundColor: cardColors.logbook
+                                                                }}>
+                                                                    <FontAwesome5 name="book-open" size={18} color="#fff" />
+                                                                </View>
+                                                            </Pressable>
+                                                            : null
+                                                    }
+                                                    {
+                                                        !this.state.doNotShow.includes("caloriesCounterDays")
+                                                            ? <Pressable style={({ pressed }) => [
+                                                                {
+                                                                    opacity: pressed ? 0.1 : 1,
+                                                                    flex: 1,
+                                                                    display: "flex",
+                                                                    flexDirection: "row",
+                                                                    justifyContent: "center"
+                                                                }
+                                                            ]} onPress={() => {
+                                                                this.props.navigation.navigate("CaloriesIntake", {
+                                                                    date: this.state.selectedDate,
+                                                                    timezoneOffset: this.state.timezoneOffset
+                                                                });
+                                                            }}>
+                                                                <View style={{
+                                                                    ...globalStyles.authPageActionButton,
+                                                                    width: "95%",
+                                                                    display: "flex",
+                                                                    flexDirection: "row",
+                                                                    alignItems: "center",
+                                                                    justifyContent: "center",
+                                                                    backgroundColor: cardColors.caloriesIntake
+                                                                }}>
+                                                                    <MaterialCommunityIcons name="food-variant" size={18} color="#fff" />
+                                                                </View>
+                                                            </Pressable>
+                                                            : null
+                                                    }
+                                                </View>
+                                            </View>
+                                            : null
+                                    : null
+                            }
                             <ScrollView
                                 overScrollMode={"never"}
                                 fadingEdgeLength={150}
