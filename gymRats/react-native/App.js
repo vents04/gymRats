@@ -2,7 +2,7 @@ import 'react-native-gesture-handler';
 import React, { useRef, useState, useEffect } from 'react';
 import { default as AsyncStorage } from '@react-native-async-storage/async-storage';
 import { AUTHENTICATION_TOKEN_KEY } from './global';
-import { AppState } from 'react-native';
+import { AppState, Button, Text } from 'react-native';
 import ApiRequests from "./app/classes/ApiRequests";
 import { ABTesting, campaigns } from './app/classes/ABTesting';
 
@@ -16,11 +16,31 @@ import * as Localization from 'expo-localization';
 import i18n from 'i18n-js';
 import translations from './translations';
 import socket from './app/classes/Socket';
+import * as Linking from 'expo-linking';
+import * as Device from 'expo-device';
+import * as Notifications from 'expo-notifications';
 
+const prefix = Linking.createURL('/');
 
 const Stack = createStackNavigator();
 
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
+
 const App = () => {
+  const linking = {
+    prefixes: [prefix],
+  };
+  const [expoPushToken, setExpoPushToken] = useState('');
+  const [notification, setNotification] = useState(false);
+  const notificationListener = useRef();
+  const responseListener = useRef();
+
   useEffect(() => {
     socket.initConnection();
     const subscription = AppState.addEventListener("change", async nextAppState => {
@@ -39,8 +59,20 @@ const App = () => {
 
     initABTestingCampaigns();
 
+    registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
+
+    notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
+      setNotification(notification);
+    });
+
+    responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+      console.log(response);
+    });
+
     return () => {
       subscription.remove();
+      Notifications.removeNotificationSubscription(notificationListener.current);
+      Notifications.removeNotificationSubscription(responseListener.current);
     };
   }, []);
 
@@ -51,6 +83,38 @@ const App = () => {
       }
     });
   }
+
+  async function registerForPushNotificationsAsync() {
+    let token;
+    if (Device.isDevice) {
+      const { status: existingStatus } = await Notifications.getPermissionsAsync();
+      let finalStatus = existingStatus;
+      if (existingStatus !== 'granted') {
+        const { status } = await Notifications.requestPermissionsAsync();
+        finalStatus = status;
+      }
+      if (finalStatus !== 'granted') {
+        alert('Failed to get push token for push notification!');
+        return;
+      }
+      token = (await Notifications.getExpoPushTokenAsync()).data;
+      console.log(token);
+    } else {
+      alert('Must use physical device for Push Notifications');
+    }
+
+    if (Platform.OS === 'android') {
+      Notifications.setNotificationChannelAsync('default', {
+        name: 'default',
+        importance: Notifications.AndroidImportance.MAX,
+        vibrationPattern: [0, 250, 250, 250],
+        lightColor: '#FF231F7C',
+      });
+    }
+
+    return token;
+  }
+
 
   const navigationRef = useNavigationContainerRef();
   const routeNameRef = useRef();
@@ -76,6 +140,7 @@ const App = () => {
 
   return (
     <NavigationContainer
+      linking={linking} fallback={<Text>Loading...</Text>}
       ref={navigationRef}
       onReady={() => {
         routeNameRef.current = navigationRef.getCurrentRoute().name;

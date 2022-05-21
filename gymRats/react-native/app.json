@@ -5,6 +5,7 @@
     "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/img/ic_launcher.png",
+    "scheme": "gymrats",
     "plugins": [
       [
         "expo-image-picker",
