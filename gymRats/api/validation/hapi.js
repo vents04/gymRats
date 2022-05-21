@@ -352,6 +352,17 @@ const unknownSourceCaloriesPostValidation = (data) => {
     return schema.validate(data);
 }
 
+const workoutUpdateValidation = (data) => {
+    const schema = Joi.object({
+        name: Joi.string().min(1).max(40).required(),
+        exercises: Joi.array().items(Joi.string().custom((value, helper) => {
+            if (!mongoose.Types.ObjectId.isValid(value))
+                return helper.message("Invalid exercise id");
+            return true;
+        })).required(),
+    })
+    return schema.validate(data);
+}
 
 module.exports = {
     signupValidation,
@@ -377,5 +388,6 @@ module.exports = {
     contentUpdateValidation,
     dailyItemUpdateValidation,
     navigationAnalyticsValidation,
-    unknownSourceCaloriesPostValidation
+    unknownSourceCaloriesPostValidation,
+    workoutUpdateValidation
 }

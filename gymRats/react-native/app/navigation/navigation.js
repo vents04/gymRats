@@ -41,6 +41,7 @@ import Suggestions from '../screens/Suggestions/Suggestions';
 import PostReview from '../screens/PostReview/PostReview';
 import Progress from '../screens/Progress/Progress';
 import AddUnknownCaloriesIntake from '../screens/cards/AddUnknownCaloriesIntake/AddUnknownCaloriesIntake';
+import ManageWorkoutTemplates from '../screens/cards/ManageWorkoutTemplates/ManageWorkoutTemplates';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -78,6 +79,13 @@ const calendarScreenStack = () => {
                     headerShown: false
                 }}
                 component={Logbook}
+            />
+            <Stack.Screen
+                name="ManageWorkoutTemplates"
+                options={{
+                    headerShown: false
+                }}
+                component={ManageWorkoutTemplates}
             />
             <Stack.Screen
                 name="ExerciseSearch"

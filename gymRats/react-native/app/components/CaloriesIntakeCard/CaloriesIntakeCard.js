@@ -30,7 +30,6 @@ export default class CaloriesIntakeCard extends Component {
     }
 
     componentDidMount() {
-        console.log("sdasdas")
         this.calculateMacros();
         if (this.props.client) this.getClientCaloriesCounterDay();
     }

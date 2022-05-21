@@ -8075,3 +8075,15 @@
 {"level":"error","message":"\"protein\" is required"}
 {"level":"error","message":"\"protein\" is required"}
 {"level":"error","message":"\"protein\" is required"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'push')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'push')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'push')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'push')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'push')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'push')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'push')"}
+{"level":"error","message":"Invalid workout id"}
+{"level":"error","message":"Invalid workout id"}
+{"level":"error","message":"Invalid workout id"}
+{"level":"error","message":"Invalid workout id"}
+{"level":"error","message":"\"exercises[1].sets[0].reps\" must be a positive number"}

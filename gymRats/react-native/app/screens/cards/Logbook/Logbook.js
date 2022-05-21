@@ -36,7 +36,8 @@ export default class Logbook extends Component {
             showTemplatePickerModal: false,
             selectedTemplateId: null,
             templates: [],
-            hasDeniedWorkoutTemplateReplication: false
+            hasDeniedWorkoutTemplateReplication: false,
+            hasWorkoutTemplates: false
         }
 
         this.focusListener;
@@ -62,6 +63,7 @@ export default class Logbook extends Component {
 
     onFocusFunction = () => {
         if (!this.props.route.params.date) {
+            console.log("asdjasldjlaskjdkas");
             return this.props.navigation.navigate("Calendar");
         }
         this.setState({ timezoneOffset: this.props.route.params.timezoneOffset || new Date().getTimezoneOffset(), date: this.props.route.params.date }, () => {
@@ -99,11 +101,12 @@ export default class Logbook extends Component {
                     this.getTemplates();
                 }
             }
+            this.checkIfHasWorkoutTemplates();
         })
     }
 
     componentDidMount = () => {
-        this.backHandler = BackHandler.addEventListener(
+        BackHandler.addEventListener(
             "hardwareBackPress",
             this.backAction
         );
@@ -113,7 +116,25 @@ export default class Logbook extends Component {
     }
 
     componentWillUnmount = () => {
-        this.backHandler.remove();
+        BackHandler.removeEventListener("hardwareBackPress", this.backAction);
+    }
+
+    checkIfHasWorkoutTemplates = () => {
+        ApiRequests.get("logbook/has-workout-templates", {}, true).then((response) => {
+            this.setState({ hasWorkoutTemplates: response.data.hasWorkoutTemplates });
+        }).catch((error) => {
+            if (error.response) {
+                if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
+                    this.setState({ showError: true, error: error.response.data });
+                } else {
+                    ApiRequests.showInternalServerError();
+                }
+            } else if (error.request) {
+                ApiRequests.showNoResponseError();
+            } else {
+                ApiRequests.showRequestSettingError();
+            }
+        })
     }
 
     getTemplates = () => {
@@ -446,7 +467,27 @@ export default class Logbook extends Component {
                             ? <Text style={globalStyles.errorBox}>{this.state.error}</Text>
                             : null
                     }
-                    <View style={styles.exercisesListContainer}>
+                    {
+                        this.state.hasWorkoutTemplates
+                            ? <View style={styles.unknownSourceCaloriesIncentiveContainer}>
+                                <Text style={styles.unknownSourceCaloriesIncentiveText}>You may manage your previously created workout templates</Text>
+                                <Pressable style={({ pressed }) => [
+                                    globalStyles.authPageActionButton,
+                                    {
+                                        opacity: pressed ? 0.1 : 1,
+                                    }
+                                ]} onPress={() => {
+                                    this.props.navigation.navigate("ManageWorkoutTemplates", {
+                                        date: this.props.route.params.date,
+                                        timezoneOffset: this.props.route.params.timezoneOffset
+                                    });
+                                }}>
+                                    <Text style={globalStyles.authPageActionButtonText}>Manage workout templates</Text>
+                                </Pressable>
+                            </View>
+                            : null
+                    }
+                    <View style={{ ...styles.exercisesListContainer, marginTop: this.state.hasWorkoutTemplates ? 0 : 16 }}>
                         <View style={styles.exercisesListContainerTopbar}>
                             <Text style={styles.sectionTitle}>Exercises</Text>
                             <Pressable style={({ pressed }) => [
