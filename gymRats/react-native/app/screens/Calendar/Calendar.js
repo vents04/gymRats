@@ -52,12 +52,10 @@ export default class Calendar extends Component {
     getCalendarActionButtonBucket = async () => {
         let calendarActionButtonBucket = campaigns.calendarActionButton[1]
         ABTesting.getBucketByCampaign('calendarActionButton').then(bucket => {
-            console.log("bucketa", bucket)
             calendarActionButtonBucket = bucket;
         }).catch(error => {
             console.log(error);
         }).finally(() => {
-            console.log("BUCKET", calendarActionButtonBucket);
             this.setState({ calendarActionButtonBucket });
         });
     }
@@ -208,7 +206,7 @@ export default class Calendar extends Component {
                                             </Pressable>
                                         </View>
                                         : this.state.calendarActionButtonBucket == campaigns.calendarActionButton[0]
-                                            ? <View style={{ marginBottom: 16 }}>
+                                            ? <View style={{ marginBottom: this.state.doNotShow.length == 3 ? 0 : 16 }}>
                                                 <View style={{
                                                     flexDirection: 'row',
                                                 }}>
@@ -300,6 +298,11 @@ export default class Calendar extends Component {
                                                                     <MaterialCommunityIcons name="food-variant" size={18} color="#fff" />
                                                                 </View>
                                                             </Pressable>
+                                                            : null
+                                                    }
+                                                    {
+                                                        this.state.doNotShow.length == 3
+                                                            ? <Text style={{ ...globalStyles.modalText, textAlign: 'left' }}>No available cards</Text>
                                                             : null
                                                     }
                                                 </View>

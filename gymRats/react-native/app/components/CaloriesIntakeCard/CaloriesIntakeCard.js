@@ -30,6 +30,7 @@ export default class CaloriesIntakeCard extends Component {
     }
 
     componentDidMount() {
+        console.log("sdasdas")
         this.calculateMacros();
         if (this.props.client) this.getClientCaloriesCounterDay();
     }
@@ -45,6 +46,15 @@ export default class CaloriesIntakeCard extends Component {
             carbs += parseInt(data.amount * data.itemInstance.carbs);
             fats += parseInt(data.amount * data.itemInstance.fats);
             protein += parseInt(data.amount * data.itemInstance.protein);
+        }
+
+        if (props.data.unknownSourceCaloriesDay && props.data.unknownSourceCaloriesDay.length > 0) {
+            for (let item of props.data.unknownSourceCaloriesDay) {
+                calories += parseInt(item.calories);
+                carbs += parseInt((0.4 * item.calories) / 4);
+                fats += parseInt((0.3 * item.calories) / 9);
+                protein += parseInt((0.3 * item.calories) / 4);
+            }
         }
 
         newState.calories = calories;
@@ -65,6 +75,17 @@ export default class CaloriesIntakeCard extends Component {
             fats += parseInt(data.amount * data.itemInstance.fats);
             protein += parseInt(data.amount * data.itemInstance.protein);
         }
+
+        if (this.props.data.unknownSourceCaloriesDay && this.props.data.unknownSourceCaloriesDay.length > 0) {
+            for (let item of this.props.data.unknownSourceCaloriesDay) {
+                calories += parseInt(item.calories);
+                carbs += parseInt((0.4 * item.calories) / 4);
+                fats += parseInt((0.3 * item.calories) / 9);
+                protein += parseInt((0.3 * item.calories) / 4);
+            }
+        }
+
+        console.log(calories, carbs, fats, protein)
 
         this.setState({ calories, carbs, fats, protein })
     }

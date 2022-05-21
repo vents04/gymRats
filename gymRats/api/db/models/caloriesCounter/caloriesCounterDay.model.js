@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { DATABASE_MODELS, CALORIES_COUNTER_MEALS } = require('../../../global');
+const { DATABASE_MODELS, CALORIES_COUNTER_MEALS, CALORIES_COUNTER_ITEM_TYPES } = require('../../../global');
 
 const caloriesCounterDaySchema = mongoose.Schema({
     userId: {
@@ -37,6 +37,10 @@ const caloriesCounterDaySchema = mongoose.Schema({
             type: String,
             enum: Object.values(CALORIES_COUNTER_MEALS),
             required: true
+        },
+        itemType: {
+            type: String,
+            default: CALORIES_COUNTER_ITEM_TYPES.FOOD
         },
         dt: {
             type: Number,

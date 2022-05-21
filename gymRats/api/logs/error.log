@@ -8071,3 +8071,7 @@
 {"level":"error","message":"Cannot read properties of undefined (reading 'sufficientWeightGainRanges')"}
 {"level":"error","message":"Provide a barcode to search for"}
 {"level":"error","message":"Provide a barcode to search for"}
+{"level":"error","message":"\"protein\" is required"}
+{"level":"error","message":"\"protein\" is required"}
+{"level":"error","message":"\"protein\" is required"}
+{"level":"error","message":"\"protein\" is required"}

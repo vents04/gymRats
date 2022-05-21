@@ -28,8 +28,41 @@ router.get('/', authenticate, async (req, res, next) => {
                 year: +req.query.year,
             });
 
+            if (!currentUserRecord && card == COLLECTIONS.CALORIES_COUNTER_DAYS) {
+                console.log("asdaskdpokasl;dkasl;dkasl;dkasl;kd", card);
+                const unknownSourceCaloriesDay = await DbService.getMany(COLLECTIONS.UNKNOWN_SOURCE_CALORIES, {
+                    userId: mongoose.Types.ObjectId(req.user._id),
+                    date: +req.query.date,
+                    month: +req.query.month,
+                    year: +req.query.year,
+                })
+                console.log("asdjasjdlkasd", unknownSourceCaloriesDay);
+                if (unknownSourceCaloriesDay.length > 0) {
+                    cards.push({
+                        card: card, data: {
+                            userId: req.user._id,
+                            date: +req.query.date,
+                            month: +req.query.month,
+                            year: +req.query.year,
+                            items: [],
+                            unknownSourceCaloriesDay
+                        }
+                    });
+                    doNotShow.push(card);
+                }
+            }
+
             if (currentUserRecord) {
                 doNotShow.push(card);
+                if (card == COLLECTIONS.CALORIES_COUNTER_DAYS) {
+                    const unknownSourceCaloriesDay = await DbService.getMany(COLLECTIONS.UNKNOWN_SOURCE_CALORIES, {
+                        userId: mongoose.Types.ObjectId(req.user._id),
+                        date: +req.query.date,
+                        month: +req.query.month,
+                        year: +req.query.year,
+                    })
+                    currentUserRecord.unknownSourceCaloriesDay = unknownSourceCaloriesDay;
+                }
                 switch (card) {
                     case COLLECTIONS.DAILY_WEIGHTS:
                         const trend = await WeightTrackerService.getDailyTrend(currentUserRecord._id);

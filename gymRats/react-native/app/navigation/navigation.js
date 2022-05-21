@@ -40,6 +40,7 @@ import Client from '../screens/Client/Client';
 import Suggestions from '../screens/Suggestions/Suggestions';
 import PostReview from '../screens/PostReview/PostReview';
 import Progress from '../screens/Progress/Progress';
+import AddUnknownCaloriesIntake from '../screens/cards/AddUnknownCaloriesIntake/AddUnknownCaloriesIntake';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -119,6 +120,13 @@ const calendarScreenStack = () => {
                     headerShown: false
                 }}
                 component={AddFood}
+            />
+            <Stack.Screen
+                name="AddUnknownCaloriesIntake"
+                options={{
+                    headerShown: false
+                }}
+                component={AddUnknownCaloriesIntake}
             />
             <Stack.Screen
                 name="Suggestions"
@@ -207,7 +215,6 @@ const coachingScreenStack = () => {
         </Stack.Navigator>
     )
 };
-
 
 const chatsScreenStack = () => {
     return (

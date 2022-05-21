@@ -12,10 +12,11 @@ const ResponseError = require('../errors/responseError');
 const { authenticate } = require('../middlewares/authenticate');
 
 const { HTTP_STATUS_CODES, COLLECTIONS, DEFAULT_ERROR_MESSAGE, RELATION_STATUSES } = require('../global');
-const { itemPostValidation, dailyItemPostValidation, dailyItemUpdateValidation } = require('../validation/hapi');
+const { itemPostValidation, dailyItemPostValidation, dailyItemUpdateValidation, unknownSourceCaloriesPostValidation } = require('../validation/hapi');
 const checkCaloriesAndMacros = require('../helperFunctions/checkCaloriesAndMacros');
 const NutritionixService = require('../services/nutritionix.service');
 const { quicksort } = require('../helperFunctions/quickSortForFoods');
+const UnknownSourceCalories = require('../db/models/caloriesCounter/unknownSourceCalories.model');
 
 router.get("/recent", authenticate, async (req, res, next) => {
     try {
@@ -48,6 +49,42 @@ router.get("/recent", authenticate, async (req, res, next) => {
     }
 });
 
+router.post('/unknown-source-calories', authenticate, async (req, res, next) => {
+    const { error } = unknownSourceCaloriesPostValidation(req.body);
+    if (error) return next(new ResponseError(error.details[0].message, HTTP_STATUS_CODES.BAD_REQUEST));
+
+    try {
+        const date = new Date(req.body.year, req.body.month, req.body.date);
+        if (date.getTime() !== date.getTime()) return next(new ResponseError("Invalid date", HTTP_STATUS_CODES.BAD_REQUEST));
+
+        const unknownSourceCalories = new UnknownSourceCalories(req.body);
+        unknownSourceCalories.userId = mongoose.Types.ObjectId(req.user._id);
+
+        await DbService.create(COLLECTIONS.UNKNOWN_SOURCE_CALORIES, unknownSourceCalories);
+
+        return res.sendStatus(HTTP_STATUS_CODES.OK);
+    } catch (err) {
+        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR))
+    }
+});
+
+router.delete("/unknown-source-calories/:id", authenticate, async (req, res, next) => {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) return next(new ResponseError("Invalid id", HTTP_STATUS_CODES.BAD_REQUEST));
+
+    try {
+        const unknownSourceCalories = await DbService.getById(COLLECTIONS.UNKNOWN_SOURCE_CALORIES, req.params.id);
+        if (!unknownSourceCalories) return next(new ResponseError("Unknown source calories not found", HTTP_STATUS_CODES.NOT_FOUND));
+
+        if (unknownSourceCalories.userId.toString() != req.user._id.toString()) return next(new ResponseError("You are not allowed to delete this unknown source calories", HTTP_STATUS_CODES.FORBIDDEN));
+
+        await DbService.delete(COLLECTIONS.UNKNOWN_SOURCE_CALORIES, { _id: mongoose.Types.ObjectId(req.params.id) });
+
+        return res.sendStatus(HTTP_STATUS_CODES.OK);
+    } catch (err) {
+        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR))
+    }
+});
+
 router.post('/item', authenticate, async (req, res, next) => {
     const { error } = itemPostValidation(req.body);
     if (error) return next(new ResponseError(error.details[0].message, HTTP_STATUS_CODES.BAD_REQUEST));
@@ -73,7 +110,7 @@ router.post('/item', authenticate, async (req, res, next) => {
         item.fats = parseFloat(item.fats / 100).toFixed(2);
         item.keywords = item.title.split(" ");
         if (req.body.brand) item.keywords.push(...req.body.brand.split(" "));
-        for(let i = 0; i < item.keywords.length; i++) {
+        for (let i = 0; i < item.keywords.length; i++) {
             item.keywords[i] = item.keywords[i].toLowerCase();
         }
 
@@ -256,6 +293,13 @@ router.get('/day', authenticate, async (req, res, next) => {
             year: +req.query.year,
         });
 
+        const unknownSourceCaloriesDay = await DbService.getMany(COLLECTIONS.UNKNOWN_SOURCE_CALORIES, {
+            userId: req.query.clientId ? mongoose.Types.ObjectId(req.query.clientId) : mongoose.Types.ObjectId(req.user._id),
+            date: +req.query.date,
+            month: +req.query.month,
+            year: +req.query.year
+        })
+
         if (calorieCounterDay) {
             for (let item of calorieCounterDay.items) {
                 const itemInstance = await DbService.getById(COLLECTIONS.CALORIES_COUNTER_ITEMS, item.itemId);
@@ -264,7 +308,8 @@ router.get('/day', authenticate, async (req, res, next) => {
         }
 
         return res.status(HTTP_STATUS_CODES.OK).send({
-            calorieCounterDay
+            calorieCounterDay,
+            unknownSourceCaloriesDay
         })
     } catch (error) {
         return next(new ResponseError(error.message || DEFAULT_ERROR_MESSAGE, error.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));

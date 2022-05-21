@@ -342,6 +342,16 @@ const navigationAnalyticsValidation = (data) => {
     return schema.validate(data);
 }
 
+const unknownSourceCaloriesPostValidation = (data) => {
+    const schema = Joi.object({
+        date: Joi.number().required(),
+        month: Joi.number().required(),
+        year: Joi.number().required(),
+        calories: Joi.number().required().positive(),
+    })
+    return schema.validate(data);
+}
+
 
 module.exports = {
     signupValidation,
@@ -366,5 +376,6 @@ module.exports = {
     contentPostValidation,
     contentUpdateValidation,
     dailyItemUpdateValidation,
-    navigationAnalyticsValidation
+    navigationAnalyticsValidation,
+    unknownSourceCaloriesPostValidation
 }
