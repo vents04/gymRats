@@ -29,6 +29,7 @@ export default class AddUnknownCaloriesIntake extends Component {
             date: this.props.route.params.date,
             timezoneOffset: this.props.route.params.timezoneOffset
         })
+        return true;
     }
 
     addUnknownSourceCalories = () => {
