@@ -28,8 +28,10 @@ export default class Chats extends Component {
     }
 
     onFocusFunction = () => {
-        if (this.props.route && this.props.route.params && this.props.route.params.chatId) {
-            this.props.navigation.navigate("Chat", { chatId: this.props.route.params.chatId })
+        if (this.props.route && this.props.route.params) {
+            if (this.props.route.params.chatId) {
+                this.props.navigation.navigate("Chat", { chatId: this.props.route.params.chatId })
+            }
         }
         this.getChats();
         this.updateLastMessage()

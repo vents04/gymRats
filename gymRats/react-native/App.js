@@ -65,6 +65,7 @@ const App = () => {
       AsyncStorage.setItem("@gymRats:expoPushToken", token);
     })
 
+    /*
     notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
       console.log(notification.request.content.data.chatId)
       if (notification && notification.request.content.data.chatId) {
@@ -74,7 +75,6 @@ const App = () => {
       setNotification(notification);
     });
 
-    /*
     responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
       console.log("notification response", response);
       if (response.notification && response.notification.request

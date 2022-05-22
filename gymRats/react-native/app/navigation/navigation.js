@@ -46,6 +46,7 @@ import { Badge } from 'react-native-elements';
 import * as Notifications from 'expo-notifications';
 import { useEffect } from 'react';
 import { useRef } from 'react';
+import { useState } from 'react';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -295,7 +296,6 @@ const NavigationRoutes = (props) => {
             if (response.notification && response.notification.request
                 && response.notification.request.content && response.notification.request.content.data
                 && response.notification.request.content.data.chatId) {
-                console.log("eto gi i propovete na navigation container", props);
                 props.navigation.navigate("Chats", { chatId: response.notification.request.content.data.chatId })
             }
         });

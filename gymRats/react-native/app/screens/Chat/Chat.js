@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import { Image, Text, View, ScrollView, TextInput, Pressable } from 'react-native';
+import { Image, Text, View, ScrollView, TextInput, Pressable, BackHandler } from 'react-native';
+import { BackButtonHandler } from '../../classes/BackButtonHandler';
 
 import socketClass from '../../classes/Socket';
 const socket = socketClass.initConnection();
@@ -42,6 +43,11 @@ export default class Chat extends Component {
             this.getChat(chatId)
             this.receiveTextMessage()
         });
+    }
+
+    backAction = () => {
+        this.props.navigation.navigate("Chats");
+        return true;
     }
 
     sendTextMessage = (messageInfo) => {
@@ -101,12 +107,14 @@ export default class Chat extends Component {
     }
 
     componentDidMount() {
+        BackHandler.addEventListener("hardwareBackPress", this.backAction);
         this.focusListener = this.props.navigation.addListener('focus', () => {
             this.onFocusFunction();
         })
     }
 
     componentWillUnmount() {
+        BackHandler.removeEventListener("hardwareBackPress", this.backAction);
         this.disconnectUserFromChat()
     }
 
@@ -122,7 +130,7 @@ export default class Chat extends Component {
                                         opacity: pressed ? 0.1 : 1,
                                     }
                                 ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
-                                    this.props.navigation.navigate("Chats")
+                                    this.backAction();
                                 }}>
                                     <Ionicons name="md-arrow-back-sharp" size={25} />
                                 </Pressable>
