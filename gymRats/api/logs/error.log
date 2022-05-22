@@ -8087,3 +8087,11 @@
 {"level":"error","message":"Invalid workout id"}
 {"level":"error","message":"Invalid workout id"}
 {"level":"error","message":"\"exercises[1].sets[0].reps\" must be a positive number"}
+{"level":"error","message":"\"modelId\" must be a string"}
+{"level":"error","message":"\"modelId\" must be a string"}
+{"level":"error","message":"\"modelId\" must be a string"}
+{"level":"error","message":"\"modelId\" must be a string"}
+{"level":"error","message":"\"platformApiLevel\" must be a string"}
+{"level":"error","message":"mongoose is not defined"}
+{"level":"error","message":"Cannot read properties of undefined (reading '_id')"}
+{"level":"error","message":"Invalid device id"}

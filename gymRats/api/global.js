@@ -20,6 +20,7 @@ const DATABASE_MODELS = {
     CONTENT: "Content",
     NAVIGATION: "Navigation",
     UNKNOWN_SOURCE_CALORIES: "UnknownSourceCalories",
+    DEVICE: "Device",
 }
 
 const COLLECTIONS = {
@@ -43,6 +44,7 @@ const COLLECTIONS = {
     CONTENTS: "contents",
     NAVIGATIONS: "navigations",
     UNKNOWN_SOURCE_CALORIES: "unknownSourceCalories",
+    DEVICES: "devices",
 }
 
 const PERSONAL_TRAINER_STATUSES = {

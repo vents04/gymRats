@@ -2,7 +2,7 @@ import 'react-native-gesture-handler';
 import React, { useRef, useState, useEffect } from 'react';
 import { default as AsyncStorage } from '@react-native-async-storage/async-storage';
 import { AUTHENTICATION_TOKEN_KEY } from './global';
-import { AppState, Button, Text } from 'react-native';
+import { AppState, Button, Platform, Text } from 'react-native';
 import ApiRequests from "./app/classes/ApiRequests";
 import { ABTesting, campaigns } from './app/classes/ABTesting';
 
@@ -59,7 +59,10 @@ const App = () => {
 
     initABTestingCampaigns();
 
-    registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
+    registerForPushNotificationsAsync().then(token => {
+      setExpoPushToken(token);
+      AsyncStorage.setItem("@gymRats:expoPushToken", token);
+    })
 
     notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
       setNotification(notification);
