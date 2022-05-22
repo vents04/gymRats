@@ -63,7 +63,6 @@ export default class Logbook extends Component {
 
     onFocusFunction = () => {
         if (!this.props.route.params.date) {
-            console.log("asdjasldjlaskjdkas");
             return this.props.navigation.navigate("Calendar");
         }
         this.setState({ timezoneOffset: this.props.route.params.timezoneOffset || new Date().getTimezoneOffset(), date: this.props.route.params.date }, () => {

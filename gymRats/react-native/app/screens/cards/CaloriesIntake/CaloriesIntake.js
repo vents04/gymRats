@@ -57,7 +57,6 @@ export default class CaloriesIntake extends Component {
 
     getCaloriesIntake = () => {
         ApiRequests.get(`calories-counter/day?date=${this.props.route.params.date.getDate()}&month=${this.props.route.params.date.getMonth() + 1}&year=${this.props.route.params.date.getFullYear()}`, {}, true).then((response) => {
-            console.log(response.data);
             this.setState({ calorieCounterDay: response.data.calorieCounterDay, unknownSourceCaloriesDay: response.data.unknownSourceCaloriesDay })
         }).catch((error) => {
             if (error.response) {

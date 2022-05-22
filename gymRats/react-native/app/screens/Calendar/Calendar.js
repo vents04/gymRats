@@ -53,8 +53,6 @@ export default class Calendar extends Component {
         let calendarActionButtonBucket = campaigns.calendarActionButton[1]
         ABTesting.getBucketByCampaign('calendarActionButton').then(bucket => {
             calendarActionButtonBucket = bucket;
-        }).catch(error => {
-            console.log(error);
         }).finally(() => {
             this.setState({ calendarActionButtonBucket });
         });

@@ -7,13 +7,14 @@ const indexRoute = require('./routes/index.route');
 const errorHandler = require('./errors/errorHandler');
 const mongoose = require('mongoose');
 
-const { PORT, HTTP_STATUS_CODES, COLLECTIONS, FOOD_TYPES, PROGRESS_NOTATION, LOGBOOK_PROGRESS_NOTATIONS } = require('./global');
+const { PORT, HTTP_STATUS_CODES, COLLECTIONS, FOOD_TYPES, PROGRESS_NOTATION, LOGBOOK_PROGRESS_NOTATIONS, CHAT_STATUSES } = require('./global');
 const MessagingService = require('./services/messaging.service');
 const ResponseError = require('./errors/responseError');
 const DbService = require('./services/db.service');
 const WeightTrackerService = require('./services/cards/weightTracker.service');
 const LogbookService = require('./services/cards/logbook.service');
 const oneRepMax = require('./helperFunctions/oneRepMax');
+const NotificationsService = require('./services/notifications.service');
 const io = require("socket.io")(httpServer, { cors: { origin: "*" } });
 
 app
@@ -226,6 +227,36 @@ io.on("connection", (socket) => {
             socket.on("send-text-message", async (messageInfo) => {
                 await MessagingService.sendTextMessage(chatId, messageInfo.messageInfo.senderId, messageInfo.messageInfo.message);
                 socket.to(chatId).emit("receive-text-message", {});
+                (async function () {
+                    const chat = await DbService.getById(COLLECTIONS.CHATS, chatId);
+                    if (chat.status == CHAT_STATUSES.ACTIVE) {
+                        let oppositeUser = null;
+                        let senderUser = null;
+                        if (chat.clientId.toString() == messageInfo.messageInfo.senderId.toString()) {
+                            let personalTrainer = await DbService.getById(COLLECTIONS.PERSONAL_TRAINERS, chat.personalTrainerId);
+                            if (personalTrainer) oppositeUser = await DbService.getById(COLLECTIONS.USERS, personalTrainer.userId);
+                        } else {
+                            oppositeUser = await DbService.getById(COLLECTIONS.USERS, chat.clientId);
+                        }
+                        if (chat.clientId.toString() == messageInfo.messageInfo.senderId.toString()) {
+                            senderUser = await DbService.getById(COLLECTIONS.USERS, chat.clientId);
+                        } else {
+                            let personalTrainer = await DbService.getById(COLLECTIONS.PERSONAL_TRAINERS, chat.personalTrainerId);
+                            if (personalTrainer) senderUser = await DbService.getById(COLLECTIONS.USERS, personalTrainer.userId);
+                        }
+                        if (oppositeUser) {
+                            const expoPushTokens = await NotificationsService.getExpoPushTokensByUserId(oppositeUser._id);
+                            console.log("eto gi", expoPushTokens, senderUser.firstName);
+                            for (let expoPushToken of expoPushTokens) {
+                                await NotificationsService.sendChatNotification(expoPushToken, {
+                                    title: "Message from " + senderUser.firstName,
+                                    body: messageInfo.messageInfo.message,
+                                    data: { chatId }
+                                });
+                            }
+                        }
+                    }
+                })();
             });
 
             socket.on("send-file-message", async (messageInfo) => {

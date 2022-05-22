@@ -47,12 +47,9 @@ export default class Splash extends Component {
             // set expo token
             const expoPushToken = await AsyncStorage.getItem('@gymRats:expoPushToken');
             if (expoPushToken) {
-                ApiRequests.put("analytics/expo-push-token/" + expoPushToken, {}, {}, true).then(async (response) => {
-                    console.log("expo push token set");
-                })
+                ApiRequests.put("analytics/expo-push-token/" + expoPushToken, {}, {}, true)
             }
         }).catch((error) => {
-            console.log(error.response.data);
             ApiRequests.alert("Error", "An error occurred while submitting device info for notifications");
         })
     }

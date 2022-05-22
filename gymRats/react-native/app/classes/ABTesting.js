@@ -20,7 +20,6 @@ const ABTesting = {
     getBucketByCampaign: (campaign) => {
         return new Promise(async (resolve, reject) => {
             try {
-                console.log(campaign);
                 const bucket = await AsyncStorage.getItem(`@gymRats:${campaign}`);
                 resolve(bucket)
             } catch (e) {

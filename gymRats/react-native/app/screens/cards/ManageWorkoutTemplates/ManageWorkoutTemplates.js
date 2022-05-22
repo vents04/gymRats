@@ -27,7 +27,6 @@ export default class ManageWorkoutTemplates extends Component {
     }
 
     backAction = () => {
-        console.log("askdaskdl;askd", this.props.route.params)
         this.props.navigation.navigate("Logbook", {
             date: this.props.route.params.date,
             timezoneOffset: this.props.route.params.timezoneOffset
@@ -51,7 +50,6 @@ export default class ManageWorkoutTemplates extends Component {
         ApiRequests.get("logbook/workout-templates", {}, true).then((response) => {
             this.setState({ workoutTemplates: response.data.templates });
         }).catch((error) => {
-            console.log(error.response.data)
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
                     this.setState({ showError: true, error: error.response.data });
@@ -70,7 +68,6 @@ export default class ManageWorkoutTemplates extends Component {
         let templates = this.state.workoutTemplates;
         let index = 0;
         for (let template of templates) {
-            console.log("template", template._id, templateId)
             if (template._id == templateId) {
                 let exerciseIndex = 0;
                 for (let exercise of template.exercises) {

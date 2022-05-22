@@ -34,10 +34,11 @@ Notifications.setNotificationHandler({
 
 const App = () => {
   const linking = {
-    prefixes: [prefix],
+    prefixes: ["gymrats://"],
   };
   const [expoPushToken, setExpoPushToken] = useState('');
   const [notification, setNotification] = useState(false);
+  const [chatNotification, setChatNotification] = useState(false);
   const notificationListener = useRef();
   const responseListener = useRef();
 
@@ -65,12 +66,25 @@ const App = () => {
     })
 
     notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
+      console.log(notification.request.content.data.chatId)
+      if (notification && notification.request.content.data.chatId) {
+        console.log("smenih go na true vuv app.js");
+        setChatNotification(true)
+      }
       setNotification(notification);
     });
 
+    /*
     responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
-      console.log(response);
+      console.log("notification response", response);
+      if (response.notification && response.notification.request
+        && response.notification.request.content && response.notification.request.content.data
+        && response.notification.request.content.data.chatId) {
+        console.log("tukaaa sum za redirect kum chats")
+        this.props.navigation.navigate("Chats");
+      }
     });
+    */
 
     return () => {
       subscription.remove();
@@ -173,9 +187,14 @@ const App = () => {
           }
           setScreenOpenDt(new Date().getTime());
         }
+
+        if (currentRouteName == "Chats") {
+          console.log("resetting chat notification to false");
+          setChatNotification(false);
+        }
         routeNameRef.current = currentRouteName;
       }}>
-      <Stack.Navigator initialRouteName="Splash">
+      <Stack.Navigator initialRouteName="Splash" chatNotification={chatNotification}>
         <Stack.Screen
           name="Splash"
           component={Splash}

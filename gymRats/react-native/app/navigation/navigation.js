@@ -42,6 +42,10 @@ import PostReview from '../screens/PostReview/PostReview';
 import Progress from '../screens/Progress/Progress';
 import AddUnknownCaloriesIntake from '../screens/cards/AddUnknownCaloriesIntake/AddUnknownCaloriesIntake';
 import ManageWorkoutTemplates from '../screens/cards/ManageWorkoutTemplates/ManageWorkoutTemplates';
+import { Badge } from 'react-native-elements';
+import * as Notifications from 'expo-notifications';
+import { useEffect } from 'react';
+import { useRef } from 'react';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -283,7 +287,20 @@ const Auth = () => {
     );
 };
 
-const NavigationRoutes = () => {
+const NavigationRoutes = (props) => {
+    const responseListener = useRef();
+
+    useEffect(() => {
+        responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+            if (response.notification && response.notification.request
+                && response.notification.request.content && response.notification.request.content.data
+                && response.notification.request.content.data.chatId) {
+                console.log("eto gi i propovete na navigation container", props);
+                props.navigation.navigate("Chats", { chatId: response.notification.request.content.data.chatId })
+            }
+        });
+    }, []);
+
     return (
         <Tab.Navigator
             screenOptions={() => ({
@@ -383,6 +400,17 @@ const NavigationRoutes = () => {
                     tabBarIcon: (tabInfo) =>
                     (
                         <View style={styles.tabBarIconContainer}>
+                            {
+                                false
+                                    ? <View style={{
+                                        position: 'absolute',
+                                        zIndex: 999,
+                                        top: 0, right: 0, height: 12, width: 12,
+                                        backgroundColor: "red",
+                                        borderRadius: 1000
+                                    }}></View>
+                                    : null
+                            }
                             <Ionicons name="chatbubbles" size={24} color={tabInfo.focused ? "#1f6cb0" : "#ccc"} />
                             <Text style={[styles.tabBarIconText, {
                                 fontFamily: (tabInfo.focused ? "MainBold" : "MainRegular")

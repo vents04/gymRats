@@ -84,8 +84,6 @@ export default class CaloriesIntakeCard extends Component {
             }
         }
 
-        console.log(calories, carbs, fats, protein)
-
         this.setState({ calories, carbs, fats, protein })
     }
 
