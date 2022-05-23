@@ -157,7 +157,7 @@ export default class Chat extends Component {
             setTimeout(() => {
                 this.getChat(this.state.chatId);
                 this.setState({ isFileBeingUploaded: false })
-            }, 500);
+            }, 1000);
         });
         socket.emit("update-last-message", {})
     }
