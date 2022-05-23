@@ -220,7 +220,6 @@ mongo.connect();
 
 io.on("connection", (socket) => {
     socket.on("join-chat-room", (payload) => {
-
         try {
             const chatId = payload.chatId;
 
@@ -281,8 +280,18 @@ io.on("connection", (socket) => {
         }
     })
 
-    socket.on("join-chats-room", () => {
-        console.log("joined chats room")
+    socket.on("join-chats-room", async (payload) => {
+        console.log(payload.userId);
+        const chats = await DbService.getMany(COLLECTIONS.CHATS, {"$or": [{personalTrainerId: mongoose.Types.ObjectId(payload.userId)}, {clientId: mongoose.Types.ObjectId(payload.userId)}]})
+        let roomId = "";
+        for(let chat of chats){
+            roomId = roomId + "_" + chat._id;
+        }
+
+        socket.join(roomId);
+
+        console.log(io.sockets.adapter.rooms)
+
     })
 
     socket.on("update-last-message", () => {

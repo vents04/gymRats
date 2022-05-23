@@ -8069,6 +8069,10 @@
 {"level":"error","message":"Cannot read properties of undefined (reading 'sufficientWeightGainRanges')"}
 {"level":"error","message":"Cannot read properties of undefined (reading 'sufficientWeightGainRanges')"}
 {"level":"error","message":"Cannot read properties of undefined (reading 'sufficientWeightGainRanges')"}
+<<<<<<< HEAD
+{"level":"error","message":"\"exercises[0].sets[0].reps\" must be a positive number"}
+{"level":"error","message":"Invalid password"}
+=======
 {"level":"error","message":"Provide a barcode to search for"}
 {"level":"error","message":"Provide a barcode to search for"}
 {"level":"error","message":"\"protein\" is required"}
@@ -8120,4 +8124,8 @@
 {"level":"error","message":"Token not provided"}
 {"level":"error","message":"Token not provided"}
 {"level":"error","message":"Token not provided"}
+<<<<<<< HEAD
 {"level":"error","message":"Invalid coach id"}
+=======
+>>>>>>> e86c0232ad293ab2926794ccf83ee7a660fab727
+>>>>>>> cdc9bc008eda0e20926a089275e97fcfb35b9883
