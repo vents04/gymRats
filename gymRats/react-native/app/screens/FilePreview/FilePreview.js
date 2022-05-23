@@ -2,12 +2,13 @@ import React, { Component } from 'react'
 import { Image, Text, View, ScrollView, TextInput, Pressable, BackHandler, Alert, ActivityIndicator, Button } from 'react-native';
 import { BackButtonHandler } from '../../classes/BackButtonHandler';
 import { Video, AVPlaybackStatus } from 'expo-av';
+import { Audio } from 'expo-av';
 
 import ApiRequests from '../../classes/ApiRequests';
 
 import { Ionicons } from '@expo/vector-icons';
 
-import { HTTP_STATUS_CODES, IMAGE_VISUALIZATION_MIME_TYPES, SUPPORTED_MIME_TYPES, VIDEO_VISUALIZATION_MIME_TYPES } from '../../../global';
+import { AUDIO_PLAY_MIME_TYPES, HTTP_STATUS_CODES, IMAGE_VISUALIZATION_MIME_TYPES, SUPPORTED_MIME_TYPES, VIDEO_VISUALIZATION_MIME_TYPES } from '../../../global';
 
 import globalStyles from '../../../assets/styles/global.styles';
 import styles from './FilePreview.styles';
@@ -18,14 +19,16 @@ export default class FilePreview extends Component {
         super(props);
 
         this.state = {
-            videoStatus: {}
+            videoStatus: {},
+            sound: undefined,
+            isAudioPlaying: false
         }
 
         this.video = React.createRef(null)
     }
 
     backAction = () => {
-        this.video.current.pauseAsync();
+        if (this.video && this.video.current) this.video.current.pauseAsync();
         this.props.navigation.goBack();
         return true;
     }
@@ -36,6 +39,23 @@ export default class FilePreview extends Component {
 
     componentWillUnmount() {
         BackHandler.removeEventListener('hardwareBackPress', this.backAction);
+        if (this.state.sound) {
+            this.state.sound.unloadAsync();
+            this.setState({ sound: undefined, isAudioPlaying: false })
+        }
+    }
+
+    playSound = async () => {
+        if (!this.state.sound) {
+            const { sound } = await Audio.Sound.createAsync({ uri: this.props.route.params.url });
+            this.setState({ sound, isAudioPlaying: true })
+            await this.state.sound.playAsync();
+        } else {
+            (this.state.isAudioPlaying)
+                ? this.state.sound.pauseAsync()
+                : this.state.sound.playAsync();
+            this.setState({ isAudioPlaying: !this.state.isAudioPlaying });
+        }
     }
 
     render() {
@@ -98,7 +118,20 @@ export default class FilePreview extends Component {
                                         <Text style={globalStyles.authPageActionButtonText}>{this.state.videoStatus.isPlaying ? 'Pause' : 'Play'}</Text>
                                     </Pressable>
                                 </>
-                                : null
+                                : AUDIO_PLAY_MIME_TYPES.includes(this.props.route.params.mimeType)
+                                    ? <>
+                                        <Pressable style={({ pressed }) => [
+                                            globalStyles.authPageActionButton, {
+                                                alignSelf: "center",
+                                                opacity: pressed ? 0.1 : 1,
+                                            }
+                                        ]} onPress={() => {
+                                            this.playSound();
+                                        }}>
+                                            <Text style={globalStyles.authPageActionButtonText}>Play/pause audio</Text>
+                                        </Pressable>
+                                    </>
+                                    : null
                     }
                 </View>
             </View>

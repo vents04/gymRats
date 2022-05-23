@@ -10,7 +10,7 @@ import prettyBytes from 'pretty-bytes';
 
 import styles from './Message.styles';
 import globalStyles from '../../../assets/styles/global.styles';
-import { IMAGE_VISUALIZATION_MIME_TYPES, ROOT_URL_API, VIDEO_VISUALIZATION_MIME_TYPES } from '../../../global';
+import { AUDIO_PLAY_MIME_TYPES, IMAGE_VISUALIZATION_MIME_TYPES, ROOT_URL_API, VIDEO_VISUALIZATION_MIME_TYPES } from '../../../global';
 
 export default class Message extends Component {
 
@@ -103,6 +103,7 @@ export default class Message extends Component {
                             {
                                 IMAGE_VISUALIZATION_MIME_TYPES.includes(this.props.message.message.file.mimeType)
                                     || VIDEO_VISUALIZATION_MIME_TYPES.includes(this.props.message.message.file.mimeType)
+                                    || AUDIO_PLAY_MIME_TYPES.includes(this.props.message.message.file.mimeType)
                                     ? <Pressable style={({ pressed }) => [
                                         {
                                             opacity: pressed ? 0.1 : 1,

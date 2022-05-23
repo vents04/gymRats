@@ -157,6 +157,16 @@ const VIDEO_VISUALIZATION_MIME_TYPES = [
     "video/3gpp2",
 ]
 
+const AUDIO_PLAY_MIME_TYPES = [
+    "audio/aac",
+    "audio/mpeg",
+    "audio/ogg",
+    "audio/wav",
+    "audio/webm",
+    "audio/3gpp",
+    "audio/3gpp2"
+]
+
 module.exports = {
     AUTHENTICATION_TOKEN_KEY,
     ROOT_URL_API,
@@ -174,5 +184,6 @@ module.exports = {
     LOGBOOK_PROGRESS_NOTATIONS,
     SUPPORTED_MIME_TYPES,
     IMAGE_VISUALIZATION_MIME_TYPES,
-    VIDEO_VISUALIZATION_MIME_TYPES
+    VIDEO_VISUALIZATION_MIME_TYPES,
+    AUDIO_PLAY_MIME_TYPES
 }
