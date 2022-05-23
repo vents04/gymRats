@@ -2,7 +2,7 @@ import 'react-native-gesture-handler';
 import React, { useRef, useState, useEffect } from 'react';
 import { default as AsyncStorage } from '@react-native-async-storage/async-storage';
 import { AUTHENTICATION_TOKEN_KEY } from './global';
-import { AppState, Button, Platform, Text } from 'react-native';
+import { Alert, AppState, Button, Platform, Text } from 'react-native';
 import ApiRequests from "./app/classes/ApiRequests";
 import { ABTesting, campaigns } from './app/classes/ABTesting';
 
@@ -43,6 +43,13 @@ const App = () => {
   const responseListener = useRef();
 
   useEffect(() => {
+    Linking.addEventListener('url', (event) => {
+      let data = event.url;
+      Alert.alert("URLA", data.toString());
+    });
+    Linking.getInitialURL().then((url) => {
+      Alert.alert("URLA", url);
+    })
     socket.initConnection();
     const subscription = AppState.addEventListener("change", async nextAppState => {
       if (nextAppState == 'background') {

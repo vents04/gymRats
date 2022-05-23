@@ -24,9 +24,9 @@
       [
         "expo-media-library",
         {
-          "photosPermission": "Allow $(PRODUCT_NAME) to access your files.",
-          "savePhotosPermission": "Allow $(PRODUCT_NAME) to save files.",
-          "isAccessMediaLocationEnabled": true
+          "photosPermission": "Allow Gym Rats to access your files.",
+          "savePhotosPermission": "Allow Gym Rats to save files.",
+          "isAccessMediaLocationEnabled": "true"
         }
       ]
     ],
