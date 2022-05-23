@@ -84,7 +84,7 @@ const App = () => {
     });
 
     return () => {
-      subscription.remove();
+      if (subscription) subscription.remove();
       Notifications.removeNotificationSubscription(notificationListener.current);
       Notifications.removeNotificationSubscription(responseListener.current);
     };
