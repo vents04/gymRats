@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, Button, TouchableOpacity, ActivityIndicator, Alert, TextInput } from 'react-native';
+import { Text, View, Button, Pressable, ActivityIndicator, Alert, TextInput, BackHandler } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 
 import ApiRequests from '../../classes/ApiRequests';
+import { BackButtonHandler } from '../../classes/BackButtonHandler';
 
 import globalStyles from '../../../assets/styles/global.styles';
 import styles from './BarcodeReader.styles';
@@ -20,8 +21,21 @@ export default function BarcodeScanner(props) {
         })()
     }
 
+    const backAction = () => {
+        props.navigation.navigate("SearchCaloriesIntake", {
+            meal: props.route.params.meal,
+            date: props.route.params.date,
+            timezoneOffset: props.route.params.timezoneOffset
+        });
+        return true;
+    }
+
     useEffect(() => {
         askForCameraPermission();
+        BackHandler.addEventListener("hardwareBackPress", backAction);
+
+        return () =>
+            BackHandler.removeEventListener("hardwareBackPress", backAction);
     }, []);
 
     const handleBarCodeScanned = ({ type, data }) => {
@@ -75,15 +89,19 @@ export default function BarcodeScanner(props) {
         return (
             <View style={styles.container}>
                 <Text style={styles.text}>No access to camera</Text>
-                <TouchableOpacity style={[globalStyles.authPageActionButton, {
-                    maxWidth: 200,
-                    marginTop: 16,
-                    marginHorizontal: 16
-                }]} onPress={() => {
+                <Pressable style={({ pressed }) => [
+                    globalStyles.authPageActionButton,
+                    {
+                        opacity: pressed ? 0.1 : 1,
+                        maxWidth: 200,
+                        marginTop: 16,
+                        marginHorizontal: 16
+                    }
+                ]} onPress={() => {
                     askForCameraPermission()
                 }}>
                     <Text style={globalStyles.authPageActionButtonText}>Allow camera</Text>
-                </TouchableOpacity>
+                </Pressable>
             </View>)
     }
 
@@ -99,25 +117,32 @@ export default function BarcodeScanner(props) {
                 scanned
                     ? <>
                         <Text style={{ ...globalStyles.modalText, marginVertical: 24 }}>Barcode not found</Text>
-                        <TouchableOpacity style={{
-                            marginHorizontal: 16,
-                            padding: 8
-                        }} onPress={() => {
+                        <Pressable style={({ pressed }) => [
+                            {
+                                opacity: pressed ? 0.1 : 1,
+                                marginHorizontal: 16,
+                                padding: 8
+                            }
+                        ]} onPress={() => {
                             setBarcode("")
                             setScanned(false)
                         }}>
                             <Text style={globalStyles.actionText}>Scan / enter again</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={[globalStyles.authPageActionButton, {
-                            maxWidth: "80%",
-                            marginTop: 64,
-                            marginHorizontal: 16
-                        }]} onPress={() => {
+                        </Pressable>
+                        <Pressable style={({ pressed }) => [
+                            globalStyles.authPageActionButton,
+                            {
+                                opacity: pressed ? 0.1 : 1,
+                                maxWidth: "80%",
+                                marginTop: 64,
+                                marginHorizontal: 16
+                            },
+                        ]} onPress={() => {
                             setScanned(false);
                             props.navigation.replace("AddFood", { barcode, date: props.route.params.date, timezoneOffset: props.route.params.timezoneOffset, meal: props.route.params.meal });
                         }}>
                             <Text style={globalStyles.authPageActionButtonText}>Let's add this food to Gym Rats</Text>
-                        </TouchableOpacity>
+                        </Pressable>
                     </>
                     : <>
                         <TextInput
@@ -125,11 +150,18 @@ export default function BarcodeScanner(props) {
                             placeholder="Enter barcode:"
                             value={barcode}
                             onChangeText={(val) => { setBarcode(val) }} />
-                        <TouchableOpacity style={[globalStyles.authPageActionButton, { width: "80%", marginTop: 16 }]} onPress={() => {
+                        <Pressable style={({ pressed }) => [
+                            globalStyles.authPageActionButton,
+                            {
+                                opacity: pressed ? 0.1 : 1,
+                                width: "80%",
+                                marginTop: 16
+                            },
+                        ]} onPress={() => {
                             handleBarCodeScanned({ type: "", data: barcode });
                         }}>
                             <Text style={globalStyles.authPageActionButtonText}>Submit barcode</Text>
-                        </TouchableOpacity>
+                        </Pressable>
                     </>
             }
         </View >

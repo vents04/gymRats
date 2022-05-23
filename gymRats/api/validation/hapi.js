@@ -342,6 +342,50 @@ const navigationAnalyticsValidation = (data) => {
     return schema.validate(data);
 }
 
+const unknownSourceCaloriesPostValidation = (data) => {
+    const schema = Joi.object({
+        date: Joi.number().required(),
+        month: Joi.number().required(),
+        year: Joi.number().required(),
+        calories: Joi.number().required().positive(),
+    })
+    return schema.validate(data);
+}
+
+const workoutUpdateValidation = (data) => {
+    const schema = Joi.object({
+        name: Joi.string().min(1).max(40).required(),
+        exercises: Joi.array().items(Joi.string().custom((value, helper) => {
+            if (!mongoose.Types.ObjectId.isValid(value))
+                return helper.message("Invalid exercise id");
+            return true;
+        })).required(),
+    })
+    return schema.validate(data);
+}
+
+const devicePostValidation = (data) => {
+    const schema = Joi.object({
+        deviceType: Joi.string().required(),
+        osName: Joi.string().required(),
+        brand: Joi.string().optional().allow(null).allow(""),
+        manufacturer: Joi.string().optional().allow(null).allow(""),
+        modelName: Joi.string().optional().allow(null).allow(""),
+        modelId: Joi.string().optional().allow(null).allow(""),
+        designName: Joi.string().optional().allow(null).allow(""),
+        productName: Joi.string().optional().allow(null).allow(""),
+        deviceYearClass: Joi.number().optional().allow(null).allow(""),
+        totalMemory: Joi.number().optional().allow(null).allow(""),
+        osBuildId: Joi.string().optional().allow(null).allow(""),
+        osInternalBuildId: Joi.string().optional().allow(null).allow(""),
+        osBuildFingerprint: Joi.string().optional().allow(null).allow(""),
+        platformApiLevel: Joi.number().optional().allow(null).allow(""),
+        deviceName: Joi.string().optional().allow(null).allow(""),
+        expoPushNotificationsToken: Joi.string().optional().allow(null).allow(""),
+        deviceId: Joi.string().optional().allow(null).allow("")
+    })
+    return schema.validate(data);
+}
 
 module.exports = {
     signupValidation,
@@ -366,5 +410,8 @@ module.exports = {
     contentPostValidation,
     contentUpdateValidation,
     dailyItemUpdateValidation,
-    navigationAnalyticsValidation
+    navigationAnalyticsValidation,
+    unknownSourceCaloriesPostValidation,
+    workoutUpdateValidation,
+    devicePostValidation
 }

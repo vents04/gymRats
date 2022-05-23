@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image, Text, View, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { Image, Text, View, ActivityIndicator, Pressable } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 
 import ApiRequests from '../../classes/ApiRequests';
@@ -96,11 +96,16 @@ export default class Profile extends Component {
         return <View style={[globalStyles.safeAreaView]}>
             <View style={globalStyles.pageContainer}>
                 <LogoBar />
-                <TouchableOpacity style={globalStyles.topbarIconContainer} onPress={() => {
+                <Pressable style={({ pressed }) => [
+                    globalStyles.topbarIconContainer,
+                    {
+                        opacity: pressed ? 0.1 : 1,
+                    }
+                ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
                     this.navigateToProfileDetailsEdit();
                 }}>
                     <Feather name="edit" size={30} color="#1f6cb0" />
-                </TouchableOpacity>
+                </Pressable>
                 {
                     this.state.showError
                         ? <Text style={globalStyles.errorBox}>{this.state.error}</Text>
@@ -115,7 +120,11 @@ export default class Profile extends Component {
                     this.state.profile != null
                         ? <View style={styles.profileContainer}>
                             <View style={styles.profileContainerTopbar}>
-                                <TouchableOpacity onPress={() => {
+                                <Pressable style={({ pressed }) => [
+                                    {
+                                        opacity: pressed ? 0.1 : 1,
+                                    }
+                                ]} onPress={() => {
                                     if (!this.state.showSaving) this.pickImage()
                                 }}>
                                     {
@@ -129,7 +138,7 @@ export default class Profile extends Component {
                                             : <Image style={styles.profilePictureContainer}
                                                 source={{ uri: this.state.profile.profilePicture }} />
                                     }
-                                </TouchableOpacity>
+                                </Pressable>
                                 {
                                     this.state.showSaving
                                         ? <View style={styles.loadingContainer}>
@@ -149,11 +158,15 @@ export default class Profile extends Component {
                                     {this.state.profile.lastName}
                                 </Text>
                                 <Text style={styles.email}>{this.state.profile.email}</Text>
-                                <TouchableOpacity onPress={() => {
+                                <Pressable style={({ pressed }) => [
+                                    {
+                                        opacity: pressed ? 0.1 : 1,
+                                    }
+                                ]} onPress={() => {
                                     this.logout();
                                 }}>
                                     <Text style={styles.highlightedText}>Logout</Text>
-                                </TouchableOpacity>
+                                </Pressable>
                             </View>
                             <View style={styles.commonDataContainer}>
                                 <View style={styles.commonDataSection}>
@@ -167,11 +180,15 @@ export default class Profile extends Component {
                                             }
                                         </Text>
                                     </View>
-                                    <TouchableOpacity onPress={() => {
+                                    <Pressable style={({ pressed }) => [
+                                        {
+                                            opacity: pressed ? 0.1 : 1,
+                                        }
+                                    ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
                                         this.navigateToProfileDetailsEdit();
                                     }}>
                                         <MaterialIcons name="edit" size={25} color="#1f6cb0" />
-                                    </TouchableOpacity>
+                                    </Pressable>
                                 </View>
                             </View>
                         </View>

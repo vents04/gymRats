@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Image, Text, TouchableOpacity, View } from 'react-native';
+import { Image, Text, Pressable, View } from 'react-native';
 
 import { Ionicons } from '@expo/vector-icons';
 
@@ -13,11 +13,15 @@ export default class CoachRequestsItem extends Component {
         return (
             <View style={styles.chatItemContainer}>
                 <View style={styles.coachRequestInfoContainer}>
-                    <TouchableOpacity onPress={() => {
+                    <Pressable style={({ pressed }) => [
+                        {
+                            opacity: pressed ? 0.1 : 1,
+                        }
+                    ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
                         this.props.updateRelationStatus(this.props.relation._id, RELATION_STATUSES.DECLINED);
                     }} >
                         <Ionicons name="close" size={18} color="#aaa" style={{ marginRight: 8 }} />
-                    </TouchableOpacity>
+                    </Pressable>
                     {
                         !this.props.relation.client.profilePicture
                             ? <View style={styles.profilePictureContainer}>
@@ -33,13 +37,18 @@ export default class CoachRequestsItem extends Component {
                         <Text style={styles.chatsItemNames}>{this.props.relation.client.firstName}&nbsp;{this.props.relation.client.lastName}</Text>
                     </View>
                 </View>
-                <TouchableOpacity style={[globalStyles.authPageActionButton, {
-                    marginTop: 14
-                }]} onPress={() => {
-                    this.props.updateRelationStatus(this.props.relation._id, RELATION_STATUSES.ACTIVE);
-                }}>
+                <Pressable style={({ pressed }) => [
+                    globalStyles.authPageActionButton,
+                    {
+                        opacity: pressed ? 0.1 : 1,
+                        marginTop: 14
+                    }
+                ]}
+                    onPress={() => {
+                        this.props.updateRelationStatus(this.props.relation._id, RELATION_STATUSES.ACTIVE);
+                    }}>
                     <Text style={globalStyles.authPageActionButtonText}>Accept request</Text>
-                </TouchableOpacity>
+                </Pressable>
             </View>
         )
     }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Dimensions, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Dimensions, ScrollView, Text, TextInput, Pressable, View } from 'react-native';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import { Picker } from '@react-native-picker/picker';
 
@@ -93,13 +93,17 @@ export default class AddCaloriesIntakeItem extends Component {
             <View style={globalStyles.safeAreaView}>
                 <View style={globalStyles.pageContainer}>
                     <View style={globalStyles.followUpScreenTopbar}>
-                        <TouchableOpacity onPress={() => {
+                        <Pressable style={({ pressed }) => [
+                            {
+                                opacity: pressed ? 0.1 : 1,
+                            }
+                        ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
                             (!this.props.route.params.previousScreen)
                                 ? this.props.navigation.navigate("SearchCaloriesIntake", { date: this.props.route.params.date, timezoneOffset: this.props.route.params.timezoneOffset, meal: this.state.meal })
                                 : this.props.navigation.navigate(this.props.route.params.previousScreen, { date: this.props.route.params.date, timezoneOffset: this.props.route.params.timezoneOffset, meal: this.state.meal })
                         }}>
                             <Ionicons name="md-arrow-back-sharp" size={25} />
-                        </TouchableOpacity>
+                        </Pressable>
                         <Text style={globalStyles.followUpScreenTitle}>{
                             this.props.route.params.intent == CALORIES_COUNTER_SCREEN_INTENTS.ADD
                                 ? "Add"
@@ -162,10 +166,14 @@ export default class AddCaloriesIntakeItem extends Component {
                                 <Picker.Item label="Snacks" value="SNACKS" />
                             </Picker>
                         </View>
-                        <TouchableOpacity style={[globalStyles.authPageActionButton, {
-                            backgroundColor: cardColors.caloriesIntake,
-                            marginTop: 8
-                        }]} onPress={() => {
+                        <Pressable style={({ pressed }) => [
+                            globalStyles.authPageActionButton,
+                            {
+                                opacity: pressed ? 0.1 : 1,
+                                backgroundColor: cardColors.caloriesIntake,
+                                marginTop: 8
+                            }
+                        ]} onPress={() => {
                             (this.props.route.params.intent == CALORIES_COUNTER_SCREEN_INTENTS.ADD)
                                 ? this.addFood()
                                 : this.updateFood()
@@ -177,7 +185,7 @@ export default class AddCaloriesIntakeItem extends Component {
                                         : "Update"
                                 }&nbsp;food
                             </Text>
-                        </TouchableOpacity>
+                        </Pressable>
                         <View style={styles.statsContainer}>
                             <Text style={styles.statsTitle}>Macronutrients ratio</Text>
                             <View style={[styles.inline, styles.macronutrientsCircles]}>

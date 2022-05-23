@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { ActivityIndicator, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
+import { ActivityIndicator, BackHandler, Text, TextInput, Pressable, TouchableWithoutFeedback, View } from 'react-native';
 
 import ApiRequests from '../../../classes/ApiRequests';
-import { DataManager } from "../../../classes/DataManager";
+import { BackButtonHandler } from '../../../classes/BackButtonHandler';
 
 import { HTTP_STATUS_CODES, WEIGHT_UNITS, WEIGHT_UNITS_LABELS } from '../../../../global';
 import { cardColors } from '../../../../assets/styles/cardColors';
@@ -26,9 +26,20 @@ export default class WeightTracker extends Component {
         }
 
         this.input = React.createRef();
+
+        this.backHandler;
+    }
+
+    backAction = () => {
+        BackButtonHandler.goToPageWithDataManagerCardUpdate(this.props.navigation, "Calendar", this.props.route.params.date)
+        return true;
     }
 
     componentDidMount() {
+        this.backHandler = BackHandler.addEventListener(
+            "hardwareBackPress",
+            this.backAction
+        );
         this.setState({
             weightUnit: (this.props.route.params.weightUnit) ? this.props.route.params.weightUnit : this.getWeightUnit(),
             weight: (this.props.route.params.weight) ? this.props.route.params.weight : null
@@ -42,6 +53,10 @@ export default class WeightTracker extends Component {
                 })
             }
         });
+    }
+
+    componentWillUnmount = () => {
+        this.backHandler.remove();
     }
 
     getWeightUnit = () => {
@@ -69,8 +84,7 @@ export default class WeightTracker extends Component {
             unit: this.state.weightUnit
         }, true).then((response) => {
             this.setState({ showSaving: false });
-            DataManager.onDateCardChanged(this.props.route.params.date);
-            this.props.navigation.navigate("Calendar");
+            this.backAction();
         }).catch((error) => {
             this.setState({
                 showError: true,
@@ -82,37 +96,22 @@ export default class WeightTracker extends Component {
         })
     }
 
-    deleteWeight = () => {
-        this.setState({ showDeleting: true });
-        setTimeout(() => {
-            ApiRequests.delete(`weight-tracker/daily-weight/${this.props.route.params._id}`, false, true).then((response) => {
-                this.setState({ showDeleting: false });
-                this.props.navigation.navigate("Calendar", { reloadDate: true, date: this.props.route.params.date });
-            }).catch((error) => {
-                this.setState({
-                    showError: true,
-                    showDeleting: false,
-                    error: error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR
-                        ? error.response.data
-                        : "Internal server error"
-                })
-            })
-        }, 500);
-    }
-
     render() {
         return <View style={globalStyles.safeAreaView}>
             <View style={globalStyles.pageContainer}>
                 <View style={globalStyles.followUpScreenTopbar}>
-                    <TouchableOpacity onPress={() => {
-                        console.log({ reloadDate: true, date: this.props.route.params.date });
-                        this.props.navigation.navigate("Calendar");
+                    <Pressable style={({ pressed }) => [
+                        {
+                            opacity: pressed ? 0.1 : 1,
+                        }
+                    ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
+                        this.backAction();
                     }}>
                         <Ionicons name="md-arrow-back-sharp" size={25} />
-                    </TouchableOpacity>
+                    </Pressable>
                     <Text style={globalStyles.followUpScreenTitle}>Weight</Text>
                 </View>
-                <TouchableOpacity style={[styles.weightInputContainer, globalStyles.authPageInput]} onPress={() => {
+                <Pressable style={[styles.weightInputContainer, globalStyles.authPageInput]} onPress={() => {
                     this.input.current.focus();
                 }}>
                     <TextInput
@@ -123,10 +122,9 @@ export default class WeightTracker extends Component {
                         placeholder="80"
                         editable={!this.state.showSaving}
                         onChangeText={(val) => {
-                            console.log(val)
                             let shouldNotBeAdded = false;
                             if (val.includes(".")) {
-                                if (val.length > 5) {
+                                if (val.split(".")[0].length > 3) {
                                     shouldNotBeAdded = true;
                                 }
                             }
@@ -134,7 +132,7 @@ export default class WeightTracker extends Component {
                             if (!shouldNotBeAdded) this.setState({ weight: val, showError: false })
                         }} />
                     <Text style={styles.editSectionInput}>{WEIGHT_UNITS_LABELS[this.state.weightUnit]}</Text>
-                </TouchableOpacity>
+                </Pressable>
                 {
                     this.state.showError
                         ? <Text style={[globalStyles.errorBox, {
@@ -142,7 +140,11 @@ export default class WeightTracker extends Component {
                         }]}>{this.state.error}</Text>
                         : null
                 }
-                <TouchableOpacity style={[globalStyles.authPageActionButton, {
+                <Pressable style={({ pressed }) => [
+                    {
+                        opacity: pressed ? 0.1 : 1,
+                    }
+                ]} style={[globalStyles.authPageActionButton, {
                     backgroundColor: cardColors.weightTracker,
                     marginTop: 16
                 }]} onPress={() => {
@@ -162,7 +164,7 @@ export default class WeightTracker extends Component {
                                 }
                             </Text>
                     }
-                </TouchableOpacity>
+                </Pressable>
             </View>
         </View >;
     }

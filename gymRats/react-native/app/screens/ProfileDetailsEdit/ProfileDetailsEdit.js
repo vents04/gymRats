@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ActivityIndicator, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, ScrollView, Text, TextInput, Pressable, View } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 
 import ApiRequests from '../../classes/ApiRequests';
@@ -107,20 +107,29 @@ export default class ProfileDetailsEdit extends Component {
         return <View style={globalStyles.safeAreaView}>
             <View style={globalStyles.pageContainer}>
                 <View style={globalStyles.followUpScreenTopbar}>
-                    <TouchableOpacity onPress={() => {
+                    <Pressable style={({ pressed }) => [
+                        {
+                            opacity: pressed ? 0.1 : 1,
+                        }
+                    ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
                         this.props.navigation.navigate("Profile")
                     }}>
                         <Ionicons name="md-arrow-back-sharp" size={25} />
-                    </TouchableOpacity>
+                    </Pressable>
                     <Text style={globalStyles.followUpScreenTitle}>Profile edit</Text>
                 </View>
                 {
                     this.state.hasChanges
-                        ? <TouchableOpacity style={globalStyles.topbarIconContainer} onPress={() => {
+                        ? <Pressable style={({ pressed }) => [
+                            globalStyles.topbarIconContainer,
+                            {
+                                opacity: pressed ? 0.1 : 1,
+                            }
+                        ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
                             this.saveChanges()
                         }}>
                             <FontAwesome name="check" size={25} color={cardColors.caloriesIntake} />
-                        </TouchableOpacity>
+                        </Pressable>
                         : null
                 }
                 {
@@ -177,11 +186,16 @@ export default class ProfileDetailsEdit extends Component {
                     </View>
                     {
                         this.state.profile.profilePicture
-                            ? <TouchableOpacity style={globalStyles.authPageActionButton} disabled={this.state.showSaving} onPress={() => {
+                            ? <Pressable style={({ pressed }) => [
+                                globalStyles.authPageActionButton,
+                                {
+                                    opacity: pressed ? 0.1 : 1,
+                                }
+                            ]} disabled={this.state.showSaving} onPress={() => {
                                 this.saveChanges(true);
                             }}>
                                 <Text style={globalStyles.authPageActionButtonText}>Remove profile picture</Text>
-                            </TouchableOpacity>
+                            </Pressable>
                             : null
                     }
                 </ScrollView>

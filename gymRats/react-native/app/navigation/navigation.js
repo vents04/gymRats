@@ -40,6 +40,14 @@ import Client from '../screens/Client/Client';
 import Suggestions from '../screens/Suggestions/Suggestions';
 import PostReview from '../screens/PostReview/PostReview';
 import Progress from '../screens/Progress/Progress';
+import AddUnknownCaloriesIntake from '../screens/cards/AddUnknownCaloriesIntake/AddUnknownCaloriesIntake';
+import ManageWorkoutTemplates from '../screens/cards/ManageWorkoutTemplates/ManageWorkoutTemplates';
+import { Badge } from 'react-native-elements';
+import * as Notifications from 'expo-notifications';
+import { useEffect } from 'react';
+import { useRef } from 'react';
+import { useState } from 'react';
+import FilePreview from '../screens/FilePreview/FilePreview';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -77,6 +85,13 @@ const calendarScreenStack = () => {
                     headerShown: false
                 }}
                 component={Logbook}
+            />
+            <Stack.Screen
+                name="ManageWorkoutTemplates"
+                options={{
+                    headerShown: false
+                }}
+                component={ManageWorkoutTemplates}
             />
             <Stack.Screen
                 name="ExerciseSearch"
@@ -119,6 +134,13 @@ const calendarScreenStack = () => {
                     headerShown: false
                 }}
                 component={AddFood}
+            />
+            <Stack.Screen
+                name="AddUnknownCaloriesIntake"
+                options={{
+                    headerShown: false
+                }}
+                component={AddUnknownCaloriesIntake}
             />
             <Stack.Screen
                 name="Suggestions"
@@ -208,7 +230,6 @@ const coachingScreenStack = () => {
     )
 };
 
-
 const chatsScreenStack = () => {
     return (
         <Stack.Navigator initialRouteName="Chats">
@@ -225,6 +246,13 @@ const chatsScreenStack = () => {
                     headerShown: false
                 }}
                 component={Chat}
+            />
+            <Stack.Screen
+                name="FilePreview"
+                options={{
+                    headerShown: false
+                }}
+                component={FilePreview}
             />
         </Stack.Navigator>
     )
@@ -268,7 +296,19 @@ const Auth = () => {
     );
 };
 
-const NavigationRoutes = () => {
+const NavigationRoutes = (props) => {
+    const responseListener = useRef();
+
+    useEffect(() => {
+        responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+            if (response.notification && response.notification.request
+                && response.notification.request.content && response.notification.request.content.data
+                && response.notification.request.content.data.chatId) {
+                props.navigation.navigate("Chats", { chatId: response.notification.request.content.data.chatId })
+            }
+        });
+    }, []);
+
     return (
         <Tab.Navigator
             screenOptions={() => ({
@@ -368,6 +408,17 @@ const NavigationRoutes = () => {
                     tabBarIcon: (tabInfo) =>
                     (
                         <View style={styles.tabBarIconContainer}>
+                            {
+                                false
+                                    ? <View style={{
+                                        position: 'absolute',
+                                        zIndex: 999,
+                                        top: 0, right: 0, height: 12, width: 12,
+                                        backgroundColor: "red",
+                                        borderRadius: 1000
+                                    }}></View>
+                                    : null
+                            }
                             <Ionicons name="chatbubbles" size={24} color={tabInfo.focused ? "#1f6cb0" : "#ccc"} />
                             <Text style={[styles.tabBarIconText, {
                                 fontFamily: (tabInfo.focused ? "MainBold" : "MainRegular")

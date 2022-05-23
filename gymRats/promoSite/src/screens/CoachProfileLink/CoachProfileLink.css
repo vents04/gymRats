@@ -1,0 +1,78 @@
+@import '../../../assets/styles/global.styles.css';
+
+.coach-profile {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fafafa;
+    border-radius: 4px;
+    border: 1px solid #e7e7e7;
+    padding: 24px;
+    min-width: 300px;
+}
+
+.coach-profile-logo-container {
+    display: flex;
+    flex-direction: row;
+    align-items:center;
+}
+
+.coach-profile-logo {
+    height: 28px;
+}
+
+.coach-profile-logo-text {
+    font-family: "Logo", sans-serif;
+    font-size: 18px;
+    color: #1f6cb0;
+    margin-left: 4px;
+}
+
+.coach-profile-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 32px 0px;
+}
+
+.coach-profile-profile-picture {
+    width: 60px;
+    height: 60px;
+    border-radius: 100%;
+    background-color: white;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.coach-profile-profile-names {
+    font-family: "Main Bold", sans-serif;
+    font-size: 18px;
+    margin-left: 12px;
+}
+
+.notation {
+    margin-top: 1rem;
+    color: #262626
+}
+
+.coach-profile-profile-picture-text {
+    font-family: "Main Bold", sans-serif;
+    font-size: 14px;
+    color: #777;
+}
+
+.badges-container {
+    margin-left: -10px;
+}
+
+@media only screen and (max-width: 768px) {
+    .coach-profile {
+        width: 90%;
+    }
+}

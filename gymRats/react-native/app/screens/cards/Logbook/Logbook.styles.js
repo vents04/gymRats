@@ -3,7 +3,6 @@ import { cardColors } from '../../../../assets/styles/cardColors';
 
 export default StyleSheet.create({
     exercisesListContainer: {
-        marginTop: 30,
         display: 'flex',
         flexDirection: 'column',
         flexGrow: 1,
@@ -105,5 +104,19 @@ export default StyleSheet.create({
         width: '50%',
         display: 'flex',
         alignItems: 'center'
+    },
+    unknownSourceCaloriesIncentiveContainer: {
+        borderColor: "#e7e7e7",
+        borderRadius: 4,
+        borderWidth: 1,
+        padding: 16,
+        backgroundColor: "#fafafa",
+        marginBottom: 32
+    },
+    unknownSourceCaloriesIncentiveText: {
+        fontFamily: 'MainMedium',
+        fontSize: 14,
+        color: "#999",
+        marginBottom: 14
     }
 })

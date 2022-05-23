@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { Text, Pressable, View } from 'react-native';
 
 import ApiRequests from '../../classes/ApiRequests';
+import { DataManager } from "../../classes/DataManager";
 
 import i18n from 'i18n-js';
 
@@ -41,7 +42,7 @@ export default class LogbookCard extends Component {
     deleteCard = () => {
         ApiRequests.delete(`logbook/workout-session?date=${this.state.data.date}&month=${this.state.data.month}&year=${this.state.data.year}`, {}, true).then((response) => {
             this.toggleShowConfirmationBox(false);
-            this.props.rerender(this.props.date);
+            DataManager.onDateCardChanged(this.props.date);
         }).catch((error) => {
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
@@ -76,7 +77,7 @@ export default class LogbookCard extends Component {
     }
 
     render() {
-        return <TouchableOpacity onPress={() => {
+        return <Pressable onPress={() => {
             if (!this.state.showConfirmationBox) this.props.actionButtonFunction();
         }}><View style={globalStyles.card}>
                 {
@@ -89,11 +90,16 @@ export default class LogbookCard extends Component {
                     <Text style={globalStyles.cardTitle}>{i18n.t('components')['cards']['logbook']['cardTitle']}</Text>
                     {
                         !this.props.client
-                            ? <TouchableOpacity style={globalStyles.cardTopbarIcon} onPress={() => {
+                            ? <Pressable style={({ pressed }) => [
+                                globalStyles.cardTopbarIcon,
+                                {
+                                    opacity: pressed ? 0.1 : 1,
+                                }
+                            ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
                                 this.setState({ showConfirmationBox: true })
                             }}>
                                 <MaterialCommunityIcons name="delete" size={25} color="#ddd" />
-                            </TouchableOpacity>
+                            </Pressable>
                             : null
                     }
                 </View>
@@ -112,8 +118,8 @@ export default class LogbookCard extends Component {
                                 <View style={styles.exercisesContainer}>
                                     {
                                         this.props.data.exercises.map((exercise, index) =>
-                                            <>
-                                                <Text key={index} style={[styles.exercise, {
+                                            <View key={index}>
+                                                <Text style={[styles.exercise, {
                                                     fontFamily: this.props.client ? "MainBold" : "MainRegular",
                                                     fontSize: this.props.client ? 16 : 12
                                                 }]}>{exercise.sets.length} {this.props.client ? (exercise.sets.length != 1 ? "sets " : "set ") : null}x {
@@ -125,7 +131,7 @@ export default class LogbookCard extends Component {
                                                 {
                                                     this.props.client
                                                         ? exercise.sets.map((set, setIndex) =>
-                                                            <Text key={`${index}${setIndex}`} style={styles.setInfo}>
+                                                            <Text style={styles.setInfo}>
                                                                 {
                                                                     set.reps
                                                                         ? <>
@@ -151,26 +157,30 @@ export default class LogbookCard extends Component {
                                                         )
                                                         : null
                                                 }
-                                            </>
+                                            </View>
                                         )
                                     }
                                 </View>
                                 {
                                     !this.props.client
-                                        ? <TouchableOpacity style={[globalStyles.authPageActionButton, {
-                                            backgroundColor: cardColors.logbook,
-                                            marginTop: 16
-                                        }]} onPress={() => {
+                                        ? <Pressable onPress={() => {
                                             this.props.actionButtonFunction();
-                                        }}>
+                                        }}
+                                            style={({ pressed }) => [
+                                                {
+                                                    backgroundColor: cardColors.logbook,
+                                                    marginTop: 16
+                                                },
+                                                globalStyles.authPageActionButton
+                                            ]}>
                                             <Text style={globalStyles.authPageActionButtonText}>{i18n.t('components')['cards']['logbook']['redirectButton']}</Text>
-                                        </TouchableOpacity>
+                                        </Pressable>
                                         : null
                                 }
                             </>
                     }
                 </View>
             </View>
-        </TouchableOpacity>;
+        </Pressable>;
     }
 }

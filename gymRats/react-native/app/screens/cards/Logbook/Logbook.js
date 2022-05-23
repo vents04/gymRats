@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
-import { Modal, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Alert, BackHandler, Modal, ScrollView, Text, TextInput, Pressable, View } from 'react-native'
 import { Picker } from '@react-native-picker/picker';
 
 import ApiRequests from '../../../classes/ApiRequests';
+import { BackButtonHandler } from '../../../classes/BackButtonHandler';
 
 import { Ionicons } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
@@ -35,10 +36,29 @@ export default class Logbook extends Component {
             showTemplatePickerModal: false,
             selectedTemplateId: null,
             templates: [],
-            hasDeniedWorkoutTemplateReplication: false
+            hasDeniedWorkoutTemplateReplication: false,
+            hasWorkoutTemplates: false
         }
 
         this.focusListener;
+
+        this.backHandler;
+    }
+
+    backAction = () => {
+        if (this.state.hasChanges) {
+            Alert.alert("Hold on!", "Are you sure you want to go back without saving the changes?", [
+                {
+                    text: "Cancel",
+                    onPress: () => { return; },
+                    style: "cancel"
+                },
+                { text: "YES", onPress: () => { BackButtonHandler.goToPageWithDataManagerCardUpdate(this.props.navigation, "Calendar", this.props.route.params.date) } }
+            ]);
+        } else {
+            BackButtonHandler.goToPageWithDataManagerCardUpdate(this.props.navigation, "Calendar", this.props.route.params.date)
+        }
+        return true;
     }
 
     onFocusFunction = () => {
@@ -80,12 +100,39 @@ export default class Logbook extends Component {
                     this.getTemplates();
                 }
             }
+            this.checkIfHasWorkoutTemplates();
         })
     }
 
     componentDidMount = () => {
+        BackHandler.addEventListener(
+            "hardwareBackPress",
+            this.backAction
+        );
         this.focusListener = this.props.navigation.addListener('focus', () => {
             this.onFocusFunction();
+        });
+    }
+
+    componentWillUnmount = () => {
+        BackHandler.removeEventListener("hardwareBackPress", this.backAction);
+    }
+
+    checkIfHasWorkoutTemplates = () => {
+        ApiRequests.get("logbook/has-workout-templates", {}, true).then((response) => {
+            this.setState({ hasWorkoutTemplates: response.data.hasWorkoutTemplates });
+        }).catch((error) => {
+            if (error.response) {
+                if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
+                    this.setState({ showError: true, error: error.response.data });
+                } else {
+                    ApiRequests.showInternalServerError();
+                }
+            } else if (error.request) {
+                ApiRequests.showNoResponseError();
+            } else {
+                ApiRequests.showRequestSettingError();
+            }
         })
     }
 
@@ -298,19 +345,29 @@ export default class Logbook extends Component {
                                             : null
                                     }
                                     <View style={globalStyles.modalActionsContainer}>
-                                        <TouchableOpacity style={styles.option} onPress={() => {
+                                        <Pressable style={({ pressed }) => [
+                                            styles.option,
+                                            {
+                                                opacity: pressed ? 0.1 : 1,
+                                            }
+                                        ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
                                             this.setState({ hasDeniedWorkoutTemplateCreation: true, showWorkoutTemplateModal: false })
                                             this.saveChanges();
                                         }}>
                                             <Text style={[globalStyles.modalActionTitle, {
                                                 color: "#1f6cb0"
                                             }]}>Skip</Text>
-                                        </TouchableOpacity>
-                                        <TouchableOpacity style={styles.option} onPress={() => {
+                                        </Pressable>
+                                        <Pressable style={({ pressed }) => [
+                                            styles.option,
+                                            {
+                                                opacity: pressed ? 0.1 : 1,
+                                            }
+                                        ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
                                             this.addWorkoutTemplate();
                                         }}>
                                             <Text style={globalStyles.modalActionTitle}>Add</Text>
-                                        </TouchableOpacity>
+                                        </Pressable>
                                     </View>
                                 </View>
                             </View>
@@ -346,18 +403,28 @@ export default class Logbook extends Component {
                                             : null
                                     }
                                     <View style={globalStyles.modalActionsContainer}>
-                                        <TouchableOpacity style={styles.option} onPress={() => {
+                                        <Pressable style={({ pressed }) => [
+                                            styles.option,
+                                            {
+                                                opacity: pressed ? 0.1 : 1,
+                                            }
+                                        ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
                                             this.setState({ showTemplatePickerModal: false, hasDeniedWorkoutTemplateReplication: true })
                                         }}>
                                             <Text style={[globalStyles.modalActionTitle, {
                                                 color: "#1f6cb0"
                                             }]}>Skip</Text>
-                                        </TouchableOpacity>
-                                        <TouchableOpacity style={styles.option} onPress={() => {
+                                        </Pressable>
+                                        <Pressable style={({ pressed }) => [
+                                            styles.option,
+                                            {
+                                                opacity: pressed ? 0.1 : 1,
+                                            }
+                                        ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
                                             this.loadWorkoutTemplate();
                                         }}>
                                             <Text style={globalStyles.modalActionTitle}>Add</Text>
-                                        </TouchableOpacity>
+                                        </Pressable>
                                     </View>
                                 </View>
                             </View>
@@ -366,23 +433,32 @@ export default class Logbook extends Component {
                 }
                 <View style={globalStyles.pageContainer}>
                     <View style={globalStyles.followUpScreenTopbar}>
-                        <TouchableOpacity onPress={() => {
-                            this.props.navigation.navigate("Calendar", { reloadDate: true, date: this.props.route.params.date })
+                        <Pressable style={({ pressed }) => [
+                            {
+                                opacity: pressed ? 0.1 : 1,
+                            }
+                        ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
+                            this.backAction();
                         }}>
                             <Ionicons name="md-arrow-back-sharp" size={25} />
-                        </TouchableOpacity>
+                        </Pressable>
                         <Text style={globalStyles.followUpScreenTitle}>Logbook</Text>
                     </View>
                     {
                         this.state.exercises.length > 0 && this.state.hasChanges
-                            ? <TouchableOpacity style={globalStyles.topbarIconContainer} onPress={() => {
+                            ? <Pressable style={({ pressed }) => [
+                                globalStyles.topbarIconContainer,
+                                {
+                                    opacity: pressed ? 0.1 : 1,
+                                }
+                            ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
                                 (!this.state.hasDeniedWorkoutTemplateCreation) ? this.checkWorkoutTemplate() : this.saveChanges()
                             }}>
                                 <Text style={[globalStyles.topbarIconTitle, {
                                     color: cardColors.logbook
                                 }]}>Save</Text>
                                 <FontAwesome name="check" size={20} color={cardColors.logbook} />
-                            </TouchableOpacity>
+                            </Pressable>
                             : null
                     }
                     {
@@ -390,14 +466,38 @@ export default class Logbook extends Component {
                             ? <Text style={globalStyles.errorBox}>{this.state.error}</Text>
                             : null
                     }
-                    <View style={styles.exercisesListContainer}>
+                    {
+                        this.state.hasWorkoutTemplates
+                            ? <View style={styles.unknownSourceCaloriesIncentiveContainer}>
+                                <Text style={styles.unknownSourceCaloriesIncentiveText}>You may manage your previously created workout templates</Text>
+                                <Pressable style={({ pressed }) => [
+                                    globalStyles.authPageActionButton,
+                                    {
+                                        opacity: pressed ? 0.1 : 1,
+                                    }
+                                ]} onPress={() => {
+                                    this.props.navigation.navigate("ManageWorkoutTemplates", {
+                                        date: this.props.route.params.date,
+                                        timezoneOffset: this.props.route.params.timezoneOffset
+                                    });
+                                }}>
+                                    <Text style={globalStyles.authPageActionButtonText}>Manage workout templates</Text>
+                                </Pressable>
+                            </View>
+                            : null
+                    }
+                    <View style={{ ...styles.exercisesListContainer, marginTop: this.state.hasWorkoutTemplates ? 0 : 16 }}>
                         <View style={styles.exercisesListContainerTopbar}>
                             <Text style={styles.sectionTitle}>Exercises</Text>
-                            <TouchableOpacity onPress={() => {
+                            <Pressable style={({ pressed }) => [
+                                {
+                                    opacity: pressed ? 0.1 : 1,
+                                }
+                            ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
                                 this.props.navigation.navigate("ExerciseSearch", { date: this.props.route.params.date, timezoneOffset: this.props.route.params.timezoneOffset })
                             }}>
                                 <Ionicons name="add-sharp" size={35} color={cardColors.logbook} />
-                            </TouchableOpacity>
+                            </Pressable>
                         </View>
                         <ScrollView contentContainerStyle={globalStyles.fillEmptySpace}>
                             {
@@ -411,17 +511,25 @@ export default class Logbook extends Component {
                                                         <View style={styles.exerciseContainerLeft}>
                                                             {
                                                                 this.state.exercises.length > 1
-                                                                    ? <TouchableOpacity onPress={() => {
+                                                                    ? <Pressable style={({ pressed }) => [
+                                                                        {
+                                                                            opacity: pressed ? 0.1 : 1,
+                                                                        }
+                                                                    ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
                                                                         this.swapExercises(index);
                                                                         this.setState({ showError: false })
                                                                     }}>
                                                                         <Ionicons name="swap-vertical" size={20} color="#777" style={{ marginRight: 10, minWidth: 25, height: 25 }} />
-                                                                    </TouchableOpacity>
+                                                                    </Pressable>
                                                                     : null
                                                             }
                                                             <Text style={styles.exerciseTitle}>{exercise.exerciseName}</Text>
                                                         </View>
-                                                        <TouchableOpacity onPress={() => {
+                                                        <Pressable style={({ pressed }) => [
+                                                            {
+                                                                opacity: pressed ? 0.1 : 1,
+                                                            }
+                                                        ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
                                                             this.addSet(exercise.exerciseId)
                                                             this.setState({ showError: false })
                                                         }}>
@@ -429,7 +537,7 @@ export default class Logbook extends Component {
                                                                 <Text style={styles.exerciseContainerAddContainerTitle}>Add set</Text>
                                                                 <Ionicons name="add-sharp" size={25} color={cardColors.logbook} />
                                                             </View>
-                                                        </TouchableOpacity>
+                                                        </Pressable>
                                                     </View>
                                                     <View style={styles.setsContainer} key={`_${index}`}>
                                                         {
@@ -474,12 +582,16 @@ export default class Logbook extends Component {
                                                                                 }} />
                                                                             <Text style={styles.setContainerItemDescriptor}>duration</Text>
                                                                         </View>
-                                                                        <TouchableOpacity onPress={() => {
+                                                                        <Pressable style={({ pressed }) => [
+                                                                            {
+                                                                                opacity: pressed ? 0.1 : 1,
+                                                                            }
+                                                                        ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
                                                                             this.deleteSet(exercise.exerciseId, index);
                                                                             this.setState({ showError: false })
                                                                         }}>
                                                                             <Ionicons name="remove" size={20} color={cardColors.logbook} style={{ padding: 12 }} />
-                                                                        </TouchableOpacity>
+                                                                        </Pressable>
                                                                     </ScrollView>
                                                                 </View>
                                                             )

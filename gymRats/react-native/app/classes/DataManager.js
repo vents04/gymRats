@@ -40,7 +40,6 @@ const DataManager = {
     onDateCardChanged: function (date) {
         const time = date.getTime();
         let info = dateCardsSubscriptions[time];
-        console.log(info);
         if (info) {
             DataManager.loadDateCards(date);
         }

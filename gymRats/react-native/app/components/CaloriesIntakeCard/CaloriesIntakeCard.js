@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { Dimensions, Text, TouchableOpacity, View } from 'react-native';
+import { Dimensions, Text, Pressable, View } from 'react-native';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 
 import ApiRequests from '../../classes/ApiRequests';
+import { DataManager } from "../../classes/DataManager";
 
 import ConfirmationBox from '../ConfirmationBox/ConfirmationBox';
 
@@ -46,6 +47,15 @@ export default class CaloriesIntakeCard extends Component {
             protein += parseInt(data.amount * data.itemInstance.protein);
         }
 
+        if (props.data.unknownSourceCaloriesDay && props.data.unknownSourceCaloriesDay.length > 0) {
+            for (let item of props.data.unknownSourceCaloriesDay) {
+                calories += parseInt(item.calories);
+                carbs += parseInt((0.4 * item.calories) / 4);
+                fats += parseInt((0.3 * item.calories) / 9);
+                protein += parseInt((0.3 * item.calories) / 4);
+            }
+        }
+
         newState.calories = calories;
         newState.carbs = carbs;
         newState.fats = fats;
@@ -65,6 +75,15 @@ export default class CaloriesIntakeCard extends Component {
             protein += parseInt(data.amount * data.itemInstance.protein);
         }
 
+        if (this.props.data.unknownSourceCaloriesDay && this.props.data.unknownSourceCaloriesDay.length > 0) {
+            for (let item of this.props.data.unknownSourceCaloriesDay) {
+                calories += parseInt(item.calories);
+                carbs += parseInt((0.4 * item.calories) / 4);
+                fats += parseInt((0.3 * item.calories) / 9);
+                protein += parseInt((0.3 * item.calories) / 4);
+            }
+        }
+
         this.setState({ calories, carbs, fats, protein })
     }
 
@@ -75,7 +94,7 @@ export default class CaloriesIntakeCard extends Component {
     deleteCard = () => {
         ApiRequests.delete(`calories-counter/${this.props.data._id}`, {}, true).then((response) => {
             this.toggleShowConfirmationBox(false);
-            this.props.rerender(this.props.date);
+            DataManager.onDateCardChanged(this.props.date);
         }).catch((error) => {
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
@@ -110,7 +129,7 @@ export default class CaloriesIntakeCard extends Component {
     }
 
     render() {
-        return <TouchableOpacity onPress={() => {
+        return <Pressable onPress={() => {
             if (!this.state.showConfirmationBox) this.props.actionButtonFunction();
         }}>
             <View style={globalStyles.card}>
@@ -124,11 +143,16 @@ export default class CaloriesIntakeCard extends Component {
                     <Text style={globalStyles.cardTitle}>Calories intake</Text>
                     {
                         !this.props.client
-                            ? <TouchableOpacity style={globalStyles.cardTopbarIcon} onPress={() => {
+                            ? <Pressable style={({ pressed }) => [
+                                globalStyles.cardTopbarIcon,
+                                {
+                                    opacity: pressed ? 0.1 : 1,
+                                }
+                            ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
                                 this.setState({ showConfirmationBox: true })
                             }}>
                                 <MaterialCommunityIcons name="delete" size={25} color="#ddd" />
-                            </TouchableOpacity>
+                            </Pressable>
                             : null
                     }
                 </View>
@@ -238,20 +262,24 @@ export default class CaloriesIntakeCard extends Component {
                             {
                                 !this.props.client
                                     ? <View>
-                                        <TouchableOpacity style={[globalStyles.authPageActionButton, {
-                                            backgroundColor: cardColors.caloriesIntake,
-                                            marginTop: 16
-                                        }]} onPress={() => {
-                                            this.props.actionButtonFunction();
-                                        }}>
+                                        <Pressable style={({ pressed }) => [
+                                            globalStyles.authPageActionButton,
+                                            {
+                                                backgroundColor: cardColors.caloriesIntake,
+                                                marginTop: 16
+                                            }
+                                        ]}
+                                            onPress={() => {
+                                                this.props.actionButtonFunction();
+                                            }}>
                                             <Text style={globalStyles.authPageActionButtonText}>Add or update food</Text>
-                                        </TouchableOpacity>
+                                        </Pressable>
                                     </View>
                                     : null
                             }
                         </>
                 }
             </View>
-        </TouchableOpacity>;
+        </Pressable>;
     }
 }

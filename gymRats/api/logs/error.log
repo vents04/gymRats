@@ -8069,5 +8069,59 @@
 {"level":"error","message":"Cannot read properties of undefined (reading 'sufficientWeightGainRanges')"}
 {"level":"error","message":"Cannot read properties of undefined (reading 'sufficientWeightGainRanges')"}
 {"level":"error","message":"Cannot read properties of undefined (reading 'sufficientWeightGainRanges')"}
+<<<<<<< HEAD
 {"level":"error","message":"\"exercises[0].sets[0].reps\" must be a positive number"}
 {"level":"error","message":"Invalid password"}
+=======
+{"level":"error","message":"Provide a barcode to search for"}
+{"level":"error","message":"Provide a barcode to search for"}
+{"level":"error","message":"\"protein\" is required"}
+{"level":"error","message":"\"protein\" is required"}
+{"level":"error","message":"\"protein\" is required"}
+{"level":"error","message":"\"protein\" is required"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'push')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'push')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'push')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'push')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'push')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'push')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'push')"}
+{"level":"error","message":"Invalid workout id"}
+{"level":"error","message":"Invalid workout id"}
+{"level":"error","message":"Invalid workout id"}
+{"level":"error","message":"Invalid workout id"}
+{"level":"error","message":"\"exercises[1].sets[0].reps\" must be a positive number"}
+{"level":"error","message":"\"modelId\" must be a string"}
+{"level":"error","message":"\"modelId\" must be a string"}
+{"level":"error","message":"\"modelId\" must be a string"}
+{"level":"error","message":"\"modelId\" must be a string"}
+{"level":"error","message":"\"platformApiLevel\" must be a string"}
+{"level":"error","message":"mongoose is not defined"}
+{"level":"error","message":"Cannot read properties of undefined (reading '_id')"}
+{"level":"error","message":"Invalid device id"}
+{"level":"error","message":"User with this email was not found"}
+{"level":"error","message":"Token not provided"}
+{"level":"error","message":"Token not provided"}
+{"level":"error","message":"Token not provided"}
+{"level":"error","message":"Token not provided"}
+{"level":"error","message":"Token not provided"}
+{"level":"error","message":"Token not provided"}
+{"level":"error","message":"Token not provided"}
+{"level":"error","message":"Token not provided"}
+{"level":"error","message":"Token not provided"}
+{"level":"error","message":"Token not provided"}
+{"level":"error","message":"Token not provided"}
+{"level":"error","message":"Token not provided"}
+{"level":"error","message":"Token not provided"}
+{"level":"error","message":"Token not provided"}
+{"level":"error","message":"Token not provided"}
+{"level":"error","message":"Token not provided"}
+{"level":"error","message":"Token not provided"}
+{"level":"error","message":"Token not provided"}
+{"level":"error","message":"Token not provided"}
+{"level":"error","message":"Token not provided"}
+{"level":"error","message":"Token not provided"}
+{"level":"error","message":"Token not provided"}
+{"level":"error","message":"Token not provided"}
+{"level":"error","message":"Token not provided"}
+>>>>>>> e86c0232ad293ab2926794ccf83ee7a660fab727

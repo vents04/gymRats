@@ -597,4 +597,24 @@ router.get('/client/:id/date', authenticate, async (req, res, next) => {
     }
 })
 
+router.get("/coach/profile/:id", async (req, res, next) => {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) return next(new ResponseError("Invalid coach id", HTTP_STATUS_CODES.BAD_REQUEST));
+
+    try {
+        const coach = await DbService.getById(COLLECTIONS.PERSONAL_TRAINERS, req.params.id);
+        if (!coach) return next(new ResponseError("Coach was not found", HTTP_STATUS_CODES.NOT_FOUND));
+
+        const userInstance = await DbService.getById(COLLECTIONS.USERS, coach.userId);
+        if (!userInstance) return next(new ResponseError("User was not found", HTTP_STATUS_CODES.NOT_FOUND));
+
+        coach.userInstance = userInstance;
+
+        return res.status(HTTP_STATUS_CODES.OK).send({
+            coach
+        })
+    } catch (err) {
+        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+    }
+})
+
 module.exports = router;

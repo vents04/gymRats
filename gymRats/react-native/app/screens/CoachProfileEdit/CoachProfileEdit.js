@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Image, Linking, ScrollView, Switch, Text, TouchableOpacity, View } from 'react-native';
+import { Image, Linking, ScrollView, Switch, Text, Pressable, View } from 'react-native';
 
 import ApiRequests from '../../classes/ApiRequests';
 
@@ -50,11 +50,15 @@ export default class CoachPage extends Component {
             <View style={globalStyles.safeAreaView}>
                 <View style={globalStyles.pageContainer}>
                     <View style={globalStyles.followUpScreenTopbar}>
-                        <TouchableOpacity onPress={() => {
+                        <Pressable style={({ pressed }) => [
+                            {
+                                opacity: pressed ? 0.1 : 1,
+                            }
+                        ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
                             this.props.navigation.navigate("Coaching", { tab: "myClients" })
                         }}>
                             <Ionicons name="md-arrow-back-sharp" size={25} />
-                        </TouchableOpacity>
+                        </Pressable>
                         <Text style={globalStyles.followUpScreenTitle}>Coach profile edit</Text>
                     </View>
                     {
@@ -101,11 +105,15 @@ export default class CoachPage extends Component {
                                                 */
                                             }
                                         </View>
-                                        <TouchableOpacity onPress={() => {
+                                        <Pressable style={({ pressed }) => [
+                                            {
+                                                opacity: pressed ? 0.1 : 1,
+                                            }
+                                        ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
                                             Linking.openURL(`https://google.com/maps/@${this.state.coach.location.lat},${this.state.coach.location.lng},11z`)
                                         }}>
                                             <Text style={styles.location}>{this.state.coach.location.address}</Text>
-                                        </TouchableOpacity>
+                                        </Pressable>
                                     </View>
                                     <Text style={[globalStyles.notation, {
                                         marginTop: 16

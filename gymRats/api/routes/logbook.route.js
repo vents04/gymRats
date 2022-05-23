@@ -13,7 +13,7 @@ const ResponseError = require('../errors/responseError');
 const { authenticate } = require('../middlewares/authenticate');
 
 const { HTTP_STATUS_CODES, COLLECTIONS, APP_EMAIL, RELATION_STATUSES } = require('../global');
-const { workoutPostValidation, workoutSessionValidation, exercisePostValidation, workoutTemplateCheckValidation } = require('../validation/hapi');
+const { workoutPostValidation, workoutSessionValidation, exercisePostValidation, workoutTemplateCheckValidation, workoutUpdateValidation } = require('../validation/hapi');
 const { quicksort } = require('../helperFunctions/quickSortForExercises');
 
 router.post("/exercise", authenticate, async (req, res, next) => {
@@ -112,6 +112,88 @@ router.get("/workout", authenticate, async (req, res, next) => {
     }
 });
 
+router.delete("/workout/:id", authenticate, async (req, res, next) => {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) return next(new ResponseError("Invalid workout id", HTTP_STATUS_CODES.BAD_REQUEST))
+
+    try {
+        const workout = await DbService.getById(COLLECTIONS.WORKOUTS, req.params.id);
+        if (!workout) return next(new ResponseError("Workout not found", HTTP_STATUS_CODES.NOT_FOUND));
+
+        if (workout.userId.toString() != req.user._id.toString()) return next(new ResponseError("You are not allowed to delete this workout", HTTP_STATUS_CODES.FORBIDDEN));
+
+        await DbService.delete(COLLECTIONS.WORKOUTS, { _id: mongoose.Types.ObjectId(req.params.id) });
+
+        return res.sendStatus(HTTP_STATUS_CODES.OK);
+    } catch (err) {
+        return next(new ResponseError(err.message || "Internal server error", err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+    }
+});
+
+router.put("/workout/:id", authenticate, async (req, res, next) => {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) return next(new ResponseError("Invalid workout id", HTTP_STATUS_CODES.BAD_REQUEST))
+
+    const { error } = workoutUpdateValidation(req.body);
+    if (error) return next(new ResponseError(error.details[0].message, HTTP_STATUS_CODES.BAD_REQUEST));
+
+    try {
+        const workout = await DbService.getById(COLLECTIONS.WORKOUTS, req.params.id);
+        if (!workout) return next(new ResponseError("Workout not found", HTTP_STATUS_CODES.NOT_FOUND));
+
+        if (workout.userId.toString() != req.user._id.toString()) return next(new ResponseError("You are not allowed to update this workout", HTTP_STATUS_CODES.FORBIDDEN));
+
+        let exercises = [];
+        for (let exercise of req.body.exercises) {
+            exercises.push(mongoose.Types.ObjectId(exercise));
+        }
+        req.body.exercises = exercises;
+
+        await DbService.update(COLLECTIONS.WORKOUTS, { _id: mongoose.Types.ObjectId(req.params.id) }, req.body);
+
+        return res.sendStatus(HTTP_STATUS_CODES.OK);
+    } catch (err) {
+        return next(new ResponseError(err.message || "Internal server error", err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+    }
+});
+
+router.get("/has-workout-templates", authenticate, async (req, res, next) => {
+    try {
+        const templates = await DbService.getMany(COLLECTIONS.WORKOUTS, { userId: mongoose.Types.ObjectId(req.user._id) });
+        return res.status(HTTP_STATUS_CODES.OK).send({
+            hasWorkoutTemplates: templates.length > 0
+        })
+    } catch (error) {
+        return next(new ResponseError(error.message || "Internal server error", error.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+    }
+})
+
+router.get("/workout-templates", authenticate, async (req, res, next) => {
+    try {
+        let finalTemplates = [];
+        const templates = await DbService.getMany(COLLECTIONS.WORKOUTS, { userId: mongoose.Types.ObjectId(req.user._id) });
+        let index = 0;
+        for (let template of templates) {
+            finalTemplates.push({
+                _id: template._id,
+                name: template.name,
+                isPublic: template.isPublic,
+                createdDt: template.createdDt,
+                userId: template.userId,
+                exercises: []
+            })
+            for (let exercise of template.exercises) {
+                const exerciseInstance = await DbService.getById(COLLECTIONS.EXERCISES, exercise);
+                finalTemplates[index].exercises.push({ exerciseId: exercise, exerciseInstance: exerciseInstance });
+            }
+            index++;
+        }
+        return res.status(HTTP_STATUS_CODES.OK).send({
+            templates: finalTemplates
+        })
+    } catch (error) {
+        return next(new ResponseError(error.message || "Internal server error", error.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+    }
+})
+
 router.get("/workout/:id/last-session", authenticate, async (req, res, next) => {
     if (!mongoose.Types.ObjectId(req.params.id)) return next(new ResponseError("Invalid workout id", HTTP_STATUS_CODES.BAD_REQUEST));
 
@@ -168,8 +250,8 @@ router.post("/workout-session", authenticate, async (req, res, next) => {
         });
         await DbService.create(COLLECTIONS.WORKOUT_SESSIONS, workoutSession);
 
-        for(let exercise of workoutSession.exercises){
-            await DbService.updateWithInc(COLLECTIONS.EXERCISES, {_id: mongoose.Types.ObjectId(exercise.exerciseId)}, {timesUsed: +1});
+        for (let exercise of workoutSession.exercises) {
+            await DbService.updateWithInc(COLLECTIONS.EXERCISES, { _id: mongoose.Types.ObjectId(exercise.exerciseId) }, { timesUsed: +1 });
         }
 
         return res.sendStatus(HTTP_STATUS_CODES.OK);
@@ -282,7 +364,7 @@ router.post('/check-template', authenticate, async (req, res, next) => {
 router.get("/search", authenticate, async (req, res, next) => {
     let words = req.query.words;
     if (!words) {
-        const exercises = await DbService.getManyWithSortAndLimit(COLLECTIONS.EXERCISES, {}, {timesUsed: -1}, 50);
+        const exercises = await DbService.getManyWithSortAndLimit(COLLECTIONS.EXERCISES, {}, { timesUsed: -1 }, 50);
         return res.status(HTTP_STATUS_CODES.OK).send({
             results: exercises
         })
@@ -290,7 +372,7 @@ router.get("/search", authenticate, async (req, res, next) => {
     try {
         words = words.split(" ");
         let sorted = [];
-        if(words && words != ""){
+        if (words && words != "") {
             for (let word of words) {
                 const exercises = await DbService.getMany(COLLECTIONS.EXERCISES, { keywords: { "$regex": word, "$options": "i" } });
 

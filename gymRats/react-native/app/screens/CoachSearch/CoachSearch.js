@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Alert, Image, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Alert, Image, ScrollView, Text, TextInput, Pressable, View } from 'react-native';
 import BottomSheet from "react-native-gesture-bottom-sheet";
 import Slider from '@react-native-community/slider';
 import * as Location from "expo-location";
@@ -109,18 +109,27 @@ export default class CoachSearch extends Component {
             <View style={globalStyles.safeAreaView}>
                 <View style={globalStyles.pageContainer}>
                     <View style={globalStyles.followUpScreenTopbar}>
-                        <TouchableOpacity onPress={() => {
+                        <Pressable style={({ pressed }) => [
+                            {
+                                opacity: pressed ? 0.1 : 1,
+                            }
+                        ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
                             this.props.navigation.navigate("Coaching", { tab: "myCoach" })
                         }}>
                             <Ionicons name="md-arrow-back-sharp" size={25} />
-                        </TouchableOpacity>
+                        </Pressable>
                         <Text style={globalStyles.followUpScreenTitle}>Coach search</Text>
                     </View>
-                    <TouchableOpacity style={globalStyles.topbarIconContainer} onPress={() => {
+                    <Pressable style={({ pressed }) => [
+                        globalStyles.topbarIconContainer,
+                        {
+                            opacity: pressed ? 0.1 : 1,
+                        }
+                    ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
                         this.filterSheet.current.show();
                     }}>
                         <Text style={globalStyles.actionText}>Filters</Text>
-                    </TouchableOpacity>
+                    </Pressable>
                     {
                         this.state.showError
                             ? <Text style={globalStyles.errorBox}>{this.state.error}</Text>
@@ -141,7 +150,11 @@ export default class CoachSearch extends Component {
                                 ref={this.scrollView}>
                                 {
                                     this.state.searchResults.map((result, index) =>
-                                        <TouchableOpacity key={index} onPress={() => {
+                                        <Pressable style={({ pressed }) => [
+                                            {
+                                                opacity: pressed ? 0.1 : 1,
+                                            }
+                                        ]} key={index} onPress={() => {
                                             this.props.navigation.navigate("CoachPage", { coach: result })
                                         }}>
                                             {
@@ -195,7 +208,7 @@ export default class CoachSearch extends Component {
                                                         </View>
                                                     </View>
                                             }
-                                        </TouchableOpacity>
+                                        </Pressable>
                                     )
                                 }
                             </ScrollView>
@@ -207,14 +220,22 @@ export default class CoachSearch extends Component {
                 <BottomSheet ref={this.filterSheet} height={400} draggable={false}>
                     <View style={styles.bottomSheetTopbar}>
                         <Text style={styles.bottomSheetTitle}>Filters</Text>
-                        <TouchableOpacity onPress={() => {
+                        <Pressable style={({ pressed }) => [
+                            {
+                                opacity: pressed ? 0.1 : 1,
+                            }
+                        ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
                             this.filterSheet.current.close();
                         }}>
                             <Ionicons name="close" size={30} />
-                        </TouchableOpacity>
+                        </Pressable>
                     </View>
                     <ScrollView style={styles.cardsContainer}>
-                        <TouchableOpacity onPress={() => {
+                        <Pressable style={({ pressed }) => [
+                            {
+                                opacity: pressed ? 0.1 : 1,
+                            }
+                        ]} onPress={() => {
                             this.filterSheet.current.close();
                         }}>
                             <Text style={styles.sheetSectionTitle}>Minimum rating is {this.state.minRating}/5</Text>
@@ -231,10 +252,15 @@ export default class CoachSearch extends Component {
                                     this.setState({ minRating: value, filtersChanged: true });
                                 }}
                             />
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => {
+                        </Pressable>
+                        <Pressable style={({ pressed }) => [
+                            {
+                                opacity: pressed ? 0.1 : 1,
+                                marginTop: 32
+                            }
+                        ]} onPress={() => {
                             this.filterSheet.current.close();
-                        }} style={{ marginTop: 32 }}>
+                        }}>
                             <Text style={styles.sheetSectionTitle}>Maximum distance is {
                                 this.state.maxDistance != 0
                                     ? `${this.state.maxDistance}km`
@@ -256,7 +282,11 @@ export default class CoachSearch extends Component {
                                                 this.setState({ maxDistance: value, filtersChanged: true });
                                             }}
                                         />
-                                        <TouchableOpacity onPress={() => {
+                                        <Pressable style={({ pressed }) => [
+                                            {
+                                                opacity: pressed ? 0.1 : 1,
+                                            }
+                                        ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
                                             this.filterSheet.current.show();
                                             this.setState({ maxDistance: 0 });
                                         }}>
@@ -264,9 +294,13 @@ export default class CoachSearch extends Component {
                                                 fontFamily: "MainBold",
                                                 marginTop: 8
                                             }]}>Unset maximum distance</Text>
-                                        </TouchableOpacity>
+                                        </Pressable>
                                     </>
-                                    : <TouchableOpacity onPress={() => {
+                                    : <Pressable style={({ pressed }) => [
+                                        {
+                                            opacity: pressed ? 0.1 : 1,
+                                        }
+                                    ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
                                         this.filterSheet.current.show();
                                         this.setState({ maxDistance: 30, filtersChanged: true });
                                     }}>
@@ -274,20 +308,24 @@ export default class CoachSearch extends Component {
                                             fontFamily: "MainBold",
                                             marginTop: 8
                                         }]}>Set maximum distance</Text>
-                                    </TouchableOpacity>
+                                    </Pressable>
                             }
-                        </TouchableOpacity>
+                        </Pressable>
                         {
                             this.state.filtersChanged
-                                ? <TouchableOpacity style={[globalStyles.authPageActionButton, {
-                                    marginTop: 16
-                                }]} onPress={() => {
+                                ? <Pressable style={({ pressed }) => [
+                                    globalStyles.authPageActionButton,
+                                    {
+                                        opacity: pressed ? 0.1 : 1,
+                                        marginTop: 16
+                                    }
+                                ]} onPress={() => {
                                     this.filterSheet.current.close();
                                     this.setState({ hasChanges: false, showError: false, error: "" });
                                     this.searchCoaches();
                                 }}>
                                     <Text style={globalStyles.authPageActionButtonText}>Apply filters</Text>
-                                </TouchableOpacity>
+                                </Pressable>
                                 : null
                         }
                     </ScrollView>

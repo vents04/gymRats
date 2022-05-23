@@ -95,14 +95,15 @@ a {
 }
 
 .action-button {
-  background-color: #66d37e;
+  background-color: #1f6cb0;
   color: white;
-  padding: 0.5rem 0.75rem;
-  font-family: "Main Black", sans-serif;
+  padding: 0.75rem;
+  font-family: "Main Bold", sans-serif;
   border-radius: 4px;
   border: none;
-  font-size: 16px;
+  font-size: 14px;
   cursor: pointer;
+  width: 100%;
 }
 
 .notation {

@@ -86,6 +86,87 @@ const LOGBOOK_PROGRESS_NOTATIONS = {
     RAPID_STRENGTH_GAIN: "RAPID_STRENGTH_GAIN",
 }
 
+const SUPPORTED_MIME_TYPES = [
+    "audio/aac",
+    "image/avif",
+    "video/x-msvideo",
+    "image/bmp",
+    "application/x-bzip",
+    "application/x-bzip2",
+    "text/csv",
+    "application/msword",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "application/epub+zip",
+    "application/gzip",
+    "image/gif",
+    "image/vnd.microsoft.icon",
+    "image/jpeg",
+    "application/json",
+    "audio/mpeg",
+    "video/mp4",
+    "video/mpeg",
+    "application/vnd.oasis.opendocument.presentation",
+    "application/vnd.oasis.opendocument.spreadsheet",
+    "application/vnd.oasis.opendocument.text",
+    "audio/ogg",
+    "video/ogg",
+    "application/ogg",
+    "image/png",
+    "application/pdf",
+    "application/vnd.ms-powerpoint",
+    "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+    "application/vnd.rar",
+    "application/rtf",
+    "image/svg+xml",
+    "application/x-tar",
+    "image/tiff",
+    "text/plain",
+    "audio/wav",
+    "audio/webm",
+    "video/webm",
+    "image/webp",
+    "application/vnd.ms-excel",
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "application/zip",
+    "video/3gpp",
+    "audio/3gpp",
+    "video/3gpp2",
+    "audio/3gpp2",
+    "application/x-7z-compressed"
+]
+
+const IMAGE_VISUALIZATION_MIME_TYPES = [
+    "image/avif",
+    "image/bmp",
+    "image/gif",
+    "image/vnd.microsoft.icon",
+    "image/jpeg",
+    "image/png",
+    "image/svg+xml",
+    "image/tiff",
+    "image/webp",
+]
+
+const VIDEO_VISUALIZATION_MIME_TYPES = [
+    "video/x-msvideo",
+    "video/mp4",
+    "video/mpeg",
+    "video/ogg",
+    "video/webm",
+    "video/3gpp",
+    "video/3gpp2",
+]
+
+const AUDIO_PLAY_MIME_TYPES = [
+    "audio/aac",
+    "audio/mpeg",
+    "audio/ogg",
+    "audio/wav",
+    "audio/webm",
+    "audio/3gpp",
+    "audio/3gpp2"
+]
+
 module.exports = {
     AUTHENTICATION_TOKEN_KEY,
     ROOT_URL_API,
@@ -101,4 +182,8 @@ module.exports = {
     CALORIES_COUNTER_UNITS,
     PROGRESS_NOTATION,
     LOGBOOK_PROGRESS_NOTATIONS,
+    SUPPORTED_MIME_TYPES,
+    IMAGE_VISUALIZATION_MIME_TYPES,
+    VIDEO_VISUALIZATION_MIME_TYPES,
+    AUDIO_PLAY_MIME_TYPES
 }
