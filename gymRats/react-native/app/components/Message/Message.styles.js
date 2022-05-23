@@ -38,5 +38,31 @@ export default StyleSheet.create({
     textMessage: {
         fontFamily: "MainRegular",
         fontSize: 14
+    },
+    fileMessage: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        padding: 16,
+        borderRadius: 4,
+        borderColor: '#e7e7e7',
+        borderWidth: 1,
+        marginHorizontal: 10,
+    },
+    filePreviewText: {
+        fontFamily: "MainRegular",
+        fontSize: 14,
+        color: "#1f6cb0",
+        marginBottom: 12
+    },
+    fileName: {
+        fontFamily: "MainBold",
+        fontSize: 16
+    },
+    downloadContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginTop: 16
     }
 });

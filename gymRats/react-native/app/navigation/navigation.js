@@ -47,6 +47,7 @@ import * as Notifications from 'expo-notifications';
 import { useEffect } from 'react';
 import { useRef } from 'react';
 import { useState } from 'react';
+import FilePreview from '../screens/FilePreview/FilePreview';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -245,6 +246,13 @@ const chatsScreenStack = () => {
                     headerShown: false
                 }}
                 component={Chat}
+            />
+            <Stack.Screen
+                name="FilePreview"
+                options={{
+                    headerShown: false
+                }}
+                component={FilePreview}
             />
         </Stack.Navigator>
     )

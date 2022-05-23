@@ -21,7 +21,28 @@ const messageSchema = mongoose.Schema({
             default: null
         },
         file: {
-            type: String,
+            type: {
+                originalName: {
+                    type: String,
+                    default: null
+                },
+                name: {
+                    type: String,
+                    default: null
+                },
+                size: {
+                    type: Number,
+                    default: null
+                },
+                mimeType: {
+                    type: String,
+                    default: null
+                },
+                extension: {
+                    type: String,
+                    default: null
+                }
+            },
             required: function () { return this.text.length == 0 },
             default: null
         }

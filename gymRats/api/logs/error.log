@@ -8095,3 +8095,28 @@
 {"level":"error","message":"mongoose is not defined"}
 {"level":"error","message":"Cannot read properties of undefined (reading '_id')"}
 {"level":"error","message":"Invalid device id"}
+{"level":"error","message":"User with this email was not found"}
+{"level":"error","message":"Token not provided"}
+{"level":"error","message":"Token not provided"}
+{"level":"error","message":"Token not provided"}
+{"level":"error","message":"Token not provided"}
+{"level":"error","message":"Token not provided"}
+{"level":"error","message":"Token not provided"}
+{"level":"error","message":"Token not provided"}
+{"level":"error","message":"Token not provided"}
+{"level":"error","message":"Token not provided"}
+{"level":"error","message":"Token not provided"}
+{"level":"error","message":"Token not provided"}
+{"level":"error","message":"Token not provided"}
+{"level":"error","message":"Token not provided"}
+{"level":"error","message":"Token not provided"}
+{"level":"error","message":"Token not provided"}
+{"level":"error","message":"Token not provided"}
+{"level":"error","message":"Token not provided"}
+{"level":"error","message":"Token not provided"}
+{"level":"error","message":"Token not provided"}
+{"level":"error","message":"Token not provided"}
+{"level":"error","message":"Token not provided"}
+{"level":"error","message":"Token not provided"}
+{"level":"error","message":"Token not provided"}
+{"level":"error","message":"Token not provided"}

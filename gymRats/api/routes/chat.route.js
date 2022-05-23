@@ -9,6 +9,10 @@ const ResponseError = require('../errors/responseError');
 const { authenticate } = require('../middlewares/authenticate');
 
 const { HTTP_STATUS_CODES, COLLECTIONS, DEFAULT_ERROR_MESSAGE } = require('../global');
+const AuthenticationService = require('../services/authentication.service');
+
+const fs = require('fs');
+const path = require('path');
 
 router.get('/', authenticate, async (req, res, next) => {
     try {
@@ -111,5 +115,57 @@ router.put('/:id/seen', authenticate, async function (req, res, next) {
         return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
     }
 });
+
+router.get("/:id/file/:messageId", async (req, res, next) => {
+    if (!req.params.id) return next(new ResponseError("Invalid chat id", HTTP_STATUS_CODES.BAD_REQUEST));
+    if (!req.params.messageId) return next(new ResponseError("Invalid message id", HTTP_STATUS_CODES.BAD_REQUEST));
+    if (!req.query.token) return next(new ResponseError("Token not provided", HTTP_STATUS_CODES.BAD_REQUEST));
+
+    try {
+        let user = null;
+        const verified = AuthenticationService.verifyToken(req.query.token);
+        if (!verified) valid = false;
+        else {
+            user = await DbService.getById(COLLECTIONS.USERS, verified._id);
+            if (!user) valid = false;
+            else {
+                if (verified.iat <= new Date(user.lastPasswordReset).getTime() / 1000) valid = false;
+            }
+        }
+        if (!valid) return next(new ResponseError("Invalid token", HTTP_STATUS_CODES.BAD_REQUEST));
+
+        const chat = await DbService.getById(COLLECTIONS.CHATS, req.params.id);
+        if (!chat) return next(new ResponseError("Chat not found", HTTP_STATUS_CODES.NOT_FOUND));
+
+        let isParticipant = false;
+        if (chat.clientId.toString() == user._id.toString()) isParticipant = true;
+        else {
+            const personalTrainer = await DbService.getById(COLLECTIONS.PERSONAL_TRAINERS, chat.personalTrainerId);
+            if (personalTrainer.userId.toString() == user._id.toString()) isParticipant = true;
+        }
+
+        if (!isParticipant) {
+            return next(new ResponseError("You are not a participant of this chat", HTTP_STATUS_CODES.FORBIDDEN));
+        }
+
+        const message = await DbService.getById(COLLECTIONS.MESSAGES, req.params.messageId);
+        if (message.chatId.toString() != req.params.id) {
+            return next(new ResponseError("Message not in this chat", HTTP_STATUS_CODES.NOT_FOUND));
+        }
+
+        const filePath = __dirname + "\\..\\ugc\\" + message.file.name + "." + message.file.extension;
+        var stat = fileSystem.statSync(filePath);
+
+        res.writeHead(200, {
+            'Content-Type': file.mimeType,
+            'Content-Length': stat.size
+        });
+
+        var readStream = fileSystem.createReadStream(filePath);
+        readStream.pipe(response);
+    } catch (err) {
+        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+    }
+})
 
 module.exports = router;

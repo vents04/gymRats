@@ -20,6 +20,14 @@
           "color": "#ffffff",
           "sounds": ["./assets/notifications/notification.wav"]
         }
+      ],
+      [
+        "expo-media-library",
+        {
+          "photosPermission": "Allow $(PRODUCT_NAME) to access your files.",
+          "savePhotosPermission": "Allow $(PRODUCT_NAME) to save files.",
+          "isAccessMediaLocationEnabled": true
+        }
       ]
     ],
     "updates": {
@@ -35,14 +43,16 @@
         "NSCameraUsageDescription": "Allow $(PRODUCT_NAME) to access your camera",
         "NSMicrophoneUsageDescription": "Allow $(PRODUCT_NAME) to access your microphone"
       },
-      "bundleIdentifier": "com.gymrats.android"
+      "bundleIdentifier": "com.gymrats.android",
+      "usesIcloudStorage": true
     },
     "android": {
       "permissions": [
         "android.permission.CAMERA",
         "android.permission.READ_EXTERNAL_STORAGE",
         "android.permission.WRITE_EXTERNAL_STORAGE",
-        "android.permission.RECORD_AUDIO"
+        "android.permission.RECORD_AUDIO",
+        "android.useNextNotificationsApi"
       ],
       "googleServicesFile": "./google-services.json",
       "package": "com.gymrats.android",

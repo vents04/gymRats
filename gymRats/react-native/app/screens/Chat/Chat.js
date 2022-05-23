@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
-import { Image, Text, View, ScrollView, TextInput, Pressable, BackHandler } from 'react-native';
+import { Image, Text, View, ScrollView, TextInput, Pressable, BackHandler, Alert, ActivityIndicator } from 'react-native';
 import { BackButtonHandler } from '../../classes/BackButtonHandler';
+import { MaterialIcons } from '@expo/vector-icons';
+import * as DocumentPicker from 'expo-document-picker';
+import * as FileSystem from 'expo-file-system';
 
 import socketClass from '../../classes/Socket';
 const socket = socketClass.initConnection();
@@ -11,7 +14,7 @@ import Message from '../../components/Message/Message';
 
 import { Ionicons } from '@expo/vector-icons';
 
-import { HTTP_STATUS_CODES } from '../../../global';
+import { HTTP_STATUS_CODES, SUPPORTED_MIME_TYPES } from '../../../global';
 
 import globalStyles from '../../../assets/styles/global.styles';
 import styles from './Chat.styles';
@@ -26,6 +29,7 @@ export default class Chat extends Component {
         this.state = {
             message: "",
             showError: false,
+            isFileBeingUploaded: false,
             error: "",
             chat: null,
             chatId: null
@@ -53,14 +57,15 @@ export default class Chat extends Component {
     sendTextMessage = (messageInfo) => {
         socket.emit("send-text-message", { messageInfo })
         this.setState({ message: "", showError: false }, () => {
-            this.getChat(this.state.chatId);
+            setTimeout(() => {
+                this.getChat(this.state.chatId);
+            }, 500);
         });
         socket.emit("update-last-message", {})
     }
 
     receiveTextMessage = () => {
-        socket.on("receive-text-message", () => {
-            this.updateSeenStatus(this.state.chatId)
+        socket.on("receive-message", (data) => {
             this.getChat(this.state.chatId)
         });
     }
@@ -70,6 +75,7 @@ export default class Chat extends Component {
     }
 
     getChat = (id) => {
+        console.log(new Date())
         ApiRequests.get(`chat/${id}`, {}, true).then((response) => {
             this.setState({ chat: response.data.chat }, () => {
                 this.scrollView.current.scrollToEnd({ animated: true });
@@ -90,8 +96,7 @@ export default class Chat extends Component {
     }
 
     updateSeenStatus = (id) => {
-        ApiRequests.put(`chat/${id}/seen`, {}, {}, true).then((response) => {
-        }).catch((error) => {
+        ApiRequests.put(`chat/${id}/seen`, {}, {}, true).catch((error) => {
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
                     this.setState({ showError: true, error: error.response.data });
@@ -116,6 +121,45 @@ export default class Chat extends Component {
     componentWillUnmount() {
         BackHandler.removeEventListener("hardwareBackPress", this.backAction);
         this.disconnectUserFromChat()
+    }
+
+    pickDocument = async () => {
+        DocumentPicker.getDocumentAsync({ type: SUPPORTED_MIME_TYPES }).then((result) => {
+            if (result.type == "success") {
+                const file = {
+                    uri: result.uri,
+                    type: result.type,
+                    name: result.name,
+                    mimeType: result.mimeType,
+                    size: result.size
+                }
+                if (file.size >= 5e+7) {
+                    Alert.alert("File upload error", "The size of the file you have selected is too large")
+                    return;
+                }
+                console.log(file.mimeType);
+                if (!SUPPORTED_MIME_TYPES.includes(file.mimeType)) {
+                    Alert.alert("File upload error", "This file type is not supported");
+                    return;
+                }
+                this.setState({ isFileBeingUploaded: true }, () => {
+                    this.sendFileMessage(file)
+                })
+            }
+        });
+    }
+
+    sendFileMessage = async (file) => {
+        const fileBase64 = await FileSystem.readAsStringAsync(file.uri, { encoding: 'base64' });
+        console.log(fileBase64.length);
+        socket.emit("send-file-message", { messageInfo: { senderId: this.state.chat.user._id, base64: fileBase64, name: file.name, size: file.size, mimeType: file.mimeType } })
+        this.setState({ showError: false }, () => {
+            setTimeout(() => {
+                this.getChat(this.state.chatId);
+                this.setState({ isFileBeingUploaded: false })
+            }, 500);
+        });
+        socket.emit("update-last-message", {})
     }
 
     render() {
@@ -149,27 +193,48 @@ export default class Chat extends Component {
                             <ScrollView ref={this.scrollView} style={styles.chatMessagesContainer}>
                                 {
                                     this.state.chat.messages.map((message, index) =>
-                                        <Message key={index} message={message} user={this.state.chat.user} oppositeUser={this.state.chat.oppositeUser} />
+                                        <Message key={index} message={message} user={this.state.chat.user} oppositeUser={this.state.chat.oppositeUser} {...this.props} />
                                     )
                                 }
                             </ScrollView>
                             <View style={styles.chatInputContainer}>
-                                <TextInput
-                                    value={this.state.message}
-                                    style={styles.chatInput}
-                                    placeholder="Type a message..."
-                                    onChangeText={(val) => { this.setState({ message: val, showError: false }) }} />
-                                <View style={styles.chatActionButtonContainer}>
-                                    <Pressable style={({ pressed }) => [
-                                        {
-                                            opacity: pressed ? 0.1 : 1,
-                                        }
-                                    ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 15 }} onPress={() => {
-                                        this.sendTextMessage({ senderId: this.state.chat.user._id, message: this.state.message })
-                                    }}>
-                                        <Ionicons name="ios-send" size={24} style={styles.chatInputButton} color="#1f6cb0" />
-                                    </Pressable>
-                                </View>
+                                {
+                                    !this.state.isFileBeingUploaded
+                                        ? <>
+                                            <TextInput
+                                                value={this.state.message}
+                                                style={styles.chatInput}
+                                                placeholder="Type a message..."
+                                                onChangeText={(val) => { this.setState({ message: val, showError: false }) }} />
+                                            <View style={styles.chatActionButtonContainer}>
+                                                {
+                                                    this.state.message && this.state.message.length > 0
+                                                        ? <Pressable style={({ pressed }) => [
+                                                            {
+                                                                opacity: pressed ? 0.1 : 1,
+                                                            }
+                                                        ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 15 }} onPress={() => {
+                                                            this.sendTextMessage({ senderId: this.state.chat.user._id, message: this.state.message })
+                                                        }}>
+                                                            <Ionicons name="ios-send" size={24} color="#1f6cb0" />
+                                                        </Pressable>
+                                                        : <Pressable style={({ pressed }) => [
+                                                            {
+                                                                opacity: pressed ? 0.1 : 1,
+                                                            }
+                                                        ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 15 }} onPress={() => {
+                                                            this.pickDocument();
+                                                        }}>
+                                                            <MaterialIcons name="file-present" size={30} color="#1f6cb0" />
+                                                        </Pressable>
+                                                }
+                                            </View>
+                                        </>
+                                        : <View style={styles.uploadingContainer}>
+                                            <Text style={styles.uploadingText}>The file is being uploaded</Text>
+                                            <ActivityIndicator size="small" color="#1f6cb0" />
+                                        </View>
+                                }
 
                             </View>
                         </>

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import { DataManager } from "../../classes/DataManager";
 
-import { Dimensions, Pressable, RefreshControl, ScrollView, Text, TouchableHighlight, TouchableNativeFeedback, TouchableWithoutFeedback, View } from 'react-native';
+import { BackHandler, Dimensions, Pressable, RefreshControl, ScrollView, Text, TouchableHighlight, TouchableNativeFeedback, TouchableWithoutFeedback, View } from 'react-native';
 import BottomSheet from "react-native-gesture-bottom-sheet";
 import DateTimePicker from '@react-native-community/datetimepicker';
 
@@ -94,12 +94,21 @@ export default class Calendar extends Component {
         }
     }
 
+    closeBottomSheet = () => {
+        this.bottomSheet.current.close();
+        return true;
+    }
+
     componentDidMount() {
         this.mounted = true;
         if (this.state.selectedDate && !this.subscription) {
             this.subscription = DataManager.subscribeForDateCards(this.state.selectedDate, this.onData, this.onError);
         }
         this.getCalendarActionButtonBucket();
+        this.backHandler = BackHandler.addEventListener(
+            "hardwareBackPress",
+            this.closeBottomSheet
+        );
     }
 
     componentWillUnmount() {
@@ -108,6 +117,10 @@ export default class Calendar extends Component {
             DataManager.unsubscribeForDateCards(this.subscription);
             this.subscription = null;
         }
+        this.backHandler = BackHandler.removeEventListener(
+            "hardwareBackPress",
+            this.closeBottomSheet
+        );
     }
 
     reloadDateAfterDelete = (date) => {

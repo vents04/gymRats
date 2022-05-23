@@ -64,27 +64,24 @@ const App = () => {
       setExpoPushToken(token);
       AsyncStorage.setItem("@gymRats:expoPushToken", token);
     })
-
     /*
-    notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
-      console.log(notification.request.content.data.chatId)
-      if (notification && notification.request.content.data.chatId) {
-        console.log("smenih go na true vuv app.js");
-        setChatNotification(true)
-      }
-      setNotification(notification);
-    });
-
+        notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
+          console.log(notification.request.content.data.chatId)
+          if (notification && notification.request.content.data.chatId) {
+            console.log("smenih go na true vuv app.js");
+            setChatNotification(true)
+          }
+          setNotification(notification);
+        });
+    */
     responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
       console.log("notification response", response);
       if (response.notification && response.notification.request
         && response.notification.request.content && response.notification.request.content.data
         && response.notification.request.content.data.chatId) {
         console.log("tukaaa sum za redirect kum chats")
-        this.props.navigation.navigate("Chats");
       }
     });
-    */
 
     return () => {
       subscription.remove();
@@ -105,6 +102,7 @@ const App = () => {
     let token;
     if (Device.isDevice) {
       const { status: existingStatus } = await Notifications.getPermissionsAsync();
+      console.log("lkasdklasjdlkasjdlkjasdlkjalkdhaksd", existingStatus)
       let finalStatus = existingStatus;
       if (existingStatus !== 'granted') {
         const { status } = await Notifications.requestPermissionsAsync();

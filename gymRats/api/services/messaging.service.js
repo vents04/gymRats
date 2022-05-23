@@ -4,12 +4,15 @@ const mongoose = require("mongoose");
 const ResponseError = require('../errors/responseError');
 const Chat = require('../db/models/messaging/chat.model');
 const Message = require('../db/models/messaging/message.model');
+const fs = require('fs');
+const { uuid } = require('uuidv4');
+const mime = require('mime-types')
 
 const MessagingService = {
     createChat: (personalTrainerId, clientId) => {
         return new Promise(async (resolve, reject) => {
             try {
-                const chat = await DbService.getOne(COLLECTIONS.CHATS, {"$or": [{ personalTrainerId: mongoose.Types.ObjectId(personalTrainerId), clientId: mongoose.Types.ObjectId(clientId)}, { personalTrainerId: mongoose.Types.ObjectId(clientId), clientId: mongoose.Types.ObjectId(personalTrainerId)}]});
+                const chat = await DbService.getOne(COLLECTIONS.CHATS, { "$or": [{ personalTrainerId: mongoose.Types.ObjectId(personalTrainerId), clientId: mongoose.Types.ObjectId(clientId) }, { personalTrainerId: mongoose.Types.ObjectId(clientId), clientId: mongoose.Types.ObjectId(personalTrainerId) }] });
                 if (!chat) {
                     const chat = new Chat({
                         personalTrainerId: mongoose.Types.ObjectId(personalTrainerId),
@@ -51,14 +54,25 @@ const MessagingService = {
         })
     },
 
-    sendFileMessage: (chatId, senderId, base64) => {
+    sendFileMessage: (chatId, senderId, base64, name, size, mimeType) => {
         return new Promise(async (resolve, reject) => {
             try {
+                const fileName = uuid();
+                const fileContents = new Buffer.from(base64, 'base64')
+                const nameSplitted = name.split(".");
+                const extension = mime.extension(mimeType);
+                fs.writeFileSync(__dirname + "\\..\\ugc\\" + fileName + "." + extension, fileContents);
                 const fileMessage = new Message({
                     senderId: mongoose.Types.ObjectId(senderId),
                     chatId: mongoose.Types.ObjectId(chatId),
                     message: {
-                        file: base64
+                        file: {
+                            name: fileName,
+                            mimeType,
+                            size,
+                            originalName: name,
+                            extension
+                        }
                     }
                 })
 
@@ -71,8 +85,8 @@ const MessagingService = {
                 }
                 await DbService.create(COLLECTIONS.MESSAGES, fileMessage);
                 resolve();
-
             } catch (err) {
+                console.log(err)
                 reject(new ResponseError("Internal server error", err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
             }
         })
