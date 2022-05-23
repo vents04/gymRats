@@ -48,12 +48,7 @@ export default class Message extends Component {
                 const asset = await MediaLibrary.createAssetAsync(fileUri);
                 if (!albumExists) await MediaLibrary.createAlbumAsync('Gym Rats', asset, false);
                 else await MediaLibrary.addAssetsToAlbumAsync(asset, albumExists.id, true)
-                Alert.alert("Downloaded successfully", `The file ${this.props.message.message.file.originalName.replace(`.${this.props.message.message.file.extension}`, "") + "." + this.props.message.message.file.extension} was downloaded to the folder named Gym Rats`, [{ text: "Close", onPress: () => { } }, {
-                    text: "Open file",
-                    onPress: () => {
-                        Linking.openURL(`${ROOT_URL_API}/ugc/${this.props.message.message.file.name}.${this.props.message.message.file.extension}`)
-                    }
-                }])
+                Alert.alert("Downloaded successfully", `The file ${this.props.message.message.file.originalName.replace(`.${this.props.message.message.file.extension}`, "") + "." + this.props.message.message.file.extension} was downloaded to the folder named Gym Rats`)
             }
         } catch (error) {
             Alert.alert("File download error", "There was an error while downloading and saving this file to your system");
