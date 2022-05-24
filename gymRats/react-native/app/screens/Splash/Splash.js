@@ -7,7 +7,6 @@ import Auth from '../../classes/Auth';
 import User from '../../classes/User';
 
 import socketClass from '../../classes/Socket';
-const socket = socketClass.initConnection();
 
 import globalStyles from '../../../assets/styles/global.styles';
 import styles from './Splash.styles';
@@ -67,7 +66,12 @@ export default class Splash extends Component {
                 });
             }
             if (isAuthenticated) {
-                socketClass.joinChatsRoom(socket);
+                let chatsRoomSocket = socketClass.getChatsRoomSocket();
+                if(!chatsRoomSocket) {
+                    chatsRoomSocket = socketClass.initConnection();
+                    socketClass.setChatsRoomSocket(chatsRoomSocket);
+                }
+                socketClass.joinChatsRoom();
                 this.submitDeviceInfo();
             }
             this.props.navigation.reset({

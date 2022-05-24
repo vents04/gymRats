@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { Image, ScrollView, Text, Pressable, View } from 'react-native';
 
 import socketClass from '../../classes/Socket';
-const socket = socketClass.initConnection();
 
 import ApiRequests from '../../classes/ApiRequests';
 
@@ -31,11 +30,11 @@ export default class Chats extends Component {
         if (this.props.route && this.props.route.params) {
             console.log(this.props)
             if (this.props.route.params.chatId) {
-                this.props.navigation.navigate("Chat", { chatId: this.props.route.params.chatId })
+                this.props.navigation.navigate("Chat", { chatId: this.props.route.params.chatId})
             }
         }
-        this.getChats();
         this.updateLastMessage()
+        this.getChats();
     }
 
     getChats = () => {
@@ -57,7 +56,7 @@ export default class Chats extends Component {
     }
 
     updateLastMessage = () => {
-        socket.on("last-message-to-be-updated", () => {
+        socketClass.getChatsRoomSocket().on("last-message-to-be-updated", () => {
             this.getChats()
         });
     }
