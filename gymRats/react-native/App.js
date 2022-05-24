@@ -58,7 +58,7 @@ const App = () => {
       };
     });
     Linking.getInitialURL().then((url) => {
-      Alert.alert("URLA", url);
+
     })
     socket.initConnection();
     const subscription = AppState.addEventListener("change", async nextAppState => {
@@ -81,16 +81,6 @@ const App = () => {
       setExpoPushToken(token);
       AsyncStorage.setItem("@gymRats:expoPushToken", token);
     })
-    /*
-        notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
-          console.log(notification.request.content.data.chatId)
-          if (notification && notification.request.content.data.chatId) {
-            console.log("smenih go na true vuv app.js");
-            setChatNotification(true)
-          }
-          setNotification(notification);
-        });
-    */
     responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
       console.log("notification response", response);
       if (response.notification && response.notification.request
@@ -102,7 +92,6 @@ const App = () => {
 
     return () => {
       if (subscription) subscription.remove();
-      Notifications.removeNotificationSubscription(notificationListener.current);
       Notifications.removeNotificationSubscription(responseListener.current);
     };
   }, []);
