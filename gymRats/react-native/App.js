@@ -2,7 +2,7 @@ import 'react-native-gesture-handler';
 import React, { useRef, useState, useEffect } from 'react';
 import { default as AsyncStorage } from '@react-native-async-storage/async-storage';
 import { AUTHENTICATION_TOKEN_KEY } from './global';
-import { AppState, Button, Platform, Text } from 'react-native';
+import { Alert, AppState, Button, Platform, Text } from 'react-native';
 import ApiRequests from "./app/classes/ApiRequests";
 import { ABTesting, campaigns } from './app/classes/ABTesting';
 
@@ -34,7 +34,7 @@ Notifications.setNotificationHandler({
 
 const App = () => {
   const linking = {
-    prefixes: ["gymrats://"],
+    prefixes: ["gymrats://", "https://gymrats.uploy.app/coach-profile"],
   };
   const [expoPushToken, setExpoPushToken] = useState('');
   const [notification, setNotification] = useState(false);
@@ -43,6 +43,23 @@ const App = () => {
   const responseListener = useRef();
 
   useEffect(() => {
+    Linking.addEventListener('url', (event) => {
+      let data = event.url;
+      if (data.includes('gymrats://')) {
+        let url = data.replace('gymrats://', '');
+        let urlSplit = url.split('/');
+        let urlScreen = urlSplit[0];
+        let urlId = urlSplit[1];
+        if (urlScreen == "coach-profile") {
+
+        }
+      } else {
+
+      };
+    });
+    Linking.getInitialURL().then((url) => {
+      Alert.alert("URLA", url);
+    })
     socket.initConnection();
     const subscription = AppState.addEventListener("change", async nextAppState => {
       if (nextAppState == 'background') {
