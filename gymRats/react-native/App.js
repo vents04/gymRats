@@ -34,7 +34,7 @@ Notifications.setNotificationHandler({
 
 const App = () => {
   const linking = {
-    prefixes: ["gymrats://"],
+    prefixes: ["gymrats://", "https://gymrats.uploy.app/coach-profile"],
   };
   const [expoPushToken, setExpoPushToken] = useState('');
   const [notification, setNotification] = useState(false);
@@ -45,7 +45,17 @@ const App = () => {
   useEffect(() => {
     Linking.addEventListener('url', (event) => {
       let data = event.url;
-      Alert.alert("URLA", data.toString());
+      if (data.includes('gymrats://')) {
+        let url = data.replace('gymrats://', '');
+        let urlSplit = url.split('/');
+        let urlScreen = urlSplit[0];
+        let urlId = urlSplit[1];
+        if (urlScreen == "coach-profile") {
+
+        }
+      } else {
+
+      };
     });
     Linking.getInitialURL().then((url) => {
       Alert.alert("URLA", url);
