@@ -1,9 +1,9 @@
 const { Expo } = require('expo-server-sdk');
 const mongoose = require('mongoose')
-const { COLLECTIONS } = require('../global');
+const { COLLECTIONS, DEFAULT_ERROR_MESSAGE } = require('../global');
 const DbService = require('./db.service');
 
-let expo = new Expo({ accessToken: process.env.EXPO_ACCESS_TOKEN });
+let expo = new Expo();
 
 let chatTimeouts = [];
 
@@ -17,7 +17,6 @@ const NOTIFICATION_PRIORITIES = {
 
 class Notification {
     constructor(to, data, title, body, ttl, expiration, priority, subtitle, sound, badge, channelId, categoryId, mutableContent) {
-        console.log(this.getDataByteSize(data));
         if (typeof to !== "string" && !Array.isArray(to)) throw new Error("Notification to should be a string<ExpoPushToken> or an array of strings<ExpoPushToken>]");
         if (typeof to === "string" && !Expo.isExpoPushToken(to)) throw new Error("Notification to should be a string<ExpoPushToken>");
         if (Array.isArray(to) && !this.checkIfArrayOfStringsIsArrayOfValidExpoPushTokens(to)) throw new Error("Notification to[" + i + "] should be a string<ExpoPushToken>");
@@ -132,16 +131,28 @@ const NotificationsService = {
         return expoPushTokens;
     },
 
-    sendNotifications: (to, data, title, body, ttl, expiration, priority, subtitle, sound, badge, channelId, categoryId, mutableContent) => {
-
+    constructNotification: (data) => {
+        try {
+            console.log(...data)
+            const notification = new Notification(...data);
+            if (!notification) throw new Error("Notification object could not be constructed");
+            return notification;
+        } catch (err) {
+            console.log(err);
+            throw new Error(err.message);
+        }
     },
 
-    sendMarketingNotificationsWithExpoPushTokens: async (tokens,) => {
-
-    },
-
-    sendMarketingNotificationsWithDatabaseFilter: async (filter,) => {
-
+    sendNotification: (notification) => {
+        return new Promise(async (resolve, reject) => {
+            try {
+                if (!notification instanceof Notification) throw new Error("Notification object is not an instance of Notification");
+                const ticket = await expo.sendPushNotificationsAsync([notification]);
+                resolve(ticket);
+            } catch (err) {
+                throw new Error(err.message || DEFAULT_ERROR_MESSAGE);
+            }
+        })
     }
 }
 
