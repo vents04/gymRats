@@ -73,6 +73,10 @@ const NotificationsService = {
         for (let device of devices) expoPushTokens.push(device.expoPushNotificationsToken);
 
         return expoPushTokens;
+    },
+
+    sendMarketingNotifications: async (filter,) => {
+
     }
 }
 
