@@ -6,7 +6,6 @@ import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
 
 import socketClass from '../../classes/Socket';
-const socket = socketClass.initConnection();
 
 import ApiRequests from '../../classes/ApiRequests';
 
@@ -40,11 +39,9 @@ export default class Chat extends Component {
 
     onFocusFunction = () => {
         const chatId = this.props.route.params.chatId
+        this.getChat(chatId)
         this.setState({ chatId: this.props.route.params.chatId }, () => {
-            socket.open()
-            socket.emit("join-chat-room", { chatId })
             this.updateSeenStatus(chatId)
-            this.getChat(chatId)
             this.receiveTextMessage()
         });
     }
@@ -55,23 +52,23 @@ export default class Chat extends Component {
     }
 
     sendTextMessage = (messageInfo) => {
-        socket.emit("send-text-message", { messageInfo })
+        socketClass.getChatsRoomSocket().emit("send-text-message", { messageInfo })
         this.setState({ message: "", showError: false }, () => {
             setTimeout(() => {
                 this.getChat(this.state.chatId);
             }, 500);
         });
-        socket.emit("update-last-message", {})
+        socketClass.getChatsRoomSocket().emit("update-last-message", {chatId: this.state.chatId});
     }
 
     receiveTextMessage = () => {
-        socket.on("receive-message", (data) => {
+        socketClass.getChatsRoomSocket().on("receive-message", (data) => {
             this.getChat(this.state.chatId)
         });
     }
 
     disconnectUserFromChat = () => {
-        socket.close();
+        socketClass.getChatsRoomSocket().close();
     }
 
     getChat = (id) => {
@@ -120,7 +117,6 @@ export default class Chat extends Component {
 
     componentWillUnmount() {
         BackHandler.removeEventListener("hardwareBackPress", this.backAction);
-        this.disconnectUserFromChat()
     }
 
     pickDocument = async () => {
@@ -152,7 +148,7 @@ export default class Chat extends Component {
     sendFileMessage = async (file) => {
         const fileBase64 = await FileSystem.readAsStringAsync(file.uri, { encoding: 'base64' });
         console.log(fileBase64.length);
-        socket.emit("send-file-message", { messageInfo: { senderId: this.state.chat.user._id, base64: fileBase64, name: file.name, size: file.size, mimeType: file.mimeType } })
+        socket.emit("send-file-message", { messageInfo: { senderId: this.state.chat.user._id, base64: fileBase64, name: file.name, size: file.size, mimeType: file.mimeType, chatId: this.props.route.params.chatId } })
         this.setState({ showError: false }, () => {
             setTimeout(() => {
                 this.getChat(this.state.chatId);
@@ -214,7 +210,7 @@ export default class Chat extends Component {
                                                                 opacity: pressed ? 0.1 : 1,
                                                             }
                                                         ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 15 }} onPress={() => {
-                                                            this.sendTextMessage({ senderId: this.state.chat.user._id, message: this.state.message })
+                                                            this.sendTextMessage({ senderId: this.state.chat.user._id, message: this.state.message, chatId: this.props.route.params.chatId });
                                                         }}>
                                                             <Ionicons name="ios-send" size={24} color="#1f6cb0" />
                                                         </Pressable>

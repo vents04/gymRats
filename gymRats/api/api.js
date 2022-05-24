@@ -219,86 +219,72 @@ mongo.connect();
 })();
 
 io.on("connection", (socket) => {
-    socket.on("join-chat-room", (payload) => {
+    socket.on("join-chats-room", async (payload) => {
+        console.log("fasfas")
         try {
-            const chatId = payload.chatId;
-
-            socket.join(chatId);
-
-            socket.on("send-text-message", async (messageInfo) => {
-                try {
-                    await MessagingService.sendTextMessage(chatId, messageInfo.messageInfo.senderId, messageInfo.messageInfo.message);
-                    socket.to(chatId).emit("receive-message", { messageInfo, fileType: "text" });
-                    (async function () {
-                        const chat = await DbService.getById(COLLECTIONS.CHATS, chatId);
-                        if (chat.status == CHAT_STATUSES.ACTIVE) {
-                            let oppositeUser = null;
-                            let senderUser = null;
-                            if (chat.clientId.toString() == messageInfo.messageInfo.senderId.toString()) {
-                                let personalTrainer = await DbService.getById(COLLECTIONS.PERSONAL_TRAINERS, chat.personalTrainerId);
-                                if (personalTrainer) oppositeUser = await DbService.getById(COLLECTIONS.USERS, personalTrainer.userId);
-                            } else {
-                                oppositeUser = await DbService.getById(COLLECTIONS.USERS, chat.clientId);
-                            }
-                            if (chat.clientId.toString() == messageInfo.messageInfo.senderId.toString()) {
-                                senderUser = await DbService.getById(COLLECTIONS.USERS, chat.clientId);
-                            } else {
-                                let personalTrainer = await DbService.getById(COLLECTIONS.PERSONAL_TRAINERS, chat.personalTrainerId);
-                                if (personalTrainer) senderUser = await DbService.getById(COLLECTIONS.USERS, personalTrainer.userId);
-                            }
-                            if (oppositeUser) {
-                                const expoPushTokens = await NotificationsService.getExpoPushTokensByUserId(senderUser._id);
-                                console.log("eto gi", expoPushTokens, senderUser.firstName);
-                                for (let expoPushToken of expoPushTokens) {
-                                    await NotificationsService.sendChatNotification(expoPushToken, {
-                                        title: "Message from " + senderUser.firstName,
-                                        body: messageInfo.messageInfo.message,
-                                        data: { chatId }
-                                    });
-                                }
-                            }
-                        }
-                    })();
-                } catch (err) {
-                    console.log(err);
-                }
-            });
-
-            socket.on("send-file-message", async (messageInfo) => {
-                try {
-                    console.log(messageInfo.messageInfo.senderId, messageInfo.messageInfo.base64.length)
-                    await MessagingService.sendFileMessage(chatId, messageInfo.messageInfo.senderId, messageInfo.messageInfo.base64, messageInfo.messageInfo.name, messageInfo.messageInfo.size, messageInfo.messageInfo.mimeType);
-                    socket.to(chatId).emit("receive-message", { messageInfo, fileType: "file" });
-                    console.log("izpratih receive message")
-                } catch (err) {
-                    console.log(err);
-                }
-            });
+            const chats = await DbService.getMany(COLLECTIONS.CHATS, {"$or": [{personalTrainerId: mongoose.Types.ObjectId(payload.userId)}, {clientId: mongoose.Types.ObjectId(payload.userId)}]})
+            for(let chat of chats){
+                socket.join(chat._id.toString())
+            }
         } catch (err) {
             reject(new ResponseError("Internal server error", err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
             socket.disconnect();
         }
     })
 
-    socket.on("join-chats-room", async (payload) => {
-        console.log(payload.userId);
-        const chats = await DbService.getMany(COLLECTIONS.CHATS, {"$or": [{personalTrainerId: mongoose.Types.ObjectId(payload.userId)}, {clientId: mongoose.Types.ObjectId(payload.userId)}]})
-        let roomId = "";
-        for(let chat of chats){
-            roomId = roomId + "_" + chat._id;
+    socket.on("send-text-message", async (messageInfo) => {
+        try {
+            await MessagingService.sendTextMessage(messageInfo.messageInfo.chatId, messageInfo.messageInfo.senderId, messageInfo.messageInfo.message);
+            socket.to(messageInfo.chatId).emit("receive-message", { messageInfo, fileType: "text" });
+            /*(async function () {
+                const chat = await DbService.getById(COLLECTIONS.CHATS, chatId);
+                if (chat.status == CHAT_STATUSES.ACTIVE) {
+                    let oppositeUser = null;
+                    let senderUser = null;
+                    if (chat.clientId.toString() == messageInfo.messageInfo.senderId.toString()) {
+                        let personalTrainer = await DbService.getById(COLLECTIONS.PERSONAL_TRAINERS, chat.personalTrainerId);
+                        if (personalTrainer) oppositeUser = await DbService.getById(COLLECTIONS.USERS, personalTrainer.userId);
+                    } else {
+                        oppositeUser = await DbService.getById(COLLECTIONS.USERS, chat.clientId);
+                    }
+                    if (chat.clientId.toString() == messageInfo.messageInfo.senderId.toString()) {
+                        senderUser = await DbService.getById(COLLECTIONS.USERS, chat.clientId);
+                    } else {
+                        let personalTrainer = await DbService.getById(COLLECTIONS.PERSONAL_TRAINERS, chat.personalTrainerId);
+                        if (personalTrainer) senderUser = await DbService.getById(COLLECTIONS.USERS, personalTrainer.userId);
+                    }
+                    if (oppositeUser) {
+                        const expoPushTokens = await NotificationsService.getExpoPushTokensByUserId(senderUser._id);
+                        console.log("eto gi", expoPushTokens, senderUser.firstName);
+                        for (let expoPushToken of expoPushTokens) {
+                            await NotificationsService.sendChatNotification(expoPushToken, {
+                                title: "Message from " + senderUser.firstName,
+                                body: messageInfo.messageInfo.message,
+                                data: { chatId }
+                            });
+                        }
+                    }
+                }
+            })();*/
+        } catch (err) {
+            console.log(err);
         }
+    });
 
-        socket.join(roomId);
+    socket.on("send-file-message", async (messageInfo) => {
+        try {
+            console.log(messageInfo.messageInfo.senderId, messageInfo.messageInfo.base64.length)
+            await MessagingService.sendFileMessage(messageInfo.chatId, messageInfo.messageInfo.senderId, messageInfo.messageInfo.base64, messageInfo.messageInfo.name, messageInfo.messageInfo.size, messageInfo.messageInfo.mimeType);
+            socket.to(messageInfo.chatId).emit("receive-message", { messageInfo, fileType: "file" });
+            console.log("izpratih receive message")
+        } catch (err) {
+            console.log(err);
+        }
+    });
 
-        console.log(io.sockets.adapter.rooms)
-
+    socket.on("update-last-message", (payload) => {
+        socket.to(payload.chatId).emit("last-message-to-be-updated", {})
     })
-
-    socket.on("update-last-message", () => {
-        console.log("here")
-        socket.emit("last-message-to-be-updated", {})
-    })
-
 });
 
 httpServer.listen(PORT, function () {

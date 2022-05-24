@@ -9,7 +9,6 @@ import i18n from 'i18n-js';
 import { HTTP_STATUS_CODES } from '../../../global';
 
 import socketClass from '../../classes/Socket';
-const socket = socketClass.initConnection();
 
 import globalStyles from '../../../assets/styles/global.styles';
 import LogoBar from '../../components/LogoBar/LogoBar';
@@ -34,7 +33,12 @@ export default class Login extends Component {
             email: this.state.email.trim(),
             password: this.state.password
         }, false).then(async (response) => {
-            //await socketClass.joinChatsRoom(socket);
+            let chatsRoomSocket = socketClass.getChatsRoomSocket();
+                if(!chatsRoomSocket) {
+                    chatsRoomSocket = socketClass.initConnection();
+                    socketClass.setChatsRoomSocket(chatsRoomSocket);
+                }
+            socketClass.joinChatsRoom();
             await Auth.setToken(response.data.token);
             this.props.navigation.replace('NavigationRoutes');
         }).catch((error) => {
