@@ -64,8 +64,8 @@ class Logger {
         this.logger.warn(msg, meta);
     }
 
-    error(msg, meta) {
-        this.logger.error(msg, meta);
+    error(meta) {
+        this.logger.error(meta);
     }
 
     fatal(msg, meta) {

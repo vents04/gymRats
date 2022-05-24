@@ -15,7 +15,7 @@ const DbService = require('./services/db.service');
 const WeightTrackerService = require('./services/cards/weightTracker.service');
 const LogbookService = require('./services/cards/logbook.service');
 const oneRepMax = require('./helperFunctions/oneRepMax');
-const NotificationsService = require('./services/notifications.service');
+const { NotificationsService, Notification } = require('./services/notifications.service');
 const io = require("socket.io")(httpServer, { cors: { origin: "*" }, maxHttpBufferSize: 5e+7 });
 
 app
@@ -222,8 +222,8 @@ io.on("connection", (socket) => {
     socket.on("join-chats-room", async (payload) => {
         console.log("fasfas")
         try {
-            const chats = await DbService.getMany(COLLECTIONS.CHATS, {"$or": [{personalTrainerId: mongoose.Types.ObjectId(payload.userId)}, {clientId: mongoose.Types.ObjectId(payload.userId)}]})
-            for(let chat of chats){
+            const chats = await DbService.getMany(COLLECTIONS.CHATS, { "$or": [{ personalTrainerId: mongoose.Types.ObjectId(payload.userId) }, { clientId: mongoose.Types.ObjectId(payload.userId) }] })
+            for (let chat of chats) {
                 socket.join(chat._id.toString())
             }
         } catch (err) {

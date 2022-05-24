@@ -8129,3 +8129,14 @@
 =======
 >>>>>>> e86c0232ad293ab2926794ccf83ee7a660fab727
 >>>>>>> cdc9bc008eda0e20926a089275e97fcfb35b9883
+{"level":"error","message":"Token is valid"}
+{"level":"error","message":"Token is valid"}
+{"level":"error","message":"Token is valid"}
+{"level":"error","message":"Token is valid"}
+{"level":"error","message":"Token is valid"}
+{"level":"error","message":"Token is valid"}
+{"level":"error","message":"Token is valid"}
+{"httpStatus":400,"level":"error","operationalStatus":{"httpStatus":400,"message":"Notification to should be a string<ExpoPushToken> or an array of strings<ExpoPushToken>]","operationalStatus":"nt001"}}
+{"httpStatus":400,"level":"error","operationalStatus":{"httpStatus":400,"message":"Notification to should be a string<ExpoPushToken> or an array of strings<ExpoPushToken>]","operationalStatus":"nt001"}}
+{"httpStatus":400,"level":"error","operationalStatus":{"httpStatus":400,"message":"Notification to should be a string<ExpoPushToken> or an array of strings<ExpoPushToken>]","operationalStatus":"nt001"}}
+{"httpStatus":400,"level":"error","operationalStatus":{"httpStatus":400,"message":"Notification to should be a string<ExpoPushToken> or an array of strings<ExpoPushToken>]","operationalStatus":"nt001"}}
