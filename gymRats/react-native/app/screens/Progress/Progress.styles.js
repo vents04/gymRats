@@ -24,12 +24,15 @@ export default StyleSheet.create({
         alignSelf: "flex-start",
         borderRadius: 4,
         padding: 8,
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center"
     },
     progressFlag: {
         fontFamily: "MainBold",
         fontSize: 10,
         textTransform: "uppercase",
-        color: "white"
+        color: "white",
     },
     progressCardTips: {
         marginTop: 16,

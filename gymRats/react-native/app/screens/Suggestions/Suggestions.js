@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Image, Text, View, ScrollView, TextInput, Pressable } from 'react-native';
+import { Image, Text, View, ScrollView, TextInput, Pressable, BackHandler } from 'react-native';
 
 import ApiRequests from '../../classes/ApiRequests';
 
@@ -31,6 +31,10 @@ export default class Suggestions extends Component {
         this.focusListener;
     }
 
+    backAction = () => {
+        this.props.navigation.goBack();
+    }
+
     onFocusFunction = () => {
         this.getSuggestions();
     }
@@ -39,6 +43,11 @@ export default class Suggestions extends Component {
         this.focusListener = this.props.navigation.addListener('focus', () => {
             this.onFocusFunction()
         })
+        BackHandler.addEventListener("hardwareBackPress", this.backAction);
+    }
+
+    componentWillUnmount() {
+        BackHandler.removeEventListener("hardwareBackPress", this.backAction);
     }
 
     postSuggestion = () => {
@@ -91,7 +100,7 @@ export default class Suggestions extends Component {
                                 opacity: pressed ? 0.1 : 1,
                             }
                         ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
-                            this.props.navigation.goBack();
+                            this.backAction();
                         }}>
                             <Ionicons name="md-arrow-back-sharp" size={25} />
                         </Pressable>
