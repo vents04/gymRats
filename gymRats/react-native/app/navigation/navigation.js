@@ -50,6 +50,7 @@ import { useState } from 'react';
 import FilePreview from '../screens/FilePreview/FilePreview';
 import WebView from '../screens/ProgressWebView/ProgressWebView';
 import ProgressWebView from '../screens/ProgressWebView/ProgressWebView';
+import PasswordRecovery from '../screens/PasswordRecovery/PasswordRecovery';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -299,6 +300,11 @@ const Auth = () => {
             <Stack.Screen
                 name="Signup"
                 component={Signup}
+                options={{ headerShown: false }}
+            />
+            <Stack.Screen
+                name="PasswordRecovery"
+                component={PasswordRecovery}
                 options={{ headerShown: false }}
             />
         </Stack.Navigator>

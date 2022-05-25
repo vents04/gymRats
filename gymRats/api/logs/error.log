@@ -8141,3 +8141,20 @@
 {"httpStatus":400,"level":"error","operationalStatus":{"httpStatus":400,"message":"Notification to should be a string<ExpoPushToken> or an array of strings<ExpoPushToken>]","operationalStatus":"nt001"}}
 {"httpStatus":400,"level":"error","operationalStatus":{"httpStatus":400,"message":"Notification to should be a string<ExpoPushToken> or an array of strings<ExpoPushToken>]","operationalStatus":"nt001"}}
 {"level":"error","message":"\"exercises[0].sets[0].reps\" must be a positive number"}
+{"level":"error","message":"Email should not be empty"}
+{"level":"error","message":"Email should not be empty"}
+{"level":"error","message":"Email should not be empty"}
+{"level":"error","message":"\"email\" must be a valid email"}
+{"level":"error","message":"\"email\" must be a valid email"}
+{"level":"error","message":"User not found"}
+{"level":"error","message":"Cannot issue password recovery for users with unverified emails"}
+{"level":"error","message":"We cannot issue password recovery for users with unverified emails"}
+{"level":"error","message":"\"email\" must be a valid email"}
+{"level":"error","message":"\"email\" must be a valid email"}
+{"level":"error","message":"Password recovery code not found"}
+{"level":"error","message":"Password recovery code not found"}
+{"level":"error","message":"Invalid password recovery code"}
+{"level":"error","message":"\"email\" must be a valid email"}
+{"level":"error","message":"Invalid password recovery code"}
+{"level":"error","message":"Password recovery code has expired"}
+{"level":"error","message":"Invalid password"}

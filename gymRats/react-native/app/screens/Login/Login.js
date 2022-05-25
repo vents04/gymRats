@@ -34,10 +34,10 @@ export default class Login extends Component {
             password: this.state.password
         }, false).then(async (response) => {
             let chatsRoomSocket = socketClass.getChatsRoomSocket();
-                if(!chatsRoomSocket) {
-                    chatsRoomSocket = socketClass.initConnection();
-                    socketClass.setChatsRoomSocket(chatsRoomSocket);
-                }
+            if (!chatsRoomSocket) {
+                chatsRoomSocket = socketClass.initConnection();
+                socketClass.setChatsRoomSocket(chatsRoomSocket);
+            }
             socketClass.joinChatsRoom();
             await Auth.setToken(response.data.token);
             this.props.navigation.replace('NavigationRoutes');
@@ -82,6 +82,16 @@ export default class Login extends Component {
                             ? <Text style={globalStyles.authPageError}>{this.state.error}</Text>
                             : null
                     }
+                    <Pressable style={({ pressed }) => [
+                        {
+                            opacity: pressed ? 0.1 : 1,
+                            marginBottom: 32
+                        }
+                    ]} onPress={() => {
+                        this.props.navigation.navigate("PasswordRecovery");
+                    }}>
+                        <Text style={globalStyles.authPageRedirectHighlightText}>Forgotten password?</Text>
+                    </Pressable>
                     <Pressable style={({ pressed }) => [
                         globalStyles.authPageActionButton,
                         {

@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
+const { uuid } = require('uuidv4');
 
 const DbService = require('../services/db.service');
 const AuthenticationService = require('../services/authentication.service');
@@ -15,7 +16,8 @@ const ResponseError = require('../errors/responseError');
 const { authenticate } = require('../middlewares/authenticate');
 
 const { HTTP_STATUS_CODES, COLLECTIONS, DEFAULT_ERROR_MESSAGE } = require('../global');
-const { signupValidation, loginValidation, suggestionPostValidation, userUpdateValidation } = require('../validation/hapi');
+const { signupValidation, loginValidation, suggestionPostValidation, userUpdateValidation, forgottenPasswordPostValidation, passwordPutValidation } = require('../validation/hapi');
+const PasswordRecoveryCode = require('../db/models/generic/passwordRecoveryCode.model');
 
 router.post("/signup", async (req, res, next) => {
     const { error } = signupValidation(req.body);
@@ -151,6 +153,75 @@ router.get("/suggestion", authenticate, async (req, res, next) => {
         return res.status(HTTP_STATUS_CODES.OK).send({
             suggestions
         })
+    } catch (err) {
+        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+    }
+});
+
+router.post("/password-recovery-code", async (req, res, next) => {
+    const { error } = forgottenPasswordPostValidation(req.body);
+    if (error) return next(new ResponseError(error.details[0].message, HTTP_STATUS_CODES.BAD_REQUEST));
+
+    try {
+        const user = await DbService.getOne(COLLECTIONS.USERS, { email: req.body.email });
+        if (!user) return next(new ResponseError("User with this email was not found", HTTP_STATUS_CODES.NOT_FOUND));
+        if (!user.verifiedEmail) return next(new ResponseError("We cannot issue password recovery for users with unverified emails", HTTP_STATUS_CODES.CONFLICT));
+
+
+        const passwordRecoveryCode = new PasswordRecoveryCode({
+            userId: user._id,
+            identifier: uuid(),
+            code: Math.floor((Math.random() * 900000) + 100000).toString()
+        });
+
+        await DbService.create(COLLECTIONS.PASSWORD_RECOVERY_CODES, passwordRecoveryCode);
+
+        await EmailService.send(user.email, "Password recovery code", "Enter this password recovery code in the app: " + passwordRecoveryCode.code);
+
+        return res.status(HTTP_STATUS_CODES.OK).send({
+            identifier: passwordRecoveryCode.identifier
+        })
+    } catch (err) {
+        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+    }
+});
+
+router.get("/check-password-recovery-code", async (req, res, next) => {
+    if (!req.query.code || !req.query.identifier)
+        return next(new ResponseError("Code and identifier must be provided"));
+
+    try {
+        const passwordRecoveryCode = await DbService.getOne(COLLECTIONS.PASSWORD_RECOVERY_CODES, { identifier: req.query.identifier, code: req.query.code });
+        if (!passwordRecoveryCode) return next(new ResponseError("Invalid password recovery code", HTTP_STATUS_CODES.NOT_FOUND));
+        if (passwordRecoveryCode.hasBeenUsed) return next(new ResponseError("Password recovery code has already been used", HTTP_STATUS_CODES.CONFLICT));
+        if (new Date(passwordRecoveryCode.createdDt).getTime() + 120000 <= new Date().getTime()) return next(new ResponseError("Password recovery code has expired", HTTP_STATUS_CODES.CONFLICT));
+
+        return res.sendStatus(HTTP_STATUS_CODES.OK);
+    } catch (err) {
+        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+    }
+})
+
+router.put("/password", async (req, res, next) => {
+    const { error } = passwordPutValidation(req.body);
+    if (error) return next(new ResponseError(error.details[0].message, HTTP_STATUS_CODES.BAD_REQUEST));
+
+    try {
+        const passwordRecoveryCode = await DbService.getOne(COLLECTIONS.PASSWORD_RECOVERY_CODES, { identifier: req.body.identifier });
+        if (!passwordRecoveryCode) return next(new ResponseError("Password recovery code not found", HTTP_STATUS_CODES.NOT_FOUND));
+        if (passwordRecoveryCode.code != req.body.code) return next(new ResponseError("Password recovery code is invalid", HTTP_STATUS_CODES.CONFLICT));
+        if (passwordRecoveryCode.hasBeenUsed) return next(new ResponseError("Password recovery code has already been used", HTTP_STATUS_CODES.CONFLICT));
+        if (new Date(passwordRecoveryCode.createdDt).getTime() + 120000 <= new Date().getTime()) return next(new ResponseError("Password recovery code has expired", HTTP_STATUS_CODES.CONFLICT));
+
+        const user = await DbService.getById(COLLECTIONS.USERS, passwordRecoveryCode.userId);
+        if (!user) return next(new ResponseError("User not found", HTTP_STATUS_CODES.NOT_FOUND));
+
+        const hashedPassword = AuthenticationService.hashPassword(req.body.password);
+
+        await DbService.update(COLLECTIONS.USERS, { _id: user._id }, { password: hashedPassword });
+        await DbService.update(COLLECTIONS.PASSWORD_RECOVERY_CODES, { identifier: req.body.identifier }, { hasBeenUsed: true });
+
+        return res.sendStatus(HTTP_STATUS_CODES.OK);
     } catch (err) {
         return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
     }

@@ -21,6 +21,7 @@ const DATABASE_MODELS = {
     NAVIGATION: "Navigation",
     UNKNOWN_SOURCE_CALORIES: "UnknownSourceCalories",
     DEVICE: "Device",
+    PASSWORD_RECOVERY_CODE: "PasswordRecoveryCode"
 }
 
 const COLLECTIONS = {
@@ -45,6 +46,7 @@ const COLLECTIONS = {
     NAVIGATIONS: "navigations",
     UNKNOWN_SOURCE_CALORIES: "unknownSourceCalories",
     DEVICES: "devices",
+    PASSWORD_RECOVERY_CODES: "passwordRecoveryCodes"
 }
 
 const PERSONAL_TRAINER_STATUSES = {

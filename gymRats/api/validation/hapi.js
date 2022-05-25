@@ -387,6 +387,22 @@ const devicePostValidation = (data) => {
     return schema.validate(data);
 }
 
+const forgottenPasswordPostValidation = (data) => {
+    const schema = Joi.object({
+        email: Joi.string().email().required()
+    });
+    return schema.validate(data);
+}
+
+const passwordPutValidation = (data) => {
+    const schema = Joi.object({
+        identifier: Joi.string().required(),
+        code: Joi.string().required(),
+        password: Joi.string().min(8).max(100).required(),
+    });
+    return schema.validate(data);
+}
+
 module.exports = {
     signupValidation,
     loginValidation,
@@ -413,5 +429,7 @@ module.exports = {
     navigationAnalyticsValidation,
     unknownSourceCaloriesPostValidation,
     workoutUpdateValidation,
-    devicePostValidation
+    devicePostValidation,
+    forgottenPasswordPostValidation,
+    passwordPutValidation
 }
