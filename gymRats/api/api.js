@@ -208,7 +208,6 @@ mongo.connect();
 
 io.on("connection", (socket) => {
     socket.on("join-chats-room", async (payload) => {
-        console.log("fasfas")
         try {
             const chats = await DbService.getMany(COLLECTIONS.CHATS, { "$or": [{ personalTrainerId: mongoose.Types.ObjectId(payload.userId) }, { clientId: mongoose.Types.ObjectId(payload.userId) }] })
             for (let chat of chats) {
