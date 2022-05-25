@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Dimensions, Image, ScrollView, Text, TextInput, Pressable, View } from 'react-native';
+import { WebView } from 'react-native-webview';
 
 import ApiRequests from '../../classes/ApiRequests';
 
@@ -99,7 +100,8 @@ export default class Progress extends Component {
                                                         opacity: pressed ? 0.1 : 1,
                                                         backgroundColor: cardColors.weightTracker
                                                     }
-                                                ]} onPress={() => { }}>
+                                                ]} onPress={() => {
+                                                }}>
                                                     <Text style={styles.progressFlag}>
                                                         {
                                                             this.state.progress.weightTrackerProgress.notation == PROGRESS_NOTATION.INSUFFICIENT_WEIGHT_LOSS
@@ -118,7 +120,7 @@ export default class Progress extends Component {
 
                                                         }
                                                     </Text>
-                                                    {/*<Entypo name="info-with-circle" size={18} color="white" />*/}
+                                                    {/* <Entypo name="info-with-circle" size={18} color="white" /> */}
                                                 </Pressable>
                                                 <View style={styles.progressCardTips}>
                                                     <Text style={styles.progressCardTipsTitle}>Tips to improve</Text>

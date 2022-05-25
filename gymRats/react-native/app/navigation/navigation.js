@@ -48,6 +48,8 @@ import { useEffect } from 'react';
 import { useRef } from 'react';
 import { useState } from 'react';
 import FilePreview from '../screens/FilePreview/FilePreview';
+import WebView from '../screens/ProgressWebView/ProgressWebView';
+import ProgressWebView from '../screens/ProgressWebView/ProgressWebView';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -162,6 +164,13 @@ const progressScreenStack = () => {
                     headerShown: false
                 }}
                 component={Progress}
+            />
+            <Stack.Screen
+                name="ProgressWebView"
+                options={{
+                    headerShown: false
+                }}
+                component={ProgressWebView}
             />
         </Stack.Navigator>
     )
