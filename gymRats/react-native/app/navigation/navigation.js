@@ -51,6 +51,7 @@ import FilePreview from '../screens/FilePreview/FilePreview';
 import WebView from '../screens/ProgressWebView/ProgressWebView';
 import ProgressWebView from '../screens/ProgressWebView/ProgressWebView';
 import PasswordRecovery from '../screens/PasswordRecovery/PasswordRecovery';
+import EmailVerification from '../screens/EmailVerification/EmailVerification';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -305,6 +306,11 @@ const Auth = () => {
             <Stack.Screen
                 name="PasswordRecovery"
                 component={PasswordRecovery}
+                options={{ headerShown: false }}
+            />
+            <Stack.Screen
+                name="EmailVerification"
+                component={EmailVerification}
                 options={{ headerShown: false }}
             />
         </Stack.Navigator>
