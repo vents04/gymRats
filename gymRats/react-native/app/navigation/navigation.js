@@ -290,12 +290,15 @@ const profileScreenStack = () => {
     )
 };
 
-const Auth = () => {
+const Auth = (props) => {
     return (
         <Stack.Navigator initialRouteName="Login">
             <Stack.Screen
                 name="Login"
                 component={Login}
+                initialParams={{
+                    email: props.route && props.route.params && props.route.params.hasUnverifiedEmail ? props.route.params.email : null,
+                }}
                 options={{ headerShown: false }}
             />
             <Stack.Screen

@@ -27,20 +27,30 @@ export default class Login extends Component {
         }
     }
 
+    componentDidMount() {
+        if (this.props.route && this.props.route.params && this.props.route.params.email && this.props.route.params.email.length > 0) {
+            this.props.navigation.navigate("EmailVerification", { email: this.props.route.params.email, doesNotComeFromSignup: true })
+        }
+    }
+
     login = () => {
         this.setState({ showError: false, error: null, isLoading: true });
         ApiRequests.post("user/login", {}, {
             email: this.state.email.trim(),
             password: this.state.password
         }, false).then(async (response) => {
-            let chatsRoomSocket = socketClass.getChatsRoomSocket();
-            if (!chatsRoomSocket) {
-                chatsRoomSocket = socketClass.initConnection();
-                socketClass.setChatsRoomSocket(chatsRoomSocket);
+            if (response.data.verifiedEmail) {
+                let chatsRoomSocket = socketClass.getChatsRoomSocket();
+                if (!chatsRoomSocket) {
+                    chatsRoomSocket = socketClass.initConnection();
+                    socketClass.setChatsRoomSocket(chatsRoomSocket);
+                }
+                socketClass.joinChatsRoom();
+                await Auth.setToken(response.data.token);
+                this.props.navigation.replace('NavigationRoutes');
+            } else {
+                this.props.navigation.navigate("EmailVerification", { email: this.state.email.trim(), doesNotComeFromSignup: true })
             }
-            socketClass.joinChatsRoom();
-            await Auth.setToken(response.data.token);
-            this.props.navigation.replace('NavigationRoutes');
         }).catch((error) => {
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {

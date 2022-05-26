@@ -8166,3 +8166,14 @@
 {"level":"error","message":"Invalid email verification code"}
 {"level":"error","message":"First name should not be empty"}
 {"level":"error","message":"Invalid email verification code"}
+{"level":"error","message":"Email should not be empty"}
+{"level":"error","message":"Invalid email verification code"}
+{"level":"error","message":"Invalid email verification code"}
+{"level":"error","message":"Invalid email verification code"}
+{"level":"error","message":"Code and identifier must be provided"}
+{"level":"error","message":"Code and identifier must be provided"}
+{"level":"error","message":"Code and identifier must be provided"}
+{"level":"error","message":"Invalid email verification code"}
+{"level":"error","message":"Invalid email verification code"}
+{"level":"error","message":"We cannot issue password recovery for users with unverified emails"}
+{"level":"error","message":"Account does not exist"}

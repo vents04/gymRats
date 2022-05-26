@@ -47,8 +47,6 @@ router.post("/login", async (req, res, next) => {
         const user = await DbService.getOne(COLLECTIONS.USERS, { email: req.body.email });
         if (!user) return next(new ResponseError("User with this email was not found", HTTP_STATUS_CODES.NOT_FOUND));
 
-        if(!user.verifiedEmail) return next(new ResponseError("Account does not exist", HTTP_STATUS_CODES.NOT_FOUND))
-
         const isPasswordValid = AuthenticationService.verifyPassword(req.body.password, user.password);
         if (!isPasswordValid) return next(new ResponseError("Invalid password", HTTP_STATUS_CODES.BAD_REQUEST));
 
@@ -56,6 +54,7 @@ router.post("/login", async (req, res, next) => {
             const token = AuthenticationService.generateToken({ _id: mongoose.Types.ObjectId(user._id) });
             return res.status(HTTP_STATUS_CODES.OK).send({
                 token: token,
+                verifiedEmail: user.verifiedEmail
             });
         }, 1000);
     } catch (err) {
@@ -259,12 +258,13 @@ router.get("/check-email-verification-code", async (req, res, next) => {
         return next(new ResponseError("Code and identifier must be provided"));
 
     try {
+        console.log(req.query)
         const emailVerificationCode = await DbService.getOne(COLLECTIONS.EMAIL_VERIFICATION_CODES, { identifier: req.query.identifier, code: req.query.code });
         if (!emailVerificationCode) return next(new ResponseError("Invalid email verification code", HTTP_STATUS_CODES.NOT_FOUND));
         if (emailVerificationCode.hasBeenUsed) return next(new ResponseError("Email verification code has already been used", HTTP_STATUS_CODES.CONFLICT));
         if (new Date(emailVerificationCode.createdDt).getTime() + 600000 <= new Date().getTime()) return next(new ResponseError("Email verification code has expired", HTTP_STATUS_CODES.CONFLICT));
 
-        await DbService.update(COLLECTIONS.USERS, { _id: mongoose.Types.ObjectId(emailVerificationCode.userId) }, {verifiedEmail: true});
+        await DbService.update(COLLECTIONS.USERS, { _id: mongoose.Types.ObjectId(emailVerificationCode.userId) }, { verifiedEmail: true });
 
         setTimeout(() => {
             const token = AuthenticationService.generateToken({ _id: mongoose.Types.ObjectId(emailVerificationCode.userId) });

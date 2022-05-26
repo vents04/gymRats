@@ -55,10 +55,16 @@ export default class Splash extends Component {
 
     componentDidMount() {
         setTimeout(async () => {
+            let validationEndpointResponse = null;
             let isAuthenticated = false;
+            let hasUnverifiedEmail = false;
             try {
                 const token = await Auth.getToken();
-                if (token) isAuthenticated = (await User.validateToken(token)).valid;
+                if (token) {
+                    validationEndpointResponse = await User.validateToken(token);
+                    isAuthenticated = validationEndpointResponse.valid;
+                    hasUnverifiedEmail = !validationEndpointResponse.user.verifiedEmail;
+                }
             } catch (err) {
                 this.props.navigation.reset({
                     index: 0,
@@ -66,18 +72,24 @@ export default class Splash extends Component {
                 });
             }
             if (isAuthenticated) {
-                let chatsRoomSocket = socketClass.getChatsRoomSocket();
-                if(!chatsRoomSocket) {
-                    chatsRoomSocket = socketClass.initConnection();
-                    socketClass.setChatsRoomSocket(chatsRoomSocket);
+                if (!hasUnverifiedEmail) {
+                    let chatsRoomSocket = socketClass.getChatsRoomSocket();
+                    if (!chatsRoomSocket) {
+                        chatsRoomSocket = socketClass.initConnection();
+                        socketClass.setChatsRoomSocket(chatsRoomSocket);
+                    }
+                    socketClass.joinChatsRoom();
+                    this.submitDeviceInfo();
                 }
-                socketClass.joinChatsRoom();
-                this.submitDeviceInfo();
             }
-            this.props.navigation.reset({
-                index: 0,
-                routes: [{ name: isAuthenticated ? 'NavigationRoutes' : 'Auth' }],
-            });
+            if (!hasUnverifiedEmail) {
+                this.props.navigation.reset({
+                    index: 0,
+                    routes: [{ name: isAuthenticated ? 'NavigationRoutes' : 'Auth' }],
+                });
+            } else {
+                this.props.navigation.replace("Auth", { hasUnverifiedEmail, email: validationEndpointResponse.user.email });
+            }
         }, 1000);
     }
 

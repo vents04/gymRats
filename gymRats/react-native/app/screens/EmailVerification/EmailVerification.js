@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, Pressable, View, ScrollView, TextInput, Image, Alert } from 'react-native';
+import { Text, Pressable, View, ScrollView, TextInput, Image, Alert, BackHandler } from 'react-native';
 
 import ApiRequests from '../../classes/ApiRequests';
 import Auth from '../../classes/Auth';
@@ -18,13 +18,14 @@ export default class EmailVerification extends Component {
 
         this.state = {
             code: "",
+            identifier: "",
             showError: false,
             error: "",
         }
     }
 
     backAction = () => {
-        // navigate to previous screen
+        this.props.navigation.goBack();
     }
 
     checkCode = () => {
@@ -38,6 +39,7 @@ export default class EmailVerification extends Component {
                 }
             }]);
         }).catch((error) => {
+            console.log(error.response.data)
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
                     this.setState({ showError: true, error: error.response.data });
@@ -76,7 +78,12 @@ export default class EmailVerification extends Component {
     componentDidMount = () => {
         this.focusListener = this.props.navigation.addListener('focus', () => {
             this.onFocusFunction()
-        })
+        });
+        BackHandler.addEventListener("hardwareBackPress", this.backAction);
+    }
+
+    componentWillUnmount = () => {
+        BackHandler.removeEventListener("hardwareBackPress", this.backAction);
     }
 
     onFocusFunction = () => {
@@ -99,6 +106,13 @@ export default class EmailVerification extends Component {
                         </Pressable>
                         <Text style={globalStyles.followUpScreenTitle}>Email verification</Text>
                     </View>
+                    {
+                        this.props.route.params.doesNotComeFromSignup
+                            ? <View style={styles.unknownSourceCaloriesIncentiveContainer}>
+                                <Text style={styles.unknownSourceCaloriesIncentiveText}>Your email has not been verified, yet. To continue using our services, please enter the code we have just sent to your email inbox.</Text>
+                            </View>
+                            : null
+                    }
                     {
                         this.state.showError
                             ? <Text style={globalStyles.errorBox}>{this.state.error}</Text>
