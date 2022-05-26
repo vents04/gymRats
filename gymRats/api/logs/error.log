@@ -8177,3 +8177,5 @@
 {"level":"error","message":"Invalid email verification code"}
 {"level":"error","message":"We cannot issue password recovery for users with unverified emails"}
 {"level":"error","message":"Account does not exist"}
+{"level":"error","message":"Invalid password"}
+{"level":"error","message":"Invalid password"}
