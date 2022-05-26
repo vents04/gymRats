@@ -394,6 +394,13 @@ const forgottenPasswordPostValidation = (data) => {
     return schema.validate(data);
 }
 
+const emailVerificationPostValidation = (data) => {
+    const schema = Joi.object({
+        email: Joi.string().email().required()
+    });
+    return schema.validate(data);
+}
+
 const passwordPutValidation = (data) => {
     const schema = Joi.object({
         identifier: Joi.string().required(),
@@ -431,5 +438,6 @@ module.exports = {
     workoutUpdateValidation,
     devicePostValidation,
     forgottenPasswordPostValidation,
-    passwordPutValidation
+    passwordPutValidation,
+    emailVerificationPostValidation
 }

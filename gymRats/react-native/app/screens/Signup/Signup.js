@@ -6,9 +6,6 @@ import Auth from '../../classes/Auth';
 
 import i18n from 'i18n-js';
 
-import socketClass from '../../classes/Socket';
-const socket = socketClass.initConnection();
-
 import { HTTP_STATUS_CODES } from '../../../global';
 
 import globalStyles from '../../../assets/styles/global.styles';
@@ -37,10 +34,8 @@ export default class Signup extends Component {
             lastName: this.state.lastName,
             email: this.state.email.trim(),
             password: this.state.password
-        }, false).then(async (response) => {
-            socketClass.joinChatsRoom(socket);
-            await Auth.setToken(response.data.token);
-            this.props.navigation.replace('NavigationRoutes');
+        }, false).then((response) => {
+            this.props.navigation.navigate("EmailVerification", {email: this.state.email});
         }).catch((error) => {
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {

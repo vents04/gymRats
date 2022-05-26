@@ -16,8 +16,9 @@ const ResponseError = require('../errors/responseError');
 const { authenticate } = require('../middlewares/authenticate');
 
 const { HTTP_STATUS_CODES, COLLECTIONS, DEFAULT_ERROR_MESSAGE } = require('../global');
-const { signupValidation, loginValidation, suggestionPostValidation, userUpdateValidation, forgottenPasswordPostValidation, passwordPutValidation } = require('../validation/hapi');
+const { signupValidation, loginValidation, suggestionPostValidation, userUpdateValidation, forgottenPasswordPostValidation, passwordPutValidation, emailVerificationPostValidation } = require('../validation/hapi');
 const PasswordRecoveryCode = require('../db/models/generic/passwordRecoveryCode.model');
+const EmailVerificationCode = require('../db/models/generic/emailVerificationCode.model');
 
 router.post("/signup", async (req, res, next) => {
     const { error } = signupValidation(req.body);
@@ -31,12 +32,8 @@ router.post("/signup", async (req, res, next) => {
         user.password = AuthenticationService.hashPassword(req.body.password);
         await DbService.create(COLLECTIONS.USERS, user);
 
-        setTimeout(() => {
-            const token = AuthenticationService.generateToken({ _id: mongoose.Types.ObjectId(user._id) });
-            return res.status(HTTP_STATUS_CODES.OK).send({
-                token: token,
-            });
-        }, 1000);
+        return res.sendStatus(HTTP_STATUS_CODES.OK);
+
     } catch (err) {
         return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
     }
@@ -49,6 +46,8 @@ router.post("/login", async (req, res, next) => {
     try {
         const user = await DbService.getOne(COLLECTIONS.USERS, { email: req.body.email });
         if (!user) return next(new ResponseError("User with this email was not found", HTTP_STATUS_CODES.NOT_FOUND));
+
+        if(!user.verifiedEmail) return next(new ResponseError("Account does not exist", HTTP_STATUS_CODES.NOT_FOUND))
 
         const isPasswordValid = AuthenticationService.verifyPassword(req.body.password, user.password);
         if (!isPasswordValid) return next(new ResponseError("Invalid password", HTTP_STATUS_CODES.BAD_REQUEST));
@@ -226,5 +225,57 @@ router.put("/password", async (req, res, next) => {
         return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
     }
 });
+
+router.post("/email-verification-code", async (req, res, next) => {
+    const { error } = emailVerificationPostValidation(req.body);
+    if (error) return next(new ResponseError(error.details[0].message, HTTP_STATUS_CODES.BAD_REQUEST));
+
+    try {
+        const user = await DbService.getOne(COLLECTIONS.USERS, { email: req.body.email });
+        if (!user) return next(new ResponseError("User with this email was not found", HTTP_STATUS_CODES.NOT_FOUND));
+        if (user.verifiedEmail) return next(new ResponseError("You can't confirm your email because it already is!", HTTP_STATUS_CODES.BAD_REQUEST));
+
+
+        const emailVerificationCode = new EmailVerificationCode({
+            userId: user._id,
+            identifier: uuid(),
+            code: Math.floor((Math.random() * 900000) + 100000).toString()
+        });
+
+        await DbService.create(COLLECTIONS.EMAIL_VERIFICATION_CODES, emailVerificationCode);
+
+        await EmailService.send(user.email, "Email verification code", "Enter this email verification code in the app: " + emailVerificationCode.code);
+
+        return res.status(HTTP_STATUS_CODES.OK).send({
+            identifier: emailVerificationCode.identifier
+        })
+    } catch (err) {
+        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+    }
+});
+
+router.get("/check-email-verification-code", async (req, res, next) => {
+    if (!req.query.code || !req.query.identifier)
+        return next(new ResponseError("Code and identifier must be provided"));
+
+    try {
+        const emailVerificationCode = await DbService.getOne(COLLECTIONS.EMAIL_VERIFICATION_CODES, { identifier: req.query.identifier, code: req.query.code });
+        if (!emailVerificationCode) return next(new ResponseError("Invalid email verification code", HTTP_STATUS_CODES.NOT_FOUND));
+        if (emailVerificationCode.hasBeenUsed) return next(new ResponseError("Email verification code has already been used", HTTP_STATUS_CODES.CONFLICT));
+        if (new Date(emailVerificationCode.createdDt).getTime() + 600000 <= new Date().getTime()) return next(new ResponseError("Email verification code has expired", HTTP_STATUS_CODES.CONFLICT));
+
+        await DbService.update(COLLECTIONS.USERS, { _id: mongoose.Types.ObjectId(emailVerificationCode.userId) }, {verifiedEmail: true});
+
+        setTimeout(() => {
+            const token = AuthenticationService.generateToken({ _id: mongoose.Types.ObjectId(emailVerificationCode.userId) });
+            return res.status(HTTP_STATUS_CODES.OK).send({
+                token: token,
+            });
+        }, 1000);
+
+    } catch (err) {
+        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+    }
+})
 
 module.exports = router;

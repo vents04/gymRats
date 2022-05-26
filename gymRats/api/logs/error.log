@@ -8158,3 +8158,11 @@
 {"level":"error","message":"Invalid password recovery code"}
 {"level":"error","message":"Password recovery code has expired"}
 {"level":"error","message":"Invalid password"}
+{"level":"error","message":"Account does not exist"}
+{"level":"error","message":"Account does not exist"}
+{"level":"error","message":"User with this email already exists"}
+{"level":"error","message":"User with this email already exists"}
+{"level":"error","message":"Invalid email verification code"}
+{"level":"error","message":"Invalid email verification code"}
+{"level":"error","message":"First name should not be empty"}
+{"level":"error","message":"Invalid email verification code"}

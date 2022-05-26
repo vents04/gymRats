@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Text, Pressable, View, ScrollView, TextInput, Image, Alert } from 'react-native';
 
 import ApiRequests from '../../classes/ApiRequests';
+import Auth from '../../classes/Auth';
 
 import { Ionicons } from '@expo/vector-icons';
 
@@ -9,15 +10,6 @@ import { HTTP_STATUS_CODES } from '../../../global';
 
 import globalStyles from '../../../assets/styles/global.styles'
 import styles from './EmailVerficiation.styles';
-
-/*
-This screen will work in the following way:
-- user gets redirected from login (if email is not verified (should modify the login response payload to have a boolean field for verifiedEmail)) or from signup (right after account creation)
-    - when navigating make sure to pass user's email as a param (this.props.navigation.navigate("EmailVerification", {param1: ..., param2: ...}))
-- user should enter the code from their email
-    - proper error messages when: code has expired, code is invalid
-- user gets redirected to calendar screen if everything went as expected
-*/
 
 export default class EmailVerification extends Component {
 
@@ -36,11 +28,49 @@ export default class EmailVerification extends Component {
     }
 
     checkCode = () => {
-        // endpoint to check if the code is valid
+        ApiRequests.get(`user/check-email-verification-code?identifier=${this.state.identifier}&code=${this.state.code}`).then(async (response) => {
+            await Auth.setToken(response.data.token);
+            this.setState({ showError: false, showPasswordEntry: true, showCodeEntry: false, showEmailEntry: false });
+            Alert.alert("Email Verified", "Your email has successfully been verified.", [{
+                text: "OK",
+                onPress: () => {
+                    this.props.navigation.replace('NavigationRoutes');
+                }
+            }]);
+        }).catch((error) => {
+            if (error.response) {
+                if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
+                    this.setState({ showError: true, error: error.response.data });
+                } else {
+                    ApiRequests.showInternalServerError();
+                }
+            } else if (error.request) {
+                ApiRequests.showNoResponseError();
+            } else {
+                ApiRequests.showRequestSettingError();
+            }
+        })
     }
 
     generateEmailVerificationCode = () => {
-        // endpoint to generate and send an email verification code
+        ApiRequests.post(`user/email-verification-code`, {}, {
+            email: this.props.route.params.email.trim()
+        }, false).then((response) => {
+            console.log(response.data);
+            this.setState({ identifier: response.data.identifier, showEmailEntry: false, showCodeEntry: true, showPasswordEntry: false })
+        }).catch((error) => {
+            if (error.response) {
+                if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
+                    this.setState({ showError: true, error: error.response.data });
+                } else {
+                    ApiRequests.showInternalServerError();
+                }
+            } else if (error.request) {
+                ApiRequests.showNoResponseError();
+            } else {
+                ApiRequests.showRequestSettingError();
+            }
+        })
     }
 
     componentDidMount = () => {
@@ -77,7 +107,7 @@ export default class EmailVerification extends Component {
                     <TextInput
                         value={this.state.code}
                         style={globalStyles.authPageInput}
-                        placeholder="Enter code sent to your email:"
+                        placeholder="Enter the code sent to your email:"
                         onChangeText={(val) => { this.setState({ code: val, showError: false }) }} />
                     <Pressable style={({ pressed }) => [
                         globalStyles.authPageActionButton,
