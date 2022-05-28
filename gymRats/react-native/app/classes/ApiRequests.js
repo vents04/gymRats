@@ -1,5 +1,6 @@
 const axios = require('axios');
 const Auth = require('./Auth');
+import i18n from 'i18n-js';
 
 const { ROOT_URL_API, AUTHENTICATION_TOKEN_KEY } = require('../../global');
 const { Alert } = require('react-native');
@@ -81,8 +82,8 @@ const ApiRequests = {
 
     showInternalServerError: () => {
         Alert.alert(
-            "Error",
-            "An internal server error occurred while executing your request. Please try again or message our Support if the problem remains unresolved.",
+            i18n.t('errors')['error'],
+            i18n.t('errors')['internalServerError'],
             [
                 { text: "OK" }
             ]
@@ -91,8 +92,8 @@ const ApiRequests = {
 
     showNoResponseError: () => {
         Alert.alert(
-            "Error",
-            "Our server did not send a response for your request. Please try again or message our Support if the problem remains unresolved.",
+            i18n.t('errors')['error'],
+            i18n.t('errors')['noResponseError'],
             [
                 { text: "OK" }
             ]
@@ -101,8 +102,8 @@ const ApiRequests = {
 
     showRequestSettingError: () => {
         Alert.alert(
-            "Error",
-            "Something failed while sending your request. Please try again or message our Support if the problem remains unresolved.",
+            i18n.t('errors')['error'],
+            i18n.t('errors')['requestSettingError'],
             [
                 { text: "OK" }
             ]

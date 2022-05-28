@@ -14,3 +14,9 @@
 {"level":"error","message":"Потребителят, асоцииран с този автентификационен ключ не е намерен"}
 {"level":"error","message":"Потребителят, асоцииран с този автентификационен ключ не е намерен"}
 {"level":"error","message":"Потребителят, асоцииран с този автентификационен ключ не е намерен"}
+{"level":"error","message":"Невалиден relationId параметър"}
+{"level":"error","message":"\"exercises[0].sets[0].reps\" must be a positive number"}
+{"level":"error","message":"Invalid collection"}
+{"level":"error","message":"Invalid collection"}
+{"level":"error","message":"Invalid collection"}
+{"level":"error","message":"Invalid collection"}

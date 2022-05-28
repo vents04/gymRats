@@ -113,7 +113,10 @@ module.exports = {
             loading: "Loading..."
         },
         errors: {
-            internalServerError: "Internal server error"
+            error: "Error",
+            internalServerError: "An internal server error occurred while executing your request. Please try again or message our Support if the problem remains unresolved.",
+            noResponseError: "Our server did not send a response for your request. Please try again or message our Support if the problem remains unresolved.",
+            requestSettingError: "Something failed while sending your request. Please try again or message our Support if the problem remains unresolved."
         }
     },
     bg: {
@@ -230,7 +233,10 @@ module.exports = {
             loading: "Зареждане..."
         },
         errors: {
-            internalServerError: "Сървърна грешка"
+            error: "Грешка",
+            internalServerError: "Възникна фатална грешка при обработването на вашата заявка. Моля, опитайте отново или се свържете с нашия помощен екип, ако проблемът не се разреши.",
+            noResponseError: "Нашият сървър не отговори на вашата заявка. Моля, опитайте отново или се свържете с нашия помощен екип, ако проблемът не се разреши.",
+            requestSettingError: "Нещо се обърка докато обработваме вашата заявка. Моля, свържете се с нашия помощен екип, ако проблемът не се разреши."
         }
     }
 }

@@ -178,7 +178,7 @@ router.post("/workout-session", authenticate, async (req, res, next) => {
     if (error) return next(new ResponseError(error.details[0].message, HTTP_STATUS_CODES.BAD_REQUEST));
 
     try {
-        const existingSession = await DbService.getOne(COLLECTIONS.WORKOUT_SESSIONS, {
+        const existingSession = await DbService.getOne("test", {
             userId: mongoose.Types.ObjectId(req.user._id),
             date: +req.query.date,
             month: +req.query.month,
