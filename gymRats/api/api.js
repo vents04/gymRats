@@ -7,6 +7,8 @@ const indexRoute = require('./routes/index.route');
 const errorHandler = require('./errors/errorHandler');
 const mongoose = require('mongoose');
 const path = require('path');
+const fs = require('fs');
+const readline = require('readline');
 
 const { PORT, HTTP_STATUS_CODES, COLLECTIONS, FOOD_TYPES, PROGRESS_NOTATION, LOGBOOK_PROGRESS_NOTATIONS, CHAT_STATUSES } = require('./global');
 const MessagingService = require('./services/messaging.service');
@@ -206,6 +208,56 @@ mongo.connect();
     console.log("From five sessions:", await LogbookService.getProgressNotationForFiveSessions(bulkOrms));
     console.log("Exercises progress:", await LogbookService.getExercisesProgress("622f8c4095e0bf7c3998ebc9"))
     await UserService.generateUnverifiedTimeouts();
+
+    try {
+        let errors = {}
+        let universal = {};
+        let universalIndex = 0;
+        fs.readdir(path.join(__dirname, "\\services"), function (err, files) {
+            if (err) {
+                console.error("Could not list the directory.", err);
+                process.exit(1);
+            }
+
+            files.forEach(function (file) {
+                if (file.includes(".")) {
+                    let index = 0;
+                    const readInterface = readline.createInterface({
+                        input: fs.createReadStream(path.join(__dirname, "\\services\\", file)),
+                        console: false
+                    });
+                    readInterface.on('line', function (line) {
+                        if (line.includes("new ResponseError") && !line.includes("DEFAULT_ERROR_MESSAGE") && !line.includes("error.details[0].message")) {
+                            const error = line.split("ResponseError(")[1].split(")")[0].split("\"")[1];
+                            let errorObject = {
+                                en: error,
+                            }
+                            let hasBeenAdded = false;
+                            for (let key in errors) {
+                                if (errors[key] && errors[key].en == error) {
+                                    universal[`uni_${universalIndex}`] = errorObject;
+                                    delete errors[key]
+                                    universalIndex++;
+                                    hasBeenAdded = true;
+                                    break;
+                                }
+                            }
+                            if (!hasBeenAdded) {
+                                errors[`s_${file.charAt(0)}${file.charAt(1)}_${index < 10 ? "0" + index : index}`] = errorObject;
+                                index++;
+                            }
+                        }
+                    });
+                }
+            });
+        })
+        setTimeout(() => {
+            console.log(universal)
+            console.log(errors);
+        }, 6000);
+    } catch (err) {
+        console.error(err);
+    }
 })();
 
 io.on("connection", (socket) => {

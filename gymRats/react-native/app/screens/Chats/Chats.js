@@ -30,7 +30,7 @@ export default class Chats extends Component {
         if (this.props.route && this.props.route.params) {
             console.log(this.props)
             if (this.props.route.params.chatId) {
-                this.props.navigation.navigate("Chat", { chatId: this.props.route.params.chatId})
+                this.props.navigation.navigate("Chat", { chatId: this.props.route.params.chatId })
             }
         }
         this.updateLastMessage()
@@ -40,6 +40,7 @@ export default class Chats extends Component {
     getChats = () => {
         ApiRequests.get("chat", {}, true).then((response) => {
             this.setState({ chats: response.data.chats });
+            console.log(response.data.chats)
         }).catch((error) => {
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
@@ -78,15 +79,18 @@ export default class Chats extends Component {
                                 contentContainerStyle={globalStyles.fillEmptySpace}>
                                 {
                                     this.state.chats.map((chat, index) =>
-                                        <Pressable style={({ pressed }) => [
-                                            {
-                                                opacity: pressed ? 0.1 : 1,
-                                            }
-                                        ]} key={index} onPress={() => {
-                                            this.props.navigation.navigate("Chat", { chatId: chat._id })
-                                        }}>
-                                            <ChatsItem chat={chat} {...this.props} />
-                                        </Pressable>
+                                        chat.oppositeUser && chat.lastMessage
+                                            ?
+                                            <Pressable style={({ pressed }) => [
+                                                {
+                                                    opacity: pressed ? 0.1 : 1,
+                                                }
+                                            ]} key={index} onPress={() => {
+                                                this.props.navigation.navigate("Chat", { chatId: chat._id })
+                                            }}>
+                                                <ChatsItem chat={chat} {...this.props} />
+                                            </Pressable>
+                                            : null
                                     )
                                 }
                             </ScrollView>
