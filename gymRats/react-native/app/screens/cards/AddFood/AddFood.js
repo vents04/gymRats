@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { ScrollView, Text, TextInput, Pressable, View } from 'react-native'
+import { ScrollView, Text, TextInput, Pressable, View, BackHandler } from 'react-native'
 import { Picker } from '@react-native-picker/picker';
 
 import ApiRequests from '../../../classes/ApiRequests';
@@ -32,6 +32,11 @@ export default class AddFood extends Component {
         this.focusListener;
     }
 
+    backAction = () => {
+        this.props.navigation.navigate("SearchCaloriesIntake", { date: this.props.route.params.date, timezoneOffset: this.props.route.params.timezoneOffset })
+        return true;
+    }
+
     onFocusFunction = () => {
         if (this.props.route.params.barcode) {
             this.setState({
@@ -44,6 +49,11 @@ export default class AddFood extends Component {
         this.focusListener = this.props.navigation.addListener('focus', () => {
             this.onFocusFunction()
         })
+        BackHandler.addEventListener('hardwareBackPress', this.backAction);
+    }
+
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.backAction);
     }
 
     addFood = () => {
@@ -90,7 +100,7 @@ export default class AddFood extends Component {
                                 opacity: pressed ? 0.1 : 1,
                             }
                         ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
-                            this.props.navigation.navigate("SearchCaloriesIntake", { date: this.props.route.params.date, timezoneOffset: this.props.route.params.timezoneOffset })
+                            this.backAction();
                         }}>
                             <Ionicons name="md-arrow-back-sharp" size={25} />
                         </Pressable>

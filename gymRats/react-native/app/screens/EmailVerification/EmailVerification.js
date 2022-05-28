@@ -9,7 +9,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { HTTP_STATUS_CODES } from '../../../global';
 
 import globalStyles from '../../../assets/styles/global.styles'
-import styles from './EmailVerficiation.styles';
+import styles from './EmailVerification.styles';
 
 export default class EmailVerification extends Component {
 

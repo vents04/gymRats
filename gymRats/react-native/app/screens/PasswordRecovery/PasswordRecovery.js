@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, Pressable, View, ScrollView, TextInput, Image, Alert } from 'react-native';
+import { Text, Pressable, View, ScrollView, TextInput, Image, Alert, BackHandler } from 'react-native';
 
 import ApiRequests from '../../classes/ApiRequests';
 
@@ -26,6 +26,19 @@ export default class PasswordRecovery extends Component {
             showCodeEntry: false,
             showEmailEntry: true,
         }
+    }
+
+    backAction = () => {
+        this.props.navigation.navigate("Login")
+        return true;
+    }
+
+    componentDidMount() {
+        BackHandler.addEventListener('hardwareBackPress', this.backAction);
+    }
+
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.backAction);
     }
 
     checkCode = () => {
@@ -108,7 +121,7 @@ export default class PasswordRecovery extends Component {
                                 opacity: pressed ? 0.1 : 1,
                             }
                         ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
-                            this.props.navigation.navigate("Login")
+                            this.backAction();
                         }}>
                             <Ionicons name="md-arrow-back-sharp" size={25} />
                         </Pressable>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { ScrollView, Text, TextInput, Pressable, View } from 'react-native'
+import { ScrollView, Text, TextInput, Pressable, View, BackHandler } from 'react-native'
 
 import ApiRequests from '../../../classes/ApiRequests';
 
@@ -34,6 +34,11 @@ export default class SearchCaloriesIntake extends Component {
         this.searchInputRef = React.createRef();
     }
 
+    backAction = () => {
+        this.props.navigation.navigate("CaloriesIntake", { date: this.props.route.params.date, timezoneOffset: this.props.route.params.timezoneOffset })
+        return true;
+    }
+
     onFocusFunction = () => {
         this.setState({ timezoneOffset: this.props.route.params.timezoneOffset || new Date().getTimezoneOffset(), date: this.props.route.params.date, query: this.props.route.params.query || "" }, () => {
             this.getRecent();
@@ -45,6 +50,11 @@ export default class SearchCaloriesIntake extends Component {
         this.focusListener = this.props.navigation.addListener('focus', () => {
             this.onFocusFunction();
         })
+        BackHandler.addEventListener("hardwareBackPress", this.backAction);
+    }
+
+    componentWillUnmount() {
+        BackHandler.removeEventListener("hardwareBackPress", this.backAction);
     }
 
     searchFood = () => {
@@ -105,7 +115,7 @@ export default class SearchCaloriesIntake extends Component {
                                 opacity: pressed ? 0.1 : 1,
                             }
                         ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
-                            this.props.navigation.navigate("CaloriesIntake", { date: this.props.route.params.date, timezoneOffset: this.props.route.params.timezoneOffset })
+                            this.backAction();
                         }}>
                             <Ionicons name="md-arrow-back-sharp" size={25} />
                         </Pressable>

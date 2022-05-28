@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, Pressable, View, ScrollView, TextInput, Image } from 'react-native';
+import { Text, Pressable, View, ScrollView, TextInput, Image, BackHandler } from 'react-native';
 import { Rating, AirbnbRating } from 'react-native-ratings';
 
 import ApiRequests from '../../classes/ApiRequests';
@@ -24,6 +24,19 @@ export default class PostReview extends Component {
         }
 
         this.ratingTitles = ["Terrible", "Bad", "OK", "Good", "Excellent"]
+    }
+
+    backAction = () => {
+        this.props.navigation.navigate("Coaching", { tab: "myCoach" })
+        return true;
+    }
+
+    componentDidMount() {
+        BackHandler.addEventListener('hardwareBackPress', this.backAction);
+    }
+
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.backAction);
     }
 
     postReview = () => {
@@ -58,7 +71,7 @@ export default class PostReview extends Component {
                                 opacity: pressed ? 0.1 : 1,
                             }
                         ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
-                            this.props.navigation.navigate("Coaching", { tab: "myCoach" })
+                            this.backAction();
                         }}>
                             <Ionicons name="md-arrow-back-sharp" size={25} />
                         </Pressable>
@@ -106,7 +119,6 @@ export default class PostReview extends Component {
                             <AirbnbRating
                                 selectedColor="#1f6cb0"
                                 count={5}
-                                defaultRating={this.state.rating}
                                 reviews={["Terrible", "Bad", "OK", "Good", "Excellent"]}
                                 defaultRating={4}
                                 size={25}
