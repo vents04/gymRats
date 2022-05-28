@@ -19,6 +19,7 @@ const { HTTP_STATUS_CODES, COLLECTIONS, DEFAULT_ERROR_MESSAGE } = require('../gl
 const { signupValidation, loginValidation, suggestionPostValidation, userUpdateValidation, forgottenPasswordPostValidation, passwordPutValidation, emailVerificationPostValidation } = require('../validation/hapi');
 const PasswordRecoveryCode = require('../db/models/generic/passwordRecoveryCode.model');
 const EmailVerificationCode = require('../db/models/generic/emailVerificationCode.model');
+const UserService = require('../services/user.service');
 
 router.post("/signup", async (req, res, next) => {
     const { error } = signupValidation(req.body);
@@ -31,6 +32,8 @@ router.post("/signup", async (req, res, next) => {
         const user = new User(req.body);
         user.password = AuthenticationService.hashPassword(req.body.password);
         await DbService.create(COLLECTIONS.USERS, user);
+
+        UserService.addToUnverifiedEmailTimeouts(user._id);
 
         return res.sendStatus(HTTP_STATUS_CODES.OK);
 
@@ -265,6 +268,8 @@ router.get("/check-email-verification-code", async (req, res, next) => {
         if (new Date(emailVerificationCode.createdDt).getTime() + 600000 <= new Date().getTime()) return next(new ResponseError("Email verification code has expired", HTTP_STATUS_CODES.CONFLICT));
 
         await DbService.update(COLLECTIONS.USERS, { _id: mongoose.Types.ObjectId(emailVerificationCode.userId) }, { verifiedEmail: true });
+
+        await UserService.removeItemFromUnverifiedEmailTimeouts(emailVerificationCode.userId);
 
         setTimeout(() => {
             const token = AuthenticationService.generateToken({ _id: mongoose.Types.ObjectId(emailVerificationCode.userId) });

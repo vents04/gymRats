@@ -8179,3 +8179,10 @@
 {"level":"error","message":"Account does not exist"}
 {"level":"error","message":"Invalid password"}
 {"level":"error","message":"Invalid password"}
+{"level":"error","message":"\"lastName\" with value \"Test2\" fails to match the required pattern: /^[A-Za-z]+$/"}
+{"level":"error","message":"User with this email already exists"}
+{"level":"error","message":"User not found"}
+{"level":"error","message":"First name should not be empty"}
+{"level":"error","message":"User not found"}
+{"level":"error","message":"Cannot read properties of undefined (reading '_id')"}
+{"level":"error","message":"User not found"}
