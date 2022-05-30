@@ -94,6 +94,16 @@ module.exports = {
                     gainedWeight: "gained compared to last measurement",
                     lostWeight: "lost compared to last measurement",
                     redirectButton: "More info"
+                },
+                caloriesIntake: {
+                    cardTitle: "Calories intake",
+                    calories: "Calories",
+                    carbs: "Carbs",
+                    grams: "g",
+                    proteins: "Proteins",
+                    fats: "Fats",
+                    noFoodAdded: "No food added",
+                    redirectButton: "Add or update food"
                 }
             },
             confirmationBox: {
@@ -214,6 +224,16 @@ module.exports = {
                     gainedWeight: "покачени от последното измерване",
                     lostWeight: "свалени от последното измерване",
                     redirectButton: "Повече инфо"
+                },
+                caloriesIntake: {
+                    cardTitle: "Приети калории",
+                    calories: "Калории",
+                    carbs: "Въглехидрати",
+                    grams: "г",
+                    proteins: "Протеини",
+                    fats: "Мазнини",
+                    noFoodAdded: "Няма добавена храна",
+                    redirectButton: "Добави и промени храната"
                 }
             },
             confirmationBox: {

@@ -7,6 +7,8 @@ import { DataManager } from "../../classes/DataManager";
 
 import ConfirmationBox from '../ConfirmationBox/ConfirmationBox';
 
+import i18n from 'i18n-js';
+
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { HTTP_STATUS_CODES, CALORIES_COUNTER_MEALS, MEAL_TITLES } from '../../../global';
@@ -140,7 +142,7 @@ export default class CaloriesIntakeCard extends Component {
                 }
                 <View style={globalStyles.cardTopbar}>
                     <MaterialCommunityIcons name="food-variant" size={25} color={cardColors.caloriesIntake} />
-                    <Text style={globalStyles.cardTitle}>Calories intake</Text>
+                    <Text style={globalStyles.cardTitle}>{i18n.t('components')['cards']['caloriesIntake']['cardTitle']}</Text>
                     {
                         !this.props.client
                             ? <Pressable style={({ pressed }) => [
@@ -162,7 +164,7 @@ export default class CaloriesIntakeCard extends Component {
                             marginTop: 16
                         }]}>{this.state.error}</Text>
                         : <>
-                            <Text style={styles.calories}>{this.state.calories} calories</Text>
+                            <Text style={styles.calories}>{this.state.calories} {i18n.t('components')['cards']['caloriesIntake']['calories']}</Text>
                             <View style={[styles.inline, styles.macronutrientsCircles]}>
                                 <View style={styles.macronutrientsCirclesContainer}>
                                     <AnimatedCircularProgress
@@ -179,11 +181,11 @@ export default class CaloriesIntakeCard extends Component {
                                         backgroundColor="#3d5875"
                                         children={() => {
                                             return (
-                                                <Text style={styles.macronutrientsRatioCircleTitle}>{this.state.carbs}g</Text>
+                                                <Text style={styles.macronutrientsRatioCircleTitle}>{this.state.carbs}{i18n.t('components')['cards']['caloriesIntake']['grams']}</Text>
                                             )
                                         }}
                                     />
-                                    <Text style={styles.macroCircleTitle}>carbs</Text>
+                                    <Text style={styles.macroCircleTitle}>{i18n.t('components')['cards']['caloriesIntake']['carbs']}</Text>
                                 </View>
                                 <View style={styles.macronutrientsCirclesContainer}>
                                     <AnimatedCircularProgress
@@ -200,11 +202,11 @@ export default class CaloriesIntakeCard extends Component {
                                         backgroundColor="#3d5875"
                                         children={() => {
                                             return (
-                                                <Text style={styles.macronutrientsRatioCircleTitle}>{this.state.protein}g</Text>
+                                                <Text style={styles.macronutrientsRatioCircleTitle}>{this.state.protein}{i18n.t('components')['cards']['caloriesIntake']['grams']}</Text>
                                             )
                                         }}
                                     />
-                                    <Text style={styles.macroCircleTitle}>proteins</Text>
+                                    <Text style={styles.macroCircleTitle}>{i18n.t('components')['cards']['caloriesIntake']['proteins']}</Text>
                                 </View>
                                 <View style={styles.macronutrientsCirclesContainer}>
                                     <AnimatedCircularProgress
@@ -221,11 +223,11 @@ export default class CaloriesIntakeCard extends Component {
                                         backgroundColor="#3d5875"
                                         children={() => {
                                             return (
-                                                <Text style={styles.macronutrientsRatioCircleTitle}>{this.state.fats}g</Text>
+                                                <Text style={styles.macronutrientsRatioCircleTitle}>{this.state.fats}{i18n.t('components')['cards']['caloriesIntake']['grams']}</Text>
                                             )
                                         }}
                                     />
-                                    <Text style={styles.macroCircleTitle}>fats</Text>
+                                    <Text style={styles.macroCircleTitle}>{i18n.t('components')['cards']['caloriesIntake']['fats']}</Text>
                                 </View>
                             </View>
                             {
@@ -253,7 +255,7 @@ export default class CaloriesIntakeCard extends Component {
                                                             </View>
                                                             : null
                                                     )
-                                                    : <Text style={globalStyles.notation}>No food added</Text>
+                                                    : <Text style={globalStyles.notation}>{i18n.t('components')['cards']['caloriesIntake']['noFoodAdded']}</Text>
                                             }
                                         </View>
                                     )
@@ -272,7 +274,7 @@ export default class CaloriesIntakeCard extends Component {
                                             onPress={() => {
                                                 this.props.actionButtonFunction();
                                             }}>
-                                            <Text style={globalStyles.authPageActionButtonText}>Add or update food</Text>
+                                            <Text style={globalStyles.authPageActionButtonText}>{i18n.t('components')['cards']['caloriesIntake']['redirectButton']}</Text>
                                         </Pressable>
                                     </View>
                                     : null
