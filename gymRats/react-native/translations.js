@@ -94,7 +94,7 @@ module.exports = {
                 enterCode: "Enter code:",
                 enterNewPassword: "Enter new password:",
                 repeatNewPassword: "Repeat new password:",
-                еnterAccountEmail: "Enter your account email:",
+                enterAccountEmail: "Enter your account email:",
                 sentRecoveryCode: "Sent recovery code",
                 recievedCode: "We have sent a recovery code to your email. Please, enter it here to continue the password recovery process.",
                 actionButton: "Check code"
@@ -259,8 +259,8 @@ module.exports = {
                 enterCode: "Въведи кода:",
                 enterNewPassword: "Въведи нова парола:",
                 repeatNewPassword: "Повтори новата парола:",
-                enterAccountEmail: "Въведете имейл адреса на вашия акаунта:",
-                sentRecoveryCode: "Изпрати код.",
+                enterAccountEmail: "Въведете имейл адреса на вашия акаунт:",
+                sentRecoveryCode: "Изпрати код",
                 recievedCode: "Изпратен е код за възстановяване на паролата на вашият имейл. Моля въведете кода, за да продължите процеса за възстановяване на паролата.",
                 actionButton: "Потвърди код"
             },

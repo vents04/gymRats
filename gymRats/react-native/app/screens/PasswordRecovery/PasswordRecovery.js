@@ -140,7 +140,7 @@ export default class PasswordRecovery extends Component {
                                 <TextInput
                                     value={this.state.email}
                                     style={globalStyles.authPageInput}
-                                    placeholder={i18n.t('screens')['passwordRecovery']['еnterAccountEmail']}
+                                    placeholder={i18n.t('screens')['passwordRecovery']['enterAccountEmail']}
                                     onChangeText={(val) => { this.setState({ email: val, showError: false }) }} />
                                 <Pressable style={({ pressed }) => [
                                     globalStyles.authPageActionButton,
