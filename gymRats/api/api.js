@@ -7,6 +7,8 @@ const indexRoute = require('./routes/index.route');
 const errorHandler = require('./errors/errorHandler');
 const mongoose = require('mongoose');
 const path = require('path');
+const fs = require('fs');
+const readline = require('readline');
 
 const { PORT, HTTP_STATUS_CODES, COLLECTIONS, FOOD_TYPES, PROGRESS_NOTATION, LOGBOOK_PROGRESS_NOTATIONS, CHAT_STATUSES } = require('./global');
 const MessagingService = require('./services/messaging.service');
@@ -16,6 +18,7 @@ const WeightTrackerService = require('./services/cards/weightTracker.service');
 const LogbookService = require('./services/cards/logbook.service');
 const oneRepMax = require('./helperFunctions/oneRepMax');
 const { NotificationsService, Notification } = require('./services/notifications.service');
+const UserService = require('./services/user.service');
 const io = require("socket.io")(httpServer, { cors: { origin: "*" }, maxHttpBufferSize: 5e+7 });
 
 app
@@ -204,6 +207,8 @@ mongo.connect();
     console.log("From last session:", await LogbookService.getProgressNotationForOneSession([88.8, 96]))
     console.log("From five sessions:", await LogbookService.getProgressNotationForFiveSessions(bulkOrms));
     console.log("Exercises progress:", await LogbookService.getExercisesProgress("622f8c4095e0bf7c3998ebc9"))
+    await UserService.generateUnverifiedTimeouts();
+
 })();
 
 io.on("connection", (socket) => {

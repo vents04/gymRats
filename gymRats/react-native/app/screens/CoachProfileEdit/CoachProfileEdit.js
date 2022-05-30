@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Image, Linking, ScrollView, Switch, Text, Pressable, View } from 'react-native';
+import { Image, Linking, ScrollView, Switch, Text, Pressable, View, BackHandler } from 'react-native';
 
 import ApiRequests from '../../classes/ApiRequests';
 
@@ -23,8 +23,18 @@ export default class CoachPage extends Component {
         }
     }
 
+    backAction = () => {
+        this.props.navigation.navigate("Coaching", { tab: "myClients" })
+        return true;
+    }
+
     componentDidMount() {
         this.getCoach();
+        BackHandler.addEventListener("hardwareBackPress", this.backAction);
+    }
+
+    componentWillUnmount() {
+        BackHandler.removeEventListener("hardwareBackPress", this.backAction);
     }
 
     getCoach = () => {
@@ -55,7 +65,7 @@ export default class CoachPage extends Component {
                                 opacity: pressed ? 0.1 : 1,
                             }
                         ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
-                            this.props.navigation.navigate("Coaching", { tab: "myClients" })
+                            this.backAction();
                         }}>
                             <Ionicons name="md-arrow-back-sharp" size={25} />
                         </Pressable>

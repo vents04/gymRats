@@ -12,35 +12,9 @@ const ResponseError = require('../errors/responseError');
 
 const { authenticate } = require('../middlewares/authenticate');
 
-const { HTTP_STATUS_CODES, COLLECTIONS, APP_EMAIL, RELATION_STATUSES } = require('../global');
-const { workoutPostValidation, workoutSessionValidation, exercisePostValidation, workoutTemplateCheckValidation, workoutUpdateValidation } = require('../validation/hapi');
+const { HTTP_STATUS_CODES, COLLECTIONS, RELATION_STATUSES, DEFAULT_ERROR_MESSAGE } = require('../global');
+const { workoutPostValidation, workoutSessionValidation, workoutTemplateCheckValidation, workoutUpdateValidation } = require('../validation/hapi');
 const { quicksort } = require('../helperFunctions/quickSortForExercises');
-
-router.post("/exercise", authenticate, async (req, res, next) => {
-    const { error } = exercisePostValidation(req.body);
-    if (error) return next(new ResponseError(error.details[0].message, HTTP_STATUS_CODES.BAD_REQUEST));
-
-    try {
-        if (req.body.keywords && req.body.keywords.length > 0 && req.user.email != APP_EMAIL) {
-            return next(new ResponseError("Keywords is a forbidden field for your user rights", HTTP_STATUS_CODES.FORBIDDEN));
-        }
-
-        if (req.body.targetMuscles) {
-            for (let targetMuscle of req.body.targetMuscles) {
-                const muscle = await DbService.getById(COLLECTIONS.MUSCLES, targetMuscle);
-                if (!muscle) return next(new ResponseError("Muscle not found", HTTP_STATUS_CODES.BAD_REQUEST));
-            }
-        }
-
-        const exercise = new Exercise(req.body);
-        exercise.userId = mongoose.Types.ObjectId(req.user._id);
-        await DbService.create(COLLECTIONS.EXERCISES, exercise);
-
-        res.sendStatus(HTTP_STATUS_CODES.OK);
-    } catch (error) {
-        return next(new ResponseError(error.message || "Internal server error", error.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
-    }
-});
 
 router.post("/workout", authenticate, async (req, res, next) => {
     const { error } = workoutPostValidation(req.body);
@@ -49,7 +23,7 @@ router.post("/workout", authenticate, async (req, res, next) => {
     try {
         for (let exerciseId of req.body.exercises) {
             const exercise = await DbService.getById(COLLECTIONS.EXERCISES, exerciseId);
-            if (!exercise) return next(new ResponseError("Exercise not found", HTTP_STATUS_CODES.NOT_FOUND));
+            if (!exercise) return next(new ResponseError("Exercise not found", HTTP_STATUS_CODES.NOT_FOUND, 40));
         }
 
         const workout = new Workout(req.body);
@@ -58,7 +32,7 @@ router.post("/workout", authenticate, async (req, res, next) => {
 
         res.sendStatus(HTTP_STATUS_CODES.OK);
     } catch (error) {
-        return next(new ResponseError(error.message || "Internal server error", error.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+        return next(new ResponseError(error.message || DEFAULT_ERROR_MESSAGE, error.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
     }
 });
 
@@ -108,38 +82,38 @@ router.get("/workout", authenticate, async (req, res, next) => {
             templates: finalTemplates,
         })
     } catch (error) {
-        return next(new ResponseError(error.message || "Internal server error", error.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+        return next(new ResponseError(error.message || DEFAULT_ERROR_MESSAGE, error.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
     }
 });
 
 router.delete("/workout/:id", authenticate, async (req, res, next) => {
-    if (!mongoose.Types.ObjectId.isValid(req.params.id)) return next(new ResponseError("Invalid workout id", HTTP_STATUS_CODES.BAD_REQUEST))
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) return next(new ResponseError("Invalid workout id", HTTP_STATUS_CODES.BAD_REQUEST, 41))
 
     try {
         const workout = await DbService.getById(COLLECTIONS.WORKOUTS, req.params.id);
-        if (!workout) return next(new ResponseError("Workout not found", HTTP_STATUS_CODES.NOT_FOUND));
+        if (!workout) return next(new ResponseError("Workout not found", HTTP_STATUS_CODES.NOT_FOUND, 42));
 
-        if (workout.userId.toString() != req.user._id.toString()) return next(new ResponseError("You are not allowed to delete this workout", HTTP_STATUS_CODES.FORBIDDEN));
+        if (workout.userId.toString() != req.user._id.toString()) return next(new ResponseError("You are not allowed to delete this workout", HTTP_STATUS_CODES.FORBIDDEN, 43));
 
         await DbService.delete(COLLECTIONS.WORKOUTS, { _id: mongoose.Types.ObjectId(req.params.id) });
 
         return res.sendStatus(HTTP_STATUS_CODES.OK);
     } catch (err) {
-        return next(new ResponseError(err.message || "Internal server error", err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
     }
 });
 
 router.put("/workout/:id", authenticate, async (req, res, next) => {
-    if (!mongoose.Types.ObjectId.isValid(req.params.id)) return next(new ResponseError("Invalid workout id", HTTP_STATUS_CODES.BAD_REQUEST))
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) return next(new ResponseError("Invalid workout id", HTTP_STATUS_CODES.BAD_REQUEST, 41))
 
     const { error } = workoutUpdateValidation(req.body);
     if (error) return next(new ResponseError(error.details[0].message, HTTP_STATUS_CODES.BAD_REQUEST));
 
     try {
         const workout = await DbService.getById(COLLECTIONS.WORKOUTS, req.params.id);
-        if (!workout) return next(new ResponseError("Workout not found", HTTP_STATUS_CODES.NOT_FOUND));
+        if (!workout) return next(new ResponseError("Workout not found", HTTP_STATUS_CODES.NOT_FOUND, 42));
 
-        if (workout.userId.toString() != req.user._id.toString()) return next(new ResponseError("You are not allowed to update this workout", HTTP_STATUS_CODES.FORBIDDEN));
+        if (workout.userId.toString() != req.user._id.toString()) return next(new ResponseError("You are not allowed to update this workout", HTTP_STATUS_CODES.FORBIDDEN, 44));
 
         let exercises = [];
         for (let exercise of req.body.exercises) {
@@ -151,7 +125,7 @@ router.put("/workout/:id", authenticate, async (req, res, next) => {
 
         return res.sendStatus(HTTP_STATUS_CODES.OK);
     } catch (err) {
-        return next(new ResponseError(err.message || "Internal server error", err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
     }
 });
 
@@ -162,7 +136,7 @@ router.get("/has-workout-templates", authenticate, async (req, res, next) => {
             hasWorkoutTemplates: templates.length > 0
         })
     } catch (error) {
-        return next(new ResponseError(error.message || "Internal server error", error.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+        return next(new ResponseError(error.message || DEFAULT_ERROR_MESSAGE, error.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
     }
 })
 
@@ -190,37 +164,14 @@ router.get("/workout-templates", authenticate, async (req, res, next) => {
             templates: finalTemplates
         })
     } catch (error) {
-        return next(new ResponseError(error.message || "Internal server error", error.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+        return next(new ResponseError(error.message || DEFAULT_ERROR_MESSAGE, error.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
     }
 })
-
-router.get("/workout/:id/last-session", authenticate, async (req, res, next) => {
-    if (!mongoose.Types.ObjectId(req.params.id)) return next(new ResponseError("Invalid workout id", HTTP_STATUS_CODES.BAD_REQUEST));
-
-    try {
-        const template = await DbService.getById(COLLECTIONS.WORKOUTS, req.params.id);
-        if (!template) return next(new ResponseError("Template not found", HTTP_STATUS_CODES.NOT_FOUND));
-        if (template.userId.toString() != req.user._id.toString()) return next(new ResponseError("Forbidden", HTTP_STATUS_CODES.FORBIDDEN));
-
-        const sessions = await DbService.getMany(COLLECTIONS.WORKOUT_SESSIONS, { userId: mongoose.Types.ObjectId(req.user._id) });
-        const nearestSession = {
-            dt: new Date(null),
-            session: null
-        }
-        for (let session of sessions) {
-            for (let exercise of session.exercises) {
-
-            }
-        }
-    } catch (error) {
-        return next(new ResponseError(error.message || "Internal server error", error.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
-    }
-});
 
 router.post("/workout-session", authenticate, async (req, res, next) => {
     if (!req.query.date || !req.query.month || !req.query.year
         || !Date.parse(req.query.year + "-" + req.query.month + "-" + req.query.date)) {
-        return next(new ResponseError("Invalid date parameters", HTTP_STATUS_CODES.BAD_REQUEST));
+        return next(new ResponseError("Invalid date parameters", HTTP_STATUS_CODES.BAD_REQUEST, 4));
     }
 
     const { error } = workoutSessionValidation(req.body);
@@ -238,7 +189,7 @@ router.post("/workout-session", authenticate, async (req, res, next) => {
 
         for (let exercise of req.body.exercises) {
             const foundExercise = await DbService.getById(COLLECTIONS.EXERCISES, exercise.exerciseId);
-            if (!foundExercise) return next(new ResponseError("Exercise not found", HTTP_STATUS_CODES.NOT_FOUND));
+            if (!foundExercise) return next(new ResponseError("Exercise not found", HTTP_STATUS_CODES.NOT_FOUND, 40));
         }
 
         const workoutSession = new Session({
@@ -256,29 +207,29 @@ router.post("/workout-session", authenticate, async (req, res, next) => {
 
         return res.sendStatus(HTTP_STATUS_CODES.OK);
     } catch (error) {
-        return next(new ResponseError(error.message || "Internal server error", error.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+        return next(new ResponseError(error.message || DEFAULT_ERROR_MESSAGE, error.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
     }
 });
 
 router.get("/workout-session", authenticate, async (req, res, next) => {
     if (!req.query.date || !req.query.month || !req.query.year
         || !Date.parse(req.query.year + "-" + req.query.month + "-" + req.query.date)) {
-        return next(new ResponseError("Invalid date parameters", HTTP_STATUS_CODES.BAD_REQUEST));
+        return next(new ResponseError("Invalid date parameters", HTTP_STATUS_CODES.BAD_REQUEST, 4));
     }
 
     if (req.query.clientId && !mongoose.Types.ObjectId.isValid(req.query.clientId))
-        return next(new ResponseError("Invalid client id", HTTP_STATUS_CODES.BAD_REQUEST));
+        return next(new ResponseError("Invalid client id", HTTP_STATUS_CODES.BAD_REQUEST, 15));
 
     try {
         if (req.query.clientId) {
             const client = await DbService.getById(COLLECTIONS.USERS, req.query.clientId);
-            if (!client) return next(new ResponseError("Client not found", HTTP_STATUS_CODES.NOT_FOUND));
+            if (!client) return next(new ResponseError("Client not found", HTTP_STATUS_CODES.NOT_FOUND, 16));
 
             const personalTrainer = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, { userId: mongoose.Types.ObjectId(req.user._id) });
-            if (!personalTrainer) return next(new ResponseError("Personal trainer not found", HTTP_STATUS_CODES.NOT_FOUND));
+            if (!personalTrainer) return next(new ResponseError("Personal trainer not found", HTTP_STATUS_CODES.NOT_FOUND, 17));
 
             const relation = await DbService.getOne(COLLECTIONS.RELATIONS, { personalTrainerId: mongoose.Types.ObjectId(personalTrainer._id), clientId: mongoose.Types.ObjectId(client._id), status: RELATION_STATUSES.ACTIVE });
-            if (!relation) return next(new ResponseError("Cannot get clients' data if you do not have an active relation with them", HTTP_STATUS_CODES.CONFLICT));
+            if (!relation) return next(new ResponseError("Cannot get clients' data if you do not have an active relation with them", HTTP_STATUS_CODES.CONFLICT, 18));
         }
 
         const workoutSession = await DbService.getOne(COLLECTIONS.WORKOUT_SESSIONS, {
@@ -299,14 +250,14 @@ router.get("/workout-session", authenticate, async (req, res, next) => {
             session: workoutSession
         })
     } catch (error) {
-        return next(new ResponseError(error.message || "Internal server error", error.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+        return next(new ResponseError(error.message || DEFAULT_ERROR_MESSAGE, error.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
     }
 });
 
 router.delete("/workout-session", authenticate, async (req, res, next) => {
     if (!req.query.date || !req.query.month || !req.query.year
         || !Date.parse(req.query.year + "-" + req.query.month + "-" + req.query.date)) {
-        return next(new ResponseError("Invalid date parameters", HTTP_STATUS_CODES.BAD_REQUEST));
+        return next(new ResponseError("Invalid date parameters", HTTP_STATUS_CODES.BAD_REQUEST, 4));
     }
 
     try {
@@ -318,7 +269,7 @@ router.delete("/workout-session", authenticate, async (req, res, next) => {
         });
         res.sendStatus(HTTP_STATUS_CODES.OK);
     } catch (error) {
-        return next(new ResponseError(error.message || "Internal server error", error.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+        return next(new ResponseError(error.message || DEFAULT_ERROR_MESSAGE, error.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
     }
 });
 
@@ -357,7 +308,7 @@ router.post('/check-template', authenticate, async (req, res, next) => {
             hasMatchingTemplate: false
         })
     } catch (error) {
-        return next(new ResponseError(error.message || "Internal server error", error.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+        return next(new ResponseError(error.message || DEFAULT_ERROR_MESSAGE, error.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
     }
 });
 
@@ -399,7 +350,7 @@ router.get("/search", authenticate, async (req, res, next) => {
             results: sorted.splice(0, 50)
         })
     } catch (error) {
-        return next(new ResponseError(error.message || "Internal server error", error.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+        return next(new ResponseError(error.message || DEFAULT_ERROR_MESSAGE, error.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
     }
 });
 

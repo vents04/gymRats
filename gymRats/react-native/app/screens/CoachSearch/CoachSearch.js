@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Alert, Image, ScrollView, Text, TextInput, Pressable, View } from 'react-native';
+import { Alert, Image, ScrollView, Text, TextInput, Pressable, View, BackHandler } from 'react-native';
 import BottomSheet from "react-native-gesture-bottom-sheet";
 import Slider from '@react-native-community/slider';
 import * as Location from "expo-location";
@@ -39,9 +39,19 @@ export default class CoachSearch extends Component {
         this.filterSheet = React.createRef();
     }
 
+    backAction = () => {
+        this.props.navigation.navigate("Coaching", { tab: "myCoach" })
+        return true;
+    }
+
     async componentDidMount() {
         this.searchCoaches();
         this.getLocation();
+        BackHandler.addEventListener("hardwareBackPress", this.backAction);
+    }
+
+    componentWillUnmount() {
+        BackHandler.removeEventListener("hardwareBackPress", this.backAction);
     }
 
     getLocation = async () => {
@@ -114,7 +124,7 @@ export default class CoachSearch extends Component {
                                 opacity: pressed ? 0.1 : 1,
                             }
                         ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
-                            this.props.navigation.navigate("Coaching", { tab: "myCoach" })
+                            this.backAction();
                         }}>
                             <Ionicons name="md-arrow-back-sharp" size={25} />
                         </Pressable>

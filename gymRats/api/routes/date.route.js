@@ -14,7 +14,7 @@ const { HTTP_STATUS_CODES, CARD_COLLECTIONS, COLLECTIONS, DEFAULT_ERROR_MESSAGE 
 router.get('/', authenticate, async (req, res, next) => {
     if (!req.query.date || !req.query.month || !req.query.year
         || !Date.parse(req.query.year + "-" + req.query.month + "-" + req.query.date)) {
-        return next(new ResponseError("Invalid date parameters", HTTP_STATUS_CODES.BAD_REQUEST));
+        return next(new ResponseError("Invalid date parameters", HTTP_STATUS_CODES.BAD_REQUEST, 4));
     }
 
     try {

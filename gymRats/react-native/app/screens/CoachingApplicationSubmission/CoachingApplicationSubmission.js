@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, TextInput, View, Pressable, Switch } from 'react-native';
+import { Text, TextInput, View, Pressable, Switch, BackHandler } from 'react-native';
 
 import ApiRequests from '../../classes/ApiRequests';
 
@@ -23,6 +23,19 @@ export default class CoachingApplicationSubmission extends Component {
             showError: false,
             error: ""
         }
+    }
+
+    backAction = () => {
+        this.props.navigation.navigate("Coaching", { tab: "myClients" });
+        return true;
+    }
+
+    componentDidMount() {
+        BackHandler.addEventListener('hardwareBackPress', this.backAction);
+    }
+
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.backAction);
     }
 
     searchLocation = () => {
@@ -74,7 +87,7 @@ export default class CoachingApplicationSubmission extends Component {
             },
             prefersOfflineCoaching: this.state.prefersOfflineCoaching
         }, true).then((response) => {
-            this.props.navigation.navigate("Coaching", { tab: "myClients" });
+            this.backAction();
         }).catch((error) => {
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
@@ -100,7 +113,7 @@ export default class CoachingApplicationSubmission extends Component {
                                 opacity: pressed ? 0.1 : 1,
                             }
                         ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
-                            this.props.navigation.navigate("Coaching")
+                            this.backAction();
                         }}>
                             <Ionicons name="md-arrow-back-sharp" size={25} />
                         </Pressable>

@@ -35,16 +35,26 @@ export default class Client extends Component {
         this.focusListener;
     }
 
+    backAction = () => {
+        this.props.navigation.navigate("Coaching", { tab: "myClients" })
+        return true;
+    }
+
     onFocusFunction = () => {
         this.setState({ client: this.props.route.params.client.clientInstance, from: this.props.route.params.client.from }, () => {
             this.getCurrentDate();
         });
     }
 
-    async componentDidMount() {
+    componentDidMount() {
         this.focusListener = this.props.navigation.addListener('focus', () => {
             this.onFocusFunction()
         })
+        BackHandler.addEventListener("hardwareBackPress", this.backAction);
+    }
+
+    componentWillUnmount() {
+        BackHandler.removeEventListener("hardwareBackPress", this.backAction);
     }
 
     getDate = (selectedDate) => {
@@ -96,7 +106,7 @@ export default class Client extends Component {
                                 opacity: pressed ? 0.1 : 1,
                             }
                         ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
-                            this.props.navigation.navigate("Coaching", { tab: "myClients" })
+                            this.backAction();
                         }}>
                             <Ionicons name="md-arrow-back-sharp" size={25} />
                         </Pressable>

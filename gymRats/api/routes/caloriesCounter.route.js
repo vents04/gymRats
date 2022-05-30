@@ -55,7 +55,7 @@ router.post('/unknown-source-calories', authenticate, async (req, res, next) => 
 
     try {
         const date = new Date(req.body.year, req.body.month, req.body.date);
-        if (date.getTime() !== date.getTime()) return next(new ResponseError("Invalid date", HTTP_STATUS_CODES.BAD_REQUEST));
+        if (date.getTime() !== date.getTime()) return next(new ResponseError("Invalid date", HTTP_STATUS_CODES.BAD_REQUEST, 4));
 
         const unknownSourceCalories = new UnknownSourceCalories(req.body);
         unknownSourceCalories.userId = mongoose.Types.ObjectId(req.user._id);
@@ -69,13 +69,13 @@ router.post('/unknown-source-calories', authenticate, async (req, res, next) => 
 });
 
 router.delete("/unknown-source-calories/:id", authenticate, async (req, res, next) => {
-    if (!mongoose.Types.ObjectId.isValid(req.params.id)) return next(new ResponseError("Invalid id", HTTP_STATUS_CODES.BAD_REQUEST));
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) return next(new ResponseError("Invalid id", HTTP_STATUS_CODES.BAD_REQUEST, 5));
 
     try {
         const unknownSourceCalories = await DbService.getById(COLLECTIONS.UNKNOWN_SOURCE_CALORIES, req.params.id);
-        if (!unknownSourceCalories) return next(new ResponseError("Unknown source calories not found", HTTP_STATUS_CODES.NOT_FOUND));
+        if (!unknownSourceCalories) return next(new ResponseError("Unknown source calories not found", HTTP_STATUS_CODES.NOT_FOUND, 6));
 
-        if (unknownSourceCalories.userId.toString() != req.user._id.toString()) return next(new ResponseError("You are not allowed to delete this unknown source calories", HTTP_STATUS_CODES.FORBIDDEN));
+        if (unknownSourceCalories.userId.toString() != req.user._id.toString()) return next(new ResponseError("You are not allowed to delete this unknown source calories", HTTP_STATUS_CODES.FORBIDDEN, 7));
 
         await DbService.delete(COLLECTIONS.UNKNOWN_SOURCE_CALORIES, { _id: mongoose.Types.ObjectId(req.params.id) });
 
@@ -97,10 +97,10 @@ router.post('/item', authenticate, async (req, res, next) => {
             carbs: req.body.carbs,
             fats: req.body.fats,
         })
-        if (existingItem) return next(new ResponseError("An item with that title, calories and macros already exists", HTTP_STATUS_CODES.CONFLICT));
+        if (existingItem) return next(new ResponseError("An item with that title, calories and macros already exists", HTTP_STATUS_CODES.CONFLICT, 8));
 
         const validCaloriesAndMacros = checkCaloriesAndMacros(req.body.calories, req.body.protein, req.body.carbs, req.body.fats);
-        if (!validCaloriesAndMacros) return next(new ResponseError("Please double check the calories and the macros because there was a mismatch found", HTTP_STATUS_CODES.BAD_REQUEST));
+        if (!validCaloriesAndMacros) return next(new ResponseError("Please double check the calories and the macros because there was a mismatch found", HTTP_STATUS_CODES.BAD_REQUEST, 9));
 
         const item = new CaloriesCounterItem(req.body);
         item.userId = req.user._id;
@@ -128,11 +128,11 @@ router.post('/item', authenticate, async (req, res, next) => {
 });
 
 router.get("/item/:id", authenticate, async (req, res, next) => {
-    if (!mongoose.Types.ObjectId.isValid(req.params.id)) return next(new ResponseError("Invalid item id", HTTP_STATUS_CODES.BAD_REQUEST));
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) return next(new ResponseError("Invalid item id", HTTP_STATUS_CODES.BAD_REQUEST, 5));
 
     try {
         const item = await DbService.getById(COLLECTIONS.CALORIES_COUNTER_ITEMS, req.params.id);
-        if (!item) return next(new ResponseError("Item not found", HTTP_STATUS_CODES.NOT_FOUND));
+        if (!item) return next(new ResponseError("Item not found", HTTP_STATUS_CODES.NOT_FOUND, 10));
 
         return res.status(HTTP_STATUS_CODES.OK).send({
             item
@@ -148,7 +148,7 @@ router.post("/daily-item", authenticate, async (req, res, next) => {
 
     try {
         const date = new Date(req.body.year, req.body.month, req.body.date);
-        if (date.getTime() !== date.getTime()) return next(new ResponseError("Invalid date", HTTP_STATUS_CODES.BAD_REQUEST));
+        if (date.getTime() !== date.getTime()) return next(new ResponseError("Invalid date", HTTP_STATUS_CODES.BAD_REQUEST, 4));
 
         const existingDay = await DbService.getOne(COLLECTIONS.CALORIES_COUNTER_DAYS, {
             userId: mongoose.Types.ObjectId(req.user._id),
@@ -192,12 +192,12 @@ router.post("/daily-item", authenticate, async (req, res, next) => {
 });
 
 router.delete('/:id', authenticate, async (req, res, next) => {
-    if (!mongoose.Types.ObjectId.isValid(req.params.id)) return next(new ResponseError("Invalid calorie counter day id", HTTP_STATUS_CODES.BAD_REQUEST));
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) return next(new ResponseError("Invalid calorie counter day id", HTTP_STATUS_CODES.BAD_REQUEST, 5));
 
     try {
         const calorieCounterDay = await DbService.getById(COLLECTIONS.CALORIES_COUNTER_DAYS, req.params.id);
-        if (!calorieCounterDay) return next(new ResponseError("Calorie counter day not found", HTTP_STATUS_CODES.NOT_FOUND));
-        if (calorieCounterDay.userId.toString() != req.user._id.toString()) return next(new ResponseError("Cannot delete calorie counter day", HTTP_STATUS_CODES.FORBIDDEN));
+        if (!calorieCounterDay) return next(new ResponseError("Calorie counter day not found", HTTP_STATUS_CODES.NOT_FOUND, 12));
+        if (calorieCounterDay.userId.toString() != req.user._id.toString()) return next(new ResponseError("Cannot delete calorie counter day", HTTP_STATUS_CODES.FORBIDDEN, 11));
 
         await DbService.delete(COLLECTIONS.CALORIES_COUNTER_DAYS, { _id: mongoose.Types.ObjectId(req.params.id) });
 
@@ -209,13 +209,13 @@ router.delete('/:id', authenticate, async (req, res, next) => {
 
 router.delete("/:dayId/:itemId", authenticate, async (req, res, next) => {
     if (!mongoose.Types.ObjectId.isValid(req.params.dayId) || !mongoose.Types.ObjectId.isValid(req.params.itemId))
-        return next(new ResponseError("Invalid day id and/or item id", HTTP_STATUS_CODES.BAD_REQUEST));
+        return next(new ResponseError("Invalid day id and/or item id", HTTP_STATUS_CODES.BAD_REQUEST, 5));
 
     try {
         const day = await DbService.getById(COLLECTIONS.CALORIES_COUNTER_DAYS, req.params.dayId);
-        if (!day) return next(new ResponseError("Day not found", HTTP_STATUS_CODES.NOT_FOUND));
+        if (!day) return next(new ResponseError("Day not found", HTTP_STATUS_CODES.NOT_FOUND, 12));
 
-        if (day.userId.toString() != req.user._id.toString()) return next(new ResponseError("You cannot delete this item", HTTP_STATUS_CODES.FORBIDDEN));
+        if (day.userId.toString() != req.user._id.toString()) return next(new ResponseError("You cannot delete this item", HTTP_STATUS_CODES.FORBIDDEN, 13));
 
         await DbService.pullUpdate(COLLECTIONS.CALORIES_COUNTER_DAYS, { _id: mongoose.Types.ObjectId(req.params.dayId) }, { "items": { _id: mongoose.Types.ObjectId(req.params.itemId) } })
 
@@ -227,16 +227,16 @@ router.delete("/:dayId/:itemId", authenticate, async (req, res, next) => {
 
 router.put("/:dayId/:itemId", authenticate, async (req, res, next) => {
     if (!mongoose.Types.ObjectId.isValid(req.params.dayId) || !mongoose.Types.ObjectId.isValid(req.params.itemId))
-        return next(new ResponseError("Invalid day id and/or item id", HTTP_STATUS_CODES.BAD_REQUEST));
+        return next(new ResponseError("Invalid day id and/or item id", HTTP_STATUS_CODES.BAD_REQUEST, 5));
 
     const { error } = dailyItemUpdateValidation(req.body);
     if (error) return next(new ResponseError(error.details[0].message, HTTP_STATUS_CODES.BAD_REQUEST));
 
     try {
         const day = await DbService.getById(COLLECTIONS.CALORIES_COUNTER_DAYS, req.params.dayId);
-        if (!day) return next(new ResponseError("Day not found", HTTP_STATUS_CODES.NOT_FOUND));
+        if (!day) return next(new ResponseError("Day not found", HTTP_STATUS_CODES.NOT_FOUND, 12));
 
-        if (day.userId.toString() != req.user._id.toString()) return next(new ResponseError("You cannot delete this item", HTTP_STATUS_CODES.FORBIDDEN));
+        if (day.userId.toString() != req.user._id.toString()) return next(new ResponseError("You cannot delete this item", HTTP_STATUS_CODES.FORBIDDEN, 14));
 
         let item = null;
         for (let currentItem of day.items) {
@@ -245,7 +245,7 @@ router.put("/:dayId/:itemId", authenticate, async (req, res, next) => {
                 break;
             }
         }
-        if (!item) return next(new ResponseError("Item could not be found", HTTP_STATUS_CODES.BAD_REQUEST));
+        if (!item) return next(new ResponseError("Item could not be found", HTTP_STATUS_CODES.BAD_REQUEST, 10));
 
         const newItem = {
             _id: mongoose.Types.ObjectId(item._id),
@@ -268,22 +268,22 @@ router.put("/:dayId/:itemId", authenticate, async (req, res, next) => {
 router.get('/day', authenticate, async (req, res, next) => {
     if (!req.query.date || !req.query.month || !req.query.year
         || !Date.parse(req.query.year + "-" + req.query.month + "-" + req.query.date)) {
-        return next(new ResponseError("Invalid date parameters", HTTP_STATUS_CODES.BAD_REQUEST));
+        return next(new ResponseError("Invalid date parameters", HTTP_STATUS_CODES.BAD_REQUEST, 4));
     }
 
     if (req.query.clientId && !mongoose.Types.ObjectId.isValid(req.query.clientId))
-        return next(new ResponseError("Invalid client id", HTTP_STATUS_CODES.BAD_REQUEST));
+        return next(new ResponseError("Invalid client id", HTTP_STATUS_CODES.BAD_REQUEST, 15));
 
     try {
         if (req.query.clientId) {
             const client = await DbService.getById(COLLECTIONS.USERS, req.query.clientId);
-            if (!client) return next(new ResponseError("Client not found", HTTP_STATUS_CODES.NOT_FOUND));
+            if (!client) return next(new ResponseError("Client not found", HTTP_STATUS_CODES.NOT_FOUND, 16));
 
             const personalTrainer = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, { userId: mongoose.Types.ObjectId(req.user._id) });
-            if (!personalTrainer) return next(new ResponseError("Personal trainer not found", HTTP_STATUS_CODES.NOT_FOUND));
+            if (!personalTrainer) return next(new ResponseError("Personal trainer not found", HTTP_STATUS_CODES.NOT_FOUND, 17));
 
             const relation = await DbService.getOne(COLLECTIONS.RELATIONS, { personalTrainerId: mongoose.Types.ObjectId(personalTrainer._id), clientId: mongoose.Types.ObjectId(client._id), status: RELATION_STATUSES.ACTIVE });
-            if (!relation) return next(new ResponseError("Cannot get clients' data if you do not have an active relation with them", HTTP_STATUS_CODES.CONFLICT));
+            if (!relation) return next(new ResponseError("Cannot get clients' data if you do not have an active relation with them", HTTP_STATUS_CODES.CONFLICT, 18));
         }
 
         const calorieCounterDay = await DbService.getOne(COLLECTIONS.CALORIES_COUNTER_DAYS, {
@@ -381,8 +381,8 @@ router.get("/search/food", async (req, res, next) => {
 });
 
 router.get("/search/barcode", async (req, res, next) => {
-    if (!req.query.barcode) return next(new ResponseError("Provide a barcode to search for", HTTP_STATUS_CODES.BAD_REQUEST));
-    if (!validbarcode(req.query.barcode)) return next(new ResponseError("Invalid barcode", HTTP_STATUS_CODES.BAD_REQUEST));
+    if (!req.query.barcode) return next(new ResponseError("Provide a barcode to search for", HTTP_STATUS_CODES.BAD_REQUEST, 19));
+    if (!validbarcode(req.query.barcode)) return next(new ResponseError("Invalid barcode", HTTP_STATUS_CODES.BAD_REQUEST, 20));
     try {
         const result = await DbService.getOne(COLLECTIONS.CALORIES_COUNTER_ITEMS, { barcode: req.query.barcode });
         return res.status(HTTP_STATUS_CODES.OK).send({

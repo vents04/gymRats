@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Dimensions, ScrollView, Text, TextInput, Pressable, View } from 'react-native';
+import { Dimensions, ScrollView, Text, TextInput, Pressable, View, BackHandler } from 'react-native';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import { Picker } from '@react-native-picker/picker';
 
@@ -26,11 +26,23 @@ export default class AddCaloriesIntakeItem extends Component {
         }
     }
 
+    backAction = () => {
+        (!this.props.route.params.previousScreen)
+            ? this.props.navigation.navigate("SearchCaloriesIntake", { date: this.props.route.params.date, timezoneOffset: this.props.route.params.timezoneOffset, meal: this.state.meal })
+            : this.props.navigation.navigate(this.props.route.params.previousScreen, { date: this.props.route.params.date, timezoneOffset: this.props.route.params.timezoneOffset, meal: this.state.meal })
+        return true;
+    }
+
     componentDidMount() {
         if (this.props.route.params.intent == CALORIES_COUNTER_SCREEN_INTENTS.UPDATE)
             this.setState({ amount: parseInt(this.props.route.params.amount) });
         if (this.props.route.params.amount)
-            this.setState({ amount: parseInt(this.props.route.params.amount) })
+            this.setState({ amount: parseInt(this.props.route.params.amount) });
+        BackHandler.addEventListener("hardwareBackPress", this.backAction);
+    }
+
+    componentWillUnmount() {
+        BackHandler.removeEventListener("hardwareBackPress", this.backAction);
     }
 
     addFood = () => {
@@ -98,9 +110,7 @@ export default class AddCaloriesIntakeItem extends Component {
                                 opacity: pressed ? 0.1 : 1,
                             }
                         ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
-                            (!this.props.route.params.previousScreen)
-                                ? this.props.navigation.navigate("SearchCaloriesIntake", { date: this.props.route.params.date, timezoneOffset: this.props.route.params.timezoneOffset, meal: this.state.meal })
-                                : this.props.navigation.navigate(this.props.route.params.previousScreen, { date: this.props.route.params.date, timezoneOffset: this.props.route.params.timezoneOffset, meal: this.state.meal })
+                            this.backAction();
                         }}>
                             <Ionicons name="md-arrow-back-sharp" size={25} />
                         </Pressable>

@@ -17,7 +17,7 @@ const { dailyWeightPostValidation } = require('../validation/hapi');
 router.post("/daily-weight", authenticate, async (req, res, next) => {
     if (!req.query.date || !req.query.month || !req.query.year
         || !Date.parse(req.query.year + "-" + req.query.month + "-" + req.query.date)) {
-        return next(new ResponseError("Invalid date parameters", HTTP_STATUS_CODES.BAD_REQUEST));
+        return next(new ResponseError("Invalid date parameters", HTTP_STATUS_CODES.BAD_REQUEST, 4));
     }
 
     const { error } = dailyWeightPostValidation(req.body);
@@ -56,12 +56,12 @@ router.post("/daily-weight", authenticate, async (req, res, next) => {
 });
 
 router.delete("/daily-weight/:id", authenticate, async (req, res, next) => {
-    if (!mongoose.Types.ObjectId.isValid(req.params.id)) return next(new ResponseError("Invalid daily weight id", HTTP_STATUS_CODES.BAD_REQUEST));
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) return next(new ResponseError("Invalid daily weight id", HTTP_STATUS_CODES.BAD_REQUEST, 5));
 
     try {
         const dailyWeight = await DbService.getOne(COLLECTIONS.DAILY_WEIGHTS, { _id: mongoose.Types.ObjectId(req.params.id) });
         if (!dailyWeight) return next(new ResponseError("Daily weight not found", HTTP_STATUS_CODES.NOT_FOUND));
-        if (dailyWeight.userId.toString() != req.user._id.toString()) return next(new ResponseError("You cannot delete this daily weight", HTTP_STATUS_CODES.FORBIDDEN));
+        if (dailyWeight.userId.toString() != req.user._id.toString()) return next(new ResponseError("You cannot delete this daily weight", HTTP_STATUS_CODES.FORBIDDEN, 45));
 
         await DbService.delete(COLLECTIONS.DAILY_WEIGHTS, { _id: mongoose.Types.ObjectId(req.params.id) });
 

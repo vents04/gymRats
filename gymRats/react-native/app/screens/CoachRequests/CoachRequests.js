@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { ScrollView, Text, Pressable, View } from 'react-native'
+import { ScrollView, Text, Pressable, View, BackHandler } from 'react-native'
 
 import ApiRequests from '../../classes/ApiRequests';
 
@@ -23,8 +23,18 @@ export default class CoachRequests extends Component {
         }
     }
 
+    backAction = () => {
+        this.props.navigation.navigate("Coaching")
+        return true;
+    }
+
     componentDidMount() {
         this.getRequests();
+        BackHandler.addEventListener("hardwareBackPress", this.backAction);
+    }
+
+    componentWillUnmount() {
+        BackHandler.removeEventListener("hardwareBackPress", this.backAction);
     }
 
     getRequests = () => {
@@ -75,7 +85,7 @@ export default class CoachRequests extends Component {
                                 opacity: pressed ? 0.1 : 1,
                             }
                         ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
-                            this.props.navigation.navigate("Coaching")
+                            this.backAction();
                         }}>
                             <Ionicons name="md-arrow-back-sharp" size={25} />
                         </Pressable>

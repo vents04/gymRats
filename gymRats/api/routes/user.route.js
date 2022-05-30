@@ -19,6 +19,7 @@ const { HTTP_STATUS_CODES, COLLECTIONS, DEFAULT_ERROR_MESSAGE } = require('../gl
 const { signupValidation, loginValidation, suggestionPostValidation, userUpdateValidation, forgottenPasswordPostValidation, passwordPutValidation, emailVerificationPostValidation } = require('../validation/hapi');
 const PasswordRecoveryCode = require('../db/models/generic/passwordRecoveryCode.model');
 const EmailVerificationCode = require('../db/models/generic/emailVerificationCode.model');
+const UserService = require('../services/user.service');
 
 router.post("/signup", async (req, res, next) => {
     const { error } = signupValidation(req.body);
@@ -26,11 +27,13 @@ router.post("/signup", async (req, res, next) => {
 
     try {
         const existingUser = await DbService.getOne(COLLECTIONS.USERS, { email: req.body.email });
-        if (existingUser) return next(new ResponseError("User with this email already exists", HTTP_STATUS_CODES.BAD_REQUEST));
+        if (existingUser) return next(new ResponseError("User with this email already exists", HTTP_STATUS_CODES.BAD_REQUEST, 46));
 
         const user = new User(req.body);
         user.password = AuthenticationService.hashPassword(req.body.password);
         await DbService.create(COLLECTIONS.USERS, user);
+
+        UserService.addToUnverifiedEmailTimeouts(user._id);
 
         return res.sendStatus(HTTP_STATUS_CODES.OK);
 
@@ -45,10 +48,10 @@ router.post("/login", async (req, res, next) => {
 
     try {
         const user = await DbService.getOne(COLLECTIONS.USERS, { email: req.body.email });
-        if (!user) return next(new ResponseError("User with this email was not found", HTTP_STATUS_CODES.NOT_FOUND));
+        if (!user) return next(new ResponseError("User with this email was not found", HTTP_STATUS_CODES.NOT_FOUND, 47));
 
         const isPasswordValid = AuthenticationService.verifyPassword(req.body.password, user.password);
-        if (!isPasswordValid) return next(new ResponseError("Invalid password", HTTP_STATUS_CODES.BAD_REQUEST));
+        if (!isPasswordValid) return next(new ResponseError("Invalid password", HTTP_STATUS_CODES.BAD_REQUEST, 48));
 
         setTimeout(() => {
             const token = AuthenticationService.generateToken({ _id: mongoose.Types.ObjectId(user._id) });
@@ -119,7 +122,7 @@ router.post("/suggestion", authenticate, async (req, res, next) => {
 
         return res.sendStatus(HTTP_STATUS_CODES.OK);
     } catch (error) {
-        return next(new ResponseError(error.message || "Internal server error", error.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+        return next(new ResponseError(error.message || DEFAULT_ERROR_MESSAGE, error.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
     }
 });
 
@@ -162,8 +165,8 @@ router.post("/password-recovery-code", async (req, res, next) => {
 
     try {
         const user = await DbService.getOne(COLLECTIONS.USERS, { email: req.body.email });
-        if (!user) return next(new ResponseError("User with this email was not found", HTTP_STATUS_CODES.NOT_FOUND));
-        if (!user.verifiedEmail) return next(new ResponseError("We cannot issue password recovery for users with unverified emails", HTTP_STATUS_CODES.CONFLICT));
+        if (!user) return next(new ResponseError("User with this email was not found", HTTP_STATUS_CODES.NOT_FOUND, 47));
+        if (!user.verifiedEmail) return next(new ResponseError("We cannot issue password recovery for users with unverified emails", HTTP_STATUS_CODES.CONFLICT, 49));
 
 
         const passwordRecoveryCode = new PasswordRecoveryCode({
@@ -186,13 +189,13 @@ router.post("/password-recovery-code", async (req, res, next) => {
 
 router.get("/check-password-recovery-code", async (req, res, next) => {
     if (!req.query.code || !req.query.identifier)
-        return next(new ResponseError("Code and identifier must be provided"));
+        return next(new ResponseError("Code and identifier must be provided", 50));
 
     try {
         const passwordRecoveryCode = await DbService.getOne(COLLECTIONS.PASSWORD_RECOVERY_CODES, { identifier: req.query.identifier, code: req.query.code });
-        if (!passwordRecoveryCode) return next(new ResponseError("Invalid password recovery code", HTTP_STATUS_CODES.NOT_FOUND));
-        if (passwordRecoveryCode.hasBeenUsed) return next(new ResponseError("Password recovery code has already been used", HTTP_STATUS_CODES.CONFLICT));
-        if (new Date(passwordRecoveryCode.createdDt).getTime() + 120000 <= new Date().getTime()) return next(new ResponseError("Password recovery code has expired", HTTP_STATUS_CODES.CONFLICT));
+        if (!passwordRecoveryCode) return next(new ResponseError("Invalid password recovery code", HTTP_STATUS_CODES.NOT_FOUND, 51));
+        if (passwordRecoveryCode.hasBeenUsed) return next(new ResponseError("Password recovery code has already been used", HTTP_STATUS_CODES.CONFLICT, 52));
+        if (new Date(passwordRecoveryCode.createdDt).getTime() + 120000 <= new Date().getTime()) return next(new ResponseError("Password recovery code has expired", HTTP_STATUS_CODES.CONFLICT, 53));
 
         return res.sendStatus(HTTP_STATUS_CODES.OK);
     } catch (err) {
@@ -206,13 +209,13 @@ router.put("/password", async (req, res, next) => {
 
     try {
         const passwordRecoveryCode = await DbService.getOne(COLLECTIONS.PASSWORD_RECOVERY_CODES, { identifier: req.body.identifier });
-        if (!passwordRecoveryCode) return next(new ResponseError("Password recovery code not found", HTTP_STATUS_CODES.NOT_FOUND));
-        if (passwordRecoveryCode.code != req.body.code) return next(new ResponseError("Password recovery code is invalid", HTTP_STATUS_CODES.CONFLICT));
-        if (passwordRecoveryCode.hasBeenUsed) return next(new ResponseError("Password recovery code has already been used", HTTP_STATUS_CODES.CONFLICT));
-        if (new Date(passwordRecoveryCode.createdDt).getTime() + 120000 <= new Date().getTime()) return next(new ResponseError("Password recovery code has expired", HTTP_STATUS_CODES.CONFLICT));
+        if (!passwordRecoveryCode) return next(new ResponseError("Password recovery code not found", HTTP_STATUS_CODES.NOT_FOUND, 54));
+        if (passwordRecoveryCode.code != req.body.code) return next(new ResponseError("Password recovery code is invalid", HTTP_STATUS_CODES.CONFLICT, 51));
+        if (passwordRecoveryCode.hasBeenUsed) return next(new ResponseError("Password recovery code has already been used", HTTP_STATUS_CODES.CONFLICT, 52));
+        if (new Date(passwordRecoveryCode.createdDt).getTime() + 120000 <= new Date().getTime()) return next(new ResponseError("Password recovery code has expired", HTTP_STATUS_CODES.CONFLICT, 53));
 
         const user = await DbService.getById(COLLECTIONS.USERS, passwordRecoveryCode.userId);
-        if (!user) return next(new ResponseError("User not found", HTTP_STATUS_CODES.NOT_FOUND));
+        if (!user) return next(new ResponseError("User not found", HTTP_STATUS_CODES.NOT_FOUND, 39));
 
         const hashedPassword = AuthenticationService.hashPassword(req.body.password);
 
@@ -231,8 +234,8 @@ router.post("/email-verification-code", async (req, res, next) => {
 
     try {
         const user = await DbService.getOne(COLLECTIONS.USERS, { email: req.body.email });
-        if (!user) return next(new ResponseError("User with this email was not found", HTTP_STATUS_CODES.NOT_FOUND));
-        if (user.verifiedEmail) return next(new ResponseError("You can't confirm your email because it already is!", HTTP_STATUS_CODES.BAD_REQUEST));
+        if (!user) return next(new ResponseError("User with this email was not found", HTTP_STATUS_CODES.NOT_FOUND, 47));
+        if (user.verifiedEmail) return next(new ResponseError("You can't confirm your email because it already is!", HTTP_STATUS_CODES.BAD_REQUEST, 55));
 
 
         const emailVerificationCode = new EmailVerificationCode({
@@ -255,17 +258,19 @@ router.post("/email-verification-code", async (req, res, next) => {
 
 router.get("/check-email-verification-code", async (req, res, next) => {
     if (!req.query.code || !req.query.identifier)
-        return next(new ResponseError("Code and identifier must be provided"));
+        return next(new ResponseError("Code and identifier must be provided", HTTP_STATUS_CODES.BAD_REQUEST, 50));
 
     try {
         console.log(req.query)
         const emailVerificationCode = await DbService.getOne(COLLECTIONS.EMAIL_VERIFICATION_CODES, { identifier: req.query.identifier, code: req.query.code });
-        if (!emailVerificationCode) return next(new ResponseError("Invalid email verification code", HTTP_STATUS_CODES.NOT_FOUND));
+        if (!emailVerificationCode) return next(new ResponseError("Invalid email verification code", HTTP_STATUS_CODES.NOT_FOUND, 56));
         if (emailVerificationCode.hasBeenUsed) return next(new ResponseError("Email verification code has already been used", HTTP_STATUS_CODES.CONFLICT));
-        if (new Date(emailVerificationCode.createdDt).getTime() + 600000 <= new Date().getTime()) return next(new ResponseError("Email verification code has expired", HTTP_STATUS_CODES.CONFLICT));
+        if (new Date(emailVerificationCode.createdDt).getTime() + 600000 <= new Date().getTime()) return next(new ResponseError("Email verification code has expired", HTTP_STATUS_CODES.CONFLICT, 57));
 
         await DbService.update(COLLECTIONS.USERS, { _id: mongoose.Types.ObjectId(emailVerificationCode.userId) }, { verifiedEmail: true });
         await DbService.update(COLLECTIONS.EMAIL_VERIFICATION_CODES, { identifier: req.query.identifier }, { hasBeenUsed: true });
+
+        await UserService.removeItemFromUnverifiedEmailTimeouts(emailVerificationCode.userId);
 
         setTimeout(() => {
             const token = AuthenticationService.generateToken({ _id: mongoose.Types.ObjectId(emailVerificationCode.userId) });
