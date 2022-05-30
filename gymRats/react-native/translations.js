@@ -110,6 +110,16 @@ module.exports = {
                 question: "Are you sure?",
                 affirmation: "Yes",
                 denial: "No"
+            },
+            chatsItem: {
+                fileSent: "File sent"
+            },
+            coachRequestItem: {
+                acceptRequest: "Accept request"
+            },
+            message: {
+                clickToPreview: "Click to preview",
+                download: "Downloading..."
             }
         },
         navigation: {
@@ -245,7 +255,18 @@ module.exports = {
                 question: "Сигурни ли сте?",
                 affirmation: "Да",
                 denial: "Не"
+            },
+            chatsItem: {
+                fileSent: "Файлът е изпратен"
+            },
+            coachRequestItem: {
+                acceptRequest: "Приеми заявката",
+            },
+            message: {
+                clickToPreview: "Прегледай файла",
+                download: "Изтегляне..."
             }
+
         },
         navigation: {
             calendar: "Календар",

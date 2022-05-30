@@ -6,6 +6,8 @@ import * as Permissions from 'expo-permissions';
 
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
+import i18n from 'i18n-js';
+
 import prettyBytes from 'pretty-bytes';
 
 import styles from './Message.styles';
@@ -110,7 +112,7 @@ export default class Message extends Component {
                                             mimeType: this.props.message.message.file.mimeType
                                         })
                                     }}>
-                                        <Text style={styles.filePreviewText}>Click here to preview</Text>
+                                        <Text style={styles.filePreviewText}>{i18n.t('components')['message']['clickToPreview']}</Text>
                                     </Pressable>
                                     : null
                             }
@@ -136,7 +138,7 @@ export default class Message extends Component {
                                             }
                                         </Text>
                                     </Pressable>
-                                    : <Text style={{ ...globalStyles.notation, marginTop: 8 }}>Downloading...</Text>
+                                    : <Text style={{ ...globalStyles.notation, marginTop: 8 }}>{i18n.t('components')['message']['download']}</Text>
                             }
                         </View>
                         : null

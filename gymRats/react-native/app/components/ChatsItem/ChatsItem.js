@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Image, Text, TouchableWithoutFeedback, View } from 'react-native';
+import i18n from 'i18n-js';
 
 import styles from './ChatsItem.styles';
 
@@ -40,7 +41,7 @@ export default class ChatsItem extends Component {
                                                 {
                                                     this.props.chat.lastMessage.text
                                                         ? <Text style={styles.chatsItemLastMessage}>{this.props.chat.lastMessage.text}</Text>
-                                                        : <Text style={styles.chatsItemLastMessage}>File sent</Text>
+                                                        : <Text style={styles.chatsItemLastMessage}>{i18n.t('components')['chatsItem']['fileSent']}</Text>
                                                 }
                                             </>
                                             : null
