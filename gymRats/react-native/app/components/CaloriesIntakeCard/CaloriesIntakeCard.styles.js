@@ -30,6 +30,8 @@ export default StyleSheet.create({
     macronutrientsRatioCircleTitle: {
         fontFamily: "MainBold",
         fontSize: 16,
+        width: "100%",
+        textAlign: "center"
     },
     macroCircleTitle: {
         fontFamily: "MainBold",

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import { Dimensions, Text, View } from 'react-native';
 
 import i18n from 'i18n-js';
 
@@ -379,6 +379,8 @@ const NavigationRoutes = (props) => {
                         <View style={styles.tabBarIconContainer}>
                             <Entypo name="line-graph" size={24} color={tabInfo.focused ? "#1f6cb0" : "#ccc"} />
                             <Text style={[styles.tabBarIconText, {
+                                width: "100%",
+                                textAlign: "center",
                                 fontFamily: (tabInfo.focused ? "MainBold" : "MainRegular")
                             }]}>{i18n.t('navigation')['progress']}</Text>
                         </View>
