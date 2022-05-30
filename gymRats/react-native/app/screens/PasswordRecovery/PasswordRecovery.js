@@ -5,6 +5,8 @@ import ApiRequests from '../../classes/ApiRequests';
 
 import { Ionicons } from '@expo/vector-icons';
 
+import i18n from 'i18n-js';
+
 import { HTTP_STATUS_CODES } from '../../../global';
 
 import globalStyles from '../../../assets/styles/global.styles'
@@ -125,7 +127,7 @@ export default class PasswordRecovery extends Component {
                         }}>
                             <Ionicons name="md-arrow-back-sharp" size={25} />
                         </Pressable>
-                        <Text style={globalStyles.followUpScreenTitle}>Password recovery</Text>
+                        <Text style={globalStyles.followUpScreenTitle}>{i18n.t('screens')['passwordRecovery']['pageTitle']}</Text>
                     </View>
                     {
                         this.state.showError
@@ -149,7 +151,7 @@ export default class PasswordRecovery extends Component {
                                 ]} onPress={() => {
                                     this.generatePasswordRecoveryCode();
                                 }}>
-                                    <Text style={globalStyles.authPageActionButtonText}>Sent recovery code</Text>
+                                    <Text style={globalStyles.authPageActionButtonText}>{i18n.t('screens')['passwordRecovery']['sentRecoveryCode']}</Text>
                                 </Pressable>
                             </>
                             : null
@@ -158,7 +160,7 @@ export default class PasswordRecovery extends Component {
                         this.state.showCodeEntry
                             ? <>
                                 <View style={styles.unknownSourceCaloriesIncentiveContainer}>
-                                    <Text style={styles.unknownSourceCaloriesIncentiveText}>We have sent a recovery code to your email. Please, enter it here to continue the password recovery process</Text>
+                                    <Text style={styles.unknownSourceCaloriesIncentiveText}>{i18n.t('screens')['passwordRecovery']['recievedCode']}</Text>
                                 </View>
                                 <TextInput
                                     keyboardType='numeric'
@@ -204,7 +206,7 @@ export default class PasswordRecovery extends Component {
                                 ]} onPress={() => {
                                     this.submitNewPassword();
                                 }}>
-                                    <Text style={globalStyles.authPageActionButtonText}>Change password</Text>
+                                    <Text style={globalStyles.authPageActionButtonText}>{i18n.t('screens')['passwordRecovery']['actionButton']}</Text>
                                 </Pressable>
                             </>
                             : null
