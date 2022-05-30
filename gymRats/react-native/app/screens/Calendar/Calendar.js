@@ -134,7 +134,14 @@ export default class Calendar extends Component {
     }
 
     render() {
-        return <View style={globalStyles.safeAreaView} >
+        return <View style={globalStyles.safeAreaView}
+            onTouchStart={e => this.touchX = e.nativeEvent.pageX}
+            onTouchEnd={e => {
+                if (this.touchX - e.nativeEvent.pageX > 20)
+                    this.incrementDate(1);
+                else if (e.nativeEvent.pageX - this.touchX > 20)
+                    this.incrementDate(-1)
+            }}>
             <View style={globalStyles.pageContainer}>
                 {
                     this.state.showCalendarPicker
@@ -309,11 +316,6 @@ export default class Calendar extends Component {
                                                                     <MaterialCommunityIcons name="food-variant" size={18} color="#fff" />
                                                                 </View>
                                                             </Pressable>
-                                                            : null
-                                                    }
-                                                    {
-                                                        this.state.doNotShow.length == 3
-                                                            ? <Text style={{ ...globalStyles.modalText, textAlign: 'left' }}>No available cards</Text>
                                                             : null
                                                     }
                                                 </View>

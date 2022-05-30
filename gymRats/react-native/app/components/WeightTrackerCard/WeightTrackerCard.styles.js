@@ -17,6 +17,7 @@ module.exports = StyleSheet.create({
         fontSize: 12,
         marginTop: 3,
         marginLeft: 10,
-        color: "#333"
+        color: "#333",
+        flexGrow: 1
     }
 });

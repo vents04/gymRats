@@ -16,10 +16,13 @@ export default StyleSheet.create({
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
+        width: "100%"
     },
     tabBarIconText: {
         fontFamily: "MainRegular",
         fontSize: 10,
-        marginTop: 10
+        marginTop: 10,
+        width: "100%",
+        textAlign: "center",
     }
 });

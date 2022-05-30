@@ -128,6 +128,10 @@ module.exports = {
             internalServerError: "An internal server error occurred while executing your request. Please try again or message our Support if the problem remains unresolved.",
             noResponseError: "Our server did not send a response for your request. Please try again or message our Support if the problem remains unresolved.",
             requestSettingError: "Something failed while sending your request. Please try again or message our Support if the problem remains unresolved."
+        },
+        constants: {
+            kgs: "kgs",
+            lbs: "lbs"
         }
     },
     bg: {
@@ -228,13 +232,13 @@ module.exports = {
                 },
                 caloriesIntake: {
                     cardTitle: "Приети калории",
-                    calories: "Калории",
-                    carbs: "Въглехидрати",
-                    grams: "г",
+                    calories: "калории",
+                    carbs: "въглехидр.",
+                    grams: "гр.",
                     proteins: "Протеини",
                     fats: "Мазнини",
-                    noFoodAdded: "Няма добавена храна",
-                    redirectButton: "Добави и промени храната"
+                    noFoodAdded: "Няма добавени храни",
+                    redirectButton: "Добави и промени храните"
                 }
             },
             confirmationBox: {
@@ -259,6 +263,10 @@ module.exports = {
             internalServerError: "Възникна фатална грешка при обработването на вашата заявка. Моля, опитайте отново или се свържете с нашия помощен екип, ако проблемът не се разреши.",
             noResponseError: "Нашият сървър не отговори на вашата заявка. Моля, опитайте отново или се свържете с нашия помощен екип, ако проблемът не се разреши.",
             requestSettingError: "Нещо се обърка докато обработваме вашата заявка. Моля, свържете се с нашия помощен екип, ако проблемът не се разреши."
+        },
+        constants: {
+            kgs: "кг.",
+            lbs: "паунда"
         }
     }
 }
