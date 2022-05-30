@@ -3,6 +3,8 @@ import { Image, Text, Pressable, View } from 'react-native';
 
 import { Ionicons } from '@expo/vector-icons';
 
+import i18n from 'i18n-js';
+
 import { RELATION_STATUSES } from '../../../global';
 
 import globalStyles from '../../../assets/styles/global.styles';
@@ -47,7 +49,7 @@ export default class CoachRequestsItem extends Component {
                     onPress={() => {
                         this.props.updateRelationStatus(this.props.relation._id, RELATION_STATUSES.ACTIVE);
                     }}>
-                    <Text style={globalStyles.authPageActionButtonText}>Accept request</Text>
+                    <Text style={globalStyles.authPageActionButtonText}>{i18n.t('components')['coachRequestItem']['acceptRequest']}</Text>
                 </Pressable>
             </View>
         )

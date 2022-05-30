@@ -110,6 +110,12 @@ module.exports = {
                 question: "Are you sure?",
                 affirmation: "Yes",
                 denial: "No"
+            },
+            chatsItem: {
+                fileSent: "File sent"
+            },
+            coachRequestItem: {
+                acceptRequest: "Accept request"
             }
         },
         navigation: {
@@ -241,6 +247,12 @@ module.exports = {
                 question: "Сигурни ли сте?",
                 affirmation: "Да",
                 denial: "Не"
+            },
+            chatsItem: {
+                fileSent: "Файлът е изпратен"
+            },
+            coachRequestItem: {
+                acceptRequest: "Приеми заявката",
             }
         },
         navigation: {
