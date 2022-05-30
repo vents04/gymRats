@@ -81,6 +81,17 @@ module.exports = {
                 prefersOfflineCoachingText: "Do you prefer to work with clients only in person?",
                 processDescriptor: "Our team will review your application as soon as possible.",
                 actionButton: "Submit application"
+            },
+            emailVerification: {
+                pageTitle: "Email verification",
+                doesNotComeFromSignup: "Your email has not been verified, yet. To continue using our services, please enter the code we have just sent to your email inbox.",
+                actionButton: "Verify email"
+            },
+            passwordRecovery: {
+                pageTitle: "Password recovery",
+                sentRecoveryCode: "Sent recovery code",
+                recievedCode: "We have sent a recovery code to your email. Please, enter it here to continue the password recovery process.",
+                actionButton: "Check code"
             }
         },
         components: {
@@ -226,6 +237,17 @@ module.exports = {
                 prefersOfflineCoachingText: "Предпочитате ли да работите с клиенти физически, спрямо онлайн?",
                 processDescriptor: "Нашият екип ще прегледа вашата заявка възможно най-скоро.",
                 actionButton: "Изпрати заявката"
+            },
+            emailVerification: {
+                pageTitle: "Потвърждаване на имейл",
+                doesNotComeFromSignup: "Вашият имейл все още не е потвърден. За да продължите да използвате нашите услуги, моля въведете кода, който сме изпратили до вашият имейл адрес.",
+                actionButton: "Потвърди имейл"
+            },
+            passwordRecovery: {
+                pageTitle: "Възстановяване на парола",
+                sentRecoveryCode: "Изпратен е код за възстановяване на паролата.",
+                recievedCode: "Изпратен е код за възстановяване на паролата на вашият имейл. Моля въведете кода за да продължите процеса за възстановяване на паролата.",
+                actionButton: "Потвърди код"
             }
         },
         components: {

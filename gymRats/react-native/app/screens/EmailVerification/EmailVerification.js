@@ -6,6 +6,8 @@ import Auth from '../../classes/Auth';
 
 import { Ionicons } from '@expo/vector-icons';
 
+import i18n from 'i18n-js';
+
 import { HTTP_STATUS_CODES } from '../../../global';
 
 import globalStyles from '../../../assets/styles/global.styles'
@@ -104,12 +106,12 @@ export default class EmailVerification extends Component {
                         }}>
                             <Ionicons name="md-arrow-back-sharp" size={25} />
                         </Pressable>
-                        <Text style={globalStyles.followUpScreenTitle}>Email verification</Text>
+                        <Text style={globalStyles.followUpScreenTitle}>{i18n.t('screens')['emailVerification']['pageTitle']}</Text>
                     </View>
                     {
                         this.props.route.params.doesNotComeFromSignup
                             ? <View style={styles.unknownSourceCaloriesIncentiveContainer}>
-                                <Text style={styles.unknownSourceCaloriesIncentiveText}>Your email has not been verified, yet. To continue using our services, please enter the code we have just sent to your email inbox.</Text>
+                                <Text style={styles.unknownSourceCaloriesIncentiveText}>{i18n.t('screens')['emailVerification']['doesNotComeFromSignup']}</Text>
                             </View>
                             : null
                     }
@@ -132,7 +134,7 @@ export default class EmailVerification extends Component {
                     ]} onPress={() => {
                         this.checkCode();
                     }}>
-                        <Text style={globalStyles.authPageActionButtonText}>Verify email</Text>
+                        <Text style={globalStyles.authPageActionButtonText}>{i18n.t('screens')['emailVerification']['actionButton']}</Text>
                     </Pressable>
                 </View>
             </View>
