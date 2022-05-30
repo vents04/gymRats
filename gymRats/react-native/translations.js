@@ -104,6 +104,7 @@ module.exports = {
         },
         navigation: {
             calendar: "Calendar",
+            progress: "Progress",
             coaching: "Coaching",
             chats: "Chats",
             profile: "Profile"
@@ -224,6 +225,7 @@ module.exports = {
         },
         navigation: {
             calendar: "Календар",
+            progress: "Прогрес"
             coaching: "Коучинг",
             chats: "Чатове",
             profile: "Профил"
