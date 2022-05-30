@@ -123,7 +123,7 @@ export default class EmailVerification extends Component {
                     <TextInput
                         value={this.state.code}
                         style={globalStyles.authPageInput}
-                        placeholder="Enter the code sent to your email:"
+                        placeholder={i18n.t('screens')['emailVerification']['enterEmailVerificationCode']}
                         onChangeText={(val) => { this.setState({ code: val, showError: false }) }} />
                     <Pressable style={({ pressed }) => [
                         globalStyles.authPageActionButton,

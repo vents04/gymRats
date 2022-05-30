@@ -140,7 +140,7 @@ export default class PasswordRecovery extends Component {
                                 <TextInput
                                     value={this.state.email}
                                     style={globalStyles.authPageInput}
-                                    placeholder="Enter your account email:"
+                                    placeholder={i18n.t('screens')['passwordRecovery']['еnterAccountEmail']}
                                     onChangeText={(val) => { this.setState({ email: val, showError: false }) }} />
                                 <Pressable style={({ pressed }) => [
                                     globalStyles.authPageActionButton,
@@ -166,7 +166,7 @@ export default class PasswordRecovery extends Component {
                                     keyboardType='numeric'
                                     value={this.state.code}
                                     style={globalStyles.authPageInput}
-                                    placeholder="Enter code:"
+                                    placeholder={i18n.t('screens')['passwordRecovery']['enterCode']}
                                     onChangeText={(val) => { this.setState({ code: val, showError: false }) }} />
                                 <Pressable style={({ pressed }) => [
                                     globalStyles.authPageActionButton,
@@ -177,7 +177,7 @@ export default class PasswordRecovery extends Component {
                                 ]} onPress={() => {
                                     this.checkCode();
                                 }}>
-                                    <Text style={globalStyles.authPageActionButtonText}>Check code</Text>
+                                    <Text style={globalStyles.authPageActionButtonText}>{i18n.t('screens')['passwordRecovery']['actionButton']}</Text>
                                 </Pressable>
                             </>
                             : null
@@ -189,13 +189,13 @@ export default class PasswordRecovery extends Component {
                                     value={this.state.password}
                                     style={globalStyles.authPageInput}
                                     secureTextEntry={true}
-                                    placeholder="Enter new password:"
+                                    placeholder={i18n.t('screens')['passwordRecovery']['enterNewPassword']}
                                     onChangeText={(val) => { this.setState({ password: val, showError: false }) }} />
                                 <TextInput
                                     value={this.state.repeatedPassword}
                                     style={globalStyles.authPageInput}
                                     secureTextEntry={true}
-                                    placeholder="Repeat the new password:"
+                                    placeholder={i18n.t('screens')['passwordRecovery']['repeatNewPassword']}
                                     onChangeText={(val) => { this.setState({ repeatedPassword: val, showError: false }) }} />
                                 <Pressable style={({ pressed }) => [
                                     globalStyles.authPageActionButton,

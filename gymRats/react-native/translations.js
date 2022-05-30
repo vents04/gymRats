@@ -84,14 +84,22 @@ module.exports = {
             },
             emailVerification: {
                 pageTitle: "Email verification",
+                enterEmailVerificationCode: "Enter the code sent to your email:",
                 doesNotComeFromSignup: "Your email has not been verified, yet. To continue using our services, please enter the code we have just sent to your email inbox.",
                 actionButton: "Verify email"
             },
             passwordRecovery: {
                 pageTitle: "Password recovery",
+                enterCode: "Enter code:",
+                enterNewPassword: "Enter new password:",
+                repeatNewPassword: "Repeat new password:",
+                еnterAccountEmail: "Enter your account email:",
                 sentRecoveryCode: "Sent recovery code",
                 recievedCode: "We have sent a recovery code to your email. Please, enter it here to continue the password recovery process.",
                 actionButton: "Check code"
+            },
+            chats: {
+                noChats: "Chats with clients and coaches will appear here"
             }
         },
         components: {
@@ -240,14 +248,22 @@ module.exports = {
             },
             emailVerification: {
                 pageTitle: "Потвърждаване на имейл",
+                enterEmailVerificationCode: "Въведете кода изпратен до вашия имейл:",
                 doesNotComeFromSignup: "Вашият имейл все още не е потвърден. За да продължите да използвате нашите услуги, моля въведете кода, който сме изпратили до вашият имейл адрес.",
                 actionButton: "Потвърди имейл"
             },
             passwordRecovery: {
                 pageTitle: "Възстановяване на парола",
-                sentRecoveryCode: "Изпратен е код за възстановяване на паролата.",
-                recievedCode: "Изпратен е код за възстановяване на паролата на вашият имейл. Моля въведете кода за да продължите процеса за възстановяване на паролата.",
+                enterCode: "Въведи кода:",
+                enterNewPassword: "Въведи нова парола:",
+                repeatNewPassword: "Повтори новата парола:",
+                enterAccountEmail: "Въведете имейл адреса на вашия акаунта:",
+                sentRecoveryCode: "Изпрати код.",
+                recievedCode: "Изпратен е код за възстановяване на паролата на вашият имейл. Моля въведете кода, за да продължите процеса за възстановяване на паролата.",
                 actionButton: "Потвърди код"
+            },
+            chats: {
+                noChats: "Чатовете"
             }
         },
         components: {
