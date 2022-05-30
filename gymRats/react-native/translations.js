@@ -6,6 +6,7 @@ module.exports = {
                 emailPlaceholder: "Email:",
                 passwordPlaceholder: "Password:",
                 submitButton: "Continue",
+                forgottenPassword: "Forgotten password?",
                 dontHaveAccount: "Don't have an account?",
                 goToSignup: "Go to Signup"
             },
@@ -170,6 +171,7 @@ module.exports = {
                 emailPlaceholder: "Имейл:",
                 passwordPlaceholder: "Парола:",
                 submitButton: "Продължи",
+                forgottenPassword: "Забравена парола?",
                 dontHaveAccount: "Нямаш акаунт?",
                 goToSignup: "Регистрирай се тук!"
             },
@@ -240,11 +242,11 @@ module.exports = {
                 actionButton: "Заяви желание да бъдеш трениран"
             },
             coachingApplicationSubmission: {
-                pageTitle: "Application submission",
-                locationInputPlaceholder: "Where are you located?",
-                prefersOfflineCoachingText: "Do you prefer to work with clients only in person?",
-                processDescriptor: "Our team will review your application as soon as possible.",
-                actionButton: "Submit application"
+                pageTitle: "Заяви желание да станеш личен треньор",
+                locationInputPlaceholder: "В кое населено място работите с клиенти?",
+                prefersOfflineCoachingText: "Предпочитате ли да работите с клиенти физически, спрямо онлайн?",
+                processDescriptor: "Нашият екип ще прегледа вашата заявка възможно най-скоро.",
+                actionButton: "Изпрати заявката"
             },
             emailVerification: {
                 pageTitle: "Потвърждаване на имейл",

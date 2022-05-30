@@ -97,7 +97,8 @@ export default StyleSheet.create({
     followUpScreenTitle: {
         marginLeft: 10,
         fontFamily: "MainBold",
-        fontSize: 18
+        fontSize: 18,
+        flexGrow: 1
     },
     topbarIconContainer: {
         position: 'absolute',
@@ -113,7 +114,7 @@ export default StyleSheet.create({
         fontFamily: "MainBold",
         fontSize: 14,
         marginRight: 4,
-        marginTop: 2
+        marginTop: 2,
     },
     card: {
         marginTop: 32,
