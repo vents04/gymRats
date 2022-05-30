@@ -100,7 +100,7 @@ export default class Login extends Component {
                     ]} onPress={() => {
                         this.props.navigation.navigate("PasswordRecovery");
                     }}>
-                        <Text style={globalStyles.authPageRedirectHighlightText}>Forgotten password?</Text>
+                        <Text style={globalStyles.authPageRedirectHighlightText}>{i18n.t('screens')['login']['forgottenPassword']}</Text>
                     </Pressable>
                     <Pressable style={({ pressed }) => [
                         globalStyles.authPageActionButton,

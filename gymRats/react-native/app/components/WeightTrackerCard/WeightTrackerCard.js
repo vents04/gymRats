@@ -116,7 +116,7 @@ export default class WeightTrackerCard extends Component {
                                                     <Text style={styles.weightTrend}>
                                                         {this.props.data.trend}
                                                         &nbsp;
-                                                        {WEIGHT_UNITS_LABELS[this.props.data.unit]}
+                                                        {i18n.t('constants')[WEIGHT_UNITS_LABELS[this.props.data.unit]]}
                                                         &nbsp;
                                                         {i18n.t('components')['cards']['weightTracker']['gainedWeight']}
                                                     </Text>

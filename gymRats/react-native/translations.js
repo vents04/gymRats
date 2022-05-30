@@ -6,6 +6,7 @@ module.exports = {
                 emailPlaceholder: "Email:",
                 passwordPlaceholder: "Password:",
                 submitButton: "Continue",
+                forgottenPassword: "Forgotten password?",
                 dontHaveAccount: "Don't have an account?",
                 goToSignup: "Go to Signup"
             },
@@ -162,6 +163,7 @@ module.exports = {
                 emailPlaceholder: "Имейл:",
                 passwordPlaceholder: "Парола:",
                 submitButton: "Продължи",
+                forgottenPassword: "Забравена парола?",
                 dontHaveAccount: "Нямаш акаунт?",
                 goToSignup: "Регистрирай се тук!"
             },
