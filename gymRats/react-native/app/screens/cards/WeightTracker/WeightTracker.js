@@ -11,6 +11,8 @@ import globalStyles from '../../../../assets/styles/global.styles';
 import styles from './WeightTracker.styles';
 import { Ionicons } from '@expo/vector-icons';
 
+import i18n from 'i18n-js';
+
 export default class WeightTracker extends Component {
 
     constructor(props) {
@@ -131,7 +133,7 @@ export default class WeightTracker extends Component {
                             else if (parseInt(val) >= 10000 || parseInt(val) < 2.1) shouldNotBeAdded = true;
                             if (!shouldNotBeAdded) this.setState({ weight: val, showError: false })
                         }} />
-                    <Text style={styles.editSectionInput}>{WEIGHT_UNITS_LABELS[this.state.weightUnit]}</Text>
+                    <Text style={styles.editSectionInput}>{i18n.t('constants')[WEIGHT_UNITS_LABELS[this.state.weightUnit]]}</Text>
                 </Pressable>
                 {
                     this.state.showError
@@ -140,11 +142,7 @@ export default class WeightTracker extends Component {
                         }]}>{this.state.error}</Text>
                         : null
                 }
-                <Pressable style={({ pressed }) => [
-                    {
-                        opacity: pressed ? 0.1 : 1,
-                    }
-                ]} style={[globalStyles.authPageActionButton, {
+                <Pressable style={[globalStyles.authPageActionButton, {
                     backgroundColor: cardColors.weightTracker,
                     marginTop: 16
                 }]} onPress={() => {

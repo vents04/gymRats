@@ -221,11 +221,11 @@ module.exports = {
                 actionButton: "Заяви желание да бъдеш трениран"
             },
             coachingApplicationSubmission: {
-                pageTitle: "Application submission",
-                locationInputPlaceholder: "Where are you located?",
-                prefersOfflineCoachingText: "Do you prefer to work with clients only in person?",
-                processDescriptor: "Our team will review your application as soon as possible.",
-                actionButton: "Submit application"
+                pageTitle: "Заяви желание да станеш личен треньор",
+                locationInputPlaceholder: "В кое населено място работите с клиенти?",
+                prefersOfflineCoachingText: "Предпочитате ли да работите с клиенти физически, спрямо онлайн?",
+                processDescriptor: "Нашият екип ще прегледа вашата заявка възможно най-скоро.",
+                actionButton: "Изпрати заявката"
             }
         },
         components: {

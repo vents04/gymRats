@@ -69,11 +69,11 @@ module.exports.errorCodes = {
     },
     17: {
         en: ["Personal trainer record not found"],
-        bg: ["Няма съществуващ запис на персонален треньор"]
+        bg: ["Няма съществуващ запис на личен треньор"]
     },
     18: {
         en: ["You are not allowed to access users' data without being one of their active coaches"],
-        bg: ["Нямате право да преглеждате данните на потребителите, когато не сте техен активен персонален треньор"]
+        bg: ["Нямате право да преглеждате данните на потребителите, когато не сте техен активен личен треньор"]
     },
     19: {
         en: ["Barcode parameter is missing"],
@@ -93,7 +93,7 @@ module.exports.errorCodes = {
     },
     23: {
         en: ["You are not allowed to access chats in which you are not a client or a personal trainer"],
-        bg: ["Нямате право да преглеждате чатове, в което не сте нито клиент, нито персонален треньор"]
+        bg: ["Нямате право да преглеждате чатове, в което не сте нито клиент, нито личен треньор"]
     },
     24: {
         en: ["The record for the opposite user in the chat was not found"],
@@ -105,19 +105,19 @@ module.exports.errorCodes = {
     },
     26: {
         en: ["You have already submitted a personal trainer application"],
-        bg: ["Вече сте изпратили заявка за персонален треньор"]
+        bg: ["Вече сте изпратили заявка за личен треньор"]
     },
     27: {
         en: ["The personal trainer is not accepting requests, currently"],
-        bg: ["Персоналният треньор не приема заявки към този момент"]
+        bg: ["Личният треньор не приема заявки към този момент"]
     },
     28: {
         en: ["You are not allowed to be your own personal trainer"],
-        bg: ["Нямате право да бъдете свой собствен персонален треньор"]
+        bg: ["Нямате право да бъдете свой собствен личен треньор"]
     },
     29: {
         en: ["You have already sent a coaching request to this personal trainer or you are already their client"],
-        bg: ["Вече сте изпратили заявка да бъдете тренирани до този персонален треньор или вече сте негов/неин клиент"]
+        bg: ["Вече сте изпратили заявка да бъдете тренирани до този личен треньор или вече сте негов/неин клиент"]
     },
     30: {
         en: ["Invalid relationId parameter"],
@@ -125,23 +125,23 @@ module.exports.errorCodes = {
     },
     31: {
         en: ["The coaching relation is not in a pending status and thus cannot be deleted"],
-        bg: ["Заявката за трениране не очаква отговор от персоналния треньор и следователно не може да бъде изтрита"]
+        bg: ["Заявката за трениране не очаква отговор от личния треньор и следователно не може да бъде изтрита"]
     },
     32: {
         en: ["You are not allowed to delete this coaching relation"],
-        bg: ["Нямате право да изтриете тази връзка между персонален треньор и клиент"]
+        bg: ["Нямате право да изтриете тази връзка между личен треньор и клиент"]
     },
     33: {
         en: ["Relation record was not found"],
-        bg: ["Връзката между персонален треньор и клиент не беше намерена"]
+        bg: ["Връзката между личен треньор и клиент не беше намерена"]
     },
     34: {
         en: ["The relation status cannot be updated in such a way"],
-        bg: ["Статусът на връзката между персонален треньор и клиент не може да бъде актуализиран по такъв начин"]
+        bg: ["Статусът на връзката между личен треньор и клиент не може да бъде актуализиран по такъв начин"]
     },
     35: {
         en: ["You are not allowed to leave a review on a non-canceled or non-declined relation"],
-        bg: ["Нямате право да публикувате отзив за връзка между персонален треньор и клиент, която не е отказана или завършена"]
+        bg: ["Нямате право да публикувате отзив за връзка между личен треньор и клиент, която не е отказана или завършена"]
     },
     36: {
         en: ["Only clients are allowed to leave reviews"],
@@ -149,7 +149,7 @@ module.exports.errorCodes = {
     },
     37: {
         en: ["Review for this relation has already been posted"],
-        bg: ["Отзив за тази връзка между персонален треньор и клиент вече е публикуван"]
+        bg: ["Отзив за тази връзка между личен треньор и клиент вече е публикуван"]
     },
     38: {
         en: ["Latitude and longitude parameters must be provided when maxDistance parameter is provided"],
