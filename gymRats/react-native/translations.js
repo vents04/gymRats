@@ -116,6 +116,10 @@ module.exports = {
             },
             coachRequestItem: {
                 acceptRequest: "Accept request"
+            },
+            message: {
+                clickToPreview: "Click to preview",
+                download: "Downloading..."
             }
         },
         navigation: {
@@ -253,7 +257,12 @@ module.exports = {
             },
             coachRequestItem: {
                 acceptRequest: "Приеми заявката",
+            },
+            message: {
+                clickToPreview: "Прегледай файла",
+                download: "Изтегляне..."
             }
+
         },
         navigation: {
             calendar: "Календар",
