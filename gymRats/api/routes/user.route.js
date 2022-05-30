@@ -265,6 +265,7 @@ router.get("/check-email-verification-code", async (req, res, next) => {
         if (new Date(emailVerificationCode.createdDt).getTime() + 600000 <= new Date().getTime()) return next(new ResponseError("Email verification code has expired", HTTP_STATUS_CODES.CONFLICT));
 
         await DbService.update(COLLECTIONS.USERS, { _id: mongoose.Types.ObjectId(emailVerificationCode.userId) }, { verifiedEmail: true });
+        await DbService.update(COLLECTIONS.EMAIL_VERIFICATION_CODES, { identifier: req.query.identifier }, { hasBeenUsed: true });
 
         setTimeout(() => {
             const token = AuthenticationService.generateToken({ _id: mongoose.Types.ObjectId(emailVerificationCode.userId) });
