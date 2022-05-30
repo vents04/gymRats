@@ -260,7 +260,7 @@ module.exports = {
                 enterNewPassword: "Въведи нова парола:",
                 repeatNewPassword: "Повтори новата парола:",
                 enterAccountEmail: "Въведете имейл адреса на вашия акаунта:",
-                sentRecoveryCode: "Изпрати код.",
+                sentRecoveryCode: "Изпрати код",
                 recievedCode: "Изпратен е код за възстановяване на паролата на вашият имейл. Моля въведете кода, за да продължите процеса за възстановяване на паролата.",
                 actionButton: "Потвърди код"
             },
