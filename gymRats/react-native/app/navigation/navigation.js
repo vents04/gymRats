@@ -380,7 +380,7 @@ const NavigationRoutes = (props) => {
                             <Entypo name="line-graph" size={24} color={tabInfo.focused ? "#1f6cb0" : "#ccc"} />
                             <Text style={[styles.tabBarIconText, {
                                 fontFamily: (tabInfo.focused ? "MainBold" : "MainRegular")
-                            }]}>Progress</Text>
+                            }]}>{i18n.t('navigation')['progress']}</Text>
                         </View>
                     )
 
