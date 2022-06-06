@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { ScrollView, Text, TextInput, Pressable, View, BackHandler } from 'react-native'
+import i18n from 'i18n-js';
 
 import ApiRequests from '../../../classes/ApiRequests';
 
@@ -119,7 +120,7 @@ export default class SearchCaloriesIntake extends Component {
                         }}>
                             <Ionicons name="md-arrow-back-sharp" size={25} />
                         </Pressable>
-                        <Text style={globalStyles.followUpScreenTitle}>Search food</Text>
+                        <Text style={globalStyles.followUpScreenTitle}>{i18n.t('screens')['searchCaloriesIntake']['title']}</Text>
                     </View>
                     <View style={globalStyles.topbarIconContainer}>
                         <Pressable style={({ pressed }) => [
@@ -160,7 +161,7 @@ export default class SearchCaloriesIntake extends Component {
                             style={[globalStyles.authPageInput, {
                                 width: "90%"
                             }]}
-                            placeholder="Type your search here"
+                            placeholder={i18n.t('screens')['searchCaloriesIntake']['searchInputPlaceholder']}
                             onChangeText={this.changeQuery} />
                         <Pressable style={({ pressed }) => [
                             {
@@ -180,13 +181,13 @@ export default class SearchCaloriesIntake extends Component {
                         <ScrollView contentContainerStyle={globalStyles.fillEmptySpace}>
                             {
                                 this.state.queryResults.length <= 0
-                                    ? <Text style={[globalStyles.notation, { marginBottom: 16 }]}>No results found</Text>
+                                    ? <Text style={[globalStyles.notation, { marginBottom: 16 }]}>{i18n.t('screens')['searchCaloriesIntake']['noResultsFound']}</Text>
                                     : null
                             }
                             {
                                 this.state.recent?.length > 0 && this.query.length <= 0
                                     ? <>
-                                        <Text style={[globalStyles.modalText, { textAlign: "left", fontFamily: "MainBlack", color: "#1f6cb0" }]}>Recent foods</Text>
+                                        <Text style={[globalStyles.modalText, { textAlign: "left", fontFamily: "MainBlack", color: "#1f6cb0" }]}>{i18n.t('screens')['searchCaloriesIntake']['recentFoods']}</Text>
                                         {
                                             this.state.recent.map((item, index) =>
                                                 <Pressable style={({ pressed }) => [

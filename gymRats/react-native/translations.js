@@ -220,6 +220,12 @@ module.exports = {
                 deletionAlertMessage: "Are you sure you want to delete this workout template?",
                 cancel: "Cancel",
                 yes: "Yes, delete"
+            },
+            searchCaloriesIntake: {
+                title: "Search food",
+                searchInputPlaceholder: "Type food name here",
+                noResultsFound: "No results found",
+                recentFoods: "Recent foods",
             }
         },
         components: {
@@ -542,6 +548,12 @@ module.exports = {
                 playPauseAudio: "Пусни/Спри аудио",
                 pause: "Спри",
                 play: "Пусни"
+            },
+            searchCaloriesIntake: {
+                title: "Търсене на храна",
+                searchInputPlaceholder: "Напиши името на храна",
+                noResultsFound: "Няма намерени резултати",
+                recentFoods: "Скорошни храни",
             }
         },
         components: {
