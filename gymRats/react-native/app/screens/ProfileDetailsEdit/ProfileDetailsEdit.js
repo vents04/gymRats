@@ -4,6 +4,8 @@ import { Picker } from '@react-native-picker/picker';
 
 import ApiRequests from '../../classes/ApiRequests';
 
+import i18n from 'i18n-js';
+
 import { Ionicons } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 
@@ -20,8 +22,8 @@ export default class ProfileDetailsEdit extends Component {
 
         this.state = {
             weightUnit: WEIGHT_UNITS.POUNDS,
-            firstName: "Ventsislav",
-            lastName: "Dimitrov",
+            firstName: "",
+            lastName: "",
             profile: {},
             showError: false,
             error: "",
@@ -126,7 +128,7 @@ export default class ProfileDetailsEdit extends Component {
                     }}>
                         <Ionicons name="md-arrow-back-sharp" size={25} />
                     </Pressable>
-                    <Text style={globalStyles.followUpScreenTitle}>Profile edit</Text>
+                    <Text style={globalStyles.followUpScreenTitle}>{i18n.t('screens')['profileDetailsEdit']['pageTitle']}</Text>
                 </View>
                 {
                     this.state.hasChanges
@@ -151,7 +153,7 @@ export default class ProfileDetailsEdit extends Component {
                                 color="#1f6cb0" />
                             <Text style={[globalStyles.notation, {
                                 marginLeft: 10
-                            }]}>Saving...</Text>
+                            }]}>{i18n.t('screens')['profileDetailsEdit']['saving']}</Text>
                         </View>
                         : null
                 }
@@ -164,25 +166,25 @@ export default class ProfileDetailsEdit extends Component {
                 }
                 <ScrollView style={styles.editSectionContainer} contentContainerStyle={globalStyles.fillEmptySpace}>
                     <View style={styles.editSection}>
-                        <Text style={styles.editSectionTitle}>First name</Text>
+                        <Text style={styles.editSectionTitle}>{i18n.t('screens')['profileDetailsEdit']['firstName']}</Text>
                         <TextInput
                             value={this.state.firstName}
                             style={globalStyles.authPageInput}
-                            placeholder="First name:"
+                            placeholder={i18n.t('screens')['profileDetailsEdit']['firstNamePlaceholder']}
                             editable={!this.state.showSaving}
                             onChangeText={(val) => { this.setState({ firstName: val, showError: false }, () => { this.changedValue() }); }} />
                     </View>
                     <View style={styles.editSection}>
-                        <Text style={styles.editSectionTitle}>Last name</Text>
+                        <Text style={styles.editSectionTitle}>{i18n.t('screens')['profileDetailsEdit']['lastName']}</Text>
                         <TextInput
                             value={this.state.lastName}
                             style={globalStyles.authPageInput}
-                            placeholder="Last name:"
+                            placeholder={i18n.t('screens')['profileDetailsEdit']['lastNamePlaceholder']}
                             editable={!this.state.showSaving}
                             onChangeText={(val) => { this.setState({ lastName: val, showError: false }, () => { this.changedValue() }) }} />
                     </View>
                     <View style={styles.editSection}>
-                        <Text style={styles.editSectionTitle}>Weight unit</Text>
+                        <Text style={styles.editSectionTitle}>{i18n.t('screens')['profileDetailsEdit']['weightUnit']}</Text>
                         <Picker
                             style={styles.editSectionInput}
                             enabled={!this.state.showSaving}
@@ -190,8 +192,8 @@ export default class ProfileDetailsEdit extends Component {
                             onValueChange={(value, index) =>
                                 this.setState({ weightUnit: value, showError: false }, () => { this.changedValue() })
                             }>
-                            <Picker.Item style={{ fontFamily: 'MainRegular' }} label="Metric system (kilograms)" value="KILOGRAMS" />
-                            <Picker.Item style={{ fontFamily: 'MainRegular' }} label="Imperial system (pounds)" value="POUNDS" />
+                            <Picker.Item style={{ fontFamily: 'MainRegular' }} label={i18n.t('screens')['profileDetailsEdit']['KILLOGRAMS']} value="KILOGRAMS" />
+                            <Picker.Item style={{ fontFamily: 'MainRegular' }} label={i18n.t('screens')['profileDetailsEdit']['POUNDS']} value="POUNDS" />
                         </Picker>
                     </View>
                     {
@@ -204,7 +206,7 @@ export default class ProfileDetailsEdit extends Component {
                             ]} disabled={this.state.showSaving} onPress={() => {
                                 this.saveChanges(true);
                             }}>
-                                <Text style={globalStyles.authPageActionButtonText}>Remove profile picture</Text>
+                                <Text style={globalStyles.authPageActionButtonText}>{i18n.t('screens')['profileDetailsEdit']['removeProfilePicture']}</Text>
                             </Pressable>
                             : null
                     }

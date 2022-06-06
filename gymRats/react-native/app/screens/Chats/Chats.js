@@ -3,6 +3,8 @@ import { Image, ScrollView, Text, Pressable, View } from 'react-native';
 
 import socketClass from '../../classes/Socket';
 
+import i18n from 'i18n-js';
+
 import ApiRequests from '../../classes/ApiRequests';
 
 import ChatsItem from '../../components/ChatsItem/ChatsItem';
@@ -94,7 +96,7 @@ export default class Chats extends Component {
                                     )
                                 }
                             </ScrollView>
-                            : <Text style={globalStyles.notation}>Chats with clients and coaches will appear here</Text>
+                            : <Text style={globalStyles.notation}>{i18n.t('screens')['chats']['noChats']}</Text>
                     }
                 </View>
             </View>
