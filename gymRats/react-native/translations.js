@@ -87,7 +87,9 @@ module.exports = {
                 pageTitle: "Email verification",
                 enterEmailVerificationCode: "Enter the code sent to your email:",
                 doesNotComeFromSignup: "Your email has not been verified, yet. To continue using our services, please enter the code we have just sent to your email inbox.",
-                actionButton: "Verify email"
+                actionButton: "Verify email",
+                emailVerified: "Email verified",
+                alertText: "Your email has been successfully verified. You can now use our services.",
             },
             passwordRecovery: {
                 pageTitle: "Password recovery",
@@ -97,7 +99,9 @@ module.exports = {
                 enterAccountEmail: "Enter your account email:",
                 sentRecoveryCode: "Sent recovery code",
                 recievedCode: "We have sent a recovery code to your email. Please, enter it here to continue the password recovery process.",
-                actionButton: "Check code"
+                actionButton: "Check code",
+                passwordUpdated: "Password updated",
+                alertText: "Your password has been updated successfully. You can now login with your new password."
             },
             chats: {
                 noChats: "Chats with clients and coaches will appear here"
@@ -114,6 +118,13 @@ module.exports = {
                 addFood: "Add this food to Gym Rats",
                 enterBarcode: "Enter barcode:",
                 submitBarcode: "Submit barcode"
+            },
+            suggestions: {
+                pageTitle: "Suggestions",
+                incentive: "Become a part of Gym Rats by suggesting features you'd like having or help us catch bugs early for a more seamless experience for all the gym rats out there.",
+                placeholder: "Type here...",
+                pendingReview: "Pending review",
+                answered: "Answered",
             }
         },
         components: {
@@ -279,7 +290,9 @@ module.exports = {
                 pageTitle: "Потвърждаване на имейл",
                 enterEmailVerificationCode: "Въведете изпратеният код:",
                 doesNotComeFromSignup: "Вашият имейл все още не е потвърден. За да продължите да използвате нашите услуги, моля въведете кода, който сме изпратили до вашият имейл адрес.",
-                actionButton: "Потвърди имейл"
+                actionButton: "Потвърди имейл",
+                emailVerified: "Потвърден имейл",
+                alertText: "Вашият имейл беше успешно потвърден. Можете да започнете да използвате нашите услуги.",
             },
             passwordRecovery: {
                 pageTitle: "Възстановяване на парола",
@@ -289,7 +302,9 @@ module.exports = {
                 enterAccountEmail: "Въведете имейла на акаунта:",
                 sentRecoveryCode: "Изпрати код",
                 recievedCode: "Изпратен е код за възстановяване на паролата на вашият имейл. Моля въведете кода, за да продължите процеса за възстановяване на паролата.",
-                actionButton: "Потвърди код"
+                actionButton: "Потвърди код",
+                passwordUpdated: "Променена парола",
+                alertText: "Паролата ви беше променена. Вече можете да влезете в профила си с новата парола.",
             },
             chats: {
                 noChats: "Чатовете"
@@ -306,7 +321,15 @@ module.exports = {
                 addFood: "Добави храната в Gym Rats",
                 enterBarcode: "Въведи баркод:",
                 submitBarcode: "Запиши баркод"
+            },
+            suggestions: {
+                pageTitle: "Предложения",
+                incentive: "Станете част от Gym Rats, като предлагате функционалности, които бихте искали да имаме или ни помогнете с откриването на бъгове, за да подобрим преживяването на всички фитнесджии тук.",
+                placeholder: "Пишете тук...",
+                pendingReview: "Изчакващи отзив от нас",
+                answered: "Отговорено",
             }
+
         },
         components: {
             cards: {

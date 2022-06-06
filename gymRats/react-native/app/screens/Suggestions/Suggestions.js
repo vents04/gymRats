@@ -5,6 +5,8 @@ import ApiRequests from '../../classes/ApiRequests';
 
 import { Ionicons } from '@expo/vector-icons';
 
+import i18n from 'i18n-js';
+
 import { HTTP_STATUS_CODES } from '../../../global';
 
 import globalStyles from '../../../assets/styles/global.styles';
@@ -24,8 +26,8 @@ export default class Suggestions extends Component {
         this.scrollView = React.createRef();
 
         this.suggestionStatusTitles = {
-            PENDING_REVIEW: "Pending review",
-            ANSWERED: "Answered"
+            PENDING_REVIEW: i18n.t('screens')['suggestions']['pendingReview'],
+            ANSWERED: i18n.t('screens')['suggestions']['answered'],
         }
 
         this.focusListener;
@@ -104,9 +106,9 @@ export default class Suggestions extends Component {
                         }}>
                             <Ionicons name="md-arrow-back-sharp" size={25} />
                         </Pressable>
-                        <Text style={globalStyles.followUpScreenTitle}>Suggestions</Text>
+                        <Text style={globalStyles.followUpScreenTitle}>{i18n.t('screens')['suggestions']['pageTitle']}</Text>
                     </View>
-                    <Text style={styles.descriptionText}>Become a part of Gym Rats by suggesting features you'd like having or help us catch bugs early for a more seamless experience for all the gym rats out there.</Text>
+                    <Text style={styles.descriptionText}>{i18n.t('screens')['suggestions']['incentive']}</Text>
                     <ScrollView ref={this.scrollView} style={[styles.chatMessagesContainer, {
                         marginTop: 16
                     }]}>
@@ -124,7 +126,7 @@ export default class Suggestions extends Component {
                     <TextInput
                         value={this.state.suggestion}
                         style={styles.chatInput}
-                        placeholder="Type here..."
+                        placeholder={i18n.t('screens')['suggestions']['placeholder']}
                         onChangeText={(val) => { this.setState({ suggestion: val }) }} />
                     <View style={styles.chatActionButtonContainer}>
                         <Pressable style={({ pressed }) => [

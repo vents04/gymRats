@@ -34,7 +34,7 @@ export default class EmailVerification extends Component {
         ApiRequests.get(`user/check-email-verification-code?identifier=${this.state.identifier}&code=${this.state.code}`).then(async (response) => {
             await Auth.setToken(response.data.token);
             this.setState({ showError: false, showPasswordEntry: true, showCodeEntry: false, showEmailEntry: false });
-            Alert.alert("Email Verified", "Your email has successfully been verified.", [{
+            Alert.alert(i18n.t('screens')['emailVerification']['emailVerified'], i18n.t('screens')['emailVerification']['alertText'], [{
                 text: "OK",
                 onPress: () => {
                     this.props.navigation.replace('NavigationRoutes');
