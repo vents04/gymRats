@@ -20,45 +20,6 @@ module.exports = {
                 haveAccount: "Have an account?",
                 goToLogin: "Go to Login"
             },
-            calendar: {
-                calendarControllerBack: "Previous",
-                calendarControllerNext: "Next",
-                addData: "Add data",
-                noData: "No data added for that date",
-                bottomSheetTitle: "Cards",
-                bottomSheetNoCards: "You have already added all type of cards"
-            },
-            profile: {
-                profileLoadingError: "There was a problem loading your profile. Try again or contact support on support@uploy.app",
-                profilePictureUpdateError: "There was a problem uploading the profile picture. Please try again or contact support at support@uploy.app",
-                logout: "Logout",
-                weightUnitSectionTitle: "Metric system",
-                weightUnitSectionSelectValues: {
-                    KILOGRAMS: "Metric system (kilogram, om)",
-                    POUNDS: "Imperial system (pound, ft, in)"
-                }
-            },
-            profileEdit: {
-                pageTitle: "Profile edit",
-                inputFields: {
-                    firstName: {
-                        title: "First name",
-                        placeholder: "First name:"
-                    },
-                    lastName: {
-                        title: "Last name",
-                        placeholder: "Last name:"
-                    },
-                    metricSystem: {
-                        title: "Metric system",
-                        labels: {
-                            KILOGRAMS: "Metric system (kilogram, om)",
-                            POUNDS: "Imperial system (pound, ft, in)"
-                        }
-                    }
-                },
-                removeProfilePicture: "Remove profile picture"
-            },
             coachSearch: {
                 pageTitle: "Coach search",
                 reviews: "reviews",
@@ -198,6 +159,20 @@ module.exports = {
                 title: "Add unknown souce calories",
                 notation: "The macros for unknown source calories are the following: 40% carbs, 30% protein, 30% fats",
                 caloriesInput: "Calories estimate:"
+            },
+            postReview: {
+                pageTitle: "Post a review",
+                startOfRelation: "This relation started at ",
+                endOfRelation: "and ended at",
+                rateExperience: "How would you rate your whole experience with this coach?",
+                review: "You may also write a detailed review",
+                placeholder: "Type here...",
+                actionButton: "Submit",
+                ratingTitlesTerrible: "Terrible",
+                ratingTitlesBad: "Bad",
+                ratingTitlesOK: "OK",
+                ratingTitlesGood: "Good",
+                ratingTitlesExcellent: "Excellent",
             }
         },
         components: {
@@ -324,37 +299,6 @@ module.exports = {
                 bottomSheetTitle: "Карти",
                 bottomSheetNoCards: "Вече сте добавили всички типове карти"
             },
-            profile: {
-                profileLoadingError: "Възнкина проблем при зареждането на профила ви. Опитайте отново или се свържете с екипа ни на support@uploy.app",
-                profilePictureUpdateError: "Възникна проблем при промяната на профилната ви снимка. Опитайте отново или се свържете с екипа ни на support@uploy.app",
-                logout: "Излез от профила",
-                weightUnitSectionTitle: "Основни мерни единици",
-                weightUnitSectionSelectValues: {
-                    KILOGRAMS: "Метрична система (килограм, см)",
-                    POUNDS: "Имперска система (паунд, фут, инч)"
-                }
-            },
-            profileEdit: {
-                pageTitle: "Промяна на профила",
-                inputFields: {
-                    firstName: {
-                        title: "Име",
-                        placeholder: "Име:"
-                    },
-                    lastName: {
-                        title: "Фамилия",
-                        placeholder: "Фамилия:"
-                    },
-                    metricSystem: {
-                        title: "Основни мерни единици",
-                        labels: {
-                            KILOGRAMS: "Метрична система (килограм, см)",
-                            POUNDS: "Имперска система (паунд, фут, инч)"
-                        }
-                    }
-                },
-                removeProfilePicture: "Премахни профилната снимка"
-            },
             coachSearch: {
                 pageTitle: "Търсене на треньори",
                 reviews: "ревюта",
@@ -480,7 +424,7 @@ module.exports = {
                 weightUnit: "Мерна единица за тегло",
                 KILOGRAMS: "Метрична система (килограми)",
                 POUNDS: "Имперска система (паунди)",
-                removeProfilePicture: "Премахване на профилна снимка",
+                removeProfilePicture: "Премахни профилната снимка",
             },
             profile: {
                 saving: "Запазване...",
@@ -494,6 +438,20 @@ module.exports = {
                 title: "Добави калории от незнаен източник",
                 notation: "Макронутриентите за калории от незнаен източник се разпределят както следва: 40% въглехидрати, 30% протеини, 30% мазнини",
                 caloriesInput: "Приблизително приети калории:"
+            },
+            postReview: {
+                pageTitle: "Публикувай отзив",
+                startOfRelation: "Тази връзка започна на ",
+                endOfRelation: "и завърши на",
+                rateExperience: "Как бихте оценили времето си с този треньор?",
+                review: "Също можете да напишете детайлен отзив",
+                placeholder: "Пишете тук...",
+                actionButton: "Публикувай",
+                ratingTitlesTerrible: "Ужасно",
+                ratingTitlesBad: "Лошо",
+                ratingTitlesOK: "Ок",
+                ratingTitlesGood: "Добро",
+                ratingTitlesExcellent: "Отлично",
             }
         },
         components: {

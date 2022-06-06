@@ -4,6 +4,8 @@ import { Rating, AirbnbRating } from 'react-native-ratings';
 
 import ApiRequests from '../../classes/ApiRequests';
 
+import i18n from 'i18n-js';
+
 import { Ionicons } from '@expo/vector-icons';
 
 import { HTTP_STATUS_CODES } from '../../../global';
@@ -23,7 +25,7 @@ export default class PostReview extends Component {
             error: "",
         }
 
-        this.ratingTitles = ["Terrible", "Bad", "OK", "Good", "Excellent"]
+        this.ratingTitles = [i18n.t('screens')['postReview']['ratingTitlesTerrible'], i18n.t('screens')['postReview']['ratingTitlesBad'], i18n.t('screens')['postReview']['ratingTitlesOK'], i18n.t('screens')['postReview']['ratingTitlesGood'], i18n.t('screens')['postReview']['ratingTitlesExcellent']];
     }
 
     backAction = () => {
@@ -75,7 +77,7 @@ export default class PostReview extends Component {
                         }}>
                             <Ionicons name="md-arrow-back-sharp" size={25} />
                         </Pressable>
-                        <Text style={globalStyles.followUpScreenTitle}>Post a review</Text>
+                        <Text style={globalStyles.followUpScreenTitle}>{i18n.t('screens')['postReview']['pageTitle']}</Text>
                     </View>
                     {
                         this.state.showError
@@ -106,20 +108,20 @@ export default class PostReview extends Component {
                         </View>
                         <Text style={[globalStyles.notation, {
                             marginTop: 12
-                        }]}>This relation started at {new Date(this.props.route.params.relation.from).toLocaleDateString()}
+                        }]}>{i18n.t('screens')['postReview']['startOfRelation']} {new Date(this.props.route.params.relation.from).toLocaleDateString()}
                             {
                                 this.props.route.params.relation.to
-                                    ? ` and ended at ${new Date(this.props.route.params.relation.to).toLocaleDateString()}`
+                                    ? i18n.t('screens')['postReview']['endOfRelation'] + " " + new Date(this.props.route.params.relation.to).toLocaleDateString()
                                     : null
                             }</Text>
                     </View>
                     <ScrollView style={globalStyles.fillEmptySpace}>
                         <View style={[styles.section, styles.centeredContent]}>
-                            <Text style={styles.sectionTitle}>How would you rate your whole experience with this coach?</Text>
+                            <Text style={styles.sectionTitle}>{i18n.t('screens')['postReview']['rateExperience']}</Text>
                             <AirbnbRating
                                 selectedColor="#1f6cb0"
                                 count={5}
-                                reviews={["Terrible", "Bad", "OK", "Good", "Excellent"]}
+                                reviews={[i18n.t('screens')['postReview']['ratingTitlesTerrible'], i18n.t('screens')['postReview']['ratingTitlesBad'], i18n.t('screens')['postReview']['ratingTitlesOK'], i18n.t('screens')['postReview']['ratingTitlesGood'], i18n.t('screens')['postReview']['ratingTitlesExcellent']]}
                                 defaultRating={4}
                                 size={25}
                                 showRating={false}
@@ -130,14 +132,14 @@ export default class PostReview extends Component {
                             <Text style={styles.ratingTitle}>{this.ratingTitles[this.state.rating - 1]}</Text>
                         </View>
                         <View style={[styles.section, styles.centeredContent]}>
-                            <Text style={styles.sectionTitle}>You may also write a detailed review</Text>
+                            <Text style={styles.sectionTitle}>{i18n.t('screens')['postReview']['review']}</Text>
                             <TextInput
                                 multiline={true}
                                 value={this.state.review}
                                 style={[globalStyles.authPageInput, {
                                     maxHeight: 250
                                 }]}
-                                placeholder="Type here..."
+                                placeholder={i18n.t('screens')['postReview']['placeholder']}
                                 onChangeText={(val) => { this.setState({ review: val, showError: false }) }} />
                         </View>
                     </ScrollView>
@@ -150,7 +152,7 @@ export default class PostReview extends Component {
                     ]} onPress={() => {
                         this.postReview()
                     }}>
-                        <Text style={globalStyles.authPageActionButtonText}>Submit</Text>
+                        <Text style={globalStyles.authPageActionButtonText}>{i18n.t('screens')['postReview']['submit']}</Text>
                     </Pressable>
                 </View>
             </View>
