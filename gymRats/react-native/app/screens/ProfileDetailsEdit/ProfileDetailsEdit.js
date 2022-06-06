@@ -192,7 +192,7 @@ export default class ProfileDetailsEdit extends Component {
                             onValueChange={(value, index) =>
                                 this.setState({ weightUnit: value, showError: false }, () => { this.changedValue() })
                             }>
-                            <Picker.Item style={{ fontFamily: 'MainRegular' }} label={i18n.t('screens')['profileDetailsEdit']['KILLOGRAMS']} value="KILOGRAMS" />
+                            <Picker.Item style={{ fontFamily: 'MainRegular' }} label={i18n.t('screens')['profileDetailsEdit']['KILOGRAMS']} value="KILOGRAMS" />
                             <Picker.Item style={{ fontFamily: 'MainRegular' }} label={i18n.t('screens')['profileDetailsEdit']['POUNDS']} value="POUNDS" />
                         </Picker>
                     </View>

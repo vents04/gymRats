@@ -23,7 +23,17 @@ module.exports = {
             coachSearch: {
                 pageTitle: "Coach search",
                 reviews: "reviews",
-                noCoachesFound: "No coaches found for that search"
+                noCoachesFound: "No coaches found for that search",
+                placeholder: "Type your search here",
+                minimumRating: "Minimum rating is ",
+                maxDistance: "Maximum distance is ",
+                notSet: "not set",
+                unsetMaximumDistance: "Unset maximum distance",
+                setMaximumDistance: "Set maximum distance",
+                applyFilters: "Apply filters", 
+                locationPermission: "Location permission needed",
+                message: "In order to provide a more personalized experience Gym Rats needs access to your location.",
+                filters: "Filters",
             },
             coachRequests: {
                 pageTitle: "Unanswered requests",
@@ -364,7 +374,17 @@ module.exports = {
             coachSearch: {
                 pageTitle: "Търсене на треньори",
                 reviews: "ревюта",
-                noCoachesFound: "Няма намерени треньори за това търсене"
+                noCoachesFound: "Няма намерени треньори за това търсене",
+                placeholder: "Търси треньори",
+                minimumRating: "Минималният рейтин е ",
+                maxDistance: "Максималното разстояние е ",
+                notSet: "не е зададено",
+                unsetMaximumDistance: "Премахни максималното разстояние",
+                setMaximumDistance: "Задай максималното разстояние",
+                applyFilters: "Постави филтри", 
+                locationPermission: "Разрешение за взимане на локация",
+                message: "За по-персонализирано преживяване, Gym Rats изисква достъп до локацията ви.",
+                filters: "Филтри",
             },
             coachRequests: {
                 pageTitle: "Неотговорени заявки",
