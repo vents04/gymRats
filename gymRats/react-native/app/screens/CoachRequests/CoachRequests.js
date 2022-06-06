@@ -3,6 +3,8 @@ import { ScrollView, Text, Pressable, View, BackHandler } from 'react-native'
 
 import ApiRequests from '../../classes/ApiRequests';
 
+import i18n from 'i18n-js';
+
 import CoachRequestsItem from '../../components/CoachRequestsItem/CoachRequestsItem';
 
 import { Ionicons } from '@expo/vector-icons';
@@ -89,7 +91,7 @@ export default class CoachRequests extends Component {
                         }}>
                             <Ionicons name="md-arrow-back-sharp" size={25} />
                         </Pressable>
-                        <Text style={globalStyles.followUpScreenTitle}>Unanswered requests</Text>
+                        <Text style={globalStyles.followUpScreenTitle}>{i18n.t('screens')['coachRequests']['pageTitle']}</Text>
                     </View>
                     {
                         this.state.showError
@@ -107,7 +109,7 @@ export default class CoachRequests extends Component {
                                     }
                                 </ScrollView>
                             </>
-                            : <Text style={globalStyles.notation}>You do not have any requests from potential clients</Text>
+                            : <Text style={globalStyles.notation}>{i18n.t('screens')['coachRequests']['pageDescriptor']}</Text>
                     }
                 </View>
             </View>

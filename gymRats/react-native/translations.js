@@ -35,6 +35,12 @@ module.exports = {
                 message: "In order to provide a more personalized experience Gym Rats needs access to your location.",
                 filters: "Filters",
             },
+            coachProfileEdit: {
+                pageTitle: "Coach profile edit",
+                clients: "clients",
+                rating: "rating",
+                inPerson: "Do you prefer to work with clients only in person?"
+            },
             coachRequests: {
                 pageTitle: "Unanswered requests",
                 pageDescriptor: "Users that have requested to be coached by you:",
@@ -398,6 +404,12 @@ module.exports = {
                 locationPermission: "Разрешение за взимане на локация",
                 message: "За по-персонализирано преживяване, Gym Rats изисква достъп до локацията ви.",
                 filters: "Филтри",
+            },
+            coachProfileEdit: {
+                pageTitle: "Редактиране на профила на треньор",
+                clients: "клиенти",
+                rating: "рейтинг",
+                inPerson: "Предпочитате ли да работите с клиенти само на живо?"
             },
             coachRequests: {
                 pageTitle: "Неотговорени заявки",
