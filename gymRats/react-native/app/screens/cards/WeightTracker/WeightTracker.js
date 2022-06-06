@@ -93,7 +93,7 @@ export default class WeightTracker extends Component {
                 showSaving: false,
                 error: error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR
                     ? error.response.data
-                    : "Internal server error"
+                    : i18n.t('errors')['internalServerError']
             })
         })
     }
@@ -111,7 +111,7 @@ export default class WeightTracker extends Component {
                     }}>
                         <Ionicons name="md-arrow-back-sharp" size={25} />
                     </Pressable>
-                    <Text style={globalStyles.followUpScreenTitle}>Weight</Text>
+                    <Text style={globalStyles.followUpScreenTitle}>{i18n.t('screens')['weightTracker']['title']}</Text>
                 </View>
                 <Pressable style={[styles.weightInputContainer, globalStyles.authPageInput]} onPress={() => {
                     this.input.current.focus();
@@ -157,8 +157,8 @@ export default class WeightTracker extends Component {
                             : <Text style={globalStyles.authPageActionButtonText}>
                                 {
                                     this.state.originalRecord
-                                        ? "Update"
-                                        : "Add"
+                                        ? i18n.t('screens')['weightTracker']['update']
+                                        : i18n.t('screens')['weightTracker']['add']
                                 }
                             </Text>
                     }

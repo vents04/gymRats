@@ -236,6 +236,11 @@ module.exports = {
                 searchInputPlaceholder: "Type food name here",
                 noResultsFound: "No results found",
                 recentFoods: "Recent foods",
+            },
+            weightTracker: {
+                title: "Weight",
+                add: "Add",
+                update: "Update"
             }
         },
         components: {
@@ -574,6 +579,11 @@ module.exports = {
                 searchInputPlaceholder: "Напиши името на храна",
                 noResultsFound: "Няма намерени резултати",
                 recentFoods: "Скорошни храни",
+            },
+            weightTracker: {
+                title: "Тегло",
+                add: "Добави",
+                update: "Обнови"
             }
         },
         components: {
