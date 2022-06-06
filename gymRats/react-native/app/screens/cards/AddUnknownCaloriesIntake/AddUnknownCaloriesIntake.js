@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Text, View, ScrollView, Pressable, BackHandler, TextInput } from 'react-native'
+import i18n from 'i18n-js';
 
 import ApiRequests from '../../../classes/ApiRequests';
 import { BackButtonHandler } from '../../../classes/BackButtonHandler';
@@ -71,7 +72,7 @@ export default class AddUnknownCaloriesIntake extends Component {
                         }}>
                             <Ionicons name="md-arrow-back-sharp" size={25} />
                         </Pressable>
-                        <Text style={globalStyles.followUpScreenTitle}>Add unknown source calories</Text>
+                        <Text style={globalStyles.followUpScreenTitle}>{i18n.t('screens')['addUnknownSourceCalories']['title']}</Text>
                     </View>
                     {
                         this.state.showError
@@ -79,9 +80,9 @@ export default class AddUnknownCaloriesIntake extends Component {
                             : null
                     }
                     <ScrollView contentContainerStyle={globalStyles.fillEmptySpace}>
-                        <Text style={globalStyles.notation}>The macros for unknown source calories are the following: 40% carbs, 30% protein, 30% fats</Text>
+                        <Text style={globalStyles.notation}>{i18n.t('screens')['addUnknownSourceCalories']['notation']}</Text>
                         <View style={styles.inputSection}>
-                            <Text style={styles.inputSectionTitle}>Calories estimate:</Text>
+                            <Text style={styles.inputSectionTitle}>{i18n.t('screens')['addUnknownSourceCalories']['caloriesInput']}</Text>
                             <TextInput
                                 keyboardType='numeric'
                                 value={this.state.calories}
@@ -96,7 +97,7 @@ export default class AddUnknownCaloriesIntake extends Component {
                         ]} onPress={() => {
                             this.addUnknownSourceCalories()
                         }}>
-                            <Text style={globalStyles.authPageActionButtonText}>Submit</Text>
+                            <Text style={globalStyles.authPageActionButtonText}>{i18n.t('common')['submit']}</Text>
                         </Pressable>
                     </ScrollView>
                 </View>

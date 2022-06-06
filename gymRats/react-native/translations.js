@@ -185,6 +185,11 @@ module.exports = {
                 KILOGRAMS: "Metric system (kilograms)",
                 POUNDS: "Imperial system (pounds)",
                 removeProfilePicture: "Remove profile picture",
+            },
+            addUnknownSourceCalories: {
+                title: "Add unknown souce calories",
+                notation: "The macros for unknown source calories are the following: 40% carbs, 30% protein, 30% fats",
+                caloriesInput: "Calories estimate:"
             }
         },
         components: {
@@ -466,6 +471,11 @@ module.exports = {
                 KILOGRAMS: "Метрична система (килограми)",
                 POUNDS: "Имперска система (паунди)",
                 removeProfilePicture: "Премахване на профилна снимка",
+            },
+            addUnknownSourceCalories: {
+                title: "Добави калории от незнаен източник",
+                notation: "Макронутриентите за калории от незнаен източник се разпределят както следва: 40% въглехидрати, 30% протеини, 30% мазнини",
+                caloriesInput: "Приблизително приети калории:"
             }
         },
         components: {
