@@ -159,6 +159,20 @@ module.exports = {
                 selectExercise: "Please, select an exercise to show progress charts for.",
                 messageToUser: "After adding some data you will have the ability to monitor your progress from this tab as well as get software-based suggestions on how to improve your fitness.",
                 letsUnlockThisTab: "Let's unlock this tab!"
+            },
+            addFood: {
+                optional: "optional",
+                title: "Add food to Gym Rats",
+                titleInput: "Title",
+                brandInput: "Brand",
+                barcodeInput: "Barcode",
+                servingUnitInput: "Serving unit",
+                caloriesInput: "Calories per 100",
+                carbsInput: "Carbs per 100",
+                proteinsInput: "Proteins per 100",
+                fatsInput: "Fats per 100",
+                barcodeAlreadyLinked: "Already linked",
+                addBarcode: "Add barcode"
             }
         },
         components: {
@@ -216,6 +230,7 @@ module.exports = {
             profile: "Profile"
         },
         common: {
+            submit: "Submit",
             saving: "Saving...",
             loading: "Loading...",
             set: "set",
@@ -413,6 +428,20 @@ module.exports = {
                 selectExercise: "Моля изберете упражнение, чийто прогрес искате да видите.",
                 messageToUser: "След като добавите данни, ще имате възможността да наблюдавате напредъка си от тази страница, както и да получавате алгоритмично базирани предложения как да подобрите своето здраве.",
                 letsUnlockThisTab: "Нека отключим тази страница"
+            },
+            addFood: {
+                optional: "опиционално",
+                title: "Добави храна в Gym Rats",
+                titleInput: "Име",
+                brandInput: "Фирма",
+                barcodeInput: "Баркод",
+                servingUnitInput: "Измревателна единица",
+                caloriesInput: "Калории за 100",
+                carbsInput: "Въглехидрати за 100",
+                proteinsInput: "Протеини за 100",
+                fatsInput: "Мазнини за 100",
+                barcodeAlreadyLinked: "Вече свързан",
+                addBarcode: "Добави баркод",
             }
         },
         components: {
@@ -471,6 +500,7 @@ module.exports = {
             profile: "Профил"
         },
         common: {
+            submit: "Изпрати",
             saving: "Запазване...",
             loading: "Зареждане...",
             set: "серия",
