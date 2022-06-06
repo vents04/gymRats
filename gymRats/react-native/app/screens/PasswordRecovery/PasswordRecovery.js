@@ -92,7 +92,7 @@ export default class PasswordRecovery extends Component {
             identifier: this.state.identifier,
             password: this.state.password
         }, false).then(response => {
-            Alert.alert("Password updated", "Your password has successfully been updated. You can now login with your new password.", [{
+            Alert.alert(i18n.t('screens')['passwordRecovery']['passwordUpdated'], i18n.t('screens')['passwordRecovery']['alertText'], [{
                 text: "OK",
                 onPress: () => {
                     this.props.navigation.navigate("Login");

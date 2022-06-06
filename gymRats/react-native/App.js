@@ -141,9 +141,9 @@ const App = () => {
   const routeNameRef = useRef();
   const [screenOpenDt, setScreenOpenDt] = useState(new Date().getTime());
 
-  i18n.defaultLocale = "en";
+  i18n.defaultLocale = "bg-BG";
   i18n.translations = translations;
-  i18n.locale = Localization.locale;
+  i18n.locale = "bg-BG";
   i18n.fallbacks = true;
 
   const [loaded] = useFonts({
