@@ -48,3 +48,7 @@
 {"level":"error","message":"Запис на потребител с този имейл не беше намерен"}
 {"level":"error","message":"Запис на потребител с този имейл не беше намерен"}
 {"level":"error","message":"Запис на потребител с този имейл не беше намерен"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'year')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'year')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'year')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'year')"}
