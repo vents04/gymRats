@@ -6,6 +6,8 @@ import { Audio } from 'expo-av';
 
 import ApiRequests from '../../classes/ApiRequests';
 
+import i18n from 'i18n-js';
+
 import { Ionicons } from '@expo/vector-icons';
 
 import { AUDIO_PLAY_MIME_TYPES, HTTP_STATUS_CODES, IMAGE_VISUALIZATION_MIME_TYPES, SUPPORTED_MIME_TYPES, VIDEO_VISUALIZATION_MIME_TYPES } from '../../../global';
@@ -115,7 +117,7 @@ export default class FilePreview extends Component {
                                     ]} onPress={() => {
                                         this.state.videoStatus.isPlaying ? this.video.current.pauseAsync() : this.video.current.playAsync()
                                     }}>
-                                        <Text style={globalStyles.authPageActionButtonText}>{this.state.videoStatus.isPlaying ? 'Pause' : 'Play'}</Text>
+                                        <Text style={globalStyles.authPageActionButtonText}>{this.state.videoStatus.isPlaying ? i18n.t('screens')['filePreview']['pause'] : i18n.t('screens')['filePreview']['play']}</Text>
                                     </Pressable>
                                 </>
                                 : AUDIO_PLAY_MIME_TYPES.includes(this.props.route.params.mimeType)
@@ -128,7 +130,7 @@ export default class FilePreview extends Component {
                                         ]} onPress={() => {
                                             this.playSound();
                                         }}>
-                                            <Text style={globalStyles.authPageActionButtonText}>Play/pause audio</Text>
+                                            <Text style={globalStyles.authPageActionButtonText}>{i18n.t('screens')['filePreview']['playPauseAudio']}</Text>
                                         </Pressable>
                                     </>
                                     : null

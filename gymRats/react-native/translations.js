@@ -186,6 +186,11 @@ module.exports = {
                 title: "Exercise search",
                 searchInputPlaceholder: "Type exercise name",
                 usageStat: ["Used in", "workout sessions"]
+            },
+            filePreview: {
+                playPauseAudio: "Play/pause audio",
+                pause: "Pause",
+                play: "Play"
             }
         },
         components: {
@@ -478,6 +483,11 @@ module.exports = {
                 title: "Търсене на упражнение",
                 searchInputPlaceholder: "Напиши име на упражнение",
                 usageStat: ["Използвано в", "тренировки"]
+            },
+            filePreview: {
+                playPauseAudio: "Пусни/Спри аудио",
+                pause: "Спри",
+                play: "Пусни"
             }
         },
         components: {
