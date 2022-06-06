@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { ScrollView, Text, TextInput, Pressable, View, BackHandler } from 'react-native'
+import i18n from 'i18n-js';
 
 import ApiRequests from '../../../classes/ApiRequests';
 
@@ -86,13 +87,13 @@ export default class ExerciseSearch extends Component {
                         }}>
                             <Ionicons name="md-arrow-back-sharp" size={25} />
                         </Pressable>
-                        <Text style={globalStyles.followUpScreenTitle}>Exercise search</Text>
+                        <Text style={globalStyles.followUpScreenTitle}>{i18n.t('screens')['exerciseSearch']['title']}</Text>
                     </View>
                     <TextInput
                         style={[globalStyles.authPageInput, {
                             marginTop: 20
                         }]}
-                        placeholder="Type your search here"
+                        placeholder={i18n.t('screens')['exerciseSearch']['searchInputPlaceholder']}
                         onChangeText={this.changeQuery} />
                     <View style={styles.searchResultsContainer}>
                         <ScrollView ref={this.scrollV} contentContainerStyle={globalStyles.fillEmptySpace}>
@@ -111,7 +112,7 @@ export default class ExerciseSearch extends Component {
                                     }}>
                                         <View style={styles.searchResult}>
                                             <Text style={styles.searchResultTitle}>{exercise.title}</Text>
-                                            <Text style={styles.searchResultStats}>Used in {exercise.timesUsed} workout sessions</Text>
+                                            <Text style={styles.searchResultStats}>{i18n.t('screens')['exerciseSearch']['usageStat'][0]} {exercise.timesUsed ? exercise.timesUsed : 0} {i18n.t('screens')['exerciseSearch']['usageStat'][1]}</Text>
                                         </View>
                                     </Pressable>
                                 )

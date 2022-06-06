@@ -206,6 +206,11 @@ module.exports = {
                 noFoodAdded: "No food added",
                 unknownSourceCaloriesTitle: "Unknown source calories",
                 unknownSourceCaloriesItemDescription: "40% carbs, 30% protein, 30% fats"
+            },
+            exerciseSearch: {
+                title: "Exercise search",
+                searchInputPlaceholder: "Type exercise name",
+                usageStat: ["Used in", "workout sessions"]
             }
         },
         components: {
@@ -510,6 +515,11 @@ module.exports = {
                 noFoodAdded: "Няма добавени храни",
                 unknownSourceCaloriesTitle: "Калории от незнайни източници",
                 unknownSourceCaloriesItemDescription: "40% въглехидрати, 30% протеини, 30% мазнини"
+            },
+            exerciseSearch: {
+                title: "Търсене на упражнение",
+                searchInputPlaceholder: "Напиши име на упражнение",
+                usageStat: ["Използвано в", "тренировки"]
             }
         },
         components: {
