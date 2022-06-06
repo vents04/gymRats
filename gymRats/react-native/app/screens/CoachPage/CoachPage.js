@@ -3,6 +3,8 @@ import { ActivityIndicator, Image, Linking, ScrollView, Text, Pressable, View, B
 
 import ApiRequests from '../../classes/ApiRequests';
 
+import i18n from 'i18n-js';
+
 import { Ionicons } from '@expo/vector-icons';
 
 import { HTTP_STATUS_CODES } from '../../../global';
@@ -73,7 +75,7 @@ export default class CoachPage extends Component {
                         }}>
                             <Ionicons name="md-arrow-back-sharp" size={25} />
                         </Pressable>
-                        <Text style={globalStyles.followUpScreenTitle}>Coach</Text>
+                        <Text style={globalStyles.followUpScreenTitle}>{i18n.t('screens')['coachPage']['pageTitle']}</Text>
                     </View>
                     {
                         this.state.showError
@@ -106,17 +108,17 @@ export default class CoachPage extends Component {
                                         <View style={styles.coachStats}>
                                             <View style={styles.statContainer}>
                                                 <Text style={styles.statValue}>{this.props.route.params.coach.clients}</Text>
-                                                <Text style={styles.statTitle}>clients</Text>
+                                                <Text style={styles.statTitle}>{i18n.t('screens')['coachPage']['clients']}</Text>
                                             </View>
                                             <View style={styles.statContainer}>
                                                 <Text style={styles.statValue}>{this.props.route.params.coach.rating}</Text>
-                                                <Text style={styles.statTitle}>rating</Text>
+                                                <Text style={styles.statTitle}>{i18n.t('screens')['coachPage']['rating']}</Text>
                                             </View>
                                             {
                                                 /*
                                             <View style={styles.statContainer}>
                                                 <Text style={styles.statValue}>{this.props.route.params.coach.experience ?? "-"}</Text>
-                                                <Text style={styles.statTitle}>experience</Text>
+                                                <Text style={styles.statTitle}>{i18n.t('screens')['coachPage']['experience']}</Text>
                                             </View>
                                                 */
                                             }
@@ -133,7 +135,7 @@ export default class CoachPage extends Component {
                                     </View>
                                     {
                                         this.props.route.params.coach.prefersOfflineCoaching
-                                            ? <Text style={[globalStyles.important, { marginBottom: 32 }]}>This coach prefers to work with clients in person (offline).</Text>
+                                            ? <Text style={[globalStyles.important, { marginBottom: 32 }]}>{i18n.t('screens')['coachPage']['preffersOfflineCoaching']}</Text>
                                             : null
                                     }
                                     <Pressable style={({ pressed }) => [
@@ -146,7 +148,7 @@ export default class CoachPage extends Component {
                                     }}>
                                         {
                                             !this.state.isLoading
-                                                ? <Text style={globalStyles.authPageActionButtonText}>Request to be coached</Text>
+                                                ? <Text style={globalStyles.authPageActionButtonText}>{i18n.t('screens')['coachPage']['actionButton']}</Text>
                                                 : <ActivityIndicator
                                                     animating={true}
                                                     color="#fff"
