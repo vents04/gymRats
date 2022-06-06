@@ -110,7 +110,7 @@ export default class Client extends Component {
                         }}>
                             <Ionicons name="md-arrow-back-sharp" size={25} />
                         </Pressable>
-                        <Text style={globalStyles.followUpScreenTitle}>Client profile</Text>
+                        <Text style={globalStyles.followUpScreenTitle}>{i18n.t("screens")['client']['title']}</Text>
                     </View>
                     {
                         this.state.showError
@@ -143,7 +143,7 @@ export default class Client extends Component {
                                         this.state.from
                                             ? <Text style={[globalStyles.notation, {
                                                 fontSize: 12,
-                                            }]}>Client since {new Date(this.state.from).toLocaleDateString()}</Text>
+                                            }]}>{i18n.t("screens")['client']['clientSince']} {new Date(this.state.from).toLocaleDateString()}</Text>
                                             : null
                                     }
                                 </View>
@@ -157,7 +157,7 @@ export default class Client extends Component {
                                     <TouchableWithoutFeedback onPress={() => { this.incrementDate(-1) }}>
                                         <View style={styles.calendarController}>
                                             <Entypo name="chevron-left" size={14} color="#999" style={{ marginRight: 5 }} />
-                                            <Text style={styles.calendarControllerText}>Previous</Text>
+                                            <Text style={styles.calendarControllerText}>{i18n.t("screens")['client']['previous']}</Text>
                                         </View>
                                     </TouchableWithoutFeedback>
                                     <Text style={styles.calendarCurrentDate}>
@@ -171,7 +171,7 @@ export default class Client extends Component {
                                     </Text>
                                     <TouchableWithoutFeedback onPress={() => { this.incrementDate(1) }}>
                                         <View style={[styles.calendarController, { justifyContent: 'flex-end' }]}>
-                                            <Text style={styles.calendarControllerText}>Next</Text>
+                                            <Text style={styles.calendarControllerText}>{i18n.t("screens")['client']['next']}</Text>
                                             <Entypo name="chevron-right" style={{ marginLeft: 5 }} size={14} color="#999" />
                                         </View>
                                     </TouchableWithoutFeedback>

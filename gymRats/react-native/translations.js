@@ -30,7 +30,7 @@ module.exports = {
                 notSet: "not set",
                 unsetMaximumDistance: "Unset maximum distance",
                 setMaximumDistance: "Set maximum distance",
-                applyFilters: "Apply filters", 
+                applyFilters: "Apply filters",
                 locationPermission: "Location permission needed",
                 message: "In order to provide a more personalized experience Gym Rats needs access to your location.",
                 filters: "Filters",
@@ -241,6 +241,19 @@ module.exports = {
                 title: "Weight",
                 add: "Add",
                 update: "Update"
+            },
+            chat: {
+                fileUploadErrorTitle: "File upload error",
+                fileUploadSizeError: "The size of the file you have selected is too large",
+                fileUploadUnsupportedType: "This file type is not supported",
+                messagePlaceholder: "Type a message...",
+                fileUploading: "The file is being uploaded"
+            },
+            client: {
+                title: "Client profile",
+                clientSince: "Client since",
+                previous: "Previous",
+                next: "Next",
             }
         },
         components: {
@@ -381,7 +394,7 @@ module.exports = {
                 notSet: "не е зададено",
                 unsetMaximumDistance: "Премахни максималното разстояние",
                 setMaximumDistance: "Задай максималното разстояние",
-                applyFilters: "Постави филтри", 
+                applyFilters: "Постави филтри",
                 locationPermission: "Разрешение за взимане на локация",
                 message: "За по-персонализирано преживяване, Gym Rats изисква достъп до локацията ви.",
                 filters: "Филтри",
@@ -584,6 +597,19 @@ module.exports = {
                 title: "Тегло",
                 add: "Добави",
                 update: "Обнови"
+            },
+            chat: {
+                fileUploadErrorTitle: "Грешка при качване на файл",
+                fileUploadSizeError: "Размерът на файла е прекалено голям",
+                fileUploadUnsupportedType: "Файловият формат не е поддържан в Gym Rats",
+                messagePlaceholder: "Напиши съобщение...",
+                fileUploading: "Файлът се качва"
+            },
+            client: {
+                title: "Клиентски профил",
+                clientSince: "Клиент от",
+                previous: "Назад",
+                next: "Напред",
             }
         },
         components: {
