@@ -5,6 +5,8 @@ import DropDownPicker from 'react-native-dropdown-picker'
 
 import ApiRequests from '../../classes/ApiRequests';
 
+import i18n from 'i18n-js';
+
 import { Ionicons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
@@ -104,7 +106,7 @@ export default class Progress extends Component {
                                             ? <View style={styles.progressCardContainer}>
                                                 <View style={styles.progressCardHeaderContainer}>
                                                     <FontAwesome5 name="weight" size={20} color={cardColors.weightTracker} />
-                                                    <Text style={styles.progressCardHeader}>Weight tracker</Text>
+                                                    <Text style={styles.progressCardHeader}>{i18n.t('screens')['progress']['weightTracker']}</Text>
                                                 </View>
                                                 <Pressable style={({ pressed }) => [
                                                     styles.progressFlagContainer,
@@ -117,24 +119,24 @@ export default class Progress extends Component {
                                                     <Text style={styles.progressFlag}>
                                                         {
                                                             this.state.progress.weightTrackerProgress.notation == PROGRESS_NOTATION.INSUFFICIENT_WEIGHT_LOSS
-                                                                ? "Minor weight loss"
+                                                                ? i18n.t('screens')['progress']['minorWeightLoss']
                                                                 : this.state.progress.weightTrackerProgress.notation == PROGRESS_NOTATION.SUFFICIENT_WEIGHT_LOSS
-                                                                    ? "Efficient weight loss"
+                                                                    ? i18n.t('screens')['progress']['efficientWeightLoss']
                                                                     : this.state.progress.weightTrackerProgress.notation == PROGRESS_NOTATION.SUFFICIENT_WEIGHT_GAIN
-                                                                        ? "Efficient weight gain"
+                                                                        ? i18n.t('screens')['progress']['efficientWeightGain']
                                                                         : this.state.progress.weightTrackerProgress.notation == PROGRESS_NOTATION.RAPID_WEIGHT_LOSS
-                                                                            ? "Too rapid weight loss"
+                                                                            ? i18n.t('screens')['progress']['tooRapidWeightLoss']
                                                                             : this.state.progress.weightTrackerProgress.notation == PROGRESS_NOTATION.RAPID_WEIGHT_GAIN
-                                                                                ? "Too rapid weight gain"
+                                                                                ? i18n.t('screens')['progress']['tooRapidWeightGain']
                                                                                 : this.state.progress.weightTrackerProgress.notation == PROGRESS_NOTATION.INSUFFICIENT_WEIGHT_GAIN
-                                                                                    ? "Minor weight gain"
+                                                                                    ? i18n.t('screens')['progress']['minorWeightGain']
                                                                                     : null
 
                                                         }
                                                     </Text>
                                                 </Pressable>
                                                 <View style={styles.progressCardTips}>
-                                                    <Text style={styles.progressCardTipsTitle}>Tips to improve</Text>
+                                                    <Text style={styles.progressCardTipsTitle}>{i18n.t('screens')['progress']['tipsToImproove']}</Text>
                                                     {
                                                         this.state.progress.weightTrackerProgress.tips.map((tip, index) =>
                                                             <View style={styles.progressCardTipContainer} key={"wtp" + index}>
@@ -153,10 +155,10 @@ export default class Progress extends Component {
                                             ? <View style={[styles.progressCardContainer, { minHeight: this.state.exerciseDropdownOpened ? 275 : 0 }]}>
                                                 <View style={styles.progressCardHeaderContainer}>
                                                     <FontAwesome5 name="weight" size={20} color={cardColors.logbook} />
-                                                    <Text style={styles.progressCardHeader}>Logbook</Text>
+                                                    <Text style={styles.progressCardHeader}>{i18n.t('screens')['progress']['logbook']}</Text>
                                                 </View>
                                                 <DropDownPicker
-                                                    placeholder="Select an exercise"
+                                                    placeholder={i18n.t('screens')['progress']['selectExercise']}
                                                     maxHeight={150}
                                                     open={this.state.exerciseDropdownOpened}
                                                     setOpen={(value) => {
@@ -201,7 +203,7 @@ export default class Progress extends Component {
                                                                                         fontFamily: "MainMedium",
                                                                                         fontSize: 14,
                                                                                         marginBottom: 8,
-                                                                                    }}>Trend from last session:</Text>
+                                                                                    }}>{i18n.t('screens')['progress']['trendFromLastSession']}</Text>
                                                                                     <Pressable style={({ pressed }) => [
                                                                                         styles.progressFlagContainer,
                                                                                         {
@@ -213,19 +215,19 @@ export default class Progress extends Component {
                                                                                         <Text style={styles.progressFlag}>
                                                                                             {
                                                                                                 exercise.lastSessionProgressNotation == LOGBOOK_PROGRESS_NOTATIONS.RAPID_STRENGTH_GAIN
-                                                                                                    ? "Rapid strength gain"
+                                                                                                    ? i18n.t('screens')['progress']['rapidStrengthGain']
                                                                                                     : exercise.lastSessionProgressNotation == LOGBOOK_PROGRESS_NOTATIONS.STRENGTH_GAIN
-                                                                                                        ? "Strength gain"
+                                                                                                        ? i18n.t('screens')['progress']['strengthGain']
                                                                                                         : exercise.lastSessionProgressNotation == LOGBOOK_PROGRESS_NOTATIONS.SLIGHT_STRENGTH_GAIN
-                                                                                                            ? "Slight strength gain"
+                                                                                                            ? i18n.t('screens')['progress']['slightStrengthGain']
                                                                                                             : exercise.lastSessionProgressNotation == LOGBOOK_PROGRESS_NOTATIONS.NO_CHANGE
-                                                                                                                ? "No notable change"
+                                                                                                                ? i18n.t('screens')['progress']['noNotableChange']
                                                                                                                 : exercise.lastSessionProgressNotation == LOGBOOK_PROGRESS_NOTATIONS.SLIGHT_STRENGTH_LOSS
-                                                                                                                    ? "Slight strength loss"
+                                                                                                                    ? i18n.t('screens')['progress']['slightStrengthLoss']
                                                                                                                     : exercise.lastSessionProgressNotation == LOGBOOK_PROGRESS_NOTATIONS.STRENGTH_LOSS
-                                                                                                                        ? "Strength loss"
+                                                                                                                        ? i18n.t('screens')['progress']['strengthLoss']
                                                                                                                         : exercise.lastSessionProgressNotation == LOGBOOK_PROGRESS_NOTATIONS.RAPID_STRENGTH_LOSS
-                                                                                                                            ? "Rapid strength loss"
+                                                                                                                            ? i18n.t('screens')['progress']['rapidStrengthLoss']
                                                                                                                             : null
 
                                                                                             }
@@ -243,7 +245,7 @@ export default class Progress extends Component {
                                                                                         fontSize: 14,
                                                                                         marginBottom: 8,
                                                                                         marginTop: 12
-                                                                                    }}>General trend:</Text>
+                                                                                    }}>{i18n.t('screens')['progress']['generalTrend']}</Text>
                                                                                     <Pressable style={({ pressed }) => [
                                                                                         styles.progressFlagContainer,
                                                                                         {
@@ -255,19 +257,19 @@ export default class Progress extends Component {
                                                                                         <Text style={styles.progressFlag}>
                                                                                             {
                                                                                                 exercise.lastFiveSessionsProgressNotation == LOGBOOK_PROGRESS_NOTATIONS.RAPID_STRENGTH_GAIN
-                                                                                                    ? "Rapid strength gain"
+                                                                                                    ? i18n.t('screens')['progress']['rapidStrengthGain']
                                                                                                     : exercise.lastFiveSessionsProgressNotation == LOGBOOK_PROGRESS_NOTATIONS.STRENGTH_GAIN
-                                                                                                        ? "Strength gain"
+                                                                                                        ? i18n.t('screens')['progress']['strengthGain']
                                                                                                         : exercise.lastFiveSessionsProgressNotation == LOGBOOK_PROGRESS_NOTATIONS.SLIGHT_STRENGTH_GAIN
-                                                                                                            ? "Slight strength gain"
+                                                                                                            ? i18n.t('screens')['progress']['slightStrengthGain']
                                                                                                             : exercise.lastFiveSessionsProgressNotation == LOGBOOK_PROGRESS_NOTATIONS.NO_CHANGE
-                                                                                                                ? "No notable change"
+                                                                                                                ? i18n.t('screens')['progress']['noNotableChange']
                                                                                                                 : exercise.lastFiveSessionsProgressNotation == LOGBOOK_PROGRESS_NOTATIONS.SLIGHT_STRENGTH_LOSS
-                                                                                                                    ? "Slight strength loss"
+                                                                                                                    ? i18n.t('screens')['progress']['slightStrengthLoss']
                                                                                                                     : exercise.lastFiveSessionsProgressNotation == LOGBOOK_PROGRESS_NOTATIONS.STRENGTH_LOSS
-                                                                                                                        ? "Strength loss"
+                                                                                                                        ? i18n.t('screens')['progress']['strengthLoss']
                                                                                                                         : exercise.lastFiveSessionsProgressNotation == LOGBOOK_PROGRESS_NOTATIONS.RAPID_STRENGTH_LOSS
-                                                                                                                            ? "Rapid strength loss"
+                                                                                                                            ? i18n.t('screens')['progress']['rapidStrengthLoss']
                                                                                                                             : null
 
                                                                                             }
@@ -280,7 +282,7 @@ export default class Progress extends Component {
                                                                         {
                                                                             !exercise.lastSessionProgressNotation && !exercise.lastFiveSessionsProgressNotation
                                                                                 ? <>
-                                                                                    <Text style={globalStyles.notation}>Finish at least two sessions with this exercise to unlock the progress functionality</Text>
+                                                                                    <Text style={globalStyles.notation}>{i18n.t('screens')['progress']['atLeastTwoSessions']}</Text>
                                                                                     <Pressable style={({ pressed }) => [
                                                                                         globalStyles.authPageActionButton, {
                                                                                             opacity: pressed ? 0.1 : 1,
@@ -292,7 +294,7 @@ export default class Progress extends Component {
                                                                                             timezoneOffset: new Date().getTimezoneOffset()
                                                                                         });
                                                                                     }}>
-                                                                                        <Text style={globalStyles.authPageActionButtonText}>Add a workout session</Text>
+                                                                                        <Text style={globalStyles.authPageActionButtonText}>{i18n.t('screens')['progress']['addWorkoutSession']}</Text>
                                                                                     </Pressable>
                                                                                 </>
                                                                                 : null
@@ -305,7 +307,7 @@ export default class Progress extends Component {
                                                 }
                                                 {
                                                     !this.state.currentExercise
-                                                        ? <Text style={globalStyles.notation}>Please, select an exercise to show progress charts for.</Text>
+                                                        ? <Text style={globalStyles.notation}>{i18n.t('screens')['progress']['selectExercise']}</Text>
                                                         : null
                                                 }
                                             </View>
@@ -316,7 +318,7 @@ export default class Progress extends Component {
                                             && this.state.progress.logbookProgress.length <= 0
                                             ? <>
                                                 <View style={styles.unknownSourceCaloriesIncentiveContainer}>
-                                                    <Text style={styles.unknownSourceCaloriesIncentiveText}>After adding some data you will have the ability to monitor your progress from this tab as well as get software-based suggestions on how to improve your fitness.</Text>
+                                                    <Text style={styles.unknownSourceCaloriesIncentiveText}>{i18n.t('screens')['progress']['messageToUser']}</Text>
                                                     <Pressable style={({ pressed }) => [
                                                         globalStyles.authPageActionButton,
                                                         {
@@ -325,7 +327,7 @@ export default class Progress extends Component {
                                                     ]} onPress={() => {
                                                         this.props.navigation.navigate("Calendar");
                                                     }}>
-                                                        <Text style={globalStyles.authPageActionButtonText}>Let's unlock this tab</Text>
+                                                        <Text style={globalStyles.authPageActionButtonText}>{i18n.t('screens')['progress']['letsUnlockThisTab']}</Text>
                                                     </Pressable>
                                                 </View>
                                             </>
