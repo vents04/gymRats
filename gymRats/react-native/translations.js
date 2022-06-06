@@ -190,6 +190,14 @@ module.exports = {
                 title: "Add unknown souce calories",
                 notation: "The macros for unknown source calories are the following: 40% carbs, 30% protein, 30% fats",
                 caloriesInput: "Calories estimate:"
+            },
+            caloriesIntake: {
+                title: "CaloriesIntake",
+                unknownSourceCaloriesMessage: "You may also add unknown source calories if you do not bother searching for a food you have consumed",
+                unknownSourceCaloriesButton: "Add calories from unknown source",
+                noFoodAdded: "No food added",
+                unknownSourceCaloriesTitle: "Unknown source calories",
+                unknownSourceCaloriesItemDescription: "40% carbs, 30% protein, 30% fats"
             }
         },
         components: {
@@ -476,6 +484,14 @@ module.exports = {
                 title: "Добави калории от незнаен източник",
                 notation: "Макронутриентите за калории от незнаен източник се разпределят както следва: 40% въглехидрати, 30% протеини, 30% мазнини",
                 caloriesInput: "Приблизително приети калории:"
+            },
+            caloriesIntake: {
+                title: "Прием на калории",
+                unknownSourceCaloriesMessage: "Може да добавите калории от незнаен източник, ако не искате да търсите специфична храна, която сте консумирали",
+                unknownSourceCaloriesButton: "Добави калории от незнаен източник",
+                noFoodAdded: "Няма добавени храни",
+                unknownSourceCaloriesTitle: "Калории от незнайни източници",
+                unknownSourceCaloriesItemDescription: "40% въглехидрати, 30% протеини, 30% мазнини"
             }
         },
         components: {

@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Text, View, ScrollView, Pressable, BackHandler } from 'react-native'
+import i18n from 'i18n-js';
 
 import ApiRequests from '../../../classes/ApiRequests';
 import { BackButtonHandler } from '../../../classes/BackButtonHandler';
@@ -125,7 +126,7 @@ export default class CaloriesIntake extends Component {
                         }}>
                             <Ionicons name="md-arrow-back-sharp" size={25} />
                         </Pressable>
-                        <Text style={globalStyles.followUpScreenTitle}>Calories intake</Text>
+                        <Text style={globalStyles.followUpScreenTitle}>{i18n.t('screens')['caloriesIntake']['title']}</Text>
                     </View>
                     {
                         this.state.showError
@@ -133,7 +134,7 @@ export default class CaloriesIntake extends Component {
                             : null
                     }
                     <View style={styles.unknownSourceCaloriesIncentiveContainer}>
-                        <Text style={styles.unknownSourceCaloriesIncentiveText}>You may also add unknown source calories if you do not bother searching for a food you have consumed</Text>
+                        <Text style={styles.unknownSourceCaloriesIncentiveText}>{i18n.t('screens')['caloriesIntake']['unknownSourceCaloriesMessage']}</Text>
                         <Pressable style={({ pressed }) => [
                             globalStyles.authPageActionButton,
                             {
@@ -145,7 +146,7 @@ export default class CaloriesIntake extends Component {
                                 timezoneOffset: this.props.route.params.timezoneOffset
                             })
                         }}>
-                            <Text style={globalStyles.authPageActionButtonText}>Add calories from unknown source</Text>
+                            <Text style={globalStyles.authPageActionButtonText}>{i18n.t('screens')['caloriesIntake']['unknownSourceCaloriesButton']}</Text>
                         </Pressable>
                     </View>
                     <ScrollView contentContainerStyle={globalStyles.fillEmptySpace}>
@@ -153,7 +154,7 @@ export default class CaloriesIntake extends Component {
                             Object.keys(CALORIES_COUNTER_MEALS).map(key =>
                                 <View key={key} style={styles.mealContainer}>
                                     <View style={styles.mealTopBar}>
-                                        <Text style={styles.mealTitle}>{MEAL_TITLES[key]}</Text>
+                                        <Text style={styles.mealTitle}>{i18n.t('common')['meals'][key]}</Text>
                                         <Pressable style={({ pressed }) => [
                                             {
                                                 opacity: pressed ? 0.1 : 1,
@@ -189,7 +190,7 @@ export default class CaloriesIntake extends Component {
                                                             })
                                                         }}>
                                                             <Text style={styles.itemTitle}>{item.itemInstance.title}</Text>
-                                                            <Text style={styles.itemAmount}>{item.amount}&nbsp;{item.itemInstance.unit.toLowerCase()}</Text>
+                                                            <Text style={styles.itemAmount}>{item.amount}&nbsp;{i18n.t('common')['foodUnits'][item.itemInstance.unit]}</Text>
                                                         </Pressable>
                                                         <Pressable style={({ pressed }) => [
                                                             {
@@ -203,7 +204,7 @@ export default class CaloriesIntake extends Component {
                                                     </View>
                                                     : null
                                             )
-                                            : <Text style={globalStyles.notation}>No food added</Text>
+                                            : <Text style={globalStyles.notation}>{i18n.t('screens')['caloriesIntake']['noFoodAdded']}</Text>
                                     }
                                 </View>
                             )
@@ -212,7 +213,7 @@ export default class CaloriesIntake extends Component {
                             this.state.unknownSourceCaloriesDay.length > 0
                                 ? <View key="unknownSourceCaloriesMeal" style={styles.mealContainer}>
                                     <View style={styles.mealTopBar}>
-                                        <Text style={styles.mealTitle}>Unknown source calories</Text>
+                                        <Text style={styles.mealTitle}>{i18n.t('screens')['caloriesIntake']['unknownSourceCaloriesTitle']}</Text>
                                         <Pressable style={({ pressed }) => [
                                             {
                                                 opacity: pressed ? 0.1 : 1,
@@ -229,8 +230,8 @@ export default class CaloriesIntake extends Component {
                                                 <Pressable style={({ pressed }) => [
                                                     styles.itemContainerLeft
                                                 ]}>
-                                                    <Text style={styles.itemTitle}>{item.calories}</Text>
-                                                    <Text style={styles.itemAmount}>40% carbs, 30% protein, 30% fats</Text>
+                                                    <Text style={styles.itemTitle}>{item.calories} {i18n.t('common')['foodUnits']['CALORIES']}</Text>
+                                                    <Text style={styles.itemAmount}>{i18n.t('screens')['caloriesIntake']['unknownSourceCaloriesItemDescription']}</Text>
                                                 </Pressable>
                                                 <Pressable style={({ pressed }) => [
                                                     {
