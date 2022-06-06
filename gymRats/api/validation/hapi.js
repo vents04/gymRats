@@ -2,75 +2,69 @@ const Joi = require('@hapi/joi');
 const mongoose = require('mongoose');
 const { CALORIES_COUNTER_UNITS, WEIGHT_UNITS, CALORIES_COUNTER_MEALS, REQUEST_STATUSES, CHAT_STATUSES, RELATION_STATUSES, CONTENT_VISIBILITY_SCOPES } = require('../global');
 
+const firstNameValidation = () => {
+    return Joi.string().min(1).max(32).required().messages({
+        "string.base": `First name should have at least 1 character`,
+        "string.empty": `First name should not be empty`,
+        "string.min": `First name should have at least 1 character`,
+        "string.max": `First name should have at most 32 characters`,
+        "any.required": `First name is a required field`
+    }).regex(/^[A-Za-z]+$/)
+}
+
+const lastNameValidation = () => {
+    return Joi.string().min(1).max(32).required().messages({
+        "string.base": `Last name should have at least 1 character`,
+        "string.empty": `Last name should not be empty`,
+        "string.min": `Last name should have at least 1 character`,
+        "string.max": `Last name should have at most 32 characters`,
+        "any.required": `Last name is a required field`
+    }).regex(/^[A-Za-z]+$/)
+}
+
+const emailValidation = () => {
+    return Joi.string().email().min(3).max(320).required().messages({
+        "string.base": `Email should have at least 3 characters`,
+        "string.empty": `Email should not be empty`,
+        "string.min": `Email should have at least 3 characters`,
+        "string.email": `Email should be a valid email address`,
+        "string.max": `Email should have at most 320 characters`,
+        "any.required": `Email is a required field`
+    })
+}
+
+const passwordValidation = () => {
+    return Joi.string().min(8).max(100).required().messages({
+        "string.base": `Password should have at least 8 characters`,
+        "string.empty": `Password should not be empty`,
+        "string.min": `Password should have at least 8 characters`,
+        "string.max": `Password should have at most 100 characters`,
+        "any.required": `Password is a required field`
+    })
+}
+
 const signupValidation = (data) => {
     const schema = Joi.object({
-        firstName: Joi.string().min(1).max(200).required().messages({
-            "string.base": `First name should have at least 1 character`,
-            "string.empty": `First name should not be empty`,
-            "string.min": `First name should have at least 1 character`,
-            "string.max": `First name should have at most 200 characters`,
-            "any.required": `First name is a required field`
-        }).regex(/^[A-Za-z]+$/),
-        lastName: Joi.string().min(1).max(200).required().messages({
-            "string.base": `Last name should have at least 1 character`,
-            "string.empty": `Last name should not be empty`,
-            "string.min": `Last name should have at least 1 character`,
-            "string.max": `Last name should have at most 200 characters`,
-            "any.required": `Last name is a required field`
-        }).regex(/^[A-Za-z]+$/),
-        email: Joi.string().email().min(3).max(320).required().messages({
-            "string.base": `Email should have at least 3 characters`,
-            "string.empty": `Email should not be empty`,
-            "string.min": `Email should have at least 3 characters`,
-            "string.email": `Email should be a valid email address`,
-            "string.max": `Email should have at most 320 characters`,
-            "any.required": `Email is a required field`
-        }),
-        password: Joi.string().min(8).max(100).required().messages({
-            "string.base": `Password should have at least 8 characters`,
-            "string.empty": `Password should not be empty`,
-            "string.min": `Password should have at least 8 characters`,
-            "string.max": `Password should have at most 100 characters`,
-            "any.required": `Password is a required field`
-        })
+        firstName: firstNameValidation(),
+        lastName: lastNameValidation(),
+        email: emailValidation(),
+        password: passwordValidation(),
     })
     return schema.validate(data);
 }
 
 const loginValidation = (data) => {
     const schema = Joi.object({
-        email: Joi.string().email().max(320).required().messages({
-            "string.base": `Email should have at least 1 characters`,
-            "string.empty": `Email should not be empty`,
-            "string.email": `Email should be a valid email address`,
-            "string.max": `Email should have at most 320 characters`,
-            "any.required": `Email is a required field`
-        }),
-        password: Joi.string().max(100).required().messages({
-            "string.base": `Password should have at least 1 character`,
-            "string.empty": `Password should not be empty`,
-            "string.max": `Password should have at most 100 characters`,
-            "any.required": `Password is a required field`
-        })
+        email: emailValidation(),
+        password: passwordValidation(),
     })
     return schema.validate(data);
 }
 
 const userUpdateValidation = (data) => {
     const schema = Joi.object({
-        firstName: Joi.string().min(1).max(200).messages({
-            "string.base": `First name should have at least 1 character`,
-            "string.empty": `First name should not be empty`,
-            "string.min": `First name should have at least 1 character`,
-            "string.max": `First name should have at most 200 characters`,
-            "any.required": `First name is a required field`
-        }).regex(/^[A-Za-z]+$/),
-        lastName: Joi.string().min(1).max(200).messages({
-            "string.base": `Last name should have at least 1 character`,
-            "string.empty": `Last name should not be empty`,
-            "string.min": `Last name should have at least 1 character`,
-            "string.max": `Last name should have at most 200 characters`,
-        }).regex(/^[A-Za-z]+$/),
+        firstName: firstNameValidation(),
+        lastName: lastNameValidation(),
         weightUnit: Joi.string().valid(...Object.values(WEIGHT_UNITS)).messages({
             "string.base": `Weight unit should have at least 1 character`,
             "string.empty": `Weight unit should not be empty`,
@@ -83,7 +77,13 @@ const userUpdateValidation = (data) => {
 
 const itemPostValidation = (data) => {
     const schema = Joi.object({
-        title: Joi.string().min(1).max(300).required(),
+        title: Joi.string().min(1).max(300).required().messages({
+            "string.base": `Title should have at least 1 characters`,
+            "string.empty": `Title should not be empty`,
+            "string.min": `Title should have at least 1 characters`,
+            "string.max": `Title should have at most 300 characters`,
+            "any.required": `Title is a required field`
+        }),
         brand: Joi.string().min(1).max(300).optional(),
         barcode: Joi.string().optional(),
         unit: Joi.string().valid(...Object.values(CALORIES_COUNTER_UNITS)).required(),

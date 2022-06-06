@@ -52,3 +52,11 @@
 {"level":"error","message":"Cannot read properties of undefined (reading 'year')"}
 {"level":"error","message":"Cannot read properties of undefined (reading 'year')"}
 {"level":"error","message":"Cannot read properties of undefined (reading 'year')"}
+{"level":"error","message":"\"firstName\" with value \"Ve1\" fails to match the required pattern: /^[A-Za-z]+$/"}
+{"level":"error","message":"First name should have at most 32 characters"}
+{"level":"error","message":"First name should have at most 32 characters"}
+{"level":"error","message":"Last name should not be empty"}
+{"level":"error","message":"Неверни данни за вход"}
+{"level":"error","message":"Неверни данни за вход"}
+{"level":"error","message":"Неверни данни за вход"}
+{"level":"error","message":"Запис на потребител с този имейл не беше намерен"}
