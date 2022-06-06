@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Text, TextInput, View, Pressable, Switch, BackHandler } from 'react-native';
+import i18n from 'i18n-js';
 
 import ApiRequests from '../../classes/ApiRequests';
 
@@ -117,7 +118,7 @@ export default class CoachingApplicationSubmission extends Component {
                         }}>
                             <Ionicons name="md-arrow-back-sharp" size={25} />
                         </Pressable>
-                        <Text style={globalStyles.followUpScreenTitle}>Application submission</Text>
+                        <Text style={globalStyles.followUpScreenTitle}>{i18n.t('screens')['coachingApplicationSubmission']['pageTitle']}</Text>
                     </View>
                     {
                         this.state.showError
@@ -129,7 +130,7 @@ export default class CoachingApplicationSubmission extends Component {
                         style={[globalStyles.authPageInput, {
                             marginVertical: 20
                         }]}
-                        placeholder="Where are you located?"
+                        placeholder={i18n.t('screens')['coachingApplicationSubmission']['locationInputPlaceholder']}
                         onChangeText={(val) => {
                             this.setState({ query: val, showError: false, selectedLocation: "" }, () => {
                                 this.searchLocation();
@@ -157,7 +158,7 @@ export default class CoachingApplicationSubmission extends Component {
                     }
                     <Text style={[globalStyles.notation, {
                         marginTop: 16
-                    }]}>Do you prefer to work with clients only in person?</Text>
+                    }]}>{i18n.t('screens')['coachingApplicationSubmission']['prefersOfflineCoachingText']}</Text>
                     <View style={{ display: 'flex', flexDirection: "row", alignItems: "center", justifyContent: "flex-start", width: "100%", }}>
                         <Switch
                             trackColor={{ false: '#767577', true: '#53c7f0' }}
@@ -175,7 +176,7 @@ export default class CoachingApplicationSubmission extends Component {
                                 <Text style={[globalStyles.notation, {
                                     marginBottom: 10,
                                     marginTop: 16
-                                }]}>Our team will review your application as soon as possible.</Text>
+                                }]}>{i18n.t('screens')['coachingApplicationSubmission']['processDescriptor']}</Text>
                                 <Pressable style={({ pressed }) => [
                                     globalStyles.authPageActionButton,
                                     {
@@ -184,7 +185,7 @@ export default class CoachingApplicationSubmission extends Component {
                                 ]} onPress={() => {
                                     this.getPlace()
                                 }}>
-                                    <Text style={globalStyles.authPageActionButtonText}>Submit application</Text>
+                                    <Text style={globalStyles.authPageActionButtonText}>{i18n.t('screens')['coachingApplicationSubmission']['actionButton']}</Text>
                                 </Pressable>
                             </>
                             : null
