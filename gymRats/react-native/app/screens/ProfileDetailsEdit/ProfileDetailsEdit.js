@@ -77,7 +77,7 @@ export default class ProfileDetailsEdit extends Component {
                         showError: true,
                         error: error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR
                             ? error.response.data
-                            : "Internal server error"
+                            : i18n.ti18n.t('errors')['internalServerError']
                     })
                 })
             } else {
@@ -100,7 +100,7 @@ export default class ProfileDetailsEdit extends Component {
                         showError: true,
                         error: error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR
                             ? error.response.data
-                            : "Internal server error"
+                            : i18n.ti18n.t('errors')['internalServerError']
                     })
                 })
             }

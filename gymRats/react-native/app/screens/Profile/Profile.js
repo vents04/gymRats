@@ -4,6 +4,8 @@ import * as ImagePicker from 'expo-image-picker';
 
 import ApiRequests from '../../classes/ApiRequests';
 
+import i18n from 'i18n-js';
+
 import LogoBar from '../../components/LogoBar/LogoBar';
 
 import { Feather } from '@expo/vector-icons';
@@ -78,8 +80,8 @@ export default class Profile extends Component {
             this.setState({
                 showError: true,
                 error: error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR
-                    ? "There was a problem uploading the profile picture. Please try again or contact support at support@uploy.app"
-                    : "Internal server error"
+                    ? i18n.ti18n.t('errors')['profilePictureUploadError']
+                    : i18n.ti18n.t('errors')['internalServerError']
             })
         })
     }
@@ -113,7 +115,7 @@ export default class Profile extends Component {
                 }
                 {
                     this.state.showLoadProfileError
-                        ? <Text style={globalStyles.errorBox}>There was a problem loading your profile. Try again or contact support on office@uploy.app</Text>
+                        ? <Text style={globalStyles.errorBox}>{i18n.t('errors')['loadProfileError']}</Text>
                         : null
                 }
                 {
@@ -148,7 +150,7 @@ export default class Profile extends Component {
                                                 color="#1f6cb0" />
                                             <Text style={[globalStyles.notation, {
                                                 marginLeft: 10
-                                            }]}>Saving...</Text>
+                                            }]}>{i18n.t('screens')['profile']['saving']}</Text>
                                         </View>
                                         : null
                                 }
@@ -165,18 +167,18 @@ export default class Profile extends Component {
                                 ]} onPress={() => {
                                     this.logout();
                                 }}>
-                                    <Text style={styles.highlightedText}>Logout</Text>
+                                    <Text style={styles.highlightedText}>{i18n.t('screens')['profile']['logout']}</Text>
                                 </Pressable>
                             </View>
                             <View style={styles.commonDataContainer}>
                                 <View style={styles.commonDataSection}>
                                     <View>
-                                        <Text style={styles.commonDataSectionTitle}>Weight unit</Text>
+                                        <Text style={styles.commonDataSectionTitle}>{i18n.t('screens')['profile']['weightUnit']}</Text>
                                         <Text style={styles.commonDataSectionValue}>
                                             {
                                                 this.state.profile.weightUnit == WEIGHT_UNITS.KILOGRAMS
-                                                    ? "Metric system (kilograms)"
-                                                    : "Imperial system (pounds)"
+                                                    ? i18n.t('screens')['profile']['KILOGRAMS']
+                                                    : i18n.t('screens')['profile']['POUNDS']
                                             }
                                         </Text>
                                     </View>
@@ -193,7 +195,7 @@ export default class Profile extends Component {
                             </View>
                         </View>
                         : !this.state.showLoadProfileError
-                            ? <Text style={globalStyles.notation}>Loading...</Text>
+                            ? <Text style={globalStyles.notation}>{i18n.t('screens')['profile']['loading']}</Text>
                             : null
                 }
             </View>
