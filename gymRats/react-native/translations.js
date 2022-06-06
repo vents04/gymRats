@@ -159,6 +159,18 @@ module.exports = {
                 selectExercise: "Please, select an exercise to show progress charts for.",
                 messageToUser: "After adding some data you will have the ability to monitor your progress from this tab as well as get software-based suggestions on how to improve your fitness.",
                 letsUnlockThisTab: "Let's unlock this tab!"
+            },
+            profileDetailsEdit: {
+                pageTitle: "Profile edit",
+                saving: "Saving...",
+                firstName: "First name",
+                firstNamePlaceholder: "First name:",
+                lastName: "Last name",
+                lastNamePlaceholder: "Last name:",
+                weightUnit: "Weight unit",
+                KILOGRAMS: "Metric system (kilograms)",
+                POUNDS: "Imperial system (pounds)",
+                removeProfilePicture: "Remove profile picture",
             }
         },
         components: {
@@ -413,6 +425,18 @@ module.exports = {
                 selectExercise: "Моля, изберете упражнение, чийто прогрес искате да видите.",
                 messageToUser: "След като добавите данни, ще имате възможността да наблюдавате напредъка си от тази страница, както и да получавате алгоритмично базирани предложения как да подобрите своето здраве.",
                 letsUnlockThisTab: "Нека отключим тази страница"
+            },
+            profileDetailsEdit: {
+                pageTitle: "Rедакция на профила",
+                saving: "Запазване...",
+                firstName: "Име",
+                firstNamePlaceholder: "Име:",
+                lastName: "Фамилия",
+                lastNamePlaceholder: "Фамилия:",
+                weightUnit: "Мерна единица за тегло",
+                KILOGRAMS: "Метрична система (килограми)",
+                POUNDS: "Имперска система (паунди)",
+                removeProfilePicture: "Премахване на профилна снимка",
             }
         },
         components: {
