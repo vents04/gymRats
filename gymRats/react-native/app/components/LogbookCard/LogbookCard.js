@@ -122,7 +122,7 @@ export default class LogbookCard extends Component {
                                                 <Text style={[styles.exercise, {
                                                     fontFamily: this.props.client ? "MainBold" : "MainRegular",
                                                     fontSize: this.props.client ? 16 : 12
-                                                }]}>{exercise.sets.length} {this.props.client ? (exercise.sets.length != 1 ? "sets " : "set ") : null}x {
+                                                }]}>{exercise.sets.length} {this.props.client ? (exercise.sets.length != 1 ? i18n.t('components')['sets'] : i18n.t('components')['set']) : null}x {
                                                         exercise.translations.hasOwnProperty(i18n.locale)
                                                             ? exercise.translations[i18n.locale]
                                                             : exercise.exerciseName
@@ -135,21 +135,21 @@ export default class LogbookCard extends Component {
                                                                 {
                                                                     set.reps
                                                                         ? <>
-                                                                            {set.reps} {set.reps != 1 ? "reps " : "rep "}
+                                                                            {set.reps} {set.reps != 1 ? i18n.t('components')['reps'] + " " : i18n.t('components')['sets'] + " "}
                                                                         </>
                                                                         : null
                                                                 }
                                                                 {
                                                                     set.weight && set.weight.amount
                                                                         ? <>
-                                                                            with {set.weight.amount}{WEIGHT_UNITS_LABELS[set.weight.unit]}&nbsp;
+                                                                            {i18n.t('components')['cards']['logbook']['with']} {set.weight.amount}{WEIGHT_UNITS_LABELS[set.weight.unit]}&nbsp;
                                                                         </>
                                                                         : null
                                                                 }
                                                                 {
                                                                     set.duration
                                                                         ? <>
-                                                                            for {set.duration} seconds&nbsp;
+                                                                            {i18n.t('components')['cards']['logbook']['for']} {set.duration} {i18n.t('components')['cards']['logbook']['seconds']}&nbsp;
                                                                         </>
                                                                         : null
                                                                 }

@@ -101,13 +101,29 @@ module.exports = {
             },
             chats: {
                 noChats: "Chats with clients and coaches will appear here"
+            },
+            barcodeReader: {
+                barcodeAlreadyExistsErrorTitle: "Barcode already exists",
+                barcodeAlreadyExistsErrorMessage: "This barcode is already associated with a food item. Please, scan a different barcode.",
+                requestingCameraPermission: "Requesting camera permission",
+                noCameraAccess: "No access to camera",
+                allowCamera: "Allow camera",
+                scanBarcode: "Scan barcode",
+                barcodeNotFound: "Barcode not found",
+                scan: "Scan / enter again",
+                addFood: "Add this food to Gym Rats",
+                enterBarcode: "Enter barcode:",
+                submitBarcode: "Submit barcode"
             }
         },
         components: {
             cards: {
                 logbook: {
                     cardTitle: "Workout",
-                    redirectButton: "Info and progress"
+                    redirectButton: "Info and progress",
+                    for: "for",
+                    seconds: "seconds",
+                    with: "with"
                 },
                 weightTracker: {
                     cardTitle: "Weight",
@@ -139,7 +155,12 @@ module.exports = {
             },
             message: {
                 clickToPreview: "Click to preview",
-                download: "Downloading..."
+                downloading: "Downloading...",
+                fileDownloadErrorTitle: "File download error",
+                fileDownloadErrorDescription: "There was an error while downloading and saving this file to your system",
+                fileDownloadSuccessTitle: "Downloaded successfully",
+                fileDownloadSuccessDescription: ["The file", ".", "was downloaded to the folder named Gym Rats"],
+                download: "Download"
             }
         },
         navigation: {
@@ -151,7 +172,13 @@ module.exports = {
         },
         common: {
             saving: "Saving...",
-            loading: "Loading..."
+            loading: "Loading...",
+            set: "set",
+            sets: "sets",
+            rep: "rep",
+            reps: "reps",
+            weight: "weight",
+            duration: "duration",
         },
         errors: {
             error: "Error",
@@ -250,7 +277,7 @@ module.exports = {
             },
             emailVerification: {
                 pageTitle: "Потвърждаване на имейл",
-                enterEmailVerificationCode: "Въведете кода изпратен до вашия имейл:",
+                enterEmailVerificationCode: "Въведете изпратеният код:",
                 doesNotComeFromSignup: "Вашият имейл все още не е потвърден. За да продължите да използвате нашите услуги, моля въведете кода, който сме изпратили до вашият имейл адрес.",
                 actionButton: "Потвърди имейл"
             },
@@ -259,20 +286,36 @@ module.exports = {
                 enterCode: "Въведи кода:",
                 enterNewPassword: "Въведи нова парола:",
                 repeatNewPassword: "Повтори новата парола:",
-                enterAccountEmail: "Въведете имейл адреса на вашия акаунт:",
+                enterAccountEmail: "Въведете имейла на акаунта:",
                 sentRecoveryCode: "Изпрати код",
                 recievedCode: "Изпратен е код за възстановяване на паролата на вашият имейл. Моля въведете кода, за да продължите процеса за възстановяване на паролата.",
                 actionButton: "Потвърди код"
             },
             chats: {
                 noChats: "Чатовете"
+            },
+            barcodeReader: {
+                barcodeAlreadyExistsErrorTitle: "Баркодът вече е записан",
+                barcodeAlreadyExistsErrorMessage: "Баркодът е свързан към друга храна. Моля, сканирайте друг баркод.",
+                requestingCameraPermission: "Чака се разрешение за ползване на камерата",
+                noCameraAccess: "Няма достъп до камерата",
+                allowCamera: "Позволи достъп до камерата",
+                scanBarcode: "Сканирай баркод",
+                barcodeNotFound: "Баркодът не е намерен",
+                scan: "Сканирай / въведи отново",
+                addFood: "Добави храната в Gym Rats",
+                enterBarcode: "Въведи баркод:",
+                submitBarcode: "Запиши баркод"
             }
         },
         components: {
             cards: {
                 logbook: {
                     cardTitle: "Тренировка",
-                    redirectButton: "Инфо и прогрес"
+                    redirectButton: "Инфо и прогрес",
+                    for: "за",
+                    seconds: "секунди",
+                    with: "с"
                 },
                 weightTracker: {
                     cardTitle: "Тегло",
@@ -304,7 +347,12 @@ module.exports = {
             },
             message: {
                 clickToPreview: "Прегледай файла",
-                download: "Изтегляне..."
+                download: "Изтегляне...",
+                fileDownloadErrorTitle: "Грешка при изтегляне на файла",
+                fileDownloadErrorDescription: "Възникна грешка по време на изтеглянето и запазването на файла на вашето устройство",
+                fileDownloadSuccessTitle: "Успешно изтегляне",
+                fileDownloadSuccessDescription: ["Файлът", ".", "е запазен в папка на име Gym Rats"],
+                download: "Изтегли"
             }
 
         },
@@ -317,7 +365,13 @@ module.exports = {
         },
         common: {
             saving: "Запазване...",
-            loading: "Зареждане..."
+            loading: "Зареждане...",
+            set: "серия",
+            sets: "серии",
+            rep: "повторение",
+            reps: "повторения",
+            weight: "тежест",
+            duration: "продължителност",
         },
         errors: {
             error: "Грешка",

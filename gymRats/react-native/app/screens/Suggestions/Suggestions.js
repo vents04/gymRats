@@ -106,7 +106,7 @@ export default class Suggestions extends Component {
                         </Pressable>
                         <Text style={globalStyles.followUpScreenTitle}>Suggestions</Text>
                     </View>
-                    <Text style={styles.descriptionText}>Gym Rats values your opinion and that is why you can message us about bugs, suggestions and wanted features.</Text>
+                    <Text style={styles.descriptionText}>Become a part of Gym Rats by suggesting features you'd like having or help us catch bugs early for a more seamless experience for all the gym rats out there.</Text>
                     <ScrollView ref={this.scrollView} style={[styles.chatMessagesContainer, {
                         marginTop: 16
                     }]}>

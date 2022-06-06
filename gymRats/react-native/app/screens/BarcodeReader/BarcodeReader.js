@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, Button, Pressable, ActivityIndicator, Alert, TextInput, BackHandler } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
+import i18n from 'i18n-js';
 
 import ApiRequests from '../../classes/ApiRequests';
 import { BackButtonHandler } from '../../classes/BackButtonHandler';
@@ -33,7 +34,6 @@ export default function BarcodeScanner(props) {
     useEffect(() => {
         askForCameraPermission();
         BackHandler.addEventListener("hardwareBackPress", backAction);
-
         return () =>
             BackHandler.removeEventListener("hardwareBackPress", backAction);
     }, []);
@@ -44,7 +44,7 @@ export default function BarcodeScanner(props) {
         ApiRequests.get('calories-counter/search/barcode?barcode=' + data).then(response => {
             if (response.data.result) {
                 if (props.route.params.isAddingBarcodeToFood) {
-                    Alert.alert("Barcode already exists", "This barcode is already associated with a food item. Please scan a different barcode.");
+                    Alert.alert(i18n.t('screens')['barcodeReader']['barcodeAlreadyExistsErrorTitle'], i18n.t('screens')['barcodeReader']['barcodeAlreadyExistsErrorMessage']);
                     setScanned(false);
                 } else {
                     props.navigation.replace("AddCaloriesIntakeItem", {
@@ -61,7 +61,7 @@ export default function BarcodeScanner(props) {
             setBarcode("")
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
-                    ApiRequests.alert("Error", error.response.data, [{ text: 'OK' }]);
+                    ApiRequests.alert(i18n.t('errors')['error'], error.response.data, [{ text: 'OK' }]);
                 } else {
                     ApiRequests.showInternalServerError();
                 }
@@ -81,14 +81,14 @@ export default function BarcodeScanner(props) {
                     color="#fff"
                     size="large"
                     style={{ marginBottom: 32 }} />
-                <Text style={styles.text}>Requesting for camera permission</Text>
+                <Text style={styles.text}>{i18n.t('screens')['barcodeReader']['requestingCameraPermission']}</Text>
             </View >
         )
     }
     if (hasPermission === false) {
         return (
             <View style={styles.container}>
-                <Text style={styles.text}>No access to camera</Text>
+                <Text style={styles.text}>{i18n.t('screens')['barcodeReader']['noCameraAccess']}</Text>
                 <Pressable style={({ pressed }) => [
                     globalStyles.authPageActionButton,
                     {
@@ -100,14 +100,14 @@ export default function BarcodeScanner(props) {
                 ]} onPress={() => {
                     askForCameraPermission()
                 }}>
-                    <Text style={globalStyles.authPageActionButtonText}>Allow camera</Text>
+                    <Text style={globalStyles.authPageActionButtonText}>{i18n.t('screens')['barcodeReader']['allowCamera']}</Text>
                 </Pressable>
             </View>)
     }
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Scan barcode</Text>
+            <Text style={styles.title}>{i18n.t('screens')['barcodeReader']['scanBarcode']}</Text>
             <View style={styles.barcodebox}>
                 <BarCodeScanner
                     onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
@@ -116,7 +116,7 @@ export default function BarcodeScanner(props) {
             {
                 scanned
                     ? <>
-                        <Text style={{ ...globalStyles.modalText, marginVertical: 24 }}>Barcode not found</Text>
+                        <Text style={{ ...globalStyles.modalText, marginVertical: 24 }}>{i18n.t('screens')['barcodeReader']['barcodeNotFound']}</Text>
                         <Pressable style={({ pressed }) => [
                             {
                                 opacity: pressed ? 0.1 : 1,
@@ -127,7 +127,7 @@ export default function BarcodeScanner(props) {
                             setBarcode("")
                             setScanned(false)
                         }}>
-                            <Text style={globalStyles.actionText}>Scan / enter again</Text>
+                            <Text style={globalStyles.actionText}>{i18n.t('screens')['barcodeReader']['scanBarcode']}</Text>
                         </Pressable>
                         <Pressable style={({ pressed }) => [
                             globalStyles.authPageActionButton,
@@ -141,13 +141,13 @@ export default function BarcodeScanner(props) {
                             setScanned(false);
                             props.navigation.replace("AddFood", { barcode, date: props.route.params.date, timezoneOffset: props.route.params.timezoneOffset, meal: props.route.params.meal });
                         }}>
-                            <Text style={globalStyles.authPageActionButtonText}>Let's add this food to Gym Rats</Text>
+                            <Text style={globalStyles.authPageActionButtonText}>{i18n.t('screens')['barcodeReader']['addFood']}</Text>
                         </Pressable>
                     </>
                     : <>
                         <TextInput
                             style={[globalStyles.authPageInput, { width: "80%", marginTop: 64 }]}
-                            placeholder="Enter barcode:"
+                            placeholder={i18n.t('screens')['barcodeReader']['enterBarcode']}
                             value={barcode}
                             onChangeText={(val) => { setBarcode(val) }} />
                         <Pressable style={({ pressed }) => [
@@ -160,7 +160,7 @@ export default function BarcodeScanner(props) {
                         ]} onPress={() => {
                             handleBarCodeScanned({ type: "", data: barcode });
                         }}>
-                            <Text style={globalStyles.authPageActionButtonText}>Submit barcode</Text>
+                            <Text style={globalStyles.authPageActionButtonText}>{i18n.t('screens')['barcodeReader']['submitBarcode']}</Text>
                         </Pressable>
                     </>
             }
