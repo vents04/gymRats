@@ -6,6 +6,8 @@ import * as Location from "expo-location";
 
 import ApiRequests from '../../classes/ApiRequests';
 
+import i18n from 'i18n-js';
+
 import { Ionicons } from '@expo/vector-icons';
 
 import { HTTP_STATUS_CODES } from '../../../global';
@@ -58,7 +60,7 @@ export default class CoachSearch extends Component {
         try {
             let { status } = await Location.requestForegroundPermissionsAsync();
             if (status !== 'granted') {
-                Alert.alert("Location permission needed", "In order to provide a more personalized experience Gym Rats needs access to your location.");
+                Alert.alert(i18n.t('screens')['coachSearch']['locationPermission'], i18n.t('screens')['coachSearch']['message']);
                 this.getLocation();
             }
             let location = await Location.getCurrentPositionAsync({});
@@ -128,7 +130,7 @@ export default class CoachSearch extends Component {
                         }}>
                             <Ionicons name="md-arrow-back-sharp" size={25} />
                         </Pressable>
-                        <Text style={globalStyles.followUpScreenTitle}>Coach search</Text>
+                        <Text style={globalStyles.followUpScreenTitle}>{i18n.t('screens')['coachSearch']['pageTitle']}</Text>
                     </View>
                     <Pressable style={({ pressed }) => [
                         globalStyles.topbarIconContainer,
@@ -138,7 +140,7 @@ export default class CoachSearch extends Component {
                     ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
                         this.filterSheet.current.show();
                     }}>
-                        <Text style={globalStyles.actionText}>Filters</Text>
+                        <Text style={globalStyles.actionText}>{i18n.t('screens')['coachSearch']['filters']}</Text>
                     </Pressable>
                     {
                         this.state.showError
@@ -149,7 +151,7 @@ export default class CoachSearch extends Component {
                         style={[globalStyles.authPageInput, {
                             marginTop: 20
                         }]}
-                        placeholder="Type your search here"
+                        placeholder={i18n.t('screens')['coachSearch']['placeholder']}
                         onChangeText={this.changeName} />
                     {
                         this.state.searchResults.length > 0
@@ -190,7 +192,7 @@ export default class CoachSearch extends Component {
                                                         </View>
                                                         <View style={[styles.coachResultInline, { marginTop: 8 }]}>
                                                             <Ionicons name="md-star" size={20} color="#1f6cb0" />
-                                                            <Text style={styles.coachResultReviews}>{result.rating}/5 ({result.reviews.length} reviews)</Text>
+                                                            <Text style={styles.coachResultReviews}>{result.rating}/5 ({result.reviews.length} {i18n.t('screens')['coachSearch']['reviews']})</Text>
                                                         </View>
                                                     </View>
                                                     : <View style={styles.coachResult}>
@@ -214,7 +216,7 @@ export default class CoachSearch extends Component {
                                                         </View>
                                                         <View style={[styles.coachResultInline, { marginTop: 8 }]}>
                                                             <Ionicons name="md-star" size={20} color="#1f6cb0" />
-                                                            <Text style={styles.coachResultReviews}>{result.rating}/5 ({result.reviews.length} reviews)</Text>
+                                                            <Text style={styles.coachResultReviews}>{result.rating}/5 ({result.reviews.length} {i18n.t('screens')['coachSearch']['reviews']})</Text>
                                                         </View>
                                                     </View>
                                             }
@@ -224,12 +226,12 @@ export default class CoachSearch extends Component {
                             </ScrollView>
                             : <Text style={[globalStyles.notation, {
                                 marginTop: 16
-                            }]}>No coaches found</Text>
+                            }]}>{i18n.t('screens')['coachSearch']['noCoachesFound']}</Text>
                     }
                 </View>
                 <BottomSheet ref={this.filterSheet} height={400} draggable={false}>
                     <View style={styles.bottomSheetTopbar}>
-                        <Text style={styles.bottomSheetTitle}>Filters</Text>
+                        <Text style={styles.bottomSheetTitle}>{i18n.t('screens')['coachSearch']['filters']}</Text>
                         <Pressable style={({ pressed }) => [
                             {
                                 opacity: pressed ? 0.1 : 1,
@@ -248,7 +250,7 @@ export default class CoachSearch extends Component {
                         ]} onPress={() => {
                             this.filterSheet.current.close();
                         }}>
-                            <Text style={styles.sheetSectionTitle}>Minimum rating is {this.state.minRating}/5</Text>
+                            <Text style={styles.sheetSectionTitle}>{i18n.t('screens')['coachSearch']['minimumRating']} {this.state.minRating}/5</Text>
                             <Slider
                                 style={{ width: "100%", height: 40 }}
                                 step={1}
@@ -271,10 +273,10 @@ export default class CoachSearch extends Component {
                         ]} onPress={() => {
                             this.filterSheet.current.close();
                         }}>
-                            <Text style={styles.sheetSectionTitle}>Maximum distance is {
+                            <Text style={styles.sheetSectionTitle}>{i18n.t('screens')['coachSearch']['maximumDistance']} {
                                 this.state.maxDistance != 0
                                     ? `${this.state.maxDistance}km`
-                                    : 'not set'
+                                    : i18n.t('screens')['coachSearch']['notSet']
                             }</Text>
                             {
                                 this.state.maxDistance != 0
@@ -303,7 +305,7 @@ export default class CoachSearch extends Component {
                                             <Text style={[globalStyles.actionText, {
                                                 fontFamily: "MainBold",
                                                 marginTop: 8
-                                            }]}>Unset maximum distance</Text>
+                                            }]}>{i18n.t('screens')['coachSearch']['unsetMaximumDistance']}</Text>
                                         </Pressable>
                                     </>
                                     : <Pressable style={({ pressed }) => [
@@ -317,7 +319,7 @@ export default class CoachSearch extends Component {
                                         <Text style={[globalStyles.actionText, {
                                             fontFamily: "MainBold",
                                             marginTop: 8
-                                        }]}>Set maximum distance</Text>
+                                        }]}>{i18n.t('screens')['coachSearch']['setMaximumDistance']}</Text>
                                     </Pressable>
                             }
                         </Pressable>
@@ -334,7 +336,7 @@ export default class CoachSearch extends Component {
                                     this.setState({ hasChanges: false, showError: false, error: "" });
                                     this.searchCoaches();
                                 }}>
-                                    <Text style={globalStyles.authPageActionButtonText}>Apply filters</Text>
+                                    <Text style={globalStyles.authPageActionButtonText}>{i18n.t('screens')['coachSearch']['applyFilters']}</Text>
                                 </Pressable>
                                 : null
                         }
