@@ -15,9 +15,12 @@ const UserService = {
         unverifiedEmailTimeouts.push({
             userId,
             timeout: setTimeout(async () => {
-                await DbService.delete(COLLECTIONS.USERS, { _id: mongoose.Types.ObjectId(userId) });
-                for (let item of unverifiedEmailTimeouts) {
-                    if (item.userId == userId) unverifiedEmailTimeouts.splice(unverifiedEmailTimeouts.indexOf(item), 1);
+                const user = await DbService.getById(COLLECTIONS.USERS, userId);
+                if (user && !user.verifiedEmail) {
+                    await DbService.delete(COLLECTIONS.USERS, { _id: mongoose.Types.ObjectId(userId) });
+                    for (let item of unverifiedEmailTimeouts) {
+                        if (item.userId == userId) unverifiedEmailTimeouts.splice(unverifiedEmailTimeouts.indexOf(item), 1);
+                    }
                 }
             }, 60000)
         });
@@ -32,7 +35,7 @@ const UserService = {
                         if (item.userId == userId) {
                             clearTimeout(item.timeout);
                             unverifiedEmailTimeouts.splice(unverifiedEmailTimeouts.indexOf(item), 1);
-                            return;
+                            break;
                         }
                     }
                 }

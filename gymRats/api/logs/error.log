@@ -1,2 +1,50 @@
 {"level":"error","message":"Invalid collection"}
 {"level":"error","message":"\"email\" must be a valid email"}
+{"level":"error","message":"Невалиден код за потвърждение на имейл"}
+{"level":"error","message":"Невалиден код за потвърждение на имейл"}
+{"level":"error","message":"Запис на потребител с този имейл не беше намерен"}
+{"level":"error","message":"Запис на потребител с този имейл не беше намерен"}
+{"level":"error","message":"Потребителят, асоцииран с този автентификационен ключ не е намерен"}
+{"level":"error","message":"Cannot read properties of undefined (reading '_id')"}
+{"level":"error","message":"Потребителят, асоцииран с този автентификационен ключ не е намерен"}
+{"level":"error","message":"Cannot read properties of undefined (reading '_id')"}
+{"level":"error","message":"Потребителят, асоцииран с този автентификационен ключ не е намерен"}
+{"level":"error","message":"Cannot read properties of undefined (reading '_id')"}
+{"level":"error","message":"Потребителят, асоцииран с този автентификационен ключ не е намерен"}
+{"level":"error","message":"Cannot read properties of undefined (reading '_id')"}
+{"level":"error","message":"Потребителят, асоцииран с този автентификационен ключ не е намерен"}
+{"level":"error","message":"Cannot read properties of undefined (reading '_id')"}
+{"level":"error","message":"Потребителят, асоцииран с този автентификационен ключ не е намерен"}
+{"level":"error","message":"Cannot read properties of undefined (reading '_id')"}
+{"level":"error","message":"Потребителят, асоцииран с този автентификационен ключ не е намерен"}
+{"level":"error","message":"Cannot read properties of undefined (reading '_id')"}
+{"level":"error","message":"Потребителят, асоцииран с този автентификационен ключ не е намерен"}
+{"level":"error","message":"Потребителят, асоцииран с този автентификационен ключ не е намерен"}
+{"level":"error","message":"\"firstName\" with value \"Ventsislav l\" fails to match the required pattern: /^[A-Za-z]+$/"}
+{"level":"error","message":"\"lastName\" with value \"Dimitrov \" fails to match the required pattern: /^[A-Za-z]+$/"}
+{"level":"error","message":"\"firstName\" with value \"Ventsislav l\" fails to match the required pattern: /^[A-Za-z]+$/"}
+{"level":"error","message":"Запис на потребител с този имейл не беше намерен"}
+{"level":"error","message":"Запис на потребител с този имейл не беше намерен"}
+{"level":"error","message":"Запис на потребител с този имейл не беше намерен"}
+{"level":"error","message":"Запис на потребител с този имейл не беше намерен"}
+{"level":"error","message":"Запис на потребител с този имейл не беше намерен"}
+{"level":"error","message":"Запис на потребител с този имейл не беше намерен"}
+{"level":"error","message":"Запис на потребител с този имейл не беше намерен"}
+{"level":"error","message":"Запис на потребител с този имейл не беше намерен"}
+{"level":"error","message":"Запис на потребител с този имейл не беше намерен"}
+{"level":"error","message":"Запис на потребител с този имейл не беше намерен"}
+{"level":"error","message":"Запис на потребител с този имейл не беше намерен"}
+{"level":"error","message":"Запис на потребител с този имейл не беше намерен"}
+{"level":"error","message":"Запис на потребител с този имейл не беше намерен"}
+{"level":"error","message":"Запис на потребител с този имейл не беше намерен"}
+{"level":"error","message":"Запис на потребител с този имейл не беше намерен"}
+{"level":"error","message":"Запис на потребител с този имейл не беше намерен"}
+{"level":"error","message":"Запис на потребител с този имейл не беше намерен"}
+{"level":"error","message":"Запис на потребител с този имейл не беше намерен"}
+{"level":"error","message":"Запис на потребител с този имейл не беше намерен"}
+{"level":"error","message":"Запис на потребител с този имейл не беше намерен"}
+{"level":"error","message":"Запис на потребител с този имейл не беше намерен"}
+{"level":"error","message":"Запис на потребител с този имейл не беше намерен"}
+{"level":"error","message":"Запис на потребител с този имейл не беше намерен"}
+{"level":"error","message":"Запис на потребител с този имейл не беше намерен"}
+{"level":"error","message":"Запис на потребител с този имейл не беше намерен"}

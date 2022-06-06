@@ -8,7 +8,8 @@ const { Alert } = require('react-native');
 const ApiRequests = {
     get: async (path, headers, applyAuthToken) => {
         const finalHeaders = {
-            ...headers
+            ...headers,
+            lng: i18n.locale.substring(0, 2)
         };
         if (applyAuthToken) {
             const token = await Auth.getToken();
@@ -24,7 +25,8 @@ const ApiRequests = {
 
     post: async (path, headers, payload, applyAuthToken) => {
         const finalHeaders = {
-            ...headers
+            ...headers,
+            lng: i18n.locale.substring(0, 2)
         };
         if (applyAuthToken) {
             const token = await Auth.getToken();
@@ -41,7 +43,8 @@ const ApiRequests = {
 
     put: async (path, headers, payload, applyAuthToken) => {
         const finalHeaders = {
-            ...headers
+            ...headers,
+            lng: i18n.locale.substring(0, 2)
         };
         if (applyAuthToken) {
             const token = await Auth.getToken();
@@ -58,7 +61,8 @@ const ApiRequests = {
 
     delete: async (path, headers, applyAuthToken) => {
         const finalHeaders = {
-            ...headers
+            ...headers,
+            lng: i18n.locale.substring(0, 2)
         };
         if (applyAuthToken) {
             const token = await Auth.getToken();

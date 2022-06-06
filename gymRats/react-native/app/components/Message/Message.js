@@ -33,8 +33,8 @@ export default class Message extends Component {
                 console.log(base64.length)
                 this.saveFile(uri);
             })
-            .catch(error => {
-                Alert.alert("File download error", "There was an error while downloading and saving this file to your system");
+            .catch((error) => {
+                Alert.alert(i18n.t('components')['message']['fileDownloadErrorTitle'], i18n.t('components')['message']['fileDownloadErrorDescription']);
             }).finally(() => {
                 setTimeout(() => {
                     this.setState({ showDownloading: false });
@@ -50,10 +50,10 @@ export default class Message extends Component {
                 const asset = await MediaLibrary.createAssetAsync(fileUri);
                 if (!albumExists) await MediaLibrary.createAlbumAsync('Gym Rats', asset, false);
                 else await MediaLibrary.addAssetsToAlbumAsync(asset, albumExists.id, true)
-                Alert.alert("Downloaded successfully", `The file ${this.props.message.message.file.originalName.replace(`.${this.props.message.message.file.extension}`, "") + "." + this.props.message.message.file.extension} was downloaded to the folder named Gym Rats`)
+                Alert.alert(i18n.t('components')['message']['fileDownloadSuccessTitle'], `${i18n.t('components')['message']['fileDownloadSuccessDescription'][0]} ${this.props.message.message.file.originalName.replace(`.${this.props.message.message.file.extension}`)}${i18n.t('components')['message']['fileDownloadSuccessDescription'][1]}${this.props.message.message.file.extension} ${i18n.t('components')['message']['fileDownloadSuccessDescription'][2]}`);
             }
         } catch (error) {
-            Alert.alert("File download error", "There was an error while downloading and saving this file to your system");
+            Alert.alert(i18n.t('components')['message']['fileDownloadErrorTitle'], i18n.t('components')['message']['fileDownloadErrorDescription']);
         }
     };
 
@@ -88,8 +88,7 @@ export default class Message extends Component {
                 }
                 {
                     this.props.message.message.text
-                        ? < View style={styles.messageContentContainer}>
-
+                        ? <View style={styles.messageContentContainer}>
                             <Text style={styles.textMessage}>{this.props.message.message.text}</Text>
                         </View>
                         : null
@@ -130,7 +129,7 @@ export default class Message extends Component {
                                         })
                                     }}>
                                         <MaterialCommunityIcons name="download-circle-outline" size={24} color="#1f6cb0" />
-                                        <Text style={{ ...globalStyles.notation, marginLeft: 8 }}>Download&nbsp;&middot;&nbsp;{prettyBytes(this.props.message.message.file.size)}
+                                        <Text style={{ ...globalStyles.notation, marginLeft: 8 }}>{i18n.t('components')['message']['download']}&nbsp;&middot;&nbsp;{prettyBytes(this.props.message.message.file.size)}
                                             {
                                                 this.props.message.message.file.extension
                                                     ? <Text>&nbsp;&middot;&nbsp;{this.props.message.message.file.extension.toUpperCase()}</Text>
@@ -138,7 +137,7 @@ export default class Message extends Component {
                                             }
                                         </Text>
                                     </Pressable>
-                                    : <Text style={{ ...globalStyles.notation, marginTop: 8 }}>{i18n.t('components')['message']['download']}</Text>
+                                    : <Text style={{ ...globalStyles.notation, marginTop: 8 }}>{i18n.t('components')['message']['downloading']}</Text>
                             }
                         </View>
                         : null

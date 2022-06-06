@@ -127,6 +127,7 @@ router.post("/suggestion", authenticate, async (req, res, next) => {
 });
 
 router.get("/", authenticate, async (req, res, next) => {
+    console.log(req.headers);
     return res.status(HTTP_STATUS_CODES.OK).send({
         user: req.user
     })
@@ -160,6 +161,7 @@ router.get("/suggestion", authenticate, async (req, res, next) => {
 });
 
 router.post("/password-recovery-code", async (req, res, next) => {
+    console.log("here");
     const { error } = forgottenPasswordPostValidation(req.body);
     if (error) return next(new ResponseError(error.details[0].message, HTTP_STATUS_CODES.BAD_REQUEST));
 
@@ -183,6 +185,7 @@ router.post("/password-recovery-code", async (req, res, next) => {
             identifier: passwordRecoveryCode.identifier
         })
     } catch (err) {
+        console.log(err)
         return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
     }
 });

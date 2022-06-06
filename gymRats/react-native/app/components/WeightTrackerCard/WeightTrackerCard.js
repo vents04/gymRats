@@ -62,7 +62,8 @@ export default class WeightTrackerCard extends Component {
         return (
             <Pressable onPress={() => {
                 if (!this.state.showConfirmationBox) this.props.actionButtonFunction();
-            }} unstable_pressDelay={150}            ><View style={globalStyles.card}>
+            }} unstable_pressDelay={150}>
+                <View style={globalStyles.card}>
                     {
                         this.state.showConfirmationBox
                             ? <ConfirmationBox deleteCard={this.deleteCard} toggleShowConfirmationBox={this.toggleShowConfirmationBox} />
