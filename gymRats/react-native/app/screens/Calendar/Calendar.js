@@ -468,7 +468,7 @@ export default class Calendar extends Component {
                                 }]}>
                                     <View style={styles.cardTopbar}>
                                         <MaterialCommunityIcons name="food-variant" size={25} color="#fff" />
-                                        <Text style={styles.cardTitle}>Calories intake</Text>
+                                        <Text style={styles.cardTitle}>{i18n.t('components')['cards']['caloriesIntake']['cardTitle']}</Text>
                                     </View>
                                 </View>
                             </Pressable>
