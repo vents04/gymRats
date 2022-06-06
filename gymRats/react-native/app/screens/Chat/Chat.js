@@ -4,6 +4,7 @@ import { BackButtonHandler } from '../../classes/BackButtonHandler';
 import { MaterialIcons } from '@expo/vector-icons';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
+import i18n from 'i18n-js'
 
 import socketClass from '../../classes/Socket';
 
@@ -58,7 +59,7 @@ export default class Chat extends Component {
                 this.getChat(this.state.chatId);
             }, 500);
         });
-        socketClass.getChatsRoomSocket().emit("update-last-message", {chatId: this.state.chatId});
+        socketClass.getChatsRoomSocket().emit("update-last-message", { chatId: this.state.chatId });
     }
 
     receiveTextMessage = () => {
@@ -130,12 +131,12 @@ export default class Chat extends Component {
                     size: result.size
                 }
                 if (file.size >= 5e+7) {
-                    Alert.alert("File upload error", "The size of the file you have selected is too large")
+                    Alert.alert(i18n.t("screens")['chat']['fileUploadErrorTitle'], i18n.t("screens")['chat']['fileUploadSizeError'])
                     return;
                 }
                 console.log(file.mimeType);
                 if (!SUPPORTED_MIME_TYPES.includes(file.mimeType)) {
-                    Alert.alert("File upload error", "This file type is not supported");
+                    Alert.alert(i18n.t("screens")['chat']['fileUploadErrorTitle'], i18n.t("screens")['chat']['fileUploadUnsupportedType'])
                     return;
                 }
                 this.setState({ isFileBeingUploaded: true }, () => {
@@ -200,7 +201,7 @@ export default class Chat extends Component {
                                             <TextInput
                                                 value={this.state.message}
                                                 style={styles.chatInput}
-                                                placeholder="Type a message..."
+                                                placeholder={i18n.t("screens")['chat']['messagePlaceholder']}
                                                 onChangeText={(val) => { this.setState({ message: val, showError: false }) }} />
                                             <View style={styles.chatActionButtonContainer}>
                                                 {
@@ -227,7 +228,7 @@ export default class Chat extends Component {
                                             </View>
                                         </>
                                         : <View style={styles.uploadingContainer}>
-                                            <Text style={styles.uploadingText}>The file is being uploaded</Text>
+                                            <Text style={styles.uploadingText}>{i18n.t("screens")['chat']['fileUploading']}</Text>
                                             <ActivityIndicator size="small" color="#1f6cb0" />
                                         </View>
                                 }
