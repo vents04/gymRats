@@ -4,6 +4,8 @@ import { Badge } from 'react-native-elements';
 
 import ApiRequests from '../../classes/ApiRequests';
 
+import i18n from 'i18n-js';
+
 import ConfirmationBox from '../../components/ConfirmationBox/ConfirmationBox';
 
 import { FontAwesome5 } from '@expo/vector-icons';
@@ -33,9 +35,9 @@ export default class Coaching extends Component {
         }
 
         this.personalTrainerStatusMessages = {
-            "PENDING": "Your coach account is being reviewed by our team and will become active soon",
-            "ACTIVE": "You do not have any clients, yet",
-            "BLOCKED": "You have been blocked by our team. Contact us at support@uploy.app for more information",
+            "PENDING": i18n.t('screens')['coaching']['personalTrainerStatusMessagesPending'],
+            "ACTIVE": i18n.t('screens')['coaching']['personalTrainerStatusMessagesActive'],
+            "BLOCKED": i18n.t('screens')['coaching']['personalTrainerStatusMessagesBlocked'],
         }
 
         this.focusListener;
@@ -182,7 +184,7 @@ export default class Coaching extends Component {
                         }}>
                             <Text style={[styles.tabTitle, {
                                 color: this.state.activeTab == "myCoach" ? "#1f6cb0" : "#aaa"
-                            }]}>Me as client</Text>
+                            }]}>{i18n.t('screens')['coaching']['meAsClient']}</Text>
                         </Pressable>
                         <Pressable style={({ pressed }) => [
                             styles.tabTitleContainer,
@@ -195,7 +197,7 @@ export default class Coaching extends Component {
                         }}>
                             <Text style={[styles.tabTitle, {
                                 color: this.state.activeTab == "myClients" ? "#1f6cb0" : "#aaa"
-                            }]}>Me as coach</Text>
+                            }]}>{i18n.t('screens')['coaching']['meAsCoach']}</Text>
                         </Pressable>
                     </View>
                     {
@@ -208,26 +210,26 @@ export default class Coaching extends Component {
                                                 <View style={styles.noCoachContainer}>
                                                     <View style={styles.noCoachTopbar}>
                                                         <FontAwesome5 name="dumbbell" size={25} color="#1f6cb0" />
-                                                        <Text style={styles.noCoachTitle}>Get in shape with Gym Rats</Text>
+                                                        <Text style={styles.noCoachTitle}>{i18n.t('screens')['coaching']['getInShape']}</Text>
                                                     </View>
-                                                    <Text style={styles.noCoachDescription}>All of our coaches are:</Text>
+                                                    <Text style={styles.noCoachDescription}>{i18n.t('screens')['coaching']['ourCoaches']}</Text>
                                                     <View style={styles.noCoachProContainer}>
                                                         <View style={styles.noCoachNumberContainer}>
                                                             <Text style={styles.noCoachNumber}>1</Text>
                                                         </View>
-                                                        <Text style={styles.noCoachPro}>Single handedly approved by us</Text>
+                                                        <Text style={styles.noCoachPro}>{i18n.t('screens')['coaching']['singleHandedly']}</Text>
                                                     </View>
                                                     <View style={styles.noCoachProContainer}>
                                                         <View style={styles.noCoachNumberContainer}>
                                                             <Text style={styles.noCoachNumber}>2</Text>
                                                         </View>
-                                                        <Text style={styles.noCoachPro}>Motivated and ready to help</Text>
+                                                        <Text style={styles.noCoachPro}>{i18n.t('screens')['coaching']['motivatedAndReady']}</Text>
                                                     </View>
                                                     <View style={styles.noCoachProContainer}>
                                                         <View style={styles.noCoachNumberContainer}>
                                                             <Text style={styles.noCoachNumber}>3</Text>
                                                         </View>
-                                                        <Text style={styles.noCoachPro}>Capable of training people with different goals</Text>
+                                                        <Text style={styles.noCoachPro}>{i18n.t('screens')['coaching']['capableOfTraining']}</Text>
                                                     </View>
                                                     <Pressable style={({ pressed }) => [
                                                         globalStyles.authPageActionButton,
@@ -238,13 +240,13 @@ export default class Coaching extends Component {
                                                     ]} onPress={() => {
                                                         this.props.navigation.navigate("CoachSearch");
                                                     }}>
-                                                        <Text style={globalStyles.authPageActionButtonText}>Search coaches</Text>
+                                                        <Text style={globalStyles.authPageActionButtonText}>{i18n.t('screens')['coaching']['searchCoaches']}</Text>
                                                     </Pressable>
                                                 </View>
                                                 {
                                                     this.state.coaching.myCoach.canceledRelations.length > 0
                                                         ? <>
-                                                            <Text style={styles.coachingSectionTitle}>Relations without reviews</Text>
+                                                            <Text style={styles.coachingSectionTitle}>{i18n.t('screens')['coaching']['relationsWithoutReviews']}</Text>
                                                             {
                                                                 this.state.coaching.myCoach.canceledRelations.map((relation, index) =>
                                                                     <View key={index} style={[styles.requestItem, {
@@ -271,10 +273,10 @@ export default class Coaching extends Component {
                                                                         </View>
                                                                         <Text style={[globalStyles.notation, {
                                                                             marginTop: 12
-                                                                        }]}>This relation started at {new Date(relation.from).toLocaleDateString()}
+                                                                        }]}>{i18n.t('screens')['coaching']['startOfRelation']} {new Date(relation.from).toLocaleDateString()}
                                                                             {
                                                                                 relation.to
-                                                                                    ? ` and ended at ${new Date(relation.to).toLocaleDateString()}`
+                                                                                    ? i18n.t('screens')['coaching']['endOfRelation'] + new Date(relation.to).toLocaleDateString()
                                                                                     : null
                                                                             }</Text>
                                                                         {
@@ -288,7 +290,7 @@ export default class Coaching extends Component {
                                                                                 ]} onPress={() => {
                                                                                     this.props.navigation.navigate("PostReview", { relation })
                                                                                 }}>
-                                                                                    <Text style={globalStyles.authPageActionButtonText}>Leave a review</Text>
+                                                                                    <Text style={globalStyles.authPageActionButtonText}>{i18n.t('screens')['coaching']['leaveAReview']}</Text>
                                                                                 </Pressable>
                                                                                 : null
                                                                         }
@@ -308,17 +310,17 @@ export default class Coaching extends Component {
                                                 ]} onPress={() => {
                                                     this.props.navigation.navigate("CoachSearch");
                                                 }}>
-                                                    <Text style={globalStyles.authPageActionButtonText}>Search coaches</Text>
+                                                    <Text style={globalStyles.authPageActionButtonText}>{i18n.t('screens')['coaching']['searchCoaches']}</Text>
                                                 </Pressable>
                                                 {
                                                     !this.state.coaching.myCoach.hasCoaches
-                                                        ? <Text style={globalStyles.notation}>You still do not have any coaches</Text>
+                                                        ? <Text style={globalStyles.notation}>{i18n.t('screens')['coaching']['stillNoCoaches']}</Text>
                                                         : null
                                                 }
                                                 {
                                                     this.state.coaching.myCoach.hasCoaches
                                                         ? <>
-                                                            <Text style={styles.coachingSectionTitle}>Coaches</Text>
+                                                            <Text style={styles.coachingSectionTitle}>{i18n.t('screens')['coaching']['coaches']}</Text>
                                                             {
                                                                 this.state.coaching.myCoach.coaches.map((coach, index) =>
                                                                     <View key={index} style={styles.requestItem}>
@@ -357,7 +359,7 @@ export default class Coaching extends Component {
                                                 {
                                                     this.state.coaching.myCoach.hasRelations
                                                         ? <>
-                                                            <Text style={styles.coachingSectionTitle}>Unanswered requests</Text>
+                                                            <Text style={styles.coachingSectionTitle}>{i18n.t('screens')['coaching']['unansweredRequests']}</Text>
                                                             {
                                                                 this.state.coaching.myCoach.relations.map((relation, index) =>
                                                                     <View key={index} style={styles.requestItem}>
@@ -409,7 +411,7 @@ export default class Coaching extends Component {
                                             ]} onPress={() => {
                                                 this.props.navigation.navigate("CoachProfileEdit");
                                             }}>
-                                                <Text style={globalStyles.authPageActionButtonText}>Open my coach profile</Text>
+                                                <Text style={globalStyles.authPageActionButtonText}>{i18n.t('screens')['coaching']['openMyCoachProfile']}</Text>
                                             </Pressable>
                                             : null
                                     }
@@ -418,26 +420,26 @@ export default class Coaching extends Component {
                                             ? <View style={styles.noCoachContainer}>
                                                 <View style={styles.noCoachTopbar}>
                                                     <FontAwesome5 name="dumbbell" size={25} color="#1f6cb0" />
-                                                    <Text style={styles.noCoachTitle}>Be a couch at Gym Rats</Text>
+                                                    <Text style={styles.noCoachTitle}>{i18n.t('screens')['coaching']['beACoach']}</Text>
                                                 </View>
-                                                <Text style={styles.noCoachDescription}>Catch the opportunity to:</Text>
+                                                <Text style={styles.noCoachDescription}>{i18n.t('screens')['coaching']['catchTheOpportunity']}</Text>
                                                 <View style={styles.noCoachProContainer}>
                                                     <View style={styles.noCoachNumberContainer}>
                                                         <Text style={styles.noCoachNumber}>1</Text>
                                                     </View>
-                                                    <Text style={styles.noCoachPro}>Work with people locally and internationally</Text>
+                                                    <Text style={styles.noCoachPro}>{i18n.t('screens')['coaching']['workWithPeople']}</Text>
                                                 </View>
                                                 <View style={styles.noCoachProContainer}>
                                                     <View style={styles.noCoachNumberContainer}>
                                                         <Text style={styles.noCoachNumber}>2</Text>
                                                     </View>
-                                                    <Text style={styles.noCoachPro}>Get access to your clients' Gym Rats data (logbooks, diet, weight and etc.)</Text>
+                                                    <Text style={styles.noCoachPro}>{i18n.t('screens')['coaching']['getAccessClientData']}</Text>
                                                 </View>
                                                 <View style={styles.noCoachProContainer}>
                                                     <View style={styles.noCoachNumberContainer}>
                                                         <Text style={styles.noCoachNumber}>3</Text>
                                                     </View>
-                                                    <Text style={styles.noCoachPro}>Get the most out of what you have earned through Gym Rats</Text>
+                                                    <Text style={styles.noCoachPro}>{i18n.t('screens')['coaching']['getTheMost']}</Text>
                                                 </View>
                                                 <Pressable style={({ pressed }) => [
                                                     globalStyles.authPageActionButton,
@@ -448,7 +450,7 @@ export default class Coaching extends Component {
                                                 ]} onPress={() => {
                                                     this.props.navigation.navigate("CoachingApplicationSubmission");
                                                 }}>
-                                                    <Text style={globalStyles.authPageActionButtonText}>Submit application</Text>
+                                                    <Text style={globalStyles.authPageActionButtonText}>{i18n.t('screens')['coaching']['submitApplication']}</Text>
                                                 </Pressable>
                                             </View>
                                             : <>
@@ -456,7 +458,7 @@ export default class Coaching extends Component {
                                                     this.state.coaching.myClients.clients.length > 0
                                                         && this.state.coaching.myClients.trainerObject
                                                         ? <>
-                                                            <Text style={styles.coachingSectionTitle}>Clients</Text>
+                                                            <Text style={styles.coachingSectionTitle}>{i18n.t('screens')['coaching']['clients']}</Text>
                                                             {
                                                                 this.state.coaching.myClients.clients.map((client, index) =>
                                                                     <Pressable style={({ pressed }) => [
