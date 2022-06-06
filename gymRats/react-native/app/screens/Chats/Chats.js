@@ -94,7 +94,7 @@ export default class Chats extends Component {
                                     )
                                 }
                             </ScrollView>
-                            : <Text style={globalStyles.notation}>Chats with clients and coaches will appear here</Text>
+                            : <Text style={globalStyles.notation}>{i18n.t('screens')['chats']['noChats']}</Text>
                     }
                 </View>
             </View>
