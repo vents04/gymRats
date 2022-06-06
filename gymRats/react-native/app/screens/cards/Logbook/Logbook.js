@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Alert, BackHandler, Modal, ScrollView, Text, TextInput, Pressable, View } from 'react-native'
+import i18n from 'i18n-js';
 import { Picker } from '@react-native-picker/picker';
 
 import ApiRequests from '../../../classes/ApiRequests';
@@ -47,13 +48,13 @@ export default class Logbook extends Component {
 
     backAction = () => {
         if (this.state.hasChanges) {
-            Alert.alert("Hold on!", "Are you sure you want to go back without saving the changes?", [
+            Alert.alert(i18n.t('screens')['logbook']['backActionAlertTitle'], i18n.t('screens')['logbook']['backActionAlertMessage'], [
                 {
-                    text: "Cancel",
+                    text: i18n.t('screens')['logbook']['cancel'],
                     onPress: () => { return; },
                     style: "cancel"
                 },
-                { text: "YES", onPress: () => { BackButtonHandler.goToPageWithDataManagerCardUpdate(this.props.navigation, "Calendar", this.props.route.params.date) } }
+                { text: i18n.t('screens')['logbook']['yes'], onPress: () => { BackButtonHandler.goToPageWithDataManagerCardUpdate(this.props.navigation, "Calendar", this.props.route.params.date) } }
             ]);
         } else {
             BackButtonHandler.goToPageWithDataManagerCardUpdate(this.props.navigation, "Calendar", this.props.route.params.date)
@@ -333,11 +334,11 @@ export default class Logbook extends Component {
                             visible={true}>
                             <View style={globalStyles.centeredView}>
                                 <View style={globalStyles.modalView}>
-                                    <Text style={globalStyles.modalText}>You may add this workout template for future use by giving it a name.</Text>
+                                    <Text style={globalStyles.modalText}>{i18n.t('screens')['logbook']['workoutTemplateModalMessage']}</Text>
                                     <TextInput
                                         value={this.state.templateTitle}
                                         style={globalStyles.authPageInput}
-                                        placeholder="Title:"
+                                        placeholder={i18n.t('screens')['logbook']['workoutTemplateModalInput']}
                                         onChangeText={(val) => { this.setState({ templateTitle: val, showModalError: false, showError: false }) }} />
                                     {
                                         this.state.showModalError
@@ -356,7 +357,7 @@ export default class Logbook extends Component {
                                         }}>
                                             <Text style={[globalStyles.modalActionTitle, {
                                                 color: "#1f6cb0"
-                                            }]}>Skip</Text>
+                                            }]}>{i18n.t('screens')['logbook']['workoutTemplateSkip']}</Text>
                                         </Pressable>
                                         <Pressable style={({ pressed }) => [
                                             styles.option,
@@ -366,7 +367,7 @@ export default class Logbook extends Component {
                                         ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
                                             this.addWorkoutTemplate();
                                         }}>
-                                            <Text style={globalStyles.modalActionTitle}>Add</Text>
+                                            <Text style={globalStyles.modalActionTitle}>{i18n.t('screens')['logbook']['workoutTemplateAdd']}</Text>
                                         </Pressable>
                                     </View>
                                 </View>
@@ -382,7 +383,7 @@ export default class Logbook extends Component {
                             visible={true}>
                             <View style={globalStyles.centeredView}>
                                 <View style={globalStyles.modalView}>
-                                    <Text style={globalStyles.modalText}>You may choose a workout template for this workout session</Text>
+                                    <Text style={globalStyles.modalText}>{i18n.t('screens')['logbook']['templatePickerModalMessage']}</Text>
                                     <Picker
                                         style={[globalStyles.authPageInput, {
                                             backgroundColor: "#fafafa"
@@ -413,7 +414,7 @@ export default class Logbook extends Component {
                                         }}>
                                             <Text style={[globalStyles.modalActionTitle, {
                                                 color: "#1f6cb0"
-                                            }]}>Skip</Text>
+                                            }]}>{i18n.t('screens')['logbook']['templatePickerModalSkip']}</Text>
                                         </Pressable>
                                         <Pressable style={({ pressed }) => [
                                             styles.option,
@@ -423,7 +424,7 @@ export default class Logbook extends Component {
                                         ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
                                             this.loadWorkoutTemplate();
                                         }}>
-                                            <Text style={globalStyles.modalActionTitle}>Add</Text>
+                                            <Text style={globalStyles.modalActionTitle}>{i18n.t('screens')['logbook']['templatePickerModalAdd']}</Text>
                                         </Pressable>
                                     </View>
                                 </View>
@@ -442,7 +443,7 @@ export default class Logbook extends Component {
                         }}>
                             <Ionicons name="md-arrow-back-sharp" size={25} />
                         </Pressable>
-                        <Text style={globalStyles.followUpScreenTitle}>Logbook</Text>
+                        <Text style={globalStyles.followUpScreenTitle}>{i18n.t('screens')['logbook']['title']}</Text>
                     </View>
                     {
                         this.state.exercises.length > 0 && this.state.hasChanges
@@ -456,7 +457,7 @@ export default class Logbook extends Component {
                             }}>
                                 <Text style={[globalStyles.topbarIconTitle, {
                                     color: cardColors.logbook
-                                }]}>Save</Text>
+                                }]}>{i18n.t('screens')['logbook']['save']}</Text>
                                 <FontAwesome name="check" size={20} color={cardColors.logbook} />
                             </Pressable>
                             : null
@@ -469,7 +470,7 @@ export default class Logbook extends Component {
                     {
                         this.state.hasWorkoutTemplates
                             ? <View style={styles.unknownSourceCaloriesIncentiveContainer}>
-                                <Text style={styles.unknownSourceCaloriesIncentiveText}>You may manage your previously created workout templates</Text>
+                                <Text style={styles.unknownSourceCaloriesIncentiveText}>{i18n.t('screens')['logbook']['manageWorkoutTemplatesMessage']}</Text>
                                 <Pressable style={({ pressed }) => [
                                     globalStyles.authPageActionButton,
                                     {
@@ -481,14 +482,14 @@ export default class Logbook extends Component {
                                         timezoneOffset: this.props.route.params.timezoneOffset
                                     });
                                 }}>
-                                    <Text style={globalStyles.authPageActionButtonText}>Manage workout templates</Text>
+                                    <Text style={globalStyles.authPageActionButtonText}>{i18n.t('screens')['logbook']['manageWorkoutTemplatesButton']}</Text>
                                 </Pressable>
                             </View>
                             : null
                     }
                     <View style={{ ...styles.exercisesListContainer, marginTop: this.state.hasWorkoutTemplates ? 0 : 16 }}>
                         <View style={styles.exercisesListContainerTopbar}>
-                            <Text style={styles.sectionTitle}>Exercises</Text>
+                            <Text style={styles.sectionTitle}>{i18n.t('screens')['logbook']['exercises']}</Text>
                             <Pressable style={({ pressed }) => [
                                 {
                                     opacity: pressed ? 0.1 : 1,
@@ -502,7 +503,7 @@ export default class Logbook extends Component {
                         <ScrollView contentContainerStyle={globalStyles.fillEmptySpace}>
                             {
                                 this.state.exercises.length == 0
-                                    ? <Text style={globalStyles.notation}>No exercises added</Text>
+                                    ? <Text style={globalStyles.notation}>{i18n.t('screens')['logbook']['noExercisesAdded']}</Text>
                                     : <>
                                         {
                                             this.state.exercises.map((exercise, index) =>
@@ -534,7 +535,7 @@ export default class Logbook extends Component {
                                                             this.setState({ showError: false })
                                                         }}>
                                                             <View style={styles.exerciseContainerAddContainer}>
-                                                                <Text style={styles.exerciseContainerAddContainerTitle}>Add set</Text>
+                                                                <Text style={styles.exerciseContainerAddContainerTitle}>{i18n.t('screens')['logbook']['addSet']}</Text>
                                                                 <Ionicons name="add-sharp" size={25} color={cardColors.logbook} />
                                                             </View>
                                                         </Pressable>
@@ -543,7 +544,7 @@ export default class Logbook extends Component {
                                                         {
                                                             exercise.sets.map((set, index) =>
                                                                 <View key={set._id}>
-                                                                    <Text style={styles.setContainerTitle}>Set No. {index + 1}</Text>
+                                                                    <Text style={styles.setContainerTitle}>{i18n.t('screens')['logbook']['setNo']}{index + 1}</Text>
                                                                     <ScrollView
                                                                         showsHorizontalScrollIndicator={false}
                                                                         style={styles.setContainer}
@@ -558,7 +559,7 @@ export default class Logbook extends Component {
                                                                                     this.changeSetVariable(exercise.exerciseId, index, "weight", val)
                                                                                     this.setState({ showError: false })
                                                                                 }} />
-                                                                            <Text style={styles.setContainerItemDescriptor}>{WEIGHT_UNITS_LABELS[set.weight.unit]}</Text>
+                                                                            <Text style={styles.setContainerItemDescriptor}>{i18n.t('common')['weightUnits'][set.weight.unit]}</Text>
                                                                         </View>
                                                                         <View style={styles.setContainerItem}>
                                                                             <TextInput style={styles.setContainerItemInput}
@@ -569,7 +570,7 @@ export default class Logbook extends Component {
                                                                                     this.changeSetVariable(exercise.exerciseId, index, "reps", val)
                                                                                     this.setState({ showError: false })
                                                                                 }} />
-                                                                            <Text style={styles.setContainerItemDescriptor}>reps</Text>
+                                                                            <Text style={styles.setContainerItemDescriptor}>{i18n.t('common')['reps']}</Text>
                                                                         </View>
                                                                         <View style={styles.setContainerItem}>
                                                                             <TextInput style={styles.setContainerItemInput}
@@ -580,7 +581,7 @@ export default class Logbook extends Component {
                                                                                     this.changeSetVariable(exercise.exerciseId, index, "duration", val)
                                                                                     this.setState({ showError: false })
                                                                                 }} />
-                                                                            <Text style={styles.setContainerItemDescriptor}>duration</Text>
+                                                                            <Text style={styles.setContainerItemDescriptor}>{i18n.t('common')['duration']}</Text>
                                                                         </View>
                                                                         <Pressable style={({ pressed }) => [
                                                                             {

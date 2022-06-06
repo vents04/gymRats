@@ -211,6 +211,27 @@ module.exports = {
                 title: "Exercise search",
                 searchInputPlaceholder: "Type exercise name",
                 usageStat: ["Used in", "workout sessions"]
+            },
+            logbook: {
+                backActionAlertTitle: "Hold on!",
+                backActionAlertMessage: "Are you sure you want to go back without saving the changes?",
+                cancel: "Cancel",
+                yes: "Yes, go back",
+                workoutTemplateModalMessage: "You may add this workout template for future use by giving it a name.",
+                workoutTemplateModalInput: "Title:",
+                workoutTemplateSkip: "Skip",
+                workoutTemplateAdd: "Add",
+                templatePickerModalMessage: "You may choose a workout template for this workout session",
+                templatePickerModalSkip: "Skip",
+                templatePickerModalAdd: "Add",
+                title: "Logbook",
+                save: "Save",
+                manageWorkoutTemplatesMessage: "You may manage your previously created workout templates",
+                manageWorkoutTemplatesButton: "Manage workout templates",
+                exercises: "Exercises",
+                noExercisesAdded: "No exercises added",
+                addSet: "Add set",
+                setNo: "Set No."
             }
         },
         components: {
@@ -293,6 +314,10 @@ module.exports = {
                 carbs: "Carbs",
                 proteins: "Proteins",
                 fats: "Fats",
+            },
+            weightUnits: {
+                KILOGRAMS: "kgs",
+                POUNDS: "lbs"
             }
         },
         errors: {
@@ -520,6 +545,27 @@ module.exports = {
                 title: "Търсене на упражнение",
                 searchInputPlaceholder: "Напиши име на упражнение",
                 usageStat: ["Използвано в", "тренировки"]
+            },
+            logbook: {
+                backActionAlertTitle: "Изчакайте!",
+                backActionAlertMessage: "Сигурни ли сте, че искате да се върнете назад без да запазите сегашните промени?",
+                cancel: "Отказ",
+                yes: "Да, назад",
+                workoutTemplateModalMessage: "Може да добавите този тренировъчен шаблон за бъдещо ползване като му дадете име",
+                workoutTemplateModalInput: "Име:",
+                workoutTemplateSkip: "Пропусни",
+                workoutTemplateAdd: "Добави",
+                templatePickerModalMessage: "Може да изберете тренировъчен шаблон за тренировъчната ви сесия",
+                templatePickerModalSkip: "Пропусни",
+                templatePickerModalAdd: "Добави",
+                title: "Тренировка",
+                save: "Запази",
+                manageWorkoutTemplatesMessage: "Може да управлявате вашите тренировъчни шаблони",
+                manageWorkoutTemplatesButton: "Управлявай шаблоните",
+                exercises: "Упражнения",
+                noExercisesAdded: "Няма добавени упражнения",
+                addSet: "Серия",
+                setNo: "Серия №"
             }
         },
         components: {
@@ -584,9 +630,9 @@ module.exports = {
             set: "серия",
             sets: "серии",
             rep: "повторение",
-            reps: "повторения",
+            reps: "повт.",
             weight: "тежест",
-            duration: "продължителност",
+            duration: "време",
             meals: {
                 BREAKFAST: "Закуска",
                 LUNCH: "Обяд",
@@ -604,6 +650,10 @@ module.exports = {
                 carbs: "Въглехидрати",
                 proteins: "Протеини",
                 fats: "Мазнини",
+            },
+            weightUnits: {
+                KILOGRAMS: "кг",
+                POUNDS: "паунда"
             }
         },
         errors: {
