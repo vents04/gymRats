@@ -112,6 +112,33 @@ module.exports = {
                 placeholder: "Type here...",
                 pendingReview: "Pending review",
                 answered: "Answered",
+            },
+            progress: {
+                pageTitle: "Progress",
+                weightTracker: "Weight tracker",
+                minorWeightLost: "Minor weight lost",
+                efficientWeightLoss: "Efficient weight loss",
+                efficientWeightGain: "Efficient weight gain",
+                tooRapidWeightLoss: "Too rapid weight loss",
+                tooRapidWeightGain: "Too rapid weight gain",
+                minorWeightGain: "Minor weight gain",
+                tipsToImproove: "Tips to improve",
+                logbook: "Logbook",
+                selectExercise: "Select an exercise",
+                trendFromLastSession: "Trend from last session",
+                rapidStrengthGain: "Rapid strength gain",
+                strengthGain: "Strength gain",
+                slightStrengthGain: "Slight strength gain",
+                noNotableChange: "No notable change",
+                slightStrengthLoss: "Slight strength loss",
+                strengthLoss: "Strength loss",
+                rapidStrengthLoss: "Rapid strength loss",
+                generalTrend: "General trend:",
+                atLeastTwoSessions: "Finish at least two sessions with this exercise to unlock the progress functionality",
+                addWorkoutSession: "Add a workout session",
+                selectExercise: "Please, select an exercise to show progress charts for.",
+                messageToUser: "After adding some data you will have the ability to monitor your progress from this tab as well as get software-based suggestions on how to improve your fitness.",
+                letsUnlockThisTab: "Let's unlock this tab!"
             }
         },
         components: {
@@ -280,7 +307,7 @@ module.exports = {
                 alertText: "Паролата ви беше променена. Вече можете да влезете в профила си с новата парола.",
             },
             chats: {
-                noChats: "Чатовете"
+                noChats: "Чатовете с клиенти и треньори ще се покажат тук"
             },
             suggestions: {
                 pageTitle: "Предложения",
@@ -288,6 +315,33 @@ module.exports = {
                 placeholder: "Пишете тук...",
                 pendingReview: "Изчакващи отзив от нас",
                 answered: "Отговорено",
+            },
+            progress: {
+                pageTitle: "Прогрес",
+                weightTracker: "Тегло",
+                minorWeightLost: "Незначителна загуба на тегло",
+                efficientWeightLoss: "Оптимална загуба на тегло",
+                efficientWeightGain: "Оптимално покачване на тегло",
+                tooRapidWeightLoss: "Дразтична загуба на тегло",
+                tooRapidWeightGain: "Дразтично покачване на тегло",
+                minorWeightGain: "Незначително качване на тегло",
+                tipsToImproove: "Съвети за подобряване",
+                logbook: "Тренировка",
+                selectExercise: "Избери упражнение",
+                trendFromLastSession: "Тенденция от последната тренировка",
+                rapidStrengthGain: "Дразтично покачване на сила",
+                strengthGain: "Покачване на сила",
+                slightStrengthGain: "Слабо покачване на сила",
+                noNotableChange: "Nяма забележима промяна",
+                slightStrengthLoss: "Слаба загуба на сила",
+                strengthLoss: "Загуба на сила",
+                rapidStrengthLoss: "Дразтична загуба на сила",
+                generalTrend: "Генерална тенденция:",
+                atLeastTwoSessions: "Направете поне 2 тренировки с това упражнение, за да отключите функционалността за прогрес",
+                addWorkoutSession: "Добави тренировка",
+                selectExercise: "Моля изберете упражнение, чийто прогрес искате да видите.",
+                messageToUser: "След като добавите данни, ще имате възможността да наблюдавате напредъка си от тази страница, както и да получавате алгоритмично базирани предложения как да подобрите своето здраве.",
+                letsUnlockThisTab: "Нека отключим тази страница"
             }
 
         },
