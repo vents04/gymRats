@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Text, View, ScrollView, Pressable, BackHandler, TextInput, Alert } from 'react-native'
+import i18n from 'i18n-js';
 
 import ApiRequests from '../../../classes/ApiRequests';
 import { BackButtonHandler } from '../../../classes/BackButtonHandler';
@@ -73,13 +74,13 @@ export default class ManageWorkoutTemplates extends Component {
                 for (let exercise of template.exercises) {
                     if (exercise.exerciseId == exerciseId) {
                         if (templates[index].exercises.length == 1) {
-                            Alert.alert("Hold on!", "Are you sure you want to delete this workout template?", [
+                            Alert.alert(i18n.t('screens')['manageWorkoutTemplates']['deletionAlertTitle'], i18n.t('screens')['manageWorkoutTemplates']['deletionAlertMessage'], [
                                 {
-                                    text: "Cancel",
+                                    text: i18n.t('screens')['manageWorkoutTemplates']['cancel'],
                                     onPress: () => null,
                                     style: "cancel"
                                 },
-                                { text: "Yes", onPress: () => { this.deleteTemplate(templateId); } }
+                                { text: i18n.t('screens')['manageWorkoutTemplates']['yes'], onPress: () => { this.deleteTemplate(templateId); } }
                             ]);
                         } else {
                             templates[index].exercises.splice(exerciseIndex, 1);
@@ -168,7 +169,7 @@ export default class ManageWorkoutTemplates extends Component {
                         }}>
                             <Ionicons name="md-arrow-back-sharp" size={25} />
                         </Pressable>
-                        <Text style={globalStyles.followUpScreenTitle}>Manage workout templates</Text>
+                        <Text style={globalStyles.followUpScreenTitle}>{i18n.t('screens')['manageWorkoutTemplates']['title']}</Text>
                     </View>
                     {
                         this.state.showError
@@ -187,13 +188,13 @@ export default class ManageWorkoutTemplates extends Component {
                                                     opacity: pressed ? 0.1 : 1,
                                                 }
                                             ]} onPress={() => {
-                                                Alert.alert("Hold on!", "Are you sure you want to delete this workout template?", [
+                                                Alert.alert(i18n.t('screens')['manageWorkoutTemplates']['deletionAlertTitle'], i18n.t('screens')['manageWorkoutTemplates']['deletionAlertMessage'], [
                                                     {
-                                                        text: "Cancel",
+                                                        text: i18n.t('screens')['manageWorkoutTemplates']['cancel'],
                                                         onPress: () => null,
                                                         style: "cancel"
                                                     },
-                                                    { text: "Yes", onPress: () => { this.deleteTemplate(workoutTemplate._id) } }
+                                                    { text: i18n.t('screens')['manageWorkoutTemplates']['yes'], onPress: () => { this.deleteTemplate(workoutTemplate._id) } }
                                                 ]);
                                             }}>
                                                 <Ionicons name="close" size={25} color={cardColors.negative} />
@@ -218,7 +219,7 @@ export default class ManageWorkoutTemplates extends Component {
                                         }
                                     </View>
                                 )
-                                : <Text style={globalStyles.notation}>You do not have any workout templates, yet.</Text>
+                                : <Text style={globalStyles.notation}>{i18n.t('screens')['manageWorkoutTemplates']['noTemplates']}</Text>
                         }
                     </ScrollView>
                 </View>

@@ -212,6 +212,14 @@ module.exports = {
                 playPauseAudio: "Play/pause audio",
                 pause: "Pause",
                 play: "Play"
+            },
+            manageWorkoutTemplates: {
+                title: "Manage workout templates",
+                noTemplates: "You do not have any workout templates, yet.",
+                deletionAlertTitle: "Hold on!",
+                deletionAlertMessage: "Are you sure you want to delete this workout template?",
+                cancel: "Cancel",
+                yes: "Yes, delete"
             }
         },
         components: {
