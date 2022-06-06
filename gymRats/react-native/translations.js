@@ -126,6 +126,13 @@ module.exports = {
                 pendingReview: "Pending review",
                 answered: "Answered",
             },
+            addCaloriesIntakeItem: {
+                add: "Add",
+                update: "Update",
+                food: "food",
+                macronutrients: "Macronutrients",
+                nutritionalInfo: ["Nutritional info per 100", ""]
+            },
             progress: {
                 pageTitle: "Progress",
                 weightTracker: "Weight tracker",
@@ -217,6 +224,23 @@ module.exports = {
             reps: "reps",
             weight: "weight",
             duration: "duration",
+            meals: {
+                BREAKFAST: "Breakfast",
+                LUNCH: "Lunch",
+                DINNER: "Dinner",
+                SNACKS: "Snacks"
+            },
+            foodUnits: {
+                GRAMS: "grams",
+                MILLILITERS: "ml",
+                CALORIES: "kcal"
+            },
+            macros: {
+                calories: "Calories",
+                carbs: "Carbs",
+                proteins: "Proteins",
+                fats: "Fats",
+            }
         },
         errors: {
             error: "Error",
@@ -356,6 +380,13 @@ module.exports = {
                 pendingReview: "Изчакващи отзив от нас",
                 answered: "Отговорено",
             },
+            addCaloriesIntakeItem: {
+                add: "Добави",
+                update: "Обнови",
+                food: "храна",
+                macronutrients: "Макронутриенти",
+                nutritionalInfo: ["Информация за", "от храната"]
+            },
             progress: {
                 pageTitle: "Прогрес",
                 weightTracker: "Тегло",
@@ -383,7 +414,6 @@ module.exports = {
                 messageToUser: "След като добавите данни, ще имате възможността да наблюдавате напредъка си от тази страница, както и да получавате алгоритмично базирани предложения как да подобрите своето здраве.",
                 letsUnlockThisTab: "Нека отключим тази страница"
             }
-
         },
         components: {
             cards: {
@@ -449,6 +479,24 @@ module.exports = {
             reps: "повторения",
             weight: "тежест",
             duration: "продължителност",
+            meals: {
+                BREAKFAST: "Закуска",
+                LUNCH: "Обяд",
+                DINNER: "Вечеря",
+                SNACKS: "Други"
+            },
+            foodUnits: {
+                GRAMS: "грама",
+                MILLILITERS: "мл.",
+                CALORIES: "ккал"
+            },
+            macros: {
+                calories: "Калории",
+                carbsShortened: "Въглех.",
+                carbs: "Въглехидрати",
+                proteins: "Протеини",
+                fats: "Мазнини",
+            }
         },
         errors: {
             error: "Грешка",

@@ -2,12 +2,13 @@ import React, { Component } from 'react'
 import { Dimensions, ScrollView, Text, TextInput, Pressable, View, BackHandler } from 'react-native';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import { Picker } from '@react-native-picker/picker';
+import i18n from 'i18n-js'
 
 import ApiRequests from '../../../classes/ApiRequests';
 
 import { Ionicons } from '@expo/vector-icons';
 
-import { CALORIES_COUNTER_SCREEN_INTENTS, HTTP_STATUS_CODES } from '../../../../global';
+import { CALORIES_COUNTER_MEALS, CALORIES_COUNTER_SCREEN_INTENTS, HTTP_STATUS_CODES, MEAL_TITLES } from '../../../../global';
 import { cardColors } from '../../../../assets/styles/cardColors';
 
 import globalStyles from '../../../../assets/styles/global.styles';
@@ -62,7 +63,7 @@ export default class AddCaloriesIntakeItem extends Component {
         }).catch((error) => {
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
-                    ApiRequests.alert("Error", error.response.data, [{ text: "OK" }]);
+                    ApiRequests.alert(i18n.t('errors')['error'], error.response.data, [{ text: "OK" }]);
                     this.setState({ showError: true, error: error.response.data });
                 } else {
                     ApiRequests.showInternalServerError();
@@ -87,7 +88,7 @@ export default class AddCaloriesIntakeItem extends Component {
         }).catch((error) => {
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
-                    ApiRequests.alert("Error", error.response.data, [{ text: "OK" }]);
+                    ApiRequests.alert(i18n.t('errors')['error'], error.response.data, [{ text: "OK" }]);
                     this.setState({ showError: true, error: error.response.data });
                 } else {
                     ApiRequests.showInternalServerError();
@@ -116,9 +117,9 @@ export default class AddCaloriesIntakeItem extends Component {
                         </Pressable>
                         <Text style={globalStyles.followUpScreenTitle}>{
                             this.props.route.params.intent == CALORIES_COUNTER_SCREEN_INTENTS.ADD
-                                ? "Add"
-                                : "Update"
-                        }&nbsp;food</Text>
+                                ? i18n.t('screens')['addCaloriesIntakeItem']['add']
+                                : i18n.t('screens')['addCaloriesIntakeItem']['update']
+                        }&nbsp;{i18n.t('screens')['addCaloriesIntakeItem']['food']}</Text>
                     </View>
                     <ScrollView contentContainerStyle={[globalStyles.fillEmptySpace, {
                         paddingBottom: 150
@@ -162,7 +163,7 @@ export default class AddCaloriesIntakeItem extends Component {
                                     value={this.state.amount}
                                     style={styles.amountInput}
                                     onChangeText={(val) => { this.setState({ amount: val, showError: false }) }} />
-                                <Text style={styles.nutritionalInfoTitle}>{this.props.route.params.item.unit.toLowerCase()}</Text>
+                                <Text style={styles.nutritionalInfoTitle}>{i18n.t('common')['foodUnits'][this.props.route.params.item.unit]}</Text>
                             </View>
                             <Picker
                                 style={styles.editSectionInput}
@@ -170,10 +171,11 @@ export default class AddCaloriesIntakeItem extends Component {
                                 onValueChange={(value, index) =>
                                     this.setState({ meal: value, showError: false })
                                 }>
-                                <Picker.Item label="Breakfast" value="BREAKFAST" />
-                                <Picker.Item label="Lunch" value="LUNCH" />
-                                <Picker.Item label="Dinner" value="DINNER" />
-                                <Picker.Item label="Snacks" value="SNACKS" />
+                                {
+                                    Object.keys(CALORIES_COUNTER_MEALS).map((meal, index) =>
+                                        <Picker.Item key={index} label={i18n.t('common')['meals'][meal]} value={meal} />
+                                    )
+                                }
                             </Picker>
                         </View>
                         <Pressable style={({ pressed }) => [
@@ -191,13 +193,13 @@ export default class AddCaloriesIntakeItem extends Component {
                             <Text style={globalStyles.authPageActionButtonText}>
                                 {
                                     this.props.route.params.intent == CALORIES_COUNTER_SCREEN_INTENTS.ADD
-                                        ? "Add"
-                                        : "Update"
-                                }&nbsp;food
+                                        ? i18n.t('screens')['addCaloriesIntakeItem']['add']
+                                        : i18n.t('screens')['addCaloriesIntakeItem']['update']
+                                }&nbsp;{i18n.t('screens')['addCaloriesIntakeItem']['food']}
                             </Text>
                         </Pressable>
                         <View style={styles.statsContainer}>
-                            <Text style={styles.statsTitle}>Macronutrients ratio</Text>
+                            <Text style={styles.statsTitle}>{i18n.t('screens')['addCaloriesIntakeItem']['macronutrients']}</Text>
                             <View style={[styles.inline, styles.macronutrientsCircles]}>
                                 <View style={styles.macronutrientsCirclesContainer}>
                                     <AnimatedCircularProgress
@@ -224,7 +226,11 @@ export default class AddCaloriesIntakeItem extends Component {
                                             )
                                         }}
                                     />
-                                    <Text style={styles.macroCircleTitle}>carbs</Text>
+                                    <Text style={styles.macroCircleTitle}>{
+                                        i18n.locale.includes("bg")
+                                            ? i18n.t('common')['macros']['carbsShortened']
+                                            : i18n.t('common')['macros']['carbs']
+                                    }</Text>
                                 </View>
                                 <View style={styles.macronutrientsCirclesContainer}>
                                     <AnimatedCircularProgress
@@ -251,7 +257,7 @@ export default class AddCaloriesIntakeItem extends Component {
                                             )
                                         }}
                                     />
-                                    <Text style={styles.macroCircleTitle}>proteins</Text>
+                                    <Text style={styles.macroCircleTitle}>{i18n.t('common')['macros']['proteins']}</Text>
                                 </View>
                                 <View style={styles.macronutrientsCirclesContainer}>
                                     <AnimatedCircularProgress
@@ -278,27 +284,27 @@ export default class AddCaloriesIntakeItem extends Component {
                                             )
                                         }}
                                     />
-                                    <Text style={styles.macroCircleTitle}>fats</Text>
+                                    <Text style={styles.macroCircleTitle}>{i18n.t('common')['macros']['fats']}</Text>
                                 </View>
                             </View>
                         </View>
                         <View style={styles.statsContainer}>
-                            <Text style={styles.statsTitle}>Nutritional info per {this.state.amount} {this.props.route.params.item.unit.toLowerCase()}</Text>
+                            <Text style={styles.statsTitle}>{i18n.t('screens')['addCaloriesIntakeItem']['nutritionalInfo'][0]} {this.state.amount} {i18n.t('common')['foodUnits'][this.props.route.params.item.unit]} {i18n.t('screens')['addCaloriesIntakeItem']['nutritionalInfo'][1]}</Text>
                             <View style={styles.nutritionalInfoContainer}>
-                                <Text style={styles.nutritionalInfoTitle}>Calories</Text>
-                                <Text style={styles.nutritionalInfoValue}>{parseFloat(this.props.route.params.item.calories * this.state.amount).toFixed()}kcal</Text>
+                                <Text style={styles.nutritionalInfoTitle}>{i18n.t('common')['macros']['calories']}</Text>
+                                <Text style={styles.nutritionalInfoValue}>{parseFloat(this.props.route.params.item.calories * this.state.amount).toFixed()} {i18n.t('common')['foodUnits']['CALORIES']}</Text>
                             </View>
                             <View style={styles.nutritionalInfoContainer}>
-                                <Text style={styles.nutritionalInfoTitle}>Carbs</Text>
-                                <Text style={styles.nutritionalInfoValue}>{parseFloat(this.props.route.params.item.carbs * this.state.amount).toFixed()}g</Text>
+                                <Text style={styles.nutritionalInfoTitle}>{i18n.t('common')['macros']['carbs']}</Text>
+                                <Text style={styles.nutritionalInfoValue}>{parseFloat(this.props.route.params.item.carbs * this.state.amount).toFixed()} {i18n.t('common')['foodUnits']['GRAMS']}</Text>
                             </View>
                             <View style={styles.nutritionalInfoContainer}>
-                                <Text style={styles.nutritionalInfoTitle}>Proteins</Text>
-                                <Text style={styles.nutritionalInfoValue}>{parseFloat(this.props.route.params.item.protein * this.state.amount).toFixed()}g</Text>
+                                <Text style={styles.nutritionalInfoTitle}>{i18n.t('common')['macros']['proteins']}</Text>
+                                <Text style={styles.nutritionalInfoValue}>{parseFloat(this.props.route.params.item.protein * this.state.amount).toFixed()} {i18n.t('common')['foodUnits']['GRAMS']}</Text>
                             </View>
                             <View style={styles.nutritionalInfoContainer}>
-                                <Text style={styles.nutritionalInfoTitle}>Fats</Text>
-                                <Text style={styles.nutritionalInfoValue}>{parseFloat(this.props.route.params.item.fats * this.state.amount).toFixed()}g</Text>
+                                <Text style={styles.nutritionalInfoTitle}>{i18n.t('common')['macros']['fats']}</Text>
+                                <Text style={styles.nutritionalInfoValue}>{parseFloat(this.props.route.params.item.fats * this.state.amount).toFixed()} {i18n.t('common')['foodUnits']['GRAMS']}</Text>
                             </View>
                         </View>
                     </ScrollView>
