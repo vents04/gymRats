@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { ScrollView, Text, TextInput, Pressable, View, BackHandler } from 'react-native'
 import { Picker } from '@react-native-picker/picker';
+import i18n from 'i18n-js';
 
 import ApiRequests from '../../../classes/ApiRequests';
 
@@ -104,7 +105,7 @@ export default class AddFood extends Component {
                         }}>
                             <Ionicons name="md-arrow-back-sharp" size={25} />
                         </Pressable>
-                        <Text style={globalStyles.followUpScreenTitle}>Create food item</Text>
+                        <Text style={globalStyles.followUpScreenTitle}>{i18n.t('screens')['addFood']['title']}</Text>
                     </View>
                     {
                         this.state.showError
@@ -115,25 +116,25 @@ export default class AddFood extends Component {
                     }
                     <ScrollView contentContainerStyle={globalStyles.fillEmptySpace}>
                         <View style={styles.inputSection}>
-                            <Text style={styles.inputSectionTitle}>Title</Text>
+                            <Text style={styles.inputSectionTitle}>{i18n.t('screens')['addFood']['titleInput']}</Text>
                             <TextInput
                                 value={this.state.title}
                                 style={styles.inputSectionInput}
                                 onChangeText={(val) => { this.setState({ title: val, showError: false }) }} />
                         </View>
                         <View style={styles.inputSection}>
-                            <Text style={styles.inputSectionTitle}>Brand<Text style={styles.optional}>&nbsp;&middot;&nbsp;optional</Text></Text>
+                            <Text style={styles.inputSectionTitle}>{i18n.t('screens')['addFood']['brandInput']}<Text style={styles.optional}>&nbsp;&middot;&nbsp;{i18n.t('screens')['addFood']['optional']}</Text></Text>
                             <TextInput
                                 value={this.state.brand}
                                 style={styles.inputSectionInput}
                                 onChangeText={(val) => { this.setState({ brand: val, showError: false }) }} />
                         </View>
                         <View style={styles.inputSection}>
-                            <Text style={styles.inputSectionTitle}>Barcode<Text style={styles.optional}>&nbsp;&middot;&nbsp;optional</Text></Text>
+                            <Text style={styles.inputSectionTitle}>{i18n.t('screens')['addFood']['barcodeInput']}<Text style={styles.optional}>&nbsp;&middot;&nbsp;{i18n.t('screens')['addFood']['optional']}</Text></Text>
                             {
                                 this.state.barcode &&
                                     this.state.barcode.length > 0
-                                    ? <Text style={globalStyles.notation}>Already linked</Text>
+                                    ? <Text style={globalStyles.notation}>{i18n.t('screens')['addFood']['barcodeAlreadyLinked']}</Text>
                                     : <Pressable style={({ pressed }) => [
                                         globalStyles.authPageActionButton,
                                         {
@@ -143,24 +144,24 @@ export default class AddFood extends Component {
                                     ]} onPress={() => {
                                         this.props.navigation.navigate("BarcodeReader", { isAddingBarcodeToFood: true, date: this.props.route.params.date, timezoneOffset: this.props.route.params.timezoneOffset, meal: this.props.route.params.meal })
                                     }}>
-                                        <Text style={globalStyles.authPageActionButtonText}>Add barcode</Text>
+                                        <Text style={globalStyles.authPageActionButtonText}>{i18n.t('screens')['addFood']['addBarcode']}</Text>
                                     </Pressable>
                             }
                         </View>
                         <View style={styles.inputSection}>
-                            <Text style={styles.inputSectionTitle}>Serving unit</Text>
+                            <Text style={styles.inputSectionTitle}>{i18n.t('screens')['addFood']['servingUnitInput']}</Text>
                             <Picker
                                 style={styles.inputSectionInput}
                                 selectedValue={this.state.unit}
                                 onValueChange={(value) =>
                                     this.setState({ unit: value, showError: false })
                                 }>
-                                <Picker.Item style={{ fontFamily: 'MainRegular' }} label="Grams" value={CALORIES_COUNTER_UNITS.GRAMS} />
-                                <Picker.Item style={{ fontFamily: 'MainRegular' }} label="Milliliters" value={CALORIES_COUNTER_UNITS.MILLILITERS} />
+                                <Picker.Item style={{ fontFamily: 'MainRegular' }} label={i18n.t('common')['foodUnits']['GRAMS']} value={CALORIES_COUNTER_UNITS.GRAMS} />
+                                <Picker.Item style={{ fontFamily: 'MainRegular' }} label={i18n.t('common')['foodUnits']['MILLILITERS']} value={CALORIES_COUNTER_UNITS.MILLILITERS} />
                             </Picker>
                         </View>
                         <View style={styles.inputSection}>
-                            <Text style={styles.inputSectionTitle}>Calories per 100 {this.state.unit.toLowerCase()}</Text>
+                            <Text style={styles.inputSectionTitle}>{i18n.t('screens')['addFood']['caloriesInput']} {i18n.t('common')['foodUnits'][this.state.unit]}</Text>
                             <TextInput
                                 keyboardType='numeric'
                                 value={this.state.calories}
@@ -168,7 +169,7 @@ export default class AddFood extends Component {
                                 onChangeText={(val) => { this.setState({ calories: val, showError: false }) }} />
                         </View>
                         <View style={styles.inputSection}>
-                            <Text style={styles.inputSectionTitle}>How many grams of carbs per 100 {this.state.unit.toLowerCase()}?</Text>
+                            <Text style={styles.inputSectionTitle}>{i18n.t('screens')['addFood']['carbsInput']} {i18n.t('common')['foodUnits'][this.state.unit]}</Text>
                             <TextInput
                                 keyboardType='numeric'
                                 value={this.state.carbs}
@@ -176,7 +177,7 @@ export default class AddFood extends Component {
                                 onChangeText={(val) => { this.setState({ carbs: val, showError: false }) }} />
                         </View>
                         <View style={styles.inputSection}>
-                            <Text style={styles.inputSectionTitle}>How many grams of proteins per 100 {this.state.unit.toLowerCase()}?</Text>
+                            <Text style={styles.inputSectionTitle}>{i18n.t('screens')['addFood']['proteinsInput']} {i18n.t('common')['foodUnits'][this.state.unit]}</Text>
                             <TextInput
                                 keyboardType='numeric'
                                 value={this.state.protein}
@@ -184,7 +185,7 @@ export default class AddFood extends Component {
                                 onChangeText={(val) => { this.setState({ protein: val, showError: false }) }} />
                         </View>
                         <View style={styles.inputSection}>
-                            <Text style={styles.inputSectionTitle}>How many grams of fats per 100 {this.state.unit.toLowerCase()}?</Text>
+                            <Text style={styles.inputSectionTitle}>{i18n.t('screens')['addFood']['fatsInput']} {i18n.t('common')['foodUnits'][this.state.unit]}</Text>
                             <TextInput
                                 keyboardType='numeric'
                                 value={this.state.fats}
@@ -199,7 +200,7 @@ export default class AddFood extends Component {
                             marginVertical: 16
                         }
                     ]} onPress={() => { this.addFood() }}>
-                        <Text style={globalStyles.authPageActionButtonText}>Submit</Text>
+                        <Text style={globalStyles.authPageActionButtonText}>{i18n.t('common')['submit']}</Text>
                     </Pressable>
                 </View>
             </View>

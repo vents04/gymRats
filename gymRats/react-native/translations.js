@@ -160,6 +160,20 @@ module.exports = {
                 messageToUser: "After adding some data you will have the ability to monitor your progress from this tab as well as get software-based suggestions on how to improve your fitness.",
                 letsUnlockThisTab: "Let's unlock this tab!"
             },
+            addFood: {
+                optional: "optional",
+                title: "Add food to Gym Rats",
+                titleInput: "Title",
+                brandInput: "Brand",
+                barcodeInput: "Barcode",
+                servingUnitInput: "Serving unit",
+                caloriesInput: "Calories per 100",
+                carbsInput: "Carbs per 100",
+                proteinsInput: "Proteins per 100",
+                fatsInput: "Fats per 100",
+                barcodeAlreadyLinked: "Already linked",
+                addBarcode: "Add barcode"
+            },
             profileDetailsEdit: {
                 pageTitle: "Profile edit",
                 saving: "Saving...",
@@ -179,6 +193,11 @@ module.exports = {
                 KILOGRAMS: "Metric system (kilograms)",
                 POUNDS: "Imperial system (pounds)",
                 loading: "Loading...",
+            },
+            addUnknownSourceCalories: {
+                title: "Add unknown souce calories",
+                notation: "The macros for unknown source calories are the following: 40% carbs, 30% protein, 30% fats",
+                caloriesInput: "Calories estimate:"
             }
         },
         components: {
@@ -236,6 +255,7 @@ module.exports = {
             profile: "Profile"
         },
         common: {
+            submit: "Submit",
             saving: "Saving...",
             loading: "Loading...",
             set: "set",
@@ -436,6 +456,20 @@ module.exports = {
                 messageToUser: "След като добавите данни, ще имате възможността да наблюдавате напредъка си от тази страница, както и да получавате алгоритмично базирани предложения как да подобрите своето здраве.",
                 letsUnlockThisTab: "Нека отключим тази страница"
             },
+            addFood: {
+                optional: "опиционално",
+                title: "Добави храна в Gym Rats",
+                titleInput: "Име",
+                brandInput: "Фирма",
+                barcodeInput: "Баркод",
+                servingUnitInput: "Измревателна единица",
+                caloriesInput: "Калории за 100",
+                carbsInput: "Въглехидрати за 100",
+                proteinsInput: "Протеини за 100",
+                fatsInput: "Мазнини за 100",
+                barcodeAlreadyLinked: "Вече свързан",
+                addBarcode: "Добави баркод",
+            },
             profileDetailsEdit: {
                 pageTitle: "Редакция на профила",
                 saving: "Запазване...",
@@ -455,6 +489,11 @@ module.exports = {
                 KILOGRAMS: "Метрична система (килограми)",
                 POUNDS: "Имперска система (паунди)",
                 loading: "Зареждане...",
+            },
+            addUnknownSourceCalories: {
+                title: "Добави калории от незнаен източник",
+                notation: "Макронутриентите за калории от незнаен източник се разпределят както следва: 40% въглехидрати, 30% протеини, 30% мазнини",
+                caloriesInput: "Приблизително приети калории:"
             }
         },
         components: {
@@ -513,6 +552,7 @@ module.exports = {
             profile: "Профил"
         },
         common: {
+            submit: "Изпрати",
             saving: "Запазване...",
             loading: "Зареждане...",
             set: "серия",
