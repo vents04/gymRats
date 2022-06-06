@@ -663,7 +663,7 @@ module.exports = {
                 ourCoaches: "Треньорите ни са:",
                 singleHandedly: "Собственоръчно одобрени от нас",
                 motivatedAndReady: "Мотивирани и готови да помогнат",
-                capableOfTraining: "Могат да тренират хора с различни цели",
+                capableOfTraining: "Способни да тренират хора с различни цели",
                 searchCoaches: "Потърси треньори",
                 relationsWithoutReviews: "Връзки персонален треньор-клиент без отзиви",
                 startOfRelation: "Връзката персонален треньор-клиент е започната на ",
@@ -677,7 +677,7 @@ module.exports = {
                 catchTheOpportunity: "Възползвай се от възможността да:",
                 workWithPeople: "Работиш с хора на местно и интернационално ниво",
                 getAccessToClientData: "Имаш достъп до информация свързана с твоите клиенти (тренировки, диети, тегло и др.)",
-                getTheMost: "Изкарай това, което ти се полага от Gym Rats",
+                getTheMost: "Изкараш това, което ти се полага от Gym Rats",
                 submitApplication: "Подай заявка",
                 clients: "Клиенти"
             }

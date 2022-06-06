@@ -433,7 +433,7 @@ export default class Coaching extends Component {
                                                     <View style={styles.noCoachNumberContainer}>
                                                         <Text style={styles.noCoachNumber}>2</Text>
                                                     </View>
-                                                    <Text style={styles.noCoachPro}>{i18n.t('screens')['coaching']['getAccessClientData']}</Text>
+                                                    <Text style={styles.noCoachPro}>{i18n.t('screens')['coaching']['getAccessToClientData']}</Text>
                                                 </View>
                                                 <View style={styles.noCoachProContainer}>
                                                     <View style={styles.noCoachNumberContainer}>
