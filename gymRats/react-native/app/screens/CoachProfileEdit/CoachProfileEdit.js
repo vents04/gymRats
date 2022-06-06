@@ -3,6 +3,8 @@ import { Image, Linking, ScrollView, Switch, Text, Pressable, View, BackHandler 
 
 import ApiRequests from '../../classes/ApiRequests';
 
+import i18n from 'i18n-js';
+
 import { Ionicons } from '@expo/vector-icons';
 
 import { HTTP_STATUS_CODES } from '../../../global';
@@ -69,7 +71,7 @@ export default class CoachPage extends Component {
                         }}>
                             <Ionicons name="md-arrow-back-sharp" size={25} />
                         </Pressable>
-                        <Text style={globalStyles.followUpScreenTitle}>Coach profile edit</Text>
+                        <Text style={globalStyles.followUpScreenTitle}>{i18n.t('screens')['coachProfileEdit']['pageTitle']}</Text>
                     </View>
                     {
                         this.state.showError
@@ -100,11 +102,11 @@ export default class CoachPage extends Component {
                                         <View style={styles.coachStats}>
                                             <View style={styles.statContainer}>
                                                 <Text style={styles.statValue}>{this.state.coach.clients}</Text>
-                                                <Text style={styles.statTitle}>clients</Text>
+                                                <Text style={styles.statTitle}>{i18n.t('screens')['coachProfileEdit']['clients']}</Text>
                                             </View>
                                             <View style={styles.statContainer}>
                                                 <Text style={styles.statValue}>{this.state.coach.rating}</Text>
-                                                <Text style={styles.statTitle}>rating</Text>
+                                                <Text style={styles.statTitle}>{i18n.t('screens')['coachProfileEdit']['rating']}</Text>
                                             </View>
                                             {
                                                 /*
@@ -127,7 +129,7 @@ export default class CoachPage extends Component {
                                     </View>
                                     <Text style={[globalStyles.notation, {
                                         marginTop: 16
-                                    }]}>Do you prefer to work with clients only in person?</Text>
+                                    }]}>{i18n.t('screens')['coachProfileEdit']['inPerson']}</Text>
                                     <View style={{ display: 'flex', flexDirection: "row", alignItems: "center", justifyContent: "flex-start", width: "100%", }}>
                                         <Switch
                                             style={{
