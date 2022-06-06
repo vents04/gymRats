@@ -252,7 +252,7 @@ const WeightTrackerService = {
                         { "$or": [{ date: { "$lt": currentDate.getDate() } }, { date: { "$eq": currentDate.getDate() } }] }
                     ]
                 }, { year: -1, month: -1, date: -1 }, 3);
-                if (weights.length == 0) resolve(null);
+                if (weights.length < 2) resolve(null);
 
                 const weight = weights[0].weight;
                 const days =
@@ -362,6 +362,7 @@ const WeightTrackerService = {
                     tips
                 })
             } catch (err) {
+                console.log(err)
                 reject(new ResponseError(err.message || "Internal server error", err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR))
             }
         })

@@ -44,14 +44,14 @@ router.post("/signup", async (req, res, next) => {
 
 router.post("/login", async (req, res, next) => {
     const { error } = loginValidation(req.body);
-    if (error) return next(new ResponseError(error.details[0].message, HTTP_STATUS_CODES.BAD_REQUEST));
+    if (error) return next(new ResponseError("Invalid credentials for login", HTTP_STATUS_CODES.BAD_REQUEST, 58));
 
     try {
         const user = await DbService.getOne(COLLECTIONS.USERS, { email: req.body.email });
-        if (!user) return next(new ResponseError("User with this email was not found", HTTP_STATUS_CODES.NOT_FOUND, 47));
+        if (!user) return next(new ResponseError("Invalid credentials for login", HTTP_STATUS_CODES.NOT_FOUND, 58));
 
         const isPasswordValid = AuthenticationService.verifyPassword(req.body.password, user.password);
-        if (!isPasswordValid) return next(new ResponseError("Invalid password", HTTP_STATUS_CODES.BAD_REQUEST, 48));
+        if (!isPasswordValid) return next(new ResponseError("Invalid credentials for login", HTTP_STATUS_CODES.BAD_REQUEST, 58));
 
         setTimeout(() => {
             const token = AuthenticationService.generateToken({ _id: mongoose.Types.ObjectId(user._id) });

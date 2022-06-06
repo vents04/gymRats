@@ -232,8 +232,8 @@ module.exports.errorCodes = {
         bg: ["Кодът за потвърждение на имейл е изтекъл"]
     },
     58: {
-        en: [""],
-        bg: [""]
+        en: ["Invalid credentials for login"],
+        bg: ["Неверни данни за вход"]
     },
     59: {
         en: [""],
