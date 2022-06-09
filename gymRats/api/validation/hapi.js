@@ -1,6 +1,6 @@
 const Joi = require('@hapi/joi');
 const mongoose = require('mongoose');
-const { CALORIES_COUNTER_UNITS, WEIGHT_UNITS, CALORIES_COUNTER_MEALS, REQUEST_STATUSES, CHAT_STATUSES, RELATION_STATUSES, CONTENT_VISIBILITY_SCOPES } = require('../global');
+const { CALORIES_COUNTER_UNITS, WEIGHT_UNITS, CALORIES_COUNTER_MEALS, REQUEST_STATUSES, CHAT_STATUSES, RELATION_STATUSES } = require('../global');
 const { stringBaseError, stringEmptyError, anyRequiredError, stringMinError, stringMaxError, stringEmailError, invalidIdError, numberMinError, numberMaxError, numberIntegerError, numberPositiveError } = require('./errors');
 
 const firstNameValidation = (lng) => {
@@ -299,7 +299,7 @@ const workoutSessionValidation = (data, lng) => {
                 })).optional(),
                 duration: Joi.number().optional().positive().max(10000).messages({
                     "number.max": numberMaxError(lng, "duration", 10000),
-                }),    
+                }),
                 weight: Joi.object({
                     amount: Joi.number().required().positive().max(3000).messages({
                         "number.max": numberMaxError(lng, "weight", 3000),
@@ -423,29 +423,6 @@ const messageValidation = (data, lng) => {
             text: Joi.string().min(0).max(1000).optional(),
             file: Joi.string().optional()
         }).required()
-    });
-    return schema.validate(data);
-}
-
-const contentPostValidation = (data, lng) => {
-    if (!lng) lng = "en";
-    const schema = Joi.object({
-        file: Joi.string().required(),
-        visibilityScope: Joi.string().valid(...Object.values(CONTENT_VISIBILITY_SCOPES)).required(),
-        isVisible: Joi.boolean().optional(),
-        section: Joi.string().min(1).max(40).required(),
-        title: Joi.string().min(1).max(40).required()
-    });
-    return schema.validate(data);
-}
-
-const contentUpdateValidation = (data, lng) => {
-    if (!lng) lng = "en";
-    const schema = Joi.object({
-        visibilityScope: Joi.string().valid(...Object.values(CONTENT_VISIBILITY_SCOPES)).required(),
-        isVisible: Joi.boolean().optional(),
-        section: Joi.string().min(1).max(40).required(),
-        title: Joi.string().min(1).max(40).required()
     });
     return schema.validate(data);
 }
@@ -595,8 +572,6 @@ module.exports = {
     coachApplicationPostValidation,
     chatValidation,
     messageValidation,
-    contentPostValidation,
-    contentUpdateValidation,
     dailyItemUpdateValidation,
     navigationAnalyticsValidation,
     unknownSourceCaloriesPostValidation,

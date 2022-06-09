@@ -84,7 +84,7 @@ module.exports = {
             identifier: "Идентификаторът",
             workoutName: "Заглавието на тренировката",
             exercises: "Упражненията",
-            exercise: "Упражнение"
+            exercise: "Упражнение",
         },
         errors: {
             stringBaseError: ["трябва да бъде текст с поне", "символа"],

@@ -69,7 +69,7 @@ const App = () => {
           ApiRequests.post("analytics/navigation", {}, { navigationAnalytics }, false).then(() => {
             AsyncStorage.setItem('@gymRats:navAnalytics', "[]");
           }).catch((error) => {
-            throw new Error(error);
+            ApiRequests.alert(i18n.t("errors")["error"], i18n.t("errors")["navigationAnalyticsSubmissionError"])
           })
         }
       }
