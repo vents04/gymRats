@@ -35,7 +35,9 @@ app
     .use(errorHandler)
     .use('/ugc', express.static(path.join(__dirname, '/ugc')))
 
-mongo.connect();
+mongo.connect().then((connection) => {
+    console.log('connect', connection)
+});
 
 (async function () {
     const cut = [
