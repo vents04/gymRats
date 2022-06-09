@@ -18,8 +18,7 @@ export default StyleSheet.create({
         paddingVertical: 20,
     },
     tabContent: {
-        marginTop: 30,
-        flex: 1
+        paddingVertical: 30,
     },
     noCoachContainer: {
         padding: 20,
@@ -36,7 +35,8 @@ export default StyleSheet.create({
     noCoachTitle: {
         fontFamily: 'MainBold',
         fontSize: 16,
-        marginLeft: 12
+        marginLeft: 12,
+        maxWidth: "80%"
     },
     noCoachDescription: {
         fontFamily: 'MainMedium',

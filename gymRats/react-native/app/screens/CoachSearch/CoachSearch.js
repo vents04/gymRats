@@ -88,6 +88,9 @@ export default class CoachSearch extends Component {
             searchQuery += `&minRating=${this.state.minRating}`;
         }
         ApiRequests.get(searchQuery, {}, true).then((response) => {
+            for (let result of response.data.results) {
+                console.log(result.user);
+            }
             this.setState({ searchResults: response.data.results })
         }).catch((error) => {
             if (error.response) {
