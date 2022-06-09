@@ -1,15 +1,15 @@
 const Joi = require('@hapi/joi');
 const mongoose = require('mongoose');
 const { CALORIES_COUNTER_UNITS, WEIGHT_UNITS, CALORIES_COUNTER_MEALS, REQUEST_STATUSES, CHAT_STATUSES, RELATION_STATUSES, CONTENT_VISIBILITY_SCOPES } = require('../global');
-const { stringBaseError, stringEmptyError, anyRequiredError } = require('./errors');
+const { stringBaseError, stringEmptyError, anyRequiredError, stringMinError, stringMaxError, stringEmailError, invalidIdError, numberMinError, numberMaxError } = require('./errors');
 
 const firstNameValidation = (lng) => {
     if (!lng) lng = "en";
     return Joi.string().min(1).max(32).required().messages({
         "string.base": stringBaseError(lng, "firstName", 1),
         "string.empty": stringEmptyError(lng, "firstName"),
-        "string.min": `First name should have at least 1 character`,
-        "string.max": `First name should have at most 32 characters`,
+        "string.min": stringMinError(lng, "firstName", 1),
+        "string.max": stringMaxError(lng, "firstName", 32),
         "any.required": anyRequiredError(lng, "firstName")
     }).regex(/^[A-Za-z]+$/)
 }
@@ -17,37 +17,36 @@ const firstNameValidation = (lng) => {
 const lastNameValidation = (lng) => {
     if (!lng) lng = "en";
     return Joi.string().min(1).max(32).required().messages({
-        "string.base": `Last name should have at least 1 character`,
-        "string.empty": `Last name should not be empty`,
-        "string.min": `Last name should have at least 1 character`,
-        "string.max": `Last name should have at most 32 characters`,
-        "any.required": `Last name is a required field`
+        "string.base": stringBaseError(lng, "lastName", 1),
+        "string.empty": stringEmptyError(lng, "lastName"),
+        "string.min": stringMinError(lng, "lastName", 1),
+        "string.max": stringMaxError(lng, "lastName", 32),
+        "any.required": anyRequiredError(lng, "lastName")
     }).regex(/^[A-Za-z]+$/)
 }
 
 const emailValidation = (lng) => {
     if (!lng) lng = "en";
     return Joi.string().email().min(3).max(320).required().messages({
-        "string.base": `Email should have at least 3 characters`,
-        "string.empty": `Email should not be empty`,
-        "string.min": `Email should have at least 3 characters`,
-        "string.email": `Email should be a valid email address`,
-        "string.max": `Email should have at most 320 characters`,
-        "any.required": `Email is a required field`
+        "string.base": stringBaseError(lng, "email", 1),
+        "string.empty": stringEmptyError(lng, "email"),
+        "string.min": stringMinError(lng, "email", 3),
+        "string.email": stringEmailError(lng, "email"),
+        "string.max": stringMaxError(lng, "email", 320),
+        "any.required": anyRequiredError(lng, "email")
     })
 }
 
 const passwordValidation = (lng) => {
     if (!lng) lng = "en";
     return Joi.string().min(8).max(100).required().messages({
-        "string.base": `Password should have at least 8 characters`,
-        "string.empty": `Password should not be empty`,
-        "string.min": `Password should have at least 8 characters`,
-        "string.max": `Password should have at most 100 characters`,
-        "any.required": `Password is a required field`
+        "string.base": stringBaseError(lng, "password", 8),
+        "string.empty": stringEmptyError(lng, "password"),
+        "string.min": stringMinError(lng, "password", 8),
+        "string.max": stringMaxError(lng, "password", 100),
+        "any.required": anyRequiredError(lng, "password")
     })
 }
-
 const signupValidation = (data, lng) => {
     if (!lng) lng = "en";
     const schema = Joi.object({
@@ -62,8 +61,8 @@ const signupValidation = (data, lng) => {
 const loginValidation = (data, lng) => {
     if (!lng) lng = "en";
     const schema = Joi.object({
-        email: emailValidation(),
-        password: passwordValidation(),
+        email: emailValidation(lng),
+        password: passwordValidation(lng),
     })
     return schema.validate(data);
 }
@@ -71,12 +70,12 @@ const loginValidation = (data, lng) => {
 const userUpdateValidation = (data, lng) => {
     if (!lng) lng = "en";
     const schema = Joi.object({
-        firstName: firstNameValidation(),
-        lastName: lastNameValidation(),
+        firstName: firstNameValidation(lng),
+        lastName: lastNameValidation(lng),
         weightUnit: Joi.string().valid(...Object.values(WEIGHT_UNITS)).messages({
-            "string.base": `Weight unit should have at least 1 character`,
-            "string.empty": `Weight unit should not be empty`,
-            "any.required": `Weight unit is a required field`
+            "string.base": stringBaseError(lng, "weightUnit", 1),
+            "string.empty": stringEmptyError(lng, "weightUnit"),
+            "any.required": anyRequiredError(lng, "weightUnit")
         }),
         profilePicture: Joi.string().optional().allow(null).allow("")
     });
@@ -87,19 +86,37 @@ const itemPostValidation = (data, lng) => {
     if (!lng) lng = "en";
     const schema = Joi.object({
         title: Joi.string().min(1).max(300).required().messages({
-            "string.base": `Title should have at least 1 characters`,
-            "string.empty": `Title should not be empty`,
-            "string.min": `Title should have at least 1 characters`,
-            "string.max": `Title should have at most 300 characters`,
-            "any.required": `Title is a required field`
+            "string.base": stringBaseError(lng, "title", 1),
+            "string.empty": stringEmptyError(lng, "title"),
+            "string.min": stringMinError(lng, "title", 1),
+            "string.max": stringMaxError(lng, "title", 300),
+            "any.required": anyRequiredError(lng, "title")
         }),
-        brand: Joi.string().min(1).max(300).optional(),
+        brand: Joi.string().min(1).max(300).required().messages({
+            "string.base": stringBaseError(lng, "brand", 1),
+            "string.empty": stringEmptyError(lng, "brand"),
+            "string.min": stringMinError(lng, "brand", 1),
+            "string.max": stringMaxError(lng, "brand", 300),
+            "any.required": anyRequiredError(lng, "brand")
+        }),
         barcode: Joi.string().optional(),
         unit: Joi.string().valid(...Object.values(CALORIES_COUNTER_UNITS)).required(),
-        calories: Joi.number().required().positive().allow(0),
-        protein: Joi.number().required().positive().allow(0),
-        carbs: Joi.number().required().positive().allow(0),
-        fats: Joi.number().required().positive().allow(0),
+        calories: Joi.number().required().positive().allow(0).messages({
+            "number.min": numberMinError(lng, "calories", 0),
+            "any.required": anyRequiredError(lng, "calories"),
+        }),
+        protein: Joi.number().required().positive().allow(0).min(0).messages({
+            "number.min": numberMinError(lng, "protein", 0),
+            "any.required": anyRequiredError(lng, "protein"),
+        }),
+        carbs: Joi.number().required().positive().allow(0).min(0).messages({
+            "number.min": numberMinError(lng, "carbs", 0),
+            "any.required": anyRequiredError(lng, "carbs"),
+        }),
+        fats: Joi.number().required().positive().allow(0).min(0).messages({
+            "number.min": numberMinError(lng, "fats", 0),
+            "any.required": anyRequiredError(lng, "fats"),
+        }),
     })
     return schema.validate(data);
 }
@@ -107,18 +124,33 @@ const itemPostValidation = (data, lng) => {
 const dailyItemPostValidation = (data, lng) => {
     if (!lng) lng = "en";
     const schema = Joi.object({
-        date: Joi.number().required(),
-        month: Joi.number().required(),
-        year: Joi.number().required(),
+        date: Joi.number().required().messages({
+            "any.required": anyRequiredError(lng, "date")
+        }),
+        month: Joi.number().required().messages({
+            "any.required": anyRequiredError(lng, "month")
+        }),
+        year: Joi.number().required().messages({
+            "any.required": anyRequiredError(lng, "year")
+        }),
         itemId: Joi.string().required().custom((value, helper) => {
             if (!mongoose.Types.ObjectId.isValid(value)) {
-                return helper.message("Invalid item id");
+                return helper.message(invalidIdError(lng, "item"));
             }
             return true;
         }),
-        amount: Joi.number().required().positive(),
-        dt: Joi.date().required(),
-        meal: Joi.string().valid(...Object.values(CALORIES_COUNTER_MEALS)).required()
+        amount: Joi.number().required().positive().min(0).messages({
+            "number.min": numberMinError(lng, "amount", 0),
+            "any.required": anyRequiredError(lng, "amount"),
+        }),
+        dt: Joi.date().required().messages({
+            "any.required": anyRequiredError(lng, "date")
+        }),
+        meal: Joi.string().valid(...Object.values(CALORIES_COUNTER_MEALS)).required().messages({
+            "string.base": stringBaseError(lng, "meal", 1),
+            "string.empty": stringEmptyError(lng, "meal"),
+            "any.required": anyRequiredError(lng, "meal")
+        })
     })
     return schema.validate(data);
 }
@@ -126,8 +158,15 @@ const dailyItemPostValidation = (data, lng) => {
 const dailyItemUpdateValidation = (data, lng) => {
     if (!lng) lng = "en";
     const schema = Joi.object({
-        amount: Joi.number().optional().positive(),
-        meal: Joi.string().valid(...Object.values(CALORIES_COUNTER_MEALS)).optional()
+        amount: Joi.number().optional().positive().min(0).messages({
+            "number.min": numberMinError(lng, "amount", 0),
+            "any.required": anyRequiredError(lng, "amount"),
+        }),
+        meal: Joi.string().valid(...Object.values(CALORIES_COUNTER_MEALS)).optional().messages({
+            "string.base": stringBaseError(lng, "meal", 1),
+            "string.empty": stringEmptyError(lng, "meal"),
+            "any.required": anyRequiredError(lng, "meal")
+        })
     })
     return schema.validate(data);
 }
@@ -135,8 +174,16 @@ const dailyItemUpdateValidation = (data, lng) => {
 const dailyWeightPostValidation = (data, lng) => {
     if (!lng) lng = "en";
     const schema = Joi.object({
-        weight: Joi.number().required().positive().min(2.1).max(635),
-        unit: Joi.string().valid(...Object.values(WEIGHT_UNITS)).required(),
+        weight: Joi.number().required().positive().min(2.1).max(635).messages({
+            "number.min": numberMinError(lng, "weight", 2.1),
+            "number.max": numberMaxError(lng, "weight", 635),
+            "any.required": anyRequiredError(lng, "weight"),
+        }),
+        unit: Joi.string().valid(...Object.values(WEIGHT_UNITS)).required().messages({
+            "string.base": stringBaseError(lng, "weightUnit", 1),
+            "string.empty": stringEmptyError(lng, "weightUnit"),
+            "any.required": anyRequiredError(lng, "weightUnit")
+        }),
     })
     return schema.validate(data);
 }
@@ -144,12 +191,22 @@ const dailyWeightPostValidation = (data, lng) => {
 const supplementsReminderValidation = (data, lng) => {
     if (!lng) lng = "en";
     const schema = Joi.object({
-        dt: Joi.date().required(),
+        dt: Joi.date().required().messages({
+            "any.required": anyRequiredError(lng, "date")
+        }),
         supplements: Joi.array().items(Joi.object({
-            name: Joi.string().min(1).max(200).required(),
+            name: Joi.string().min(1).max(200).required().messages({
+                "string.min": numberMinError(lng, "name", 1),
+                "string.max": numberMaxError(lng, "name", 200),
+                "any.required": anyRequiredError(lng, "name")
+            }),
             intake: Joi.array().items(Joi.object({
-                hours: Joi.number().required(),
-                minutes: Joi.number().required()
+                hours: Joi.number().required().messages({
+                    "any.required": anyRequiredError(lng, "hours")
+                }),
+                minutes: Joi.number().required().messages({
+                    "any.required": anyRequiredError(lng, "minutes")
+                })
             })),
             until: Joi.date.required()
         })).required(),

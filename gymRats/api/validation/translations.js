@@ -7,11 +7,31 @@ module.exports = {
             password: "Password",
             weightUnit: "Weight unit",
             profilePicture: "ProfilePicture",
+            title: "Title",
+            brand: "Brand",
+            item: "item",
+            calories: "Calories",
+            protein: "Protein",
+            carbs: "Carbs",
+            fat: "Fat",
+            date: "Date",
+            month: "Month",
+            year: "Year",
+            amount: "Amount",
+            meals: "Meals",
+            weight: "Weight",
+            name: "Name",
         },
         errors: {
             stringBaseError: ["must be a string with at least", "characters"],
             stringEmptyError: ["should not be empty"],
-            anyRequiredError: ["is a required field"]
+            anyRequiredError: ["is a required field"],
+            stringMinError: ["should have at least", "characters"],
+            stringMaxError: ["should have at most", "characters"],
+            stringEmailError: ["should be a valid email address"],
+            invalidIdError: ["Invalid", "id"],
+            numberMinError: ["should be greater than"],
+            numberMaxError: ["should be less than"],
         }
     },
     bg: {
@@ -22,11 +42,29 @@ module.exports = {
             password: "Паролата",
             weightUnit: "Мерната единица за тегло",
             profilePicture: "Профилната снимка",
+            title: "Заглавието",
+            brand: "Марката",
+            item: "продукт",
+            calories: "Калориите",
+            protein: "Протеина",
+            carbs: "Въглехидратите",
+            fat: "Мазнините",
+            date: "Датата",
+            month: "Месеца",
+            year: "Годината",
+            amount: "Количеството",
+            meals: "Типът ядене",
+            weight: "Теглото",
+            name: "Името",
         },
         errors: {
             stringBaseError: ["трябва да бъде текст с поне", "символа"],
             stringEmptyError: ["не трябва да е празно"],
-            anyRequiredError: ["е задължително поле"]
+            anyRequiredError: ["е задължително поле"],
+            stringMinError: ["трябва да има поне", "символа"],
+            stringMaxError: ["трябва да има най-много", "символа"],
+            stringEmailError: ["трябва да бъде валиден имейл"],
+            invalidIdError: ["Невалиднено ид на", ""]
         }
     }
 }
