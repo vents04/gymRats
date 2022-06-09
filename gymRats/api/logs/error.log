@@ -78,3 +78,15 @@
 {"level":"error","message":"First name is a required field"}
 {"level":"error","message":"Името е задължително поле"}
 {"level":"error","message":"Името е задължително поле"}
+{"level":"error","message":"Request path contains unescaped characters"}
+{"level":"error","message":"Request path contains unescaped characters"}
+{"level":"error","message":"Request path contains unescaped characters"}
+{"level":"error","message":"Request path contains unescaped characters"}
+{"level":"error","message":"Request path contains unescaped characters"}
+{"level":"error","message":"Request path contains unescaped characters"}
+{"level":"error","message":"Bad Request"}
+{"level":"error","message":"Вече сте изпратили заявка за личен треньор"}
+{"level":"error","message":"Bad Request"}
+{"level":"error","message":"Bad Request"}
+{"level":"error","message":"Bad Request"}
+{"level":"error","message":"Bad Request"}

@@ -132,9 +132,9 @@ const CALORIES_COUNTER_MEALS = {
     SNACKS: "SNACKS",
 }
 
-const SENDGRID_API_KEY = "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";
+const SENDGRID_API_KEY = "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";
 
-const APP_EMAIL = "support@uploy.app";
+const APP_EMAIL = "noreply@uploy.app";
 
 const WEIGHT_UNIT_RELATIONS = {
     KILOGRAMS: {
