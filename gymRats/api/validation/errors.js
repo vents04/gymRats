@@ -20,13 +20,22 @@ const HapiErrors = {
         return `${translations[lng].fields[field]} ${translations[lng].errors.stringEmailError[0]}`;
     },
     invalidIdError: (lng, field) => {
-        return `${translations[lng].errors.invalidIdError[0]} ${translations[lng].fields[field]} ${translations[lng].errors.invalidIdError[1]}`;
+        return `${translations[lng].fields[field]} ${translations[lng].errors.invalidIdError[0]} ${translations[lng].errors.invalidIdError[1]}`;
     },
     numberMinError: (lng, field, min) => {
         return `${translations[lng].fields[field]} ${translations[lng].errors.numberMinError[0]} ${min}`;
     },
     numberMaxError: (lng, field, max) => {
         return `${translations[lng].fields[field]} ${translations[lng].errors.numberMaxError[0]} ${max}`;
+    },
+    numberPositiveError: (lng, field) => {
+        return `${translations[lng].fields[field]} ${translations[lng].errors.numberPositiveError[0]}`;
+    },
+    numberIntegerError: (lng, field) => {
+        return `${translations[lng].fields[field]} ${translations[lng].errors.numberIntegerError[0]}`;
+    },
+    arrayIncludesError: (lng, field) => {
+        return `${translations[lng].errors.arrayIncludesError[0]} ${translations[lng].fields[field]} ${translations[lng].errors.arrayIncludesError[1]}`;
     }
 }
 

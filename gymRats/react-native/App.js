@@ -81,12 +81,11 @@ const App = () => {
       setExpoPushToken(token);
       AsyncStorage.setItem("@gymRats:expoPushToken", token);
     })
+
     responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
-      console.log("notification response", response);
       if (response.notification && response.notification.request
         && response.notification.request.content && response.notification.request.content.data
         && response.notification.request.content.data.chatId) {
-        console.log("tukaaa sum za redirect kum chats")
       }
     });
 
@@ -108,7 +107,6 @@ const App = () => {
     let token;
     if (Device.isDevice) {
       const { status: existingStatus } = await Notifications.getPermissionsAsync();
-      console.log("lkasdklasjdlkasjdlkjasdlkjalkdhaksd", existingStatus)
       let finalStatus = existingStatus;
       if (existingStatus !== 'granted') {
         const { status } = await Notifications.requestPermissionsAsync();
@@ -119,7 +117,6 @@ const App = () => {
         return;
       }
       token = (await Notifications.getExpoPushTokenAsync()).data;
-      console.log(token);
     } else {
       alert('Must use physical device for Push Notifications');
     }

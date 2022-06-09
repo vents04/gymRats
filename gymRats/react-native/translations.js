@@ -383,7 +383,8 @@ module.exports = {
             noResponseError: "Our server did not send a response for your request. Please try again or message our Support if the problem remains unresolved.",
             requestSettingError: "Something failed while sending your request. Please try again or message our Support if the problem remains unresolved.",
             profilePictureUploadError: "There was a problem uploading the profile picture. Please try again or contact support at support@uploy.app",
-            loadProfileError: "There was a problem loading your profile. Try again or contact support on office@uploy.app"
+            loadProfileError: "There was a problem loading your profile. Try again or contact support on office@uploy.app",
+            deviceInfoSubmissionError: "An error occurred while submitting device info"
         },
         constants: {
             kgs: "kgs",
@@ -776,7 +777,8 @@ module.exports = {
             noResponseError: "Нашият сървър не отговори на вашата заявка. Моля, опитайте отново или се свържете с нашия помощен екип, ако проблемът не се разреши.",
             requestSettingError: "Нещо се обърка докато обработваме вашата заявка. Моля, свържете се с нашия помощен екип, ако проблемът не се разреши.",
             profilePictureUploadError: "Възникна проблем с качването на профилната снимка. Моля, опитайте отново или се свържете с помощеня екип на support@uploy.app",
-            loadProfileError: "Възникна проблем със зареждането на профилът ви. Моля, опитайте отново или се свържете с помощеня екип на support@uploy.app"
+            loadProfileError: "Възникна проблем със зареждането на профилът ви. Моля, опитайте отново или се свържете с помощеня екип на support@uploy.app",
+            deviceInfoSubmissionError: "Възникна проблем при изпращането на информация за устройството"
         },
         constants: {
             kgs: "кг.",
