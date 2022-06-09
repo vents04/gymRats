@@ -61,6 +61,7 @@ module.exports = {
             numberPositiveError: ["should be a positive number"],
             numberIntegerError: ["should be an integer"],
             arrayIncludesError: ["The array of", "includes an invalid value"],
+            stringAlphabeticalRegexError: ["should consist only of letters"]
         }
     },
     bg: {
@@ -123,6 +124,7 @@ module.exports = {
             numberPositiveError: ["трябва да е положително число"],
             numberIntegerError: ["трябва да е цяло число"],
             arrayIncludesError: ["Масивът с", "има невалидни стойности"],
+            stringAlphabeticalRegexError: ["трябва да съдържа само букви"]
         }
     }
 }

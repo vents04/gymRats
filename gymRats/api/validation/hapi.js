@@ -1,7 +1,7 @@
 const Joi = require('@hapi/joi');
 const mongoose = require('mongoose');
 const { CALORIES_COUNTER_UNITS, WEIGHT_UNITS, CALORIES_COUNTER_MEALS, REQUEST_STATUSES, CHAT_STATUSES, RELATION_STATUSES } = require('../global');
-const { stringBaseError, stringEmptyError, anyRequiredError, stringMinError, stringMaxError, stringEmailError, invalidIdError, numberMinError, numberMaxError, numberIntegerError, numberPositiveError } = require('./errors');
+const { stringBaseError, stringEmptyError, anyRequiredError, stringMinError, stringMaxError, stringEmailError, invalidIdError, numberMinError, numberMaxError, numberIntegerError, numberPositiveError, stringAlphabeticalRegexError } = require('./errors');
 
 const firstNameValidation = (lng) => {
     if (!lng) lng = "en";
@@ -10,6 +10,7 @@ const firstNameValidation = (lng) => {
         "string.empty": stringEmptyError(lng, "firstName"),
         "string.min": stringMinError(lng, "firstName", 1),
         "string.max": stringMaxError(lng, "firstName", 32),
+        "string.pattern.base": stringAlphabeticalRegexError(lng, "firstName"),
         "any.required": anyRequiredError(lng, "firstName")
     }).regex(/^[A-Za-z]+$/)
 }
@@ -21,6 +22,7 @@ const lastNameValidation = (lng) => {
         "string.empty": stringEmptyError(lng, "lastName"),
         "string.min": stringMinError(lng, "lastName", 1),
         "string.max": stringMaxError(lng, "lastName", 32),
+        "string.pattern.base": stringAlphabeticalRegexError(lng, "lastName"),
         "any.required": anyRequiredError(lng, "lastName")
     }).regex(/^[A-Za-z]+$/)
 }

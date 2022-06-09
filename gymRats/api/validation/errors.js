@@ -36,6 +36,9 @@ const HapiErrors = {
     },
     arrayIncludesError: (lng, field) => {
         return `${translations[lng].errors.arrayIncludesError[0]} ${translations[lng].fields[field].toLowerCase()} ${translations[lng].errors.arrayIncludesError[1]}`;
+    },
+    stringAlphabeticalRegexError: (lng, field) => {
+        return `${translations[lng].fields[field]} ${translations[lng].errors.stringAlphabeticalRegexError[0]}`;
     }
 }
 
