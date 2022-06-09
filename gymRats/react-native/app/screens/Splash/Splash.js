@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { ActivityIndicator, Image, View, Text, Alert } from 'react-native';
 import * as Device from 'expo-device';
 import { default as AsyncStorage } from '@react-native-async-storage/async-storage';
+import i18n from 'i18n-js'
 
 import Auth from '../../classes/Auth';
 import User from '../../classes/User';
@@ -49,7 +50,7 @@ export default class Splash extends Component {
                 ApiRequests.put("analytics/expo-push-token/" + expoPushToken, {}, {}, true)
             }
         }).catch((error) => {
-            ApiRequests.alert("Error", "An error occurred while submitting device info for notifications");
+            ApiRequests.alert(i18n.t("errors")['error'], i18n.t("errors")['deviceInfoSubmissionError']);
         })
     }
 

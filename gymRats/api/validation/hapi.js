@@ -1,7 +1,7 @@
 const Joi = require('@hapi/joi');
 const mongoose = require('mongoose');
 const { CALORIES_COUNTER_UNITS, WEIGHT_UNITS, CALORIES_COUNTER_MEALS, REQUEST_STATUSES, CHAT_STATUSES, RELATION_STATUSES, CONTENT_VISIBILITY_SCOPES } = require('../global');
-const { stringBaseError, stringEmptyError, anyRequiredError, stringMinError, stringMaxError, stringEmailError, invalidIdError, numberMinError, numberMaxError } = require('./errors');
+const { stringBaseError, stringEmptyError, anyRequiredError, stringMinError, stringMaxError, stringEmailError, invalidIdError, numberMinError, numberMaxError, numberIntegerError, numberPositiveError } = require('./errors');
 
 const firstNameValidation = (lng) => {
     if (!lng) lng = "en";
@@ -430,10 +430,30 @@ const navigationAnalyticsValidation = (data, lng) => {
 const unknownSourceCaloriesPostValidation = (data, lng) => {
     if (!lng) lng = "en";
     const schema = Joi.object({
-        date: Joi.number().required(),
-        month: Joi.number().required(),
-        year: Joi.number().required(),
-        calories: Joi.number().required().positive(),
+        date: Joi.number().integer().positive().min(1).max(31).required().messages({
+            "number.integer": numberIntegerError(lng, "date"),
+            "number.positive": numberPositiveError(lng, "date"),
+            "number.min": numberMinError(lng, "month", 1),
+            "number.max": numberMaxError(lng, "month", 31),
+            "any.required": anyRequiredError(lng, "date")
+        }),
+        month: Joi.number().integer().positive().min(1).max(12).required().messages({
+            "number.integer": numberIntegerError(lng, "month"),
+            "number.positive": numberPositiveError(lng, "month"),
+            "number.min": numberMinError(lng, "month", 1),
+            "number.max": numberMaxError(lng, "month", 12),
+            "any.required": anyRequiredError(lng, "month")
+        }),
+        year: Joi.number().integer().positive().required().messages({
+            "number.integer": numberIntegerError(lng, "year"),
+            "number.positive": numberPositiveError(lng, "year"),
+            "any.required": anyRequiredError(lng, "year")
+        }),
+        calories: Joi.number().positive().integer().required().messages({
+            "number.integer": numberIntegerError(lng, "calories"),
+            "number.positive": numberPositiveError(lng, "calories"),
+            "any.required": anyRequiredError(lng, "calories")
+        }),
     })
     return schema.validate(data);
 }
@@ -441,12 +461,20 @@ const unknownSourceCaloriesPostValidation = (data, lng) => {
 const workoutUpdateValidation = (data, lng) => {
     if (!lng) lng = "en";
     const schema = Joi.object({
-        name: Joi.string().min(1).max(40).required(),
+        name: Joi.string().min(1).max(40).required().messages({
+            "string.base": stringBaseError(lng, "workoutName", 1),
+            "string.empty": stringEmptyError(lng, "workoutName"),
+            "string.min": stringMinError(lng, "workoutName", 1),
+            "string.max": stringMaxError(lng, "workoutName", 40),
+            "any.required": anyRequiredError(lng, "workoutName")
+        }),
         exercises: Joi.array().items(Joi.string().custom((value, helper) => {
-            if (!mongoose.Types.ObjectId.isValid(value))
-                return helper.message("Invalid exercise id");
+            if (!mongoose.Types.ObjectId.isValid(value)) return helper.message(invalidIdError(lng, "exercise"));
             return true;
-        })).required(),
+        })).required().messages({
+            "array.includes": arrayIncludesError(lng, "exercises"),
+            "any.required": anyRequiredError(lng, "exercises")
+        }),
     })
     return schema.validate(data);
 }
@@ -478,7 +506,7 @@ const devicePostValidation = (data, lng) => {
 const forgottenPasswordPostValidation = (data, lng) => {
     if (!lng) lng = "en";
     const schema = Joi.object({
-        email: Joi.string().email().required()
+        email: emailValidation(lng)
     });
     return schema.validate(data);
 }
@@ -486,7 +514,7 @@ const forgottenPasswordPostValidation = (data, lng) => {
 const emailVerificationPostValidation = (data, lng) => {
     if (!lng) lng = "en";
     const schema = Joi.object({
-        email: Joi.string().email().required()
+        email: emailValidation(lng)
     });
     return schema.validate(data);
 }
@@ -494,9 +522,19 @@ const emailVerificationPostValidation = (data, lng) => {
 const passwordPutValidation = (data, lng) => {
     if (!lng) lng = "en";
     const schema = Joi.object({
-        identifier: Joi.string().required(),
-        code: Joi.string().required(),
-        password: Joi.string().min(8).max(100).required(),
+        identifier: Joi.string().max(1000).required().messages({
+            "string.base": stringBaseError(lng, "identifier", 1),
+            "string.empty": stringEmptyError(lng, "identifier"),
+            "string.max": stringMaxError(lng, "identifier", 1000),
+            "any.required": anyRequiredError(lng, "identifier")
+        }),
+        code: Joi.string().max(1000).required().messages({
+            "string.base": stringBaseError(lng, "code", 1),
+            "string.empty": stringEmptyError(lng, "code"),
+            "string.max": stringMaxError(lng, "code", 1000),
+            "any.required": anyRequiredError(lng, "code")
+        }),
+        password: passwordValidation(lng),
     });
     return schema.validate(data);
 }
