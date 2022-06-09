@@ -34,6 +34,15 @@ module.exports = {
             workoutName: "Workout name",
             exercises: "Exercises",
             exercise: "Exercise",
+            reciever: "Reciever",
+            status: "Status",
+            rating: "Rating",
+            review: "Review",
+            address: "Address",
+            lat: "Latitude",
+            lng: "Longitude",
+            trainer: "Trainer",
+            client: "Client"
         },
         errors: {
             stringBaseError: ["must be a string with at least", "characters"],
@@ -84,7 +93,16 @@ module.exports = {
             identifier: "Идентификаторът",
             workoutName: "Заглавието на тренировката",
             exercises: "Упражненията",
-            exercise: "Упражнение"
+            exercise: "Упражнение",
+            reciever: "Получател",
+            status: "Статусa",
+            rating: "Рейтингът",
+            review: "Отзивът",
+            address: "Адресът",
+            lat: "Географската ширина",
+            lng: "Географската дължина",
+            trainer: "Треньор",
+            client: "Клиент"
         },
         errors: {
             stringBaseError: ["трябва да бъде текст с поне", "символа"],
