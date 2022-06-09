@@ -294,6 +294,7 @@ router.get("/coach/search", authenticate, async (req, res, next) => {
 
     if (((req.query.lat && !req.query.lng) || (!req.query.lat && req.query.lng)) && !names) {
         const trainers = await DbService.getMany(COLLECTIONS.PERSONAL_TRAINERS, {});
+        console.log(trainers);
         return res.status(HTTP_STATUS_CODES.OK).send({
             results: trainers
         })
@@ -316,7 +317,9 @@ router.get("/coach/search", authenticate, async (req, res, next) => {
             names = names.split(" ");
             for (let name of names) {
                 users = await DbService.getMany(COLLECTIONS.PERSONAL_TRAINERS, { "$and": [{ "$or": [{ firstName: { "$regex": name, "$options": "i" } }, { lastName: { "$regex": name, "$options": "i" } }] }, { status: PERSONAL_TRAINER_STATUSES.ACTIVE }] })
-
+                for (let index = 0; index < users.length; index++) {
+                    if (!users[index].user) users.splice(index, 1);
+                }
                 for (let i = 0; i < users.length; i++) {
 
                     const clients = await DbService.getMany(COLLECTIONS.RELATIONS, { "$or": [{ personalTrainerId: users[i]._id }, { personalTrainerId: mongoose.Types.ObjectId(users[i]._id) }] });
@@ -351,6 +354,9 @@ router.get("/coach/search", authenticate, async (req, res, next) => {
 
         } else {
             users = await DbService.getMany(COLLECTIONS.PERSONAL_TRAINERS, { status: PERSONAL_TRAINER_STATUSES.ACTIVE })
+            for (let index = 0; index < users.length; index++) {
+                if (!users[index].user) users.splice(index, 1);
+            }
             for (let i = 0; i < users.length; i++) {
 
                 const clients = await DbService.getMany(COLLECTIONS.RELATIONS, { "$or": [{ personalTrainerId: users[i]._id }, { personalTrainerId: mongoose.Types.ObjectId(users[i]._id) }] });
