@@ -14,7 +14,8 @@ const firstNameValidation = (lng) => {
     }).regex(/^[A-Za-z]+$/)
 }
 
-const lastNameValidation = () => {
+const lastNameValidation = (lng) => {
+    if (!lng) lng = "en";
     return Joi.string().min(1).max(32).required().messages({
         "string.base": `Last name should have at least 1 character`,
         "string.empty": `Last name should not be empty`,
@@ -24,7 +25,8 @@ const lastNameValidation = () => {
     }).regex(/^[A-Za-z]+$/)
 }
 
-const emailValidation = () => {
+const emailValidation = (lng) => {
+    if (!lng) lng = "en";
     return Joi.string().email().min(3).max(320).required().messages({
         "string.base": `Email should have at least 3 characters`,
         "string.empty": `Email should not be empty`,
@@ -35,7 +37,8 @@ const emailValidation = () => {
     })
 }
 
-const passwordValidation = () => {
+const passwordValidation = (lng) => {
+    if (!lng) lng = "en";
     return Joi.string().min(8).max(100).required().messages({
         "string.base": `Password should have at least 8 characters`,
         "string.empty": `Password should not be empty`,
@@ -56,7 +59,8 @@ const signupValidation = (data, lng) => {
     return schema.validate(data);
 }
 
-const loginValidation = (data) => {
+const loginValidation = (data, lng) => {
+    if (!lng) lng = "en";
     const schema = Joi.object({
         email: emailValidation(),
         password: passwordValidation(),
@@ -64,7 +68,8 @@ const loginValidation = (data) => {
     return schema.validate(data);
 }
 
-const userUpdateValidation = (data) => {
+const userUpdateValidation = (data, lng) => {
+    if (!lng) lng = "en";
     const schema = Joi.object({
         firstName: firstNameValidation(),
         lastName: lastNameValidation(),
@@ -78,7 +83,8 @@ const userUpdateValidation = (data) => {
     return schema.validate(data);
 }
 
-const itemPostValidation = (data) => {
+const itemPostValidation = (data, lng) => {
+    if (!lng) lng = "en";
     const schema = Joi.object({
         title: Joi.string().min(1).max(300).required().messages({
             "string.base": `Title should have at least 1 characters`,
@@ -98,7 +104,8 @@ const itemPostValidation = (data) => {
     return schema.validate(data);
 }
 
-const dailyItemPostValidation = (data) => {
+const dailyItemPostValidation = (data, lng) => {
+    if (!lng) lng = "en";
     const schema = Joi.object({
         date: Joi.number().required(),
         month: Joi.number().required(),
@@ -116,7 +123,8 @@ const dailyItemPostValidation = (data) => {
     return schema.validate(data);
 }
 
-const dailyItemUpdateValidation = (data) => {
+const dailyItemUpdateValidation = (data, lng) => {
+    if (!lng) lng = "en";
     const schema = Joi.object({
         amount: Joi.number().optional().positive(),
         meal: Joi.string().valid(...Object.values(CALORIES_COUNTER_MEALS)).optional()
@@ -124,7 +132,8 @@ const dailyItemUpdateValidation = (data) => {
     return schema.validate(data);
 }
 
-const dailyWeightPostValidation = (data) => {
+const dailyWeightPostValidation = (data, lng) => {
+    if (!lng) lng = "en";
     const schema = Joi.object({
         weight: Joi.number().required().positive().min(2.1).max(635),
         unit: Joi.string().valid(...Object.values(WEIGHT_UNITS)).required(),
@@ -132,7 +141,8 @@ const dailyWeightPostValidation = (data) => {
     return schema.validate(data);
 }
 
-const supplementsReminderValidation = (data) => {
+const supplementsReminderValidation = (data, lng) => {
+    if (!lng) lng = "en";
     const schema = Joi.object({
         dt: Joi.date().required(),
         supplements: Joi.array().items(Joi.object({
@@ -147,14 +157,16 @@ const supplementsReminderValidation = (data) => {
     return schema.validate(data);
 }
 
-const suggestionPostValidation = (data) => {
+const suggestionPostValidation = (data, lng) => {
+    if (!lng) lng = "en";
     const schema = Joi.object({
         suggestion: Joi.string().required()
     })
     return schema.validate(data);
 }
 
-const exercisePostValidation = (data) => {
+const exercisePostValidation = (data, lng) => {
+    if (!lng) lng = "en";
     const schema = Joi.object({
         title: Joi.string().min(1).max(150).required(),
         description: Joi.string().min(1).max(300).optional(),
@@ -169,7 +181,8 @@ const exercisePostValidation = (data) => {
     return schema.validate(data);
 }
 
-const workoutPostValidation = (data) => {
+const workoutPostValidation = (data, lng) => {
+    if (!lng) lng = "en";
     const schema = Joi.object({
         name: Joi.string().min(1).max(150).required(),
         exercises: Joi.array().items(Joi.string().required().custom((value, helper) => {
@@ -182,7 +195,8 @@ const workoutPostValidation = (data) => {
     return schema.validate(data);
 }
 
-const workoutSessionValidation = (data) => {
+const workoutSessionValidation = (data, lng) => {
+    if (!lng) lng = "en";
     const schema = Joi.object({
         exercises: Joi.array().items(Joi.object({
             _id: Joi.string().optional(),
@@ -212,7 +226,8 @@ const workoutSessionValidation = (data) => {
     return schema.validate(data);
 }
 
-const workoutTemplateCheckValidation = (data) => {
+const workoutTemplateCheckValidation = (data, lng) => {
+    if (!lng) lng = "en";
     const schema = Joi.object({
         exercises: Joi.array().items(Joi.object({
             exerciseId: Joi.string().required().custom((value, helper) => {
@@ -226,7 +241,8 @@ const workoutTemplateCheckValidation = (data) => {
     return schema.validate(data);
 }
 
-const relationValidation = (data) => {
+const relationValidation = (data, lng) => {
+    if (!lng) lng = "en";
     const schema = Joi.object({
         coachId: Joi.string().custom((value, helper) => {
             if (!mongoose.Types.ObjectId.isValid(value)) {
@@ -238,14 +254,16 @@ const relationValidation = (data) => {
     return schema.validate(data);
 }
 
-const relationStatusUpdateValidation = (data) => {
+const relationStatusUpdateValidation = (data, lng) => {
+    if (!lng) lng = "en";
     const schema = Joi.object({
         status: Joi.string().valid(...Object.values(RELATION_STATUSES)).required()
     });
     return schema.validate(data);
 }
 
-const coachingReviewPostValidation = (data) => {
+const coachingReviewPostValidation = (data, lng) => {
+    if (!lng) lng = "en";
     const schema = Joi.object({
         rating: Joi.number().min(1).max(5).required(),
         review: Joi.string().min(1).max(1000).optional()
@@ -253,14 +271,16 @@ const coachingReviewPostValidation = (data) => {
     return schema.validate(data);
 }
 
-const googlePlacesSearchValidation = (data) => {
+const googlePlacesSearchValidation = (data, lng) => {
+    if (!lng) lng = "en";
     const schema = Joi.object({
         query: Joi.string().required().allow(null).allow("")
     });
     return schema.validate(data);
 }
 
-const coachApplicationPostValidation = (data) => {
+const coachApplicationPostValidation = (data, lng) => {
+    if (!lng) lng = "en";
     const schema = Joi.object({
         location: Joi.object({
             address: Joi.string().required(),
@@ -272,7 +292,8 @@ const coachApplicationPostValidation = (data) => {
     return schema.validate(data);
 }
 
-const chatValidation = (data) => {
+const chatValidation = (data, lng) => {
+    if (!lng) lng = "en";
     const schema = Joi.object({
         personalTrainerId: Joi.string().custom((value, helper) => {
             if (!mongoose.Types.ObjectId.isValid(value)) {
@@ -290,7 +311,8 @@ const chatValidation = (data) => {
     return schema.validate(data);
 }
 
-const messageValidation = (data) => {
+const messageValidation = (data, lng) => {
+    if (!lng) lng = "en";
     const schema = Joi.object({
         senderId: Joi.string().custom((value, helper) => {
             if (!mongoose.Types.ObjectId.isValid(value)) {
@@ -312,7 +334,8 @@ const messageValidation = (data) => {
     return schema.validate(data);
 }
 
-const contentPostValidation = (data) => {
+const contentPostValidation = (data, lng) => {
+    if (!lng) lng = "en";
     const schema = Joi.object({
         file: Joi.string().required(),
         visibilityScope: Joi.string().valid(...Object.values(CONTENT_VISIBILITY_SCOPES)).required(),
@@ -323,7 +346,8 @@ const contentPostValidation = (data) => {
     return schema.validate(data);
 }
 
-const contentUpdateValidation = (data) => {
+const contentUpdateValidation = (data, lng) => {
+    if (!lng) lng = "en";
     const schema = Joi.object({
         visibilityScope: Joi.string().valid(...Object.values(CONTENT_VISIBILITY_SCOPES)).required(),
         isVisible: Joi.boolean().optional(),
@@ -333,7 +357,8 @@ const contentUpdateValidation = (data) => {
     return schema.validate(data);
 }
 
-const navigationAnalyticsValidation = (data) => {
+const navigationAnalyticsValidation = (data, lng) => {
+    if (!lng) lng = "en";
     const schema = Joi.object({
         navigationAnalytics: Joi.array().items(Joi.object({
             name: Joi.string().required(),
@@ -345,7 +370,8 @@ const navigationAnalyticsValidation = (data) => {
     return schema.validate(data);
 }
 
-const unknownSourceCaloriesPostValidation = (data) => {
+const unknownSourceCaloriesPostValidation = (data, lng) => {
+    if (!lng) lng = "en";
     const schema = Joi.object({
         date: Joi.number().required(),
         month: Joi.number().required(),
@@ -355,7 +381,8 @@ const unknownSourceCaloriesPostValidation = (data) => {
     return schema.validate(data);
 }
 
-const workoutUpdateValidation = (data) => {
+const workoutUpdateValidation = (data, lng) => {
+    if (!lng) lng = "en";
     const schema = Joi.object({
         name: Joi.string().min(1).max(40).required(),
         exercises: Joi.array().items(Joi.string().custom((value, helper) => {
@@ -367,7 +394,8 @@ const workoutUpdateValidation = (data) => {
     return schema.validate(data);
 }
 
-const devicePostValidation = (data) => {
+const devicePostValidation = (data, lng) => {
+    if (!lng) lng = "en";
     const schema = Joi.object({
         deviceType: Joi.string().required(),
         osName: Joi.string().required(),
@@ -390,21 +418,24 @@ const devicePostValidation = (data) => {
     return schema.validate(data);
 }
 
-const forgottenPasswordPostValidation = (data) => {
+const forgottenPasswordPostValidation = (data, lng) => {
+    if (!lng) lng = "en";
     const schema = Joi.object({
         email: Joi.string().email().required()
     });
     return schema.validate(data);
 }
 
-const emailVerificationPostValidation = (data) => {
+const emailVerificationPostValidation = (data, lng) => {
+    if (!lng) lng = "en";
     const schema = Joi.object({
         email: Joi.string().email().required()
     });
     return schema.validate(data);
 }
 
-const passwordPutValidation = (data) => {
+const passwordPutValidation = (data, lng) => {
+    if (!lng) lng = "en";
     const schema = Joi.object({
         identifier: Joi.string().required(),
         code: Joi.string().required(),
