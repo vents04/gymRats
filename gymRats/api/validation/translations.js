@@ -46,7 +46,13 @@ module.exports = {
             lat: "Latitude",
             lng: "Longitude",
             trainer: "Trainer",
-            client: "Client"
+            client: "Client",
+            foodUnit: "Food unit",
+            foodDt: "Food add date and time",
+            muscles: "Muscles",
+            keywords: "Keywords",
+            sets: "Sets",
+            prefersOfflineCoaching: "Preference for coaching offline"
         },
         errors: {
             stringBaseError: ["must be a string with at least", "characters"],
@@ -61,7 +67,11 @@ module.exports = {
             numberPositiveError: ["should be a positive number"],
             numberIntegerError: ["should be an integer"],
             arrayIncludesError: ["The array of", "includes an invalid value"],
-            stringAlphabeticalRegexError: ["should consist only of letters"]
+            stringAlphabeticalRegexError: ["should consist only of letters"],
+            anyOnlyError: ["is with an invalid format"],
+            numberPrecisionError: ["should have at most 2 digits past the decimal point"],
+            invalidRepsValue: ["Invalid reps value"],
+            booleanBaseError: ["has an invalid boolean value"]
         }
     },
     bg: {
@@ -111,7 +121,13 @@ module.exports = {
             lat: "Географската ширина",
             lng: "Географската дължина",
             trainer: "Треньор",
-            client: "Клиент"
+            client: "Клиент",
+            foodUnit: "Мерната единица за храна",
+            foodDt: "Времето на добавяне на храната",
+            muscles: "Мускулите",
+            keywords: "Ключовите думи",
+            sets: "Сериите",
+            prefersOfflineCoaching: "Предпочитанието за работа на живо"
         },
         errors: {
             stringBaseError: ["трябва да бъде текст с поне", "символа"],
@@ -121,10 +137,16 @@ module.exports = {
             stringMaxError: ["трябва да има най-много", "символа"],
             stringEmailError: ["трябва да бъде валиден имейл"],
             invalidIdError: ["е невалиден идентификатор", ""],
+            numberMinError: ["трябва да е по-голямо от"],
+            numberMaxError: ["трябва да е по-малко от"],
             numberPositiveError: ["трябва да е положително число"],
             numberIntegerError: ["трябва да е цяло число"],
             arrayIncludesError: ["Масивът с", "има невалидни стойности"],
-            stringAlphabeticalRegexError: ["трябва да съдържа само букви"]
+            stringAlphabeticalRegexError: ["трябва да съдържа само букви"],
+            anyOnlyError: ["не е в подходящ формат"],
+            numberPrecisionError: ["трябва да има максимум", "цифри след десетичната запетая"],
+            invalidRepsValue: ["Невалидна стойност за повторения"],
+            booleanBaseError: ["има невалидна булева стойност"]
         }
     }
 }

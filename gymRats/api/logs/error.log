@@ -91,3 +91,5 @@
 {"level":"error","message":"Bad Request"}
 {"level":"error","message":"Bad Request"}
 {"level":"error","message":"Името трябва да съдържа само букви"}
+{"level":"error","message":"\"weightUnit\" must be one of [POUNDS, KILOGRAMS]"}
+{"level":"error","message":"Мерната единица за тегло не е в допустимите стойности"}

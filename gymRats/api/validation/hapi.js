@@ -1,30 +1,31 @@
 const Joi = require('@hapi/joi');
 const mongoose = require('mongoose');
-const { CALORIES_COUNTER_UNITS, WEIGHT_UNITS, CALORIES_COUNTER_MEALS, REQUEST_STATUSES, CHAT_STATUSES, RELATION_STATUSES } = require('../global');
-const { stringBaseError, stringEmptyError, anyRequiredError, stringMinError, stringMaxError, stringEmailError, invalidIdError, numberMinError, numberMaxError, numberIntegerError, numberPositiveError, stringAlphabeticalRegexError, arrayIncludesError } = require('./errors');
+const { CALORIES_COUNTER_UNITS, WEIGHT_UNITS, CALORIES_COUNTER_MEALS, RELATION_STATUSES } = require('../global');
+const translations = require("./translations");
+const { booleanBaseError, numberPrecisionError, anyOnlyError, stringBaseError, stringEmptyError, anyRequiredError, stringMinError, stringMaxError, stringEmailError, invalidIdError, numberMinError, numberMaxError, numberIntegerError, numberPositiveError, stringAlphabeticalRegexError, arrayIncludesError } = require('./errors');
 
 const firstNameValidation = (lng) => {
     if (!lng) lng = "en";
-    return Joi.string().min(1).max(32).required().messages({
+    return Joi.string().min(1).max(32).regex(/^[A-Za-z]+$/).required().messages({
         "string.base": stringBaseError(lng, "firstName", 1),
         "string.empty": stringEmptyError(lng, "firstName"),
         "string.min": stringMinError(lng, "firstName", 1),
         "string.max": stringMaxError(lng, "firstName", 32),
         "string.pattern.base": stringAlphabeticalRegexError(lng, "firstName"),
         "any.required": anyRequiredError(lng, "firstName")
-    }).regex(/^[A-Za-z]+$/)
+    })
 }
 
 const lastNameValidation = (lng) => {
     if (!lng) lng = "en";
-    return Joi.string().min(1).max(32).required().messages({
+    return Joi.string().min(1).max(32).regex(/^[A-Za-z]+$/).required().messages({
         "string.base": stringBaseError(lng, "lastName", 1),
         "string.empty": stringEmptyError(lng, "lastName"),
         "string.min": stringMinError(lng, "lastName", 1),
         "string.max": stringMaxError(lng, "lastName", 32),
         "string.pattern.base": stringAlphabeticalRegexError(lng, "lastName"),
         "any.required": anyRequiredError(lng, "lastName")
-    }).regex(/^[A-Za-z]+$/)
+    })
 }
 
 const emailValidation = (lng) => {
@@ -76,7 +77,8 @@ const userUpdateValidation = (data, lng) => {
         lastName: lastNameValidation(lng),
         weightUnit: Joi.string().valid(...Object.values(WEIGHT_UNITS)).messages({
             "string.base": stringBaseError(lng, "weightUnit", 1),
-            "string.empty": stringEmptyError(lng, "weightUnit")
+            "string.empty": stringEmptyError(lng, "weightUnit"),
+            "any.only": anyOnlyError(lng, "weightUnit")
         }).optional(),
         profilePicture: Joi.string().optional().allow(null).allow("")
     });
@@ -101,20 +103,31 @@ const itemPostValidation = (data, lng) => {
             "any.required": anyRequiredError(lng, "brand")
         }),
         barcode: Joi.string().optional(),
-        unit: Joi.string().valid(...Object.values(CALORIES_COUNTER_UNITS)).required(),
-        calories: Joi.number().required().positive().allow(0).min(0).messages({
+        unit: Joi.string().valid(...Object.values(CALORIES_COUNTER_UNITS)).required().messages({
+            "any.only": anyOnlyError(lng, "foodUnit"),
+            "any.required": anyRequiredError(lng, "foodUnit")
+        }),
+        calories: Joi.number().integer().required().positive().allow(0).min(0).messages({
+            "number.integer": numberIntegerError(lng, "calories"),
+            "number.positive": numberPositiveError(lng, "calories"),
             "number.min": numberMinError(lng, "calories", 0),
             "any.required": anyRequiredError(lng, "calories"),
         }),
-        protein: Joi.number().required().positive().allow(0).min(0).messages({
+        protein: Joi.number().integer().required().positive().allow(0).min(0).messages({
+            "number.integer": numberIntegerError(lng, "protein"),
+            "number.positive": numberPositiveError(lng, "protein"),
             "number.min": numberMinError(lng, "protein", 0),
             "any.required": anyRequiredError(lng, "protein"),
         }),
-        carbs: Joi.number().required().positive().allow(0).min(0).messages({
+        carbs: Joi.number().integer().required().positive().allow(0).min(0).messages({
+            "number.integer": numberIntegerError(lng, "carbs"),
+            "number.positive": numberPositiveError(lng, "carbs"),
             "number.min": numberMinError(lng, "carbs", 0),
             "any.required": anyRequiredError(lng, "carbs"),
         }),
-        fats: Joi.number().required().positive().allow(0).min(0).messages({
+        fats: Joi.number().integer().required().positive().allow(0).min(0).messages({
+            "number.integer": numberIntegerError(lng, "fats"),
+            "number.positive": numberPositiveError(lng, "fats"),
             "number.min": numberMinError(lng, "fats", 0),
             "any.required": anyRequiredError(lng, "fats"),
         }),
@@ -125,31 +138,44 @@ const itemPostValidation = (data, lng) => {
 const dailyItemPostValidation = (data, lng) => {
     if (!lng) lng = "en";
     const schema = Joi.object({
-        date: Joi.number().required().messages({
+        date: Joi.number().integer().positive().min(1).max(31).required().messages({
+            "number.integer": numberIntegerError(lng, "date"),
+            "number.positive": numberPositiveError(lng, "date"),
+            "number.min": numberMinError(lng, "month", 1),
+            "number.max": numberMaxError(lng, "month", 31),
             "any.required": anyRequiredError(lng, "date")
         }),
-        month: Joi.number().required().messages({
+        month: Joi.number().integer().positive().min(1).max(12).required().messages({
+            "number.integer": numberIntegerError(lng, "month"),
+            "number.positive": numberPositiveError(lng, "month"),
+            "number.min": numberMinError(lng, "month", 1),
+            "number.max": numberMaxError(lng, "month", 12),
             "any.required": anyRequiredError(lng, "month")
         }),
-        year: Joi.number().required().messages({
+        year: Joi.number().integer().positive().required().messages({
+            "number.integer": numberIntegerError(lng, "year"),
+            "number.positive": numberPositiveError(lng, "year"),
             "any.required": anyRequiredError(lng, "year")
         }),
         itemId: Joi.string().required().custom((value, helper) => {
-            if (!mongoose.Types.ObjectId.isValid(value)) {
-                return helper.message(invalidIdError(lng, "item"));
-            }
+            if (!mongoose.Types.ObjectId.isValid(value)) return helper.message(invalidIdError(lng, "item"));
             return true;
+        }).messages({
+            "any.required": anyRequiredError(lng, "item")
         }),
-        amount: Joi.number().required().positive().min(0).messages({
+        amount: Joi.number().integer().required().positive().min(0).messages({
             "number.min": numberMinError(lng, "amount", 0),
+            "number.integer": numberIntegerError(lng, "year"),
+            "number.positive": numberPositiveError(lng, "year"),
             "any.required": anyRequiredError(lng, "amount"),
         }),
         dt: Joi.date().required().messages({
-            "any.required": anyRequiredError(lng, "date")
+            "any.required": anyRequiredError(lng, "foodDt")
         }),
         meal: Joi.string().valid(...Object.values(CALORIES_COUNTER_MEALS)).required().messages({
             "string.base": stringBaseError(lng, "meal", 1),
             "string.empty": stringEmptyError(lng, "meal"),
+            "any.only": anyOnlyError(lng, "meal"),
             "any.required": anyRequiredError(lng, "meal")
         })
     })
@@ -159,12 +185,16 @@ const dailyItemPostValidation = (data, lng) => {
 const dailyItemUpdateValidation = (data, lng) => {
     if (!lng) lng = "en";
     const schema = Joi.object({
-        amount: Joi.number().optional().positive().min(0).messages({
+        amount: Joi.number().integer().optional().positive().min(0).messages({
+            "number.integer": numberIntegerError(lng, "year"),
+            "number.positive": numberPositiveError(lng, "year"),
             "number.min": numberMinError(lng, "amount", 0)
         }),
         meal: Joi.string().valid(...Object.values(CALORIES_COUNTER_MEALS)).optional().messages({
             "string.base": stringBaseError(lng, "meal", 1),
-            "string.empty": stringEmptyError(lng, "meal")
+            "string.empty": stringEmptyError(lng, "meal"),
+            "any.only": anyOnlyError(lng, "meal"),
+            "any.required": anyRequiredError(lng, "meal")
         })
     })
     return schema.validate(data);
@@ -173,45 +203,19 @@ const dailyItemUpdateValidation = (data, lng) => {
 const dailyWeightPostValidation = (data, lng) => {
     if (!lng) lng = "en";
     const schema = Joi.object({
-        weight: Joi.number().required().positive().min(2.1).max(635).messages({
+        weight: Joi.number().precision(2).required().positive().min(2.1).max(10000).messages({
+            "number.precision": numberPrecisionError(lng, "weight", 2),
+            "number.positive": numberPositiveError(lng, "weight"),
             "number.min": numberMinError(lng, "weight", 2.1),
-            "number.max": numberMaxError(lng, "weight", 635),
+            "number.max": numberMaxError(lng, "weight", 10000),
             "any.required": anyRequiredError(lng, "weight"),
         }),
         unit: Joi.string().valid(...Object.values(WEIGHT_UNITS)).required().messages({
             "string.base": stringBaseError(lng, "weightUnit", 1),
             "string.empty": stringEmptyError(lng, "weightUnit"),
+            "any.only": anyOnlyError(lng, "weightUnit"),
             "any.required": anyRequiredError(lng, "weightUnit")
         }),
-    })
-    return schema.validate(data);
-}
-
-const supplementsReminderValidation = (data, lng) => {
-    if (!lng) lng = "en";
-    const schema = Joi.object({
-        dt: Joi.date().required().messages({
-            "any.required": anyRequiredError(lng, "date")
-        }),
-        supplements: Joi.array().items(Joi.object({
-            name: Joi.string().min(1).max(200).required().messages({
-                "string.base": stringBaseError(lng, "supplement", 1),
-                "string.min": numberMinError(lng, "name", 1),
-                "string.max": numberMaxError(lng, "name", 200),
-                "any.required": anyRequiredError(lng, "name")
-            }),
-            intake: Joi.array().items(Joi.object({
-                hours: Joi.number().required().messages({
-                    "any.required": anyRequiredError(lng, "hours")
-                }),
-                minutes: Joi.number().required().messages({
-                    "any.required": anyRequiredError(lng, "minutes")
-                })
-            })),
-            until: Joi.date.required().messages({
-                "any.required": anyRequiredError(lng, "date")
-            })
-        })).required(),
     })
     return schema.validate(data);
 }
@@ -245,16 +249,18 @@ const exercisePostValidation = (data, lng) => {
             "any.required": anyRequiredError(lng, "description")
         }),
         targetMuscles: Joi.array().items(Joi.string().required().custom((value, helper) => {
-            if (!mongoose.Types.ObjectId.isValid(value)) {
-                return helper.message(invalidIdError(lng, "muscle"));
-            }
+            if (!mongoose.Types.ObjectId.isValid(value)) return helper.message(invalidIdError(lng, "muscle"));
             return true;
-        })).optional(),
+        })).optional().messages({
+            "array.includes": arrayIncludesError(lng, "muscles"),
+        }),
         keywords: Joi.array().items(Joi.string().required().messages({
             "string.base": stringBaseError(lng, "keyword", 1),
             "string.empty": stringEmptyError(lng, "keyword"),
             "any.required": anyRequiredError(lng, "keyword")
-        })).optional(),
+        })).optional().messages({
+            "array.includes": arrayIncludesError(lng, "keywords"),
+        }),
     });
     return schema.validate(data);
 }
@@ -269,9 +275,7 @@ const workoutPostValidation = (data, lng) => {
             "any.required": anyRequiredError(lng, "name")
         }),
         exercises: Joi.array().items(Joi.string().required().custom((value, helper) => {
-            if (!mongoose.Types.ObjectId.isValid(value)) {
-                return helper.message(invalidIdError(lng, "exercise"));
-            }
+            if (!mongoose.Types.ObjectId.isValid(value)) return helper.message(invalidIdError(lng, "exercise"));
             return true;
         })).required()
     })
@@ -283,40 +287,51 @@ const workoutSessionValidation = (data, lng) => {
     const schema = Joi.object({
         exercises: Joi.array().items(Joi.object({
             _id: Joi.string().optional(),
-            exerciseId: Joi.string().required().custom((value, helper) => {
-                if (!mongoose.Types.ObjectId.isValid(value)) {
-                    return helper.message(invalidIdError(lng, "exercise"));
-                }
+            exerciseId: Joi.string().custom((value, helper) => {
+                if (!mongoose.Types.ObjectId.isValid(value)) return helper.message(invalidIdError(lng, "exercise"));
                 return true;
-            }).required(),
+            }).required().messages({
+                "string.base": stringBaseError(lng, "exercise", 1),
+                "string.empty": stringEmptyError(lng, "exercise"),
+                "any.required": anyRequiredError(lng, "exercise")
+            }),
             sets: Joi.array().items(Joi.object({
                 reps: Joi.alternatives().try(Joi.string().custom((value, helper) => {
-                    if (value != "AMRAP") {
-                        return helper.message("Invalid reps value");
-                    }
+                    if (value != "AMRAP") return helper.message(translations[lng].errors.invalidRepsValue);
                     return true;
                 }).required(), Joi.number().positive().required().min(1).messages({
+                    "number.positive": numberPositiveError(lng, "reps"),
                     "number.min": numberMinError(lng, "reps", 1),
                     "any.required": anyRequiredError(lng, "reps")
                 })).optional(),
-                duration: Joi.number().optional().positive().max(10000).messages({
+                duration: Joi.number().integer().optional().positive().max(10000).messages({
+                    "number.positive": numberPositiveError(lng, "duration"),
+                    "number.integer": numberIntegerError(lng, "year"),
                     "number.max": numberMaxError(lng, "duration", 10000),
                 }),
                 weight: Joi.object({
-                    amount: Joi.number().required().positive().max(3000).messages({
+                    amount: Joi.number().precision(2).required().positive().max(3000).messages({
+                        "number.precision": numberPrecisionError(lng, "weight", 2),
                         "number.max": numberMaxError(lng, "weight", 3000),
                         "any.required": anyRequiredError(lng, "weight")
                     }),
                     unit: Joi.string().valid(...Object.values(WEIGHT_UNITS)).required().messages({
                         "string.base": stringBaseError(lng, "weightUnit", 1),
                         "string.empty": stringEmptyError(lng, "weightUnit"),
+                        "any.only": anyOnlyError(lng, "weightUnit"),
                         "any.required": anyRequiredError(lng, "weightUnit")
                     })
                 }).optional(),
                 _id: Joi.string().optional(),
-            }).required()),
+            }).required()).messages({
+                "array.includes": arrayIncludesError(lng, "sets"),
+                "any.required": anyRequiredError(lng, "sets")
+            }),
             note: Joi.string().optional().allow(null).allow("")
-        }).required()).required(),
+        }).required()).messages({
+            "array.includes": arrayIncludesError(lng, "exercises"),
+            "any.required": anyRequiredError(lng, "exercises")
+        }),
     })
     return schema.validate(data);
 }
@@ -326,12 +341,13 @@ const workoutTemplateCheckValidation = (data, lng) => {
     const schema = Joi.object({
         exercises: Joi.array().items(Joi.object({
             exerciseId: Joi.string().required().custom((value, helper) => {
-                if (!mongoose.Types.ObjectId.isValid(value)) {
-                    return helper.message(invalidIdError(lng, "exercise"));
-                }
+                if (!mongoose.Types.ObjectId.isValid(value)) return helper.message(invalidIdError(lng, "exercise"));
                 return true;
             })
-        }))
+        })).required().messages({
+            "array.includes": arrayIncludesError(lng, "exercises"),
+            "any.required": anyRequiredError(lng, "exercises")
+        }),
     });
     return schema.validate(data);
 }
@@ -340,11 +356,13 @@ const relationValidation = (data, lng) => {
     if (!lng) lng = "en";
     const schema = Joi.object({
         coachId: Joi.string().custom((value, helper) => {
-            if (!mongoose.Types.ObjectId.isValid(value)) {
-                return helper.message(invalidIdError(lng, "receiver"));
-            }
+            if (!mongoose.Types.ObjectId.isValid(value)) return helper.message(invalidIdError(lng, "receiver"));
             return true;
-        }).required(),
+        }).required().messages({
+            "string.base": stringBaseError(lng, "receiver", 1),
+            "string.empty": stringEmptyError(lng, "receiver"),
+            "any.required": anyRequiredError(lng, "receiver")
+        }),
     });
     return schema.validate(data);
 }
@@ -355,6 +373,7 @@ const relationStatusUpdateValidation = (data, lng) => {
         status: Joi.string().valid(...Object.values(RELATION_STATUSES)).required().messages({
             "string.base": stringBaseError(lng, "status", 1),
             "string.empty": stringEmptyError(lng, "status"),
+            "any.only": anyOnlyError(lng, "status"),
             "any.required": anyRequiredError(lng, "status")
         }),
     });
@@ -406,7 +425,9 @@ const coachApplicationPostValidation = (data, lng) => {
                 "any.required": anyRequiredError(lng, "lng")
             })
         }),
-        prefersOfflineCoaching: Joi.boolean().required()
+        prefersOfflineCoaching: Joi.boolean().required().messages({
+            "boolean.base": booleanBaseError(lng, "prefersOfflineCoaching"),
+        })
     });
     return schema.validate(data);
 }
@@ -415,17 +436,17 @@ const chatValidation = (data, lng) => {
     if (!lng) lng = "en";
     const schema = Joi.object({
         personalTrainerId: Joi.string().custom((value, helper) => {
-            if (!mongoose.Types.ObjectId.isValid(value)) {
-                return helper.message(invalidIdError(lng, "trainer"));
-            }
+            if (!mongoose.Types.ObjectId.isValid(value)) return helper.message(invalidIdError(lng, "trainer"));
             return true;
-        }).required(),
+        }).required().messages({
+            "any.required": anyRequiredError(lng, "trainer")
+        }),
         clientId: Joi.string().custom((value, helper) => {
-            if (!mongoose.Types.ObjectId.isValid(value)) {
-                return helper.message(invalidIdError(lng, "client"));
-            }
+            if (!mongoose.Types.ObjectId.isValid(value)) return helper.message(invalidIdError(lng, "client"));
             return true;
-        }).required()
+        }).required().messages({
+            "any.required": anyRequiredError(lng, "client")
+        })
     });
     return schema.validate(data);
 }
@@ -594,7 +615,6 @@ module.exports = {
     exercisePostValidation,
     workoutPostValidation,
     workoutSessionValidation,
-    supplementsReminderValidation,
     workoutTemplateCheckValidation,
     relationValidation,
     relationStatusUpdateValidation,

@@ -39,6 +39,15 @@ const HapiErrors = {
     },
     stringAlphabeticalRegexError: (lng, field) => {
         return `${translations[lng].fields[field]} ${translations[lng].errors.stringAlphabeticalRegexError[0]}`;
+    },
+    anyOnlyError: (lng, field) => {
+        return `${translations[lng].fields[field]} ${translations[lng].errors.anyOnlyError[0]}`;
+    },
+    numberPrecisionError: (lng, field, precision) => {
+        return `${translations[lng].fields[field]} ${translations[lng].errors.numberPrecisionError[0]} ${precision} ${translations[lng].errors.numberPrecisionError[0]}`;
+    },
+    booleanBaseError: (lng, field) => {
+        return `${translations[lng].fields[field]} ${translations[lng].errors.booleanBaseError[0]}`;
     }
 }
 
