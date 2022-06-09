@@ -1,6 +1,6 @@
 const AUTHENTICATION_TOKEN_KEY = "x-auth-token";
 
-const ROOT_URL_API = "http://192.168.43.124:4057";
+const ROOT_URL_API = "http://192.168.0.184:4057";
 
 const HTTP_STATUS_CODES = {
     OK: 200,
@@ -166,6 +166,7 @@ const AUDIO_PLAY_MIME_TYPES = [
     "audio/3gpp",
     "audio/3gpp2"
 ]
+
 
 module.exports = {
     AUTHENTICATION_TOKEN_KEY,

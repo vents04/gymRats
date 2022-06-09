@@ -14,7 +14,7 @@ const { HTTP_STATUS_CODES, DEFAULT_ERROR_MESSAGE, COLLECTIONS } = require('../gl
 const Device = require('../db/models/analytics/device.model');
 
 router.post("/navigation", async (req, res, next) => {
-    const { error } = navigationAnalyticsValidation(req.body);
+    const { error } = navigationAnalyticsValidation(req.body, req.headers.lng);
     if (error) return next(new ResponseError(error.details[0].message, HTTP_STATUS_CODES.BAD_REQUEST));
 
     try {
@@ -29,7 +29,7 @@ router.post("/navigation", async (req, res, next) => {
 });
 
 router.post("/device", authenticate, async (req, res, next) => {
-    const { error } = devicePostValidation(req.body);
+    const { error } = devicePostValidation(req.body, req.headers.lng);
     if (error) return next(new ResponseError(error.details[0].message, HTTP_STATUS_CODES.BAD_REQUEST));
 
     try {

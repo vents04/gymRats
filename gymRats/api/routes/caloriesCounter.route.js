@@ -50,7 +50,7 @@ router.get("/recent", authenticate, async (req, res, next) => {
 });
 
 router.post('/unknown-source-calories', authenticate, async (req, res, next) => {
-    const { error } = unknownSourceCaloriesPostValidation(req.body);
+    const { error } = unknownSourceCaloriesPostValidation(req.body, req.headers.lng);
     if (error) return next(new ResponseError(error.details[0].message, HTTP_STATUS_CODES.BAD_REQUEST));
 
     try {
@@ -86,7 +86,7 @@ router.delete("/unknown-source-calories/:id", authenticate, async (req, res, nex
 });
 
 router.post('/item', authenticate, async (req, res, next) => {
-    const { error } = itemPostValidation(req.body);
+    const { error } = itemPostValidation(req.body, req.headers.lng);
     if (error) return next(new ResponseError(error.details[0].message, HTTP_STATUS_CODES.BAD_REQUEST));
 
     try {
@@ -143,7 +143,7 @@ router.get("/item/:id", authenticate, async (req, res, next) => {
 });
 
 router.post("/daily-item", authenticate, async (req, res, next) => {
-    const { error } = dailyItemPostValidation(req.body);
+    const { error } = dailyItemPostValidation(req.body, req.headers.lng);
     if (error) return next(new ResponseError(error.details[0].message, HTTP_STATUS_CODES.BAD_REQUEST));
 
     try {
@@ -229,7 +229,7 @@ router.put("/:dayId/:itemId", authenticate, async (req, res, next) => {
     if (!mongoose.Types.ObjectId.isValid(req.params.dayId) || !mongoose.Types.ObjectId.isValid(req.params.itemId))
         return next(new ResponseError("Invalid day id and/or item id", HTTP_STATUS_CODES.BAD_REQUEST, 5));
 
-    const { error } = dailyItemUpdateValidation(req.body);
+    const { error } = dailyItemUpdateValidation(req.body, req.headers.lng);
     if (error) return next(new ResponseError(error.details[0].message, HTTP_STATUS_CODES.BAD_REQUEST));
 
     try {

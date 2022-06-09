@@ -1,14 +1,16 @@
 const Joi = require('@hapi/joi');
 const mongoose = require('mongoose');
 const { CALORIES_COUNTER_UNITS, WEIGHT_UNITS, CALORIES_COUNTER_MEALS, REQUEST_STATUSES, CHAT_STATUSES, RELATION_STATUSES, CONTENT_VISIBILITY_SCOPES } = require('../global');
+const { stringBaseError, stringEmptyError, anyRequiredError } = require('./errors');
 
-const firstNameValidation = () => {
+const firstNameValidation = (lng) => {
+    if (!lng) lng = "en";
     return Joi.string().min(1).max(32).required().messages({
-        "string.base": `First name should have at least 1 character`,
-        "string.empty": `First name should not be empty`,
+        "string.base": stringBaseError(lng, "firstName", 1),
+        "string.empty": stringEmptyError(lng, "firstName"),
         "string.min": `First name should have at least 1 character`,
         "string.max": `First name should have at most 32 characters`,
-        "any.required": `First name is a required field`
+        "any.required": anyRequiredError(lng, "firstName")
     }).regex(/^[A-Za-z]+$/)
 }
 
@@ -43,12 +45,13 @@ const passwordValidation = () => {
     })
 }
 
-const signupValidation = (data) => {
+const signupValidation = (data, lng) => {
+    if (!lng) lng = "en";
     const schema = Joi.object({
-        firstName: firstNameValidation(),
-        lastName: lastNameValidation(),
-        email: emailValidation(),
-        password: passwordValidation(),
+        firstName: firstNameValidation(lng),
+        lastName: lastNameValidation(lng),
+        email: emailValidation(lng),
+        password: passwordValidation(lng),
     })
     return schema.validate(data);
 }

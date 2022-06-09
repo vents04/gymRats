@@ -20,7 +20,7 @@ router.post("/daily-weight", authenticate, async (req, res, next) => {
         return next(new ResponseError("Invalid date parameters", HTTP_STATUS_CODES.BAD_REQUEST, 4));
     }
 
-    const { error } = dailyWeightPostValidation(req.body);
+    const { error } = dailyWeightPostValidation(req.body, req.headers.lng);
     if (error) return next(new ResponseError(error.details[0].message, HTTP_STATUS_CODES.BAD_REQUEST));
 
     try {

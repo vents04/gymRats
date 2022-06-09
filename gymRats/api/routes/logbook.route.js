@@ -17,7 +17,7 @@ const { workoutPostValidation, workoutSessionValidation, workoutTemplateCheckVal
 const { quicksort } = require('../helperFunctions/quickSortForExercises');
 
 router.post("/workout", authenticate, async (req, res, next) => {
-    const { error } = workoutPostValidation(req.body);
+    const { error } = workoutPostValidation(req.body, req.headers.lng);
     if (error) return next(new ResponseError(error.details[0].message, HTTP_STATUS_CODES.BAD_REQUEST));
 
     try {
@@ -106,7 +106,7 @@ router.delete("/workout/:id", authenticate, async (req, res, next) => {
 router.put("/workout/:id", authenticate, async (req, res, next) => {
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) return next(new ResponseError("Invalid workout id", HTTP_STATUS_CODES.BAD_REQUEST, 41))
 
-    const { error } = workoutUpdateValidation(req.body);
+    const { error } = workoutUpdateValidation(req.body, req.headers.lng);
     if (error) return next(new ResponseError(error.details[0].message, HTTP_STATUS_CODES.BAD_REQUEST));
 
     try {
@@ -174,7 +174,7 @@ router.post("/workout-session", authenticate, async (req, res, next) => {
         return next(new ResponseError("Invalid date parameters", HTTP_STATUS_CODES.BAD_REQUEST, 4));
     }
 
-    const { error } = workoutSessionValidation(req.body);
+    const { error } = workoutSessionValidation(req.body, req.headers.lng);
     if (error) return next(new ResponseError(error.details[0].message, HTTP_STATUS_CODES.BAD_REQUEST));
 
     try {
@@ -274,7 +274,7 @@ router.delete("/workout-session", authenticate, async (req, res, next) => {
 });
 
 router.post('/check-template', authenticate, async (req, res, next) => {
-    const { error } = workoutTemplateCheckValidation(req.body);
+    const { error } = workoutTemplateCheckValidation(req.body, req.headers.lng);
     if (error) return next(new ResponseError(error.details[0].message, HTTP_STATUS_CODES.BAD_REQUEST));
 
     try {

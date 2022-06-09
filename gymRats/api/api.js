@@ -10,7 +10,7 @@ const path = require('path');
 const fs = require('fs');
 const readline = require('readline');
 
-const { PORT, HTTP_STATUS_CODES, COLLECTIONS, FOOD_TYPES, PROGRESS_NOTATION, LOGBOOK_PROGRESS_NOTATIONS, CHAT_STATUSES } = require('./global');
+const { PORT, HTTP_STATUS_CODES, COLLECTIONS, FOOD_TYPES, PROGRESS_NOTATION, LOGBOOK_PROGRESS_NOTATIONS, CHAT_STATUSES, SUPPORTED_LANGUAGES } = require('./global');
 const MessagingService = require('./services/messaging.service');
 const ResponseError = require('./errors/responseError');
 const DbService = require('./services/db.service');
@@ -26,6 +26,10 @@ app
     .use(express.json({
         limit: '100mb'
     }))
+    .use((req, res, next) => {
+        if (!Object.values(SUPPORTED_LANGUAGES).includes(req.header("lng"))) req.headers.lng = SUPPORTED_LANGUAGES.ENGLISH;
+        next();
+    })
     .use(express.urlencoded({ extended: true, limit: '50mb' }))
     .use("/", indexRoute)
     .use(errorHandler)

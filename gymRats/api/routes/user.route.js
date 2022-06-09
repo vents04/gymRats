@@ -22,7 +22,7 @@ const EmailVerificationCode = require('../db/models/generic/emailVerificationCod
 const UserService = require('../services/user.service');
 
 router.post("/signup", async (req, res, next) => {
-    const { error } = signupValidation(req.body);
+    const { error } = signupValidation(req.body, req.headers.lng);
     if (error) return next(new ResponseError(error.details[0].message, HTTP_STATUS_CODES.BAD_REQUEST));
 
     try {
@@ -43,7 +43,7 @@ router.post("/signup", async (req, res, next) => {
 });
 
 router.post("/login", async (req, res, next) => {
-    const { error } = loginValidation(req.body);
+    const { error } = loginValidation(req.body, req.headers.lng);
     if (error) return next(new ResponseError("Invalid credentials for login", HTTP_STATUS_CODES.BAD_REQUEST, 58));
 
     try {
@@ -66,7 +66,7 @@ router.post("/login", async (req, res, next) => {
 });
 
 router.put("/", authenticate, async (req, res, next) => {
-    const { error } = userUpdateValidation(req.body);
+    const { error } = userUpdateValidation(req.body, req.headers.lng);
     if (error) return next(new ResponseError(error.details[0].message, HTTP_STATUS_CODES.BAD_REQUEST));
 
     try {
@@ -110,7 +110,7 @@ router.post("/validate-token", async (req, res, next) => {
 });
 
 router.post("/suggestion", authenticate, async (req, res, next) => {
-    const { error } = suggestionPostValidation(req.body);
+    const { error } = suggestionPostValidation(req.body, req.headers.lng);
     if (error) return next(new ResponseError(error.details[0].message, HTTP_STATUS_CODES.BAD_REQUEST));
 
     try {
@@ -134,7 +134,7 @@ router.get("/", authenticate, async (req, res, next) => {
 });
 
 router.post("/suggestion", authenticate, async (req, res, next) => {
-    const { error } = suggestionPostValidation(req.body);
+    const { error } = suggestionPostValidation(req.body, req.headers.lng);
     if (error) return next(new ResponseError(error.details[0].message, HTTP_STATUS_CODES.BAD_REQUEST));
 
     try {
@@ -162,7 +162,7 @@ router.get("/suggestion", authenticate, async (req, res, next) => {
 
 router.post("/password-recovery-code", async (req, res, next) => {
     console.log("here");
-    const { error } = forgottenPasswordPostValidation(req.body);
+    const { error } = forgottenPasswordPostValidation(req.body, req.headers.lng);
     if (error) return next(new ResponseError(error.details[0].message, HTTP_STATUS_CODES.BAD_REQUEST));
 
     try {
@@ -207,7 +207,7 @@ router.get("/check-password-recovery-code", async (req, res, next) => {
 })
 
 router.put("/password", async (req, res, next) => {
-    const { error } = passwordPutValidation(req.body);
+    const { error } = passwordPutValidation(req.body, req.headers.lng);
     if (error) return next(new ResponseError(error.details[0].message, HTTP_STATUS_CODES.BAD_REQUEST));
 
     try {
@@ -232,7 +232,7 @@ router.put("/password", async (req, res, next) => {
 });
 
 router.post("/email-verification-code", async (req, res, next) => {
-    const { error } = emailVerificationPostValidation(req.body);
+    const { error } = emailVerificationPostValidation(req.body, req.headers.lng);
     if (error) return next(new ResponseError(error.details[0].message, HTTP_STATUS_CODES.BAD_REQUEST));
 
     try {

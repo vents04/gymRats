@@ -122,7 +122,7 @@ router.get('/me-as-coach', authenticate, async (req, res, next) => {
 });
 
 router.post('/application', authenticate, async (req, res, next) => {
-    const { error } = coachApplicationPostValidation(req.body);
+    const { error } = coachApplicationPostValidation(req.body, req.headers.lng);
     if (error) return next(new ResponseError(error.details[0].message, HTTP_STATUS_CODES.BAD_REQUEST));
 
     try {
@@ -144,7 +144,7 @@ router.post('/application', authenticate, async (req, res, next) => {
 });
 
 router.post('/relation', authenticate, async (req, res, next) => {
-    const { error } = relationValidation(req.body);
+    const { error } = relationValidation(req.body, req.headers.lng);
     if (error) return next(new ResponseError(error.details[0].message, HTTP_STATUS_CODES.BAD_REQUEST));
 
     try {
@@ -197,7 +197,7 @@ router.delete("/relation/:id", authenticate, async (req, res, next) => {
 router.put('/relation/:id/status', authenticate, async (req, res, next) => {
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) return next(new ResponseError("Invalid relation id", HTTP_STATUS_CODES.BAD_REQUEST, 5))
 
-    const { error } = relationStatusUpdateValidation(req.body);
+    const { error } = relationStatusUpdateValidation(req.body, req.headers.lng);
     if (error) return next(new ResponseError(error.details[0].message, HTTP_STATUS_CODES.BAD_REQUEST));
 
     try {
@@ -267,7 +267,7 @@ router.get('/requests', authenticate, async (req, res, next) => {
 router.post('/relation/:id/review', authenticate, async (req, res, next) => {
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) return next(new ResponseError("Invalid relation id", HTTP_STATUS_CODES.BAD_REQUEST, 30))
 
-    const { error } = coachingReviewPostValidation(req.body);
+    const { error } = coachingReviewPostValidation(req.body, req.headers.lng);
     if (error) return next(new ResponseError(error.details[0].message, HTTP_STATUS_CODES.BAD_REQUEST));
 
     try {
