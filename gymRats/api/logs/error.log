@@ -90,3 +90,4 @@
 {"level":"error","message":"Bad Request"}
 {"level":"error","message":"Bad Request"}
 {"level":"error","message":"Bad Request"}
+{"level":"error","message":"Името трябва да съдържа само букви"}
