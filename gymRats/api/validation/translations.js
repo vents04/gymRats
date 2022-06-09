@@ -37,7 +37,16 @@ module.exports = {
             message: "Message object",
             messageText: "Message text",
             senderId: "The id of the sender",
-            chatId: "The id of the chat"
+            chatId: "The id of the chat",
+            receiver: "Reciever",
+            status: "Status",
+            rating: "Rating",
+            review: "Review",
+            address: "Address",
+            lat: "Latitude",
+            lng: "Longitude",
+            trainer: "Trainer",
+            client: "Client"
         },
         errors: {
             stringBaseError: ["must be a string with at least", "characters"],
@@ -92,7 +101,16 @@ module.exports = {
             message: "Обектът на съобщението",
             messageText: "Текстът на съобщението",
             senderId: "Идентификаторът на изпращащия",
-            chatId: "Идентификаторът на чата"
+            chatId: "Идентификаторът на чата",
+            receiver: "Получател",
+            status: "Статусa",
+            rating: "Рейтингът",
+            review: "Отзивът",
+            address: "Адресът",
+            lat: "Географската ширина",
+            lng: "Географската дължина",
+            trainer: "Треньор",
+            client: "Клиент"
         },
         errors: {
             stringBaseError: ["трябва да бъде текст с поне", "символа"],

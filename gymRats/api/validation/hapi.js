@@ -325,7 +325,7 @@ const workoutTemplateCheckValidation = (data, lng) => {
         exercises: Joi.array().items(Joi.object({
             exerciseId: Joi.string().required().custom((value, helper) => {
                 if (!mongoose.Types.ObjectId.isValid(value)) {
-                    return helper.message("Invalid exercise id");
+                    return helper.message(invalidIdError(lng, "exercise"));
                 }
                 return true;
             })
@@ -339,7 +339,7 @@ const relationValidation = (data, lng) => {
     const schema = Joi.object({
         coachId: Joi.string().custom((value, helper) => {
             if (!mongoose.Types.ObjectId.isValid(value)) {
-                return helper.message("Invalid receiver id");
+                return helper.message(invalidIdError(lng, "receiver"));
             }
             return true;
         }).required(),
@@ -350,7 +350,11 @@ const relationValidation = (data, lng) => {
 const relationStatusUpdateValidation = (data, lng) => {
     if (!lng) lng = "en";
     const schema = Joi.object({
-        status: Joi.string().valid(...Object.values(RELATION_STATUSES)).required()
+        status: Joi.string().valid(...Object.values(RELATION_STATUSES)).required().messages({
+            "string.base": stringBaseError(lng, "status", 1),
+            "string.empty": stringEmptyError(lng, "status"),
+            "any.required": anyRequiredError(lng, "status")
+        }),
     });
     return schema.validate(data);
 }
@@ -358,8 +362,16 @@ const relationStatusUpdateValidation = (data, lng) => {
 const coachingReviewPostValidation = (data, lng) => {
     if (!lng) lng = "en";
     const schema = Joi.object({
-        rating: Joi.number().min(1).max(5).required(),
-        review: Joi.string().min(1).max(1000).optional()
+        rating: Joi.number().min(1).max(5).required().messages({
+            "number.min": numberMinError(lng, "rating", 1),
+            "number.max": numberMaxError(lng, "rating", 5),
+            "any.required": anyRequiredError(lng, "rating")
+        }),
+        review: Joi.string().min(1).max(1000).optional().messages({
+            "string.min": stringMinError(lng, "review", 1),
+            "string.max": stringMaxError(lng, "review", 1000),
+        }),
+
     });
     return schema.validate(data);
 }
@@ -376,9 +388,21 @@ const coachApplicationPostValidation = (data, lng) => {
     if (!lng) lng = "en";
     const schema = Joi.object({
         location: Joi.object({
-            address: Joi.string().required(),
-            lat: Joi.number().required(),
-            lng: Joi.number().required(),
+            address: Joi.string().required().messages({
+                "string.base": stringBaseError(lng, "address", 1),
+                "string.empty": stringEmptyError(lng, "address"),
+                "any.required": anyRequiredError(lng, "address")
+            }),
+            lat: Joi.number().required().min(-90).max(90).messages({
+                "number.min": numberMinError(lng, "lat", -90),
+                "number.max": numberMaxError(lng, "lat", 90),
+                "any.required": anyRequiredError(lng, "lat")
+            }),
+            lng: Joi.number().min(-180).max(180).required().messages({
+                "number.min": numberMinError(lng, "lng", -180),
+                "number.max": numberMaxError(lng, "lng", 180),
+                "any.required": anyRequiredError(lng, "lng")
+            })
         }),
         prefersOfflineCoaching: Joi.boolean().required()
     });
@@ -390,13 +414,13 @@ const chatValidation = (data, lng) => {
     const schema = Joi.object({
         personalTrainerId: Joi.string().custom((value, helper) => {
             if (!mongoose.Types.ObjectId.isValid(value)) {
-                return helper.message("Invalid triner id");
+                return helper.message(invalidIdError(lng, "trainer"));
             }
             return true;
         }).required(),
         clientId: Joi.string().custom((value, helper) => {
             if (!mongoose.Types.ObjectId.isValid(value)) {
-                return helper.message("Invalid client id");
+                return helper.message(invalidIdError(lng, "client"));
             }
             return true;
         }).required()
