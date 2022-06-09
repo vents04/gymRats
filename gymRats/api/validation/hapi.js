@@ -74,9 +74,8 @@ const userUpdateValidation = (data, lng) => {
         lastName: lastNameValidation(lng),
         weightUnit: Joi.string().valid(...Object.values(WEIGHT_UNITS)).messages({
             "string.base": stringBaseError(lng, "weightUnit", 1),
-            "string.empty": stringEmptyError(lng, "weightUnit"),
-            "any.required": anyRequiredError(lng, "weightUnit")
-        }),
+            "string.empty": stringEmptyError(lng, "weightUnit")
+        }).optional(),
         profilePicture: Joi.string().optional().allow(null).allow("")
     });
     return schema.validate(data);
@@ -101,7 +100,7 @@ const itemPostValidation = (data, lng) => {
         }),
         barcode: Joi.string().optional(),
         unit: Joi.string().valid(...Object.values(CALORIES_COUNTER_UNITS)).required(),
-        calories: Joi.number().required().positive().allow(0).messages({
+        calories: Joi.number().required().positive().allow(0).min(0).messages({
             "number.min": numberMinError(lng, "calories", 0),
             "any.required": anyRequiredError(lng, "calories"),
         }),
@@ -159,13 +158,11 @@ const dailyItemUpdateValidation = (data, lng) => {
     if (!lng) lng = "en";
     const schema = Joi.object({
         amount: Joi.number().optional().positive().min(0).messages({
-            "number.min": numberMinError(lng, "amount", 0),
-            "any.required": anyRequiredError(lng, "amount"),
+            "number.min": numberMinError(lng, "amount", 0)
         }),
         meal: Joi.string().valid(...Object.values(CALORIES_COUNTER_MEALS)).optional().messages({
             "string.base": stringBaseError(lng, "meal", 1),
-            "string.empty": stringEmptyError(lng, "meal"),
-            "any.required": anyRequiredError(lng, "meal")
+            "string.empty": stringEmptyError(lng, "meal")
         })
     })
     return schema.validate(data);
@@ -196,6 +193,7 @@ const supplementsReminderValidation = (data, lng) => {
         }),
         supplements: Joi.array().items(Joi.object({
             name: Joi.string().min(1).max(200).required().messages({
+                "string.base": stringBaseError(lng, "supplement", 1),
                 "string.min": numberMinError(lng, "name", 1),
                 "string.max": numberMaxError(lng, "name", 200),
                 "any.required": anyRequiredError(lng, "name")
@@ -208,7 +206,9 @@ const supplementsReminderValidation = (data, lng) => {
                     "any.required": anyRequiredError(lng, "minutes")
                 })
             })),
-            until: Joi.date.required()
+            until: Joi.date.required().messages({
+                "any.required": anyRequiredError(lng, "date")
+            })
         })).required(),
     })
     return schema.validate(data);
@@ -217,7 +217,12 @@ const supplementsReminderValidation = (data, lng) => {
 const suggestionPostValidation = (data, lng) => {
     if (!lng) lng = "en";
     const schema = Joi.object({
-        suggestion: Joi.string().required()
+        suggestion: Joi.string().min(1).max(1000).required().messages({
+            "string.base": stringBaseError(lng, "suggestion", 1),
+            "string.min": stringMinError(lng, "suggestion", 1),
+            "string.max": stringMaxError(lng, "suggestion", 1000),
+            "any.required": anyRequiredError(lng, "suggestion")
+        }),
     })
     return schema.validate(data);
 }
@@ -225,15 +230,29 @@ const suggestionPostValidation = (data, lng) => {
 const exercisePostValidation = (data, lng) => {
     if (!lng) lng = "en";
     const schema = Joi.object({
-        title: Joi.string().min(1).max(150).required(),
-        description: Joi.string().min(1).max(300).optional(),
+        title: Joi.string().min(1).max(150).required().messages({
+            "string.base": stringBaseError(lng, "title", 1),
+            "string.min": stringMinError(lng, "title", 1),
+            "string.max": stringMaxError(lng, "title", 150),
+            "any.required": anyRequiredError(lng, "title")
+        }),
+        description: Joi.string().min(1).max(300).optional().messages({
+            "string.base": stringBaseError(lng, "description", 1),
+            "string.min": stringMinError(lng, "description", 1),
+            "string.max": stringMaxError(lng, "description", 300),
+            "any.required": anyRequiredError(lng, "description")
+        }),
         targetMuscles: Joi.array().items(Joi.string().required().custom((value, helper) => {
             if (!mongoose.Types.ObjectId.isValid(value)) {
-                return helper.message("Invalid muscle id");
+                return helper.message(invalidIdError(lng, "muscle"));
             }
             return true;
         })).optional(),
-        keywords: Joi.array().items(Joi.string().required()).optional(),
+        keywords: Joi.array().items(Joi.string().required().messages({
+            "string.base": stringBaseError(lng, "keyword", 1),
+            "string.empty": stringEmptyError(lng, "keyword"),
+            "any.required": anyRequiredError(lng, "keyword")
+        })).optional(),
     });
     return schema.validate(data);
 }
@@ -241,10 +260,15 @@ const exercisePostValidation = (data, lng) => {
 const workoutPostValidation = (data, lng) => {
     if (!lng) lng = "en";
     const schema = Joi.object({
-        name: Joi.string().min(1).max(150).required(),
+        name: Joi.string().min(1).max(150).required().messages({
+            "string.base": stringBaseError(lng, "name", 1),
+            "string.min": stringMinError(lng, "name", 1),
+            "string.max": stringMaxError(lng, "name", 150),
+            "any.required": anyRequiredError(lng, "name")
+        }),
         exercises: Joi.array().items(Joi.string().required().custom((value, helper) => {
             if (!mongoose.Types.ObjectId.isValid(value)) {
-                return helper.message("Invalid exercise id");
+                return helper.message(invalidIdError(lng, "exercise"));
             }
             return true;
         })).required()
@@ -259,7 +283,7 @@ const workoutSessionValidation = (data, lng) => {
             _id: Joi.string().optional(),
             exerciseId: Joi.string().required().custom((value, helper) => {
                 if (!mongoose.Types.ObjectId.isValid(value)) {
-                    return helper.message("Invalid exercise id");
+                    return helper.message(invalidIdError(lng, "exercise"));
                 }
                 return true;
             }).required(),
@@ -269,11 +293,23 @@ const workoutSessionValidation = (data, lng) => {
                         return helper.message("Invalid reps value");
                     }
                     return true;
-                }).required(), Joi.number().positive()).optional(),
-                duration: Joi.number().optional().positive().max(10000),
+                }).required(), Joi.number().positive().required().min(1).messages({
+                    "number.min": numberMinError(lng, "reps", 1),
+                    "any.required": anyRequiredError(lng, "reps")
+                })).optional(),
+                duration: Joi.number().optional().positive().max(10000).messages({
+                    "number.max": numberMaxError(lng, "duration", 10000),
+                }),    
                 weight: Joi.object({
-                    amount: Joi.number().required().positive().max(3000),
-                    unit: Joi.string().valid(...Object.values(WEIGHT_UNITS)).required()
+                    amount: Joi.number().required().positive().max(3000).messages({
+                        "number.max": numberMaxError(lng, "weight", 3000),
+                        "any.required": anyRequiredError(lng, "weight")
+                    }),
+                    unit: Joi.string().valid(...Object.values(WEIGHT_UNITS)).required().messages({
+                        "string.base": stringBaseError(lng, "weightUnit", 1),
+                        "string.empty": stringEmptyError(lng, "weightUnit"),
+                        "any.required": anyRequiredError(lng, "weightUnit")
+                    })
                 }).optional(),
                 _id: Joi.string().optional(),
             }).required()),
