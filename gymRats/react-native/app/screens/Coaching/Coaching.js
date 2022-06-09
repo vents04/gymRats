@@ -203,7 +203,9 @@ export default class Coaching extends Component {
                     {
                         this.state.coaching
                             ? this.state.activeTab == "myCoach"
-                                ? <ScrollView style={styles.tabContent}>
+                                ? <ScrollView contentContainerStyle={[globalStyles.fillEmptySpace, {
+                                    paddingVertical: 30
+                                }]}>
                                     {
                                         !this.state.coaching.myCoach.hasCoaches && !this.state.coaching.myCoach.hasRelations
                                             ? <>
@@ -399,7 +401,9 @@ export default class Coaching extends Component {
                                             </>
                                     }
                                 </ScrollView>
-                                : <View style={styles.tabContent}>
+                                : <ScrollView contentContainerStyle={[globalStyles.fillEmptySpace, {
+                                    paddingVertical: 30
+                                }]}>
                                     {
                                         this.state.coaching.myClients.isPersonalTrainer
                                             ? <Pressable style={({ pressed }) => [
@@ -509,7 +513,7 @@ export default class Coaching extends Component {
                                                 }
                                             </>
                                     }
-                                </View>
+                                </ScrollView>
                             : null
                     }
                 </View>

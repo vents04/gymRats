@@ -18,8 +18,7 @@ export default StyleSheet.create({
         paddingVertical: 20,
     },
     tabContent: {
-        marginTop: 30,
-        flex: 1
+        paddingVertical: 30,
     },
     noCoachContainer: {
         padding: 20,
