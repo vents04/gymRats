@@ -34,6 +34,10 @@ module.exports = {
             workoutName: "Workout name",
             exercises: "Exercises",
             exercise: "Exercise",
+            message: "Message object",
+            messageText: "Message text",
+            senderId: "The id of the sender",
+            chatId: "The id of the chat"
         },
         errors: {
             stringBaseError: ["must be a string with at least", "characters"],
@@ -85,6 +89,10 @@ module.exports = {
             workoutName: "Заглавието на тренировката",
             exercises: "Упражненията",
             exercise: "Упражнение",
+            message: "Обектът на съобщението",
+            messageText: "Текстът на съобщението",
+            senderId: "Идентификаторът на изпращащия",
+            chatId: "Идентификаторът на чата"
         },
         errors: {
             stringBaseError: ["трябва да бъде текст с поне", "символа"],

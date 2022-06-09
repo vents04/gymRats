@@ -408,21 +408,26 @@ const messageValidation = (data, lng) => {
     if (!lng) lng = "en";
     const schema = Joi.object({
         senderId: Joi.string().custom((value, helper) => {
-            if (!mongoose.Types.ObjectId.isValid(value)) {
-                return helper.message("Invalid sender id");
-            }
+            if (!mongoose.Types.ObjectId.isValid(value)) return helper.message(invalidIdError(lng, "senderId"));
             return true;
-        }).required(),
+        }).required().messages({
+            "any.required": anyRequiredError(lng, "message")
+        }),
         chatId: Joi.string().custom((value, helper) => {
-            if (!mongoose.Types.ObjectId.isValid(value)) {
-                return helper.message("Invalid chat id");
-            }
+            if (!mongoose.Types.ObjectId.isValid(value)) return helper.message(invalidIdError(lng, "chatId"));
             return true;
-        }).required(),
+        }).required().messages({
+            "any.required": anyRequiredError(lng, "message")
+        }),
         message: Joi.object({
-            text: Joi.string().min(0).max(1000).optional(),
+            text: Joi.string().min(0).max(1000).optional().messages({
+                "string.min": stringMinError(lng, "messageText", 0),
+                "string.max": stringMaxError(lng, "messageText", 1000)
+            }),
             file: Joi.string().optional()
-        }).required()
+        }).required().messages({
+            "any.required": anyRequiredError(lng, "message")
+        })
     });
     return schema.validate(data);
 }
