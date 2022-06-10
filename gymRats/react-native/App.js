@@ -1,5 +1,6 @@
 import 'react-native-gesture-handler';
 import React, { useRef, useState, useEffect } from 'react';
+import { SafeAreaProvider} from 'react-native-safe-area-context';
 import { default as AsyncStorage } from '@react-native-async-storage/async-storage';
 import { AUTHENTICATION_TOKEN_KEY } from './global';
 import { Alert, AppState, Button, Platform, Text } from 'react-native';
@@ -157,6 +158,7 @@ const App = () => {
   }
 
   return (
+    <SafeAreaProvider>
     <NavigationContainer
       linking={linking} fallback={<Text>Loading...</Text>}
       ref={navigationRef}
@@ -213,6 +215,7 @@ const App = () => {
         />
       </Stack.Navigator>
     </NavigationContainer>
+    </SafeAreaProvider>
   );
 };
 

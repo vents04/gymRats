@@ -1,5 +1,6 @@
 import React from 'react';
-import { Dimensions, Text, View } from 'react-native';
+import { Dimensions, Platform, Text, View } from 'react-native';
+import { SafeAreaView} from 'react-native-safe-area-context';
 
 import i18n from 'i18n-js';
 
@@ -325,6 +326,7 @@ const NavigationRoutes = (props) => {
     }, []);
 
     return (
+        <SafeAreaView style={{flexGrow: 1, backgroundColor: "white"}}>
         <Tab.Navigator
             screenOptions={() => ({
                 headerShown: false,
@@ -336,7 +338,7 @@ const NavigationRoutes = (props) => {
                     bottom: 0,
                     elevation: 0,
                     borderColor: "#ddd",
-                    height: 75,
+                    height: 75,     
                     ...styles.shadow
                 },
             })}
@@ -347,6 +349,7 @@ const NavigationRoutes = (props) => {
                     tabBarStyle: {
                         display: getTabBarVisibility(route),
                         height: 75,
+                        paddingTop: 25,
                     },
                     tabBarLabel: 'Calendar',
                     headerShown: false,
@@ -370,6 +373,7 @@ const NavigationRoutes = (props) => {
                     tabBarStyle: {
                         display: getTabBarVisibility(route),
                         height: 75,
+                        paddingTop: 25
                     },
                     tabBarLabel: 'Progress',
                     headerShown: false,
@@ -395,6 +399,7 @@ const NavigationRoutes = (props) => {
                     tabBarStyle: {
                         display: getTabBarVisibility(route),
                         height: 75,
+                        paddingTop: 25
                     },
                     tabBarLabel: 'Coaching',
                     headerShown: false,
@@ -418,6 +423,7 @@ const NavigationRoutes = (props) => {
                     tabBarStyle: {
                         display: getTabBarVisibility(route),
                         height: 75,
+                        paddingTop: 25
                     },
                     tabBarLabel: 'Chats',
                     headerShown: false,
@@ -451,6 +457,7 @@ const NavigationRoutes = (props) => {
                     tabBarStyle: {
                         display: getTabBarVisibility(route),
                         height: 75,
+                        paddingTop: 25
                     },
                     tabBarLabel: 'Profile',
                     headerShown: false,
@@ -468,6 +475,7 @@ const NavigationRoutes = (props) => {
                 component={profileScreenStack}
             />
         </Tab.Navigator>
+        </SafeAreaView>
     );
 };
 
