@@ -21,7 +21,7 @@ export default StyleSheet.create({
     tabBarIconText: {
         fontFamily: "MainRegular",
         fontSize: 10,
-        marginTop: 10,
+        paddingTop: 10,
         width: "100%",
         textAlign: "center",
     }

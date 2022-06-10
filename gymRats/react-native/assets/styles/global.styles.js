@@ -1,8 +1,7 @@
-import { StyleSheet, StatusBar } from 'react-native';
+import { StyleSheet, StatusBar, Platform } from 'react-native';
 
 export default StyleSheet.create({
     safeAreaView: {
-        marginTop: StatusBar.currentHeight,
         backgroundColor: "#fff",
         position: "absolute",
         left: 0,
@@ -15,7 +14,7 @@ export default StyleSheet.create({
     },
     pageContainer: {
         paddingTop: 32,
-        paddingHorizontal: 32,
+        paddingHorizontal: 24,
         flex: 1,
         maxHeight: "100%",
     },
