@@ -101,3 +101,7 @@
 {"level":"error","message":"Името е задължително поле"}
 {"level":"error","message":"Името е задължително поле"}
 {"level":"error","message":"Неверни данни за вход"}
+{"level":"error","message":"Невалиден barcode параметър"}
+{"level":"error","message":"Bad Request"}
+{"level":"error","message":"Bad Request"}
+{"level":"error","message":"Bad Request"}
