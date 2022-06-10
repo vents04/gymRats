@@ -52,6 +52,7 @@ export default class Login extends Component {
                 this.props.navigation.navigate("EmailVerification", { email: this.state.email.trim(), doesNotComeFromSignup: true })
             }
         }).catch((error) => {
+            console.log(error.request)
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
                     this.setState({ showError: true, error: error.response.data });

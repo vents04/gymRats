@@ -1,6 +1,6 @@
 import React from 'react';
 import { Dimensions, Platform, Text, View } from 'react-native';
-import { SafeAreaView} from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import i18n from 'i18n-js';
 
@@ -326,155 +326,155 @@ const NavigationRoutes = (props) => {
     }, []);
 
     return (
-        <SafeAreaView style={{flexGrow: 1, backgroundColor: "white"}}>
-        <Tab.Navigator
-            screenOptions={() => ({
-                headerShown: false,
-                tabBarShowLabel: false,
-                tabBarHideOnKeyboard: true,
-                tabBarStyle: {
-                    display: 'flex',
-                    position: 'absolute',
-                    bottom: 0,
-                    elevation: 0,
-                    borderColor: "#ddd",
-                    height: 75,     
-                    ...styles.shadow
-                },
-            })}
-        >
-            <Tab.Screen
-                name="calendarScreenStack"
-                options={({ route }) => ({
-                    tabBarStyle: {
-                        display: getTabBarVisibility(route),
-                        height: 75,
-                        paddingTop: 25,
-                    },
-                    tabBarLabel: 'Calendar',
+        <SafeAreaView style={{ flexGrow: 1, backgroundColor: "white" }}>
+            <Tab.Navigator
+                screenOptions={() => ({
                     headerShown: false,
-                    tabBarActiveTintColor: "#ccc",
-                    tabBarIcon: (tabInfo) =>
-                    (
-                        <View style={styles.tabBarIconContainer}>
-                            <Ionicons name="md-calendar-sharp" size={24} color={tabInfo.focused ? "#1f6cb0" : "#ccc"} />
-                            <Text style={[styles.tabBarIconText, {
-                                fontFamily: (tabInfo.focused ? "MainBold" : "MainRegular")
-                            }]}>{i18n.t('navigation')['calendar']}</Text>
-                        </View>
-                    )
+                    tabBarShowLabel: false,
+                    tabBarHideOnKeyboard: true,
+                    tabBarStyle: {
+                        display: 'flex',
+                        position: 'absolute',
+                        bottom: 0,
+                        elevation: 0,
+                        borderColor: "#ddd",
+                        height: 75,
+                        ...styles.shadow
+                    },
+                })}
+            >
+                <Tab.Screen
+                    name="calendarScreenStack"
+                    options={({ route }) => ({
+                        tabBarStyle: {
+                            display: getTabBarVisibility(route),
+                            height: 75,
+                            paddingTop: Platform.OS == "ios" ? 25 : 0,
+                        },
+                        tabBarLabel: 'Calendar',
+                        headerShown: false,
+                        tabBarActiveTintColor: "#ccc",
+                        tabBarIcon: (tabInfo) =>
+                        (
+                            <View style={styles.tabBarIconContainer}>
+                                <Ionicons name="md-calendar-sharp" size={24} color={tabInfo.focused ? "#1f6cb0" : "#ccc"} />
+                                <Text style={[styles.tabBarIconText, {
+                                    fontFamily: (tabInfo.focused ? "MainBold" : "MainRegular")
+                                }]}>{i18n.t('navigation')['calendar']}</Text>
+                            </View>
+                        )
 
-                })}
-                component={calendarScreenStack}
-            />
-            <Tab.Screen
-                name="progressScreenStack"
-                options={({ route }) => ({
-                    tabBarStyle: {
-                        display: getTabBarVisibility(route),
-                        height: 75,
-                        paddingTop: 25
-                    },
-                    tabBarLabel: 'Progress',
-                    headerShown: false,
-                    tabBarActiveTintColor: "#ccc",
-                    tabBarIcon: (tabInfo) =>
-                    (
-                        <View style={styles.tabBarIconContainer}>
-                            <Entypo name="line-graph" size={24} color={tabInfo.focused ? "#1f6cb0" : "#ccc"} />
-                            <Text style={[styles.tabBarIconText, {
-                                width: "100%",
-                                textAlign: "center",
-                                fontFamily: (tabInfo.focused ? "MainBold" : "MainRegular")
-                            }]}>{i18n.t('navigation')['progress']}</Text>
-                        </View>
-                    )
+                    })}
+                    component={calendarScreenStack}
+                />
+                <Tab.Screen
+                    name="progressScreenStack"
+                    options={({ route }) => ({
+                        tabBarStyle: {
+                            display: getTabBarVisibility(route),
+                            height: 75,
+                            paddingTop: Platform.OS == "ios" ? 25 : 0,
+                        },
+                        tabBarLabel: 'Progress',
+                        headerShown: false,
+                        tabBarActiveTintColor: "#ccc",
+                        tabBarIcon: (tabInfo) =>
+                        (
+                            <View style={styles.tabBarIconContainer}>
+                                <Entypo name="line-graph" size={24} color={tabInfo.focused ? "#1f6cb0" : "#ccc"} />
+                                <Text style={[styles.tabBarIconText, {
+                                    width: "100%",
+                                    textAlign: "center",
+                                    fontFamily: (tabInfo.focused ? "MainBold" : "MainRegular")
+                                }]}>{i18n.t('navigation')['progress']}</Text>
+                            </View>
+                        )
 
-                })}
-                component={progressScreenStack}
-            />
-            <Tab.Screen
-                name="coachingScreenStack"
-                options={({ route }) => ({
-                    tabBarStyle: {
-                        display: getTabBarVisibility(route),
-                        height: 75,
-                        paddingTop: 25
-                    },
-                    tabBarLabel: 'Coaching',
-                    headerShown: false,
-                    tabBarActiveTintColor: "#ccc",
-                    tabBarIcon: (tabInfo) =>
-                    (
-                        <View style={styles.tabBarIconContainer}>
-                            <FontAwesome5 name="dumbbell" size={24} color={tabInfo.focused ? "#1f6cb0" : "#ccc"} />
-                            <Text style={[styles.tabBarIconText, {
-                                fontFamily: (tabInfo.focused ? "MainBold" : "MainRegular")
-                            }]}>{i18n.t('navigation')['coaching']}</Text>
-                        </View>
-                    )
+                    })}
+                    component={progressScreenStack}
+                />
+                <Tab.Screen
+                    name="coachingScreenStack"
+                    options={({ route }) => ({
+                        tabBarStyle: {
+                            display: getTabBarVisibility(route),
+                            height: 75,
+                            paddingTop: Platform.OS == "ios" ? 25 : 0,
+                        },
+                        tabBarLabel: 'Coaching',
+                        headerShown: false,
+                        tabBarActiveTintColor: "#ccc",
+                        tabBarIcon: (tabInfo) =>
+                        (
+                            <View style={styles.tabBarIconContainer}>
+                                <FontAwesome5 name="dumbbell" size={24} color={tabInfo.focused ? "#1f6cb0" : "#ccc"} />
+                                <Text style={[styles.tabBarIconText, {
+                                    fontFamily: (tabInfo.focused ? "MainBold" : "MainRegular")
+                                }]}>{i18n.t('navigation')['coaching']}</Text>
+                            </View>
+                        )
 
-                })}
-                component={coachingScreenStack}
-            />
-            <Tab.Screen
-                name="chatsScreenStack"
-                options={({ route }) => ({
-                    tabBarStyle: {
-                        display: getTabBarVisibility(route),
-                        height: 75,
-                        paddingTop: 25
-                    },
-                    tabBarLabel: 'Chats',
-                    headerShown: false,
-                    tabBarActiveTintColor: "#ccc",
-                    tabBarIcon: (tabInfo) =>
-                    (
-                        <View style={styles.tabBarIconContainer}>
-                            {
-                                false
-                                    ? <View style={{
-                                        position: 'absolute',
-                                        zIndex: 999,
-                                        top: 0, right: 0, height: 12, width: 12,
-                                        backgroundColor: "red",
-                                        borderRadius: 1000
-                                    }}></View>
-                                    : null
-                            }
-                            <Ionicons name="chatbubbles" size={24} color={tabInfo.focused ? "#1f6cb0" : "#ccc"} />
-                            <Text style={[styles.tabBarIconText, {
-                                fontFamily: (tabInfo.focused ? "MainBold" : "MainRegular")
-                            }]}>{i18n.t('navigation')['chats']}</Text>
-                        </View>
-                    )
-                })}
-                component={chatsScreenStack}
-            />
-            <Tab.Screen
-                name="profileScreenStack"
-                options={({ route }) => ({
-                    tabBarStyle: {
-                        display: getTabBarVisibility(route),
-                        height: 75,
-                        paddingTop: 25
-                    },
-                    tabBarLabel: 'Profile',
-                    headerShown: false,
-                    tabBarActiveTintColor: "#ccc",
-                    tabBarIcon: (tabInfo) =>
-                    (
-                        <View style={styles.tabBarIconContainer}>
-                            <FontAwesome5 name="user-circle" size={24} color={tabInfo.focused ? "#1f6cb0" : "#ccc"} />
-                            <Text style={[styles.tabBarIconText, {
-                                fontFamily: (tabInfo.focused ? "MainBold" : "MainRegular")
-                            }]}>{i18n.t('navigation')['profile']}</Text>
-                        </View>
-                    )
-                })}
-                component={profileScreenStack}
-            />
-        </Tab.Navigator>
+                    })}
+                    component={coachingScreenStack}
+                />
+                <Tab.Screen
+                    name="chatsScreenStack"
+                    options={({ route }) => ({
+                        tabBarStyle: {
+                            display: getTabBarVisibility(route),
+                            height: 75,
+                            paddingTop: Platform.OS == "ios" ? 25 : 0,
+                        },
+                        tabBarLabel: 'Chats',
+                        headerShown: false,
+                        tabBarActiveTintColor: "#ccc",
+                        tabBarIcon: (tabInfo) =>
+                        (
+                            <View style={styles.tabBarIconContainer}>
+                                {
+                                    false
+                                        ? <View style={{
+                                            position: 'absolute',
+                                            zIndex: 999,
+                                            top: 0, right: 0, height: 12, width: 12,
+                                            backgroundColor: "red",
+                                            borderRadius: 1000
+                                        }}></View>
+                                        : null
+                                }
+                                <Ionicons name="chatbubbles" size={24} color={tabInfo.focused ? "#1f6cb0" : "#ccc"} />
+                                <Text style={[styles.tabBarIconText, {
+                                    fontFamily: (tabInfo.focused ? "MainBold" : "MainRegular")
+                                }]}>{i18n.t('navigation')['chats']}</Text>
+                            </View>
+                        )
+                    })}
+                    component={chatsScreenStack}
+                />
+                <Tab.Screen
+                    name="profileScreenStack"
+                    options={({ route }) => ({
+                        tabBarStyle: {
+                            display: getTabBarVisibility(route),
+                            height: 75,
+                            paddingTop: Platform.OS == "ios" ? 25 : 0,
+                        },
+                        tabBarLabel: 'Profile',
+                        headerShown: false,
+                        tabBarActiveTintColor: "#ccc",
+                        tabBarIcon: (tabInfo) =>
+                        (
+                            <View style={styles.tabBarIconContainer}>
+                                <FontAwesome5 name="user-circle" size={24} color={tabInfo.focused ? "#1f6cb0" : "#ccc"} />
+                                <Text style={[styles.tabBarIconText, {
+                                    fontFamily: (tabInfo.focused ? "MainBold" : "MainRegular")
+                                }]}>{i18n.t('navigation')['profile']}</Text>
+                            </View>
+                        )
+                    })}
+                    component={profileScreenStack}
+                />
+            </Tab.Navigator>
         </SafeAreaView>
     );
 };

@@ -6,6 +6,7 @@ export default StyleSheet.create({
         position: "absolute",
         left: 0,
         top: 0,
+        paddingTop: Platform.OS == 'android' ? 32 : 0,
         right: 0,
         bottom: 0,
     },
@@ -13,7 +14,7 @@ export default StyleSheet.create({
         backgroundColor: "#1f6cb0"
     },
     pageContainer: {
-        paddingTop: 32,
+        paddingTop: Platform.OS == 'ios' ? 32 : 0,
         paddingHorizontal: 24,
         flex: 1,
         maxHeight: "100%",
@@ -102,9 +103,7 @@ export default StyleSheet.create({
     topbarIconContainer: {
         position: 'absolute',
         top: 0,
-        right: 0,
-        margin: 24,
-        padding: 8,
+        right: 24,
         display: "flex",
         flexDirection: "row",
         alignItems: "center",
