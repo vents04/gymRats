@@ -6,7 +6,7 @@ export default StyleSheet.create({
         position: "absolute",
         left: 0,
         top: 0,
-        paddingTop: Platform.OS == 'android' ? 32 : 0,
+        paddingTop: 32,
         right: 0,
         bottom: 0,
     },
