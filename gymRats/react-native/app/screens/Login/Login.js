@@ -78,6 +78,9 @@ export default class Login extends Component {
                     <View style={globalStyles.authPageInputs}>
                         <TextInput
                             autoCapitalize='none'
+                            autoCorrect={false}
+                            keyboardType="email-address"
+                            textContentType="emailAddress"
                             value={this.state.email}
                             style={globalStyles.authPageInput}
                             placeholder={i18n.t('screens')['login']['emailPlaceholder']}
