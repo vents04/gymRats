@@ -37,7 +37,7 @@ app
 
 mongo.connect();
 
-(async function () {
+/*(async function () {
     const cut = [
         [
             [74, 10],
@@ -213,7 +213,7 @@ mongo.connect();
     console.log("Exercises progress:", await LogbookService.getExercisesProgress("622f8c4095e0bf7c3998ebc9"))
     await UserService.generateUnverifiedTimeouts();
 
-})();
+})();*/
 
 io.on("connection", (socket) => {
     socket.on("join-chats-room", async (payload) => {

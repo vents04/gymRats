@@ -191,7 +191,7 @@ const DbService = {
                 reject(new ResponseError(error.message, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
             });
         })
-    },
+    }
 }
 
 module.exports = DbService;
