@@ -125,21 +125,23 @@ router.post('/application', authenticate, async (req, res, next) => {
     const { error } = coachApplicationPostValidation(req.body, req.headers.lng);
     if (error) return next(new ResponseError(error.details[0].message, HTTP_STATUS_CODES.BAD_REQUEST));
 
+    const personalTrainer = new PersonalTrainer(req.body);
+
     try {
         const existingPersonalTrainer = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, { userId: mongoose.Types.ObjectId(req.user._id) });
         if (existingPersonalTrainer) return next(new ResponseError("You are already a personal trainer", HTTP_STATUS_CODES.CONFLICT, 26));
 
-        const personalTrainer = new PersonalTrainer(req.body);
         personalTrainer.userId = req.user._id;
         personalTrainer.firstName = req.user.firstName;
         personalTrainer.lastName = req.user.lastName;
         await DbService.create(COLLECTIONS.PERSONAL_TRAINERS, personalTrainer);
 
-        await EmailService.send("Coach request", `${req.user.firstName} ${req.user.lastName} with a personal trainer id ${personalTrainer._id} and user id ${req.user._id} requested to be a coach`);
-
         return res.sendStatus(HTTP_STATUS_CODES.OK);
     } catch (error) {
+        console.log(error.response.body.errors)
         return next(new ResponseError(error.message || DEFAULT_ERROR_MESSAGE, error.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+    } finally {
+        await EmailService.send("office@uploy.app", "Coach request", `${req.user.firstName} ${req.user.lastName} with a personal trainer id ${personalTrainer._id} and user id ${req.user._id} requested to be a coach`);
     }
 });
 

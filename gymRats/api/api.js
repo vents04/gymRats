@@ -37,6 +37,7 @@ app
 
 mongo.connect();
 
+<<<<<<< HEAD
 /*(async function () {
     const cut = [
         [
@@ -187,25 +188,68 @@ mongo.connect();
         let orm = 0;
         for (let set of session) {
             if (oneRepMax(set[0], set[1]) > orm) orm = parseFloat(parseFloat(oneRepMax(set[0], set[1])).toFixed(1));
-        }
-        bulkOrms.push(orm);
-    }
-    console.log("CUT ORMS:")
-    console.log(cutOrms);
-    for (let index = 0; index < cutOrms.length; index++) {
-        if (index + 1 < cutOrms.length) {
-            const percentageDifference = parseFloat(parseFloat((cutOrms[index + 1] - cutOrms[index]) / cutOrms[index] * 100).toFixed(2));
-        }
-    }
-    console.log("BULK ORMS:")
-    console.log(bulkOrms);
-    for (let index = 0; index < bulkOrms.length; index++) {
-        try {
-            if (index + 1 < bulkOrms.length) {
-                const percentageDifference = parseFloat(parseFloat((bulkOrms[index + 1] - bulkOrms[index]) / bulkOrms[index] * 100).toFixed(2));
+=======
+(async function () {
+    setTimeout(async function () {
+        let tree = {};
+        const foods = await DbService.getManyWithSortAndLimit(COLLECTIONS.CALORIES_COUNTER_ITEMS, {}, {}, 500);
+        let index = 0;
+        for (let food of foods) {
+            index++;
+            for (let keyword of food.keywords) {
+                for (let char = 0; char < keyword.length; char++) {
+                    if (tree[keyword[char]] == undefined) {
+                        tree[keyword[char]] = {};
+                    }
+                    let currentNode = tree[keyword[char]];
+                    for (let i = char + 1; i < keyword.length; i++) {
+                        if (currentNode[keyword[i]] == undefined) {
+                            currentNode[keyword[i]] = {};
+                        }
+                        currentNode = currentNode[keyword[i]];
+                    }
+                    currentNode.foods = currentNode.foods || [];
+                    if (!currentNode.foods.includes(food)) currentNode.foods.push({
+                        _id: food._id,
+                        searchedTimes: food.searchedTimes,
+                        usedTimes: food.usedTimes,
+                        keywords: food.keywords
+                    });
+                }
             }
-        } catch (err) {
-            console.log(err);
+>>>>>>> ffb5acc7b386968ecdf4af383ff819662fd27359
+        }
+        const stringifiedTree = JSON.stringify(tree);
+        //fs.writeFileSync(path.join(__dirname, './foodTree.json'), stringifiedTree);
+        const startDt = new Date().getTime();
+        const query = "s";
+        let subTree = {};
+        if (tree[query.charAt(0)]) {
+            subTree = tree;
+            for (let char = 0; char < query.length; char++) {
+                subTree = subTree[query.charAt(char)] || {};
+            }
+        }
+        // recursively search for foods in subTree binary tree
+        const subTreeFoods = {};
+        let arrayLength = 0;
+        Object.values(subTreeFoods).map((el) => arrayLength += el.length)
+        console.log(arrayLength)
+        let subFoodIndex = 0;
+        const search = function (node, subFoodIndex) {
+            let arrayLength = 0;
+            Object.values(subTreeFoods).map((el) => arrayLength += el.length)
+            if (arrayLength < 40) {
+                if (node.foods) {
+                    if (!subTreeFoods.hasOwnProperty(subFoodIndex)) subTreeFoods[subFoodIndex] = [];
+                    subTreeFoods[subFoodIndex].push(...node.foods)
+                }
+                for (let key in node) {
+                    if (key != "foods") {
+                        search(node[key], subFoodIndex + 1);
+                    }
+                }
+            }
         }
     }
     console.log("From last session:", await LogbookService.getProgressNotationForOneSession([88.8, 96]))

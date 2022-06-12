@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Text, View, Image, TextInput, Pressable, ActivityIndicator, Alert, TouchableWithoutFeedback } from 'react-native';
+import { Keyboard, Text, View, Image, TextInput, Pressable, ActivityIndicator, Alert, TouchableWithoutFeedback } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
 import ApiRequests from '../../classes/ApiRequests';
 import Auth from '../../classes/Auth';
@@ -12,6 +13,7 @@ import socketClass from '../../classes/Socket';
 
 import globalStyles from '../../../assets/styles/global.styles';
 import LogoBar from '../../components/LogoBar/LogoBar';
+import { Platform } from 'react-native';
 
 export default class Login extends Component {
 
@@ -21,6 +23,7 @@ export default class Login extends Component {
         this.state = {
             email: "",
             password: "",
+            showPassword: false,
             showError: false,
             error: "",
             isLoading: false
@@ -34,6 +37,7 @@ export default class Login extends Component {
     }
 
     login = () => {
+        Keyboard.dismiss();
         this.setState({ showError: false, error: null, isLoading: true });
         ApiRequests.post("user/login", {}, {
             email: this.state.email.trim(),
@@ -52,6 +56,7 @@ export default class Login extends Component {
                 this.props.navigation.navigate("EmailVerification", { email: this.state.email.trim(), doesNotComeFromSignup: true })
             }
         }).catch((error) => {
+            this.setState({ password: "" })
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
                     this.setState({ showError: true, error: error.response.data });
@@ -76,16 +81,43 @@ export default class Login extends Component {
                     <Text style={globalStyles.authPageTitle}>{i18n.t('screens')['login']['pageTitle']}</Text>
                     <View style={globalStyles.authPageInputs}>
                         <TextInput
+                            autoCapitalize='none'
+                            autoCorrect={false}
+                            keyboardType={Platform.OS == "ios" ? "email-address" : "default"}
                             value={this.state.email}
                             style={globalStyles.authPageInput}
                             placeholder={i18n.t('screens')['login']['emailPlaceholder']}
                             onChangeText={(val) => { this.setState({ email: val, showError: false }) }} />
-                        <TextInput
-                            value={this.state.password}
-                            style={globalStyles.authPageInput}
-                            placeholder={i18n.t('screens')['login']['passwordPlaceholder']}
-                            secureTextEntry={true}
-                            onChangeText={(val) => { this.setState({ password: val, showError: false }) }} />
+                        <View style={globalStyles.authPageInputContainer}>
+                            {
+                                this.state.password && this.state.password.length > 0
+                                    ? <Text style={{
+                                        ...globalStyles.authPageInputLabel,
+                                        top: !this.state.password || this.state.password.length == 0 ? "auto" : -10,
+                                        left: !this.state.password || this.state.password.length == 0 ? "auto" : 6,
+                                    }}>{i18n.t('screens')['login']['passwordPlaceholder']}</Text>
+                                    : null
+                            }
+                            <TextInput
+                                style={{ ...globalStyles.authPageInputText, width: '90%' }}
+                                value={this.state.password}
+                                placeholder={!this.state.password || this.state.password.length == 0 ? i18n.t('screens')['login']['passwordPlaceholder'] : ""}
+                                secureTextEntry={!this.state.showPassword}
+                                onChangeText={(val) => { this.setState({ password: val, showError: false }) }} />
+                            <Pressable style={({ pressed }) => [
+                                {
+                                    opacity: pressed ? 0.1 : 1,
+                                    width: '10%',
+                                    display: 'flex',
+                                    flexDirection: 'row',
+                                    alignItems: 'flex-end',
+                                }
+                            ]} onPress={() => {
+                                this.setState({ showPassword: !this.state.showPassword })
+                            }} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }}>
+                                <Ionicons name={!this.state.showPassword ? "eye-sharp" : "eye-off-sharp"} size={24} color="#ccc" />
+                            </Pressable>
+                        </View>
                     </View>
                     {
                         this.state.showError

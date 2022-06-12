@@ -157,17 +157,16 @@ export default class Calendar extends Component {
                         : null
                 }
                 <LogoBar />
-                <View style={globalStyles.topbarIconContainer}>
-                    <Pressable onPress={() => {
-                        this.props.navigation.navigate("Suggestions")
-                    }} style={({ pressed }) => [
-                        {
-                            opacity: pressed ? 0.1 : 1,
-                        }
-                    ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }}>
-                        <FontAwesome5 name="lightbulb" size={24} color={"#1f6cb0"} />
-                    </Pressable>
-                </View>
+                <Pressable hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
+                    this.props.navigation.navigate("Suggestions")
+                }} style={({ pressed }) => [
+                    globalStyles.topbarIconContainer,
+                    {
+                        opacity: pressed ? 0.1 : 1,
+                    }
+                ]}>
+                    <FontAwesome5 name="lightbulb" size={24} color={"#1f6cb0"} />
+                </Pressable>
                 {
                     this.state.selectedDate
                         ? <View style={[globalStyles.fillEmptySpace, { flexShrink: 1 }]}>

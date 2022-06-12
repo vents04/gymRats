@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { ActivityIndicator, ScrollView, Text, TextInput, Pressable, View, BackHandler } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
+import DropDownPicker from 'react-native-dropdown-picker'
 
 import ApiRequests from '../../classes/ApiRequests';
 
@@ -25,6 +26,8 @@ export default class ProfileDetailsEdit extends Component {
             firstName: "",
             lastName: "",
             profile: {},
+            weightUnitDropDownOpened: false,
+            weightUnits: [],
             showError: false,
             error: "",
             hasChanges: false,
@@ -46,10 +49,22 @@ export default class ProfileDetailsEdit extends Component {
             profile: profile
         })
         BackHandler.addEventListener("hardwareBackPress", this.backAction);
+        this.setWeightUnitsArray();
     }
 
     componentWillUnmount() {
         BackHandler.removeEventListener("hardwareBackPress", this.backAction);
+    }
+
+    setWeightUnitsArray = () => {
+        let weightUnits = [];
+        Object.values(WEIGHT_UNITS).forEach(unit => {
+            weightUnits.push({
+                label: i18n.t("common")["weightUnits"][unit],
+                value: unit
+            })
+        })
+        this.setState({ weightUnits });
     }
 
     saveChanges = (removeProfilePicture = false) => {
@@ -185,16 +200,39 @@ export default class ProfileDetailsEdit extends Component {
                     </View>
                     <View style={styles.editSection}>
                         <Text style={styles.editSectionTitle}>{i18n.t('screens')['profileDetailsEdit']['weightUnit']}</Text>
-                        <Picker
-                            style={styles.editSectionInput}
-                            enabled={!this.state.showSaving}
-                            selectedValue={this.state.weightUnit}
-                            onValueChange={(value, index) =>
-                                this.setState({ weightUnit: value, showError: false }, () => { this.changedValue() })
-                            }>
-                            <Picker.Item style={{ fontFamily: 'MainRegular' }} label={i18n.t('screens')['profileDetailsEdit']['KILOGRAMS']} value="KILOGRAMS" />
-                            <Picker.Item style={{ fontFamily: 'MainRegular' }} label={i18n.t('screens')['profileDetailsEdit']['POUNDS']} value="POUNDS" />
-                        </Picker>
+                        <DropDownPicker
+                            placeholder={i18n.t('screens')['progress']['selectExercise']}
+                            maxHeight={150}
+                            open={this.state.weightUnitDropDownOpened}
+                            setOpen={(value) => {
+                                this.setState({ weightUnitDropDownOpened: value })
+                            }}
+                            value={this.state.weightUnit}
+                            setValue={(callback) => {
+                                this.setState(state => ({
+                                    weightUnit: callback(state.value)
+                                }));
+                            }}
+                            items={this.state.weightUnits}
+                            setItems={(callback) => {
+                                this.setState(state => ({
+                                    weightUnits: callback(state.items)
+                                }));
+                            }}
+                            onChangeItem={item => console.log(weightUnits.label, weightUnits.value)}
+                            zIndex={10000}
+                            textStyle={{
+                                fontFamily: 'MainMedium',
+                                fontSize: 14,
+                            }}
+                            dropDownContainerStyle={{
+                                borderColor: "#ccc",
+                            }}
+                            style={{
+                                borderColor: "#ccc",
+                                marginBottom: 16
+                            }}
+                        />
                     </View>
                     {
                         this.state.profile.profilePicture

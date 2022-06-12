@@ -37,7 +37,7 @@ const emailValidation = (lng) => {
         "string.email": stringEmailError(lng, "email"),
         "string.max": stringMaxError(lng, "email", 320),
         "any.required": anyRequiredError(lng, "email")
-    })
+    }).trim().lowercase()
 }
 
 const passwordValidation = (lng) => {

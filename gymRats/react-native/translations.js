@@ -3,8 +3,8 @@ module.exports = {
         screens: {
             login: {
                 pageTitle: "Login",
-                emailPlaceholder: "Email:",
-                passwordPlaceholder: "Password:",
+                emailPlaceholder: "Email",
+                passwordPlaceholder: "Password",
                 submitButton: "Continue",
                 forgottenPassword: "Forgotten password?",
                 dontHaveAccount: "Don't have an account?",
@@ -12,13 +12,21 @@ module.exports = {
             },
             signup: {
                 pageTitle: "Signup",
-                firstNamePlaceholder: "First name:",
-                lastNamePlaceholder: "Last name:",
-                emailPlaceholder: "Email:",
-                passwordPlaceholder: "Password:",
+                firstNamePlaceholder: "First name",
+                lastNamePlaceholder: "Last name",
+                emailPlaceholder: "Email",
+                passwordPlaceholder: "Password",
                 submitButton: "Create account",
                 haveAccount: "Have an account?",
                 goToLogin: "Go to Login"
+            },
+            calendar: {
+                calendarControllerBack: "Previous",
+                calendarControllerNext: "Next",
+                addData: "Add data",
+                noData: "No data added for this date",
+                bottomSheetTitle: "Cards",
+                bottomSheetNoCards: "You have already added all data cards for this date"
             },
             coachSearch: {
                 pageTitle: "Coach search",
@@ -155,9 +163,9 @@ module.exports = {
                 pageTitle: "Profile edit",
                 saving: "Saving...",
                 firstName: "First name",
-                firstNamePlaceholder: "First name:",
+                firstNamePlaceholder: "First name",
                 lastName: "Last name",
-                lastNamePlaceholder: "Last name:",
+                lastNamePlaceholder: "Last name",
                 weightUnit: "Weight unit",
                 KILOGRAMS: "Metric system (kilograms)",
                 POUNDS: "Imperial system (pounds)",
@@ -396,8 +404,8 @@ module.exports = {
         screens: {
             login: {
                 pageTitle: "Вход",
-                emailPlaceholder: "Имейл:",
-                passwordPlaceholder: "Парола:",
+                emailPlaceholder: "Имейл",
+                passwordPlaceholder: "Парола",
                 submitButton: "Продължи",
                 forgottenPassword: "Забравена парола?",
                 dontHaveAccount: "Нямаш акаунт?",
@@ -405,10 +413,10 @@ module.exports = {
             },
             signup: {
                 pageTitle: "Регистрация",
-                firstNamePlaceholder: "Име:",
-                lastNamePlaceholder: "Фамилия:",
-                emailPlaceholder: "Имейл:",
-                passwordPlaceholder: "Парола:",
+                firstNamePlaceholder: "Име",
+                lastNamePlaceholder: "Фамилия",
+                emailPlaceholder: "Имейл",
+                passwordPlaceholder: "Парола",
                 submitButton: "Създай акаунт",
                 haveAccount: "Имаш акаунт?",
                 goToLogin: "Влез тук!"
@@ -556,9 +564,9 @@ module.exports = {
                 pageTitle: "Редакция на профила",
                 saving: "Запазване...",
                 firstName: "Име",
-                firstNamePlaceholder: "Име:",
+                firstNamePlaceholder: "Име",
                 lastName: "Фамилия",
-                lastNamePlaceholder: "Фамилия:",
+                lastNamePlaceholder: "Фамилия",
                 weightUnit: "Мерна единица за тегло",
                 KILOGRAMS: "Метрична система (килограми)",
                 POUNDS: "Имперска система (паунди)",
