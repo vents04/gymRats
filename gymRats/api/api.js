@@ -35,186 +35,74 @@ app
     .use(errorHandler)
     .use('/ugc', express.static(path.join(__dirname, '/ugc')))
 
-mongo.connect().then((connection) => {
-    console.log('connect', connection)
-});
+mongo.connect();
 
 (async function () {
-    const cut = [
-        [
-            [74, 10],
-            [70, 10],
-            [64, 12]
-        ],
-        [
-            [74, 9],
-            [70, 10],
-            [64, 11]
-        ],
-        [
-            [74, 9],
-            [70, 10],
-            [64, 11]
-        ],
-        [
-            [74, 10],
-            [70, 10],
-            [64, 11],
-        ],
-        [
-            [74, 8],
-            [70, 8],
-            [64, 11]
-        ],
-        [
-            [74, 5],
-            [70, 8],
-            [64, 12]
-        ],
-        [
-            [74, 7],
-            [70, 8],
-            [64, 10]
-        ],
-        [
-            [74, 8],
-            [70, 10],
-            [64, 12]
-        ],
-        [
-            [74, 8],
-            [70, 10],
-            [64, 12]
-        ],
-        [
-            [74, 8],
-            [70, 9],
-            [64, 10]
-        ],
-        [
-            [74, 8],
-            [70, 9],
-            [64, 11]
-        ],
-        [
-            [74, 8],
-            [70, 9],
-            [64, 11]
-        ],
-        [
-            [80, 4],
-            [74, 6],
-            [64, 12]
-        ],
-        [
-            [80, 4],
-            [74, 6],
-            [64, 12]
-        ],
-        [
-            [80, 4],
-            [74, 7],
-            [64, 12]
-        ],
-        [
-            [80, 4],
-            [74, 7],
-            [64, 12]
-        ]
-    ]
-    const bulk = [
-        [
-            [72, 8],
-            [72, 8],
-            [70, 8],
-            [70, 8]
-        ],
-        [
-            [76, 7],
-            [76, 7],
-            [70, 8],
-            [70, 8]
-        ],
-        [
-            [74, 7],
-            [74, 6],
-            [70, 7],
-            [70, 6]
-        ],
-        [
-            [72, 9],
-            [72, 9],
-            [70, 9],
-            [70, 9]
-        ],
-        [
-            [72, 7],
-            [72, 7],
-            [70, 8],
-            [70, 8]
-        ],
-        [
-            [72, 10],
-            [72, 9],
-            [70, 9],
-            [70, 9]
-        ],
-        [
-            [76, 8],
-            [76, 8],
-            [70, 9],
-        ],
-        [
-            [80, 6],
-            [72, 9],
-            [72, 7],
-        ],
-        [
-            [70, 11],
-            [70, 11],
-            [70, 7]
-        ]
-    ]
-    console.log("--------------------------------------------");
-    let cutOrms = [];
-    let bulkOrms = [];
-    for (let session of cut) {
-        let orm = 0;
-        for (let set of session) {
-            if (oneRepMax(set[0], set[1]) > orm) orm = parseFloat(parseFloat(oneRepMax(set[0], set[1])).toFixed(1));
-        }
-        cutOrms.push(orm);
-    }
-    for (let session of bulk) {
-        let orm = 0;
-        for (let set of session) {
-            if (oneRepMax(set[0], set[1]) > orm) orm = parseFloat(parseFloat(oneRepMax(set[0], set[1])).toFixed(1));
-        }
-        bulkOrms.push(orm);
-    }
-    console.log("CUT ORMS:")
-    console.log(cutOrms);
-    for (let index = 0; index < cutOrms.length; index++) {
-        if (index + 1 < cutOrms.length) {
-            const percentageDifference = parseFloat(parseFloat((cutOrms[index + 1] - cutOrms[index]) / cutOrms[index] * 100).toFixed(2));
-        }
-    }
-    console.log("BULK ORMS:")
-    console.log(bulkOrms);
-    for (let index = 0; index < bulkOrms.length; index++) {
-        try {
-            if (index + 1 < bulkOrms.length) {
-                const percentageDifference = parseFloat(parseFloat((bulkOrms[index + 1] - bulkOrms[index]) / bulkOrms[index] * 100).toFixed(2));
+    setTimeout(async function () {
+        let tree = {};
+        const foods = await DbService.getManyWithSortAndLimit(COLLECTIONS.CALORIES_COUNTER_ITEMS, {}, {}, 500);
+        let index = 0;
+        for (let food of foods) {
+            index++;
+            for (let keyword of food.keywords) {
+                for (let char = 0; char < keyword.length; char++) {
+                    if (tree[keyword[char]] == undefined) {
+                        tree[keyword[char]] = {};
+                    }
+                    let currentNode = tree[keyword[char]];
+                    for (let i = char + 1; i < keyword.length; i++) {
+                        if (currentNode[keyword[i]] == undefined) {
+                            currentNode[keyword[i]] = {};
+                        }
+                        currentNode = currentNode[keyword[i]];
+                    }
+                    currentNode.foods = currentNode.foods || [];
+                    if (!currentNode.foods.includes(food)) currentNode.foods.push({
+                        _id: food._id,
+                        searchedTimes: food.searchedTimes,
+                        usedTimes: food.usedTimes,
+                        keywords: food.keywords
+                    });
+                }
             }
-        } catch (err) {
-            console.log(err);
         }
-    }
-    console.log("From last session:", await LogbookService.getProgressNotationForOneSession([88.8, 96]))
-    console.log("From five sessions:", await LogbookService.getProgressNotationForFiveSessions(bulkOrms));
-    console.log("Exercises progress:", await LogbookService.getExercisesProgress("622f8c4095e0bf7c3998ebc9"))
-    await UserService.generateUnverifiedTimeouts();
-
+        const stringifiedTree = JSON.stringify(tree);
+        //fs.writeFileSync(path.join(__dirname, './foodTree.json'), stringifiedTree);
+        const startDt = new Date().getTime();
+        const query = "s";
+        let subTree = {};
+        if (tree[query.charAt(0)]) {
+            subTree = tree;
+            for (let char = 0; char < query.length; char++) {
+                subTree = subTree[query.charAt(char)] || {};
+            }
+        }
+        // recursively search for foods in subTree binary tree
+        const subTreeFoods = {};
+        let arrayLength = 0;
+        Object.values(subTreeFoods).map((el) => arrayLength += el.length)
+        console.log(arrayLength)
+        let subFoodIndex = 0;
+        const search = function (node, subFoodIndex) {
+            let arrayLength = 0;
+            Object.values(subTreeFoods).map((el) => arrayLength += el.length)
+            if (arrayLength < 40) {
+                if (node.foods) {
+                    if (!subTreeFoods.hasOwnProperty(subFoodIndex)) subTreeFoods[subFoodIndex] = [];
+                    subTreeFoods[subFoodIndex].push(...node.foods)
+                }
+                for (let key in node) {
+                    if (key != "foods") {
+                        search(node[key], subFoodIndex + 1);
+                    }
+                }
+            }
+        }
+        search(subTree, subFoodIndex);
+        const endDt = new Date().getTime();
+        console.log(subTreeFoods)
+        console.log(subTreeFoods.length, "za", endDt - startDt);
+    }, 1500);
 })();
 
 io.on("connection", (socket) => {

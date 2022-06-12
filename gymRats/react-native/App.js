@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import React, { useRef, useState, useEffect } from 'react';
-import { SafeAreaProvider} from 'react-native-safe-area-context';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { default as AsyncStorage } from '@react-native-async-storage/async-storage';
 import { AUTHENTICATION_TOKEN_KEY } from './global';
 import { Alert, AppState, Button, Platform, Text } from 'react-native';
@@ -141,7 +141,7 @@ const App = () => {
 
   i18n.defaultLocale = "bg-BG";
   i18n.translations = translations;
-  i18n.locale = "bg-BG";
+  i18n.locale = Localization.locale;
   i18n.fallbacks = true;
 
   const [loaded] = useFonts({
@@ -159,62 +159,62 @@ const App = () => {
 
   return (
     <SafeAreaProvider>
-    <NavigationContainer
-      linking={linking} fallback={<Text>Loading...</Text>}
-      ref={navigationRef}
-      onReady={() => {
-        routeNameRef.current = navigationRef.getCurrentRoute().name;
-      }}
-      onStateChange={async () => {
-        const previousRouteName = routeNameRef.current;
-        const currentRouteName = navigationRef.getCurrentRoute().name;
+      <NavigationContainer
+        linking={linking} fallback={<Text>Loading...</Text>}
+        ref={navigationRef}
+        onReady={() => {
+          routeNameRef.current = navigationRef.getCurrentRoute().name;
+        }}
+        onStateChange={async () => {
+          const previousRouteName = routeNameRef.current;
+          const currentRouteName = navigationRef.getCurrentRoute().name;
 
-        if (previousRouteName !== currentRouteName) {
-          if (previousRouteName != "Splash") {
-            const previousScreenData = {
-              name: previousRouteName,
-              time: new Date().getTime() - screenOpenDt,
-              toDt: new Date().getTime(),
-              token: null
+          if (previousRouteName !== currentRouteName) {
+            if (previousRouteName != "Splash") {
+              const previousScreenData = {
+                name: previousRouteName,
+                time: new Date().getTime() - screenOpenDt,
+                toDt: new Date().getTime(),
+                token: null
+              }
+              let currentNavAnalytics = await AsyncStorage.getItem('@gymRats:navAnalytics');
+              if (currentNavAnalytics) {
+                currentNavAnalytics = JSON.parse(currentNavAnalytics);
+                currentNavAnalytics.push(previousScreenData);
+              } else {
+                currentNavAnalytics = [previousScreenData];
+              }
+              let token = await AsyncStorage.getItem(AUTHENTICATION_TOKEN_KEY);
+              if (token) previousScreenData.token = token;
+              await AsyncStorage.setItem('@gymRats:navAnalytics', JSON.stringify(currentNavAnalytics));
             }
-            let currentNavAnalytics = await AsyncStorage.getItem('@gymRats:navAnalytics');
-            if (currentNavAnalytics) {
-              currentNavAnalytics = JSON.parse(currentNavAnalytics);
-              currentNavAnalytics.push(previousScreenData);
-            } else {
-              currentNavAnalytics = [previousScreenData];
-            }
-            let token = await AsyncStorage.getItem(AUTHENTICATION_TOKEN_KEY);
-            if (token) previousScreenData.token = token;
-            await AsyncStorage.setItem('@gymRats:navAnalytics', JSON.stringify(currentNavAnalytics));
+            setScreenOpenDt(new Date().getTime());
           }
-          setScreenOpenDt(new Date().getTime());
-        }
 
-        if (currentRouteName == "Chats") {
-          console.log("resetting chat notification to false");
-          setChatNotification(false);
-        }
-        routeNameRef.current = currentRouteName;
-      }}>
-      <Stack.Navigator initialRouteName="Splash" chatNotification={chatNotification}>
-        <Stack.Screen
-          name="Splash"
-          component={Splash}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Auth"
-          component={Auth}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="NavigationRoutes"
-          component={NavigationRoutes}
-          options={{ headerShown: false }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+          if (currentRouteName == "Chats") {
+            console.log("resetting chat notification to false");
+            setChatNotification(false);
+          }
+          routeNameRef.current = currentRouteName;
+        }}>
+        <Stack.Navigator initialRouteName="Splash" chatNotification={chatNotification}>
+          <Stack.Screen
+            name="Splash"
+            component={Splash}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Auth"
+            component={Auth}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="NavigationRoutes"
+            component={NavigationRoutes}
+            options={{ headerShown: false }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
     </SafeAreaProvider>
   );
 };

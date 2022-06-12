@@ -6,7 +6,7 @@ export default StyleSheet.create({
         position: "absolute",
         left: 0,
         top: 0,
-        paddingTop: 32,
+        paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 32,
         right: 0,
         bottom: 0,
     },
@@ -36,7 +36,36 @@ export default StyleSheet.create({
         paddingBottom: 12,
         paddingHorizontal: 8,
         marginVertical: 4,
-        width: "100%"
+        width: "100%",
+        position: "relative"
+    },
+    authPageInputContainer: {
+        marginTop: 16,
+        position: "relative",
+        fontSize: 14,
+        borderRadius: 4,
+        borderColor: "#ccc",
+        borderWidth: 1,
+        marginVertical: 4,
+        width: "100%",
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between"
+    },
+    authPageInputText: {
+        fontFamily: "MainRegular",
+        paddingTop: 13,
+        paddingBottom: 12,
+        paddingHorizontal: 8,
+    },
+    authPageInputLabel: {
+        position: "absolute",
+        backgroundColor: "white",
+        paddingHorizontal: 8,
+        fontFamily: "MainRegular",
+        fontSize: 14,
+        color: "#999"
     },
     authPageActionButton: {
         backgroundColor: "#1f6cb0",
