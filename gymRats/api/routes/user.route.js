@@ -118,11 +118,11 @@ router.post("/suggestion", authenticate, async (req, res, next) => {
         suggestion.userId = mongoose.Types.ObjectId(req.user._id);
         await DbService.create(COLLECTIONS.SUGGESTIONS, suggestion);
 
-        await EmailService.send("Suggestion posted", `${req.user.firstName} ${req.user.lastName} with an id ${req.user._id} wrote: ${req.body.suggestion}`);
-
         return res.sendStatus(HTTP_STATUS_CODES.OK);
     } catch (error) {
         return next(new ResponseError(error.message || DEFAULT_ERROR_MESSAGE, error.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+    } finally {
+        await EmailService.send("office@uploy.app", "Suggestion posted", `${req.user.firstName} ${req.user.lastName} with an id ${req.user._id} wrote: ${req.body.suggestion}`);
     }
 });
 

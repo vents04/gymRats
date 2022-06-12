@@ -118,3 +118,8 @@
 {"level":"error","message":"Неверни данни за вход"}
 {"level":"error","message":"Неверни данни за вход"}
 {"level":"error","message":"Bad Request"}
+{"level":"error","message":"Bad Request"}
+{"level":"error","message":"You have already submitted a personal trainer application"}
+{"level":"error","message":"You have already submitted a personal trainer application"}
+{"level":"error","message":"Bad Request"}
+{"level":"error","message":"Bad Request"}
