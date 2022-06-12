@@ -25,6 +25,8 @@ router.post("/signup", async (req, res, next) => {
     const { error } = signupValidation(req.body, req.headers.lng);
     if (error) return next(new ResponseError(error.details[0].message, HTTP_STATUS_CODES.BAD_REQUEST));
 
+    req.body.email = req.body.email.toLowerCase();
+
     try {
         const existingUser = await DbService.getOne(COLLECTIONS.USERS, { email: req.body.email });
         if (existingUser) return next(new ResponseError("User with this email already exists", HTTP_STATUS_CODES.BAD_REQUEST, 46));
@@ -45,6 +47,8 @@ router.post("/signup", async (req, res, next) => {
 router.post("/login", async (req, res, next) => {
     const { error } = loginValidation(req.body, req.headers.lng);
     if (error) return next(new ResponseError("Invalid credentials for login", HTTP_STATUS_CODES.BAD_REQUEST, 58));
+
+    req.body.email = req.body.email.toLowerCase();
 
     try {
         const user = await DbService.getOne(COLLECTIONS.USERS, { email: req.body.email });
@@ -161,9 +165,10 @@ router.get("/suggestion", authenticate, async (req, res, next) => {
 });
 
 router.post("/password-recovery-code", async (req, res, next) => {
-    console.log("here");
     const { error } = forgottenPasswordPostValidation(req.body, req.headers.lng);
     if (error) return next(new ResponseError(error.details[0].message, HTTP_STATUS_CODES.BAD_REQUEST));
+
+    req.body.email = req.body.email.toLowerCase();
 
     try {
         const user = await DbService.getOne(COLLECTIONS.USERS, { email: req.body.email });
@@ -235,6 +240,8 @@ router.post("/email-verification-code", async (req, res, next) => {
     const { error } = emailVerificationPostValidation(req.body, req.headers.lng);
     if (error) return next(new ResponseError(error.details[0].message, HTTP_STATUS_CODES.BAD_REQUEST));
 
+    req.body.email = req.body.email.toLowerCase();
+
     try {
         const user = await DbService.getOne(COLLECTIONS.USERS, { email: req.body.email });
         if (!user) return next(new ResponseError("User with this email was not found", HTTP_STATUS_CODES.NOT_FOUND, 47));
@@ -264,7 +271,6 @@ router.get("/check-email-verification-code", async (req, res, next) => {
         return next(new ResponseError("Code and identifier must be provided", HTTP_STATUS_CODES.BAD_REQUEST, 50));
 
     try {
-        console.log(req.query)
         const emailVerificationCode = await DbService.getOne(COLLECTIONS.EMAIL_VERIFICATION_CODES, { identifier: req.query.identifier, code: req.query.code });
         if (!emailVerificationCode) return next(new ResponseError("Invalid email verification code", HTTP_STATUS_CODES.NOT_FOUND, 56));
         if (emailVerificationCode.hasBeenUsed) return next(new ResponseError("Email verification code has already been used", HTTP_STATUS_CODES.CONFLICT));

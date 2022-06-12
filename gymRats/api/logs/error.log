@@ -123,3 +123,7 @@
 {"level":"error","message":"You have already submitted a personal trainer application"}
 {"level":"error","message":"Bad Request"}
 {"level":"error","message":"Bad Request"}
+{"level":"error","message":"User record with this email address already exists"}
+{"level":"error","message":"User record with this email was not found"}
+{"level":"error","message":"User record with this email address already exists"}
+{"level":"error","message":"User record with this email was not found"}
