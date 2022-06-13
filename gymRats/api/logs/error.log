@@ -181,3 +181,4 @@
 {"level":"error","message":"Cannot read properties of undefined (reading 'user')"}
 {"level":"error","message":"Cannot read properties of undefined (reading 'user')"}
 {"level":"error","message":"Cannot read properties of undefined (reading 'user')"}
+{"level":"error","message":"Latitude and longitude parameters must be provided when maxDistance parameter is provided"}
