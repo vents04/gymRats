@@ -291,7 +291,7 @@ router.post('/relation/:id/review', authenticate, async (req, res, next) => {
     }
 });
 
-router.get("/coach/search", /*authenticate,*/ async (req, res, next) => {
+router.get("/coach/search", authenticate, async (req, res, next) => {
     let names = req.query.name;
     let reviewsForPush = [];
     const reviews = await DbService.getMany(COLLECTIONS.REVIEWS, {});
@@ -346,12 +346,12 @@ router.get("/coach/search", /*authenticate,*/ async (req, res, next) => {
                 for (let i = 0; i < trainers.length; i++) {
                     const clients = await DbService.getMany(COLLECTIONS.RELATIONS, { "$or": [{ personalTrainerId: trainers[i]._id }, { personalTrainerId: mongoose.Types.ObjectId(trainers[i]._id) }] });
 
-                    /*const relation = await DbService.getOne(COLLECTIONS.RELATIONS, { personalTrainerId: trainers[i]._id, clientId: req.user._id, status: RELATION_STATUSES.PENDING_APPROVAL })
+                    const relation = await DbService.getOne(COLLECTIONS.RELATIONS, { personalTrainerId: trainers[i]._id, clientId: req.user._id, status: RELATION_STATUSES.PENDING_APPROVAL })
                     if (trainers[i].userId.toString() == req.user._id.toString() || relation) {
                         trainers.splice(i, 1);
                         i--;
                         continue;
-                    }*/
+                    }
 
 
                     Object.assign(trainers[i], { criteriasMet: 0 });
@@ -381,12 +381,12 @@ router.get("/coach/search", /*authenticate,*/ async (req, res, next) => {
 
                 const clients = await DbService.getMany(COLLECTIONS.RELATIONS, { "$or": [{ personalTrainerId: trainers[i]._id }, { personalTrainerId: mongoose.Types.ObjectId(trainers[i]._id) }] });
 
-                /*const relation = await DbService.getOne(COLLECTIONS.RELATIONS, { personalTrainerId: trainers[i]._id, clientId: req.user._id, status: RELATION_STATUSES.PENDING_APPROVAL })
+                const relation = await DbService.getOne(COLLECTIONS.RELATIONS, { personalTrainerId: trainers[i]._id, clientId: req.user._id, status: RELATION_STATUSES.PENDING_APPROVAL })
                 if (trainers[i].userId.toString() == req.user._id.toString() || relation) {
                     trainers.splice(i, 1);
                     i--;
                     continue;
-                }*/
+                }
 
                 Object.assign(trainers[i], { criteriasMet: 0 });
 
