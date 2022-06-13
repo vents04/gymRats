@@ -137,3 +137,15 @@
 {"level":"error","message":"User record with this email was not found"}
 {"level":"error","message":"User record with this email address already exists"}
 {"level":"error","message":"User record with this email was not found"}
+{"level":"error","message":"Reps should be a positive number"}
+{"level":"error","message":"Reps should be a positive number"}
+{"level":"error","message":"Reps should be a positive number"}
+{"level":"error","message":"Reps should be a positive number"}
+{"level":"error","message":"Reps should be a positive number"}
+{"level":"error","message":"Invalid id parameter/s"}
+{"level":"error","message":"Invalid id parameter/s"}
+{"level":"error","message":"Invalid id parameter/s"}
+{"level":"error","message":"First name is a required field"}
+{"level":"error","message":"First name is a required field"}
+{"level":"error","message":"First name is a required field"}
+{"level":"error","message":"First name is a required field"}
