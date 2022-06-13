@@ -296,7 +296,12 @@ router.get("/coach/search", authenticate, async (req, res, next) => {
 
     if (((req.query.lat && !req.query.lng) || (!req.query.lat && req.query.lng)) && !names) {
         const trainers = await DbService.getMany(COLLECTIONS.PERSONAL_TRAINERS, {});
-        console.log(trainers);
+        for(let trainer of trainers){
+            const user = await DbService.getById(COLLECTIONS.USERS, trainer.userId);
+            if(!user){
+                console.log(trainer)
+            }
+        }
         return res.status(HTTP_STATUS_CODES.OK).send({
             results: trainers
         })
@@ -388,6 +393,11 @@ router.get("/coach/search", authenticate, async (req, res, next) => {
             }
             quicksort(users, 0, users.length - 1)
 
+        }
+        for(let i = 0; i < 50; i++){
+            if(!users[i].user){
+                console.log(users[i])
+            }
         }
         return res.status(HTTP_STATUS_CODES.OK).send({
             results: users.slice(0, 50)
