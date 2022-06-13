@@ -336,18 +336,8 @@ router.get("/search/food", async (req, res, next) => {
                 regex[i] = new RegExp("^"+words[i].toLowerCase())
             }
 
-
-            const dt = Date.now();
-
-            console.log(regex)
+            
             foods = await DbService.getMany(COLLECTIONS.CALORIES_COUNTER_ITEMS, {$text: {$search: words.join(" ")}});
-            
-            
-            
-
-            console.log(Date.now() - dt);
-            
-            console.log(foods.length);
             
             if (words.length > 1) {
                 for (let food of foods) {

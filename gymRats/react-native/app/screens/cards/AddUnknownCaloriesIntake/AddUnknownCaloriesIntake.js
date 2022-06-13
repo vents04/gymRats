@@ -32,6 +32,14 @@ export default class AddUnknownCaloriesIntake extends Component {
         })
         return true;
     }
+    
+    componentDidMount() {
+        BackHandler.addEventListener('hardwareBackPress', this.backAction)
+    }
+
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.backAction)
+    }
 
     addUnknownSourceCalories = () => {
         ApiRequests.post("calories-counter/unknown-source-calories", {}, {
