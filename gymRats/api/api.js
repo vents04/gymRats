@@ -37,7 +37,6 @@ app
 
 mongo.connect();
 
-<<<<<<< HEAD
 /*(async function () {
     const cut = [
         [
@@ -188,36 +187,6 @@ mongo.connect();
         let orm = 0;
         for (let set of session) {
             if (oneRepMax(set[0], set[1]) > orm) orm = parseFloat(parseFloat(oneRepMax(set[0], set[1])).toFixed(1));
-=======
-(async function () {
-    setTimeout(async function () {
-        let tree = {};
-        const foods = await DbService.getManyWithSortAndLimit(COLLECTIONS.CALORIES_COUNTER_ITEMS, {}, {}, 500);
-        let index = 0;
-        for (let food of foods) {
-            index++;
-            for (let keyword of food.keywords) {
-                for (let char = 0; char < keyword.length; char++) {
-                    if (tree[keyword[char]] == undefined) {
-                        tree[keyword[char]] = {};
-                    }
-                    let currentNode = tree[keyword[char]];
-                    for (let i = char + 1; i < keyword.length; i++) {
-                        if (currentNode[keyword[i]] == undefined) {
-                            currentNode[keyword[i]] = {};
-                        }
-                        currentNode = currentNode[keyword[i]];
-                    }
-                    currentNode.foods = currentNode.foods || [];
-                    if (!currentNode.foods.includes(food)) currentNode.foods.push({
-                        _id: food._id,
-                        searchedTimes: food.searchedTimes,
-                        usedTimes: food.usedTimes,
-                        keywords: food.keywords
-                    });
-                }
-            }
->>>>>>> ffb5acc7b386968ecdf4af383ff819662fd27359
         }
         const stringifiedTree = JSON.stringify(tree);
         //fs.writeFileSync(path.join(__dirname, './foodTree.json'), stringifiedTree);

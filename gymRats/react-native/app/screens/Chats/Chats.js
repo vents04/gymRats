@@ -57,6 +57,7 @@ export default class Chats extends Component {
             }
         })
     }
+    
 
     updateLastMessage = () => {
         socketClass.getChatsRoomSocket().on("last-message-to-be-updated", () => {
