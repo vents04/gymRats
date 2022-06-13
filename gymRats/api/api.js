@@ -229,8 +229,8 @@ mongo.connect();
 })();*/
 
 
-/*
-(async function () {
+
+/*(async function () {
     const trainers = await DbService.getMany(COLLECTIONS.PERSONAL_TRAINERS, {});
     for (let trainer of trainers) {
         const user = await DbService.getOne(COLLECTIONS.USERS, { "$or": [{ _id: mongoose.Types.ObjectId(trainer.userId) }, { _id: trainer.userId }] });
@@ -238,8 +238,8 @@ mongo.connect();
             await DbService.update(COLLECTIONS.PERSONAL_TRAINERS, { _id: mongoose.Types.ObjectId(trainer._id) }, { firstName: user.firstName, lastName: user.lastName });
         }
     }
-})();
-*/
+})();*/
+
 
 io.on("connection", (socket) => {
     socket.on("join-chats-room", async (payload) => {

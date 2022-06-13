@@ -182,3 +182,12 @@
 {"level":"error","message":"Cannot read properties of undefined (reading 'user')"}
 {"level":"error","message":"Cannot read properties of undefined (reading 'user')"}
 {"level":"error","message":"Latitude and longitude parameters must be provided when maxDistance parameter is provided"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'user')"}
+{"level":"error","message":"The user for the provided authentication token was not found"}
+{"level":"error","message":"Cannot read properties of undefined (reading '_id')"}
+{"level":"error","message":"The user for the provided authentication token was not found"}
+{"level":"error","message":"Cannot read properties of undefined (reading '_id')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'user')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'user')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'user')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'user')"}
