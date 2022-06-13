@@ -245,7 +245,7 @@ export default class CoachSearch extends Component {
                             }]}>{i18n.t('screens')['coachSearch']['noCoachesFound']}</Text>
                     }
                 </View>
-                <BottomSheet ref={this.filterSheet} height={400} draggable={false}>
+                <BottomSheet ref={this.filterSheet} height={this.state.lat != null && this.state.lng != null ? 400 : 250} draggable={false}>
                     <View style={styles.bottomSheetTopbar}>
                         <Text style={styles.bottomSheetTitle}>{i18n.t('screens')['coachSearch']['filters']}</Text>
                         <Pressable style={({ pressed }) => [
@@ -281,64 +281,68 @@ export default class CoachSearch extends Component {
                                 }}
                             />
                         </Pressable>
-                        <Pressable style={({ pressed }) => [
-                            {
-                                opacity: pressed ? 0.1 : 1,
-                                marginTop: 32
-                            }
-                        ]} onPress={() => {
-                            this.filterSheet.current.close();
-                        }}>
-                            <Text style={styles.sheetSectionTitle}>{i18n.t('screens')['coachSearch']['maximumDistance']} {
-                                this.state.maxDistance != 0
-                                    ? `${this.state.maxDistance}km`
-                                    : i18n.t('screens')['coachSearch']['notSet']
-                            }</Text>
-                            {
-                                this.state.maxDistance != 0
-                                    ? <>
-                                        <Slider
-                                            style={{ width: "100%", height: 40 }}
-                                            step={1}
-                                            value={this.state.maxDistance}
-                                            thumbTintColor="#1f6cb0"
-                                            minimumValue={1}
-                                            maximumValue={30}
-                                            minimumTrackTintColor="#1f6cb0"
-                                            maximumTrackTintColor="#000000"
-                                            onSlidingComplete={(value) => {
-                                                this.setState({ maxDistance: value, filtersChanged: true });
-                                            }}
-                                        />
-                                        <Pressable style={({ pressed }) => [
-                                            {
-                                                opacity: pressed ? 0.1 : 1,
-                                            }
-                                        ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
-                                            this.filterSheet.current.show();
-                                            this.setState({ maxDistance: 0 });
-                                        }}>
-                                            <Text style={[globalStyles.actionText, {
-                                                fontFamily: "MainBold",
-                                                marginTop: 8
-                                            }]}>{i18n.t('screens')['coachSearch']['unsetMaximumDistance']}</Text>
-                                        </Pressable>
-                                    </>
-                                    : <Pressable style={({ pressed }) => [
-                                        {
-                                            opacity: pressed ? 0.1 : 1,
-                                        }
-                                    ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
-                                        this.filterSheet.current.show();
-                                        this.setState({ maxDistance: 30, filtersChanged: true });
-                                    }}>
-                                        <Text style={[globalStyles.actionText, {
-                                            fontFamily: "MainBold",
-                                            marginTop: 8
-                                        }]}>{i18n.t('screens')['coachSearch']['setMaximumDistance']}</Text>
-                                    </Pressable>
-                            }
-                        </Pressable>
+                        {
+                            this.state.lat != null && this.state.lng != null
+                                ? <Pressable style={({ pressed }) => [
+                                    {
+                                        opacity: pressed ? 0.1 : 1,
+                                        marginTop: 32
+                                    }
+                                ]} onPress={() => {
+                                    this.filterSheet.current.close();
+                                }}>
+                                    <Text style={[styles.sheetSectionTitle, { paddingLeft: 0 }]}>{i18n.t('screens')['coachSearch']['maximumDistance']} {
+                                        this.state.maxDistance != 0
+                                            ? `${this.state.maxDistance}km`
+                                            : i18n.t('screens')['coachSearch']['unsetMaximumDistance']
+                                    }</Text>
+                                    {
+                                        this.state.maxDistance != 0
+                                            ? <>
+                                                <Slider
+                                                    style={{ width: "100%", height: 40 }}
+                                                    step={1}
+                                                    value={this.state.maxDistance}
+                                                    thumbTintColor="#1f6cb0"
+                                                    minimumValue={1}
+                                                    maximumValue={30}
+                                                    minimumTrackTintColor="#1f6cb0"
+                                                    maximumTrackTintColor="#000000"
+                                                    onSlidingComplete={(value) => {
+                                                        this.setState({ maxDistance: value, filtersChanged: true });
+                                                    }}
+                                                />
+                                                <Pressable style={({ pressed }) => [
+                                                    {
+                                                        opacity: pressed ? 0.1 : 1,
+                                                    }
+                                                ]} onPress={() => {
+                                                    this.filterSheet.current.show();
+                                                    this.setState({ maxDistance: 0 });
+                                                }}>
+                                                    <Text style={[globalStyles.actionText, {
+                                                        fontFamily: "MainBold",
+                                                        marginTop: 8
+                                                    }]}>{i18n.t('screens')['coachSearch']['unsetMaximumDistance']}</Text>
+                                                </Pressable>
+                                            </>
+                                            : <Pressable style={({ pressed }) => [
+                                                {
+                                                    opacity: pressed ? 0.1 : 1,
+                                                }
+                                            ]} onPress={() => {
+                                                this.filterSheet.current.show();
+                                                this.setState({ maxDistance: 30, filtersChanged: true });
+                                            }}>
+                                                <Text style={[globalStyles.actionText, {
+                                                    fontFamily: "MainBold",
+                                                    marginTop: 8
+                                                }]}>{i18n.t('screens')['coachSearch']['setMaximumDistance']}</Text>
+                                            </Pressable>
+                                    }
+                                </Pressable>
+                                : null
+                        }
                         {
                             this.state.filtersChanged
                                 ? <Pressable style={({ pressed }) => [

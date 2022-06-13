@@ -19,10 +19,12 @@ router.get("/page", authenticate, async (req, res, next) => {
         const date = new Date();
         let weightTrackerProgress = await WeightTrackerService.getProgressNotationNew(date.getDate(), date.getMonth() + 1, date.getFullYear(), req.user._id, req.headers.lng);
         let logbookProgress = await LogbookService.getExercisesProgress(req.user._id);
+        let workoutSession = await DbService.getOne(COLLECTIONS.WORKOUT_SESSIONS, { userId: mongoose.Types.ObjectId(req.user._id), date: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear() });
         return res.status(HTTP_STATUS_CODES.OK).send({
             weightTrackerProgress,
             logbookProgress,
-            message: message
+            message: message,
+            hasAddedWorkoutSession: workoutSession ? true : false
         })
     } catch (err) {
         console.log(err)

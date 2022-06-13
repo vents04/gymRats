@@ -290,19 +290,23 @@ export default class Progress extends Component {
                                                                                     !exercise.lastSessionProgressNotation && !exercise.lastFiveSessionsProgressNotation
                                                                                         ? <>
                                                                                             <Text style={globalStyles.notation}>{i18n.t('screens')['progress']['atLeastTwoSessions']}</Text>
-                                                                                            <Pressable style={({ pressed }) => [
-                                                                                                globalStyles.authPageActionButton, {
-                                                                                                    opacity: pressed ? 0.1 : 1,
-                                                                                                    marginTop: 12
-                                                                                                }
-                                                                                            ]} onPress={() => {
-                                                                                                this.props.navigation.navigate("Logbook", {
-                                                                                                    date: new Date(),
-                                                                                                    timezoneOffset: new Date().getTimezoneOffset()
-                                                                                                });
-                                                                                            }}>
-                                                                                                <Text style={globalStyles.authPageActionButtonText}>{i18n.t('screens')['progress']['addWorkoutSession']}</Text>
-                                                                                            </Pressable>
+                                                                                            {
+                                                                                                !this.state.progress.hasAddedWorkoutSession
+                                                                                                    ? <Pressable style={({ pressed }) => [
+                                                                                                        globalStyles.authPageActionButton, {
+                                                                                                            opacity: pressed ? 0.1 : 1,
+                                                                                                            marginTop: 12
+                                                                                                        }
+                                                                                                    ]} onPress={() => {
+                                                                                                        this.props.navigation.navigate("Logbook", {
+                                                                                                            date: new Date(),
+                                                                                                            timezoneOffset: new Date().getTimezoneOffset()
+                                                                                                        });
+                                                                                                    }}>
+                                                                                                        <Text style={globalStyles.authPageActionButtonText}>{i18n.t('screens')['progress']['addWorkoutSession']}</Text>
+                                                                                                    </Pressable>
+                                                                                                    : null
+                                                                                            }
                                                                                         </>
                                                                                         : null
                                                                                 }
