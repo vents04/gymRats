@@ -3,7 +3,7 @@ import "./Home.css"
 import logo from "../../../assets/images/icon.png"
 import google from "../../../assets/images/badges/google.png"
 import apple from "../../../assets/images/badges/apple.svg"
-import mockup from "../../../assets/images/mockup.png"
+import mockup from "../../../assets/images/mockup-2.png"
 
 export default class Home extends Component {
   render() {
