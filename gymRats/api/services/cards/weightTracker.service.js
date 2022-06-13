@@ -2,6 +2,7 @@ const { HTTP_STATUS_CODES, COLLECTIONS, WEIGHT_UNITS, WEIGHT_UNIT_RELATIONS, PRO
 const DbService = require("../db.service");
 const mongoose = require("mongoose");
 const ResponseError = require("../../errors/responseError");
+const progressTips = require("../../progressTips");
 
 const WeightTrackerService = {
     getDailyTrend: (_id) => {
@@ -240,7 +241,8 @@ const WeightTrackerService = {
         })
     },
 
-    getProgressNotationNew: (date, month, year, userId) => {
+    getProgressNotationNew: (date, month, year, userId, lng) => {
+        if (!lng) lng = "en"
         return new Promise(async (resolve, reject) => {
             try {
                 const currentDate = new Date(year, month - 1, date);
@@ -314,46 +316,22 @@ const WeightTrackerService = {
                 let tips = [];
                 switch (notation) {
                     case PROGRESS_NOTATION.RAPID_WEIGHT_GAIN:
-                        tips = [
-                            "Eat more saturating foods like fruits, vegetables, and whole grains",
-                            "Exercise more",
-                            "Try avoiding sugars and junk food if you have been consuming them",
-                        ]
+                        tips = progressTips[lng].rapidWeightGain;
                         break;
                     case PROGRESS_NOTATION.SUFFICIENT_WEIGHT_GAIN:
-                        tips = [
-                            "Keep eating protein and fiber rich foods",
-                            "Do not forget to get at least 8h of sleep every night",
-                            "Strength training is vital for keeping fat gain to a minimum during weight gaining",
-                        ]
+                        tips = progressTips[lng].sufficientWeightGain;
                         break;
                     case PROGRESS_NOTATION.INSUFFICIENT_WEIGHT_GAIN:
-                        tips = [
-                            "Consume 100-150 calories more per day",
-                            "Eat more protein and fiber rich foods",
-                            "Do not forget to drink the recommended 2L water intake per day",
-                        ]
+                        tips = progressTips[lng].insufficientWeightGain;
                         break;
                     case PROGRESS_NOTATION.INSUFFICIENT_WEIGHT_LOSS:
-                        tips = [
-                            "Drop your calories intake by 200-250 calories for a more prominent weight loss",
-                            "Eat more protein and fiber rich foods to keep you full for longer periods of time",
-                            "Start doing cardio to burn fat and for overall health",
-                        ]
+                        tips = progressTips[lng].insufficientWeightLoss;
                         break;
                     case PROGRESS_NOTATION.SUFFICIENT_WEIGHT_LOSS:
-                        tips = [
-                            "Keep doing what you are doing because you are dropping weight at the perfect pace",
-                            "Do strength training to preserve muscle mass",
-                            "A good water intake will not only be beneficial for your health but will make you feel full, too",
-                        ]
+                        tips = progressTips[lng].sufficientWeightLoss;
                         break;
                     case PROGRESS_NOTATION.RAPID_WEIGHT_LOSS:
-                        tips = [
-                            "Up your calories by 100-150 because you are loosing weight too quickly",
-                            "Try lowering the intensity of your workouts if that is causing the rapid weight loss",
-                            "Muscles are a healthy tissue that may be lost during aggressive weight loss phases for long periods of time",
-                        ]
+                        tips = progressTips[lng].rapidWeightLoss;
                         break;
                 }
 

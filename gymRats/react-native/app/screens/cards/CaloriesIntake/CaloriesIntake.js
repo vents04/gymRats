@@ -209,45 +209,43 @@ export default class CaloriesIntake extends Component {
                                 </View>
                             )
                         }
-                        {
-                            this.state.unknownSourceCaloriesDay.length > 0
-                                ? <View key="unknownSourceCaloriesMeal" style={styles.mealContainer}>
-                                    <View style={styles.mealTopBar}>
-                                        <Text style={styles.mealTitle}>{i18n.t('screens')['caloriesIntake']['unknownSourceCaloriesTitle']}</Text>
-                                        <Pressable style={({ pressed }) => [
-                                            {
-                                                opacity: pressed ? 0.1 : 1,
-                                            }
-                                        ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
-                                            this.props.navigation.navigate("AddUnknownCaloriesIntake", { date: this.props.route.params.date, timezoneOffset: this.state.timezoneOffset })
-                                        }}>
-                                            <Ionicons name="add-sharp" size={25} color={cardColors.caloriesIntake} />
-                                        </Pressable>
-                                    </View>
+                        <View key="unknownSourceCaloriesMeal" style={styles.mealContainer}>
+                            <View style={styles.mealTopBar}>
+                                <Text style={styles.mealTitle}>{i18n.t('screens')['caloriesIntake']['unknownSourceCaloriesTitle']}</Text>
+                                <Pressable style={({ pressed }) => [
                                     {
-                                        this.state.unknownSourceCaloriesDay.map((item, index) =>
-                                            <View key={item._id} style={styles.itemContainer}>
-                                                <Pressable style={({ pressed }) => [
-                                                    styles.itemContainerLeft
-                                                ]}>
-                                                    <Text style={styles.itemTitle}>{item.calories} {i18n.t('common')['foodUnits']['CALORIES']}</Text>
-                                                    <Text style={styles.itemAmount}>{i18n.t('screens')['caloriesIntake']['unknownSourceCaloriesItemDescription']}</Text>
-                                                </Pressable>
-                                                <Pressable style={({ pressed }) => [
-                                                    {
-                                                        opacity: pressed ? 0.1 : 1,
-                                                    }
-                                                ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
-                                                    this.removeUnknownSourceCaloriesItem(item._id)
-                                                }}>
-                                                    <Ionicons name="close" size={20} />
-                                                </Pressable>
-                                            </View>
-                                        )
+                                        opacity: pressed ? 0.1 : 1,
                                     }
-                                </View>
-                                : null
-                        }
+                                ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
+                                    this.props.navigation.navigate("AddUnknownCaloriesIntake", { date: this.props.route.params.date, timezoneOffset: this.state.timezoneOffset })
+                                }}>
+                                    <Ionicons name="add-sharp" size={25} color={cardColors.caloriesIntake} />
+                                </Pressable>
+                            </View>
+                            {
+                                this.state.unknownSourceCaloriesDay.length > 0
+                                    ? this.state.unknownSourceCaloriesDay.map((item, index) =>
+                                        <View key={item._id} style={styles.itemContainer}>
+                                            <Pressable style={({ pressed }) => [
+                                                styles.itemContainerLeft
+                                            ]}>
+                                                <Text style={styles.itemTitle}>{item.calories} {i18n.t('common')['foodUnits']['CALORIES']}</Text>
+                                                <Text style={styles.itemAmount}>{i18n.t('screens')['caloriesIntake']['unknownSourceCaloriesItemDescription']}</Text>
+                                            </Pressable>
+                                            <Pressable style={({ pressed }) => [
+                                                {
+                                                    opacity: pressed ? 0.1 : 1,
+                                                }
+                                            ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
+                                                this.removeUnknownSourceCaloriesItem(item._id)
+                                            }}>
+                                                <Ionicons name="close" size={20} />
+                                            </Pressable>
+                                        </View>
+                                    )
+                                    : <Text style={globalStyles.notation}>{i18n.t('screens')['caloriesIntake']['noFoodAdded']}</Text>
+                            }
+                        </View>
                     </ScrollView>
                 </View>
             </View>

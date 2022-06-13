@@ -210,7 +210,8 @@ export default class ProfileDetailsEdit extends Component {
                             value={this.state.weightUnit}
                             setValue={(callback) => {
                                 this.setState(state => ({
-                                    weightUnit: callback(state.value)
+                                    weightUnit: callback(state.value),
+                                    hasChanges: true
                                 }));
                             }}
                             items={this.state.weightUnits}

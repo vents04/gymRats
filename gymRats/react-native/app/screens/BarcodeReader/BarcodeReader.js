@@ -9,6 +9,7 @@ import { BackButtonHandler } from '../../classes/BackButtonHandler';
 import globalStyles from '../../../assets/styles/global.styles';
 import styles from './BarcodeReader.styles';
 import { CALORIES_COUNTER_SCREEN_INTENTS, HTTP_STATUS_CODES } from '../../../global';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function BarcodeScanner(props) {
     const [hasPermission, setHasPermission] = useState(null);
@@ -23,11 +24,7 @@ export default function BarcodeScanner(props) {
     }
 
     const backAction = () => {
-        props.navigation.navigate("SearchCaloriesIntake", {
-            meal: props.route.params.meal,
-            date: props.route.params.date,
-            timezoneOffset: props.route.params.timezoneOffset
-        });
+        props.navigation.goBack();
         return true;
     }
 
@@ -106,64 +103,80 @@ export default function BarcodeScanner(props) {
     }
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.title}>{i18n.t('screens')['barcodeReader']['scanBarcode']}</Text>
-            <View style={styles.barcodebox}>
-                <BarCodeScanner
-                    onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-                    style={{ height: 400, width: 400 }} />
+        <View style={globalStyles.safeAreaView}>
+            <View style={globalStyles.pageContainer}>
+                <View style={globalStyles.followUpScreenTopbar}>
+                    <Pressable style={({ pressed }) => [
+                        {
+                            opacity: pressed ? 0.1 : 1,
+                        }
+                    ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
+                        backAction();
+                    }}>
+                        <Ionicons name="md-arrow-back-sharp" size={25} />
+                    </Pressable>
+                    <Text style={globalStyles.followUpScreenTitle}>Barcode reader</Text>
+                </View>
+                <View style={styles.container}>
+                    <Text style={styles.title}>{i18n.t('screens')['barcodeReader']['scanBarcode']}</Text>
+                    <View style={styles.barcodebox}>
+                        <BarCodeScanner
+                            onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+                            style={{ height: 400, width: 400 }} />
+                    </View>
+                    {
+                        scanned
+                            ? <>
+                                <Text style={{ ...globalStyles.modalText, marginVertical: 24 }}>{i18n.t('screens')['barcodeReader']['barcodeNotFound']}</Text>
+                                <Pressable style={({ pressed }) => [
+                                    {
+                                        opacity: pressed ? 0.1 : 1,
+                                        marginHorizontal: 16,
+                                        padding: 8
+                                    }
+                                ]} onPress={() => {
+                                    setBarcode("")
+                                    setScanned(false)
+                                }}>
+                                    <Text style={globalStyles.actionText}>{i18n.t('screens')['barcodeReader']['scanBarcode']}</Text>
+                                </Pressable>
+                                <Pressable style={({ pressed }) => [
+                                    globalStyles.authPageActionButton,
+                                    {
+                                        opacity: pressed ? 0.1 : 1,
+                                        maxWidth: "80%",
+                                        marginTop: 64,
+                                        marginHorizontal: 16
+                                    },
+                                ]} onPress={() => {
+                                    setScanned(false);
+                                    props.navigation.replace("AddFood", { barcode, date: props.route.params.date, timezoneOffset: props.route.params.timezoneOffset, meal: props.route.params.meal });
+                                }}>
+                                    <Text style={globalStyles.authPageActionButtonText}>{i18n.t('screens')['barcodeReader']['addFood']}</Text>
+                                </Pressable>
+                            </>
+                            : <>
+                                <TextInput
+                                    style={[globalStyles.authPageInput, { width: "80%", marginTop: 64 }]}
+                                    placeholder={i18n.t('screens')['barcodeReader']['enterBarcode']}
+                                    value={barcode}
+                                    onChangeText={(val) => { setBarcode(val) }} />
+                                <Pressable style={({ pressed }) => [
+                                    globalStyles.authPageActionButton,
+                                    {
+                                        opacity: pressed ? 0.1 : 1,
+                                        width: "80%",
+                                        marginTop: 16
+                                    },
+                                ]} onPress={() => {
+                                    handleBarCodeScanned({ type: "", data: barcode });
+                                }}>
+                                    <Text style={globalStyles.authPageActionButtonText}>{i18n.t('screens')['barcodeReader']['submitBarcode']}</Text>
+                                </Pressable>
+                            </>
+                    }
+                </View >
             </View>
-            {
-                scanned
-                    ? <>
-                        <Text style={{ ...globalStyles.modalText, marginVertical: 24 }}>{i18n.t('screens')['barcodeReader']['barcodeNotFound']}</Text>
-                        <Pressable style={({ pressed }) => [
-                            {
-                                opacity: pressed ? 0.1 : 1,
-                                marginHorizontal: 16,
-                                padding: 8
-                            }
-                        ]} onPress={() => {
-                            setBarcode("")
-                            setScanned(false)
-                        }}>
-                            <Text style={globalStyles.actionText}>{i18n.t('screens')['barcodeReader']['scanBarcode']}</Text>
-                        </Pressable>
-                        <Pressable style={({ pressed }) => [
-                            globalStyles.authPageActionButton,
-                            {
-                                opacity: pressed ? 0.1 : 1,
-                                maxWidth: "80%",
-                                marginTop: 64,
-                                marginHorizontal: 16
-                            },
-                        ]} onPress={() => {
-                            setScanned(false);
-                            props.navigation.replace("AddFood", { barcode, date: props.route.params.date, timezoneOffset: props.route.params.timezoneOffset, meal: props.route.params.meal });
-                        }}>
-                            <Text style={globalStyles.authPageActionButtonText}>{i18n.t('screens')['barcodeReader']['addFood']}</Text>
-                        </Pressable>
-                    </>
-                    : <>
-                        <TextInput
-                            style={[globalStyles.authPageInput, { width: "80%", marginTop: 64 }]}
-                            placeholder={i18n.t('screens')['barcodeReader']['enterBarcode']}
-                            value={barcode}
-                            onChangeText={(val) => { setBarcode(val) }} />
-                        <Pressable style={({ pressed }) => [
-                            globalStyles.authPageActionButton,
-                            {
-                                opacity: pressed ? 0.1 : 1,
-                                width: "80%",
-                                marginTop: 16
-                            },
-                        ]} onPress={() => {
-                            handleBarCodeScanned({ type: "", data: barcode });
-                        }}>
-                            <Text style={globalStyles.authPageActionButtonText}>{i18n.t('screens')['barcodeReader']['submitBarcode']}</Text>
-                        </Pressable>
-                    </>
-            }
-        </View >
+        </View>
     );
 }

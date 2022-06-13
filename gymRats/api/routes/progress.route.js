@@ -17,7 +17,7 @@ router.get("/page", authenticate, async (req, res, next) => {
         if (relation && relation.status == RELATION_STATUSES.ACTIVE) message = true;
 
         const date = new Date();
-        let weightTrackerProgress = await WeightTrackerService.getProgressNotationNew(date.getDate(), date.getMonth() + 1, date.getFullYear(), req.user._id);
+        let weightTrackerProgress = await WeightTrackerService.getProgressNotationNew(date.getDate(), date.getMonth() + 1, date.getFullYear(), req.user._id, req.headers.lng);
         let logbookProgress = await LogbookService.getExercisesProgress(req.user._id);
         return res.status(HTTP_STATUS_CODES.OK).send({
             weightTrackerProgress,

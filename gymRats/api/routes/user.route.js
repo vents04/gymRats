@@ -23,6 +23,7 @@ const UserService = require('../services/user.service');
 
 router.post("/signup", async (req, res, next) => {
     const { error } = signupValidation(req.body, req.headers.lng);
+    console.log(error);
     if (error) return next(new ResponseError(error.details[0].message, HTTP_STATUS_CODES.BAD_REQUEST));
 
     req.body.email = req.body.email.toLowerCase();

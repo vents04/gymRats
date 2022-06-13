@@ -94,7 +94,7 @@ export default class EmailVerification extends Component {
 
     render() {
         return (
-            <View style={globalStyles.safeAreaView}>
+            <View style={[globalStyles.safeAreaView, { paddingTop: 64 }]}>
                 <View style={globalStyles.pageContainer}>
                     <View style={globalStyles.followUpScreenTopbar}>
                         <Pressable style={({ pressed }) => [

@@ -145,13 +145,6 @@ const calendarScreenStack = () => {
                 }}
                 component={AddUnknownCaloriesIntake}
             />
-            <Stack.Screen
-                name="Suggestions"
-                options={{
-                    headerShown: false,
-                }}
-                component={Suggestions}
-            />
         </Stack.Navigator>
     );
 };
@@ -277,6 +270,13 @@ const profileScreenStack = () => {
                     headerShown: false
                 }}
                 component={ProfileDetailsEdit}
+            />
+            <Stack.Screen
+                name="Suggestions"
+                options={{
+                    headerShown: false,
+                }}
+                component={Suggestions}
             />
         </Stack.Navigator>
     )

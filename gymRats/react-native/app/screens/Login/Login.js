@@ -75,7 +75,7 @@ export default class Login extends Component {
 
     render() {
         return (
-            <View style={globalStyles.safeAreaView}>
+            <View style={[globalStyles.safeAreaView, { paddingTop: 64 }]}>
                 <View style={globalStyles.pageContainer}>
                     <LogoBar />
                     <Text style={globalStyles.authPageTitle}>{i18n.t('screens')['login']['pageTitle']}</Text>
@@ -89,6 +89,7 @@ export default class Login extends Component {
                             placeholder={i18n.t('screens')['login']['emailPlaceholder']}
                             onChangeText={(val) => { this.setState({ email: val, showError: false }) }} />
                         <View style={globalStyles.authPageInputContainer}>
+                            {/*
                             {
                                 this.state.password && this.state.password.length > 0
                                     ? <Text style={{
@@ -98,6 +99,7 @@ export default class Login extends Component {
                                     }}>{i18n.t('screens')['login']['passwordPlaceholder']}</Text>
                                     : null
                             }
+                        */}
                             <TextInput
                                 style={{ ...globalStyles.authPageInputText, width: '90%' }}
                                 value={this.state.password}

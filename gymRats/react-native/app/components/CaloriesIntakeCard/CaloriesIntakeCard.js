@@ -93,11 +93,18 @@ export default class CaloriesIntakeCard extends Component {
         this.setState({ showConfirmationBox: state });
     }
 
-    deleteCard = () => {
-        ApiRequests.delete(`calories-counter/${this.props.data._id}`, {}, true).then((response) => {
+    deleteCard = async () => {
+        console.log(this.props.data);
+        try {
+            if (this.props.data._id) await ApiRequests.delete(`calories-counter/${this.props.data._id}`, {}, true);
+            if (this.props.data.unknownSourceCaloriesDay.length > 0) {
+                for (let item of this.props.data.unknownSourceCaloriesDay) {
+                    await ApiRequests.delete(`calories-counter/unknown-source-calories/${item._id}`, {}, true);
+                }
+            }
             this.toggleShowConfirmationBox(false);
             DataManager.onDateCardChanged(this.props.date);
-        }).catch((error) => {
+        } catch (error) {
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
                     this.setState({ showError: true, error: error.response.data });
@@ -109,7 +116,7 @@ export default class CaloriesIntakeCard extends Component {
             } else {
                 ApiRequests.showRequestSettingError();
             }
-        })
+        }
     }
 
     getClientCaloriesCounterDay = () => {

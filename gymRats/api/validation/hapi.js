@@ -308,7 +308,7 @@ const workoutSessionValidation = (data, lng) => {
                     "number.positive": numberPositiveError(lng, "duration"),
                     "number.integer": numberIntegerError(lng, "year"),
                     "number.max": numberMaxError(lng, "duration", 10000),
-                }),
+                }).allow(null).allow(0),
                 weight: Joi.object({
                     amount: Joi.number().precision(2).required().positive().max(3000).messages({
                         "number.precision": numberPrecisionError(lng, "weight", 2),

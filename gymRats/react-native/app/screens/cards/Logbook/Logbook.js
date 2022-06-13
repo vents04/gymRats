@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Alert, BackHandler, Modal, ScrollView, Text, TextInput, Pressable, View } from 'react-native'
 import i18n from 'i18n-js';
 import { Picker } from '@react-native-picker/picker';
+import DropDownPicker from 'react-native-dropdown-picker'
 
 import ApiRequests from '../../../classes/ApiRequests';
 import { BackButtonHandler } from '../../../classes/BackButtonHandler';
@@ -38,7 +39,9 @@ export default class Logbook extends Component {
             selectedTemplateId: null,
             templates: [],
             hasDeniedWorkoutTemplateReplication: false,
-            hasWorkoutTemplates: false
+            hasWorkoutTemplates: false,
+            templatePickerModalTemplateIds: [],
+            isTemplatePickerModalOpened: false,
         }
 
         this.focusListener;
@@ -142,6 +145,11 @@ export default class Logbook extends Component {
             this.setState({ templates: response.data.templates });
             if (response.data.templates.length > 0) {
                 this.setState({ showTemplatePickerModal: !this.state.hasDeniedWorkoutTemplateReplication, selectedTemplateId: response.data.templates[0]._id });
+                let templatePickerModalTemplateIds = [];
+                for (let template of response.data.templates) {
+                    templatePickerModalTemplateIds.push({ value: template._id, label: template.name });
+                }
+                this.setState({ templatePickerModalTemplateIds });
             }
         }).catch((error) => {
             if (error.response) {
@@ -334,6 +342,7 @@ export default class Logbook extends Component {
                             visible={true}>
                             <View style={globalStyles.centeredView}>
                                 <View style={globalStyles.modalView}>
+                                    <Text style={globalStyles.modalTitle}>{i18n.t('screens')['logbook']['templatePostModalTitle']}</Text>
                                     <Text style={globalStyles.modalText}>{i18n.t('screens')['logbook']['workoutTemplateModalMessage']}</Text>
                                     <TextInput
                                         value={this.state.templateTitle}
@@ -383,21 +392,41 @@ export default class Logbook extends Component {
                             visible={true}>
                             <View style={globalStyles.centeredView}>
                                 <View style={globalStyles.modalView}>
+                                    <Text style={globalStyles.modalTitle}>{i18n.t('screens')['logbook']['templatePickerModalTitle']}</Text>
                                     <Text style={globalStyles.modalText}>{i18n.t('screens')['logbook']['templatePickerModalMessage']}</Text>
-                                    <Picker
-                                        style={[globalStyles.authPageInput, {
-                                            backgroundColor: "#fafafa"
-                                        }]}
-                                        selectedValue={this.state.selectedTemplateId}
-                                        onValueChange={(itemValue, itemIndex) =>
-                                            this.setState({ selectedTemplateId: itemValue, showModalError: false, showError: false })
-                                        }>
-                                        {
-                                            this.state.templates.map((template, index) =>
-                                                <Picker.Item style={{ fontFamily: 'MainRegular' }} key={index} label={template.name} value={template._id} />
-                                            )
-                                        }
-                                    </Picker>
+                                    <DropDownPicker
+                                        placeholder={i18n.t('screens')['logbook']['templatePickerModalDropdownPlaceholder']}
+                                        maxHeight={150}
+                                        open={this.state.isTemplatePickerModalOpened}
+                                        setOpen={(value) => {
+                                            this.setState({ isTemplatePickerModalOpened: value })
+                                        }}
+                                        value={this.state.selectedTemplateId}
+                                        setValue={(callback) => {
+                                            this.setState(state => ({
+                                                selectedTemplateId: callback(state.value),
+                                            }));
+                                        }}
+                                        items={this.state.templatePickerModalTemplateIds}
+                                        setItems={(callback) => {
+                                            this.setState(state => ({
+                                                templatePickerModalTemplateIds: callback(state.items)
+                                            }));
+                                        }}
+                                        onChangeItem={item => { }}
+                                        zIndex={10000}
+                                        textStyle={{
+                                            fontFamily: 'MainMedium',
+                                            fontSize: 14,
+                                        }}
+                                        dropDownContainerStyle={{
+                                            borderColor: "#ccc",
+                                        }}
+                                        style={{
+                                            borderColor: "#ccc",
+                                            marginBottom: 16
+                                        }}
+                                    />
                                     {
                                         this.state.showModalError
                                             ? <Text style={globalStyles.errorBox}>{this.state.modalError}</Text>
@@ -587,7 +616,7 @@ export default class Logbook extends Component {
                                                                             {
                                                                                 opacity: pressed ? 0.1 : 1,
                                                                             }
-                                                                        ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
+                                                                        ]} onPress={() => {
                                                                             this.deleteSet(exercise.exerciseId, index);
                                                                             this.setState({ showError: false })
                                                                         }}>

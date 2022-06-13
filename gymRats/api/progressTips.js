@@ -16,7 +16,7 @@ module.exports = {
             "Do not forget to drink the recommended 2L water intake per day",
         ],
         insufficientWeightLoss: [
-            "Drop your calories intake by 200-250 calories for a more prominent weight loss",
+            "Drop your calories intake a bit more for a more prominent weight loss",
             "Eat more protein and fiber rich foods to keep you full for longer periods of time",
             "Start doing cardio to burn fat and for overall health",
         ],
@@ -26,7 +26,7 @@ module.exports = {
             "A good water intake will not only be beneficial for your health but will make you feel full, too",
         ],
         rapidWeightLoss: [
-            "Up your calories by 100-150 because you are loosing weight too quickly",
+            "Up your calories because you are loosing weight too quickly",
             "Try lowering the intensity of your workouts if that is causing the rapid weight loss",
             "Muscles are a healthy tissue that may be lost during aggressive weight loss phases for long periods of time",
         ]
@@ -48,7 +48,7 @@ module.exports = {
             "Не забравяйте да пиете препоръчителните 2 литра вода на ден",
         ],
         insufficientWeightLoss: [
-            "Намалете калорииния прием с 200-250 калории за по-ефективна загуба на тегло",
+            "Намалете калорииния прием малко повече за по-ефективна загуба на тегло",
             "Яжте повече храни богати на фибри и протеини, за да сте заситени за по-дълго време",
             "Правете кардио за изгаряне на мазнините и за подобряване на здравето",
         ],
@@ -58,7 +58,7 @@ module.exports = {
             "Пиенето на вода ще ви накара да се чувствате сити",
         ],
         rapidWeightLoss: [
-            "Увеличете калорииният си прием с 100-150 калории, тъй като губите тегло твърде бързо",
+            "Увеличете калорииният си прием, тъй като губите тегло твърде бързо",
             "Намалете интензитета на тренировките си",
             "Мускулите са здравословна тъкан, която може да бъде изгубена по време агресивна загуба на тегло за дълги периоди",
         ]

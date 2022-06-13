@@ -76,7 +76,7 @@ module.exports = {
     },
     bg: {
         fields: {
-            firstName: "Името",
+            firstName: "Име",
             lastName: "Фамилията",
             email: "Имейлът",
             password: "Паролата",

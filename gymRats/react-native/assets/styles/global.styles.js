@@ -6,7 +6,7 @@ export default StyleSheet.create({
         position: "absolute",
         left: 0,
         top: 0,
-        paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 32,
+        paddingTop: 32,
         right: 0,
         bottom: 0,
     },
@@ -14,7 +14,6 @@ export default StyleSheet.create({
         backgroundColor: "#1f6cb0"
     },
     pageContainer: {
-        paddingTop: Platform.OS == 'ios' ? 32 : 0,
         paddingHorizontal: 24,
         flex: 1,
         maxHeight: "100%",
@@ -40,7 +39,6 @@ export default StyleSheet.create({
         position: "relative"
     },
     authPageInputContainer: {
-        marginTop: 16,
         position: "relative",
         fontSize: 14,
         borderRadius: 4,
@@ -99,7 +97,7 @@ export default StyleSheet.create({
         fontFamily: "MainBold",
         color: "red",
         fontSize: 14,
-        marginBottom: 24
+        marginBottom: 24,
     },
     errorBox: {
         borderColor: "#eb0202",
@@ -183,7 +181,6 @@ export default StyleSheet.create({
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
-        marginTop: 22,
         backgroundColor: "rgba(0, 0, 0, 0.5)",
     },
     modalView: {
@@ -220,9 +217,10 @@ export default StyleSheet.create({
     },
     modalText: {
         marginBottom: 15,
-        textAlign: "center",
-        fontFamily: "MainBold",
-        fontSize: 16
+        fontFamily: "MainMedium",
+        fontSize: 12,
+        color: "#777",
+        width: "100%",
     },
     modalActionsContainer: {
         display: "flex",
@@ -233,10 +231,16 @@ export default StyleSheet.create({
         marginTop: 16
     },
     modalActionTitle: {
-        width: "50%",
+        width: "100%",
         textAlign: "center",
         fontFamily: "MainMedium",
-        fontSize: 14
+        fontSize: 14,
+    },
+    modalTitle: {
+        fontFamily: "MainBold",
+        fontSize: 18,
+        width: "100%",
+        marginBottom: 8
     },
     important: {
         padding: 16,

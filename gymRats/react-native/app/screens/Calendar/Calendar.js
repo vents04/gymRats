@@ -5,6 +5,9 @@ import { DataManager } from "../../classes/DataManager";
 import { BackHandler, Dimensions, Pressable, RefreshControl, ScrollView, Text, TouchableHighlight, TouchableNativeFeedback, TouchableWithoutFeedback, View } from 'react-native';
 import BottomSheet from "react-native-gesture-bottom-sheet";
 import DateTimePicker from '@react-native-community/datetimepicker';
+import GestureRecognizer, {
+    swipeDirections,
+} from 'react-native-swipe-gestures';
 
 import ApiRequests from '../../classes/ApiRequests';
 
@@ -134,13 +137,19 @@ export default class Calendar extends Component {
     }
 
     render() {
-        return <View style={globalStyles.safeAreaView}
-            onTouchStart={e => this.touchX = e.nativeEvent.pageX}
-            onTouchEnd={e => {
-                if (this.touchX - e.nativeEvent.pageX > 20)
-                    this.incrementDate(1);
-                else if (e.nativeEvent.pageX - this.touchX > 20)
-                    this.incrementDate(-1)
+        return <GestureRecognizer style={[globalStyles.safeAreaView, { paddingTop: 32 }]}
+            onSwipe={(gestureName, gestureState) => {
+                const { SWIPE_UP, SWIPE_DOWN, SWIPE_LEFT, SWIPE_RIGHT } = swipeDirections;
+                switch (gestureName) {
+                    case SWIPE_LEFT:
+                        this.incrementDate(1);
+                        break;
+                    case SWIPE_RIGHT:
+                        this.incrementDate(-1);
+                        break;
+                    default:
+                        break;
+                }
             }}>
             <View style={globalStyles.pageContainer}>
                 {
@@ -150,23 +159,49 @@ export default class Calendar extends Component {
                             value={new Date(this.state.selectedDate)}
                             mode={"date"}
                             onChange={(event, selectedDate) => {
-                                this.setDate(new Date(selectedDate));
-                                this.setState({ showCalendarPicker: false })
+                                this.setState({ showCalendarPicker: false }, () => {
+                                    this.setDate(new Date(selectedDate));
+                                })
                             }}
                         />
                         : null
                 }
                 <LogoBar />
-                <Pressable hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
-                    this.props.navigation.navigate("Suggestions")
-                }} style={({ pressed }) => [
-                    globalStyles.topbarIconContainer,
-                    {
-                        opacity: pressed ? 0.1 : 1,
-                    }
-                ]}>
-                    <FontAwesome5 name="lightbulb" size={24} color={"#1f6cb0"} />
-                </Pressable>
+                <View style={globalStyles.topbarIconContainer}>
+                    <Pressable hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
+                        this.setDate(new Date())
+                    }} style={({ pressed }) => [
+                        {
+                            opacity: pressed ? 0.1 : 1,
+                            marginLeft: 12
+                        }
+                    ]}>
+                        {
+                            this.state.selectedDate
+                                && new Date().toDateString() != new Date(this.state.selectedDate).toDateString()
+                                ? <View style={{
+                                    backgroundColor: "#1f6cb0",
+                                    paddingHorizontal: 12,
+                                    paddingVertical: 6,
+                                    borderRadius: 4,
+                                    marginLeft: 8,
+                                    display: "flex",
+                                    flexDirection: "row",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                }}>
+                                    <Ionicons name="ios-arrow-forward-circle" size={14} color="white" />
+                                    <Text style={{
+                                        fontFamily: "MainMedium",
+                                        fontSize: 12,
+                                        color: "white",
+                                        marginLeft: 6
+                                    }}>Today</Text>
+                                </View>
+                                : null
+                        }
+                    </Pressable>
+                </View>
                 {
                     this.state.selectedDate
                         ? <View style={[globalStyles.fillEmptySpace, { flexShrink: 1 }]}>
@@ -475,6 +510,6 @@ export default class Calendar extends Component {
                     }
                 </ScrollView>
             </BottomSheet>
-        </View >;
+        </GestureRecognizer>;
     }
 }
