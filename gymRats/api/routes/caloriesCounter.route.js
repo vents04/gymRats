@@ -342,7 +342,8 @@ router.get("/search/food", async (req, res, next) => {
             console.log(regex)
             foods = await DbService.getMany(COLLECTIONS.CALORIES_COUNTER_ITEMS, {$text: {$search: words.join(" ")}});
             
-
+            
+            
 
             console.log(Date.now() - dt);
             
