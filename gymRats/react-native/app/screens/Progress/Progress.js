@@ -102,7 +102,8 @@ export default class Progress extends Component {
                     <LogoBar />
                     {
                         !this.state.showLoading
-                            ? <ScrollView contentContainerStyle={globalStyles.fillEmptySpace}>
+                            ? <ScrollView contentContainerStyle={globalStyles.fillEmptySpace}
+                                scrollEnabled={!this.state.exerciseDropdownOpened}>
                                 {
                                     this.state.progress
                                         ? <>
