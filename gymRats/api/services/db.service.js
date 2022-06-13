@@ -134,6 +134,16 @@ const DbService = {
         })
     },
 
+    getManyWithLimit: function (collection, filter, limit) {
+        return new Promise((resolve, reject) => {
+            validateCollection(collection, reject);
+            db.collection(collection).find(filter).limit(limit).toArray(function (err, cursor) {
+                if (err) return reject(new ResponseError(err.message || HTTP_STATUS_CODES.INTERNAL_SERVER));
+                resolve(cursor);
+            });
+        })
+    },
+
     getManyWithSort: function (collection, filter, sort, limit) {
         return new Promise((resolve, reject) => {
             validateCollection(collection, reject);
