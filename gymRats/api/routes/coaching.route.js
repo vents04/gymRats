@@ -323,7 +323,6 @@ router.get("/coach/search", authenticate, async (req, res, next) => {
                     if (!users[index].user) users.splice(index, 1);
                 }
                 for (let i = 0; i < users.length; i++) {
-
                     const clients = await DbService.getMany(COLLECTIONS.RELATIONS, { "$or": [{ personalTrainerId: users[i]._id }, { personalTrainerId: mongoose.Types.ObjectId(users[i]._id) }] });
 
                     const relation = await DbService.getOne(COLLECTIONS.RELATIONS, { personalTrainerId: users[i]._id, clientId: req.user._id, status: RELATION_STATUSES.PENDING_APPROVAL })
