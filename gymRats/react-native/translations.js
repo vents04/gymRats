@@ -116,7 +116,8 @@ module.exports = {
                 update: "Update",
                 food: "food",
                 macronutrients: "Macronutrients",
-                nutritionalInfo: ["Nutritional info per 100", ""]
+                nutritionalInfo: ["Nutritional info per", ""],
+                mealPickerPlaceholder: "Choose meal"
             },
             progress: {
                 pageTitle: "Progress",
@@ -157,7 +158,8 @@ module.exports = {
                 proteinsInput: "Proteins per 100",
                 fatsInput: "Fats per 100",
                 barcodeAlreadyLinked: "Already linked",
-                addBarcode: "Add barcode"
+                addBarcode: "Add barcode",
+                servingUnitPlaceholder: "Choose a serving unit"
             },
             profileDetailsEdit: {
                 pageTitle: "Profile edit",
@@ -230,7 +232,10 @@ module.exports = {
                 exercises: "Exercises",
                 noExercisesAdded: "No exercises added",
                 addSet: "Add set",
-                setNo: "Set No."
+                setNo: "Set No.",
+                templatePickerModalTitle: "Workout template picker",
+                templatePickerModalDropdownPlaceholder: "Choose a template",
+                templatePostModalTitle: "Add workout template",
             },
             filePreview: {
                 playPauseAudio: "Play/pause audio",
@@ -326,6 +331,7 @@ module.exports = {
                 }
             },
             confirmationBox: {
+                title: "Confirmation",
                 question: "Are you sure?",
                 affirmation: "Yes",
                 denial: "No"
@@ -517,7 +523,8 @@ module.exports = {
                 update: "Обнови",
                 food: "храна",
                 macronutrients: "Макронутриенти",
-                nutritionalInfo: ["Информация за", "от храната"]
+                nutritionalInfo: ["Информация за", "от храната"],
+                mealPickerPlaceholder: "Избери хранене"
             },
             progress: {
                 pageTitle: "Прогрес",
@@ -559,6 +566,7 @@ module.exports = {
                 fatsInput: "Мазнини за 100",
                 barcodeAlreadyLinked: "Вече свързан",
                 addBarcode: "Добави баркод",
+                servingUnitPlaceholder: "Избери начин на измерване на порция"
             },
             profileDetailsEdit: {
                 pageTitle: "Редакция на профила",
@@ -631,7 +639,10 @@ module.exports = {
                 exercises: "Упражнения",
                 noExercisesAdded: "Няма добавени упражнения",
                 addSet: "Серия",
-                setNo: "Серия №"
+                setNo: "Серия №",
+                templatePickerModalTitle: "Избор на тренировъчен шаблон",
+                templatePickerModalDropdownPlaceholder: "Избери шаблон",
+                templatePostModalTitle: "Добавяне на тренировъчен шаблон",
             },
             filePreview: {
                 playPauseAudio: "Пусни/Спри аудио",
@@ -690,7 +701,15 @@ module.exports = {
                 getTheMost: "Изкараш това, което ти се полага от Gym Rats",
                 submitApplication: "Подай заявка",
                 clients: "Клиенти"
-            }
+            },
+            manageWorkoutTemplates: {
+                title: "Управление на тренировъчните шаблони",
+                noTemplates: "Все още нямате добавени тренировъчни шаблони",
+                deletionAlertTitle: "Изчакайте!",
+                deletionAlertMessage: "Сигурни ли сте, че искате да изтриете този тренировъчен шаблон?",
+                cancel: "Отказ",
+                yes: "Да, изтрий"
+            },
         },
         components: {
             cards: {
@@ -719,6 +738,7 @@ module.exports = {
                 }
             },
             confirmationBox: {
+                title: "Потвърждение",
                 question: "Сигурни ли сте?",
                 affirmation: "Да",
                 denial: "Не"

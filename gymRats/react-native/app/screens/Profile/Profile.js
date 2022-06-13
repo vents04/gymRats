@@ -8,7 +8,7 @@ import i18n from 'i18n-js';
 
 import LogoBar from '../../components/LogoBar/LogoBar';
 
-import { Feather } from '@expo/vector-icons';
+import { Feather, FontAwesome5 } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 
 import { HTTP_STATUS_CODES, WEIGHT_UNITS } from '../../../global';
@@ -95,19 +95,30 @@ export default class Profile extends Component {
     }
 
     render() {
-        return <View style={[globalStyles.safeAreaView]}>
+        return <View style={[globalStyles.safeAreaView, { paddingTop: 32 }]}>
             <View style={globalStyles.pageContainer}>
                 <LogoBar />
-                <Pressable style={({ pressed }) => [
-                    globalStyles.topbarIconContainer,
-                    {
-                        opacity: pressed ? 0.1 : 1,
-                    }
-                ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
-                    this.navigateToProfileDetailsEdit();
-                }}>
-                    <Feather name="edit" size={30} color="#1f6cb0" />
-                </Pressable>
+                <View style={globalStyles.topbarIconContainer}>
+                    <Pressable hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
+                        this.props.navigation.navigate("Suggestions")
+                    }} style={({ pressed }) => [
+                        {
+                            opacity: pressed ? 0.1 : 1,
+                        }
+                    ]}>
+                        <FontAwesome5 name="lightbulb" size={24} color={"#1f6cb0"} />
+                    </Pressable>
+                    <Pressable style={({ pressed }) => [
+                        {
+                            opacity: pressed ? 0.1 : 1,
+                            marginLeft: 24
+                        }
+                    ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
+                        this.navigateToProfileDetailsEdit();
+                    }}>
+                        <Feather name="edit" size={30} color="#1f6cb0" />
+                    </Pressable>
+                </View>
                 {
                     this.state.showError
                         ? <Text style={globalStyles.errorBox}>{this.state.error}</Text>

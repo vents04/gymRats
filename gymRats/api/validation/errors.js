@@ -5,7 +5,7 @@ const HapiErrors = {
         return `${translations[lng].fields[field]} ${translations[lng].errors.stringBaseError[0]} ${min} ${translations[lng].errors.stringBaseError[1]}`;
     },
     stringEmptyError: (lng, field) => {
-        return `${translations[lng].fields[field]} ${translations[lng].errors.stringBaseError[0]}`;
+        return `${translations[lng].fields[field]} ${translations[lng].errors.stringEmptyError[0]}`;
     },
     anyRequiredError: (lng, field) => {
         return `${translations[lng].fields[field]} ${translations[lng].errors.anyRequiredError[0]}`;

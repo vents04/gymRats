@@ -48,7 +48,7 @@ export default class CoachSearch extends Component {
 
     async componentDidMount() {
         this.searchCoaches();
-        this.getLocation();
+        this.requestLocationPermission();
         BackHandler.addEventListener("hardwareBackPress", this.backAction);
     }
 
@@ -57,16 +57,31 @@ export default class CoachSearch extends Component {
     }
 
     getLocation = async () => {
+        let location = await Location.getCurrentPositionAsync({});
+        this.setState({ lat: location.coords.latitude, lng: location.coords.longitude }, () => {
+            this.searchCoaches()
+        });
+    }
+
+    requestLocationPermission = async () => {
         try {
-            let { status } = await Location.requestForegroundPermissionsAsync();
-            if (status !== 'granted') {
-                Alert.alert(i18n.t('screens')['coachSearch']['locationPermission'], i18n.t('screens')['coachSearch']['message']);
+            let permission = await Location.getForegroundPermissionsAsync();
+            console.log(permission);
+            if (permission.status !== "granted" && permission.canAskAgain) {
+                Alert.alert(i18n.t('screens')['coachSearch']['locationPermission'], i18n.t('screens')['coachSearch']['message'],
+                    [
+                        {
+                            text: "OK",
+                            onPress: async () => {
+                                let { status } = await Location.requestForegroundPermissionsAsync();
+                                if (status !== 'granted') return;
+                                this.getLocation();
+                            }
+                        },
+                    ]);
+            } else {
                 this.getLocation();
             }
-            let location = await Location.getCurrentPositionAsync({});
-            this.setState({ lat: location.coords.latitude, lng: location.coords.longitude }, () => {
-                this.searchCoaches()
-            });
         } catch (error) {
             this.setState({ showError: true, error: error.message })
         }
@@ -88,9 +103,6 @@ export default class CoachSearch extends Component {
             searchQuery += `&minRating=${this.state.minRating}`;
         }
         ApiRequests.get(searchQuery, {}, true).then((response) => {
-            for (let result of response.data.results) {
-                console.log(result.user);
-            }
             this.setState({ searchResults: response.data.results })
         }).catch((error) => {
             if (error.response) {

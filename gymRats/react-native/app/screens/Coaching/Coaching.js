@@ -136,7 +136,7 @@ export default class Coaching extends Component {
 
     render() {
         return (
-            <View style={globalStyles.safeAreaView}>
+            <View style={[globalStyles.safeAreaView, { paddingTop: 32 }]}>
                 {
                     this.state.showEndRelationModal
                         ? <ConfirmationBox deleteCard={() => { this.updateStatus(this.state.relationToBeEndedId, this.state.statusToBeUpdated) }} toggleShowConfirmationBox={this.toggleShowEndRelationModal} />
@@ -406,6 +406,9 @@ export default class Coaching extends Component {
                                 }]}>
                                     {
                                         this.state.coaching.myClients.isPersonalTrainer
+                                            && this.state.coaching.myClients.trainerObject
+                                            && this.state.coaching.myClients.trainerObject.status
+                                            && this.state.coaching.myClients.trainerObject.status == "ACTIVE"
                                             ? <Pressable style={({ pressed }) => [
                                                 globalStyles.authPageActionButton,
                                                 {
@@ -508,7 +511,30 @@ export default class Coaching extends Component {
                                                             }
                                                         </>
                                                         : <>
-                                                            <Text style={globalStyles.notation}>{this.personalTrainerStatusMessages[this.state.coaching.myClients.trainerObject.status]}</Text>
+                                                            {
+                                                                this.state.coaching.myClients.trainerObject.status == "PENDING"
+                                                                    || this.state.coaching.myClients.trainerObject.status == "BLOCKED"
+                                                                    ? <View style={styles.coachProfileNotationContainer}>
+                                                                        <Text style={[styles.coachProfileStatus, {
+                                                                            color: this.state.coaching.myClients.trainerObject.status == "PENDING"
+                                                                                ? "#1f6cb0"
+                                                                                : this.state.coaching.myClients.trainerObject.status == "BLOCKED"
+                                                                                    ? "red"
+                                                                                    : "black"
+                                                                        }]}>
+                                                                            {
+                                                                                this.state.coaching.myClients.trainerObject.status == "PENDING"
+                                                                                    ? "UNDER REVIEW"
+                                                                                    : this.state.coaching.myClients.trainerObject.status == "BLOCKED"
+                                                                                        ? "BLOCKED"
+                                                                                        : "ACTIVE"
+                                                                            }
+                                                                        </Text>
+                                                                        <Text style={globalStyles.notation}>{this.personalTrainerStatusMessages[this.state.coaching.myClients.trainerObject.status]}</Text>
+                                                                    </View>
+                                                                    : <Text style={globalStyles.notation}>{this.personalTrainerStatusMessages[this.state.coaching.myClients.trainerObject.status]}</Text>
+
+                                                            }
                                                         </>
                                                 }
                                             </>

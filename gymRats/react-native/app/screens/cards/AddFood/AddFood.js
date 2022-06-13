@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { ScrollView, Text, TextInput, Pressable, View, BackHandler } from 'react-native'
 import { Picker } from '@react-native-picker/picker';
 import i18n from 'i18n-js';
+import DropDownPicker from 'react-native-dropdown-picker'
 
 import ApiRequests from '../../../classes/ApiRequests';
 
@@ -26,6 +27,8 @@ export default class AddFood extends Component {
             protein: 0,
             carbs: 0,
             fats: 0,
+            unitPickerValues: [],
+            isUnitPickerOpened: false,
             showError: false,
             error: ""
         }
@@ -51,10 +54,19 @@ export default class AddFood extends Component {
             this.onFocusFunction()
         })
         BackHandler.addEventListener('hardwareBackPress', this.backAction);
+        this.setServingUnitValues();
     }
 
     componentWillUnmount() {
         BackHandler.removeEventListener('hardwareBackPress', this.backAction);
+    }
+
+    setServingUnitValues = () => {
+        let servingUnitValues = [
+            { value: CALORIES_COUNTER_UNITS.GRAMS, label: i18n.t('common')['foodUnits']['GRAMS'] },
+            { value: CALORIES_COUNTER_UNITS.MILLILITERS, label: i18n.t('common')['foodUnits']['MILLILITERS'] },
+        ]
+        this.setState({ unitPickerValues: servingUnitValues });
     }
 
     addFood = () => {
@@ -150,15 +162,40 @@ export default class AddFood extends Component {
                         </View>
                         <View style={styles.inputSection}>
                             <Text style={styles.inputSectionTitle}>{i18n.t('screens')['addFood']['servingUnitInput']}</Text>
-                            <Picker
-                                style={styles.inputSectionInput}
-                                selectedValue={this.state.unit}
-                                onValueChange={(value) =>
-                                    this.setState({ unit: value, showError: false })
-                                }>
-                                <Picker.Item style={{ fontFamily: 'MainRegular' }} label={i18n.t('common')['foodUnits']['GRAMS']} value={CALORIES_COUNTER_UNITS.GRAMS} />
-                                <Picker.Item style={{ fontFamily: 'MainRegular' }} label={i18n.t('common')['foodUnits']['MILLILITERS']} value={CALORIES_COUNTER_UNITS.MILLILITERS} />
-                            </Picker>
+                            <DropDownPicker
+                                placeholder={i18n.t('screens')['addFood']['servingUnitPlaceholder']}
+                                maxHeight={150}
+                                open={this.state.isUnitPickerOpened}
+                                setOpen={(value) => {
+                                    this.setState({ isUnitPickerOpened: value })
+                                }}
+                                value={this.state.unit}
+                                setValue={(callback) => {
+                                    this.setState(state => ({
+                                        unit: callback(state.value),
+                                    }));
+                                }}
+                                items={this.state.unitPickerValues}
+                                setItems={(callback) => {
+                                    this.setState(state => ({
+                                        unitPickerValues: callback(state.items)
+                                    }));
+                                }}
+                                onChangeItem={item => { }}
+                                zIndex={10000}
+                                textStyle={{
+                                    fontFamily: 'MainMedium',
+                                    fontSize: 14,
+                                    textTransform: "capitalize",
+                                }}
+                                dropDownContainerStyle={{
+                                    borderColor: "#ccc",
+                                }}
+                                style={{
+                                    borderColor: "#ccc",
+                                    marginBottom: 16
+                                }}
+                            />
                         </View>
                         <View style={styles.inputSection}>
                             <Text style={styles.inputSectionTitle}>{i18n.t('screens')['addFood']['caloriesInput']} {i18n.t('common')['foodUnits'][this.state.unit]}</Text>

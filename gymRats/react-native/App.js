@@ -69,9 +69,7 @@ const App = () => {
           const navigationAnalytics = JSON.parse(navAnalytics);
           ApiRequests.post("analytics/navigation", {}, { navigationAnalytics }, false).then(() => {
             AsyncStorage.setItem('@gymRats:navAnalytics', "[]");
-          }).catch((error) => {
-            ApiRequests.alert(i18n.t("errors")["error"], i18n.t("errors")["navigationAnalyticsSubmissionError"])
-          })
+          }).catch((error) => { })
         }
       }
     });

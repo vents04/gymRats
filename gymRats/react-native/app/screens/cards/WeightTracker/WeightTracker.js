@@ -82,7 +82,7 @@ export default class WeightTracker extends Component {
     postWeight = () => {
         this.setState({ showSaving: true });
         ApiRequests.post(`weight-tracker/daily-weight?date=${this.props.route.params.date.getDate()}&month=${this.props.route.params.date.getMonth() + 1}&year=${this.props.route.params.date.getFullYear()}`, false, {
-            weight: 7888.99999,
+            weight: this.state.weight,
             unit: this.state.weightUnit
         }, true).then((response) => {
             this.setState({ showSaving: false });
@@ -126,11 +126,11 @@ export default class WeightTracker extends Component {
                         onChangeText={(val) => {
                             let shouldNotBeAdded = false;
                             if (val.includes(".")) {
-                                if (val.split(".")[0].length > 3) {
+                                if (val.split(".")[0].length > 4) {
                                     shouldNotBeAdded = true;
                                 }
                             }
-                            else if (parseInt(val) >= 10000 || parseInt(val) < 2.1) shouldNotBeAdded = true;
+                            else if (parseInt(val) >= 1000000 || parseInt(val) < 0) shouldNotBeAdded = true;
                             if (!shouldNotBeAdded) this.setState({ weight: val, showError: false })
                         }} />
                     <Text style={styles.editSectionInput}>{i18n.t('constants')[WEIGHT_UNITS_LABELS[this.state.weightUnit]]}</Text>

@@ -3,6 +3,7 @@ import { Dimensions, ScrollView, Text, TextInput, Pressable, View, BackHandler }
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import { Picker } from '@react-native-picker/picker';
 import i18n from 'i18n-js'
+import DropDownPicker from 'react-native-dropdown-picker'
 
 import ApiRequests from '../../../classes/ApiRequests';
 
@@ -22,10 +23,13 @@ export default class AddCaloriesIntakeItem extends Component {
         this.state = {
             amount: 100,
             meal: this.props.route.params.meal || "BREAKFAST",
+            mealPickerValues: [],
+            isMealPickerOpened: false,
             showError: false,
             error: ""
         }
     }
+
 
     backAction = () => {
         (!this.props.route.params.previousScreen)
@@ -40,10 +44,19 @@ export default class AddCaloriesIntakeItem extends Component {
         if (this.props.route.params.amount)
             this.setState({ amount: parseInt(this.props.route.params.amount) });
         BackHandler.addEventListener("hardwareBackPress", this.backAction);
+        this.setMealPickerValues();
     }
 
     componentWillUnmount() {
         BackHandler.removeEventListener("hardwareBackPress", this.backAction);
+    }
+
+    setMealPickerValues = () => {
+        let mealPickerValues = [];
+        Object.keys(CALORIES_COUNTER_MEALS).map((meal) =>
+            mealPickerValues.push({ value: meal, label: i18n.t('common')['meals'][meal] })
+        )
+        this.setState({ mealPickerValues })
     }
 
     addFood = () => {
@@ -165,18 +178,40 @@ export default class AddCaloriesIntakeItem extends Component {
                                     onChangeText={(val) => { this.setState({ amount: val, showError: false }) }} />
                                 <Text style={styles.nutritionalInfoTitle}>{i18n.t('common')['foodUnits'][this.props.route.params.item.unit]}</Text>
                             </View>
-                            <Picker
-                                style={styles.editSectionInput}
-                                selectedValue={this.state.meal}
-                                onValueChange={(value, index) =>
-                                    this.setState({ meal: value, showError: false })
-                                }>
-                                {
-                                    Object.keys(CALORIES_COUNTER_MEALS).map((meal, index) =>
-                                        <Picker.Item key={index} label={i18n.t('common')['meals'][meal]} value={meal} />
-                                    )
-                                }
-                            </Picker>
+                            <DropDownPicker
+                                placeholder={i18n.t('screens')['addCaloriesIntakeItem']['mealPickerPlaceholder']}
+                                maxHeight={200}
+                                open={this.state.isMealPickerOpened}
+                                setOpen={(value) => {
+                                    this.setState({ isMealPickerOpened: value })
+                                }}
+                                value={this.state.meal}
+                                setValue={(callback) => {
+                                    this.setState(state => ({
+                                        meal: callback(state.value),
+                                    }));
+                                }}
+                                items={this.state.mealPickerValues}
+                                setItems={(callback) => {
+                                    this.setState(state => ({
+                                        mealPickerValues: callback(state.items)
+                                    }));
+                                }}
+                                onChangeItem={item => { }}
+                                zIndex={10000}
+                                textStyle={{
+                                    fontFamily: 'MainMedium',
+                                    fontSize: 14,
+                                }}
+                                dropDownContainerStyle={{
+                                    borderColor: "#ccc",
+                                    width: "50%",
+                                    marginLeft: 16,
+                                }}
+                                style={[styles.editSectionInput, {
+                                    borderColor: "#ccc",
+                                }]}
+                            />
                         </View>
                         <Pressable style={({ pressed }) => [
                             globalStyles.authPageActionButton,

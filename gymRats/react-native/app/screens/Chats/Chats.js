@@ -72,7 +72,7 @@ export default class Chats extends Component {
 
     render() {
         return (
-            <View style={globalStyles.safeAreaView}>
+            <View style={[globalStyles.safeAreaView, { paddingTop: 32 }]}>
                 <View style={globalStyles.pageContainer}>
                     <LogoBar />
                     {

@@ -127,3 +127,42 @@
 {"level":"error","message":"User record with this email was not found"}
 {"level":"error","message":"User record with this email address already exists"}
 {"level":"error","message":"User record with this email was not found"}
+{"level":"error","message":"Reps should be a positive number"}
+{"level":"error","message":"Името трябва да бъде текст с поне"}
+{"level":"error","message":"Името трябва да бъде текст с поне"}
+{"level":"error","message":"Името трябва да бъде текст с поне"}
+{"level":"error","message":"Името трябва да бъде текст с поне"}
+{"level":"error","message":"Името трябва да бъде текст с поне"}
+{"level":"error","message":"Името трябва да бъде текст с поне"}
+{"level":"error","message":"Името трябва да бъде текст с поне"}
+{"level":"error","message":"Името не трябва да е празно"}
+{"level":"error","message":"Фамилията не трябва да е празно"}
+{"level":"error","message":"Име не трябва да е празно"}
+{"level":"error","message":"Име не трябва да е празно"}
+{"level":"error","message":"Фамилията не трябва да е празно"}
+{"level":"error","message":"Фамилията не трябва да е празно"}
+{"level":"error","message":"Повторенията трябва да е положително число"}
+{"level":"error","message":"\"exercises[0].sets[0].reps\" does not match any of the allowed types"}
+{"level":"error","message":"Продължителността трябва да е положително число"}
+{"level":"error","message":"\"exercises[0].sets[0].duration\" must be a number"}
+{"level":"error","message":"\"exercises[0].sets[0].duration\" must be a number"}
+{"level":"error","message":"\"exercises[0].sets[0].duration\" must be a number"}
+{"level":"error","message":"\"exercises[0].sets[0].duration\" must be a number"}
+{"level":"error","message":"\"exercises[0].sets[0].duration\" must be a number"}
+{"level":"error","message":"\"exercises[0].sets[0].duration\" must be a number"}
+{"level":"error","message":"\"exercises[0].sets[0].duration\" must be a number"}
+{"level":"error","message":"\"exercises[0].sets[0].duration\" must be a number"}
+{"level":"error","message":"\"exercises[0].sets[0].duration\" must be a number"}
+{"level":"error","message":"\"exercises[0].sets[0].duration\" must be a number"}
+{"level":"error","message":"Повторенията трябва да е положително число"}
+{"level":"error","message":"Повторенията трябва да е положително число"}
+{"level":"error","message":"Повторенията трябва да е положително число"}
+{"level":"error","message":"Invalid id parameter/s"}
+{"level":"error","message":"Invalid id parameter/s"}
+{"level":"error","message":"Reps should be a positive number"}
+{"level":"error","message":"\"exercises[0].sets[0].duration\" must be a safe number"}
+{"level":"error","message":"Invalid id parameter/s"}
+{"level":"error","message":"Invalid id parameter/s"}
+{"level":"error","message":"Invalid id parameter/s"}
+{"level":"error","message":"Invalid id parameter/s"}
+{"level":"error","message":"Invalid id parameter/s"}

@@ -19,6 +19,7 @@ export default class ConfirmationBox extends Component {
                 }}>
                 <View style={globalStyles.centeredView}>
                     <View style={globalStyles.modalView}>
+                        <Text style={globalStyles.modalTitle}>{i18n.t('components')['confirmationBox']['title']}</Text>
                         <Text style={globalStyles.modalText}>{i18n.t('components')['confirmationBox']['question']}</Text>
                         <View style={globalStyles.modalActionsContainer}>
                             <Pressable onPress={() => {

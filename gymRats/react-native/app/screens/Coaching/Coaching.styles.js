@@ -113,4 +113,16 @@ export default StyleSheet.create({
         color: "#222",
         marginLeft: 16,
     },
+    coachProfileNotationContainer: {
+        padding: 16,
+        borderWidth: 1,
+        borderRadius: 4,
+        borderColor: "#ccc",
+    },
+    coachProfileStatus: {
+        fontFamily: "MainBold",
+        textTransform: "uppercase",
+        fontSize: 16,
+        marginBottom: 8
+    }
 });

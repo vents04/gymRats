@@ -97,7 +97,7 @@ export default class Progress extends Component {
 
     render() {
         return (
-            <View style={globalStyles.safeAreaView}>
+            <View style={[globalStyles.safeAreaView, { paddingTop: 32 }]}>
                 <View style={globalStyles.pageContainer}>
                     <LogoBar />
                     {
@@ -157,14 +157,15 @@ export default class Progress extends Component {
                                             {
                                                 this.state.progress.logbookProgress
                                                     && this.state.progress.logbookProgress.length > 0
-                                                    ? <View style={[styles.progressCardContainer, { minHeight: this.state.exerciseDropdownOpened ? 275 : 0 }]}>
+                                                    ? <View style={[styles.progressCardContainer]}>
+                                                        {/* up styles minHeight: this.state.exerciseDropdownOpened ? 275 : 0 */}
                                                         <View style={styles.progressCardHeaderContainer}>
                                                             <FontAwesome5 name="weight" size={20} color={cardColors.logbook} />
                                                             <Text style={styles.progressCardHeader}>{i18n.t('screens')['progress']['logbook']}</Text>
                                                         </View>
                                                         <DropDownPicker
                                                             placeholder={i18n.t('screens')['progress']['selectExercise']}
-                                                            maxHeight={150}
+                                                            maxHeight={100}
                                                             open={this.state.exerciseDropdownOpened}
                                                             setOpen={(value) => {
                                                                 this.setState({ exerciseDropdownOpened: value })
@@ -349,7 +350,7 @@ export default class Progress extends Component {
                             }} size="large" color="#777" />
                     }
                 </View>
-            </View>
+            </View >
         )
     }
 }

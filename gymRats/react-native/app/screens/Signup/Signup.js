@@ -56,7 +56,7 @@ export default class Signup extends Component {
 
     render() {
         return (
-            <View style={globalStyles.safeAreaView}>
+            <View style={[globalStyles.safeAreaView, { paddingTop: 64 }]}>
                 <View style={globalStyles.pageContainer}>
                     <LogoBar />
                     <Text style={globalStyles.authPageTitle}>{i18n.t('screens')['signup']['pageTitle']}</Text>
