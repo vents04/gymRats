@@ -93,6 +93,16 @@
 {"level":"error","message":"Името трябва да съдържа само букви"}
 {"level":"error","message":"\"weightUnit\" must be one of [POUNDS, KILOGRAMS]"}
 {"level":"error","message":"Мерната единица за тегло не е в допустимите стойности"}
+{"level":"error","message":"Повторенията трябва да е положително число"}
+{"level":"error","message":"Повторенията трябва да е положително число"}
+{"level":"error","message":"Повторенията трябва да е положително число"}
+{"level":"error","message":"db is not defined"}
+{"level":"error","message":"foods.splice is not a function"}
+{"level":"error","message":"Maximum call stack size exceeded"}
+{"level":"error","message":"Unexpected token $ in JSON at position 1"}
+{"level":"error","message":"Unexpected token $ in JSON at position 1"}
+{"level":"error","message":"Unexpected token / in JSON at position 10"}
+{"level":"error","message":"Unexpected string in JSON at position 10"}
 {"level":"error","message":"Неверни данни за вход"}
 {"level":"error","message":"Неверни данни за вход"}
 {"level":"error","message":"Фамилията трябва да съдържа само букви"}

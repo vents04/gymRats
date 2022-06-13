@@ -317,8 +317,7 @@ router.get('/day', authenticate, async (req, res, next) => {
 });
 
 router.get("/search/food", async (req, res, next) => {
-    let results = [];
-
+    let results = [];    
     if (!req.query.words || req.query.words == "") {
         results = await DbService.getManyWithSortAndLimit(COLLECTIONS.CALORIES_COUNTER_ITEMS, {}, { usedTimes: -1, searchedTimes: -1 }, 50)
         return res.status(HTTP_STATUS_CODES.OK).send({
@@ -334,11 +333,21 @@ router.get("/search/food", async (req, res, next) => {
             words = words.split(" ");
             var regex = [];
             for (let i = 0; i < words.length; i++) {
-                regex[i] = new RegExp(words[i].toLowerCase());
+                regex[i] = new RegExp("^"+words[i].toLowerCase())
             }
 
-            foods = await DbService.getMany(COLLECTIONS.CALORIES_COUNTER_ITEMS, { keywords: { "$in": regex } });
 
+            const dt = Date.now();
+
+            console.log(regex)
+            foods = await DbService.getMany(COLLECTIONS.CALORIES_COUNTER_ITEMS, {$text: {$search: words.join(" ")}});
+            
+
+
+            console.log(Date.now() - dt);
+            
+            console.log(foods.length);
+            
             if (words.length > 1) {
                 for (let food of foods) {
                     newWords = req.query.words.split(" ");
@@ -355,6 +364,7 @@ router.get("/search/food", async (req, res, next) => {
                     }
 
                     if (food.userId) {
+                        console.log("here")
                         const user = await DbService.getById(COLLECTIONS.USERS, food.userId);
                         food.userInstance = user;
                     }
@@ -364,13 +374,14 @@ router.get("/search/food", async (req, res, next) => {
                 quicksort(foods, 0, foods.length - 1, true);
             }
 
+
         }
 
         results = foods.splice(0, 50);
 
-        for (let result of results) {
+        /*for (let result of results) {
             await DbService.updateWithIncrement(COLLECTIONS.CALORIES_COUNTER_ITEMS, { _id: mongoose.Types.ObjectId(result._id) }, { searchedTimes: 1 })
-        }
+        }*/
 
         return res.status(HTTP_STATUS_CODES.OK).send({
             results

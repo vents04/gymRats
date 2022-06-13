@@ -37,6 +37,158 @@ app
 
 mongo.connect();
 
+<<<<<<< HEAD
+/*(async function () {
+    const cut = [
+        [
+            [74, 10],
+            [70, 10],
+            [64, 12]
+        ],
+        [
+            [74, 9],
+            [70, 10],
+            [64, 11]
+        ],
+        [
+            [74, 9],
+            [70, 10],
+            [64, 11]
+        ],
+        [
+            [74, 10],
+            [70, 10],
+            [64, 11],
+        ],
+        [
+            [74, 8],
+            [70, 8],
+            [64, 11]
+        ],
+        [
+            [74, 5],
+            [70, 8],
+            [64, 12]
+        ],
+        [
+            [74, 7],
+            [70, 8],
+            [64, 10]
+        ],
+        [
+            [74, 8],
+            [70, 10],
+            [64, 12]
+        ],
+        [
+            [74, 8],
+            [70, 10],
+            [64, 12]
+        ],
+        [
+            [74, 8],
+            [70, 9],
+            [64, 10]
+        ],
+        [
+            [74, 8],
+            [70, 9],
+            [64, 11]
+        ],
+        [
+            [74, 8],
+            [70, 9],
+            [64, 11]
+        ],
+        [
+            [80, 4],
+            [74, 6],
+            [64, 12]
+        ],
+        [
+            [80, 4],
+            [74, 6],
+            [64, 12]
+        ],
+        [
+            [80, 4],
+            [74, 7],
+            [64, 12]
+        ],
+        [
+            [80, 4],
+            [74, 7],
+            [64, 12]
+        ]
+    ]
+    const bulk = [
+        [
+            [72, 8],
+            [72, 8],
+            [70, 8],
+            [70, 8]
+        ],
+        [
+            [76, 7],
+            [76, 7],
+            [70, 8],
+            [70, 8]
+        ],
+        [
+            [74, 7],
+            [74, 6],
+            [70, 7],
+            [70, 6]
+        ],
+        [
+            [72, 9],
+            [72, 9],
+            [70, 9],
+            [70, 9]
+        ],
+        [
+            [72, 7],
+            [72, 7],
+            [70, 8],
+            [70, 8]
+        ],
+        [
+            [72, 10],
+            [72, 9],
+            [70, 9],
+            [70, 9]
+        ],
+        [
+            [76, 8],
+            [76, 8],
+            [70, 9],
+        ],
+        [
+            [80, 6],
+            [72, 9],
+            [72, 7],
+        ],
+        [
+            [70, 11],
+            [70, 11],
+            [70, 7]
+        ]
+    ]
+    console.log("--------------------------------------------");
+    let cutOrms = [];
+    let bulkOrms = [];
+    for (let session of cut) {
+        let orm = 0;
+        for (let set of session) {
+            if (oneRepMax(set[0], set[1]) > orm) orm = parseFloat(parseFloat(oneRepMax(set[0], set[1])).toFixed(1));
+        }
+        cutOrms.push(orm);
+    }
+    for (let session of bulk) {
+        let orm = 0;
+        for (let set of session) {
+            if (oneRepMax(set[0], set[1]) > orm) orm = parseFloat(parseFloat(oneRepMax(set[0], set[1])).toFixed(1));
+=======
 (async function () {
     setTimeout(async function () {
         let tree = {};
@@ -65,6 +217,7 @@ mongo.connect();
                     });
                 }
             }
+>>>>>>> ffb5acc7b386968ecdf4af383ff819662fd27359
         }
         const stringifiedTree = JSON.stringify(tree);
         //fs.writeFileSync(path.join(__dirname, './foodTree.json'), stringifiedTree);
@@ -98,12 +251,13 @@ mongo.connect();
                 }
             }
         }
-        search(subTree, subFoodIndex);
-        const endDt = new Date().getTime();
-        console.log(subTreeFoods)
-        console.log(subTreeFoods.length, "za", endDt - startDt);
-    }, 1500);
-})();
+    }
+    console.log("From last session:", await LogbookService.getProgressNotationForOneSession([88.8, 96]))
+    console.log("From five sessions:", await LogbookService.getProgressNotationForFiveSessions(bulkOrms));
+    console.log("Exercises progress:", await LogbookService.getExercisesProgress("622f8c4095e0bf7c3998ebc9"))
+    await UserService.generateUnverifiedTimeouts();
+
+})();*/
 
 io.on("connection", (socket) => {
     socket.on("join-chats-room", async (payload) => {
