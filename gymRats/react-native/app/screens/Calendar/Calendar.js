@@ -190,7 +190,11 @@ export default class Calendar extends Component {
                                     alignItems: "center",
                                     justifyContent: "center",
                                 }}>
-                                    <Ionicons name="ios-arrow-forward-circle" size={14} color="white" />
+                                    {
+                                        new Date().getTime() > new Date(this.state.selectedDate).getTime()
+                                            ? <Ionicons name="ios-arrow-forward-circle" size={14} color="white" />
+                                            : <Ionicons name="ios-arrow-back-circle" size={14} color="white" />
+                                    }
                                     <Text style={{
                                         fontFamily: "MainMedium",
                                         fontSize: 12,
