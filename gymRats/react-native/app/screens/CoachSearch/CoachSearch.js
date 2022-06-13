@@ -105,6 +105,7 @@ export default class CoachSearch extends Component {
         ApiRequests.get(searchQuery, {}, true).then((response) => {
             this.setState({ searchResults: response.data.results })
         }).catch((error) => {
+            console.log(error.response)
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
                     this.setState({ showError: true, error: error.response.data });

@@ -176,3 +176,5 @@
 {"level":"error","message":"Invalid id parameter/s"}
 {"level":"error","message":"Invalid id parameter/s"}
 {"level":"error","message":"Invalid id parameter/s"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'user')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'user')"}
