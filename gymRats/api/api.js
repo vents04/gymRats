@@ -246,6 +246,7 @@ io.on("connection", (socket) => {
         try {
             const chats = await DbService.getMany(COLLECTIONS.CHATS, { "$or": [{ personalTrainerId: mongoose.Types.ObjectId(payload.userId) }, { clientId: mongoose.Types.ObjectId(payload.userId) }] })
             for (let chat of chats) {
+                console.log(chat._id.toString());
                 socket.join(chat._id.toString())
             }
         } catch (err) {
@@ -256,8 +257,9 @@ io.on("connection", (socket) => {
 
     socket.on("send-text-message", async (messageInfo) => {
         try {
-            await MessagingService.sendTextMessage(messageInfo.messageInfo.chatId, messageInfo.messageInfo.senderId, messageInfo.messageInfo.message);
-            socket.to(messageInfo.chatId).emit("receive-message", { messageInfo, fileType: "text" });
+            const message = await MessagingService.sendTextMessage(messageInfo.messageInfo.chatId, messageInfo.messageInfo.senderId, messageInfo.messageInfo.message);
+            console.log(io.sockets.adapter.rooms)
+            io.to(messageInfo.messageInfo.chatId).emit("receive-message", { message });
             /*(async function () {
                 const chat = await DbService.getById(COLLECTIONS.CHATS, chatId);
                 if (chat.status == CHAT_STATUSES.ACTIVE) {
@@ -295,18 +297,13 @@ io.on("connection", (socket) => {
 
     socket.on("send-file-message", async (messageInfo) => {
         try {
-            console.log(messageInfo.messageInfo.senderId, messageInfo.messageInfo.base64.length)
-            await MessagingService.sendFileMessage(messageInfo.chatId, messageInfo.messageInfo.senderId, messageInfo.messageInfo.base64, messageInfo.messageInfo.name, messageInfo.messageInfo.size, messageInfo.messageInfo.mimeType);
-            socket.to(messageInfo.chatId).emit("receive-message", { messageInfo, fileType: "file" });
-            console.log("izpratih receive message")
+            const message = await MessagingService.sendFileMessage(messageInfo.messageInfo.chatId, messageInfo.messageInfo.senderId, messageInfo.messageInfo.base64, messageInfo.messageInfo.name, messageInfo.messageInfo.size, messageInfo.messageInfo.mimeType);
+            console.log(messageInfo.messageInfo.chatId)
+            io.to(messageInfo.messageInfo.chatId).emit("receive-message", { message });
         } catch (err) {
             console.log(err);
         }
     });
-
-    socket.on("update-last-message", (payload) => {
-        socket.to(payload.chatId).emit("last-message-to-be-updated", {})
-    })
 });
 
 httpServer.listen(PORT, function () {

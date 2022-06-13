@@ -51,8 +51,6 @@ router.get('/', authenticate, async (req, res, next) => {
             }
         }
 
-        console.log(chats, errors)
-
         return res.status(HTTP_STATUS_CODES.OK).send({
             chats,
             errors

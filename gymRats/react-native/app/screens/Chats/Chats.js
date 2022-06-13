@@ -30,7 +30,6 @@ export default class Chats extends Component {
 
     onFocusFunction = () => {
         if (this.props.route && this.props.route.params) {
-            console.log(this.props)
             if (this.props.route.params.chatId) {
                 this.props.navigation.navigate("Chat", { chatId: this.props.route.params.chatId })
             }
@@ -42,7 +41,6 @@ export default class Chats extends Component {
     getChats = () => {
         ApiRequests.get("chat", {}, true).then((response) => {
             this.setState({ chats: response.data.chats });
-            console.log(response.data.chats)
         }).catch((error) => {
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
@@ -57,7 +55,7 @@ export default class Chats extends Component {
             }
         })
     }
-    
+
 
     updateLastMessage = () => {
         socketClass.getChatsRoomSocket().on("last-message-to-be-updated", () => {

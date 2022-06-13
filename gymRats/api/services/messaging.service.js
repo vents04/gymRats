@@ -46,8 +46,7 @@ const MessagingService = {
                     reject(new ResponseError("Trainer or client is not part of the chat or the chat does not exist", HTTP_STATUS_CODES.BAD_REQUEST));
                 }
                 await DbService.create(COLLECTIONS.MESSAGES, textMessage);
-                resolve();
-
+                resolve(textMessage);
             } catch (err) {
                 reject(new ResponseError("Internal server error", err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
             }
@@ -84,7 +83,7 @@ const MessagingService = {
                     reject(new ResponseError("Trainer or client is not part of the chat or the chat does not exist", HTTP_STATUS_CODES.BAD_REQUEST));
                 }
                 await DbService.create(COLLECTIONS.MESSAGES, fileMessage);
-                resolve();
+                resolve(fileMessage);
             } catch (err) {
                 console.log(err)
                 reject(new ResponseError("Internal server error", err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
