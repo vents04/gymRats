@@ -52,7 +52,9 @@ const App = () => {
         let urlSplit = url.split('/');
         let urlScreen = urlSplit[0];
         let urlId = urlSplit[1];
+        let here = false;
         if (urlScreen == "coach-profile") {
+          here = true;
           await AsyncStorage.setItem("@gymrats:coachProfileId", urlId);
         }
       }

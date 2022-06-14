@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import { DataManager } from "../../classes/DataManager";
 
-import { BackHandler, Dimensions, Pressable, RefreshControl, ScrollView, Text, TouchableHighlight, TouchableNativeFeedback, TouchableWithoutFeedback, View } from 'react-native';
+import { Alert, BackHandler, Dimensions, Pressable, RefreshControl, ScrollView, Text, TouchableHighlight, TouchableNativeFeedback, TouchableWithoutFeedback, View } from 'react-native';
 import BottomSheet from "react-native-gesture-bottom-sheet";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import GestureRecognizer, {
@@ -105,11 +105,14 @@ export default class Calendar extends Component {
 
     checkForCoachProfileLink = async () => {
         const coachProfileId = await AsyncStorage.getItem('@gymRats:coachProfileId');
+        Alert.alert("TUKA SUM", `COACH PROFILE ID: ${coachProfileId}`);
         if (coachProfileId) {
             ApiRequests.get("coaching/coach/" + coachProfileId)
                 .then(response => {
+                    Alert.alert("Redirect kum coach page", JSON.stringify(response.data.coach))
                     this.props.navigation.navigate('CoachPage', { coach: response.data.coach });
                 }).catch((error) => {
+                    Alert.alert("IMA GRESHKA MAI MAI", JSON.stringify(error))
                     console.log(error);
                 }).finally(() => {
                     AsyncStorage.removeItem('@gymRats:coachProfileId');

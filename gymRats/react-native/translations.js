@@ -203,7 +203,7 @@ module.exports = {
                 ratingTitlesExcellent: "Excellent",
             },
             caloriesIntake: {
-                title: "CaloriesIntake",
+                title: "Calories intake",
                 unknownSourceCaloriesMessage: "You may also add unknown source calories if you do not bother searching for a food you have consumed",
                 unknownSourceCaloriesButton: "Add calories from unknown source",
                 noFoodAdded: "No food added",
