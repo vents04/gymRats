@@ -243,11 +243,17 @@ mongo.connect();
 
 io.on("connection", (socket) => {
     socket.on("join-chats-room", async (payload) => {
+        let chats;
         try {
-            const chats = await DbService.getMany(COLLECTIONS.CHATS, { "$or": [{ personalTrainerId: mongoose.Types.ObjectId(payload.userId) }, { clientId: mongoose.Types.ObjectId(payload.userId) }] })
+            const trainer = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, {userId: mongoose.Types.ObjectId(payload.userId)})
+            if(trainer){
+                chats = await DbService.getMany(COLLECTIONS.CHATS, { "$or": [{ personalTrainerId: mongoose.Types.ObjectId(trainer._id) }, { clientId: mongoose.Types.ObjectId(payload.userId) }] })
+            }else{
+                chats = await DbService.getMany(COLLECTIONS.CHATS, { clientId: mongoose.Types.ObjectId(payload.userId)  })
+            }
+
             for (let chat of chats) {
-                console.log(chat._id.toString());
-                socket.join(chat._id.toString())
+                socket.join(chat._id.toString());
             }
         } catch (err) {
             reject(new ResponseError("Internal server error", err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
@@ -258,7 +264,6 @@ io.on("connection", (socket) => {
     socket.on("send-text-message", async (messageInfo) => {
         try {
             const message = await MessagingService.sendTextMessage(messageInfo.messageInfo.chatId, messageInfo.messageInfo.senderId, messageInfo.messageInfo.message);
-            console.log(io.sockets.adapter.rooms)
             io.to(messageInfo.messageInfo.chatId).emit("receive-message", { message });
             /*(async function () {
                 const chat = await DbService.getById(COLLECTIONS.CHATS, chatId);
