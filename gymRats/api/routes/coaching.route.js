@@ -11,10 +11,10 @@ const Review = require('../db/models/coaching/review.model');
 
 const ResponseError = require('../errors/responseError');
 
-const { authenticate } = require('../middlewares/authenticate');
+const { authenticate, adminAuthenticate } = require('../middlewares/authenticate');
 
 const { HTTP_STATUS_CODES, COLLECTIONS, PERSONAL_TRAINER_STATUSES, RELATION_STATUSES, DEFAULT_ERROR_MESSAGE, CARD_COLLECTIONS } = require('../global');
-const { relationValidation, relationStatusUpdateValidation, coachApplicationPostValidation, coachingReviewPostValidation } = require('../validation/hapi');
+const { relationValidation, relationStatusUpdateValidation, coachApplicationPostValidation, coachingReviewPostValidation, adminCoachStatusUpdateValidation } = require('../validation/hapi');
 const WeightTrackerService = require('../services/cards/weightTracker.service');
 const { func } = require('@hapi/joi');
 const { quicksort } = require('../helperFunctions/quickSortForCoaches')
@@ -298,8 +298,8 @@ router.get("/coach/search", authenticate, async (req, res, next) => {
 
     if (((req.query.lat == "null" || !req.query.lat) || (req.query.lng == "null" || !req.query.lng)) && !names) {
         const trainers = await DbService.getManyWithLimit(COLLECTIONS.PERSONAL_TRAINERS, {}, 50);
-        for(let trainer of trainers){
-            const user = await DbService.getOne(COLLECTIONS.USERS, {"$or": [{_id: trainer.userId}, {_id: mongoose.Types.ObjectId(trainer.userId)}]});
+        for (let trainer of trainers) {
+            const user = await DbService.getOne(COLLECTIONS.USERS, { "$or": [{ _id: trainer.userId }, { _id: mongoose.Types.ObjectId(trainer.userId) }] });
             trainer.user = user;
 
             let sumOfAllRatings = 0, counter = 0, overallRating = 0;
@@ -342,7 +342,7 @@ router.get("/coach/search", authenticate, async (req, res, next) => {
             names = names.split(" ");
             for (let name of names) {
                 trainers = await DbService.getMany(COLLECTIONS.PERSONAL_TRAINERS, { "$and": [{ "$or": [{ firstName: { "$regex": name, "$options": "i" } }, { lastName: { "$regex": name, "$options": "i" } }] }, { status: PERSONAL_TRAINER_STATUSES.ACTIVE }] })
-                
+
                 for (let i = 0; i < trainers.length; i++) {
                     const clients = await DbService.getMany(COLLECTIONS.RELATIONS, { "$or": [{ personalTrainerId: trainers[i]._id }, { personalTrainerId: mongoose.Types.ObjectId(trainers[i]._id) }] });
 
@@ -538,6 +538,34 @@ router.get("/coach/profile/:id", async (req, res, next) => {
     } catch (err) {
         return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
     }
-})
+});
+
+router.get('/applications', adminAuthenticate, async (req, res, next) => {
+    try {
+        const applications = await DbService.getMany(COLLECTIONS.PERSONAL_TRAINERS, { status: PERSONAL_TRAINER_STATUSES.PENDING });
+        return res.status(HTTP_STATUS_CODES.OK).send({
+            applications
+        })
+    } catch (err) {
+        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+    }
+});
+
+router.put('/coach/:id/status', adminAuthenticate, async (req, res, next) => {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) return next(new ResponseError("Invalid coach id", HTTP_STATUS_CODES.BAD_REQUEST));
+
+    const { error } = adminCoachStatusUpdateValidation(req.body);
+    if (error) return next(new ResponseError(error.details[0].message, HTTP_STATUS_CODES.BAD_REQUEST));
+
+    try {
+        const coach = await DbService.getById(COLLECTIONS.PERSONAL_TRAINERS, req.params.id);
+        if (!coach) return next(new ResponseError("Coach was not found", HTTP_STATUS_CODES.NOT_FOUND));
+        await DbService.update(COLLECTIONS.PERSONAL_TRAINERS, { _id: mongoose.Types.ObjectId(req.params.id) }, { status: req.body.status })
+
+        return res.sendStatus(HTTP_STATUS_CODES.OK);
+    } catch (err) {
+        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+    }
+});
 
 module.exports = router;
