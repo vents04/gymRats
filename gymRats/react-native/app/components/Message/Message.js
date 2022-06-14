@@ -105,6 +105,7 @@ export default class Message extends Component {
                                             opacity: pressed ? 0.1 : 1,
                                         }
                                     ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
+                                        this.props.removeListener();
                                         this.props.navigation.navigate("FilePreview", {
                                             url: `${ROOT_URL_API}/ugc/${this.props.message.message.file.name}.${this.props.message.message.file.extension}`,
                                             name: this.props.message.message.file.originalName,

@@ -59,6 +59,7 @@ export default class Splash extends Component {
             let validationEndpointResponse = null;
             let isAuthenticated = false;
             let hasUnverifiedEmail = false;
+            let user = {};
             try {
                 const token = await Auth.getToken();
                 if (token) {
@@ -73,6 +74,7 @@ export default class Splash extends Component {
                 });
             }
             if (isAuthenticated) {
+                user = validationEndpointResponse.user;
                 if (!hasUnverifiedEmail) {
                     let chatsRoomSocket = socketClass.getChatsRoomSocket();
                     if (!chatsRoomSocket) {
@@ -91,6 +93,7 @@ export default class Splash extends Component {
             } else {
                 this.props.navigation.replace("Auth", { hasUnverifiedEmail, email: validationEndpointResponse.user.email });
             }
+            await AsyncStorage.setItem("@gymrats:user", JSON.stringify(user));
         }, 1000);
     }
 

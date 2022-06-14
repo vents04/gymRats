@@ -239,11 +239,10 @@ mongo.connect();
         }
     }
 })();*/
-
-
 io.on("connection", (socket) => {
     socket.on("join-chats-room", async (payload) => {
         let chats;
+        console.log("Socket: ", socket.id)
         try {
             const trainer = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, {userId: mongoose.Types.ObjectId(payload.userId)})
             if(trainer){
@@ -253,7 +252,18 @@ io.on("connection", (socket) => {
             }
 
             for (let chat of chats) {
-                socket.join(chat._id.toString());
+                let shouldJoin = true;
+                for(let [key, value] of io.sockets.adapter.rooms){
+                    if(key.toString() === chat._id.toString()){
+                        shouldJoin = false;
+                        break;
+                    }
+                }
+
+                if(shouldJoin) {
+                    console.log("Joining chat room: ", chat._id)
+                    socket.join(chat._id.toString());
+                }
             }
         } catch (err) {
             reject(new ResponseError("Internal server error", err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
@@ -262,6 +272,7 @@ io.on("connection", (socket) => {
     })
 
     socket.on("send-text-message", async (messageInfo) => {
+        console.log("message sent");
         try {
             const message = await MessagingService.sendTextMessage(messageInfo.messageInfo.chatId, messageInfo.messageInfo.senderId, messageInfo.messageInfo.message);
             io.to(messageInfo.messageInfo.chatId).emit("receive-message", { message });
