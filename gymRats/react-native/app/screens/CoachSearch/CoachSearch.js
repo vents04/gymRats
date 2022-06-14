@@ -104,6 +104,7 @@ export default class CoachSearch extends Component {
         }
         ApiRequests.get(searchQuery, {}, true).then((response) => {
             this.setState({ searchResults: response.data.results })
+            console.log(response.data.results[0])
         }).catch((error) => {
             console.log(error.response)
             if (error.response) {

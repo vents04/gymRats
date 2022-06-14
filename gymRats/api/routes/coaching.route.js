@@ -540,6 +540,45 @@ router.get("/coach/profile/:id", async (req, res, next) => {
     }
 });
 
+router.get("/coach/:id", async (req, res, next) => {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) return next(new ResponseError("Invalid coach id", HTTP_STATUS_CODES.BAD_REQUEST, 5));
+
+    try {
+        const coach = await DbService.getById(COLLECTIONS.PERSONAL_TRAINERS, req.params.id);
+        if (!coach) return next(new ResponseError("Coach was not found", HTTP_STATUS_CODES.NOT_FOUND, 17));
+
+        const relations = await DbService.getMany(COLLECTIONS.RELATIONS, { personalTrainerId: mongoose.Types.ObjectId(req.params.id) });
+        let reviews = [];
+        for (let relation of relations) {
+            const review = await DbService.getOne(COLLECTIONS.REVIEWS, { relationId: mongoose.Types.ObjectId(relation._id) });
+            if (review) reviews.push(review);
+        }
+
+        let rating = 3;
+        if (reviews.length > 0) {
+            rating = 0;
+            for (let review of reviews) {
+                rating += review.rating;
+            }
+            rating = rating / reviews.length;
+        }
+
+        coach.rating = rating;
+        coach.reviews = reviews;
+
+        const user = await DbService.getOne(COLLECTIONS.USERS, { "$or": [{ _id: mongoose.Types.ObjectId(coach.userId) }, { _id: coach.userId }] });
+        if (!user) return next(new ResponseError("User was not found", HTTP_STATUS_CODES.NOT_FOUND, 39));
+
+        coach.user = user;
+
+        return res.status(HTTP_STATUS_CODES.OK).send({
+            coach
+        })
+    } catch (err) {
+        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+    }
+})
+
 router.get('/applications', adminAuthenticate, async (req, res, next) => {
     try {
         const applications = await DbService.getMany(COLLECTIONS.PERSONAL_TRAINERS, { status: PERSONAL_TRAINER_STATUSES.PENDING });

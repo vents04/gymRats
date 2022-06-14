@@ -8,6 +8,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import GestureRecognizer, {
     swipeDirections,
 } from 'react-native-swipe-gestures';
+import { default as AsyncStorage } from '@react-native-async-storage/async-storage';
 
 import ApiRequests from '../../classes/ApiRequests';
 
@@ -102,6 +103,20 @@ export default class Calendar extends Component {
         return true;
     }
 
+    checkForCoachProfileLink = async () => {
+        const coachProfileId = await AsyncStorage.getItem('@gymRats:coachProfileId');
+        if (coachProfileId) {
+            ApiRequests.get("coaching/coach/" + coachProfileId)
+                .then(response => {
+                    this.props.navigation.navigate('CoachPage', { coach: response.data.coach });
+                }).catch((error) => {
+                    console.log(error);
+                }).finally(() => {
+                    AsyncStorage.removeItem('@gymRats:coachProfileId');
+                })
+        }
+    }
+
     componentDidMount() {
         this.mounted = true;
         if (this.state.selectedDate && !this.subscription) {
@@ -112,6 +127,7 @@ export default class Calendar extends Component {
             "hardwareBackPress",
             this.closeBottomSheet
         );
+        this.checkForCoachProfileLink();
     }
 
     componentWillUnmount() {
@@ -139,7 +155,7 @@ export default class Calendar extends Component {
     render() {
         return <GestureRecognizer style={[globalStyles.safeAreaView, { paddingTop: 32 }]}
             onSwipe={(gestureName, gestureState) => {
-                const { SWIPE_UP, SWIPE_DOWN, SWIPE_LEFT, SWIPE_RIGHT } = swipeDirections;
+                const { SWIPE_LEFT, SWIPE_RIGHT } = swipeDirections;
                 switch (gestureName) {
                     case SWIPE_LEFT:
                         this.incrementDate(1);

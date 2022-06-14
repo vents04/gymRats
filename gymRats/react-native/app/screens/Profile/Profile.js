@@ -99,7 +99,7 @@ export default class Profile extends Component {
             <View style={globalStyles.pageContainer}>
                 <LogoBar />
                 <View style={globalStyles.topbarIconContainer}>
-                    <Pressable hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
+                    <Pressable hitSlop={{ top: 15, right: 15, bottom: 15, left: 15 }} onPress={() => {
                         this.props.navigation.navigate("Suggestions")
                     }} style={({ pressed }) => [
                         {
@@ -113,7 +113,7 @@ export default class Profile extends Component {
                             opacity: pressed ? 0.1 : 1,
                             marginLeft: 24
                         }
-                    ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
+                    ]} hitSlop={{ top: 15, right: 15, bottom: 15, left: 15 }} onPress={() => {
                         this.navigateToProfileDetailsEdit();
                     }}>
                         <Feather name="edit" size={30} color="#1f6cb0" />

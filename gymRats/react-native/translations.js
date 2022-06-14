@@ -47,7 +47,8 @@ module.exports = {
                 pageTitle: "Coach profile edit",
                 clients: "clients",
                 rating: "rating",
-                inPerson: "Do you prefer to work with clients only in person?"
+                inPerson: "Do you prefer to work with clients only in person?",
+                shareProfileLink: "Share profile link",
             },
             coachRequests: {
                 pageTitle: "Unanswered requests",
@@ -455,7 +456,8 @@ module.exports = {
                 pageTitle: "Редактиране на профила на треньор",
                 clients: "клиенти",
                 rating: "рейтинг",
-                inPerson: "Предпочитате ли да работите с клиенти само на живо?"
+                inPerson: "Предпочитате ли да работите с клиенти само на живо?",
+                shareProfileLink: "Сподели линк към профила",
             },
             coachRequests: {
                 pageTitle: "Неотговорени заявки",

@@ -575,3 +575,9 @@
 {"level":"error","message":"jwt malformed"}
 {"level":"error","message":"jwt malformed"}
 {"level":"error","message":"jwt malformed"}
+{"level":"error","message":"User record was not found"}
+{"level":"error","message":"User was not found"}
+{"level":"error","message":"User record was not found"}
+{"level":"error","message":"User record was not found"}
+{"level":"error","message":"User record was not found"}
+{"level":"error","message":"User record was not found"}

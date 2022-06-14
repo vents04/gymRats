@@ -43,8 +43,9 @@ const App = () => {
   const notificationListener = useRef();
   const responseListener = useRef();
 
-  useEffect(() => {
-    Linking.addEventListener('url', (event) => {
+  useEffect(async () => {
+    await AsyncStorage.removeItem("@gymrats:coachProfileId");
+    Linking.addEventListener('url', async (event) => {
       let data = event.url;
       if (data.includes('gymrats://')) {
         let url = data.replace('gymrats://', '');
@@ -52,15 +53,10 @@ const App = () => {
         let urlScreen = urlSplit[0];
         let urlId = urlSplit[1];
         if (urlScreen == "coach-profile") {
-
+          await AsyncStorage.setItem("@gymrats:coachProfileId", urlId);
         }
-      } else {
-
-      };
+      }
     });
-    Linking.getInitialURL().then((url) => {
-
-    })
     socket.initConnection();
     const subscription = AppState.addEventListener("change", async nextAppState => {
       if (nextAppState == 'background') {
