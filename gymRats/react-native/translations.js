@@ -124,7 +124,7 @@ module.exports = {
             progress: {
                 pageTitle: "Progress",
                 weightTracker: "Weight tracker",
-                minorWeightLost: "Minor weight lost",
+                minorWeightLoss: "Minor weight loss",
                 efficientWeightLoss: "Efficient weight loss",
                 efficientWeightGain: "Efficient weight gain",
                 tooRapidWeightLoss: "Too rapid weight loss",
@@ -533,7 +533,7 @@ module.exports = {
             progress: {
                 pageTitle: "Прогрес",
                 weightTracker: "Тегло",
-                minorWeightLost: "Незначителна загуба на тегло",
+                minorWeightLoss: "Незначителна загуба на тегло",
                 efficientWeightLoss: "Оптимална загуба на тегло",
                 efficientWeightGain: "Оптимално покачване на тегло",
                 tooRapidWeightLoss: "Драстична загуба на тегло",
