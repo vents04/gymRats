@@ -63,7 +63,6 @@ export default class Chat extends Component {
             this.setState({ isFileBeingUploaded: false });
             const chat = this.state.chat;
             if (chat && chat.messages) {
-                //chat.messages.push(data.message);
                 this.getChat(this.state.chat._id)
                 this.setState({ chat }, () => {
                     this.scrollView.current.scrollToEnd({ animated: true });
