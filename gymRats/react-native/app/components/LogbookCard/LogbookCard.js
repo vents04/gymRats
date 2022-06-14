@@ -135,7 +135,7 @@ export default class LogbookCard extends Component {
                                                                 {
                                                                     set.reps
                                                                         ? <>
-                                                                            {set.reps} {set.reps != 1 ? i18n.t('components')['reps'] + " " : i18n.t('components')['sets'] + " "}
+                                                                            {set.reps} {set.reps != 1 ? i18n.t('common')['reps'] + " " : i18n.t('common')['rep'] + " "}
                                                                         </>
                                                                         : null
                                                                 }
