@@ -242,7 +242,6 @@ mongo.connect();
 io.on("connection", (socket) => {
     socket.on("join-chats-room", async (payload) => {
         let chats;
-        console.log("Socket: ", socket.id)
         try {
             const trainer = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, {userId: mongoose.Types.ObjectId(payload.userId)})
             if(trainer){
@@ -261,7 +260,6 @@ io.on("connection", (socket) => {
                 }
 
                 if(shouldJoin) {
-                    console.log("Joining chat room: ", chat._id)
                     socket.join(chat._id.toString());
                 }
             }
@@ -272,10 +270,10 @@ io.on("connection", (socket) => {
     })
 
     socket.on("send-text-message", async (messageInfo) => {
-        console.log("message sent");
         try {
             const message = await MessagingService.sendTextMessage(messageInfo.messageInfo.chatId, messageInfo.messageInfo.senderId, messageInfo.messageInfo.message);
             io.to(messageInfo.messageInfo.chatId).emit("receive-message", { message });
+            io.to(messageInfo.messageInfo.chatId).emit("update-last-message", { message });
             /*(async function () {
                 const chat = await DbService.getById(COLLECTIONS.CHATS, chatId);
                 if (chat.status == CHAT_STATUSES.ACTIVE) {
@@ -314,7 +312,6 @@ io.on("connection", (socket) => {
     socket.on("send-file-message", async (messageInfo) => {
         try {
             const message = await MessagingService.sendFileMessage(messageInfo.messageInfo.chatId, messageInfo.messageInfo.senderId, messageInfo.messageInfo.base64, messageInfo.messageInfo.name, messageInfo.messageInfo.size, messageInfo.messageInfo.mimeType);
-            console.log(messageInfo.messageInfo.chatId)
             io.to(messageInfo.messageInfo.chatId).emit("receive-message", { message });
         } catch (err) {
             console.log(err);

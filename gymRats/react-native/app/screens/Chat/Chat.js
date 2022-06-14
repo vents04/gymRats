@@ -59,19 +59,16 @@ export default class Chat extends Component {
     }
 
     receiveMessageHandler = (data) => {
-        console.log("recieved message");
-            if (data.message && data.message.chatId == this.state.chatId) {
-                //console.log(data)
-                this.setState({ isFileBeingUploaded: false });
-                const chat = this.state.chat;
-                if (chat && chat.messages) {
-                    this.state.chat.messages.push(data.message)
-                    //this.getChat(this.state.chat._id)
-                    this.setState({ chat }, () => {
-                        this.scrollView.current.scrollToEnd({ animated: true });
-                    });
-                }
+        if (data.message && data.message.chatId == this.state.chatId) {
+            this.setState({ isFileBeingUploaded: false });
+            const chat = this.state.chat;
+            if (chat && chat.messages) {
+                this.state.chat.messages.push(data.message)
+                this.setState({ chat }, () => {
+                    this.scrollView.current.scrollToEnd({ animated: true });
+                });
             }
+        }
     }
 
     receiveTextMessage = () => {
@@ -126,7 +123,6 @@ export default class Chat extends Component {
         const user = await AsyncStorage.getItem("@gymrats:user");
         if(user){
             const userData = JSON.parse(user);
-            console.log("joinRooms")
             socketClass.getChatsRoomSocket().emit("join-chats-room", { userId: userData._id });
             return
         }

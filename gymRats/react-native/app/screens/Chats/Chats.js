@@ -11,6 +11,8 @@ import ChatsItem from '../../components/ChatsItem/ChatsItem';
 
 import { HTTP_STATUS_CODES } from '../../../global';
 
+import { default as AsyncStorage } from '@react-native-async-storage/async-storage';
+
 import globalStyles from '../../../assets/styles/global.styles';
 import LogoBar from '../../components/LogoBar/LogoBar';
 
@@ -34,7 +36,6 @@ export default class Chats extends Component {
                 this.props.navigation.navigate("Chat", { chatId: this.props.route.params.chatId })
             }
         }
-        this.updateLastMessage()
         this.getChats();
     }
 
@@ -56,14 +57,33 @@ export default class Chats extends Component {
         })
     }
 
+    joinRooms = async () => {
+        const user = await AsyncStorage.getItem("@gymrats:user");
+        if(user){
+            const userData = JSON.parse(user);
+            socketClass.getChatsRoomSocket().emit("join-chats-room", { userId: userData._id });
+            this.updateLastMessage()
+            return
+        }
+        this.props.navigation.navigate("Chats");
+    }
+
 
     updateLastMessage = () => {
-        socketClass.getChatsRoomSocket().on("last-message-to-be-updated", () => {
-            this.getChats()
+        socketClass.getChatsRoomSocket().on("update-last-message", (data) => {
+            const chats = this.state.chats
+            for(let chat of chats){
+                if(chat._id == data.message.chatId){
+                    chat.lastMessage = data.message.message.text || i18n.t('screens')['chats']['fileMessage'];
+                    break;
+                }
+            }
+            this.setState({ chats });
         });
     }
 
     componentDidMount() {
+        this.joinRooms();
         this.focusListener = this.props.navigation.addListener('focus', () => {
             this.onFocusFunction()
         })
