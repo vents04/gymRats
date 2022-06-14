@@ -298,9 +298,7 @@ export default class Progress extends Component {
                                                                                                             marginTop: 12
                                                                                                         }
                                                                                                     ]} onPress={() => {
-                                                                                                        this.props.navigation.navigate("Logbook", {
-                                                                                                            date: new Date(),
-                                                                                                            timezoneOffset: new Date().getTimezoneOffset()
+                                                                                                        this.props.navigation.navigate("Calendar", {
                                                                                                         });
                                                                                                     }}>
                                                                                                         <Text style={globalStyles.authPageActionButtonText}>{i18n.t('screens')['progress']['addWorkoutSession']}</Text>
