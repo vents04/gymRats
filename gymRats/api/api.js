@@ -253,7 +253,6 @@ io.on("connection", (socket) => {
             }
 
             for (let chat of chats) {
-                console.log(chat._id.toString());
                 socket.join(chat._id.toString());
             }
         } catch (err) {
@@ -265,7 +264,6 @@ io.on("connection", (socket) => {
     socket.on("send-text-message", async (messageInfo) => {
         try {
             const message = await MessagingService.sendTextMessage(messageInfo.messageInfo.chatId, messageInfo.messageInfo.senderId, messageInfo.messageInfo.message);
-            console.log(io.sockets.adapter.rooms)
             io.to(messageInfo.messageInfo.chatId).emit("receive-message", { message });
             /*(async function () {
                 const chat = await DbService.getById(COLLECTIONS.CHATS, chatId);
