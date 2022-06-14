@@ -1,0 +1,11 @@
+@import '../../../assets/styles/global.styles.css';
+
+.centered-view {
+    background-color: #e7e7e7;
+    border-radius: 4px;
+    padding: 16px;
+    width: 400px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
