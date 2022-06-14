@@ -80,7 +80,7 @@ export default class Chats extends Component {
                                 contentContainerStyle={globalStyles.fillEmptySpace}>
                                 {
                                     this.state.chats.map((chat, index) =>
-                                        chat.oppositeUser && chat.lastMessage
+                                        chat.oppositeUser
                                             ?
                                             <Pressable style={({ pressed }) => [
                                                 {
