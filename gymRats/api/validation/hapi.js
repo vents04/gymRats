@@ -1,6 +1,6 @@
 const Joi = require('@hapi/joi');
 const mongoose = require('mongoose');
-const { CALORIES_COUNTER_UNITS, WEIGHT_UNITS, CALORIES_COUNTER_MEALS, RELATION_STATUSES } = require('../global');
+const { CALORIES_COUNTER_UNITS, WEIGHT_UNITS, CALORIES_COUNTER_MEALS, RELATION_STATUSES, PERSONAL_TRAINER_STATUSES } = require('../global');
 const translations = require("./translations");
 const { booleanBaseError, numberPrecisionError, anyOnlyError, stringBaseError, stringEmptyError, anyRequiredError, stringMinError, stringMaxError, stringEmailError, invalidIdError, numberMinError, numberMaxError, numberIntegerError, numberPositiveError, stringAlphabeticalRegexError, arrayIncludesError } = require('./errors');
 
@@ -604,6 +604,13 @@ const passwordPutValidation = (data, lng) => {
     return schema.validate(data);
 }
 
+const adminCoachStatusUpdateValidation = (data) => {
+    const schema = Joi.object({
+        status: Joi.string().valid(...Object.values(PERSONAL_TRAINER_STATUSES)).required()
+    });
+    return schema.validate(data);
+}
+
 module.exports = {
     signupValidation,
     loginValidation,
@@ -630,5 +637,6 @@ module.exports = {
     devicePostValidation,
     forgottenPasswordPostValidation,
     passwordPutValidation,
-    emailVerificationPostValidation
+    emailVerificationPostValidation,
+    adminCoachStatusUpdateValidation
 }

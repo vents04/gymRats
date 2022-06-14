@@ -1,4 +1,4 @@
-const { COLLECTIONS, HTTP_STATUS_CODES } = require('../global');
+const { COLLECTIONS, HTTP_STATUS_CODES, ADMIN_STATUSES } = require('../global');
 
 const DbService = require('../services/db.service');
 const ResponseError = require('../errors/responseError');
@@ -37,6 +37,50 @@ let authenticate = async (req, res, next) => {
     }
 }
 
+let adminAuthenticate = async (req, res, next) => {
+    const token = req.header("x-admin-token");
+    const secret = req.headers("x-admin-secret");
+    if (!token) {
+        errorHandler(new ResponseError("Token not provided", HTTP_STATUS_CODES.UNAUTHORIZED), req, res, next);
+        return;
+    }
+    if (!secret) {
+        errorHandler(new ResponseError("Secret not provided", HTTP_STATUS_CODES.UNAUTHORIZED), req, res, next);
+        return;
+    }
+    try {
+        if (secret != ADMIN_SECRET) {
+            errorHandler(new ResponseError("Secret verification failed", HTTP_STATUS_CODES.UNAUTHORIZED), req, res, next);
+            return;
+        }
+
+        const verified = AuthenticationService.verifyToken(token);
+        if (!verified) {
+            errorHandler(new ResponseError("Token verification failed", HTTP_STATUS_CODES.UNAUTHORIZED), req, res, next);
+            return;
+        }
+
+        let admin = await DbService.getById(COLLECTIONS.ADMINS, verified._id);
+        if (!admin) {
+            errorHandler(new ResponseError("Admin not found", HTTP_STATUS_CODES.UNAUTHORIZED), req, res, next);
+            return;
+        }
+
+        if (admin.status == ADMIN_STATUSES.BLOCKED) {
+            errorHandler(new ResponseError("Admin is blocked", HTTP_STATUS_CODES.UNAUTHORIZED), req, res, next);
+            return;
+        }
+
+        req.admin = admin;
+        req.token = token;
+        next();
+    }
+    catch (error) {
+        errorHandler(new ResponseError(error.message, error.status || HTTP_STATUS_CODES.UNAUTHORIZED), req, res, next);
+    }
+}
+
 module.exports = {
-    authenticate: authenticate
+    authenticate: authenticate,
+    adminAuthenticate: adminAuthenticate
 };
