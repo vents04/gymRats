@@ -5,6 +5,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
 import i18n from 'i18n-js'
+import { default as AsyncStorage } from '@react-native-async-storage/async-storage';
 
 import socketClass from '../../classes/Socket';
 
@@ -57,30 +58,37 @@ export default class Chat extends Component {
         this.setState({ message: "", showError: false })
     }
 
-    receiveTextMessage = () => {
-        socketClass.getChatsRoomSocket().on("receive-message", (data) => {
+    receiveMessageHandler = (data) => {
+        console.log("recieved message");
             if (data.message && data.message.chatId == this.state.chatId) {
-                console.log(data)
+                //console.log(data)
                 this.setState({ isFileBeingUploaded: false });
                 const chat = this.state.chat;
                 if (chat && chat.messages) {
-                    this.getChat(this.state.chat._id)
+                    this.state.chat.messages.push(data.message)
+                    //this.getChat(this.state.chat._id)
                     this.setState({ chat }, () => {
                         this.scrollView.current.scrollToEnd({ animated: true });
                     });
                 }
             }
+    }
+
+    receiveTextMessage = () => {
+        socketClass.getChatsRoomSocket().off("receive-message", (data) => {
+            this.receiveMessageHandler(data)
+        }).on("receive-message", (data) => {
+            this.receiveMessageHandler(data)
         });
     }
 
     disconnectUserFromChat = () => {
-        socketClass.getChatsRoomSocket().close();
+        socketClass.getChatsRoomSocket().removeAllListeners("receive-message");
     }
 
     getChat = (id) => {
         ApiRequests.get(`chat/${id}`, {}, true).then((response) => {
             this.setState({ chat: response.data.chat }, () => {
-                socketClass.getChatsRoomSocket().emit("join-chats-room", { userId: this.state.chat.user._id });
                 this.scrollView.current.scrollToEnd({ animated: true });
             });
         }).catch((error) => {
@@ -114,7 +122,19 @@ export default class Chat extends Component {
         })
     }
 
+    joinRooms = async () => {
+        const user = await AsyncStorage.getItem("@gymrats:user");
+        if(user){
+            const userData = JSON.parse(user);
+            console.log("joinRooms")
+            socketClass.getChatsRoomSocket().emit("join-chats-room", { userId: userData._id });
+            return
+        }
+        this.props.navigation.navigate("Chats");
+    }
+
     componentDidMount() {
+        this.joinRooms();
         BackHandler.addEventListener("hardwareBackPress", this.backAction);
         this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
             this.scrollView.current.scrollToEnd({ animated: true });
@@ -126,6 +146,7 @@ export default class Chat extends Component {
 
     componentWillUnmount() {
         BackHandler.removeEventListener("hardwareBackPress", this.backAction);
+        this.disconnectUserFromChat();
         this.keyboardDidShowListener.remove();
     }
 
@@ -191,7 +212,7 @@ export default class Chat extends Component {
                             <ScrollView ref={this.scrollView} style={styles.chatMessagesContainer}>
                                 {
                                     this.state.chat.messages.map((message, index) =>
-                                        <Message key={index} message={message} user={this.state.chat.user} oppositeUser={this.state.chat.oppositeUser} {...this.props} />
+                                        <Message removeListener={this.disconnectUserFromChat} key={index} message={message} user={this.state.chat.user} oppositeUser={this.state.chat.oppositeUser} {...this.props} />
                                     )
                                 }
                             </ScrollView>
