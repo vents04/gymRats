@@ -89,7 +89,8 @@ module.exports = {
                 alertText: "Your password has been updated successfully. You can now login with your new password."
             },
             chats: {
-                noChats: "Chats with clients and coaches will appear here"
+                noChats: "Chats with clients and coaches will appear here",
+                fileMessage: "File message"
             },
             barcodeReader: {
                 barcodeAlreadyExistsErrorTitle: "Barcode already exists",
@@ -496,7 +497,8 @@ module.exports = {
                 alertText: "Паролата ви беше променена. Вече можете да влезете в профила си с новата парола.",
             },
             chats: {
-                noChats: "Чатовете с клиенти и треньори ще се покажат тук"
+                noChats: "Чатовете с клиенти и треньори ще се покажат тук",
+                fileMessage: "Файлово съобщение"
             },
             barcodeReader: {
                 barcodeAlreadyExistsErrorTitle: "Баркодът вече е записан",
