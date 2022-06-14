@@ -3,16 +3,19 @@ import { Route, Routes, BrowserRouter } from 'react-router-dom';
 import Home from './screens/Home/Home';
 import Login from './screens/Login/Login';
 
+import ApiRequests from './classes/ApiRequests';
+import { HTTP_STATUS_CODES, ROOT_URL_ADMIN } from './global';
+
 class App extends React.Component {
 
-    componentDidMount() {
+    constructor(props) {
+        super(props);
 
+        this.state = {
+            error: "",
+            showError: false,
+        }
     }
-
-    checkToken = () => {
-
-    }
-
     render() {
         return (
             <BrowserRouter>
