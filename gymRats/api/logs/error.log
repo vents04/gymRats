@@ -191,3 +191,4 @@
 {"level":"error","message":"Cannot read properties of undefined (reading 'user')"}
 {"level":"error","message":"Cannot read properties of undefined (reading 'user')"}
 {"level":"error","message":"Cannot read properties of undefined (reading 'user')"}
+{"level":"error","message":"Invalid credentials for login"}

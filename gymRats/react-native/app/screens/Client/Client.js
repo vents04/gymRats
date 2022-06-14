@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { ScrollView, Text, View, Image, TouchableWithoutFeedback, Pressable } from 'react-native'
+import { ScrollView, Text, View, Image, TouchableWithoutFeedback, Pressable, BackHandler } from 'react-native'
 
 import ApiRequests from '../../classes/ApiRequests';
 
