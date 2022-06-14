@@ -59,14 +59,16 @@ export default class Chat extends Component {
 
     receiveTextMessage = () => {
         socketClass.getChatsRoomSocket().on("receive-message", (data) => {
-            console.log(data)
-            this.setState({ isFileBeingUploaded: false });
-            const chat = this.state.chat;
-            if (chat && chat.messages) {
-                this.getChat(this.state.chat._id)
-                this.setState({ chat }, () => {
-                    this.scrollView.current.scrollToEnd({ animated: true });
-                });
+            if (data.message && data.message.chatId == this.state.chatId) {
+                console.log(data)
+                this.setState({ isFileBeingUploaded: false });
+                const chat = this.state.chat;
+                if (chat && chat.messages) {
+                    this.getChat(this.state.chat._id)
+                    this.setState({ chat }, () => {
+                        this.scrollView.current.scrollToEnd({ animated: true });
+                    });
+                }
             }
         });
     }
