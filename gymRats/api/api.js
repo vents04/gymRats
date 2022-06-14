@@ -244,18 +244,17 @@ mongo.connect();
 io.on("connection", (socket) => {
     socket.on("join-chats-room", async (payload) => {
         let chats;
-        console.log(payload.userId);
         try {
-            const trainer = await DbService.getOne(COLLECTIONS.USERS, {userId: mongoose.Types.ObjectId(payload.userId)})
+            const trainer = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, {userId: mongoose.Types.ObjectId(payload.userId)})
             if(trainer){
                 chats = await DbService.getMany(COLLECTIONS.CHATS, { "$or": [{ personalTrainerId: mongoose.Types.ObjectId(trainer._id) }, { clientId: mongoose.Types.ObjectId(payload.userId) }] })
             }else{
                 chats = await DbService.getMany(COLLECTIONS.CHATS, { clientId: mongoose.Types.ObjectId(payload.userId)  })
             }
-            console.log(chats.length)
+
             for (let chat of chats) {
                 console.log(chat._id.toString());
-                socket.join(chat._id.toString())
+                socket.join(chat._id.toString());
             }
         } catch (err) {
             reject(new ResponseError("Internal server error", err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
