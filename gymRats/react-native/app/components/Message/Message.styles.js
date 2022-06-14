@@ -57,7 +57,8 @@ export default StyleSheet.create({
     },
     fileName: {
         fontFamily: "MainBold",
-        fontSize: 16
+        fontSize: 16,
+        maxWidth: "90%"
     },
     downloadContainer: {
         display: 'flex',
