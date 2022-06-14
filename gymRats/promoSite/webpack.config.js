@@ -6,7 +6,7 @@ module.exports = {
         filename: 'index.bundle.js'
     },
     devServer: {
-        host: '192.168.0.150',
+        host: '192.168.0.184',
         port: 3002,
         hot: true,
         historyApiFallback: true,

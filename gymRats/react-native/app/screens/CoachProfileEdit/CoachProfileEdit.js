@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Image, Linking, ScrollView, Switch, Text, Pressable, View, BackHandler } from 'react-native';
+import { Image, Linking, ScrollView, Switch, Text, Pressable, View, BackHandler, Share } from 'react-native';
 
 import ApiRequests from '../../classes/ApiRequests';
 
@@ -42,6 +42,7 @@ export default class CoachPage extends Component {
     getCoach = () => {
         ApiRequests.get('coaching/me-as-coach', {}, true).then((response) => {
             this.setState({ coach: response.data.coach })
+            console.log(response.data.coach)
         }).catch((error) => {
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
@@ -55,6 +56,17 @@ export default class CoachPage extends Component {
                 ApiRequests.showRequestSettingError();
             }
         })
+    }
+
+    shareProfileLink = async () => {
+        try {
+            const url = `https://gymrats.uploy.app/coach-profile/${this.state.coach._id}`
+            await Share.share({
+                message: `Be coached by ${this.state.coach.firstName}!\n${url}`,
+            });
+        } catch (error) {
+            alert(error.message);
+        }
     }
 
     render() {
@@ -127,6 +139,17 @@ export default class CoachPage extends Component {
                                             <Text style={styles.location}>{this.state.coach.location.address}</Text>
                                         </Pressable>
                                     </View>
+                                    <Pressable style={({ pressed }) => [
+                                        globalStyles.authPageActionButton,
+                                        {
+                                            opacity: pressed ? 0.1 : 1,
+                                            marginBottom: 16
+                                        }
+                                    ]} onPress={() => {
+                                        this.shareProfileLink();
+                                    }}>
+                                        <Text style={globalStyles.authPageActionButtonText}>{i18n.t('screens')['coachProfileEdit']['shareProfileLink']}</Text>
+                                    </Pressable>
                                     <Text style={[globalStyles.notation, {
                                         marginTop: 16
                                     }]}>{i18n.t('screens')['coachProfileEdit']['inPerson']}</Text>

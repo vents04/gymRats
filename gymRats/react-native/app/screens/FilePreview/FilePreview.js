@@ -90,9 +90,9 @@ export default class FilePreview extends Component {
                             ? <Image style={{
                                 position: "absolute",
                                 top: 0,
-                                right: 0,
                                 left: 0,
                                 height: "100%",
+                                width: "100%",
                                 zIndex: -9
                             }} source={{ uri: this.props.route.params.url }} />
                             : VIDEO_VISUALIZATION_MIME_TYPES.includes(this.props.route.params.mimeType)

@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { ScrollView, Text, View, Image, TouchableWithoutFeedback, Pressable, BackHandler } from 'react-native'
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 import ApiRequests from '../../classes/ApiRequests';
 
@@ -16,7 +17,9 @@ import { HTTP_STATUS_CODES } from '../../../global';
 
 import globalStyles from '../../../assets/styles/global.styles';
 import styles from './Client.styles';
-
+import GestureRecognizer, {
+    swipeDirections,
+} from 'react-native-swipe-gestures';
 export default class Client extends Component {
 
     constructor(props) {
@@ -29,7 +32,8 @@ export default class Client extends Component {
             selectedDate: null,
             timezoneOffset: null,
             showError: false,
-            error: ""
+            error: "",
+            showCalendarPicker: false
         }
 
         this.focusListener;
@@ -98,8 +102,36 @@ export default class Client extends Component {
 
     render() {
         return (
-            <View style={globalStyles.safeAreaView}>
+            <GestureRecognizer style={globalStyles.safeAreaView}
+                onSwipe={(gestureName, gestureState) => {
+                    const { SWIPE_LEFT, SWIPE_RIGHT } = swipeDirections;
+                    switch (gestureName) {
+                        case SWIPE_LEFT:
+                            this.incrementDate(1);
+                            break;
+                        case SWIPE_RIGHT:
+                            this.incrementDate(-1);
+                            break;
+                        default:
+                            break;
+                    }
+                }}>
                 <View style={globalStyles.pageContainer}>
+                    {
+                        this.state.showCalendarPicker
+                            ? <DateTimePicker
+                                testID="dateTimePicker"
+                                value={new Date(this.state.selectedDate)}
+                                mode={"date"}
+                                onChange={(event, selectedDate) => {
+                                    this.setState({ showCalendarPicker: false }, () => {
+                                        this.setState({ selectedDate: new Date(selectedDate) });
+                                        this.getDate(new Date(selectedDate));
+                                    })
+                                }}
+                            />
+                            : null
+                    }
                     <View style={globalStyles.followUpScreenTopbar}>
                         <Pressable style={({ pressed }) => [
                             {
@@ -111,6 +143,47 @@ export default class Client extends Component {
                             <Ionicons name="md-arrow-back-sharp" size={25} />
                         </Pressable>
                         <Text style={globalStyles.followUpScreenTitle}>{i18n.t("screens")['client']['title']}</Text>
+                    </View>
+                    <View style={globalStyles.topbarIconContainer}>
+                        <Pressable hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
+                            this.setState({ selectedDate: new Date() }, () => {
+                                this.getDate(this.state.selectedDate);
+                            });
+                        }} style={({ pressed }) => [
+                            {
+                                opacity: pressed ? 0.1 : 1,
+                                marginLeft: 12
+                            }
+                        ]}>
+                            {
+                                this.state.selectedDate
+                                    && new Date().toDateString() != new Date(this.state.selectedDate).toDateString()
+                                    ? <View style={{
+                                        backgroundColor: "#1f6cb0",
+                                        paddingHorizontal: 12,
+                                        paddingVertical: 6,
+                                        borderRadius: 4,
+                                        marginLeft: 8,
+                                        display: "flex",
+                                        flexDirection: "row",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                    }}>
+                                        {
+                                            new Date().getTime() > new Date(this.state.selectedDate).getTime()
+                                                ? <Ionicons name="ios-arrow-forward-circle" size={14} color="white" />
+                                                : <Ionicons name="ios-arrow-back-circle" size={14} color="white" />
+                                        }
+                                        <Text style={{
+                                            fontFamily: "MainMedium",
+                                            fontSize: 12,
+                                            color: "white",
+                                            marginLeft: 6
+                                        }}>Today</Text>
+                                    </View>
+                                    : null
+                            }
+                        </Pressable>
                     </View>
                     {
                         this.state.showError
@@ -154,29 +227,32 @@ export default class Client extends Component {
                         this.state.selectedDate
                             ? <View style={globalStyles.fillEmptySpace}>
                                 <View style={styles.calendarControllersContainer}>
-                                    <TouchableWithoutFeedback onPress={() => { this.incrementDate(-1) }}>
-                                        <View style={styles.calendarController}>
-                                            <Entypo name="chevron-left" size={14} color="#999" style={{ marginRight: 5 }} />
-                                            <Text style={styles.calendarControllerText}>{i18n.t("screens")['client']['previous']}</Text>
-                                        </View>
-                                    </TouchableWithoutFeedback>
-                                    <Text style={styles.calendarCurrentDate}>
-                                        {this.state.selectedDate.getDate()}
-                                        .
-                                        {
-                                            this.state.selectedDate.getMonth() + 1 < 10
-                                                ? `0${(this.state.selectedDate.getMonth() + 1)}`
-                                                : (this.state.selectedDate.getMonth() + 1)
-                                        }
-                                    </Text>
-                                    <TouchableWithoutFeedback onPress={() => { this.incrementDate(1) }}>
-                                        <View style={[styles.calendarController, { justifyContent: 'flex-end' }]}>
-                                            <Text style={styles.calendarControllerText}>{i18n.t("screens")['client']['next']}</Text>
-                                            <Entypo name="chevron-right" style={{ marginLeft: 5 }} size={14} color="#999" />
-                                        </View>
-                                    </TouchableWithoutFeedback>
+                                    <Pressable style={styles.calendarController} onPress={() => { this.incrementDate(-1) }}>
+                                        <Entypo name="chevron-left" size={14} color="#999" style={{ marginRight: 5 }} />
+                                        <Text style={styles.calendarControllerText}>{i18n.t("screens")['client']['previous']}</Text>
+                                    </Pressable>
+                                    <Pressable hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
+                                        this.setState({ showCalendarPicker: true })
+                                    }}>
+                                        <Text style={styles.calendarCurrentDate}>
+                                            {this.state.selectedDate.getDate()}
+                                            .
+                                            {
+                                                this.state.selectedDate.getMonth() + 1 < 10
+                                                    ? `0${(this.state.selectedDate.getMonth() + 1)}`
+                                                    : (this.state.selectedDate.getMonth() + 1)
+                                            }
+                                        </Text>
+                                    </Pressable>
+                                    <Pressable style={[styles.calendarController, { justifyContent: 'flex-end' }]} onPress={() => { this.incrementDate(1) }}>
+                                        <Text style={styles.calendarControllerText}>{i18n.t("screens")['client']['next']}</Text>
+                                        <Entypo name="chevron-right" style={{ marginLeft: 5 }} size={14} color="#999" />
+                                    </Pressable>
                                 </View>
-                                <ScrollView contentContainerStyle={globalStyles.fillEmptySpace}>
+                                <ScrollView contentContainerStyle={{
+                                    ...globalStyles.fillEmptySpace,
+                                    paddingBottom: 300
+                                }}>
                                     {
                                         this.state.dates.map((date) =>
                                             date.date.getTime() == this.state.selectedDate.getTime()
@@ -221,7 +297,7 @@ export default class Client extends Component {
                             : null
                     }
                 </View>
-            </View>
+            </GestureRecognizer>
         )
     }
 }

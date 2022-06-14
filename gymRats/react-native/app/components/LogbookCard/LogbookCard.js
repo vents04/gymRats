@@ -78,7 +78,7 @@ export default class LogbookCard extends Component {
 
     render() {
         return <Pressable onPress={() => {
-            if (!this.state.showConfirmationBox) this.props.actionButtonFunction();
+            if (!this.state.showConfirmationBox && !this.props.client) this.props.actionButtonFunction();
         }}><View style={globalStyles.card}>
                 {
                     this.state.showConfirmationBox

@@ -61,7 +61,7 @@ export default class Message extends Component {
         return (
             <View style={[styles.messageContainer, {
                 alignSelf: (this.props.user._id == this.props.message.senderId) ? "flex-end" : "flex-start",
-                flexDirection: (this.props.user._id == this.props.message.senderId) ? "row-reverse" : "row"
+                flexDirection: (this.props.user._id == this.props.message.senderId) ? "row-reverse" : "row",
             }]}>
                 {
                     this.props.user._id == this.props.message.senderId

@@ -47,7 +47,8 @@ module.exports = {
                 pageTitle: "Coach profile edit",
                 clients: "clients",
                 rating: "rating",
-                inPerson: "Do you prefer to work with clients only in person?"
+                inPerson: "Do you prefer to work with clients only in person?",
+                shareProfileLink: "Share profile link",
             },
             coachRequests: {
                 pageTitle: "Unanswered requests",
@@ -123,7 +124,7 @@ module.exports = {
             progress: {
                 pageTitle: "Progress",
                 weightTracker: "Weight tracker",
-                minorWeightLost: "Minor weight lost",
+                minorWeightLoss: "Minor weight loss",
                 efficientWeightLoss: "Efficient weight loss",
                 efficientWeightGain: "Efficient weight gain",
                 tooRapidWeightLoss: "Too rapid weight loss",
@@ -202,7 +203,7 @@ module.exports = {
                 ratingTitlesExcellent: "Excellent",
             },
             caloriesIntake: {
-                title: "CaloriesIntake",
+                title: "Calories intake",
                 unknownSourceCaloriesMessage: "You may also add unknown source calories if you do not bother searching for a food you have consumed",
                 unknownSourceCaloriesButton: "Add calories from unknown source",
                 noFoodAdded: "No food added",
@@ -455,7 +456,8 @@ module.exports = {
                 pageTitle: "Редактиране на профила на треньор",
                 clients: "клиенти",
                 rating: "рейтинг",
-                inPerson: "Предпочитате ли да работите с клиенти само на живо?"
+                inPerson: "Предпочитате ли да работите с клиенти само на живо?",
+                shareProfileLink: "Сподели линк към профила",
             },
             coachRequests: {
                 pageTitle: "Неотговорени заявки",
@@ -531,7 +533,7 @@ module.exports = {
             progress: {
                 pageTitle: "Прогрес",
                 weightTracker: "Тегло",
-                minorWeightLost: "Незначителна загуба на тегло",
+                minorWeightLoss: "Незначителна загуба на тегло",
                 efficientWeightLoss: "Оптимална загуба на тегло",
                 efficientWeightGain: "Оптимално покачване на тегло",
                 tooRapidWeightLoss: "Драстична загуба на тегло",
