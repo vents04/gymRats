@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Dimensions, ScrollView, Text, TextInput, Pressable, View, BackHandler } from 'react-native';
+import { Dimensions, ScrollView, Text, TextInput, Pressable, View, BackHandler, ActivityIndicator } from 'react-native';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import { Picker } from '@react-native-picker/picker';
 import i18n from 'i18n-js'
@@ -26,10 +26,10 @@ export default class AddCaloriesIntakeItem extends Component {
             mealPickerValues: [],
             isMealPickerOpened: false,
             showError: false,
-            error: ""
+            error: "",
+            showLoading: false
         }
     }
-
 
     backAction = () => {
         (!this.props.route.params.previousScreen)
@@ -60,58 +60,66 @@ export default class AddCaloriesIntakeItem extends Component {
     }
 
     addFood = () => {
-        ApiRequests.post(`calories-counter/daily-item`, {}, {
-            date: +new Date(this.props.route.params.date).getDate(),
-            month: +new Date(this.props.route.params.date).getMonth() + 1,
-            year: +new Date(this.props.route.params.date).getFullYear(),
-            itemId: this.props.route.params.item._id,
-            meal: this.state.meal,
-            dt: new Date().getTime(),
-            amount: this.state.amount
-        }, true).then((response) => {
-            this.props.navigation.navigate("CaloriesIntake", {
-                date: this.props.route.params.date,
-                timezoneOffset: this.props.route.params.timezoneOffset
-            })
-        }).catch((error) => {
-            if (error.response) {
-                if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR && !error.response.data.includes("<html>")) {
-                    ApiRequests.alert(i18n.t('errors')['error'], error.response.data, [{ text: "OK" }]);
-                    this.setState({ showError: true, error: error.response.data });
+        this.setState({ showLoading: true }, () => {
+            ApiRequests.post(`calories-counter/daily-item`, {}, {
+                date: +new Date(this.props.route.params.date).getDate(),
+                month: +new Date(this.props.route.params.date).getMonth() + 1,
+                year: +new Date(this.props.route.params.date).getFullYear(),
+                itemId: this.props.route.params.item._id,
+                meal: this.state.meal,
+                dt: new Date().getTime(),
+                amount: this.state.amount
+            }, true).then((response) => {
+                this.props.navigation.navigate("CaloriesIntake", {
+                    date: this.props.route.params.date,
+                    timezoneOffset: this.props.route.params.timezoneOffset
+                })
+            }).catch((error) => {
+                if (error.response) {
+                    if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR && !error.response.data.includes("<html>")) {
+                        ApiRequests.alert(i18n.t('errors')['error'], error.response.data, [{ text: "OK" }]);
+                        this.setState({ showError: true, error: error.response.data });
+                    } else {
+                        ApiRequests.showInternalServerError();
+                    }
+                } else if (error.request) {
+                    ApiRequests.showNoResponseError();
                 } else {
-                    ApiRequests.showInternalServerError();
+                    ApiRequests.showRequestSettingError();
                 }
-            } else if (error.request) {
-                ApiRequests.showNoResponseError();
-            } else {
-                ApiRequests.showRequestSettingError();
-            }
-        })
+            }).finally(() => {
+                this.setState({ showLoading: false });
+            })
+        });
     }
 
     updateFood = () => {
-        ApiRequests.put(`calories-counter/${this.props.route.params.dayId}/${this.props.route.params.itemId}`, {}, {
-            meal: this.state.meal,
-            amount: this.state.amount
-        }, true).then((response) => {
-            this.props.navigation.navigate("CaloriesIntake", {
-                date: this.props.route.params.date,
-                timezoneOffset: this.props.route.params.timezoneOffset
-            })
-        }).catch((error) => {
-            if (error.response) {
-                if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR && !error.response.data.includes("<html>")) {
-                    ApiRequests.alert(i18n.t('errors')['error'], error.response.data, [{ text: "OK" }]);
-                    this.setState({ showError: true, error: error.response.data });
+        this.setState({ showLoading: true }, () => {
+            ApiRequests.put(`calories-counter/${this.props.route.params.dayId}/${this.props.route.params.itemId}`, {}, {
+                meal: this.state.meal,
+                amount: this.state.amount
+            }, true).then((response) => {
+                this.props.navigation.navigate("CaloriesIntake", {
+                    date: this.props.route.params.date,
+                    timezoneOffset: this.props.route.params.timezoneOffset
+                })
+            }).catch((error) => {
+                if (error.response) {
+                    if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR && !error.response.data.includes("<html>")) {
+                        ApiRequests.alert(i18n.t('errors')['error'], error.response.data, [{ text: "OK" }]);
+                        this.setState({ showError: true, error: error.response.data });
+                    } else {
+                        ApiRequests.showInternalServerError();
+                    }
+                } else if (error.request) {
+                    ApiRequests.showNoResponseError();
                 } else {
-                    ApiRequests.showInternalServerError();
+                    ApiRequests.showRequestSettingError();
                 }
-            } else if (error.request) {
-                ApiRequests.showNoResponseError();
-            } else {
-                ApiRequests.showRequestSettingError();
-            }
-        })
+            }).finally(() => {
+                this.setState({ showLoading: false })
+            });
+        });
     }
 
     render() {
@@ -221,17 +229,26 @@ export default class AddCaloriesIntakeItem extends Component {
                                 marginTop: 8
                             }
                         ]} onPress={() => {
-                            (this.props.route.params.intent == CALORIES_COUNTER_SCREEN_INTENTS.ADD)
-                                ? this.addFood()
-                                : this.updateFood()
+                            if (!this.state.showLoading) {
+                                (this.props.route.params.intent == CALORIES_COUNTER_SCREEN_INTENTS.ADD)
+                                    ? this.addFood()
+                                    : this.updateFood()
+                            }
                         }}>
-                            <Text style={globalStyles.authPageActionButtonText}>
-                                {
-                                    this.props.route.params.intent == CALORIES_COUNTER_SCREEN_INTENTS.ADD
-                                        ? i18n.t('screens')['addCaloriesIntakeItem']['add']
-                                        : i18n.t('screens')['addCaloriesIntakeItem']['update']
-                                }&nbsp;{i18n.t('screens')['addCaloriesIntakeItem']['food']}
-                            </Text>
+                            {
+                                !this.state.showLoading
+                                    ? <Text style={globalStyles.authPageActionButtonText}>
+                                        {
+                                            this.props.route.params.intent == CALORIES_COUNTER_SCREEN_INTENTS.ADD
+                                                ? i18n.t('screens')['addCaloriesIntakeItem']['add']
+                                                : i18n.t('screens')['addCaloriesIntakeItem']['update']
+                                        }&nbsp;{i18n.t('screens')['addCaloriesIntakeItem']['food']}
+                                    </Text>
+                                    : <ActivityIndicator
+                                        size="small"
+                                        color="#fff"
+                                        animating={true} />
+                            }
                         </Pressable>
                         <View style={styles.statsContainer}>
                             <Text style={styles.statsTitle}>{i18n.t('screens')['addCaloriesIntakeItem']['macronutrients']}</Text>

@@ -39,26 +39,27 @@ export default class CoachPage extends Component {
     }
 
     sendRequest = () => {
-        this.setState({ showError: false, error: "", isLoading: true });
-        ApiRequests.post("coaching/relation", {}, {
-            coachId: this.props.route.params.coach._id
-        }, true).then((response) => {
-            this.setState({ isLoading: false });
-            this.props.navigation.navigate("Coaching", { tab: "myCoach" })
-        }).catch((error) => {
-            this.setState({ isLoading: false });
-            if (error.response) {
-                if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR && !error.response.data.includes("<html>")) {
-                    this.setState({ showError: true, error: error.response.data });
+        this.setState({ showError: false, error: "", isLoading: true }, () => {
+            ApiRequests.post("coaching/relation", {}, {
+                coachId: this.props.route.params.coach._id
+            }, true).then((response) => {
+                this.props.navigation.navigate("Coaching", { tab: "myCoach" })
+            }).catch((error) => {
+                if (error.response) {
+                    if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR && !error.response.data.includes("<html>")) {
+                        this.setState({ showError: true, error: error.response.data });
+                    } else {
+                        ApiRequests.showInternalServerError();
+                    }
+                } else if (error.request) {
+                    ApiRequests.showNoResponseError();
                 } else {
-                    ApiRequests.showInternalServerError();
+                    ApiRequests.showRequestSettingError();
                 }
-            } else if (error.request) {
-                ApiRequests.showNoResponseError();
-            } else {
-                ApiRequests.showRequestSettingError();
-            }
-        })
+            }).finally(() => {
+                this.setState({ isLoading: false });
+            })
+        });
     }
 
     render() {

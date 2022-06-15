@@ -16,6 +16,7 @@ export default function BarcodeScanner(props) {
     const [scanned, setScanned] = useState(false);
     const [barcode, setBarcode] = useState("");
     const [shouldHideBarcodeBox, setShouldHideBarcodeBox] = useState(false);
+    const [showLoading, setShowLoading] = useState(false);
 
     const askForCameraPermission = () => {
         (async () => {
@@ -44,6 +45,7 @@ export default function BarcodeScanner(props) {
     }, []);
 
     const handleBarCodeScanned = ({ type, data }) => {
+        setShowLoading(true);
         setScanned(true);
         setBarcode(data)
         ApiRequests.get('calories-counter/search/barcode?barcode=' + data).then(response => {
@@ -75,6 +77,8 @@ export default function BarcodeScanner(props) {
             } else {
                 ApiRequests.showRequestSettingError();
             }
+        }).finally(() => {
+            setShowLoading(false);
         })
     };
 
@@ -180,9 +184,17 @@ export default function BarcodeScanner(props) {
                                         marginTop: 16
                                     },
                                 ]} onPress={() => {
-                                    handleBarCodeScanned({ type: "", data: barcode });
+                                    if (!showLoading) handleBarCodeScanned({ type: "", data: barcode });
                                 }}>
-                                    <Text style={globalStyles.authPageActionButtonText}>{i18n.t('screens')['barcodeReader']['submitBarcode']}</Text>
+                                    {
+                                        !showLoading
+                                            ? <Text style={globalStyles.authPageActionButtonText}>{i18n.t('screens')['barcodeReader']['submitBarcode']}</Text>
+                                            : <ActivityIndicator
+                                                animating={true}
+                                                color="#fff"
+                                                size="small"
+                                            />
+                                    }
                                 </Pressable>
                             </>
                     }

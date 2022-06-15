@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View, ScrollView, Pressable, BackHandler, TextInput } from 'react-native'
+import { Text, View, ScrollView, Pressable, BackHandler, TextInput, ActivityIndicator } from 'react-native'
 import i18n from 'i18n-js';
 
 import ApiRequests from '../../../classes/ApiRequests';
@@ -21,7 +21,8 @@ export default class AddUnknownCaloriesIntake extends Component {
         this.state = {
             showError: false,
             error: '',
-            calories: 0
+            calories: 0,
+            showLoading: false,
         }
     }
 
@@ -42,25 +43,29 @@ export default class AddUnknownCaloriesIntake extends Component {
     }
 
     addUnknownSourceCalories = () => {
-        ApiRequests.post("calories-counter/unknown-source-calories", {}, {
-            calories: this.state.calories,
-            date: this.props.route.params.date.getDate(),
-            month: this.props.route.params.date.getMonth() + 1,
-            year: this.props.route.params.date.getFullYear()
-        }, true).then((response) => {
-            this.backAction();
-        }).catch((error) => {
-            if (error.response) {
-                if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR && !error.response.data.includes("<html>")) {
-                    this.setState({ showError: true, error: error.response.data });
+        this.setState({ showLoading: true }, () => {
+            ApiRequests.post("calories-counter/unknown-source-calories", {}, {
+                calories: this.state.calories,
+                date: this.props.route.params.date.getDate(),
+                month: this.props.route.params.date.getMonth() + 1,
+                year: this.props.route.params.date.getFullYear()
+            }, true).then((response) => {
+                this.backAction();
+            }).catch((error) => {
+                if (error.response) {
+                    if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR && !error.response.data.includes("<html>")) {
+                        this.setState({ showError: true, error: error.response.data });
+                    } else {
+                        ApiRequests.showInternalServerError();
+                    }
+                } else if (error.request) {
+                    ApiRequests.showNoResponseError();
                 } else {
-                    ApiRequests.showInternalServerError();
+                    ApiRequests.showRequestSettingError();
                 }
-            } else if (error.request) {
-                ApiRequests.showNoResponseError();
-            } else {
-                ApiRequests.showRequestSettingError();
-            }
+            }).finally(() => {
+                this.setState({ showLoading: false })
+            })
         })
     }
 
@@ -103,9 +108,16 @@ export default class AddUnknownCaloriesIntake extends Component {
                                 opacity: pressed ? 0.1 : 1,
                             }
                         ]} onPress={() => {
-                            this.addUnknownSourceCalories()
+                            if (!this.state.showLoading) this.addUnknownSourceCalories()
                         }}>
-                            <Text style={globalStyles.authPageActionButtonText}>{i18n.t('common')['submit']}</Text>
+                            {
+                                !this.state.showLoading
+                                    ? <Text style={globalStyles.authPageActionButtonText}>{i18n.t('common')['submit']}</Text>
+                                    : <ActivityIndicator
+                                        size="small"
+                                        color="#fff"
+                                        animating={true} />
+                            }
                         </Pressable>
                     </ScrollView>
                 </View>

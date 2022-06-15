@@ -38,39 +38,40 @@ export default class Login extends Component {
 
     login = () => {
         Keyboard.dismiss();
-        this.setState({ showError: false, error: null, isLoading: true });
-        ApiRequests.post("user/login", {}, {
-            email: this.state.email.trim(),
-            password: this.state.password
-        }, false).then(async (response) => {
-            if (response.data.verifiedEmail) {
-                let chatsRoomSocket = socketClass.getChatsRoomSocket();
-                if (!chatsRoomSocket) {
-                    chatsRoomSocket = socketClass.initConnection();
-                    socketClass.setChatsRoomSocket(chatsRoomSocket);
-                }
-                socketClass.joinChatsRoom();
-                await Auth.setToken(response.data.token);
-                this.props.navigation.replace('NavigationRoutes');
-            } else {
-                this.props.navigation.navigate("EmailVerification", { email: this.state.email.trim(), doesNotComeFromSignup: true })
-            }
-        }).catch((error) => {
-            this.setState({ password: "" })
-            if (error.response) {
-                if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR && !error.response.data.includes("<html>")) {
-                    this.setState({ showError: true, error: error.response.data });
+        this.setState({ showError: false, error: null, isLoading: true }, () => {
+            ApiRequests.post("user/login", {}, {
+                email: this.state.email.trim(),
+                password: this.state.password
+            }, false).then(async (response) => {
+                if (response.data.verifiedEmail) {
+                    let chatsRoomSocket = socketClass.getChatsRoomSocket();
+                    if (!chatsRoomSocket) {
+                        chatsRoomSocket = socketClass.initConnection();
+                        socketClass.setChatsRoomSocket(chatsRoomSocket);
+                    }
+                    socketClass.joinChatsRoom();
+                    await Auth.setToken(response.data.token);
+                    this.props.navigation.replace('NavigationRoutes');
                 } else {
-                    ApiRequests.showInternalServerError();
+                    this.props.navigation.navigate("EmailVerification", { email: this.state.email.trim(), doesNotComeFromSignup: true })
                 }
-            } else if (error.request) {
-                ApiRequests.showNoResponseError();
-            } else {
-                ApiRequests.showRequestSettingError();
-            }
-        }).finally(() => {
-            this.setState({ isLoading: false })
-        })
+            }).catch((error) => {
+                this.setState({ password: "" })
+                if (error.response) {
+                    if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR && !error.response.data.includes("<html>")) {
+                        this.setState({ showError: true, error: error.response.data });
+                    } else {
+                        ApiRequests.showInternalServerError();
+                    }
+                } else if (error.request) {
+                    ApiRequests.showNoResponseError();
+                } else {
+                    ApiRequests.showRequestSettingError();
+                }
+            }).finally(() => {
+                this.setState({ isLoading: false })
+            })
+        });
     }
 
     render() {

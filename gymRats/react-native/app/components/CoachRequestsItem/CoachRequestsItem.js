@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Image, Text, Pressable, View } from 'react-native';
+import { Image, Text, Pressable, View, ActivityIndicator } from 'react-native';
 
 import { Ionicons } from '@expo/vector-icons';
 
