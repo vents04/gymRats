@@ -33,35 +33,37 @@ Notifications.setNotificationHandler({
   }),
 });
 
-const App = () => {
+const App = (props) => {
   const linking = {
-    prefixes: ["gymrats://", "https://gymrats.uploy.app/coach-profile"],
+    prefixes: ["gymrats://", "https://gymrats.uploy.app/", "exp://"]
   };
   const [expoPushToken, setExpoPushToken] = useState('');
   const [notification, setNotification] = useState(false);
   const [chatNotification, setChatNotification] = useState(false);
+  const [coachIdToShow, setCoachIdToShow] = useState("");
   const notificationListener = useRef();
   const responseListener = useRef();
 
   useEffect(async () => {
-    await AsyncStorage.removeItem("@gymrats:coachProfileId");
+    const initialUrl = await Linking.getInitialURL();
+    if (initialUrl) {
+      if (initialUrl.includes("coach-profile/")) {
+        let coachId = initialUrl.split('/coach-profile/')[1];
+        setCoachIdToShow(coachId);
+      }
+    }
+
     Linking.addEventListener('url', async (event) => {
       let data = event.url;
-      if (data.includes('gymrats://')) {
-        let url = data.replace('gymrats://', '');
-        let urlSplit = url.split('/');
-        let urlScreen = urlSplit[0];
-        let urlId = urlSplit[1];
-        let here = false;
-        if (urlScreen == "coach-profile") {
-          here = true;
-          await AsyncStorage.setItem("@gymrats:coachProfileId", urlId);
-        }
+      if (data.includes('coach-profile/')) {
+        let coachId = data.split('/coach-profile/')[1];
+        setCoachIdToShow(coachId);
       }
     });
     socket.initConnection();
     const subscription = AppState.addEventListener("change", async nextAppState => {
       if (nextAppState == 'background') {
+        console.log("background")
         const navAnalytics = await AsyncStorage.getItem('@gymRats:navAnalytics');
         if (navAnalytics) {
           const navigationAnalytics = JSON.parse(navAnalytics);
@@ -69,6 +71,8 @@ const App = () => {
             AsyncStorage.setItem('@gymRats:navAnalytics', "[]");
           }).catch((error) => { })
         }
+      } else if (nextAppState == 'active') {
+        console.log("active state")
       }
     });
 
@@ -208,6 +212,7 @@ const App = () => {
           <Stack.Screen
             name="NavigationRoutes"
             component={NavigationRoutes}
+
             options={{ headerShown: false }}
           />
         </Stack.Navigator>

@@ -48,7 +48,9 @@ export default class CoachSearch extends Component {
 
     async componentDidMount() {
         this.searchCoaches();
-        this.requestLocationPermission();
+        this.focusListener = this.props.navigation.addListener('focus', () => {
+            this.requestLocationPermission();
+        })
         BackHandler.addEventListener("hardwareBackPress", this.backAction);
     }
 
@@ -67,6 +69,7 @@ export default class CoachSearch extends Component {
         try {
             let permission = await Location.getForegroundPermissionsAsync();
             console.log(permission);
+            Alert.alert("Coach location permission", JSON.stringify(permission));
             if (permission.status !== "granted" && permission.canAskAgain) {
                 Alert.alert(i18n.t('screens')['coachSearch']['locationPermission'], i18n.t('screens')['coachSearch']['message'],
                     [

@@ -3,6 +3,7 @@ import { Alert, BackHandler, Modal, ScrollView, Text, TextInput, Pressable, View
 import i18n from 'i18n-js';
 import { Picker } from '@react-native-picker/picker';
 import DropDownPicker from 'react-native-dropdown-picker'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import ApiRequests from '../../../classes/ApiRequests';
 import { BackButtonHandler } from '../../../classes/BackButtonHandler';
@@ -529,7 +530,7 @@ export default class Logbook extends Component {
                                 <Ionicons name="add-sharp" size={35} color={cardColors.logbook} />
                             </Pressable>
                         </View>
-                        <ScrollView contentContainerStyle={globalStyles.fillEmptySpace}>
+                        <KeyboardAwareScrollView style={globalStyles.fillEmptySpace}>
                             {
                                 this.state.exercises.length == 0
                                     ? <Text style={globalStyles.notation}>{i18n.t('screens')['logbook']['noExercisesAdded']}</Text>
@@ -632,7 +633,7 @@ export default class Logbook extends Component {
                                         }
                                     </>
                             }
-                        </ScrollView>
+                        </KeyboardAwareScrollView>
                     </View>
                 </View>
             </View >

@@ -1,3 +1,3 @@
 module.exports = {
-    ROOT_URL_API: "https://api.gymrats.uploy.app"
+    ROOT_URL_API: "http://192.168.0.184:4057"
 }
