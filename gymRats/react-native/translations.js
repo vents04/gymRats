@@ -201,6 +201,7 @@ module.exports = {
                 ratingTitlesOK: "OK",
                 ratingTitlesGood: "Good",
                 ratingTitlesExcellent: "Excellent",
+                submit: "Submit"
             },
             caloriesIntake: {
                 title: "Calories intake",
@@ -610,6 +611,7 @@ module.exports = {
                 ratingTitlesOK: "Ок",
                 ratingTitlesGood: "Добро",
                 ratingTitlesExcellent: "Отлично",
+                submit: "Публикувай отзив",
             },
             caloriesIntake: {
                 title: "Прием на калории",
