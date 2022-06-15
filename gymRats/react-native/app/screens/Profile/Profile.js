@@ -75,8 +75,10 @@ export default class Profile extends Component {
         ApiRequests.put('user', {}, {
             profilePicture: `data:image/jpg;base64,${base64}`,
         }, true).then((response) => {
+            console.log("salkdlaskjdlkas", response.data)
             this.loadProfile();
         }).catch((error) => {
+            console.log(error.response.data);
             this.setState({
                 showError: true,
                 error: error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR && !error.response.data.includes("<html>")
