@@ -121,7 +121,7 @@ export default class Chat extends Component {
 
     joinRooms = async () => {
         const user = await AsyncStorage.getItem("@gymrats:user");
-        if(user){
+        if (user) {
             const userData = JSON.parse(user);
             socketClass.getChatsRoomSocket().emit("join-chats-room", { userId: userData._id });
             return

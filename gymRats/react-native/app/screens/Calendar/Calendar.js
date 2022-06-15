@@ -105,14 +105,11 @@ export default class Calendar extends Component {
 
     checkForCoachProfileLink = async () => {
         const coachProfileId = await AsyncStorage.getItem('@gymRats:coachProfileId');
-        Alert.alert("TUKA SUM", `COACH PROFILE ID: ${coachProfileId}`);
         if (coachProfileId) {
             ApiRequests.get("coaching/coach/" + coachProfileId)
                 .then(response => {
-                    Alert.alert("Redirect kum coach page", JSON.stringify(response.data.coach))
                     this.props.navigation.navigate('CoachPage', { coach: response.data.coach });
                 }).catch((error) => {
-                    Alert.alert("IMA GRESHKA MAI MAI", JSON.stringify(error))
                     console.log(error);
                 }).finally(() => {
                     AsyncStorage.removeItem('@gymRats:coachProfileId');
