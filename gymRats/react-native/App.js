@@ -156,7 +156,8 @@ const App = () => {
   return (
     <SafeAreaProvider>
       <NavigationContainer
-        linking={linking} fallback={<Text>Loading...</Text>}
+        linking={linking}
+        fallback={<Text>Loading...</Text>}
         ref={navigationRef}
         onReady={() => {
           routeNameRef.current = navigationRef.getCurrentRoute().name;

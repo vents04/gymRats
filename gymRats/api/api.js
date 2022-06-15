@@ -239,27 +239,32 @@ mongo.connect();
         }
     }
 })();*/
+
 io.on("connection", (socket) => {
+    console.log("connected", socket)
+    socket.on("connect_error", (err) => {
+        console.log(`connect_error due to ${err.message}`);
+    });
     socket.on("join-chats-room", async (payload) => {
         let chats;
         try {
-            const trainer = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, {userId: mongoose.Types.ObjectId(payload.userId)})
-            if(trainer){
+            const trainer = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, { userId: mongoose.Types.ObjectId(payload.userId) })
+            if (trainer) {
                 chats = await DbService.getMany(COLLECTIONS.CHATS, { "$or": [{ personalTrainerId: mongoose.Types.ObjectId(trainer._id) }, { clientId: mongoose.Types.ObjectId(payload.userId) }] })
-            }else{
-                chats = await DbService.getMany(COLLECTIONS.CHATS, { clientId: mongoose.Types.ObjectId(payload.userId)  })
+            } else {
+                chats = await DbService.getMany(COLLECTIONS.CHATS, { clientId: mongoose.Types.ObjectId(payload.userId) })
             }
 
             for (let chat of chats) {
                 let shouldJoin = true;
-                for(let [key, value] of io.sockets.adapter.rooms){
-                    if(key.toString() === chat._id.toString()){
+                for (let [key, value] of io.sockets.adapter.rooms) {
+                    if (key.toString() === chat._id.toString()) {
                         shouldJoin = false;
                         break;
                     }
                 }
 
-                if(shouldJoin) {
+                if (shouldJoin) {
                     socket.join(chat._id.toString());
                 }
             }

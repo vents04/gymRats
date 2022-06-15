@@ -585,6 +585,7 @@ export default class Logbook extends Component {
                                                                                 value={set.weight.amount && set.weight.amount != undefined ? set.weight.amount.toString() : null}
                                                                                 defaultValue={set.weight.amount && set.weight.amount != undefined ? set.weight.amount.toString() : null}
                                                                                 onChangeText={(val) => {
+                                                                                    console.log(val)
                                                                                     this.changeSetVariable(exercise.exerciseId, index, "weight", val)
                                                                                     this.setState({ showError: false })
                                                                                 }} />
