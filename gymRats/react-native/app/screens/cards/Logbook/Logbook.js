@@ -574,19 +574,19 @@ export default class Logbook extends Component {
                                                             exercise.sets.map((set, index) =>
                                                                 <View key={set._id}>
                                                                     <Text style={styles.setContainerTitle}>{i18n.t('screens')['logbook']['setNo']}{index + 1}</Text>
-                                                                    <ScrollView
-                                                                        showsHorizontalScrollIndicator={false}
+                                                                    <View
                                                                         style={styles.setContainer}
-                                                                        horizontal={true}
                                                                         contentContainerStyle={{ alignItems: "center", paddingVertical: 5 }}>
                                                                         <View style={styles.setContainerItem}>
                                                                             <TextInput style={styles.setContainerItemInput}
-                                                                                keyboardType='numeric'
                                                                                 value={set.weight.amount && set.weight.amount != undefined ? set.weight.amount.toString() : null}
-                                                                                defaultValue={set.weight.amount && set.weight.amount != undefined ? set.weight.amount.toString() : null}
                                                                                 onChangeText={(val) => {
+                                                                                    console.log(val)
                                                                                     this.changeSetVariable(exercise.exerciseId, index, "weight", val)
                                                                                     this.setState({ showError: false })
+                                                                                }}
+                                                                                onBlur={() => {
+                                                                                    console.log("blurred")
                                                                                 }} />
                                                                             <Text style={styles.setContainerItemDescriptor}>{i18n.t('common')['weightUnits'][set.weight.unit]}</Text>
                                                                         </View>
@@ -622,7 +622,7 @@ export default class Logbook extends Component {
                                                                         }}>
                                                                             <Ionicons name="remove" size={20} color={cardColors.logbook} style={{ padding: 12 }} />
                                                                         </Pressable>
-                                                                    </ScrollView>
+                                                                    </View>
                                                                 </View>
                                                             )
                                                         }

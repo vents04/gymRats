@@ -8,6 +8,14 @@ const Socket = {
     initConnection: () => {
         const socket = io(ROOT_URL_API, {
             transports: ['websocket'],
+            jsonp: false,
+            agent: '-',
+            pfx: '-',
+            cert: '-',
+            ca: '-',
+            ciphers: '-',
+            rejectUnauthorized: '-',
+            perMessageDeflate: '-'
         });
         return socket;
     },
@@ -22,14 +30,14 @@ const Socket = {
 
     joinChatsRoom: () => {
         return new Promise(async (resolve, reject) => {
-            try{
-                if(!chatsRoomSocket) throw new Error("Socket is not initialized");
+            try {
+                if (!chatsRoomSocket) throw new Error("Socket is not initialized");
                 const token = await AsyncStorage.getItem(AUTHENTICATION_TOKEN_KEY);
-                if(!token) throw new Error("No token found");
+                if (!token) throw new Error("No token found");
                 const validation = await User.validateToken()
-                if(!validation.valid) throw new Error("Invalid token")
-                chatsRoomSocket.emit("join-chats-room", {userId: validation.user._id});
-            }catch(error){
+                if (!validation.valid) throw new Error("Invalid token")
+                chatsRoomSocket.emit("join-chats-room", { userId: validation.user._id });
+            } catch (error) {
                 reject(error);
             }
         })

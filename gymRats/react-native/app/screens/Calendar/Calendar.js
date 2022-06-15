@@ -130,7 +130,9 @@ export default class Calendar extends Component {
             "hardwareBackPress",
             this.closeBottomSheet
         );
-        this.checkForCoachProfileLink();
+        this.focusListener = this.props.navigation.addListener('focus', () => {
+            this.checkForCoachProfileLink();
+        })
     }
 
     componentWillUnmount() {

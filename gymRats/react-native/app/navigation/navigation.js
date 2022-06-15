@@ -57,7 +57,7 @@ const Tab = createBottomTabNavigator();
 
 const getTabBarVisibility = route => {
     const routeName = getFocusedRouteNameFromRoute(route) ?? "Calendar";
-
+    console.log(routeName)
     const match = Object.values(SHOW_MAIN_TAB_NAVIGATION_ON_SCREENS).find(element => {
         if (element == routeName) return true;
     });
@@ -339,16 +339,15 @@ const NavigationRoutes = (props) => {
                         elevation: 0,
                         borderColor: "#ddd",
                         height: 75,
-                        ...styles.shadow
+                        ...styles.shadow,
                     },
-                })}
-            >
+                })}>
                 <Tab.Screen
                     name="calendarScreenStack"
                     options={({ route }) => ({
                         tabBarStyle: {
                             display: getTabBarVisibility(route),
-                            height: 75,
+                            height: getTabBarVisibility(route) == "flex" ? 75 : 0,
                             paddingTop: Platform.OS == "ios" ? 25 : 0,
                         },
                         tabBarLabel: 'Calendar',
@@ -372,7 +371,7 @@ const NavigationRoutes = (props) => {
                     options={({ route }) => ({
                         tabBarStyle: {
                             display: getTabBarVisibility(route),
-                            height: 75,
+                            height: getTabBarVisibility(route) == "flex" ? 75 : 0,
                             paddingTop: Platform.OS == "ios" ? 25 : 0,
                         },
                         tabBarLabel: 'Progress',
@@ -398,7 +397,7 @@ const NavigationRoutes = (props) => {
                     options={({ route }) => ({
                         tabBarStyle: {
                             display: getTabBarVisibility(route),
-                            height: 75,
+                            height: getTabBarVisibility(route) == "flex" ? 75 : 0,
                             paddingTop: Platform.OS == "ios" ? 25 : 0,
                         },
                         tabBarLabel: 'Coaching',
@@ -422,7 +421,7 @@ const NavigationRoutes = (props) => {
                     options={({ route }) => ({
                         tabBarStyle: {
                             display: getTabBarVisibility(route),
-                            height: 75,
+                            height: getTabBarVisibility(route) == "flex" ? 75 : 0,
                             paddingTop: Platform.OS == "ios" ? 25 : 0,
                         },
                         tabBarLabel: 'Chats',
@@ -456,7 +455,7 @@ const NavigationRoutes = (props) => {
                     options={({ route }) => ({
                         tabBarStyle: {
                             display: getTabBarVisibility(route),
-                            height: 75,
+                            height: getTabBarVisibility(route) == "flex" ? 75 : 0,
                             paddingTop: Platform.OS == "ios" ? 25 : 0,
                         },
                         tabBarLabel: 'Profile',
