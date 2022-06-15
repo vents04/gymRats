@@ -44,6 +44,7 @@ export default class Coaching extends Component {
     }
 
     onFocusFunction = () => {
+        this.setState({ showError: false, error: "" })
         if (this.props && this.props.route && this.props.route.params && this.props.route.params.tab) {
             this.setState({ activeTab: this.props.route.params.tab });
         }
