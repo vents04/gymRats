@@ -90,7 +90,7 @@ export default class ProfileDetailsEdit extends Component {
                     this.setState({
                         showSaving: false,
                         showError: true,
-                        error: error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR
+                        error: error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR && !error.response.data.includes("<html>")
                             ? error.response.data
                             : i18n.ti18n.t('errors')['internalServerError']
                     })
@@ -113,7 +113,7 @@ export default class ProfileDetailsEdit extends Component {
                     this.setState({
                         showSaving: false,
                         showError: true,
-                        error: error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR
+                        error: error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR && !error.response.data.includes("<html>")
                             ? error.response.data
                             : i18n.ti18n.t('errors')['internalServerError']
                     })

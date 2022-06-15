@@ -79,7 +79,7 @@ export default class Profile extends Component {
         }).catch((error) => {
             this.setState({
                 showError: true,
-                error: error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR
+                error: error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR && !error.response.data.includes("<html>")
                     ? i18n.ti18n.t('errors')['profilePictureUploadError']
                     : i18n.ti18n.t('errors')['internalServerError']
             })

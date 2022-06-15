@@ -57,7 +57,7 @@ export default function BarcodeScanner(props) {
             setScanned(false)
             setBarcode("")
             if (error.response) {
-                if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
+                if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR && !error.response.data.includes("<html>")) {
                     ApiRequests.alert(i18n.t('errors')['error'], error.response.data, [{ text: 'OK' }]);
                 } else {
                     ApiRequests.showInternalServerError();

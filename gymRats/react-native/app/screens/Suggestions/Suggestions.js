@@ -61,7 +61,7 @@ export default class Suggestions extends Component {
             this.scrollView.current.scrollToEnd({ animated: true });
         }).catch((error) => {
             if (error.response) {
-                if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
+                if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR && !error.response.data.includes("<html>")) {
                     ApiRequests.alert("Error", error.response.data);
                 } else {
                     ApiRequests.showInternalServerError();
@@ -79,7 +79,7 @@ export default class Suggestions extends Component {
             this.setState({ suggestions: response.data.suggestions })
         }).catch((error) => {
             if (error.response) {
-                if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
+                if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR && !error.response.data.includes("<html>")) {
                     ApiRequests.alert("Error", error.response.data);
                 } else {
                     ApiRequests.showInternalServerError();

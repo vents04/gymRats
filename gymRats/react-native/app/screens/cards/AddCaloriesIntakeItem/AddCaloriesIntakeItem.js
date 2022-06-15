@@ -75,7 +75,7 @@ export default class AddCaloriesIntakeItem extends Component {
             })
         }).catch((error) => {
             if (error.response) {
-                if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
+                if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR && !error.response.data.includes("<html>")) {
                     ApiRequests.alert(i18n.t('errors')['error'], error.response.data, [{ text: "OK" }]);
                     this.setState({ showError: true, error: error.response.data });
                 } else {
@@ -100,7 +100,7 @@ export default class AddCaloriesIntakeItem extends Component {
             })
         }).catch((error) => {
             if (error.response) {
-                if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
+                if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR && !error.response.data.includes("<html>")) {
                     ApiRequests.alert(i18n.t('errors')['error'], error.response.data, [{ text: "OK" }]);
                     this.setState({ showError: true, error: error.response.data });
                 } else {
