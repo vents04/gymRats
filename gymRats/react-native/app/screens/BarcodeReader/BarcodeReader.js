@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, Button, Pressable, ActivityIndicator, Alert, TextInput, BackHandler } from 'react-native';
+import { Text, View, Button, Pressable, ActivityIndicator, Alert, TextInput, BackHandler, KeyboardAvoidingView, Keyboard } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import i18n from 'i18n-js';
 
@@ -15,6 +15,7 @@ export default function BarcodeScanner(props) {
     const [hasPermission, setHasPermission] = useState(null);
     const [scanned, setScanned] = useState(false);
     const [barcode, setBarcode] = useState("");
+    const [shouldHideBarcodeBox, setShouldHideBarcodeBox] = useState(false);
 
     const askForCameraPermission = () => {
         (async () => {
@@ -31,8 +32,15 @@ export default function BarcodeScanner(props) {
     useEffect(() => {
         askForCameraPermission();
         BackHandler.addEventListener("hardwareBackPress", backAction);
-        return () =>
+        Keyboard.addListener("keyboardDidShow", () => {
+            setShouldHideBarcodeBox(true);
+        })
+        Keyboard.addListener("keyboardDidHide", () => {
+            setShouldHideBarcodeBox(false);
+        })
+        return () => {
             BackHandler.removeEventListener("hardwareBackPress", backAction);
+        }
     }, []);
 
     const handleBarCodeScanned = ({ type, data }) => {
@@ -103,7 +111,7 @@ export default function BarcodeScanner(props) {
     }
 
     return (
-        <View style={globalStyles.safeAreaView}>
+        <KeyboardAvoidingView style={globalStyles.safeAreaView}>
             <View style={globalStyles.pageContainer}>
                 <View style={globalStyles.followUpScreenTopbar}>
                     <Pressable style={({ pressed }) => [
@@ -115,15 +123,18 @@ export default function BarcodeScanner(props) {
                     }}>
                         <Ionicons name="md-arrow-back-sharp" size={25} />
                     </Pressable>
-                    <Text style={globalStyles.followUpScreenTitle}>Barcode reader</Text>
+                    <Text style={globalStyles.followUpScreenTitle}>{i18n.t('screens')['barcodeReader']['scanBarcode']}</Text>
                 </View>
                 <View style={styles.container}>
-                    <Text style={styles.title}>{i18n.t('screens')['barcodeReader']['scanBarcode']}</Text>
-                    <View style={styles.barcodebox}>
-                        <BarCodeScanner
-                            onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-                            style={{ height: 400, width: 400 }} />
-                    </View>
+                    {
+                        !shouldHideBarcodeBox
+                            ? <View style={styles.barcodebox}>
+                                <BarCodeScanner
+                                    onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+                                    style={{ height: 400, width: 400 }} />
+                            </View>
+                            : null
+                    }
                     {
                         scanned
                             ? <>
@@ -157,7 +168,7 @@ export default function BarcodeScanner(props) {
                             </>
                             : <>
                                 <TextInput
-                                    style={[globalStyles.authPageInput, { width: "80%", marginTop: 64 }]}
+                                    style={[globalStyles.authPageInput, { width: "80%", marginTop: 32 }]}
                                     placeholder={i18n.t('screens')['barcodeReader']['enterBarcode']}
                                     value={barcode}
                                     onChangeText={(val) => { setBarcode(val) }} />
@@ -177,6 +188,6 @@ export default function BarcodeScanner(props) {
                     }
                 </View >
             </View>
-        </View>
+        </KeyboardAvoidingView>
     );
 }
