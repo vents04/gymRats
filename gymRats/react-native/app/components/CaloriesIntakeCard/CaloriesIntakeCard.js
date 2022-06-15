@@ -124,7 +124,7 @@ export default class CaloriesIntakeCard extends Component {
             if (response.data.calorieCounterDay) this.setState({ calorieCounterDay: response.data.calorieCounterDay })
         }).catch((error) => {
             if (error.response) {
-                if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
+                if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR && !error.response.data.includes("<html>")) {
                     this.setState({ showError: true, error: error.response.data });
                 } else {
                     ApiRequests.showInternalServerError();

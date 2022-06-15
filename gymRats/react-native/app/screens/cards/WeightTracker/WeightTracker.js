@@ -66,7 +66,7 @@ export default class WeightTracker extends Component {
             this.setState({ weightUnit: response.data.user.weightUnit });
         }).catch((error) => {
             if (error.response) {
-                if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
+                if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR && !error.response.data.includes("<html>")) {
                     this.setState({ showError: true, error: error.response.data });
                 } else {
                     ApiRequests.showInternalServerError();
@@ -91,7 +91,7 @@ export default class WeightTracker extends Component {
             this.setState({
                 showError: true,
                 showSaving: false,
-                error: error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR
+                error: error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR && !error.response.data.includes("<html>")
                     ? error.response.data
                     : i18n.t('errors')['internalServerError']
             })

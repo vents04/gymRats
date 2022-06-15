@@ -39,7 +39,7 @@ export default class Signup extends Component {
             this.props.navigation.navigate("EmailVerification", { email: this.state.email });
         }).catch((error) => {
             if (error.response) {
-                if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
+                if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR && !error.response.data.includes("<html>")) {
                     this.setState({ showError: true, error: error.response.data });
                 } else {
                     ApiRequests.showInternalServerError();

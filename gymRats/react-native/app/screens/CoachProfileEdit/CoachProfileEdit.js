@@ -45,7 +45,7 @@ export default class CoachPage extends Component {
             console.log(response.data.coach)
         }).catch((error) => {
             if (error.response) {
-                if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
+                if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR && !error.response.data.includes("<html>")) {
                     this.setState({ showError: true, error: error.response.data });
                 } else {
                     ApiRequests.showInternalServerError();
@@ -60,7 +60,7 @@ export default class CoachPage extends Component {
 
     shareProfileLink = async () => {
         try {
-            const url = `https://gymrats.uploy.app/coach-profile/${this.state.coach._id}`
+            const url = `exp://coach-profile/${this.state.coach._id}`
             await Share.share({
                 message: `Be coached by ${this.state.coach.firstName}!\n${url}`,
             });

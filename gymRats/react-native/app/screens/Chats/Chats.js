@@ -44,7 +44,7 @@ export default class Chats extends Component {
             this.setState({ chats: response.data.chats });
         }).catch((error) => {
             if (error.response) {
-                if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
+                if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR && !error.response.data.includes("<html>")) {
                     this.setState({ showError: true, error: error.response.data });
                 } else {
                     ApiRequests.showInternalServerError();
@@ -59,7 +59,7 @@ export default class Chats extends Component {
 
     joinRooms = async () => {
         const user = await AsyncStorage.getItem("@gymrats:user");
-        if(user){
+        if (user) {
             const userData = JSON.parse(user);
             socketClass.getChatsRoomSocket().emit("join-chats-room", { userId: userData._id });
             this.updateLastMessage()
@@ -72,8 +72,8 @@ export default class Chats extends Component {
     updateLastMessage = () => {
         socketClass.getChatsRoomSocket().on("update-last-message", (data) => {
             const chats = this.state.chats
-            for(let chat of chats){
-                if(chat._id == data.message.chatId){
+            for (let chat of chats) {
+                if (chat._id == data.message.chatId) {
                     chat.lastMessage = data.message.message.text || i18n.t('screens')['chats']['fileMessage'];
                     break;
                 }

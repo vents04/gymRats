@@ -48,7 +48,9 @@ export default class CoachSearch extends Component {
 
     async componentDidMount() {
         this.searchCoaches();
-        this.requestLocationPermission();
+        this.focusListener = this.props.navigation.addListener('focus', () => {
+            this.requestLocationPermission();
+        })
         BackHandler.addEventListener("hardwareBackPress", this.backAction);
     }
 
@@ -67,6 +69,7 @@ export default class CoachSearch extends Component {
         try {
             let permission = await Location.getForegroundPermissionsAsync();
             console.log(permission);
+            Alert.alert("Coach location permission", JSON.stringify(permission));
             if (permission.status !== "granted" && permission.canAskAgain) {
                 Alert.alert(i18n.t('screens')['coachSearch']['locationPermission'], i18n.t('screens')['coachSearch']['message'],
                     [
@@ -108,7 +111,7 @@ export default class CoachSearch extends Component {
         }).catch((error) => {
             console.log(error.response)
             if (error.response) {
-                if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
+                if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR && !error.response.data.includes("<html>")) {
                     this.setState({ showError: true, error: error.response.data });
                 } else {
                     ApiRequests.showInternalServerError();

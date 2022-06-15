@@ -44,6 +44,7 @@ export default class Coaching extends Component {
     }
 
     onFocusFunction = () => {
+        this.setState({ showError: false, error: "" })
         if (this.props && this.props.route && this.props.route.params && this.props.route.params.tab) {
             this.setState({ activeTab: this.props.route.params.tab });
         }
@@ -62,7 +63,7 @@ export default class Coaching extends Component {
             this.setState({ coaching: response.data.coaching });
         }).catch((error) => {
             if (error.response) {
-                if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
+                if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR && !error.response.data.includes("<html>")) {
                     this.setState({ showError: true, error: error.response.data });
                 } else {
                     ApiRequests.showInternalServerError();
@@ -80,7 +81,7 @@ export default class Coaching extends Component {
             this.getCoachingPageState();
         }).catch((error) => {
             if (error.response) {
-                if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
+                if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR && !error.response.data.includes("<html>")) {
                     this.setState({ showError: true, error: error.response.data });
                 } else {
                     ApiRequests.showInternalServerError();
@@ -99,7 +100,7 @@ export default class Coaching extends Component {
         }).catch((error) => {
             this.setState({ showEndRelationModal: false });
             if (error.response) {
-                if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
+                if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR && !error.response.data.includes("<html>")) {
                     this.setState({ showError: true, error: error.response.data });
                 } else {
                     ApiRequests.showInternalServerError();
@@ -117,7 +118,7 @@ export default class Coaching extends Component {
             this.setState({ requests: response.data.requests });
         }).catch((error) => {
             if (error.response) {
-                if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
+                if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR && !error.response.data.includes("<html>")) {
                     this.setState({ showError: true, error: error.response.data });
                 } else {
                     ApiRequests.showInternalServerError();

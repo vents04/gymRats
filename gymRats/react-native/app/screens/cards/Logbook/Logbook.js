@@ -3,6 +3,7 @@ import { Alert, BackHandler, Modal, ScrollView, Text, TextInput, Pressable, View
 import i18n from 'i18n-js';
 import { Picker } from '@react-native-picker/picker';
 import DropDownPicker from 'react-native-dropdown-picker'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import ApiRequests from '../../../classes/ApiRequests';
 import { BackButtonHandler } from '../../../classes/BackButtonHandler';
@@ -127,7 +128,7 @@ export default class Logbook extends Component {
             this.setState({ hasWorkoutTemplates: response.data.hasWorkoutTemplates });
         }).catch((error) => {
             if (error.response) {
-                if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
+                if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR && !error.response.data.includes("<html>")) {
                     this.setState({ showError: true, error: error.response.data });
                 } else {
                     ApiRequests.showInternalServerError();
@@ -153,7 +154,7 @@ export default class Logbook extends Component {
             }
         }).catch((error) => {
             if (error.response) {
-                if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
+                if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR && !error.response.data.includes("<html>")) {
                     this.setState({ showError: true, error: error.response.data });
                 } else {
                     ApiRequests.showInternalServerError();
@@ -171,7 +172,7 @@ export default class Logbook extends Component {
             this.setState({ exercises: response.data.session.exercises })
         }).catch((error) => {
             if (error.response) {
-                if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
+                if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR && !error.response.data.includes("<html>")) {
                     this.setState({ showError: true, error: error.response.data });
                 } else {
                     ApiRequests.showInternalServerError();
@@ -244,7 +245,7 @@ export default class Logbook extends Component {
             }
         }).catch((error) => {
             if (error.response) {
-                if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
+                if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR && !error.response.data.includes("<html>")) {
                     this.setState({ showError: true, error: error.response.data });
                 } else {
                     ApiRequests.showInternalServerError();
@@ -267,7 +268,7 @@ export default class Logbook extends Component {
             this.saveChanges();
         }).catch((error) => {
             if (error.response) {
-                if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
+                if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR && !error.response.data.includes("<html>")) {
                     this.setState({ showModalError: true, modalError: error.response.data });
                 } else {
                     ApiRequests.showInternalServerError();
@@ -303,7 +304,7 @@ export default class Logbook extends Component {
             });
         }).catch((error) => {
             if (error.response) {
-                if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
+                if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR && !error.response.data.includes("<html>")) {
                     this.setState({ showError: true, error: error.response.data });
                 } else {
                     ApiRequests.showInternalServerError();
@@ -529,7 +530,7 @@ export default class Logbook extends Component {
                                 <Ionicons name="add-sharp" size={35} color={cardColors.logbook} />
                             </Pressable>
                         </View>
-                        <ScrollView contentContainerStyle={globalStyles.fillEmptySpace}>
+                        <KeyboardAwareScrollView style={globalStyles.fillEmptySpace}>
                             {
                                 this.state.exercises.length == 0
                                     ? <Text style={globalStyles.notation}>{i18n.t('screens')['logbook']['noExercisesAdded']}</Text>
@@ -632,7 +633,7 @@ export default class Logbook extends Component {
                                         }
                                     </>
                             }
-                        </ScrollView>
+                        </KeyboardAwareScrollView>
                     </View>
                 </View>
             </View >
