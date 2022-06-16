@@ -68,8 +68,6 @@ export default class CoachSearch extends Component {
     requestLocationPermission = async () => {
         try {
             let permission = await Location.getForegroundPermissionsAsync();
-            console.log(permission);
-            Alert.alert("Coach location permission", JSON.stringify(permission));
             if (permission.status !== "granted" && permission.canAskAgain) {
                 Alert.alert(i18n.t('screens')['coachSearch']['locationPermission'], i18n.t('screens')['coachSearch']['message'],
                     [

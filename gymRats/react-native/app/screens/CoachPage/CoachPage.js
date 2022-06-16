@@ -6,11 +6,13 @@ import ApiRequests from '../../classes/ApiRequests';
 import i18n from 'i18n-js';
 
 import { Ionicons } from '@expo/vector-icons';
+import { FontAwesome } from '@expo/vector-icons';
 
 import { HTTP_STATUS_CODES } from '../../../global';
 
 import globalStyles from '../../../assets/styles/global.styles';
 import styles from './CoachPage.styles';
+import { Share } from 'react-native';
 
 export default class CoachPage extends Component {
 
@@ -63,6 +65,17 @@ export default class CoachPage extends Component {
         });
     }
 
+    shareProfileLink = async () => {
+        try {
+            const url = `exp://coach-profile/${this.props.route.params.coach._id}`
+            await Share.share({
+                message: `Be coached by ${this.props.route.params.coach.firstName}!\n${url}`,
+            });
+        } catch (error) {
+            alert(error.message);
+        }
+    }
+
     render() {
         return (
             <View style={globalStyles.safeAreaView}>
@@ -78,6 +91,17 @@ export default class CoachPage extends Component {
                             <Ionicons name="md-arrow-back-sharp" size={25} />
                         </Pressable>
                         <Text style={globalStyles.followUpScreenTitle}>{i18n.t('screens')['coachPage']['pageTitle']}</Text>
+                    </View>
+                    <View style={globalStyles.topbarIconContainer}>
+                        <Pressable style={({ pressed }) => [
+                            {
+                                opacity: pressed ? 0.1 : 1,
+                            }
+                        ]} hitSlop={{ top: 30, right: 15, bottom: 30, left: 15 }} onPress={() => {
+                            this.shareProfileLink();
+                        }}>
+                            <FontAwesome name="share-square-o" size={25} color="#1f6cb0" style={{ marginRight: 12 }} />
+                        </Pressable>
                     </View>
                     {
                         this.state.showError
