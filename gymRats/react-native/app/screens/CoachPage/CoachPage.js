@@ -31,6 +31,7 @@ export default class CoachPage extends Component {
     }
 
     componentDidMount() {
+        console.log("mountnah")
         BackHandler.addEventListener("hardwareBackPress", this.backAction);
     }
 

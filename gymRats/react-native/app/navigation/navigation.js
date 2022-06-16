@@ -189,6 +189,7 @@ const coachingScreenStack = () => {
             />
             <Stack.Screen
                 name="CoachPage"
+                path="coach-profile"
                 options={{
                     headerShown: false
                 }}

@@ -20,6 +20,7 @@ import socket from './app/classes/Socket';
 import * as Linking from 'expo-linking';
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
+import CoachPage from './app/screens/CoachPage/CoachPage';
 
 const prefix = Linking.createURL('/');
 
@@ -34,36 +35,42 @@ Notifications.setNotificationHandler({
 });
 
 const App = (props) => {
-  const linking = {
-    prefixes: ["gymrats://", "https://gymrats.uploy.app/", "exp://"]
-  };
   const [expoPushToken, setExpoPushToken] = useState('');
   const [notification, setNotification] = useState(false);
   const [chatNotification, setChatNotification] = useState(false);
-  const [coachIdToShow, setCoachIdToShow] = useState("");
+  const [coach, setCoach] = useState(null);
+  const [navigationRefInterval, setNavigationRefInterval] = useState(null)
   const notificationListener = useRef();
   const responseListener = useRef();
 
-  useEffect(async () => {
-    const initialUrl = await Linking.getInitialURL();
-    if (initialUrl) {
-      if (initialUrl.includes("coach-profile/")) {
-        let coachId = initialUrl.split('/coach-profile/')[1];
-        setCoachIdToShow(coachId);
+  const linking = {
+    prefix: ["gymrats://", "exp://"],
+    config: {
+      screens: {
+        CoachPage: "coach-profile"
       }
     }
+  }
 
+  useEffect(async () => {
     Linking.addEventListener('url', async (event) => {
       let data = event.url;
       if (data.includes('coach-profile/')) {
         let coachId = data.split('/coach-profile/')[1];
-        setCoachIdToShow(coachId);
+        console.log("Coach id:", coachId);
+        ApiRequests.get("coaching/coach/" + coachId).then((response) => {
+          if (navigationRef.current && navigationRef.current.isReady()) {
+            navigationRef.current.navigate("NavigationRoutes", { screen: "coachingScreenStack", params: { screen: "CoachPage", params: { coach: response.data.coach } } })
+          }
+        }).catch((error) => {
+          console.log(error)
+        })
       }
     });
     socket.initConnection();
+
     const subscription = AppState.addEventListener("change", async nextAppState => {
       if (nextAppState == 'background') {
-        console.log("background")
         const navAnalytics = await AsyncStorage.getItem('@gymRats:navAnalytics');
         if (navAnalytics) {
           const navigationAnalytics = JSON.parse(navAnalytics);
@@ -71,8 +78,6 @@ const App = (props) => {
             AsyncStorage.setItem('@gymRats:navAnalytics', "[]");
           }).catch((error) => { })
         }
-      } else if (nextAppState == 'active') {
-        console.log("active state")
       }
     });
 
@@ -92,6 +97,7 @@ const App = (props) => {
 
     return () => {
       if (subscription) subscription.remove();
+      clearInterval(interval);
       Notifications.removeNotificationSubscription(responseListener.current);
     };
   }, []);
@@ -163,8 +169,24 @@ const App = (props) => {
         linking={linking}
         fallback={<Text>Loading...</Text>}
         ref={navigationRef}
-        onReady={() => {
+        onReady={async () => {
           routeNameRef.current = navigationRef.getCurrentRoute().name;
+          const initialUrl = await Linking.getInitialURL();
+          if (initialUrl) {
+            if (initialUrl.includes("coach-profile/")) {
+              let coachId = initialUrl.split('/coach-profile/')[1];
+              ApiRequests.get("coaching/coach/" + coachId).then((response) => {
+                navigationRef.current.addListener("state", (state) => {
+                  if (state.data && state.data.state) {
+                    navigationRef.current.navigate("NavigationRoutes", { screen: "coachingScreenStack", params: { screen: "CoachPage", params: { coach: response.data.coach } } })
+                    navigationRef.removeListener("state");
+                  }
+                })
+              }).catch((error) => {
+                console.log(error)
+              })
+            }
+          }
         }}
         onStateChange={async () => {
           const previousRouteName = routeNameRef.current;
@@ -193,7 +215,6 @@ const App = (props) => {
           }
 
           if (currentRouteName == "Chats") {
-            console.log("resetting chat notification to false");
             setChatNotification(false);
           }
           routeNameRef.current = currentRouteName;
@@ -212,7 +233,6 @@ const App = (props) => {
           <Stack.Screen
             name="NavigationRoutes"
             component={NavigationRoutes}
-
             options={{ headerShown: false }}
           />
         </Stack.Navigator>
