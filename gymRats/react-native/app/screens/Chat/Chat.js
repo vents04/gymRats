@@ -71,6 +71,7 @@ export default class Chat extends Component {
         this.disconnectUserFromChat();
         this.receiveTextMessage();
 
+        this.setState({ showSending: true });
         console.log("sendTextMessage");
         socketClass.getChatsRoomSocket().emit("send-text-message", { messageInfo })
         this.setState({ message: "", showError: false })
@@ -207,9 +208,9 @@ export default class Chat extends Component {
 
     sendFileMessageHandler = async (file) => {
         console.log("sendFileMessageHandler");
+        this.setState({ showSending: true, showError: false });
         const fileBase64 = await FileSystem.readAsStringAsync(file.uri, { encoding: 'base64' });
         socketClass.getChatsRoomSocket().emit("send-file-message", { messageInfo: { senderId: this.state.chat.user._id, base64: fileBase64, name: file.name, size: file.size, mimeType: file.mimeType, chatId: this.props.route.params.chatId } })
-        this.setState({ showError: false });
     }
 
     render() {
