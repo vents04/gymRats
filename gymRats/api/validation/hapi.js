@@ -73,8 +73,8 @@ const loginValidation = (data, lng) => {
 const userUpdateValidation = (data, lng) => {
     if (!lng) lng = "en";
     const schema = Joi.object({
-        firstName: firstNameValidation(lng),
-        lastName: lastNameValidation(lng),
+        firstName: firstNameValidation(lng).optional(),
+        lastName: lastNameValidation(lng).optional(),
         weightUnit: Joi.string().valid(...Object.values(WEIGHT_UNITS)).messages({
             "string.base": stringBaseError(lng, "weightUnit", 1),
             "string.empty": stringEmptyError(lng, "weightUnit"),

@@ -2,9 +2,9 @@
   "expo": {
     "name": "Gym Rats",
     "slug": "gym-rats",
-    "version": "1.0.1",
+    "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/img/ic_launcher.png",
+    "icon": "./assets/img/ic_launcher_icon.png",
     "scheme": "gymrats",
     "plugins": [
       [
@@ -52,6 +52,8 @@
         "android.permission.READ_EXTERNAL_STORAGE",
         "android.permission.WRITE_EXTERNAL_STORAGE",
         "android.permission.RECORD_AUDIO",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.ACCESS_COARSE_LOCATION",
         "android.useNextNotificationsApi"
       ],
       "googleServicesFile": "./google-services.json",

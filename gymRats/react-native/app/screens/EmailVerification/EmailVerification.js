@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, Pressable, View, ScrollView, TextInput, Image, Alert, BackHandler } from 'react-native';
+import { Text, Pressable, View, ScrollView, TextInput, Image, Alert, BackHandler, ActivityIndicator } from 'react-native';
 
 import ApiRequests from '../../classes/ApiRequests';
 import Auth from '../../classes/Auth';
@@ -23,6 +23,7 @@ export default class EmailVerification extends Component {
             identifier: "",
             showError: false,
             error: "",
+            showLoading: false
         }
     }
 
@@ -31,28 +32,31 @@ export default class EmailVerification extends Component {
     }
 
     checkCode = () => {
-        ApiRequests.get(`user/check-email-verification-code?identifier=${this.state.identifier}&code=${this.state.code}`).then(async (response) => {
-            await Auth.setToken(response.data.token);
-            this.setState({ showError: false, showPasswordEntry: true, showCodeEntry: false, showEmailEntry: false });
-            Alert.alert(i18n.t('screens')['emailVerification']['emailVerified'], i18n.t('screens')['emailVerification']['alertText'], [{
-                text: "OK",
-                onPress: () => {
-                    this.props.navigation.replace('NavigationRoutes');
-                }
-            }]);
-        }).catch((error) => {
-            console.log(error.response.data)
-            if (error.response) {
-                if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR && !error.response.data.includes("<html>")) {
-                    this.setState({ showError: true, error: error.response.data });
+        this.setState({ showLoading: true }, () => {
+            ApiRequests.get(`user/check-email-verification-code?identifier=${this.state.identifier}&code=${this.state.code}`).then(async (response) => {
+                await Auth.setToken(response.data.token);
+                this.setState({ showError: false, showPasswordEntry: true, showCodeEntry: false, showEmailEntry: false });
+                Alert.alert(i18n.t('screens')['emailVerification']['emailVerified'], i18n.t('screens')['emailVerification']['alertText'], [{
+                    text: "OK",
+                    onPress: () => {
+                        this.props.navigation.replace('NavigationRoutes');
+                    }
+                }]);
+            }).catch((error) => {
+                if (error.response) {
+                    if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR && !error.response.data.includes("<html>")) {
+                        this.setState({ showError: true, error: error.response.data });
+                    } else {
+                        ApiRequests.showInternalServerError();
+                    }
+                } else if (error.request) {
+                    ApiRequests.showNoResponseError();
                 } else {
-                    ApiRequests.showInternalServerError();
+                    ApiRequests.showRequestSettingError();
                 }
-            } else if (error.request) {
-                ApiRequests.showNoResponseError();
-            } else {
-                ApiRequests.showRequestSettingError();
-            }
+            }).finally(() => {
+                this.setState({ showLoading: false });
+            })
         })
     }
 
@@ -60,7 +64,6 @@ export default class EmailVerification extends Component {
         ApiRequests.post(`user/email-verification-code`, {}, {
             email: this.props.route.params.email.trim()
         }, false).then((response) => {
-            console.log(response.data);
             this.setState({ identifier: response.data.identifier, showEmailEntry: false, showCodeEntry: true, showPasswordEntry: false })
         }).catch((error) => {
             if (error.response) {
@@ -132,9 +135,16 @@ export default class EmailVerification extends Component {
                             marginTop: 16
                         }
                     ]} onPress={() => {
-                        this.checkCode();
+                        if (!this.state.showLoading) this.checkCode();
                     }}>
-                        <Text style={globalStyles.authPageActionButtonText}>{i18n.t('screens')['emailVerification']['actionButton']}</Text>
+                        {
+                            !this.state.showLoading
+                                ? <Text style={globalStyles.authPageActionButtonText}>{i18n.t('screens')['emailVerification']['actionButton']}</Text>
+                                : <ActivityIndicator
+                                    size="small"
+                                    color="#fff"
+                                    animating={true} />
+                        }
                     </Pressable>
                 </View>
             </View>

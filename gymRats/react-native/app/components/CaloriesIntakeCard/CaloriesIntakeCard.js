@@ -94,7 +94,6 @@ export default class CaloriesIntakeCard extends Component {
     }
 
     deleteCard = async () => {
-        console.log(this.props.data);
         try {
             if (this.props.data._id) await ApiRequests.delete(`calories-counter/${this.props.data._id}`, {}, true);
             if (this.props.data.unknownSourceCaloriesDay.length > 0) {

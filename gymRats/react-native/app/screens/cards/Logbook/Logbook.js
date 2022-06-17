@@ -51,17 +51,21 @@ export default class Logbook extends Component {
     }
 
     backAction = () => {
-        if (this.state.hasChanges) {
-            Alert.alert(i18n.t('screens')['logbook']['backActionAlertTitle'], i18n.t('screens')['logbook']['backActionAlertMessage'], [
-                {
-                    text: i18n.t('screens')['logbook']['cancel'],
-                    onPress: () => { return; },
-                    style: "cancel"
-                },
-                { text: i18n.t('screens')['logbook']['yes'], onPress: () => { BackButtonHandler.goToPageWithDataManagerCardUpdate(this.props.navigation, "Calendar", this.props.route.params.date) } }
-            ]);
+        if (this.state.exercises.length == 0 && !this.state.showTemplatePickerModal && this.state.hasWorkoutTemplates) {
+            this.setState({ showTemplatePickerModal: true });
         } else {
-            BackButtonHandler.goToPageWithDataManagerCardUpdate(this.props.navigation, "Calendar", this.props.route.params.date)
+            if (this.state.hasChanges) {
+                Alert.alert(i18n.t('screens')['logbook']['backActionAlertTitle'], i18n.t('screens')['logbook']['backActionAlertMessage'], [
+                    {
+                        text: i18n.t('screens')['logbook']['cancel'],
+                        onPress: () => { return; },
+                        style: "cancel"
+                    },
+                    { text: i18n.t('screens')['logbook']['yes'], onPress: () => { BackButtonHandler.goToPageWithDataManagerCardUpdate(this.props.navigation, "Calendar", this.props.route.params.date) } }
+                ]);
+            } else {
+                BackButtonHandler.goToPageWithDataManagerCardUpdate(this.props.navigation, "Calendar", this.props.route.params.date)
+            }
         }
         return true;
     }
@@ -390,7 +394,11 @@ export default class Logbook extends Component {
                         ? <Modal
                             animationType="slide"
                             transparent={true}
-                            visible={true}>
+                            visible={true}
+                            onRequestClose={() => {
+                                this.setState({ showTemplatePickerModal: false });
+                                this.backAction();
+                            }}>
                             <View style={globalStyles.centeredView}>
                                 <View style={globalStyles.modalView}>
                                     <Text style={globalStyles.modalTitle}>{i18n.t('screens')['logbook']['templatePickerModalTitle']}</Text>
@@ -582,12 +590,8 @@ export default class Logbook extends Component {
                                                                             <TextInput style={styles.setContainerItemInput}
                                                                                 value={set.weight.amount && set.weight.amount != undefined ? set.weight.amount.toString() : null}
                                                                                 onChangeText={(val) => {
-                                                                                    console.log(val)
                                                                                     this.changeSetVariable(exercise.exerciseId, index, "weight", val)
                                                                                     this.setState({ showError: false })
-                                                                                }}
-                                                                                onBlur={() => {
-                                                                                    console.log("blurred")
                                                                                 }} />
                                                                             <Text style={styles.setContainerItemDescriptor}>{i18n.t('common')['weightUnits'][set.weight.unit]}</Text>
                                                                         </View>

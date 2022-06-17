@@ -14,7 +14,6 @@ const { authenticate } = require('../middlewares/authenticate');
 const { HTTP_STATUS_CODES, COLLECTIONS, DEFAULT_ERROR_MESSAGE, RELATION_STATUSES } = require('../global');
 const { itemPostValidation, dailyItemPostValidation, dailyItemUpdateValidation, unknownSourceCaloriesPostValidation } = require('../validation/hapi');
 const checkCaloriesAndMacros = require('../helperFunctions/checkCaloriesAndMacros');
-const NutritionixService = require('../services/nutritionix.service');
 const { quicksort } = require('../helperFunctions/quickSortForFoods');
 const UnknownSourceCalories = require('../db/models/caloriesCounter/unknownSourceCalories.model');
 
@@ -317,7 +316,7 @@ router.get('/day', authenticate, async (req, res, next) => {
 });
 
 router.get("/search/food", async (req, res, next) => {
-    let results = [];    
+    let results = [];
     if (!req.query.words || req.query.words == "") {
         results = await DbService.getManyWithSortAndLimit(COLLECTIONS.CALORIES_COUNTER_ITEMS, {}, { usedTimes: -1, searchedTimes: -1 }, 50)
         return res.status(HTTP_STATUS_CODES.OK).send({
@@ -333,12 +332,12 @@ router.get("/search/food", async (req, res, next) => {
             words = words.split(" ");
             var regex = [];
             for (let i = 0; i < words.length; i++) {
-                regex[i] = new RegExp("^"+words[i].toLowerCase())
+                regex[i] = new RegExp("^" + words[i].toLowerCase())
             }
 
-            
-            foods = await DbService.getMany(COLLECTIONS.CALORIES_COUNTER_ITEMS, {$text: {$search: words.join(" ")}});
-            
+
+            foods = await DbService.getMany(COLLECTIONS.CALORIES_COUNTER_ITEMS, { $text: { $search: words.join(" ") } });
+
             if (words.length > 1) {
                 for (let food of foods) {
                     newWords = req.query.words.split(" ");

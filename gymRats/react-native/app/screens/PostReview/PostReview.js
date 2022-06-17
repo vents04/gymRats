@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, Pressable, View, ScrollView, TextInput, Image, BackHandler } from 'react-native';
+import { Text, Pressable, View, ScrollView, TextInput, Image, BackHandler, ActivityIndicator } from 'react-native';
 import { Rating, AirbnbRating } from 'react-native-ratings';
 
 import ApiRequests from '../../classes/ApiRequests';
@@ -23,6 +23,7 @@ export default class PostReview extends Component {
             review: "",
             showError: false,
             error: "",
+            showLoading: false
         }
 
         this.ratingTitles = [i18n.t('screens')['postReview']['ratingTitlesTerrible'], i18n.t('screens')['postReview']['ratingTitlesBad'], i18n.t('screens')['postReview']['ratingTitlesOK'], i18n.t('screens')['postReview']['ratingTitlesGood'], i18n.t('screens')['postReview']['ratingTitlesExcellent']];
@@ -150,9 +151,16 @@ export default class PostReview extends Component {
                             marginVertical: 24
                         }
                     ]} onPress={() => {
-                        this.postReview()
+                        if (!this.state.showLoading) this.postReview()
                     }}>
-                        <Text style={globalStyles.authPageActionButtonText}>{i18n.t('screens')['postReview']['submit']}</Text>
+                        {
+                            !this.state.showLoading
+                                ? <Text style={globalStyles.authPageActionButtonText}>{i18n.t('screens')['postReview']['submit']}</Text>
+                                : <ActivityIndicator
+                                    size="small"
+                                    color="#fff"
+                                    animating={true} />
+                        }
                     </Pressable>
                 </View>
             </View>

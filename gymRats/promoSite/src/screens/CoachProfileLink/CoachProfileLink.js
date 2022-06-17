@@ -26,7 +26,7 @@ export default function CoachProfileLink() {
             if (new Date().valueOf() - now > 100) return;
             setShowDownloadApp(true);
         }, 25);
-        window.location = "exp://coach-profile/" + id;
+        window.location = "gymrats://coach-profile/" + id;
     }
 
 

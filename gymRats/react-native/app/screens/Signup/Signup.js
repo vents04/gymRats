@@ -29,29 +29,30 @@ export default class Signup extends Component {
     }
 
     signup = () => {
-        this.setState({ showError: false, error: null, isLoading: true });
-        ApiRequests.post("user/signup", {}, {
-            firstName: this.state.firstName,
-            lastName: this.state.lastName,
-            email: this.state.email.trim(),
-            password: this.state.password
-        }, false).then((response) => {
-            this.props.navigation.navigate("EmailVerification", { email: this.state.email });
-        }).catch((error) => {
-            if (error.response) {
-                if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR && !error.response.data.includes("<html>")) {
-                    this.setState({ showError: true, error: error.response.data });
+        this.setState({ showError: false, error: null, isLoading: true }, () => {
+            ApiRequests.post("user/signup", {}, {
+                firstName: this.state.firstName,
+                lastName: this.state.lastName,
+                email: this.state.email.trim(),
+                password: this.state.password
+            }, false).then((response) => {
+                this.props.navigation.navigate("EmailVerification", { email: this.state.email });
+            }).catch((error) => {
+                if (error.response) {
+                    if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR && !error.response.data.includes("<html>")) {
+                        this.setState({ showError: true, error: error.response.data });
+                    } else {
+                        ApiRequests.showInternalServerError();
+                    }
+                } else if (error.request) {
+                    ApiRequests.showNoResponseError();
                 } else {
-                    ApiRequests.showInternalServerError();
+                    ApiRequests.showRequestSettingError();
                 }
-            } else if (error.request) {
-                ApiRequests.showNoResponseError();
-            } else {
-                ApiRequests.showRequestSettingError();
-            }
-        }).finally(() => {
-            this.setState({ isLoading: false })
-        })
+            }).finally(() => {
+                this.setState({ isLoading: false })
+            })
+        });
     }
 
     render() {

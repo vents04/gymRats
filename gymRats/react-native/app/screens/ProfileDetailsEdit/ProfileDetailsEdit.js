@@ -220,7 +220,7 @@ export default class ProfileDetailsEdit extends Component {
                                     weightUnits: callback(state.items)
                                 }));
                             }}
-                            onChangeItem={item => console.log(weightUnits.label, weightUnits.value)}
+                            onChangeItem={item => { }}
                             zIndex={10000}
                             textStyle={{
                                 fontFamily: 'MainMedium',

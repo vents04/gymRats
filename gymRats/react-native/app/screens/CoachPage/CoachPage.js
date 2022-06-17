@@ -6,11 +6,13 @@ import ApiRequests from '../../classes/ApiRequests';
 import i18n from 'i18n-js';
 
 import { Ionicons } from '@expo/vector-icons';
+import { FontAwesome } from '@expo/vector-icons';
 
 import { HTTP_STATUS_CODES } from '../../../global';
 
 import globalStyles from '../../../assets/styles/global.styles';
 import styles from './CoachPage.styles';
+import { Share } from 'react-native';
 
 export default class CoachPage extends Component {
 
@@ -39,26 +41,38 @@ export default class CoachPage extends Component {
     }
 
     sendRequest = () => {
-        this.setState({ showError: false, error: "", isLoading: true });
-        ApiRequests.post("coaching/relation", {}, {
-            coachId: this.props.route.params.coach._id
-        }, true).then((response) => {
-            this.setState({ isLoading: false });
-            this.props.navigation.navigate("Coaching", { tab: "myCoach" })
-        }).catch((error) => {
-            this.setState({ isLoading: false });
-            if (error.response) {
-                if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR && !error.response.data.includes("<html>")) {
-                    this.setState({ showError: true, error: error.response.data });
+        this.setState({ showError: false, error: "", isLoading: true }, () => {
+            ApiRequests.post("coaching/relation", {}, {
+                coachId: this.props.route.params.coach._id
+            }, true).then((response) => {
+                this.props.navigation.navigate("Coaching", { tab: "myCoach" })
+            }).catch((error) => {
+                if (error.response) {
+                    if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR && !error.response.data.includes("<html>")) {
+                        this.setState({ showError: true, error: error.response.data });
+                    } else {
+                        ApiRequests.showInternalServerError();
+                    }
+                } else if (error.request) {
+                    ApiRequests.showNoResponseError();
                 } else {
-                    ApiRequests.showInternalServerError();
+                    ApiRequests.showRequestSettingError();
                 }
-            } else if (error.request) {
-                ApiRequests.showNoResponseError();
-            } else {
-                ApiRequests.showRequestSettingError();
-            }
-        })
+            }).finally(() => {
+                this.setState({ isLoading: false });
+            })
+        });
+    }
+
+    shareProfileLink = async () => {
+        try {
+            const url = `gymrats://coach-profile/${this.props.route.params.coach._id}`
+            await Share.share({
+                message: `Be coached by ${this.props.route.params.coach.firstName}!\n${url}`,
+            });
+        } catch (error) {
+            alert(error.message);
+        }
     }
 
     render() {
@@ -76,6 +90,17 @@ export default class CoachPage extends Component {
                             <Ionicons name="md-arrow-back-sharp" size={25} />
                         </Pressable>
                         <Text style={globalStyles.followUpScreenTitle}>{i18n.t('screens')['coachPage']['pageTitle']}</Text>
+                    </View>
+                    <View style={globalStyles.topbarIconContainer}>
+                        <Pressable style={({ pressed }) => [
+                            {
+                                opacity: pressed ? 0.1 : 1,
+                            }
+                        ]} hitSlop={{ top: 30, right: 15, bottom: 30, left: 15 }} onPress={() => {
+                            this.shareProfileLink();
+                        }}>
+                            <FontAwesome name="share-square-o" size={25} color="#1f6cb0" style={{ marginRight: 12 }} />
+                        </Pressable>
                     </View>
                     {
                         this.state.showError

@@ -34,7 +34,8 @@ export default class Chat extends Component {
             isFileBeingUploaded: false,
             error: "",
             chat: null,
-            chatId: null
+            chatId: null,
+            showSending: false,
         }
 
         this.focusListener;
@@ -76,7 +77,7 @@ export default class Chat extends Component {
 
     receiveMessageHandler = (data) => {
         if (data.message && data.message.chatId == this.state.chatId) {
-            this.setState({ isFileBeingUploaded: false });
+            this.setState({ showSending: false, isFileBeingUploaded: false });
             const chat = this.state.chat;
             if (chat && chat.messages) {
                 this.state.chat.messages.push(data.message)
@@ -142,6 +143,7 @@ export default class Chat extends Component {
         if (user) {
             const userData = JSON.parse(user);
             socketClass.getChatsRoomSocket().emit("join-chats-room", { userId: userData._id });
+            this.receiveTextMessage();
             return
         }
         this.props.navigation.navigate("Chats");
@@ -256,16 +258,23 @@ export default class Chat extends Component {
                                                                 opacity: pressed ? 0.1 : 1,
                                                             }
                                                         ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 15 }} onPress={() => {
-                                                            this.sendTextMessage({ senderId: this.state.chat.user._id, message: this.state.message, chatId: this.props.route.params.chatId });
+                                                            if (!this.state.showSending) this.sendTextMessage({ senderId: this.state.chat.user._id, message: this.state.message, chatId: this.props.route.params.chatId });
                                                         }}>
-                                                            <Ionicons name="ios-send" size={24} color="#1f6cb0" />
+                                                            {
+                                                                !this.state.showSending
+                                                                    ? <Ionicons name="ios-send" size={24} color="#1f6cb0" />
+                                                                    : <ActivityIndicator
+                                                                        size="small"
+                                                                        color="#1f6cb0"
+                                                                        animating={true} />
+                                                            }
                                                         </Pressable>
                                                         : <Pressable style={({ pressed }) => [
                                                             {
                                                                 opacity: pressed ? 0.1 : 1,
                                                             }
                                                         ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 15 }} onPress={() => {
-                                                            this.pickDocument();
+                                                            if (!this.state.showSending) this.pickDocument();
                                                         }}>
                                                             <MaterialIcons name="file-present" size={30} color="#1f6cb0" />
                                                         </Pressable>

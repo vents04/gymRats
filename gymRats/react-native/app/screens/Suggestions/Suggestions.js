@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Image, Text, View, ScrollView, TextInput, Pressable, BackHandler } from 'react-native';
+import { Image, Text, View, ScrollView, TextInput, Pressable, BackHandler, ActivityIndicator } from 'react-native';
 
 import ApiRequests from '../../classes/ApiRequests';
 
@@ -20,7 +20,8 @@ export default class Suggestions extends Component {
 
         this.state = {
             suggestions: [],
-            suggestion: ""
+            suggestion: "",
+            showSending: false
         }
 
         this.scrollView = React.createRef();
@@ -53,25 +54,29 @@ export default class Suggestions extends Component {
     }
 
     postSuggestion = () => {
-        ApiRequests.post(`user/suggestion`, {}, {
-            suggestion: this.state.suggestion
-        }, true).then((response) => {
-            this.setState({ suggestion: "" });
-            this.getSuggestions();
-            this.scrollView.current.scrollToEnd({ animated: true });
-        }).catch((error) => {
-            if (error.response) {
-                if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR && !error.response.data.includes("<html>")) {
-                    ApiRequests.alert("Error", error.response.data);
+        this.setState({ showSending: true }, () => {
+            ApiRequests.post(`user/suggestion`, {}, {
+                suggestion: this.state.suggestion
+            }, true).then((response) => {
+                this.setState({ suggestion: "" });
+                this.getSuggestions();
+                this.scrollView.current.scrollToEnd({ animated: true });
+            }).catch((error) => {
+                if (error.response) {
+                    if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR && !error.response.data.includes("<html>")) {
+                        ApiRequests.alert("Error", error.response.data);
+                    } else {
+                        ApiRequests.showInternalServerError();
+                    }
+                } else if (error.request) {
+                    ApiRequests.showNoResponseError();
                 } else {
-                    ApiRequests.showInternalServerError();
+                    ApiRequests.showRequestSettingError();
                 }
-            } else if (error.request) {
-                ApiRequests.showNoResponseError();
-            } else {
-                ApiRequests.showRequestSettingError();
-            }
-        })
+            }).finally(() => {
+                this.setState({ showSending: false })
+            })
+        });
     }
 
     getSuggestions = () => {
@@ -134,9 +139,16 @@ export default class Suggestions extends Component {
                                 opacity: pressed ? 0.1 : 1,
                             }
                         ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 15 }} onPress={() => {
-                            this.postSuggestion();
+                            if (!this.state.showSending) this.postSuggestion();
                         }}>
-                            <Ionicons name="ios-send" size={24} style={styles.chatInputButton} color="#1f6cb0" />
+                            {
+                                !this.state.showSending
+                                    ? <Ionicons name="ios-send" size={24} style={styles.chatInputButton} color="#1f6cb0" />
+                                    : <ActivityIndicator
+                                        size="small"
+                                        color="#1f6cb0"
+                                        animating={true} />
+                            }
                         </Pressable>
                     </View>
 

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, TextInput, View, Pressable, Switch, BackHandler } from 'react-native';
+import { Text, TextInput, View, Pressable, Switch, BackHandler, ActivityIndicator } from 'react-native';
 import i18n from 'i18n-js';
 
 import ApiRequests from '../../classes/ApiRequests';
@@ -22,7 +22,8 @@ export default class CoachingApplicationSubmission extends Component {
             selectedLocation: "",
             prefersOfflineCoaching: false,
             showError: false,
-            error: ""
+            error: "",
+            showLoading: false
         }
     }
 
@@ -58,24 +59,27 @@ export default class CoachingApplicationSubmission extends Component {
     }
 
     getPlace = () => {
-        ApiRequests.get(`google/place/${this.state.selectedLocation.place_id}`, {}, true).then((response) => {
-            const selectedLocation = this.state.selectedLocation;
-            selectedLocation.location = response.data.result.geometry.location;
-            this.setState({ selectedLocation: selectedLocation }, () => {
-                this.submitApplication()
-            })
-        }).catch((error) => {
-            if (error.response) {
-                if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR && !error.response.data.includes("<html>")) {
-                    this.setState({ showError: true, error: error.response.data });
+        this.setState({ showLoading: true }, () => {
+            ApiRequests.get(`google/place/${this.state.selectedLocation.place_id}`, {}, true).then((response) => {
+                const selectedLocation = this.state.selectedLocation;
+                selectedLocation.location = response.data.result.geometry.location;
+                this.setState({ selectedLocation: selectedLocation }, () => {
+                    this.submitApplication()
+                })
+            }).catch((error) => {
+                this.setState({ showLoading: false });
+                if (error.response) {
+                    if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR && !error.response.data.includes("<html>")) {
+                        this.setState({ showError: true, error: error.response.data });
+                    } else {
+                        ApiRequests.showInternalServerError();
+                    }
+                } else if (error.request) {
+                    ApiRequests.showNoResponseError();
                 } else {
-                    ApiRequests.showInternalServerError();
+                    ApiRequests.showRequestSettingError();
                 }
-            } else if (error.request) {
-                ApiRequests.showNoResponseError();
-            } else {
-                ApiRequests.showRequestSettingError();
-            }
+            })
         })
     }
 
@@ -90,7 +94,6 @@ export default class CoachingApplicationSubmission extends Component {
         }, true).then((response) => {
             this.backAction();
         }).catch((error) => {
-            console.log(error.response.data);
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR && !error.response.data.includes("<html>")) {
                     this.setState({ showError: true, error: error.response.data });
@@ -102,6 +105,8 @@ export default class CoachingApplicationSubmission extends Component {
             } else {
                 ApiRequests.showRequestSettingError();
             }
+        }).finally(() => {
+            this.setState({ showLoading: false });
         })
     }
 
@@ -184,9 +189,16 @@ export default class CoachingApplicationSubmission extends Component {
                                         opacity: pressed ? 0.1 : 1,
                                     }
                                 ]} onPress={() => {
-                                    this.getPlace()
+                                    if (!this.state.showLoading) this.getPlace()
                                 }}>
-                                    <Text style={globalStyles.authPageActionButtonText}>{i18n.t('screens')['coachingApplicationSubmission']['actionButton']}</Text>
+                                    {
+                                        !this.state.showLoading
+                                            ? <Text style={globalStyles.authPageActionButtonText}>{i18n.t('screens')['coachingApplicationSubmission']['actionButton']}</Text>
+                                            : <ActivityIndicator
+                                                size="small"
+                                                color="#fff"
+                                                animating={true} />
+                                    }
                                 </Pressable>
                             </>
                             : null

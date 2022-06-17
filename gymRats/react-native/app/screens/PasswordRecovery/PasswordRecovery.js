@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, Pressable, View, ScrollView, TextInput, Image, Alert, BackHandler } from 'react-native';
+import { Text, Pressable, View, ScrollView, TextInput, Image, Alert, BackHandler, ActivityIndicator } from 'react-native';
 
 import ApiRequests from '../../classes/ApiRequests';
 
@@ -27,6 +27,7 @@ export default class PasswordRecovery extends Component {
             showPasswordEntry: false,
             showCodeEntry: false,
             showEmailEntry: true,
+            showLoading: false
         }
     }
 
@@ -44,42 +45,48 @@ export default class PasswordRecovery extends Component {
     }
 
     checkCode = () => {
-        ApiRequests.get(`user/check-password-recovery-code?identifier=${this.state.identifier}&code=${this.state.code}`).then((response) => {
-            this.setState({ showError: false, showPasswordEntry: true, showCodeEntry: false, showEmailEntry: false });
-        }).catch((error) => {
-            if (error.response) {
-                if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR && !error.response.data.includes("<html>")) {
-                    this.setState({ showError: true, error: error.response.data });
+        this.setState({ showError: true }, () => {
+            ApiRequests.get(`user/check-password-recovery-code?identifier=${this.state.identifier}&code=${this.state.code}`).then((response) => {
+                this.setState({ showError: false, showPasswordEntry: true, showCodeEntry: false, showEmailEntry: false });
+            }).catch((error) => {
+                if (error.response) {
+                    if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR && !error.response.data.includes("<html>")) {
+                        this.setState({ showError: true, error: error.response.data });
+                    } else {
+                        ApiRequests.showInternalServerError();
+                    }
+                } else if (error.request) {
+                    ApiRequests.showNoResponseError();
                 } else {
-                    ApiRequests.showInternalServerError();
+                    ApiRequests.showRequestSettingError();
                 }
-            } else if (error.request) {
-                ApiRequests.showNoResponseError();
-            } else {
-                ApiRequests.showRequestSettingError();
-            }
+            }).finally(() => {
+                this.setState({ showLoading: false });
+            })
         })
     }
 
     generatePasswordRecoveryCode = () => {
-        console.log("tuuaks;aK;SLKAl;sk;l")
-        ApiRequests.post(`user/password-recovery-code`, {}, {
-            email: this.state.email
-        }, false).then((response) => {
-            console.log(response.data);
-            this.setState({ identifier: response.data.identifier, showEmailEntry: false, showCodeEntry: true, showPasswordEntry: false })
-        }).catch((error) => {
-            if (error.response) {
-                if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR && !error.response.data.includes("<html>")) {
-                    this.setState({ showError: true, error: error.response.data });
+        this.setState({ showLoading: true }, () => {
+            ApiRequests.post(`user/password-recovery-code`, {}, {
+                email: this.state.email
+            }, false).then((response) => {
+                this.setState({ identifier: response.data.identifier, showEmailEntry: false, showCodeEntry: true, showPasswordEntry: false })
+            }).catch((error) => {
+                if (error.response) {
+                    if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR && !error.response.data.includes("<html>")) {
+                        this.setState({ showError: true, error: error.response.data });
+                    } else {
+                        ApiRequests.showInternalServerError();
+                    }
+                } else if (error.request) {
+                    ApiRequests.showNoResponseError();
                 } else {
-                    ApiRequests.showInternalServerError();
+                    ApiRequests.showRequestSettingError();
                 }
-            } else if (error.request) {
-                ApiRequests.showNoResponseError();
-            } else {
-                ApiRequests.showRequestSettingError();
-            }
+            }).finally(() => {
+                this.setState({ showLoading: false });
+            })
         })
     }
 
@@ -88,29 +95,33 @@ export default class PasswordRecovery extends Component {
             this.setState({ showError: true, error: "Repeated password is different" });
             return;
         }
-        ApiRequests.put(`user/password`, {}, {
-            code: this.state.code,
-            identifier: this.state.identifier,
-            password: this.state.password
-        }, false).then(response => {
-            Alert.alert(i18n.t('screens')['passwordRecovery']['passwordUpdated'], i18n.t('screens')['passwordRecovery']['alertText'], [{
-                text: "OK",
-                onPress: () => {
-                    this.props.navigation.navigate("Login");
-                }
-            }]);
-        }).catch((error) => {
-            if (error.response) {
-                if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR && !error.response.data.includes("<html>")) {
-                    this.setState({ showError: true, error: error.response.data });
+        this.setState({ showLoading: true }, () => {
+            ApiRequests.put(`user/password`, {}, {
+                code: this.state.code,
+                identifier: this.state.identifier,
+                password: this.state.password
+            }, false).then(response => {
+                Alert.alert(i18n.t('screens')['passwordRecovery']['passwordUpdated'], i18n.t('screens')['passwordRecovery']['alertText'], [{
+                    text: "OK",
+                    onPress: () => {
+                        this.props.navigation.navigate("Login");
+                    }
+                }]);
+            }).catch((error) => {
+                if (error.response) {
+                    if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR && !error.response.data.includes("<html>")) {
+                        this.setState({ showError: true, error: error.response.data });
+                    } else {
+                        ApiRequests.showInternalServerError();
+                    }
+                } else if (error.request) {
+                    ApiRequests.showNoResponseError();
                 } else {
-                    ApiRequests.showInternalServerError();
+                    ApiRequests.showRequestSettingError();
                 }
-            } else if (error.request) {
-                ApiRequests.showNoResponseError();
-            } else {
-                ApiRequests.showRequestSettingError();
-            }
+            }).finally(() => {
+                this.setState({ showLoading: false });
+            })
         })
     }
 
@@ -150,9 +161,16 @@ export default class PasswordRecovery extends Component {
                                         marginTop: 16
                                     }
                                 ]} onPress={() => {
-                                    this.generatePasswordRecoveryCode();
+                                    if (!this.state.showLoading) this.generatePasswordRecoveryCode();
                                 }}>
-                                    <Text style={globalStyles.authPageActionButtonText}>{i18n.t('screens')['passwordRecovery']['sentRecoveryCode']}</Text>
+                                    {
+                                        !this.state.showLoading
+                                            ? <Text style={globalStyles.authPageActionButtonText}>{i18n.t('screens')['passwordRecovery']['sentRecoveryCode']}</Text>
+                                            : <ActivityIndicator
+                                                size="small"
+                                                color="#fff"
+                                                animating={true} />
+                                    }
                                 </Pressable>
                             </>
                             : null
@@ -176,9 +194,16 @@ export default class PasswordRecovery extends Component {
                                         marginTop: 16
                                     }
                                 ]} onPress={() => {
-                                    this.checkCode();
+                                    if (!this.state.showLoading) this.checkCode();
                                 }}>
-                                    <Text style={globalStyles.authPageActionButtonText}>{i18n.t('screens')['passwordRecovery']['actionButton']}</Text>
+                                    {
+                                        !this.state.showLoading
+                                            ? <Text style={globalStyles.authPageActionButtonText}>{i18n.t('screens')['passwordRecovery']['actionButton']}</Text>
+                                            : <ActivityIndicator
+                                                size="small"
+                                                color="#fff"
+                                                animating={true} />
+                                    }
                                 </Pressable>
                             </>
                             : null
@@ -205,9 +230,16 @@ export default class PasswordRecovery extends Component {
                                         marginTop: 16
                                     }
                                 ]} onPress={() => {
-                                    this.submitNewPassword();
+                                    if (!this.state.showLoading) this.submitNewPassword();
                                 }}>
-                                    <Text style={globalStyles.authPageActionButtonText}>{i18n.t('screens')['passwordRecovery']['actionButton']}</Text>
+                                    {
+                                        !this.state.showLoading
+                                            ? <Text style={globalStyles.authPageActionButtonText}>{i18n.t('screens')['passwordRecovery']['actionButton']}</Text>
+                                            : <ActivityIndicator
+                                                size="small"
+                                                color="#fff"
+                                                animating={true} />
+                                    }
                                 </Pressable>
                             </>
                             : null

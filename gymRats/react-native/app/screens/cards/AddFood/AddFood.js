@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { ScrollView, Text, TextInput, Pressable, View, BackHandler } from 'react-native'
+import { ScrollView, Text, TextInput, Pressable, View, BackHandler, ActivityIndicator } from 'react-native'
 import { Picker } from '@react-native-picker/picker';
 import i18n from 'i18n-js';
 import DropDownPicker from 'react-native-dropdown-picker'
@@ -30,7 +30,8 @@ export default class AddFood extends Component {
             unitPickerValues: [],
             isUnitPickerOpened: false,
             showError: false,
-            error: ""
+            error: "",
+            showLoading: false,
         }
 
         this.focusListener;
@@ -70,36 +71,40 @@ export default class AddFood extends Component {
     }
 
     addFood = () => {
-        const payload = {
-            title: this.state.title,
-            unit: this.state.unit,
-            calories: this.state.calories,
-            carbs: this.state.carbs,
-            protein: this.state.protein,
-            fats: this.state.fats
-        }
-        if (this.state.barcode?.length > 0) payload.barcode = this.state.barcode;
-        if (this.state.brand?.length > 0) payload.brand = this.state.brand;
-        ApiRequests.post('calories-counter/item', {}, payload, true).then((response) => {
-            this.props.navigation.navigate("AddCaloriesIntakeItem", {
-                intent: CALORIES_COUNTER_SCREEN_INTENTS.ADD,
-                item: response.data.item,
-                meal: this.props.route.params.meal,
-                date: this.props.route.params.date,
-                timezoneOffset: this.props.route.params.timezoneOffset
-            })
-        }).catch((error) => {
-            if (error.response) {
-                if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR && !error.response.data.includes("<html>")) {
-                    this.setState({ showError: true, error: error.response.data });
-                } else {
-                    ApiRequests.showInternalServerError();
-                }
-            } else if (error.request) {
-                ApiRequests.showNoResponseError();
-            } else {
-                ApiRequests.showRequestSettingError();
+        this.setState({ showLoading: true }, () => {
+            const payload = {
+                title: this.state.title,
+                unit: this.state.unit,
+                calories: this.state.calories,
+                carbs: this.state.carbs,
+                protein: this.state.protein,
+                fats: this.state.fats
             }
+            if (this.state.barcode?.length > 0) payload.barcode = this.state.barcode;
+            if (this.state.brand?.length > 0) payload.brand = this.state.brand;
+            ApiRequests.post('calories-counter/item', {}, payload, true).then((response) => {
+                this.props.navigation.navigate("AddCaloriesIntakeItem", {
+                    intent: CALORIES_COUNTER_SCREEN_INTENTS.ADD,
+                    item: response.data.item,
+                    meal: this.props.route.params.meal,
+                    date: this.props.route.params.date,
+                    timezoneOffset: this.props.route.params.timezoneOffset
+                })
+            }).catch((error) => {
+                if (error.response) {
+                    if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR && !error.response.data.includes("<html>")) {
+                        this.setState({ showError: true, error: error.response.data });
+                    } else {
+                        ApiRequests.showInternalServerError();
+                    }
+                } else if (error.request) {
+                    ApiRequests.showNoResponseError();
+                } else {
+                    ApiRequests.showRequestSettingError();
+                }
+            }).finally(() => {
+                this.setState({ showLoading: false });
+            })
         })
     }
 
@@ -236,8 +241,15 @@ export default class AddFood extends Component {
                             opacity: pressed ? 0.1 : 1,
                             marginVertical: 16
                         }
-                    ]} onPress={() => { this.addFood() }}>
-                        <Text style={globalStyles.authPageActionButtonText}>{i18n.t('common')['submit']}</Text>
+                    ]} onPress={() => { if (!this.state.showLoading) this.addFood() }}>
+                        {
+                            !this.state.showLoading
+                                ? <Text style={globalStyles.authPageActionButtonText}>{i18n.t('common')['submit']}</Text>
+                                : <ActivityIndicator
+                                    size="small"
+                                    color="#fff"
+                                    animating={true} />
+                        }
                     </Pressable>
                 </View>
             </View>

@@ -42,7 +42,6 @@ export default class CoachPage extends Component {
     getCoach = () => {
         ApiRequests.get('coaching/me-as-coach', {}, true).then((response) => {
             this.setState({ coach: response.data.coach })
-            console.log(response.data.coach)
         }).catch((error) => {
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR && !error.response.data.includes("<html>")) {
@@ -60,7 +59,7 @@ export default class CoachPage extends Component {
 
     shareProfileLink = async () => {
         try {
-            const url = `exp://coach-profile/${this.state.coach._id}`
+            const url = `gymrats://coach-profile/${this.state.coach._id}`
             await Share.share({
                 message: `Be coached by ${this.state.coach.firstName}!\n${url}`,
             });
