@@ -66,7 +66,7 @@ export default class CoachPage extends Component {
 
     shareProfileLink = async () => {
         try {
-            const url = `gymrats://coach-profile/${this.props.route.params.coach._id}`
+            const url = `https://gymrats.uploy.app/coach-profile/${this.props.route.params.coach._id}`
             await Share.share({
                 message: `Be coached by ${this.props.route.params.coach.firstName}!\n${url}`,
             });
