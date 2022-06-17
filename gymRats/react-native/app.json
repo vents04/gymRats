@@ -4,7 +4,7 @@
     "slug": "gym-rats",
     "version": "1.0.1",
     "orientation": "portrait",
-    "icon": "./assets/img/ic_launcher.png",
+    "icon": "./assets/img/ic_launcher_icon.png",
     "scheme": "gymrats",
     "plugins": [
       [
