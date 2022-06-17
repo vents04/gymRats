@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
-import { Image, Text, View, ScrollView, TextInput, Pressable, BackHandler, Alert, ActivityIndicator, Keyboard } from 'react-native';
+import { Image, Text, View, ScrollView, TextInput, Pressable, BackHandler, Alert, AppState, ActivityIndicator, Keyboard } from 'react-native';
 import { BackButtonHandler } from '../../classes/BackButtonHandler';
 import { MaterialIcons } from '@expo/vector-icons';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
 import i18n from 'i18n-js'
 import { default as AsyncStorage } from '@react-native-async-storage/async-storage';
+
 
 import socketClass from '../../classes/Socket';
 
@@ -40,11 +41,22 @@ export default class Chat extends Component {
     }
 
     onFocusFunction = () => {
+        
+        let chatsRoomSocket = socketClass.getChatsRoomSocket();
+        if (!chatsRoomSocket) {
+            chatsRoomSocket = socketClass.initConnection();
+            socketClass.setChatsRoomSocket(chatsRoomSocket);
+        }
+        socketClass.joinChatsRoom();
+
+        console.log("onFocusFunction");
+
         const chatId = this.props.route.params.chatId;
         this.getChat(chatId)
         this.setState({ chatId: this.props.route.params.chatId }, () => {
             this.updateSeenStatus(chatId)
             this.receiveTextMessage()
+
         });
     }
 
@@ -54,6 +66,10 @@ export default class Chat extends Component {
     }
 
     sendTextMessage = (messageInfo) => {
+        this.disconnectUserFromChat();
+        this.receiveTextMessage();
+
+        console.log("sendTextMessage");
         socketClass.getChatsRoomSocket().emit("send-text-message", { messageInfo })
         this.setState({ message: "", showError: false })
     }
@@ -72,6 +88,7 @@ export default class Chat extends Component {
     }
 
     receiveTextMessage = () => {
+        console.log("receiveTextMessage");
         socketClass.getChatsRoomSocket().off("receive-message", (data) => {
             this.receiveMessageHandler(data)
         }).on("receive-message", (data) => {
@@ -80,6 +97,7 @@ export default class Chat extends Component {
     }
 
     disconnectUserFromChat = () => {
+        console.log("disconnectUserFromChat")
         socketClass.getChatsRoomSocket().removeAllListeners("receive-message");
     }
 
@@ -172,6 +190,15 @@ export default class Chat extends Component {
     }
 
     sendFileMessage = async (file) => {
+        setTimeout(() => {
+            this.disconnectUserFromChat();
+            this.receiveTextMessage();
+            this.sendFileMessageHandler(file)
+        }, 500);
+    }
+
+    sendFileMessageHandler = async (file) => {
+        console.log("sendFileMessageHandler");
         const fileBase64 = await FileSystem.readAsStringAsync(file.uri, { encoding: 'base64' });
         socketClass.getChatsRoomSocket().emit("send-file-message", { messageInfo: { senderId: this.state.chat.user._id, base64: fileBase64, name: file.name, size: file.size, mimeType: file.mimeType, chatId: this.props.route.params.chatId } })
         this.setState({ showError: false });

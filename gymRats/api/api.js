@@ -241,7 +241,7 @@ mongo.connect();
 })();*/
 
 io.on("connection", (socket) => {
-    console.log("connected", socket)
+    console.log("connected", socket.id)
     socket.on("connect_error", (err) => {
         console.log(`connect_error due to ${err.message}`);
     });
@@ -277,7 +277,9 @@ io.on("connection", (socket) => {
     socket.on("send-text-message", async (messageInfo) => {
         try {
             const message = await MessagingService.sendTextMessage(messageInfo.messageInfo.chatId, messageInfo.messageInfo.senderId, messageInfo.messageInfo.message);
+            console.log(io.sockets.adapter.rooms)
             io.to(messageInfo.messageInfo.chatId).emit("receive-message", { message });
+            console.log("mina")
             io.to(messageInfo.messageInfo.chatId).emit("update-last-message", { message });
             /*(async function () {
                 const chat = await DbService.getById(COLLECTIONS.CHATS, chatId);
@@ -321,6 +323,12 @@ io.on("connection", (socket) => {
         } catch (err) {
             console.log(err);
         }
+    });
+
+    socket.on('disconnectUser', function () {
+        console.log("disconnected", socket.id)
+        socket.disconnect();
+  
     });
 });
 

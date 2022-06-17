@@ -14,9 +14,9 @@ import Splash from './app/screens/Splash/Splash';
 import { NavigationRoutes, Auth } from './app/navigation/navigation';
 import { useFonts } from 'expo-font';
 import * as Localization from 'expo-localization';
+import socketClass from './app/classes/Socket';
 import i18n from 'i18n-js';
 import translations from './translations';
-import socket from './app/classes/Socket';
 import * as Linking from 'expo-linking';
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
@@ -60,10 +60,13 @@ const App = (props) => {
         setCoachIdToShow(coachId);
       }
     });
-    socket.initConnection();
     const subscription = AppState.addEventListener("change", async nextAppState => {
       if (nextAppState == 'background') {
-        console.log("background")
+        console.log("background1")
+
+        socketClass.getChatsRoomSocket().emit("disconnectUser")
+        socketClass.setChatsRoomSocket(null);
+
         const navAnalytics = await AsyncStorage.getItem('@gymRats:navAnalytics');
         if (navAnalytics) {
           const navigationAnalytics = JSON.parse(navAnalytics);
@@ -72,8 +75,17 @@ const App = (props) => {
           }).catch((error) => { })
         }
       } else if (nextAppState == 'active') {
-        console.log("active state")
+        console.log("active state1")
+
+        let chatsRoomSocket = socketClass.getChatsRoomSocket();
+        if (!chatsRoomSocket) {
+          console.log("FAUBFYUABFYUWBFYUQBW(OQNOM")
+          chatsRoomSocket = socketClass.initConnection();
+          socketClass.setChatsRoomSocket(chatsRoomSocket);
+        }
+        socketClass.joinChatsRoom();
       }
+
     });
 
     initABTestingCampaigns();

@@ -31,6 +31,14 @@ export default class Chats extends Component {
     }
 
     onFocusFunction = () => {
+        
+        let chatsRoomSocket = socketClass.getChatsRoomSocket();
+        if (!chatsRoomSocket) {
+            chatsRoomSocket = socketClass.initConnection();
+            socketClass.setChatsRoomSocket(chatsRoomSocket);
+        }
+        socketClass.joinChatsRoom();
+
         if (this.props.route && this.props.route.params) {
             if (this.props.route.params.chatId) {
                 this.props.navigation.navigate("Chat", { chatId: this.props.route.params.chatId })
