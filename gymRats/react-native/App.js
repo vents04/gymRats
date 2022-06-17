@@ -208,6 +208,15 @@ const App = (props) => {
           const previousRouteName = routeNameRef.current;
           const currentRouteName = navigationRef.getCurrentRoute().name;
 
+          console.log(currentRouteName)
+          if(currentRouteName == "Chat"){
+            let chatsRoomSocket = socketClass.getChatsRoomSocket();
+            if (chatsRoomSocket) {
+              chatsRoomSocket.removeAllListeners("update-last-message");
+              console.log("removed listeners")
+            }
+          }
+
           if (previousRouteName !== currentRouteName) {
             if (previousRouteName != "Splash") {
               const previousScreenData = {

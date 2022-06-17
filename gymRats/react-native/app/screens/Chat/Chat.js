@@ -61,6 +61,7 @@ export default class Chat extends Component {
         });
     }
 
+
     backAction = () => {
         this.props.navigation.navigate("Chats");
         return true;
@@ -143,7 +144,6 @@ export default class Chat extends Component {
         if (user) {
             const userData = JSON.parse(user);
             socketClass.getChatsRoomSocket().emit("join-chats-room", { userId: userData._id });
-            this.receiveTextMessage();
             return
         }
         this.props.navigation.navigate("Chats");
@@ -192,11 +192,17 @@ export default class Chat extends Component {
     }
 
     sendFileMessage = async (file) => {
-        setTimeout(() => {
-            this.disconnectUserFromChat();
-            this.receiveTextMessage();
-            this.sendFileMessageHandler(file)
-        }, 500);
+        const interval = setInterval(() => {
+            if(socketClass.getChatsRoomSocket()){
+                console.log(socketClass.getChatsRoomSocket().connected)
+                if(socketClass.getChatsRoomSocket().connected){
+                    clearInterval(interval);
+                    this.disconnectUserFromChat();
+                    this.receiveTextMessage();
+                    this.sendFileMessageHandler(file)
+                }
+            }
+        }, 100)
     }
 
     sendFileMessageHandler = async (file) => {

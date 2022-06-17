@@ -319,6 +319,7 @@ io.on("connection", (socket) => {
         try {
             const message = await MessagingService.sendFileMessage(messageInfo.messageInfo.chatId, messageInfo.messageInfo.senderId, messageInfo.messageInfo.base64, messageInfo.messageInfo.name, messageInfo.messageInfo.size, messageInfo.messageInfo.mimeType);
             io.to(messageInfo.messageInfo.chatId).emit("receive-message", { message });
+            io.to(messageInfo.messageInfo.chatId).emit("update-last-message", { message });
         } catch (err) {
             console.log(err);
         }
