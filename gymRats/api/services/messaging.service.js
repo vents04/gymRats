@@ -1,4 +1,4 @@
-const { HTTP_STATUS_CODES, COLLECTIONS, RELATION_STATUSES } = require("../global");
+const { HTTP_STATUS_CODES, COLLECTIONS, RELATION_STATUSES, NODE_ENVIRONMENT, NODE_ENVIRONMENTS } = require("../global");
 const DbService = require('../services/db.service');
 const mongoose = require("mongoose");
 const ResponseError = require('../errors/responseError');
@@ -60,7 +60,16 @@ const MessagingService = {
                 const fileContents = new Buffer.from(base64, 'base64')
                 const nameSplitted = name.split(".");
                 const extension = mime.extension(mimeType);
-                fs.writeFileSync(__dirname + "\\..\\ugc\\" + fileName + "." + extension, fileContents);
+                console.log(__dirname)
+                console.log(NODE_ENVIRONMENT==NODE_ENVIRONMENTS.PRODUCTION 
+                    ? __dirname + "/../ugc/" + fileName + "." + extension
+                    : __dirname + "\\..\\ugc\\" + fileName + "." + extension);
+
+                    
+                fs.writeFileSync(NODE_ENVIRONMENT==NODE_ENVIRONMENTS.PRODUCTION 
+                    ? __dirname + "/../ugc/" + fileName + "." + extension
+                    : __dirname + "\\..\\ugc\\" + fileName + "." + extension, fileContents);
+                //fs.writeFileSync("/../ugc/" + fileName + "." + extension, fileContents);
                 const fileMessage = new Message({
                     senderId: mongoose.Types.ObjectId(senderId),
                     chatId: mongoose.Types.ObjectId(chatId),

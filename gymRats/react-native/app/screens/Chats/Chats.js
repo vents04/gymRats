@@ -79,16 +79,29 @@ export default class Chats extends Component {
     updateLastMessage = () => {
         console.log("vika li se")
         socketClass.getChatsRoomSocket().on("update-last-message", (data) => {
-            console.log("TEST ZA UPDATE LAST MESSAGE")
+            console.log("TEST ZA UPDATE LAST MESSAGE", data)
             const chats = this.state.chats
             for (let chat of chats) {
                 if (chat._id == data.message.chatId) {
-                    chat.lastMessage = data.message.message.text || i18n.t('screens')['chats']['fileMessage'];
+                    chat.lastMessage = {text: data.message.message.text || i18n.t('screens')['chats']['fileMessage']};
                     break;
                 }
             }
             this.setState({ chats });
         });
+    }
+
+    updateSeen = (id) => {
+        const chats = this.state.chats;
+        for (let chat of chats) {
+            console.log(chat._id, id)
+            if(chat._id == id){
+                console.log("ALALALAL")
+                chat.lastMessage.seen = true;
+                break;
+            }
+        }
+        this.setState({ chats });
     }
 
     componentDidMount() {
@@ -112,15 +125,9 @@ export default class Chats extends Component {
                                     this.state.chats.map((chat, index) =>
                                         chat.oppositeUser
                                             ?
-                                            <Pressable style={({ pressed }) => [
-                                                {
-                                                    opacity: pressed ? 0.1 : 1,
-                                                }
-                                            ]} key={index} onPress={() => {
-                                                this.props.navigation.navigate("Chat", { chatId: chat._id })
-                                            }}>
-                                                <ChatsItem chat={chat} {...this.props} />
-                                            </Pressable>
+
+                                                <ChatsItem updateSeen={() => {this.updateSeen}} chat={chat} {...this.props} />
+                                            
                                             : null
                                     )
                                 }
