@@ -14,9 +14,9 @@ import Splash from './app/screens/Splash/Splash';
 import { NavigationRoutes, Auth } from './app/navigation/navigation';
 import { useFonts } from 'expo-font';
 import * as Localization from 'expo-localization';
+import socketClass from './app/classes/Socket';
 import i18n from 'i18n-js';
 import translations from './translations';
-import socket from './app/classes/Socket';
 import * as Linking from 'expo-linking';
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
@@ -66,9 +66,16 @@ const App = (props) => {
         })
       }
     });
-
     const subscription = AppState.addEventListener("change", async nextAppState => {
       if (nextAppState == 'background') {
+        console.log("background1")
+
+        let chatsRoomSocket = socketClass.getChatsRoomSocket();
+        if(chatsRoomSocket){
+          socketClass.getChatsRoomSocket().emit("disconnectUser")
+          socketClass.setChatsRoomSocket(null);
+        } 
+
         const navAnalytics = await AsyncStorage.getItem('@gymRats:navAnalytics');
         if (navAnalytics) {
           const navigationAnalytics = JSON.parse(navAnalytics);
@@ -76,7 +83,18 @@ const App = (props) => {
             AsyncStorage.setItem('@gymRats:navAnalytics', "[]");
           }).catch((error) => { })
         }
+      } else if (nextAppState == 'active') {
+        console.log("active state1")
+
+        let chatsRoomSocket = socketClass.getChatsRoomSocket();
+        if (!chatsRoomSocket) {
+          console.log("FAUBFYUABFYUWBFYUQBW(OQNOM")
+          chatsRoomSocket = socketClass.initConnection();
+          socketClass.setChatsRoomSocket(chatsRoomSocket);
+        }
+        socketClass.joinChatsRoom();
       }
+
     });
 
     initABTestingCampaigns();
@@ -189,6 +207,15 @@ const App = (props) => {
         onStateChange={async () => {
           const previousRouteName = routeNameRef.current;
           const currentRouteName = navigationRef.getCurrentRoute().name;
+
+          console.log(currentRouteName)
+          if(currentRouteName == "Chat"){
+            let chatsRoomSocket = socketClass.getChatsRoomSocket();
+            if (chatsRoomSocket) {
+              chatsRoomSocket.removeAllListeners("update-last-message");
+              console.log("removed listeners")
+            }
+          }
 
           if (previousRouteName !== currentRouteName) {
             if (previousRouteName != "Splash") {

@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
-import { Image, Text, View, ScrollView, TextInput, Pressable, BackHandler, Alert, ActivityIndicator, Keyboard } from 'react-native';
+import { Image, Text, View, ScrollView, TextInput, Pressable, BackHandler, Alert, AppState, ActivityIndicator, Keyboard } from 'react-native';
 import { BackButtonHandler } from '../../classes/BackButtonHandler';
 import { MaterialIcons } from '@expo/vector-icons';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
 import i18n from 'i18n-js'
 import { default as AsyncStorage } from '@react-native-async-storage/async-storage';
+
 
 import socketClass from '../../classes/Socket';
 
@@ -41,12 +42,25 @@ export default class Chat extends Component {
     }
 
     onFocusFunction = () => {
+        
+        let chatsRoomSocket = socketClass.getChatsRoomSocket();
+        if (!chatsRoomSocket) {
+            chatsRoomSocket = socketClass.initConnection();
+            socketClass.setChatsRoomSocket(chatsRoomSocket);
+        }
+        socketClass.joinChatsRoom();
+
+        console.log("onFocusFunction");
+
         const chatId = this.props.route.params.chatId;
         this.getChat(chatId)
         this.setState({ chatId: this.props.route.params.chatId }, () => {
             this.updateSeenStatus(chatId)
+            this.receiveTextMessage()
+
         });
     }
+
 
     backAction = () => {
         this.props.navigation.navigate("Chats");
@@ -54,9 +68,13 @@ export default class Chat extends Component {
     }
 
     sendTextMessage = (messageInfo) => {
-        this.setState({ showSending: true, message: "", showError: false }, () => {
-            socketClass.getChatsRoomSocket().emit("send-text-message", { messageInfo })
-        })
+        this.disconnectUserFromChat();
+        this.receiveTextMessage();
+
+        this.setState({ showSending: true });
+        console.log("sendTextMessage");
+        socketClass.getChatsRoomSocket().emit("send-text-message", { messageInfo })
+        this.setState({ message: "", showError: false })
     }
 
     receiveMessageHandler = (data) => {
@@ -73,6 +91,7 @@ export default class Chat extends Component {
     }
 
     receiveTextMessage = () => {
+        console.log("receiveTextMessage");
         socketClass.getChatsRoomSocket().off("receive-message", (data) => {
             this.receiveMessageHandler(data)
         }).on("receive-message", (data) => {
@@ -81,6 +100,7 @@ export default class Chat extends Component {
     }
 
     disconnectUserFromChat = () => {
+        console.log("disconnectUserFromChat")
         socketClass.getChatsRoomSocket().removeAllListeners("receive-message");
     }
 
@@ -125,7 +145,6 @@ export default class Chat extends Component {
         if (user) {
             const userData = JSON.parse(user);
             socketClass.getChatsRoomSocket().emit("join-chats-room", { userId: userData._id });
-            this.receiveTextMessage();
             return
         }
         this.props.navigation.navigate("Chats");
@@ -174,9 +193,24 @@ export default class Chat extends Component {
     }
 
     sendFileMessage = async (file) => {
+        const interval = setInterval(() => {
+            if(socketClass.getChatsRoomSocket()){
+                console.log(socketClass.getChatsRoomSocket().connected)
+                if(socketClass.getChatsRoomSocket().connected){
+                    clearInterval(interval);
+                    this.disconnectUserFromChat();
+                    this.receiveTextMessage();
+                    this.sendFileMessageHandler(file)
+                }
+            }
+        }, 100)
+    }
+
+    sendFileMessageHandler = async (file) => {
+        console.log("sendFileMessageHandler");
+        this.setState({ showSending: true, showError: false });
         const fileBase64 = await FileSystem.readAsStringAsync(file.uri, { encoding: 'base64' });
         socketClass.getChatsRoomSocket().emit("send-file-message", { messageInfo: { senderId: this.state.chat.user._id, base64: fileBase64, name: file.name, size: file.size, mimeType: file.mimeType, chatId: this.props.route.params.chatId } })
-        this.setState({ showError: false });
     }
 
     render() {

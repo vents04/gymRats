@@ -16,6 +16,7 @@ const Socket = {
             console.log('connected_');
         })
         socket.on('disconnect', () => {
+            chatsRoomSocket = null;
             console.log('disconnected_');
         })
         console.log("connected 2")

@@ -656,3 +656,8 @@
 {"level":"error","message":"Cannot read properties of undefined (reading '_id')"}
 {"level":"error","message":"The user for the provided authentication token was not found"}
 {"level":"error","message":"Cannot read properties of undefined (reading '_id')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'userId')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'userId')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'userId')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'userId')"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'userId')"}

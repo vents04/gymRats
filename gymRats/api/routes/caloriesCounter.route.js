@@ -369,9 +369,9 @@ router.get("/search/food", async (req, res, next) => {
 
         results = foods.splice(0, 50);
 
-        /*for (let result of results) {
+        for (let result of results) {
             await DbService.updateWithIncrement(COLLECTIONS.CALORIES_COUNTER_ITEMS, { _id: mongoose.Types.ObjectId(result._id) }, { searchedTimes: 1 })
-        }*/
+        }
 
         return res.status(HTTP_STATUS_CODES.OK).send({
             results

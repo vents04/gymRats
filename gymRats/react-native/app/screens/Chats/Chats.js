@@ -31,6 +31,14 @@ export default class Chats extends Component {
     }
 
     onFocusFunction = () => {
+
+        let chatsRoomSocket = socketClass.getChatsRoomSocket();
+        if (!chatsRoomSocket) {
+            chatsRoomSocket = socketClass.initConnection();
+            socketClass.setChatsRoomSocket(chatsRoomSocket);
+        }
+        socketClass.joinChatsRoom();
+
         if (this.props.route && this.props.route.params) {
             if (this.props.route.params.chatId) {
                 this.props.navigation.navigate("Chat", { chatId: this.props.route.params.chatId })
@@ -62,7 +70,6 @@ export default class Chats extends Component {
         if (user) {
             const userData = JSON.parse(user);
             socketClass.getChatsRoomSocket().emit("join-chats-room", { userId: userData._id });
-            this.updateLastMessage()
             return
         }
         this.props.navigation.navigate("Chats");
@@ -70,7 +77,9 @@ export default class Chats extends Component {
 
 
     updateLastMessage = () => {
+        console.log("vika li se")
         socketClass.getChatsRoomSocket().on("update-last-message", (data) => {
+            console.log("TEST ZA UPDATE LAST MESSAGE")
             const chats = this.state.chats
             for (let chat of chats) {
                 if (chat._id == data.message.chatId) {
@@ -84,6 +93,7 @@ export default class Chats extends Component {
 
     componentDidMount() {
         this.joinRooms();
+        this.updateLastMessage();
         this.focusListener = this.props.navigation.addListener('focus', () => {
             this.onFocusFunction()
         })
