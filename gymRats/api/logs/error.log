@@ -661,3 +661,4 @@
 {"level":"error","message":"Cannot read properties of undefined (reading 'userId')"}
 {"level":"error","message":"Cannot read properties of undefined (reading 'userId')"}
 {"level":"error","message":"Cannot read properties of undefined (reading 'userId')"}
+{"level":"error","message":"jwt malformed"}

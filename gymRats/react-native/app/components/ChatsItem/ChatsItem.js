@@ -9,6 +9,7 @@ export default class ChatsItem extends Component {
     render() {
         return (
             <TouchableWithoutFeedback onPress={() => {
+                this.props.updateSeen(this.props.chat._id)
                 this.props.navigation.navigate("Chat", { chatId: this.props.chat._id })
             }}>
                 <View style={styles.chatItemContainer}>
@@ -38,11 +39,14 @@ export default class ChatsItem extends Component {
                                         this.props.chat.lastMessage
                                             && (this.props.chat.lastMessage.text || this.props.chat.lastMessage.file)
                                             ? <>
-                                                {
-                                                    this.props.chat.lastMessage.text
-                                                        ? <Text style={styles.chatsItemLastMessage}>{this.props.chat.lastMessage.text}</Text>
-                                                        : <Text style={styles.chatsItemLastMessage}>{i18n.t('components')['chatsItem']['fileSent']}</Text>
-                                                }
+                                                    <Text style={[styles.chatsItemLastMessage, {
+                                                        fontFamily: this.props.chat.lastMessage.seen
+                                                        ? 'MainRegular'
+                                                        : 'MainBold'
+                                                    }] }>{
+                                                        this.props.chat.lastMessage.text
+                                                    ?this.props.chat.lastMessage.text
+                                                    :i18n.t('screens')['chats']['fileMessage']}</Text>
                                             </>
                                             : null
                                     }
