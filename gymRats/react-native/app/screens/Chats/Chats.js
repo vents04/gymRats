@@ -83,7 +83,7 @@ export default class Chats extends Component {
             const chats = this.state.chats
             for (let chat of chats) {
                 if (chat._id == data.message.chatId) {
-                    chat.lastMessage = {text: data.message.message.text || i18n.t('screens')['chats']['fileMessage']};
+                    chat.lastMessage = { text: data.message.message.text || i18n.t('screens')['chats']['fileMessage'] };
                     break;
                 }
             }
@@ -95,7 +95,7 @@ export default class Chats extends Component {
         const chats = this.state.chats;
         for (let chat of chats) {
             console.log(chat._id, id)
-            if(chat._id == id){
+            if (chat._id == id) {
                 console.log("ALALALAL")
                 chat.lastMessage.seen = true;
                 break;
@@ -126,8 +126,8 @@ export default class Chats extends Component {
                                         chat.oppositeUser
                                             ?
 
-                                                <ChatsItem updateSeen={() => {this.updateSeen}} chat={chat} {...this.props} />
-                                            
+                                            <ChatsItem updateSeen={() => { this.updateSeen }} chat={chat} {...this.props} />
+
                                             : null
                                     )
                                 }

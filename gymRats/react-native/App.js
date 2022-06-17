@@ -71,10 +71,10 @@ const App = (props) => {
         console.log("background1")
 
         let chatsRoomSocket = socketClass.getChatsRoomSocket();
-        if(chatsRoomSocket){
+        if (chatsRoomSocket) {
           socketClass.getChatsRoomSocket().emit("disconnectUser")
           socketClass.setChatsRoomSocket(null);
-        } 
+        }
 
         const navAnalytics = await AsyncStorage.getItem('@gymRats:navAnalytics');
         if (navAnalytics) {

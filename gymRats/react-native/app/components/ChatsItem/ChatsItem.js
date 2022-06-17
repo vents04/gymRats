@@ -39,14 +39,14 @@ export default class ChatsItem extends Component {
                                         this.props.chat.lastMessage
                                             && (this.props.chat.lastMessage.text || this.props.chat.lastMessage.file)
                                             ? <>
-                                                    <Text style={[styles.chatsItemLastMessage, {
-                                                        fontFamily: this.props.chat.lastMessage.seen
+                                                <Text style={[styles.chatsItemLastMessage, {
+                                                    fontFamily: this.props.chat.lastMessage.seen
                                                         ? 'MainRegular'
                                                         : 'MainBold'
-                                                    }] }>{
+                                                }]}>{
                                                         this.props.chat.lastMessage.text
-                                                    ?this.props.chat.lastMessage.text
-                                                    :i18n.t('screens')['chats']['fileMessage']}</Text>
+                                                            ? this.props.chat.lastMessage.text
+                                                            : i18n.t('screens')['chats']['fileMessage']}</Text>
                                             </>
                                             : null
                                     }
