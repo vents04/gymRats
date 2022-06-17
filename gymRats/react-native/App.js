@@ -44,7 +44,7 @@ const App = (props) => {
   const responseListener = useRef();
 
   const linking = {
-    prefix: ["gymrats://", "exp://"],
+    prefix: ["gymrats://"],
     config: {
       screens: {
         CoachPage: "coach-profile"
