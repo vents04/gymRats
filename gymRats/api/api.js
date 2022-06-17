@@ -257,12 +257,11 @@ io.on("connection", (socket) => {
 
             for (let chat of chats) {
                 let shouldJoin = true;
-                for (let [key, value] of io.sockets.adapter.rooms) {
-                    if (key.toString() === chat._id.toString()) {
+                socket.rooms.forEach(room => {
+                    if (room.toString() === chat._id.toString()) {
                         shouldJoin = false;
-                        break;
                     }
-                }
+                  });
 
                 if (shouldJoin) {
                     socket.join(chat._id.toString());
