@@ -57,7 +57,6 @@ const Tab = createBottomTabNavigator();
 
 const getTabBarVisibility = route => {
     const routeName = getFocusedRouteNameFromRoute(route) ?? "Calendar";
-    console.log(routeName)
     const match = Object.values(SHOW_MAIN_TAB_NAVIGATION_ON_SCREENS).find(element => {
         if (element == routeName) return true;
     });

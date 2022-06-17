@@ -590,12 +590,8 @@ export default class Logbook extends Component {
                                                                             <TextInput style={styles.setContainerItemInput}
                                                                                 value={set.weight.amount && set.weight.amount != undefined ? set.weight.amount.toString() : null}
                                                                                 onChangeText={(val) => {
-                                                                                    console.log(val)
                                                                                     this.changeSetVariable(exercise.exerciseId, index, "weight", val)
                                                                                     this.setState({ showError: false })
-                                                                                }}
-                                                                                onBlur={() => {
-                                                                                    console.log("blurred")
                                                                                 }} />
                                                                             <Text style={styles.setContainerItemDescriptor}>{i18n.t('common')['weightUnits'][set.weight.unit]}</Text>
                                                                         </View>

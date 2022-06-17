@@ -57,7 +57,6 @@ const App = (props) => {
       let data = event.url;
       if (data.includes('coach-profile/')) {
         let coachId = data.split('/coach-profile/')[1];
-        console.log("Coach id:", coachId);
         ApiRequests.get("coaching/coach/" + coachId).then((response) => {
           if (navigationRef.current && navigationRef.current.isReady()) {
             navigationRef.current.navigate("NavigationRoutes", { screen: "coachingScreenStack", params: { screen: "CoachPage", params: { coach: response.data.coach } } })
@@ -67,7 +66,6 @@ const App = (props) => {
         })
       }
     });
-    socket.initConnection();
 
     const subscription = AppState.addEventListener("change", async nextAppState => {
       if (nextAppState == 'background') {

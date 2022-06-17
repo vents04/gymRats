@@ -43,7 +43,6 @@ export default class EmailVerification extends Component {
                     }
                 }]);
             }).catch((error) => {
-                console.log(error.response.data)
                 if (error.response) {
                     if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR && !error.response.data.includes("<html>")) {
                         this.setState({ showError: true, error: error.response.data });
@@ -65,7 +64,6 @@ export default class EmailVerification extends Component {
         ApiRequests.post(`user/email-verification-code`, {}, {
             email: this.props.route.params.email.trim()
         }, false).then((response) => {
-            console.log(response.data);
             this.setState({ identifier: response.data.identifier, showEmailEntry: false, showCodeEntry: true, showPasswordEntry: false })
         }).catch((error) => {
             if (error.response) {

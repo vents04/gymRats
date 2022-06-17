@@ -78,7 +78,6 @@ export default class Progress extends Component {
             }
             this.setState({ progress: response.data, exercises, currentExercise: exercises.length > 0 ? exercises[0].value : null });
         }).catch((error) => {
-            console.log(error)
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
                     this.setState({ showError: true, error: error.response.data });
@@ -183,7 +182,7 @@ export default class Progress extends Component {
                                                                     exercises: callback(state.items)
                                                                 }));
                                                             }}
-                                                            onChangeItem={item => console.log(item.label, item.value)}
+                                                            onChangeItem={item => { }}
                                                             zIndex={10000}
                                                             textStyle={{
                                                                 fontFamily: 'MainMedium',

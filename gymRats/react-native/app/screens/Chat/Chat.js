@@ -45,7 +45,6 @@ export default class Chat extends Component {
         this.getChat(chatId)
         this.setState({ chatId: this.props.route.params.chatId }, () => {
             this.updateSeenStatus(chatId)
-            this.receiveTextMessage()
         });
     }
 
@@ -62,7 +61,7 @@ export default class Chat extends Component {
 
     receiveMessageHandler = (data) => {
         if (data.message && data.message.chatId == this.state.chatId) {
-            this.setState({ isFileBeingUploaded: false });
+            this.setState({ showSending: false, isFileBeingUploaded: false });
             const chat = this.state.chat;
             if (chat && chat.messages) {
                 this.state.chat.messages.push(data.message)
@@ -75,10 +74,8 @@ export default class Chat extends Component {
 
     receiveTextMessage = () => {
         socketClass.getChatsRoomSocket().off("receive-message", (data) => {
-            this.setState({ showSending: false })
             this.receiveMessageHandler(data)
         }).on("receive-message", (data) => {
-            this.setState({ showSending: false })
             this.receiveMessageHandler(data)
         });
     }
@@ -128,6 +125,7 @@ export default class Chat extends Component {
         if (user) {
             const userData = JSON.parse(user);
             socketClass.getChatsRoomSocket().emit("join-chats-room", { userId: userData._id });
+            this.receiveTextMessage();
             return
         }
         this.props.navigation.navigate("Chats");

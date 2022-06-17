@@ -71,7 +71,6 @@ export default class PasswordRecovery extends Component {
             ApiRequests.post(`user/password-recovery-code`, {}, {
                 email: this.state.email
             }, false).then((response) => {
-                console.log(response.data);
                 this.setState({ identifier: response.data.identifier, showEmailEntry: false, showCodeEntry: true, showPasswordEntry: false })
             }).catch((error) => {
                 if (error.response) {

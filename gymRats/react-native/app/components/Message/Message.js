@@ -30,7 +30,6 @@ export default class Message extends Component {
         )
             .then(async ({ uri }) => {
                 const base64 = await FileSystem.readAsStringAsync(uri, { encoding: 'base64' })
-                console.log(base64.length)
                 this.saveFile(uri);
             })
             .catch((error) => {
