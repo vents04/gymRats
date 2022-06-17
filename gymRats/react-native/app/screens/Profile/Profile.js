@@ -3,6 +3,7 @@ import { Image, Text, View, ActivityIndicator, Pressable } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 
 import ApiRequests from '../../classes/ApiRequests';
+import socketClass from '../../classes/Socket';
 
 import i18n from 'i18n-js';
 
@@ -88,6 +89,13 @@ export default class Profile extends Component {
 
     logout = async () => {
         await Auth.removeToken();
+
+        let chatsRoomSocket = socketClass.getChatsRoomSocket();
+        if(chatsRoomSocket){
+          socketClass.getChatsRoomSocket().emit("disconnectUser")
+          socketClass.setChatsRoomSocket(null);
+        } 
+
         this.props.navigation.reset({
             index: 0,
             routes: [{ name: "Auth" }],

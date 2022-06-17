@@ -31,7 +31,7 @@ export default class Chats extends Component {
     }
 
     onFocusFunction = () => {
-        
+
         let chatsRoomSocket = socketClass.getChatsRoomSocket();
         if (!chatsRoomSocket) {
             chatsRoomSocket = socketClass.initConnection();
@@ -78,6 +78,7 @@ export default class Chats extends Component {
 
 
     updateLastMessage = () => {
+        console.log("updateLastMessage")
         socketClass.getChatsRoomSocket().on("update-last-message", (data) => {
             const chats = this.state.chats
             for (let chat of chats) {
