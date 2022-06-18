@@ -60,6 +60,7 @@ export default class CoachSearch extends Component {
 
     getLocation = async () => {
         let location = await Location.getCurrentPositionAsync({});
+        console.log("LOKACIQ", location)
         this.setState({ lat: location.coords.latitude, lng: location.coords.longitude }, () => {
             this.searchCoaches()
         });
