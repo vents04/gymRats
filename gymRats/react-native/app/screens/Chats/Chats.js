@@ -46,10 +46,23 @@ export default class Chats extends Component {
         this.getChats();
     }
 
+    sortChatsBySeen = (chats) => {
+        chats.sort((a, b) => {
+            if (a.lastMessage.seen && !b.lastMessage.seen) {
+                return -1;
+            } else if (!a.lastMessage.seen && b.lastMessage.seen) {
+                return 1;
+            } else {
+                return 0;
+            }
+        }).reverse();
+        return chats;
+    }
+
     getChats = () => {
         ApiRequests.get("chat", {}, true).then((response) => {
+            response.data.chats = this.sortChatsBySeen(response.data.chats);
             this.setState({ chats: response.data.chats });
-            console.log(response.data.chats)
         }).catch((error) => {
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR && !error.response.data.includes("<html>")) {
@@ -87,6 +100,7 @@ export default class Chats extends Component {
                     break;
                 }
             }
+            chats = this.sortChatsBySeen(chats);
             this.setState({ chats });
         });
     }
