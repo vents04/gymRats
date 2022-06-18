@@ -101,8 +101,10 @@ router.put('/:id/seen', authenticate, async function (req, res, next) {
         if (!chat) return next(new ResponseError("Chat not found", HTTP_STATUS_CODES.NOT_FOUND, 22));
 
         const personalTrainer = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, { userId: mongoose.Types.ObjectId(req.user._id) })
-        if (personalTrainer && (personalTrainer._id.toString() != chat.personalTrainerId.toString()) && (req.user._id.toString() != chat.clientId.toString()))
+        if (req.user._id.toString() != chat.clientId.toString()){
+            if(personalTrainer && (personalTrainer._id.toString() != chat.personalTrainerId.toString()))
             return next(new ResponseError("You cannot access chats in which you are not a participant!", HTTP_STATUS_CODES.FORBIDDEN, 23));
+        }
     
 
         const personalTrainerUserInstance = await DbService.getById(COLLECTIONS.USERS, personalTrainer.userId)
