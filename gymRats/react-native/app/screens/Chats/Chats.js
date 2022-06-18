@@ -31,7 +31,6 @@ export default class Chats extends Component {
     }
 
     onFocusFunction = () => {
-
         let chatsRoomSocket = socketClass.getChatsRoomSocket();
         if (!chatsRoomSocket) {
             chatsRoomSocket = socketClass.initConnection();
@@ -50,6 +49,7 @@ export default class Chats extends Component {
     getChats = () => {
         ApiRequests.get("chat", {}, true).then((response) => {
             this.setState({ chats: response.data.chats });
+            console.log(response.data.chats)
         }).catch((error) => {
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR && !error.response.data.includes("<html>")) {
@@ -124,10 +124,7 @@ export default class Chats extends Component {
                                 {
                                     this.state.chats.map((chat, index) =>
                                         chat.oppositeUser
-                                            ?
-
-                                            <ChatsItem updateSeen={() => { this.updateSeen }} chat={chat} {...this.props} />
-
+                                            ? <ChatsItem key={index} updateSeen={() => { this.updateSeen }} chat={chat} {...this.props} />
                                             : null
                                     )
                                 }

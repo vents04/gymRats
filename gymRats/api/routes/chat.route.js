@@ -44,8 +44,10 @@ router.get('/', authenticate, async (req, res, next) => {
             const messages = await DbService.getMany(COLLECTIONS.MESSAGES, { chatId: mongoose.Types.ObjectId(chat._id) });
             let minTime = 0;
             for (let message of messages) {
-                if (new Date(message.createdDt).getTime() > minTime && message.message.text) {
+                if (new Date(message.createdDt).getTime() > minTime) {
                     chat.lastMessage = message.message;
+                    chat.lastMessage.seen = message.seen;
+                    chat.lastMessage.senderId = message.senderId;
                     minTime = new Date(message.createdDt).getTime();
                 }
             }

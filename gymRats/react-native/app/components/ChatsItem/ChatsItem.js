@@ -40,9 +40,9 @@ export default class ChatsItem extends Component {
                                             && (this.props.chat.lastMessage.text || this.props.chat.lastMessage.file)
                                             ? <>
                                                 <Text style={[styles.chatsItemLastMessage, {
-                                                    fontFamily: this.props.chat.lastMessage.seen
-                                                        ? 'MainRegular'
-                                                        : 'MainBold'
+                                                    fontFamily: !this.props.chat.lastMessage.seen && this.props.chat.user._id != this.props.chat.lastMessage.senderId
+                                                        ? 'MainBold'
+                                                        : 'MainRegular'
                                                 }]}>{
                                                         this.props.chat.lastMessage.text
                                                             ? this.props.chat.lastMessage.text
