@@ -588,6 +588,7 @@ export default class Logbook extends Component {
                                                                         contentContainerStyle={{ alignItems: "center", paddingVertical: 5 }}>
                                                                         <View style={styles.setContainerItem}>
                                                                             <TextInput style={styles.setContainerItemInput}
+                                                                                keyboardType='numeric'
                                                                                 value={set.weight.amount && set.weight.amount != undefined ? set.weight.amount.toString() : null}
                                                                                 onChangeText={(val) => {
                                                                                     this.changeSetVariable(exercise.exerciseId, index, "weight", val)
