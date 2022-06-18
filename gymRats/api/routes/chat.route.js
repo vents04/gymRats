@@ -103,10 +103,14 @@ router.put('/:id/seen', authenticate, async function (req, res, next) {
         const personalTrainer = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, { userId: mongoose.Types.ObjectId(req.user._id) })
         if (personalTrainer && (personalTrainer._id.toString() != chat.personalTrainerId.toString()) && (req.user._id.toString() != chat.clientId.toString()))
             return next(new ResponseError("You cannot access chats in which you are not a participant!", HTTP_STATUS_CODES.FORBIDDEN, 23));
+    
+
+        const personalTrainerUserInstance = await DbService.getById(COLLECTIONS.USERS, personalTrainer.userId)
+        if (!personalTrainerUserInstance) return next(new ResponseError("Personal trainer user not found", HTTP_STATUS_CODES.NOT_FOUND, 39));
 
         let messages = (personalTrainer && (chat.personalTrainerId.toString() == personalTrainer._id.toString()))
-            ? await DbService.getMany(COLLECTIONS.MESSAGES, { senderId: mongoose.Types.ObjectId(chat.clientId) })
-            : await DbService.getMany(COLLECTIONS.MESSAGES, { senderId: mongoose.Types.ObjectId(chat.personalTrainerId) });
+            ? await DbService.getMany(COLLECTIONS.MESSAGES, { senderId: mongoose.Types.ObjectId(chat.clientId), chatId: mongoose.Types.ObjectId(req.params.id) })
+            : await DbService.getMany(COLLECTIONS.MESSAGES, { senderId: mongoose.Types.ObjectId(personalTrainerUserInstance._id), chatId: mongoose.Types.ObjectId(req.params.id)});
 
         for (let message of messages) {
             await DbService.update(COLLECTIONS.MESSAGES, { _id: mongoose.Types.ObjectId(message._id) }, { seen: true });

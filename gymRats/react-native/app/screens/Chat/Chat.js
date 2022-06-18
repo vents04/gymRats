@@ -126,6 +126,7 @@ export default class Chat extends Component {
 
     updateSeenStatus = (id) => {
         ApiRequests.put(`chat/${id}/seen`, {}, {}, true).catch((error) => {
+            console.log("update seen status")
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
                     this.setState({ showError: true, error: error.response.data });
