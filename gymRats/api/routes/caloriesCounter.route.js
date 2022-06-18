@@ -383,7 +383,6 @@ router.get("/search/food", async (req, res, next) => {
 
 router.get("/search/barcode", async (req, res, next) => {
     if (!req.query.barcode) return next(new ResponseError("Provide a barcode to search for", HTTP_STATUS_CODES.BAD_REQUEST, 19));
-    if (!validbarcode(req.query.barcode)) return next(new ResponseError("Invalid barcode", HTTP_STATUS_CODES.BAD_REQUEST, 20));
     try {
         const result = await DbService.getOne(COLLECTIONS.CALORIES_COUNTER_ITEMS, { barcode: req.query.barcode });
         return res.status(HTTP_STATUS_CODES.OK).send({

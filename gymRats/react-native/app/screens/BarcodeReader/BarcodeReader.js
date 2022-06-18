@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, Button, Pressable, ActivityIndicator, Alert, TextInput, BackHandler, KeyboardAvoidingView, Keyboard } from 'react-native';
+import { Text, View, Button, Pressable, ActivityIndicator, Alert, TextInput, BackHandler, KeyboardAvoidingView, Keyboard, Platform } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
+import { Camera, CameraType } from 'expo-camera';
 import i18n from 'i18n-js';
 
 import ApiRequests from '../../classes/ApiRequests';
@@ -17,10 +18,11 @@ export default function BarcodeScanner(props) {
     const [barcode, setBarcode] = useState("");
     const [shouldHideBarcodeBox, setShouldHideBarcodeBox] = useState(false);
     const [showLoading, setShowLoading] = useState(false);
+    const [cameraKey, setCameraKey] = useState(0);
 
     const askForCameraPermission = () => {
         (async () => {
-            const { status } = await BarCodeScanner.requestPermissionsAsync();
+            const { status } = await Camera.requestCameraPermissionsAsync();
             setHasPermission(status === 'granted');
         })()
     }
@@ -44,7 +46,7 @@ export default function BarcodeScanner(props) {
         }
     }, []);
 
-    const handleBarCodeScanned = ({ type, data }) => {
+    const handleBarCodeScanned = ({ data }) => {
         setShowLoading(true);
         setScanned(true);
         setBarcode(data)
@@ -68,14 +70,21 @@ export default function BarcodeScanner(props) {
             setBarcode("")
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR && !error.response.data.includes("<html>")) {
-                    ApiRequests.alert(i18n.t('errors')['error'], error.response.data, [{ text: 'OK' }]);
+                    ApiRequests.alert(i18n.t('errors')['error'], error.response.data, [{
+                        text: 'OK', onPress: () => {
+                            if (Platform.OS == 'android') setCameraKey(cameraKey + 1);
+                        }
+                    }]);
                 } else {
                     ApiRequests.showInternalServerError();
+                    if (Platform.OS == 'android') setCameraKey(cameraKey + 1);
                 }
             } else if (error.request) {
                 ApiRequests.showNoResponseError();
+                if (Platform.OS == 'android') setCameraKey(cameraKey + 1);
             } else {
                 ApiRequests.showRequestSettingError();
+                if (Platform.OS == 'android') setCameraKey(cameraKey + 1);
             }
         }).finally(() => {
             setShowLoading(false);
@@ -133,8 +142,13 @@ export default function BarcodeScanner(props) {
                     {
                         !shouldHideBarcodeBox
                             ? <View style={styles.barcodebox}>
-                                <BarCodeScanner
-                                    onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+                                <Camera
+                                    key={cameraKey}
+                                    onBarCodeScanned={(data) => {
+                                        if (!scanned) {
+                                            handleBarCodeScanned({ data: data.data });
+                                        }
+                                    }}
                                     style={{ height: 400, width: 400 }} />
                             </View>
                             : null
@@ -142,7 +156,7 @@ export default function BarcodeScanner(props) {
                     {
                         scanned
                             ? <>
-                                <Text style={{ ...globalStyles.modalText, marginVertical: 24 }}>{i18n.t('screens')['barcodeReader']['barcodeNotFound']}</Text>
+                                <Text style={{ ...globalStyles.modalText, marginVertical: 24, textAlign: 'center' }}>{i18n.t('screens')['barcodeReader']['barcodeNotFound']}</Text>
                                 <Pressable style={({ pressed }) => [
                                     {
                                         opacity: pressed ? 0.1 : 1,
@@ -150,6 +164,7 @@ export default function BarcodeScanner(props) {
                                         padding: 8
                                     }
                                 ]} onPress={() => {
+                                    if (Platform.OS == 'android') setCameraKey(cameraKey + 1);
                                     setBarcode("")
                                     setScanned(false)
                                 }}>
@@ -165,6 +180,7 @@ export default function BarcodeScanner(props) {
                                     },
                                 ]} onPress={() => {
                                     setScanned(false);
+                                    if (Platform.OS == 'android') setCameraKey(cameraKey + 1);
                                     props.navigation.replace("AddFood", { barcode, date: props.route.params.date, timezoneOffset: props.route.params.timezoneOffset, meal: props.route.params.meal });
                                 }}>
                                     <Text style={globalStyles.authPageActionButtonText}>{i18n.t('screens')['barcodeReader']['addFood']}</Text>
