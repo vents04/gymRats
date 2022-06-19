@@ -225,7 +225,7 @@ export default class Client extends Component {
                     }
                     {
                         this.state.selectedDate
-                            ? <View style={globalStyles.fillEmptySpace}>
+                            ? <View style={{ ...globalStyles.fillEmptySpace, flexShrink: 1 }}>
                                 <View style={styles.calendarControllersContainer}>
                                     <Pressable style={styles.calendarController} onPress={() => { this.incrementDate(-1) }}>
                                         <Entypo name="chevron-left" size={14} color="#999" style={{ marginRight: 5 }} />
@@ -251,7 +251,7 @@ export default class Client extends Component {
                                 </View>
                                 <ScrollView contentContainerStyle={{
                                     ...globalStyles.fillEmptySpace,
-                                    paddingBottom: 300
+                                    paddingBottom: 25
                                 }}>
                                     {
                                         this.state.dates.map((date) =>
