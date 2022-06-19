@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import { DataManager } from "../../classes/DataManager";
 
-import { Alert, BackHandler, Dimensions, Pressable, RefreshControl, ScrollView, Text, TouchableHighlight, TouchableNativeFeedback, TouchableWithoutFeedback, View } from 'react-native';
+import { Alert, BackHandler, Dimensions, Platform, Pressable, RefreshControl, ScrollView, Text, TouchableHighlight, TouchableNativeFeedback, TouchableWithoutFeedback, View } from 'react-native';
 import BottomSheet from "react-native-gesture-bottom-sheet";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import GestureRecognizer, {
