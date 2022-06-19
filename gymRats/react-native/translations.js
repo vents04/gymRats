@@ -104,7 +104,8 @@ module.exports = {
                 scan: "Scan / enter again",
                 addFood: "Add this food to Gym Rats",
                 enterBarcode: "Enter barcode:",
-                submitBarcode: "Submit barcode"
+                submitBarcode: "Submit barcode",
+                barcodeAlreadyLinked: "Barcode is already linked to another food"
             },
             suggestions: {
                 pageTitle: "Suggestions",
@@ -514,7 +515,8 @@ module.exports = {
                 scan: "Сканирай / въведи отново",
                 addFood: "Добави храната в Gym Rats",
                 enterBarcode: "Въведи баркод:",
-                submitBarcode: "Запиши баркод"
+                submitBarcode: "Запиши баркод",
+                barcodeAlreadyLinked: "Баркодът е свързан към друга храна"
             },
             suggestions: {
                 pageTitle: "Предложения",
