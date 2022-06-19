@@ -202,7 +202,7 @@ export default class ProfileDetailsEdit extends Component {
                         <Text style={styles.editSectionTitle}>{i18n.t('screens')['profileDetailsEdit']['weightUnit']}</Text>
                         <DropDownPicker
                             placeholder={i18n.t('screens')['progress']['selectExercise']}
-                            maxHeight={150}
+                            maxHeight={100}
                             open={this.state.weightUnitDropDownOpened}
                             setOpen={(value) => {
                                 this.setState({ weightUnitDropDownOpened: value })
@@ -231,7 +231,7 @@ export default class ProfileDetailsEdit extends Component {
                             }}
                             style={{
                                 borderColor: "#ccc",
-                                marginBottom: 16
+                                marginBottom: 16,
                             }}
                         />
                     </View>
@@ -241,6 +241,8 @@ export default class ProfileDetailsEdit extends Component {
                                 globalStyles.authPageActionButton,
                                 {
                                     opacity: pressed ? 0.1 : 1,
+                                    position: "absolute",
+                                    bottom: 32
                                 }
                             ]} disabled={this.state.showSaving} onPress={() => {
                                 this.saveChanges(true);

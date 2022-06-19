@@ -42,7 +42,7 @@ export default class Chat extends Component {
     }
 
     onFocusFunction = () => {
-        
+
         let chatsRoomSocket = socketClass.getChatsRoomSocket();
         if (!chatsRoomSocket) {
             chatsRoomSocket = socketClass.initConnection();
@@ -107,6 +107,7 @@ export default class Chat extends Component {
     getChat = (id) => {
         ApiRequests.get(`chat/${id}`, {}, true).then((response) => {
             this.setState({ chat: response.data.chat }, () => {
+                console.log(this.scrollView.current);
                 this.scrollView.current.scrollToEnd({ animated: true });
             });
         }).catch((error) => {
@@ -195,9 +196,9 @@ export default class Chat extends Component {
 
     sendFileMessage = async (file) => {
         const interval = setInterval(() => {
-            if(socketClass.getChatsRoomSocket()){
+            if (socketClass.getChatsRoomSocket()) {
                 console.log(socketClass.getChatsRoomSocket().connected)
-                if(socketClass.getChatsRoomSocket().connected){
+                if (socketClass.getChatsRoomSocket().connected) {
                     clearInterval(interval);
                     this.disconnectUserFromChat();
                     this.receiveTextMessage();
@@ -242,7 +243,9 @@ export default class Chat extends Component {
                                 }
                                 <Text style={styles.chatProfileNames}>{this.state.chat.oppositeUser.firstName}</Text>
                             </View>
-                            <ScrollView ref={this.scrollView} style={styles.chatMessagesContainer}>
+                            <ScrollView ref={this.scrollView} style={styles.chatMessagesContainer} onContentSizeChange={() => {
+                                this.scrollView.current.scrollToEnd({ animated: true });
+                            }}>
                                 {
                                     this.state.chat.messages.map((message, index) =>
                                         <Message removeListener={this.disconnectUserFromChat} key={index} message={message} user={this.state.chat.user} oppositeUser={this.state.chat.oppositeUser} {...this.props} />

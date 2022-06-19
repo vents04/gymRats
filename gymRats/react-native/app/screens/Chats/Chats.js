@@ -93,15 +93,19 @@ export default class Chats extends Component {
         console.log("vika li se")
         socketClass.getChatsRoomSocket().on("update-last-message", (data) => {
             console.log("TEST ZA UPDATE LAST MESSAGE", data)
-            const chats = this.state.chats
-            for (let chat of chats) {
-                if (chat._id == data.message.chatId) {
-                    chat.lastMessage = { text: data.message.message.text || i18n.t('screens')['chats']['fileMessage'] };
-                    break;
+            try {
+                let chats = this.state.chats
+                for (let chat of chats) {
+                    if (chat._id == data.message.chatId) {
+                        chat.lastMessage = { text: data.message.message.text || i18n.t('screens')['chats']['fileMessage'] };
+                        break;
+                    }
                 }
+                chats = this.sortChatsBySeen(chats);
+                this.setState({ chats });
+            } catch (error) {
+                console.log(error);
             }
-            chats = this.sortChatsBySeen(chats);
-            this.setState({ chats });
         });
     }
 

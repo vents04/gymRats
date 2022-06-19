@@ -466,6 +466,7 @@ export default class Calendar extends Component {
                                     opacity: pressed ? 0.1 : 1,
                                 }
                             ]} onPress={() => {
+                                this.bottomSheet.current.close();
                                 this.props.navigation.navigate("WeightTracker", {
                                     date: this.state.selectedDate,
                                     timezoneOffset: this.state.timezoneOffset
