@@ -32,9 +32,7 @@ export default class AddCaloriesIntakeItem extends Component {
     }
 
     backAction = () => {
-        (!this.props.route.params.previousScreen)
-            ? this.props.navigation.navigate("SearchCaloriesIntake", { date: this.props.route.params.date, timezoneOffset: this.props.route.params.timezoneOffset, meal: this.state.meal })
-            : this.props.navigation.navigate(this.props.route.params.previousScreen, { date: this.props.route.params.date, timezoneOffset: this.props.route.params.timezoneOffset, meal: this.state.meal })
+        this.props.navigation.goBack();
         return true;
     }
 

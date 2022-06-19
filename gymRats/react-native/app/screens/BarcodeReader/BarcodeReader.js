@@ -48,13 +48,12 @@ export default function BarcodeScanner(props) {
 
     const handleBarCodeScanned = ({ data }) => {
         setShowLoading(true);
-        setScanned(true);
         setBarcode(data)
         ApiRequests.get('calories-counter/search/barcode?barcode=' + data).then(response => {
             if (response.data.result) {
                 if (props.route.params.isAddingBarcodeToFood) {
                     Alert.alert(i18n.t('screens')['barcodeReader']['barcodeAlreadyExistsErrorTitle'], i18n.t('screens')['barcodeReader']['barcodeAlreadyExistsErrorMessage']);
-                    setScanned(false);
+                    setScanned(true);
                 } else {
                     props.navigation.replace("AddCaloriesIntakeItem", {
                         intent: CALORIES_COUNTER_SCREEN_INTENTS.ADD,
@@ -64,9 +63,17 @@ export default function BarcodeScanner(props) {
                         timezoneOffset: props.route.params.timezoneOffset
                     })
                 }
+            } else {
+                if (props.route.params.isAddingBarcodeToFood) {
+                    props.navigation.replace("AddFood", {
+                        barcode: data
+                    })
+                } else {
+                    setScanned(true);
+                }
             }
         }).catch((error) => {
-            setScanned(false)
+            setScanned(true)
             setBarcode("")
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR && !error.response.data.includes("<html>")) {
@@ -156,7 +163,11 @@ export default function BarcodeScanner(props) {
                     {
                         scanned
                             ? <>
-                                <Text style={{ ...globalStyles.modalText, marginVertical: 24, textAlign: 'center' }}>{i18n.t('screens')['barcodeReader']['barcodeNotFound']}</Text>
+                                {
+                                    !props.route.params.isAddingBarcodeToFood
+                                        ? <Text style={{ ...globalStyles.modalText, marginVertical: 24, textAlign: 'center' }}>{i18n.t('screens')['barcodeReader']['barcodeNotFound']}</Text>
+                                        : <Text style={{ ...globalStyles.modalText, marginVertical: 24, textAlign: 'center' }}>{i18n.t('screens')['barcodeReader']['barcodeAlreadyLinked']}</Text>
+                                }
                                 <Pressable style={({ pressed }) => [
                                     {
                                         opacity: pressed ? 0.1 : 1,
@@ -170,21 +181,25 @@ export default function BarcodeScanner(props) {
                                 }}>
                                     <Text style={globalStyles.actionText}>{i18n.t('screens')['barcodeReader']['scanBarcode']}</Text>
                                 </Pressable>
-                                <Pressable style={({ pressed }) => [
-                                    globalStyles.authPageActionButton,
-                                    {
-                                        opacity: pressed ? 0.1 : 1,
-                                        maxWidth: "80%",
-                                        marginTop: 64,
-                                        marginHorizontal: 16
-                                    },
-                                ]} onPress={() => {
-                                    setScanned(false);
-                                    if (Platform.OS == 'android') setCameraKey(cameraKey + 1);
-                                    props.navigation.replace("AddFood", { barcode, date: props.route.params.date, timezoneOffset: props.route.params.timezoneOffset, meal: props.route.params.meal });
-                                }}>
-                                    <Text style={globalStyles.authPageActionButtonText}>{i18n.t('screens')['barcodeReader']['addFood']}</Text>
-                                </Pressable>
+                                {
+                                    !props.route.params.isAddingBarcodeToFood
+                                        ? <Pressable style={({ pressed }) => [
+                                            globalStyles.authPageActionButton,
+                                            {
+                                                opacity: pressed ? 0.1 : 1,
+                                                maxWidth: "80%",
+                                                marginTop: 64,
+                                                marginHorizontal: 16
+                                            },
+                                        ]} onPress={() => {
+                                            setScanned(false);
+                                            if (Platform.OS == 'android') setCameraKey(cameraKey + 1);
+                                            props.navigation.replace("AddFood", { barcode, date: props.route.params.date, timezoneOffset: props.route.params.timezoneOffset, meal: props.route.params.meal });
+                                        }}>
+                                            <Text style={globalStyles.authPageActionButtonText}>{i18n.t('screens')['barcodeReader']['addFood']}</Text>
+                                        </Pressable>
+                                        : null
+                                }
                             </>
                             : <>
                                 <TextInput

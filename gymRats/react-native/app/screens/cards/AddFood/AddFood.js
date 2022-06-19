@@ -43,6 +43,7 @@ export default class AddFood extends Component {
     }
 
     onFocusFunction = () => {
+        console.log(this.props.route.params)
         if (this.props.route.params.barcode) {
             this.setState({
                 barcode: this.props.route.params.barcode
