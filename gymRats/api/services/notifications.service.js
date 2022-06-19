@@ -89,7 +89,7 @@ const NotificationsService = {
                             }
                         }
                     }
-                }, 5000)
+                }, 60000)
                 return;
             }
         }
@@ -115,7 +115,7 @@ const NotificationsService = {
                         }
                     }
                 }
-            }, 5000)
+            }, 60000)
         })
     },
 

@@ -1,4 +1,5 @@
-const { COLLECTIONS, HTTP_STATUS_CODES, ADMIN_STATUSES } = require('../global');
+const { COLLECTIONS, HTTP_STATUS_CODES, ADMIN_STATUSES, SUPPORTED_LANGUAGES } = require('../global');
+const mongoose = require('mongoose')
 
 const DbService = require('../services/db.service');
 const ResponseError = require('../errors/responseError');
@@ -28,6 +29,11 @@ let authenticate = async (req, res, next) => {
             errorHandler(new ResponseError("Token has expired", HTTP_STATUS_CODES.UNAUTHORIZED, 3), req, res, next);
             return;
         }
+
+        (async function () {
+            await DbService.update(COLLECTIONS.USERS, { _id: mongoose.Types.ObjectId(user._id) }, { language: Object.values(SUPPORTED_LANGUAGES).includes(req.lng) ? req.lng : SUPPORTED_LANGUAGES.ENGLISH })
+        })();
+
         req.user = user;
         req.token = token;
         next();
