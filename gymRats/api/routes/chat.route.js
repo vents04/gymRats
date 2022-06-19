@@ -125,10 +125,16 @@ router.get('/:id', authenticate, async (req, res, next) => {
         let messages = [];
         if (!lastMessageId) {
             messages = await DbService.getManyWithSortAndLimit(COLLECTIONS.MESSAGES, { chatId: mongoose.Types.ObjectId(req.params.id) }, { createdDt: -1 }, 25);
+            messages.reverse()
+            console.log(new Date(messages[0].createdDt));
+            console.log(new Date(messages[messages.length - 1].createdDt));
         } else {
             const lastMessage = await DbService.getOne(COLLECTIONS.MESSAGES, { _id: mongoose.Types.ObjectId(req.query.lastMessageId) });
             if (!lastMessage) return next(new ResponseError("Message not found", HTTP_STATUS_CODES.NOT_FOUND, 59));
             messages = await DbService.getManyWithSortAndLimit(COLLECTIONS.MESSAGES, { chatId: mongoose.Types.ObjectId(req.params.id), createdDt: { "$lt": lastMessage.createdDt } }, { createdDt: -1 }, 25);
+            messages.reverse();
+            console.log(new Date(messages[0].createdDt));
+            console.log(new Date(messages[messages.length - 1].createdDt));
         }
 
         Object.assign(chat, { user: req.user }, { oppositeUser: oppositeUser }, { messages: messages });

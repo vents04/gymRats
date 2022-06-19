@@ -130,6 +130,16 @@ export default class Chat extends Component {
             ApiRequests.get(`chat/${id}/?lastMessageId=${lastMessageId}`, {}, true).then((response) => {
                 let chat = this.state.chat;
                 chat.messages.unshift(...response.data.chat.messages)
+                let passed = [];
+                let repeatingCounter = 0;
+                for (let i = 0; i < chat.messages.length; i++) {
+                    if (passed.includes(chat.messages[i]._id)) {
+                        console.log(chat.messages[i]._id);
+                        repeatingCounter++;
+                    }
+                    passed.push(chat.messages[i]._id);
+                }
+                console.log(passed.length, repeatingCounter);;
                 this.setState({ chat, hasReachedChatStart: response.data.chat.messages.length < 25 });
             }).catch((error) => {
                 if (error.response) {
