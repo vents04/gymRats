@@ -39,13 +39,14 @@ export default class Chat extends Component {
             showLoadingPreviousMessages: false,
             hasReachedChatStart: false,
             currentScrollViewHeight: 0,
+            backgroundListener: null
         }
 
         this.focusListener;
     }
 
     onFocusFunction = () => {
-
+        console.log("mounting")
         let chatsRoomSocket = socketClass.getChatsRoomSocket();
         if (!chatsRoomSocket) {
             chatsRoomSocket = socketClass.initConnection();
@@ -195,6 +196,14 @@ export default class Chat extends Component {
         this.focusListener = this.props.navigation.addListener('focus', () => {
             this.onFocusFunction();
         })
+        const backgroundListener = AppState.addEventListener('change', async nextAppState => {
+            if (nextAppState == 'background') {
+                console.log("background ksdl;kas;ldkasl;kdl;askdl;kal;")
+            } else if (nextAppState == 'active') {
+                this.onFocusFunction();
+            }
+        });
+        this.setState({ backgroundListener });
     }
 
     componentWillUnmount() {
