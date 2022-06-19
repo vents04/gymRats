@@ -86,6 +86,7 @@ export default class Chat extends Component {
                 this.state.chat.messages.push(data.message)
                 this.setState({ chat }, () => {
                     this.scrollView.current.scrollToEnd({ animated: true });
+                    this.updateSeenStatus();
                 });
             }
         }
@@ -297,7 +298,7 @@ export default class Chat extends Component {
                             }
                             <ScrollView ref={this.scrollView} style={styles.chatMessagesContainer}
                                 onContentSizeChange={(width, height) => {
-                                    this.scrollView.current.scrollTo({ x: 0, y: (height - this.state.currentScrollViewHeight) - 25 })
+                                    this.scrollView.current.scrollTo({ x: 0, y: (height - this.state.currentScrollViewHeight) })
                                 }}
                                 onScroll={(event) => {
                                     const currentScrollViewHeight = event.nativeEvent.contentSize.height;
