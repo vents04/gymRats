@@ -123,7 +123,7 @@ router.get('/:id/:lastMessageId', authenticate, async (req, res, next) => {
         }else{
             const lastMessage = await DbService.getOne(COLLECTIONS.MESSAGES, { _id: mongoose.Types.ObjectId(req.params.lastMessageId) });
             if(!lastMessage) return next(new ResponseError("Message not found", HTTP_STATUS_CODES.NOT_FOUND, 59));
-            messages = await DbService.getManyWithLimit(COLLECTIONS.MESSAGES, { chatId: mongoose.Types.ObjectId(req.params.id), createdDt: { $lt: lastMessage.createdDt } }, 25);
+            messages = await DbService.getManyWithLimit(COLLECTIONS.MESSAGES, { chatId: mongoose.Types.ObjectId(req.params.id), createdDt: { "$lt": lastMessage.createdDt } }, 25);
         }
 
         Object.assign(chat, { user: req.user }, { oppositeUser: oppositeUser }, { messages: messages });
