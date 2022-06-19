@@ -69,5 +69,18 @@ export default StyleSheet.create({
         fontFamily: "MainMedium",
         fontSize: 14,
         marginRight: 8
+    },
+    loadingMessagesContainer: {
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center",
+        width: "100%",
+        paddingVertical: 12
+    },
+    loadingMessagesText: {
+        fontFamily: "MainMedium",
+        fontSize: 14,
+        marginLeft: 8
     }
 });

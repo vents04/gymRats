@@ -36,6 +36,9 @@ export default class Chat extends Component {
             chat: null,
             chatId: null,
             showSending: false,
+            showLoadingPreviousMessages: false,
+            hasReachedChatStart: false,
+            currentScrollViewHeight: 0,
         }
 
         this.focusListener;
@@ -71,10 +74,11 @@ export default class Chat extends Component {
         this.disconnectUserFromChat();
         this.receiveTextMessage();
 
-        this.setState({ showSending: true });
-        console.log("sendTextMessage");
-        socketClass.getChatsRoomSocket().emit("send-text-message", { messageInfo })
-        this.setState({ message: "", showError: false })
+        this.setState({ showSending: true, currentScrollViewHeight: 0 }, () => {
+            console.log("sendTextMessage");
+            socketClass.getChatsRoomSocket().emit("send-text-message", { messageInfo })
+            this.setState({ message: "", showError: false })
+        });
     }
 
     receiveMessageHandler = (data) => {
@@ -210,9 +214,43 @@ export default class Chat extends Component {
 
     sendFileMessageHandler = async (file) => {
         console.log("sendFileMessageHandler");
-        this.setState({ showSending: true, showError: false });
-        const fileBase64 = await FileSystem.readAsStringAsync(file.uri, { encoding: 'base64' });
-        socketClass.getChatsRoomSocket().emit("send-file-message", { messageInfo: { senderId: this.state.chat.user._id, base64: fileBase64, name: file.name, size: file.size, mimeType: file.mimeType, chatId: this.props.route.params.chatId } })
+        this.setState({ showSending: true, showError: false, currentScrollViewHeight: 0 }, async () => {
+            const fileBase64 = await FileSystem.readAsStringAsync(file.uri, { encoding: 'base64' });
+            socketClass.getChatsRoomSocket().emit("send-file-message", { messageInfo: { senderId: this.state.chat.user._id, base64: fileBase64, name: file.name, size: file.size, mimeType: file.mimeType, chatId: this.props.route.params.chatId } })
+        });
+    }
+
+    loadPreviousMessages = async () => {
+        if (!this.state.hasReachedChatStart) {
+            const firstMessage = this.state.chat.messages[0];
+            this.setState({ showLoadingPreviousMessages: true }, () => {
+                setTimeout(() => {
+                    let chat = this.state.chat;
+                    chat.messages.unshift({
+                        "_id": "62ace9bb12124a66ab0ec04b",
+                        "chatId": "62ace9b612124a66ab0ec010",
+                        "createdDt": 1655499195448,
+                        "message": {
+                            "file": null,
+                            "text": "message upshifting",
+                        },
+                        "seen": true,
+                        "senderId": "627ab993439d03f4b3fac33a",
+                    }, {
+                        "_id": "62ace9bb12124a66ab0ec04b",
+                        "chatId": "62ace9b612124a66ab0ec010",
+                        "createdDt": 1655499195448,
+                        "message": {
+                            "file": null,
+                            "text": "message upshifting",
+                        },
+                        "seen": true,
+                        "senderId": "627ab993439d03f4b3fac33a",
+                    })
+                    this.setState({ showLoadingPreviousMessages: false, chat, hasReachedChatStart: true });
+                }, 5000);
+            });
+        }
     }
 
     render() {
@@ -243,9 +281,29 @@ export default class Chat extends Component {
                                 }
                                 <Text style={styles.chatProfileNames}>{this.state.chat.oppositeUser.firstName}</Text>
                             </View>
-                            <ScrollView ref={this.scrollView} style={styles.chatMessagesContainer} onContentSizeChange={() => {
-                                this.scrollView.current.scrollToEnd({ animated: true });
-                            }}>
+                            {
+                                this.state.showLoadingPreviousMessages
+                                    ? <View style={styles.loadingMessagesContainer}>
+                                        <ActivityIndicator
+                                            size={'small'}
+                                            color={'#1f6cb0'}
+                                            animating={true}
+                                        />
+                                        <Text style={styles.loadingMessagesText}>{i18n.t("screens")["chat"]["loadingMessagesText"]}</Text>
+                                    </View>
+                                    : null
+                            }
+                            <ScrollView ref={this.scrollView} style={styles.chatMessagesContainer}
+                                onContentSizeChange={(width, height) => {
+                                    this.scrollView.current.scrollTo({ x: 0, y: (height - this.state.currentScrollViewHeight) - 25 })
+                                }}
+                                onScroll={(event) => {
+                                    const currentScrollViewHeight = event.nativeEvent.contentSize.height;
+                                    this.setState({ currentScrollViewHeight: currentScrollViewHeight - event.nativeEvent.contentOffset.y });
+                                    if (event.nativeEvent.contentOffset.y == 0) {
+                                        this.loadPreviousMessages();
+                                    }
+                                }}>
                                 {
                                     this.state.chat.messages.map((message, index) =>
                                         <Message removeListener={this.disconnectUserFromChat} key={index} message={message} user={this.state.chat.user} oppositeUser={this.state.chat.oppositeUser} {...this.props} />

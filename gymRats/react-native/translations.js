@@ -270,7 +270,8 @@ module.exports = {
                 fileUploadSizeError: "The size of the file you have selected is too large",
                 fileUploadUnsupportedType: "This file type is not supported",
                 messagePlaceholder: "Type a message...",
-                fileUploading: "The file is being uploaded"
+                fileUploading: "The file is being uploaded",
+                loadingMessagesText: "Loading messages",
             },
             client: {
                 title: "Client profile",
@@ -673,7 +674,8 @@ module.exports = {
                 fileUploadSizeError: "Размерът на файла е прекалено голям",
                 fileUploadUnsupportedType: "Файловият формат не е поддържан в Gym Rats",
                 messagePlaceholder: "Напиши съобщение...",
-                fileUploading: "Файлът се качва"
+                fileUploading: "Файлът се качва",
+                loadingMessagesText: "Съобщенията се зареждат"
             },
             client: {
                 title: "Клиентски профил",
