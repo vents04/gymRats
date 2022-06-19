@@ -63,15 +63,12 @@ export default class Chat extends Component {
         });
     }
 
-
     backAction = () => {
         this.props.navigation.navigate("Chats");
         return true;
     }
 
     sendTextMessage = (messageInfo) => {
-        this.disconnectUserFromChat();
-        this.receiveTextMessage();
 
         this.setState({ showSending: true, currentScrollViewHeight: 0 }, () => {
             socketClass.getChatsRoomSocket().emit("send-text-message", { messageInfo })
@@ -106,6 +103,7 @@ export default class Chat extends Component {
     }
 
     getChat = (id) => {
+        console.log("chat got!!!!")
         let lastMessageId = null;
         if (this.state.chat && this.state.chat.messages.length > 0) {
             lastMessageId = this.state.chat.messages[0]._id;
@@ -190,9 +188,17 @@ export default class Chat extends Component {
     componentDidMount() {
         this.joinRooms();
         BackHandler.addEventListener("hardwareBackPress", this.backAction);
+        
+        const interval = setInterval(() => {
+            if (this.scrollView.current) {
+                this.scrollView.current.scrollToEnd({ animated: true });
+                clearInterval(interval);
+            }
+        }, 50)
         this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
             this.scrollView.current.scrollToEnd({ animated: true });
         });
+
         this.focusListener = this.props.navigation.addListener('focus', () => {
             this.onFocusFunction();
         })
@@ -200,7 +206,9 @@ export default class Chat extends Component {
             if (nextAppState == 'background') {
                 console.log("background ksdl;kas;ldkasl;kdl;askdl;kal;")
             } else if (nextAppState == 'active') {
-                this.onFocusFunction();
+                this.setState({ chat: null}, () => {
+                    this.onFocusFunction()
+                });
             }
         });
         this.setState({ backgroundListener });
