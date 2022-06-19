@@ -104,6 +104,8 @@ router.get('/:id', authenticate, async (req, res, next) => {
             console.log(new Date(messages[messages.length - 1].createdDt));
         }
 
+        console.log(messages.length)
+
         Object.assign(chat, { user: req.user }, { oppositeUser: oppositeUser }, { messages: messages });
 
         return res.status(HTTP_STATUS_CODES.OK).send({
