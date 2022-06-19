@@ -663,3 +663,33 @@
 {"level":"error","message":"Cannot read properties of undefined (reading 'userId')"}
 {"level":"error","message":"jwt malformed"}
 {"level":"error","message":"Calories should be an integer"}
+{"level":"error","message":"Потребителят, асоцииран с този автентификационен ключ не е намерен"}
+{"level":"error","message":"Cannot read properties of undefined (reading '_id')"}
+{"level":"error","message":"Невалиден id параметър/ри"}
+{"level":"error","message":"Невалиден id параметър/ри"}
+{"level":"error","message":"Невалиден id параметър/ри"}
+{"level":"error","message":"Невалиден id параметър/ри"}
+{"level":"error","message":"Невалиден id параметър/ри"}
+{"level":"error","message":"Невалиден id параметър/ри"}
+{"level":"error","message":"Невалиден id параметър/ри"}
+{"level":"error","message":"Невалиден id параметър/ри"}
+{"level":"error","message":"Невалиден id параметър/ри"}
+{"level":"error","message":"Невалиден id параметър/ри"}
+{"level":"error","message":"Невалиден id параметър/ри"}
+{"level":"error","message":"Невалиден id параметър/ри"}
+{"level":"error","message":"Невалиден id параметър/ри"}
+{"level":"error","message":"Невалиден id параметър/ри"}
+{"level":"error","message":"Невалиден id параметър/ри"}
+{"level":"error","message":"Нямате право да преглеждате чатове, в което не сте нито клиент, нито личен треньор"}
+{"level":"error","message":"Нямате право да преглеждате чатове, в което не сте нито клиент, нито личен треньор"}
+{"level":"error","message":"Нямате право да преглеждате чатове, в което не сте нито клиент, нито личен треньор"}
+{"level":"error","message":"Нямате право да преглеждате чатове, в което не сте нито клиент, нито личен треньор"}
+{"level":"error","message":"Нямате право да преглеждате чатове, в което не сте нито клиент, нито личен треньор"}
+{"level":"error","message":"Невалиден id параметър/ри"}
+{"level":"error","message":"Невалиден id параметър/ри"}
+{"level":"error","message":"Невалиден id параметър/ри"}
+{"level":"error","message":"Невалиден id параметър/ри"}
+{"level":"error","message":"Невалиден id параметър/ри"}
+{"level":"error","message":"Няма съществуващ запис на съобщението"}
+{"level":"error","message":"Няма съществуващ запис на съобщението"}
+{"level":"error","message":"Няма съществуващ запис на съобщението"}

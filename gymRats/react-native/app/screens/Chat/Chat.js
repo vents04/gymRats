@@ -53,8 +53,6 @@ export default class Chat extends Component {
         }
         socketClass.joinChatsRoom();
 
-        console.log("onFocusFunction");
-
         const chatId = this.props.route.params.chatId;
         this.getChat(chatId)
         this.setState({ chatId: this.props.route.params.chatId }, () => {
@@ -75,7 +73,6 @@ export default class Chat extends Component {
         this.receiveTextMessage();
 
         this.setState({ showSending: true, currentScrollViewHeight: 0 }, () => {
-            console.log("sendTextMessage");
             socketClass.getChatsRoomSocket().emit("send-text-message", { messageInfo })
             this.setState({ message: "", showError: false })
         });
@@ -95,7 +92,6 @@ export default class Chat extends Component {
     }
 
     receiveTextMessage = () => {
-        console.log("receiveTextMessage");
         socketClass.getChatsRoomSocket().off("receive-message", (data) => {
             this.receiveMessageHandler(data)
         }).on("receive-message", (data) => {
@@ -104,34 +100,57 @@ export default class Chat extends Component {
     }
 
     disconnectUserFromChat = () => {
-        console.log("disconnectUserFromChat")
         socketClass.getChatsRoomSocket().removeAllListeners("receive-message");
     }
 
     getChat = (id) => {
-        ApiRequests.get(`chat/${id}`, {}, true).then((response) => {
-            this.setState({ chat: response.data.chat }, () => {
-                console.log(this.scrollView.current);
-                this.scrollView.current.scrollToEnd({ animated: true });
-            });
-        }).catch((error) => {
-            if (error.response) {
-                if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR && !error.response.data.includes("<html>")) {
-                    this.setState({ showError: true, error: error.response.data });
+        let lastMessageId = null;
+        if (this.state.chat && this.state.chat.messages.length > 0) {
+            lastMessageId = this.state.chat.messages[0]._id;
+        }
+        if (!lastMessageId) {
+            ApiRequests.get(`chat/${id}`, {}, true).then((response) => {
+                this.setState({ chat: response.data.chat }, () => {
+                    this.scrollView.current.scrollToEnd({ animated: true });
+                });
+            }).catch((error) => {
+                if (error.response) {
+                    if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR && !error.response.data.includes("<html>")) {
+                        this.setState({ showError: true, error: error.response.data });
+                    } else {
+                        ApiRequests.showInternalServerError();
+                    }
+                } else if (error.request) {
+                    ApiRequests.showNoResponseError();
                 } else {
-                    ApiRequests.showInternalServerError();
+                    ApiRequests.showRequestSettingError();
                 }
-            } else if (error.request) {
-                ApiRequests.showNoResponseError();
-            } else {
-                ApiRequests.showRequestSettingError();
-            }
-        })
+            })
+        } else {
+            ApiRequests.get(`chat/${id}/?lastMessageId=${lastMessageId}`, {}, true).then((response) => {
+                let chat = this.state.chat;
+                chat.messages.unshift(...response.data.chat.messages)
+                this.setState({ chat, hasReachedChatStart: response.data.chat.messages.length < 25 });
+            }).catch((error) => {
+                if (error.response) {
+                    if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR && !error.response.data.includes("<html>")) {
+                        this.setState({ showError: true, error: error.response.data });
+                    } else {
+                        ApiRequests.showInternalServerError();
+                    }
+                } else if (error.request) {
+                    ApiRequests.showNoResponseError();
+                } else {
+                    ApiRequests.showRequestSettingError();
+                }
+            }).finally(() => {
+                this.setState({ showLoadingPreviousMessages: false });
+            })
+        }
     }
 
     updateSeenStatus = (id) => {
         ApiRequests.put(`chat/${id}/seen`, {}, {}, true).catch((error) => {
-            console.log("update seen status")
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
                     this.setState({ showError: true, error: error.response.data });
@@ -201,7 +220,6 @@ export default class Chat extends Component {
     sendFileMessage = async (file) => {
         const interval = setInterval(() => {
             if (socketClass.getChatsRoomSocket()) {
-                console.log(socketClass.getChatsRoomSocket().connected)
                 if (socketClass.getChatsRoomSocket().connected) {
                     clearInterval(interval);
                     this.disconnectUserFromChat();
@@ -213,7 +231,6 @@ export default class Chat extends Component {
     }
 
     sendFileMessageHandler = async (file) => {
-        console.log("sendFileMessageHandler");
         this.setState({ showSending: true, showError: false, currentScrollViewHeight: 0 }, async () => {
             const fileBase64 = await FileSystem.readAsStringAsync(file.uri, { encoding: 'base64' });
             socketClass.getChatsRoomSocket().emit("send-file-message", { messageInfo: { senderId: this.state.chat.user._id, base64: fileBase64, name: file.name, size: file.size, mimeType: file.mimeType, chatId: this.props.route.params.chatId } })
@@ -222,33 +239,8 @@ export default class Chat extends Component {
 
     loadPreviousMessages = async () => {
         if (!this.state.hasReachedChatStart) {
-            const firstMessage = this.state.chat.messages[0];
             this.setState({ showLoadingPreviousMessages: true }, () => {
-                setTimeout(() => {
-                    let chat = this.state.chat;
-                    chat.messages.unshift({
-                        "_id": "62ace9bb12124a66ab0ec04b",
-                        "chatId": "62ace9b612124a66ab0ec010",
-                        "createdDt": 1655499195448,
-                        "message": {
-                            "file": null,
-                            "text": "message upshifting",
-                        },
-                        "seen": true,
-                        "senderId": "627ab993439d03f4b3fac33a",
-                    }, {
-                        "_id": "62ace9bb12124a66ab0ec04b",
-                        "chatId": "62ace9b612124a66ab0ec010",
-                        "createdDt": 1655499195448,
-                        "message": {
-                            "file": null,
-                            "text": "message upshifting",
-                        },
-                        "seen": true,
-                        "senderId": "627ab993439d03f4b3fac33a",
-                    })
-                    this.setState({ showLoadingPreviousMessages: false, chat, hasReachedChatStart: true });
-                }, 5000);
+                this.getChat(this.props.route.params.chatId);
             });
         }
     }
