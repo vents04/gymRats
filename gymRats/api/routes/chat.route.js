@@ -131,6 +131,8 @@ router.get('/:id', authenticate, async (req, res, next) => {
             messages = await DbService.getManyWithSortAndLimit(COLLECTIONS.MESSAGES, { chatId: mongoose.Types.ObjectId(req.params.id), createdDt: { "$lt": lastMessage.createdDt } }, { createdDt: -1 }, 25);
         }
 
+        console.log(messages.length)
+
         Object.assign(chat, { user: req.user }, { oppositeUser: oppositeUser }, { messages: messages });
 
         return res.status(HTTP_STATUS_CODES.OK).send({
