@@ -16,8 +16,6 @@
       [
         "expo-notifications",
         {
-          "icon": "./assets/notifications/ic_stat-icon.png",
-          "color": "#ffffff",
           "sounds": ["./assets/notifications/notification.wav"]
         }
       ],
@@ -44,9 +42,12 @@
         "NSMicrophoneUsageDescription": "Allow $(PRODUCT_NAME) to access your microphone"
       },
       "bundleIdentifier": "com.gymrats.android",
-      "usesIcloudStorage": true
+      "usesIcloudStorage": true,
+      "icon": "./assets/notifications/ic_stat_icon.png"
     },
     "android": {
+      "useNextNotificationsApi": true,
+      "icon": "./assets/notifications/ic_stat_icon.png",
       "permissions": [
         "android.permission.CAMERA",
         "android.permission.READ_EXTERNAL_STORAGE",

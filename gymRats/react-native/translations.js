@@ -26,7 +26,8 @@ module.exports = {
                 addData: "Add data",
                 noData: "No data added for this date",
                 bottomSheetTitle: "Cards",
-                bottomSheetNoCards: "You have already added all data cards for this date"
+                bottomSheetNoCards: "You have already added all data cards for this date",
+                cardsRefreshing: "Cards refreshing..."
             },
             coachSearch: {
                 pageTitle: "Coach search",
@@ -438,7 +439,8 @@ module.exports = {
                 addData: "Добави данни",
                 noData: "Няма добавени данни за тази дата",
                 bottomSheetTitle: "Карти",
-                bottomSheetNoCards: "Вече сте добавили всички типове карти"
+                bottomSheetNoCards: "Вече сте добавили всички типове карти",
+                cardsRefreshing: "Картите се обновяват..."
             },
             coachSearch: {
                 pageTitle: "Търсене на треньори",

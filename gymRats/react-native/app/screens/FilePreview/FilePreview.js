@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Image, Text, View, ScrollView, TextInput, Pressable, BackHandler, Alert, ActivityIndicator, Button } from 'react-native';
+import { Image, Text, View, ScrollView, TextInput, Pressable, BackHandler, Alert, ActivityIndicator, Button, Dimensions } from 'react-native';
 import { BackButtonHandler } from '../../classes/BackButtonHandler';
 import { Video, AVPlaybackStatus } from 'expo-av';
 import { Audio } from 'expo-av';
@@ -73,26 +73,25 @@ export default class FilePreview extends Component {
                             this.backAction();
                         }}>
                             <Ionicons name="md-arrow-back-sharp" size={25} color={
-                                IMAGE_VISUALIZATION_MIME_TYPES.includes(this.props.route.params.mimeType) ? "white" : "black"
+                                IMAGE_VISUALIZATION_MIME_TYPES.includes(this.props.route.params.mimeType) ? "black" : "black"
                             } style={{
                                 textShadowColor: "black"
                             }} />
                         </Pressable>
                         <Text style={[globalStyles.followUpScreenTitle, {
+                            maxWidth: "90%",
                             fontSize: 14,
-                            color: IMAGE_VISUALIZATION_MIME_TYPES.includes(this.props.route.params.mimeType) ? "white" : "#262626",
-                            textShadowColor: IMAGE_VISUALIZATION_MIME_TYPES.includes(this.props.route.params.mimeType) ? "#777" : null,
-                            textShadowRadius: IMAGE_VISUALIZATION_MIME_TYPES.includes(this.props.route.params.mimeType) ? 4 : null
+                            color: IMAGE_VISUALIZATION_MIME_TYPES.includes(this.props.route.params.mimeType) ? "black" : "#262626",
+                            textShadowColor: IMAGE_VISUALIZATION_MIME_TYPES.includes(this.props.route.params.mimeType) ? null : null,
+                            textShadowRadius: IMAGE_VISUALIZATION_MIME_TYPES.includes(this.props.route.params.mimeType) ? 0 : null
                         }]}>{this.props.route.params.name}</Text>
                     </View>
                     {
                         IMAGE_VISUALIZATION_MIME_TYPES.includes(this.props.route.params.mimeType)
                             ? <Image style={{
-                                position: "absolute",
-                                top: 0,
-                                left: 0,
-                                height: "100%",
+                                height: Dimensions.get('window').height - 100,
                                 width: "100%",
+                                resizeMode: "contain",
                                 zIndex: -9
                             }} source={{ uri: this.props.route.params.url }} />
                             : VIDEO_VISUALIZATION_MIME_TYPES.includes(this.props.route.params.mimeType)

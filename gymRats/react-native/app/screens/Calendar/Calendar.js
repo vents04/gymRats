@@ -433,7 +433,7 @@ export default class Calendar extends Component {
                                                     : <Text style={globalStyles.notation}>{i18n.t('screens')['calendar']['noData']}</Text>
                                             }
                                         </>
-                                        : <Text style={globalStyles.notation}>Cards refreshing...</Text>
+                                        : <Text style={globalStyles.notation}>{i18n.t("screens")["calendar"]["cardsRefreshing"]}</Text>
                                 }
                             </ScrollView>
                         </View>
