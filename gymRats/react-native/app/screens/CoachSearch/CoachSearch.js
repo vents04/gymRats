@@ -122,7 +122,7 @@ export default class CoachSearch extends Component {
     }
 
     changeName = (value) => {
-        this.query = value;
+        this.query = value.trim();
 
         if (this.typingTimeout) {
             clearTimeout(this.typingTimeout);

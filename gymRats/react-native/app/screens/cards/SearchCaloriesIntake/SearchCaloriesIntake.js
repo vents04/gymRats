@@ -95,7 +95,7 @@ export default class SearchCaloriesIntake extends Component {
     }
 
     changeQuery = (value) => {
-        this.query = value;
+        this.query = value.trim();
 
         if (this.typingTimeout) {
             clearTimeout(this.typingTimeout);

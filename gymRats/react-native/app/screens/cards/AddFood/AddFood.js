@@ -74,15 +74,15 @@ export default class AddFood extends Component {
     addFood = () => {
         this.setState({ showLoading: true }, () => {
             const payload = {
-                title: this.state.title,
+                title: this.state.title.trim(),
                 unit: this.state.unit,
-                calories: this.state.calories,
-                carbs: this.state.carbs,
-                protein: this.state.protein,
-                fats: this.state.fats
+                calories: parseFloat(this.state.calories).toFixed(2),
+                carbs: parseFloat(this.state.carbs).toFixed(2),
+                protein: parseFloat(this.state.protein).toFixed(2),
+                fats: parseFloat(this.state.fats).toFixed(2)
             }
             if (this.state.barcode?.length > 0) payload.barcode = this.state.barcode;
-            if (this.state.brand?.length > 0) payload.brand = this.state.brand;
+            if (this.state.brand?.length > 0) payload.brand = this.state.brand.trim();
             ApiRequests.post('calories-counter/item', {}, payload, true).then((response) => {
                 this.props.navigation.navigate("AddCaloriesIntakeItem", {
                     intent: CALORIES_COUNTER_SCREEN_INTENTS.ADD,
@@ -206,7 +206,7 @@ export default class AddFood extends Component {
                         <View style={styles.inputSection}>
                             <Text style={styles.inputSectionTitle}>{i18n.t('screens')['addFood']['caloriesInput']} {i18n.t('common')['foodUnits'][this.state.unit]}</Text>
                             <TextInput
-                                keyboardType='numeric'
+                                keyboardType='decimal-pad'
                                 value={this.state.calories}
                                 style={styles.inputSectionInput}
                                 onChangeText={(val) => { this.setState({ calories: val, showError: false }) }} />
@@ -214,7 +214,7 @@ export default class AddFood extends Component {
                         <View style={styles.inputSection}>
                             <Text style={styles.inputSectionTitle}>{i18n.t('screens')['addFood']['carbsInput']} {i18n.t('common')['foodUnits'][this.state.unit]}</Text>
                             <TextInput
-                                keyboardType='numeric'
+                                keyboardType='decimal-pad'
                                 value={this.state.carbs}
                                 style={styles.inputSectionInput}
                                 onChangeText={(val) => { this.setState({ carbs: val, showError: false }) }} />
@@ -222,7 +222,7 @@ export default class AddFood extends Component {
                         <View style={styles.inputSection}>
                             <Text style={styles.inputSectionTitle}>{i18n.t('screens')['addFood']['proteinsInput']} {i18n.t('common')['foodUnits'][this.state.unit]}</Text>
                             <TextInput
-                                keyboardType='numeric'
+                                keyboardType='decimal-pad'
                                 value={this.state.protein}
                                 style={styles.inputSectionInput}
                                 onChangeText={(val) => { this.setState({ protein: val, showError: false }) }} />
@@ -230,7 +230,7 @@ export default class AddFood extends Component {
                         <View style={styles.inputSection}>
                             <Text style={styles.inputSectionTitle}>{i18n.t('screens')['addFood']['fatsInput']} {i18n.t('common')['foodUnits'][this.state.unit]}</Text>
                             <TextInput
-                                keyboardType='numeric'
+                                keyboardType='decimal-pad'
                                 value={this.state.fats}
                                 style={styles.inputSectionInput}
                                 onChangeText={(val) => { this.setState({ fats: val, showError: false }) }} />

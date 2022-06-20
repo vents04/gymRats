@@ -359,7 +359,7 @@ export default class Chat extends Component {
                                                                 opacity: pressed ? 0.1 : 1,
                                                             }
                                                         ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 15 }} onPress={() => {
-                                                            if (!this.state.showSending) this.sendTextMessage({ senderId: this.state.chat.user._id, message: this.state.message, chatId: this.props.route.params.chatId });
+                                                            if (!this.state.showSending) this.sendTextMessage({ senderId: this.state.chat.user._id, message: this.state.message.trim(), chatId: this.props.route.params.chatId });
                                                         }}>
                                                             {
                                                                 !this.state.showSending

@@ -45,7 +45,7 @@ export default class AddUnknownCaloriesIntake extends Component {
     addUnknownSourceCalories = () => {
         this.setState({ showLoading: true }, () => {
             ApiRequests.post("calories-counter/unknown-source-calories", {}, {
-                calories: this.state.calories,
+                calories: parseFloat(this.state.calories).toFixed(2),
                 date: this.props.route.params.date.getDate(),
                 month: this.props.route.params.date.getMonth() + 1,
                 year: this.props.route.params.date.getFullYear()

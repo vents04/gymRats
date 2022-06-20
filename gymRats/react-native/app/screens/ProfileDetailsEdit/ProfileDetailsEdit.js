@@ -72,14 +72,14 @@ export default class ProfileDetailsEdit extends Component {
         setTimeout(() => {
             if (!removeProfilePicture) {
                 ApiRequests.put('user', {}, {
-                    firstName: this.state.firstName,
-                    lastName: this.state.lastName,
+                    firstName: this.state.firstName.trim(),
+                    lastName: this.state.lastName.trim(),
                     weightUnit: this.state.weightUnit,
                 }, true).then((response) => {
                     this.setState({
                         profile: {
-                            firstName: this.state.firstName,
-                            lastName: this.state.lastName,
+                            firstName: this.state.firstName.trim(),
+                            lastName: this.state.lastName.trim(),
                             weightUnit: this.state.weightUnit,
                             profilePicture: this.state.profile.profilePicture
                         },
@@ -101,8 +101,8 @@ export default class ProfileDetailsEdit extends Component {
                 }, true).then((response) => {
                     this.setState({
                         profile: {
-                            firstName: this.state.firstName,
-                            lastName: this.state.lastName,
+                            firstName: this.state.firstName.trim(),
+                            lastName: this.state.lastName.trim(),
                             weightUnit: this.state.weightUnit,
                             profilePicture: null
                         },
@@ -125,8 +125,8 @@ export default class ProfileDetailsEdit extends Component {
     changedValue = () => {
         this.setState({
             hasChanges: this.state.profile.weightUnit != this.state.weightUnit
-                || this.state.profile.firstName != this.state.firstName
-                || this.state.profile.lastName != this.state.lastName
+                || this.state.profile.firstName.trim() != this.state.firstName.trim()
+                || this.state.profile.lastName.trim() != this.state.lastName.trim()
         })
     }
 

@@ -46,7 +46,7 @@ export default class PostReview extends Component {
         let payload = {
             rating: this.state.rating
         }
-        if (this.state.review.length > 0) payload.review = this.state.review;
+        if (this.state.review.length > 0) payload.review = this.state.review.trim();
         ApiRequests.post(`coaching/relation/${this.props.route.params.relation._id}/review`, {}, payload, true).then((response) => {
             this.props.navigation.navigate('Coaching', { tab: "myCoach" });
         }).catch((error) => {

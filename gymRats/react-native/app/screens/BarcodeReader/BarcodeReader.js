@@ -49,6 +49,7 @@ export default function BarcodeScanner(props) {
     const handleBarCodeScanned = ({ data }) => {
         setShowLoading(true);
         setBarcode(data)
+        data = data.trim().replace(" ", "");
         ApiRequests.get('calories-counter/search/barcode?barcode=' + data).then(response => {
             if (response.data.result) {
                 if (props.route.params.isAddingBarcodeToFood) {

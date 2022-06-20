@@ -246,62 +246,6 @@ export default class Coaching extends Component {
                                                         <Text style={globalStyles.authPageActionButtonText}>{i18n.t('screens')['coaching']['searchCoaches']}</Text>
                                                     </Pressable>
                                                 </View>
-                                                {
-                                                    this.state.coaching.myCoach.canceledRelations.length > 0
-                                                        ? <>
-                                                            <Text style={styles.coachingSectionTitle}>{i18n.t('screens')['coaching']['relationsWithoutReviews']}</Text>
-                                                            {
-                                                                this.state.coaching.myCoach.canceledRelations.map((relation, index) =>
-                                                                    <View key={index} style={[styles.requestItem, {
-                                                                        flexDirection: "column",
-                                                                        alignItems: "flex-start",
-                                                                    }]}>
-                                                                        <View style={styles.requestItemProfile}>
-                                                                            {
-                                                                                !relation.coach.profilePicture
-                                                                                    ? <View style={styles.profilePictureContainer}>
-                                                                                        <Text style={styles.noProfilePictureText}>
-                                                                                            {relation.coach.firstName.charAt(0)}
-                                                                                            {relation.coach.lastName.charAt(0)}
-                                                                                        </Text>
-                                                                                    </View>
-                                                                                    : <Image style={styles.profilePictureContainer}
-                                                                                        source={{ uri: relation.coach.profilePicture }} />
-                                                                            }
-                                                                            <Text style={styles.names}>
-                                                                                {relation.coach.firstName}
-                                                                                &nbsp;
-                                                                                {relation.coach.lastName}
-                                                                            </Text>
-                                                                        </View>
-                                                                        <Text style={[globalStyles.notation, {
-                                                                            marginTop: 12
-                                                                        }]}>{i18n.t('screens')['coaching']['startOfRelation']} {new Date(relation.from).toLocaleDateString()}
-                                                                            {
-                                                                                relation.to
-                                                                                    ? i18n.t('screens')['coaching']['endOfRelation'] + new Date(relation.to).toLocaleDateString()
-                                                                                    : null
-                                                                            }</Text>
-                                                                        {
-                                                                            !relation.hasReview
-                                                                                ? <Pressable style={({ pressed }) => [
-                                                                                    globalStyles.authPageActionButton,
-                                                                                    {
-                                                                                        opacity: pressed ? 0.1 : 1,
-                                                                                        marginTop: 12
-                                                                                    }
-                                                                                ]} onPress={() => {
-                                                                                    this.props.navigation.navigate("PostReview", { relation })
-                                                                                }}>
-                                                                                    <Text style={globalStyles.authPageActionButtonText}>{i18n.t('screens')['coaching']['leaveAReview']}</Text>
-                                                                                </Pressable>
-                                                                                : null
-                                                                        }
-                                                                    </View>
-                                                                )}
-                                                        </>
-                                                        : null
-                                                }
                                             </>
                                             : <>
                                                 <Pressable style={({ pressed }) => [
@@ -400,6 +344,62 @@ export default class Coaching extends Component {
                                                         : null
                                                 }
                                             </>
+                                    }
+                                    {
+                                        this.state.coaching.myCoach.canceledRelations.length > 0
+                                            ? <>
+                                                <Text style={styles.coachingSectionTitle}>{i18n.t('screens')['coaching']['relationsWithoutReviews']}</Text>
+                                                {
+                                                    this.state.coaching.myCoach.canceledRelations.map((relation, index) =>
+                                                        <View key={index} style={[styles.requestItem, {
+                                                            flexDirection: "column",
+                                                            alignItems: "flex-start",
+                                                        }]}>
+                                                            <View style={styles.requestItemProfile}>
+                                                                {
+                                                                    !relation.coach.profilePicture
+                                                                        ? <View style={styles.profilePictureContainer}>
+                                                                            <Text style={styles.noProfilePictureText}>
+                                                                                {relation.coach.firstName.charAt(0)}
+                                                                                {relation.coach.lastName.charAt(0)}
+                                                                            </Text>
+                                                                        </View>
+                                                                        : <Image style={styles.profilePictureContainer}
+                                                                            source={{ uri: relation.coach.profilePicture }} />
+                                                                }
+                                                                <Text style={styles.names}>
+                                                                    {relation.coach.firstName}
+                                                                    &nbsp;
+                                                                    {relation.coach.lastName}
+                                                                </Text>
+                                                            </View>
+                                                            <Text style={[globalStyles.notation, {
+                                                                marginTop: 12
+                                                            }]}>{i18n.t('screens')['coaching']['startOfRelation']} {new Date(relation.from).toLocaleDateString()}
+                                                                {
+                                                                    relation.to
+                                                                        ? i18n.t('screens')['coaching']['endOfRelation'] + new Date(relation.to).toLocaleDateString()
+                                                                        : null
+                                                                }</Text>
+                                                            {
+                                                                !relation.hasReview
+                                                                    ? <Pressable style={({ pressed }) => [
+                                                                        globalStyles.authPageActionButton,
+                                                                        {
+                                                                            opacity: pressed ? 0.1 : 1,
+                                                                            marginTop: 12
+                                                                        }
+                                                                    ]} onPress={() => {
+                                                                        this.props.navigation.navigate("PostReview", { relation })
+                                                                    }}>
+                                                                        <Text style={globalStyles.authPageActionButtonText}>{i18n.t('screens')['coaching']['leaveAReview']}</Text>
+                                                                    </Pressable>
+                                                                    : null
+                                                            }
+                                                        </View>
+                                                    )}
+                                            </>
+                                            : null
                                     }
                                 </ScrollView>
                                 : <ScrollView contentContainerStyle={[globalStyles.fillEmptySpace, {

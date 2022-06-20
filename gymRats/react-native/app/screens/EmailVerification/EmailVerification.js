@@ -33,7 +33,7 @@ export default class EmailVerification extends Component {
 
     checkCode = () => {
         this.setState({ showLoading: true }, () => {
-            ApiRequests.get(`user/check-email-verification-code?identifier=${this.state.identifier}&code=${this.state.code}`).then(async (response) => {
+            ApiRequests.get(`user/check-email-verification-code?identifier=${this.state.identifier}&code=${this.state.code.trim().replace(" ", "")}`).then(async (response) => {
                 await Auth.setToken(response.data.token);
                 this.setState({ showError: false, showPasswordEntry: true, showCodeEntry: false, showEmailEntry: false });
                 Alert.alert(i18n.t('screens')['emailVerification']['emailVerified'], i18n.t('screens')['emailVerification']['alertText'], [{

@@ -40,7 +40,7 @@ export default class Login extends Component {
         Keyboard.dismiss();
         this.setState({ showError: false, error: null, isLoading: true }, () => {
             ApiRequests.post("user/login", {}, {
-                email: this.state.email.trim(),
+                email: this.state.email.trim().toLowerCase(),
                 password: this.state.password
             }, false).then(async (response) => {
                 if (response.data.verifiedEmail) {
@@ -53,7 +53,7 @@ export default class Login extends Component {
                     await Auth.setToken(response.data.token);
                     this.props.navigation.replace('NavigationRoutes');
                 } else {
-                    this.props.navigation.navigate("EmailVerification", { email: this.state.email.trim(), doesNotComeFromSignup: true })
+                    this.props.navigation.navigate("EmailVerification", { email: this.state.email.trim().toLowerCase(), doesNotComeFromSignup: true })
                 }
             }).catch((error) => {
                 this.setState({ password: "" })

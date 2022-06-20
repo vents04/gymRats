@@ -46,7 +46,7 @@ export default class PasswordRecovery extends Component {
 
     checkCode = () => {
         this.setState({ showError: true }, () => {
-            ApiRequests.get(`user/check-password-recovery-code?identifier=${this.state.identifier}&code=${this.state.code}`).then((response) => {
+            ApiRequests.get(`user/check-password-recovery-code?identifier=${this.state.identifier}&code=${this.state.code.trim().replace(" ", "")}`).then((response) => {
                 this.setState({ showError: false, showPasswordEntry: true, showCodeEntry: false, showEmailEntry: false });
             }).catch((error) => {
                 if (error.response) {
@@ -69,7 +69,7 @@ export default class PasswordRecovery extends Component {
     generatePasswordRecoveryCode = () => {
         this.setState({ showLoading: true }, () => {
             ApiRequests.post(`user/password-recovery-code`, {}, {
-                email: this.state.email
+                email: this.state.email.trim().toLowerCase()
             }, false).then((response) => {
                 this.setState({ identifier: response.data.identifier, showEmailEntry: false, showCodeEntry: true, showPasswordEntry: false })
             }).catch((error) => {

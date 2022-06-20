@@ -56,7 +56,7 @@ export default class Suggestions extends Component {
     postSuggestion = () => {
         this.setState({ showSending: true }, () => {
             ApiRequests.post(`user/suggestion`, {}, {
-                suggestion: this.state.suggestion
+                suggestion: this.state.suggestion.trim()
             }, true).then((response) => {
                 this.setState({ suggestion: "" });
                 this.getSuggestions();

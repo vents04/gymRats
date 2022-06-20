@@ -12,17 +12,17 @@ const MessagingService = {
     createChat: (personalTrainerId, clientId) => {
         return new Promise(async (resolve, reject) => {
             try {
-                const chat1 = await DbService.getOne(COLLECTIONS.CHATS, {personalTrainerId: mongoose.Types.ObjectId(personalTrainerId), clientId: mongoose.Types.ObjectId(clientId) });
+                const chat1 = await DbService.getOne(COLLECTIONS.CHATS, { personalTrainerId: mongoose.Types.ObjectId(personalTrainerId), clientId: mongoose.Types.ObjectId(clientId) });
                 let chat2 = null
                 if (!chat1) {
-                    
+
                     const personalTrainer2 = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, { userId: mongoose.Types.ObjectId(clientId) })
                     const personalTrainer = await DbService.getById(COLLECTIONS.PERSONAL_TRAINERS, personalTrainerId)
-                    if(personalTrainer2){
-                        chat2 = await DbService.getOne(COLLECTIONS.CHATS, {personalTrainerId: mongoose.Types.ObjectId(personalTrainer2._id), clientId: mongoose.Types.ObjectId(personalTrainer.userId)})
+                    if (personalTrainer2) {
+                        chat2 = await DbService.getOne(COLLECTIONS.CHATS, { personalTrainerId: mongoose.Types.ObjectId(personalTrainer2._id), clientId: mongoose.Types.ObjectId(personalTrainer.userId) })
                     }
 
-                    if(!chat2){
+                    if (!chat2) {
                         const chat = new Chat({
                             personalTrainerId: mongoose.Types.ObjectId(personalTrainerId),
                             clientId: mongoose.Types.ObjectId(clientId)

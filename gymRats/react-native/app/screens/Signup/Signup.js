@@ -31,12 +31,12 @@ export default class Signup extends Component {
     signup = () => {
         this.setState({ showError: false, error: null, isLoading: true }, () => {
             ApiRequests.post("user/signup", {}, {
-                firstName: this.state.firstName,
-                lastName: this.state.lastName,
-                email: this.state.email.trim(),
+                firstName: this.state.firstName.trim(),
+                lastName: this.state.lastName.trim(),
+                email: this.state.email.trim().toLowerCase(),
                 password: this.state.password
             }, false).then((response) => {
-                this.props.navigation.navigate("EmailVerification", { email: this.state.email });
+                this.props.navigation.navigate("EmailVerification", { email: this.state.email.trim().toLowerCase() });
             }).catch((error) => {
                 if (error.response) {
                     if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR && !error.response.data.includes("<html>")) {
