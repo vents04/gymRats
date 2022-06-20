@@ -43,11 +43,11 @@
       },
       "bundleIdentifier": "com.gymrats.android",
       "usesIcloudStorage": true,
-      "icon": "./assets/notifications/ic_stat_icon.png"
+      "icon": "./assets/img/ic_launcher_icon.png"
     },
     "android": {
       "useNextNotificationsApi": true,
-      "icon": "./assets/notifications/ic_stat_icon.png",
+      "icon": "./assets/img/ic_launcher_icon.png",
       "permissions": [
         "android.permission.CAMERA",
         "android.permission.READ_EXTERNAL_STORAGE",
