@@ -263,7 +263,7 @@ export default class Logbook extends Component {
     }
 
     addWorkoutTemplate = () => {
-        let payload = { exercises: [], name: this.state.templateTitle };
+        let payload = { exercises: [], name: this.state.templateTitle.trim() };
         for (let exercise of this.state.exercises) {
             payload.exercises.push(exercise.exerciseId);
         }
@@ -587,7 +587,8 @@ export default class Logbook extends Component {
                                                                         style={styles.setContainer}
                                                                         contentContainerStyle={{ alignItems: "center", paddingVertical: 5 }}>
                                                                         <View style={styles.setContainerItem}>
-                                                                            <TextInput style={styles.setContainerItemInput}
+                                                                            <TextInput
+                                                                                style={styles.setContainerItemInput}
                                                                                 keyboardType='numeric'
                                                                                 value={set.weight.amount && set.weight.amount != undefined ? set.weight.amount.toString() : null}
                                                                                 onChangeText={(val) => {
