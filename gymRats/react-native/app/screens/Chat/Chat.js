@@ -221,7 +221,7 @@ export default class Chat extends Component {
             if (nextAppState == 'background') {
                 console.log("background ksdl;kas;ldkasl;kdl;askdl;kal;")
             } else if (nextAppState == 'active') {
-                this.setState({ chat: null }, () => {
+                this.setState({ chat: null, hasReachedChatStart: false }, () => {
                     this.onFocusFunction()
                 });
             }
