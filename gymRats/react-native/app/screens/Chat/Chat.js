@@ -108,7 +108,6 @@ export default class Chat extends Component {
     }
 
     getChat = (id) => {
-        console.log("chat got!!!!")
         let lastMessageId = null;
         if (this.state.chat && this.state.chat.messages.length > 0) {
             lastMessageId = this.state.chat.messages[0]._id;
@@ -218,9 +217,7 @@ export default class Chat extends Component {
             this.onFocusFunction();
         })
         const backgroundListener = AppState.addEventListener('change', async nextAppState => {
-            if (nextAppState == 'background') {
-                console.log("background ksdl;kas;ldkasl;kdl;askdl;kal;")
-            } else if (nextAppState == 'active') {
+            if (nextAppState == 'active') {
                 this.setState({ chat: null, hasReachedChatStart: false }, () => {
                     this.onFocusFunction()
                 });

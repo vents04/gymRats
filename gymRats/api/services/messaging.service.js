@@ -71,12 +71,12 @@ const MessagingService = {
                 const nameSplitted = name.split(".");
                 const extension = mime.extension(mimeType);
                 console.log(__dirname)
-                console.log(NODE_ENVIRONMENT==NODE_ENVIRONMENTS.PRODUCTION 
+                console.log(NODE_ENVIRONMENT == NODE_ENVIRONMENTS.PRODUCTION
                     ? __dirname + "/../ugc/" + fileName + "." + extension
                     : __dirname + "\\..\\ugc\\" + fileName + "." + extension);
 
-                    
-                fs.writeFileSync(NODE_ENVIRONMENT==NODE_ENVIRONMENTS.PRODUCTION 
+
+                fs.writeFileSync(NODE_ENVIRONMENT == NODE_ENVIRONMENTS.PRODUCTION
                     ? __dirname + "/../ugc/" + fileName + "." + extension
                     : __dirname + "\\..\\ugc\\" + fileName + "." + extension, fileContents);
                 //fs.writeFileSync("/../ugc/" + fileName + "." + extension, fileContents);
