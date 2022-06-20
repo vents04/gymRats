@@ -17,9 +17,9 @@ const MessagingService = {
                 if (!chat1) {
                     
                     const personalTrainer2 = await DbService.getOne(COLLECTIONS.PERSONAL_TRAINERS, { userId: mongoose.Types.ObjectId(clientId) })
-                    const client2 = await DbService.getById(COLLECTIONS.USERS, personalTrainerId)
+                    const personalTrainer = await DbService.getById(COLLECTIONS.PERSONAL_TRAINERS, personalTrainerId)
                     if(personalTrainer2){
-                        chat2 = await DbService.getOne(COLLECTIONS.CHATS, {personalTrainerId: mongoose.Types.ObjectId(personalTrainer2._id), clientId: mongoose.Types.ObjectId(client2._id)})
+                        chat2 = await DbService.getOne(COLLECTIONS.CHATS, {personalTrainerId: mongoose.Types.ObjectId(personalTrainer2._id), clientId: mongoose.Types.ObjectId(personalTrainer.userId)})
                     }
 
                     if(!chat2){
