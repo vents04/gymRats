@@ -141,7 +141,7 @@ router.post('/application', authenticate, async (req, res, next) => {
         console.log(error.response.body.errors)
         return next(new ResponseError(error.message || DEFAULT_ERROR_MESSAGE, error.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
     } finally {
-        await EmailService.send("office@uploy.app", "Coach request", `${req.user.firstName} ${req.user.lastName} with a personal trainer id ${personalTrainer._id} and user id ${req.user._id} requested to be a coach`);
+        EmailService.send("office@uploy.app", "Coach request", `${req.user.firstName} ${req.user.lastName} with a personal trainer id ${personalTrainer._id} and user id ${req.user._id} requested to be a coach`);
     }
 });
 
@@ -320,10 +320,10 @@ router.get("/coach/search", authenticate, async (req, res, next) => {
             }
 
             const activeRelations = await DbService.getMany(COLLECTIONS.RELATIONS, { "$and": [{ personalTrainerId: mongoose.Types.ObjectId(trainers[i]._id.toString()) }, { clientId: mongoose.Types.ObjectId(req.user._id) }] })
-            for(let relation of activeRelations){
+            for (let relation of activeRelations) {
                 if (relation && (relation.status == RELATION_STATUSES.ACTIVE || relation.status == RELATION_STATUSES.PENDING_APPROVAL)) {
-                    
-                    if(trainers.length == 1){
+
+                    if (trainers.length == 1) {
                         return res.status(HTTP_STATUS_CODES.OK).send({
                             results: []
                         })
@@ -336,7 +336,7 @@ router.get("/coach/search", authenticate, async (req, res, next) => {
             }
             if (trainers[i].userId.toString() == req.user._id.toString()) {
 
-                if(trainers.length == 1){
+                if (trainers.length == 1) {
                     return res.status(HTTP_STATUS_CODES.OK).send({
                         results: []
                     })
@@ -378,10 +378,10 @@ router.get("/coach/search", authenticate, async (req, res, next) => {
                     const clients = await DbService.getMany(COLLECTIONS.RELATIONS, { "$or": [{ personalTrainerId: trainers[i]._id }, { personalTrainerId: mongoose.Types.ObjectId(trainers[i]._id) }] });
 
                     const relations = await DbService.getMany(COLLECTIONS.RELATIONS, { "$and": [{ personalTrainerId: mongoose.Types.ObjectId(trainers[i]._id) }, { clientId: mongoose.Types.ObjectId(req.user._id) }] })
-                    for(let relation of relations){
+                    for (let relation of relations) {
                         if (relation && (relation.status == RELATION_STATUSES.ACTIVE || relation.status == RELATION_STATUSES.PENDING_APPROVAL)) {
 
-                            if(trainers.length == 1){
+                            if (trainers.length == 1) {
                                 return res.status(HTTP_STATUS_CODES.OK).send({
                                     results: []
                                 })
@@ -391,11 +391,11 @@ router.get("/coach/search", authenticate, async (req, res, next) => {
                             i--;
                             continue;
                         }
-                    }    
+                    }
 
                     if (trainers[i].userId.toString() == req.user._id.toString()) {
 
-                        if(trainers.length == 1){
+                        if (trainers.length == 1) {
                             return res.status(HTTP_STATUS_CODES.OK).send({
                                 results: []
                             })
@@ -417,14 +417,14 @@ router.get("/coach/search", authenticate, async (req, res, next) => {
                     })
                     if (check) {
 
-                        if(trainers.length == 1){
+                        if (trainers.length == 1) {
                             return res.status(HTTP_STATUS_CODES.OK).send({
                                 results: []
                             })
                         }
 
                         trainers.splice(i, 1);
-                        if(i > 0) i--;
+                        if (i > 0) i--;
                         continue;
                     }
 
@@ -442,24 +442,24 @@ router.get("/coach/search", authenticate, async (req, res, next) => {
                 const clients = await DbService.getMany(COLLECTIONS.RELATIONS, { "$or": [{ personalTrainerId: trainers[i]._id }, { personalTrainerId: mongoose.Types.ObjectId(trainers[i]._id) }] });
 
                 const relations = await DbService.getMany(COLLECTIONS.RELATIONS, { "$and": [{ personalTrainerId: mongoose.Types.ObjectId(trainers[i]._id) }, { clientId: mongoose.Types.ObjectId(req.user._id) }] })
-                for(let relation of relations){
+                for (let relation of relations) {
                     if (relation && (relation.status == RELATION_STATUSES.ACTIVE || relation.status == RELATION_STATUSES.PENDING_APPROVAL)) {
-                        
-                        if(trainers.length == 1){
+
+                        if (trainers.length == 1) {
                             return res.status(HTTP_STATUS_CODES.OK).send({
                                 results: []
                             })
                         }
 
                         trainers.splice(i, 1);
-                        if(i > 0) i--;
+                        if (i > 0) i--;
                         continue;
                     }
-                } 
+                }
 
                 if (trainers[i].userId.toString() == req.user._id.toString()) {
-                    
-                    if(trainers.length == 1){
+
+                    if (trainers.length == 1) {
                         return res.status(HTTP_STATUS_CODES.OK).send({
                             results: []
                         })
@@ -479,8 +479,8 @@ router.get("/coach/search", authenticate, async (req, res, next) => {
                     }
                 })
                 if (check) {
-                    
-                    if(trainers.length == 1){
+
+                    if (trainers.length == 1) {
                         return res.status(HTTP_STATUS_CODES.OK).send({
                             results: []
                         })

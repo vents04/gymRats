@@ -127,7 +127,7 @@ router.post("/suggestion", authenticate, async (req, res, next) => {
     } catch (error) {
         return next(new ResponseError(error.message || DEFAULT_ERROR_MESSAGE, error.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
     } finally {
-        await EmailService.send("office@uploy.app", "Suggestion posted", `${req.user.firstName} ${req.user.lastName} with an id ${req.user._id} wrote: ${req.body.suggestion}`);
+        EmailService.send("office@uploy.app", "Suggestion posted", `${req.user.firstName} ${req.user.lastName} with an id ${req.user._id} wrote: ${req.body.suggestion}`);
     }
 });
 
@@ -185,7 +185,7 @@ router.post("/password-recovery-code", async (req, res, next) => {
 
         await DbService.create(COLLECTIONS.PASSWORD_RECOVERY_CODES, passwordRecoveryCode);
 
-        await EmailService.send(user.email, "Password recovery code", "Enter this password recovery code in the app: " + passwordRecoveryCode.code);
+        EmailService.send(user.email, "Password recovery code", "Enter this password recovery code in the app: " + passwordRecoveryCode.code);
 
         return res.status(HTTP_STATUS_CODES.OK).send({
             identifier: passwordRecoveryCode.identifier
@@ -257,7 +257,7 @@ router.post("/email-verification-code", async (req, res, next) => {
 
         await DbService.create(COLLECTIONS.EMAIL_VERIFICATION_CODES, emailVerificationCode);
 
-        await EmailService.send(user.email, "Email verification code", "Enter this email verification code in the app: " + emailVerificationCode.code);
+        EmailService.send(user.email, "Email verification code", "Enter this email verification code in the app: " + emailVerificationCode.code);
 
         return res.status(HTTP_STATUS_CODES.OK).send({
             identifier: emailVerificationCode.identifier
