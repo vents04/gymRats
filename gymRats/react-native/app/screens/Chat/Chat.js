@@ -83,7 +83,12 @@ export default class Chat extends Component {
             if (chat && chat.messages) {
                 this.state.chat.messages.push(data.message)
                 this.setState({ chat }, () => {
-                    this.scrollView.current.scrollToEnd({ animated: true });
+                    const interval = setInterval(() => {
+                        if (this.scrollView.current) {
+                            this.scrollView.current.scrollToEnd({ animated: true });
+                            clearInterval(interval);
+                        }
+                    }, 50)
                     this.updateSeenStatus();
                 });
             }
@@ -111,7 +116,12 @@ export default class Chat extends Component {
         if (!lastMessageId) {
             ApiRequests.get(`chat/${id}`, {}, true).then((response) => {
                 this.setState({ chat: response.data.chat }, () => {
-                    this.scrollView.current.scrollToEnd({ animated: true });
+                    const interval = setInterval(() => {
+                        if (this.scrollView.current) {
+                            this.scrollView.current.scrollToEnd({ animated: true });
+                            clearInterval(interval);
+                        }
+                    }, 50)
                 });
             }).catch((error) => {
                 if (error.response) {
@@ -188,7 +198,7 @@ export default class Chat extends Component {
     componentDidMount() {
         this.joinRooms();
         BackHandler.addEventListener("hardwareBackPress", this.backAction);
-        
+
         const interval = setInterval(() => {
             if (this.scrollView.current) {
                 this.scrollView.current.scrollToEnd({ animated: true });
@@ -196,7 +206,12 @@ export default class Chat extends Component {
             }
         }, 50)
         this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
-            this.scrollView.current.scrollToEnd({ animated: true });
+            const interval = setInterval(() => {
+                if (this.scrollView.current) {
+                    this.scrollView.current.scrollToEnd({ animated: true });
+                    clearInterval(interval);
+                }
+            }, 50)
         });
 
         this.focusListener = this.props.navigation.addListener('focus', () => {
@@ -206,7 +221,7 @@ export default class Chat extends Component {
             if (nextAppState == 'background') {
                 console.log("background ksdl;kas;ldkasl;kdl;askdl;kal;")
             } else if (nextAppState == 'active') {
-                this.setState({ chat: null}, () => {
+                this.setState({ chat: null }, () => {
                     this.onFocusFunction()
                 });
             }

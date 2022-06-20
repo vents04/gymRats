@@ -240,6 +240,15 @@ mongo.connect();
     }
 })();*/
 
+const notificationMessages = {
+    en: {
+        fileMessage: "File message"
+    },
+    bg: {
+        fileMessage: "Файлово съобщение"
+    }
+}
+
 io.on("connection", (socket) => {
     console.log("connected", socket.id)
     socket.on("connect_error", (err) => {
@@ -261,7 +270,7 @@ io.on("connection", (socket) => {
                     if (room.toString() === chat._id.toString()) {
                         shouldJoin = false;
                     }
-                  });
+                });
 
                 if (shouldJoin) {
                     socket.join(chat._id.toString());
@@ -280,36 +289,39 @@ io.on("connection", (socket) => {
             io.to(messageInfo.messageInfo.chatId).emit("receive-message", { message });
             console.log("mina")
             io.to(messageInfo.messageInfo.chatId).emit("update-last-message", { message });
-            /*(async function () {
-                const chat = await DbService.getById(COLLECTIONS.CHATS, chatId);
+            (async function () {
+                const chat = await DbService.getById(COLLECTIONS.CHATS, messageInfo.messageInfo.chatId);
                 if (chat.status == CHAT_STATUSES.ACTIVE) {
                     let oppositeUser = null;
                     let senderUser = null;
                     if (chat.clientId.toString() == messageInfo.messageInfo.senderId.toString()) {
                         let personalTrainer = await DbService.getById(COLLECTIONS.PERSONAL_TRAINERS, chat.personalTrainerId);
-                        if (personalTrainer) oppositeUser = await DbService.getById(COLLECTIONS.USERS, personalTrainer.userId);
+                        if (personalTrainer) {
+                            oppositeUser = await DbService.getById(COLLECTIONS.USERS, personalTrainer.userId);
+                            senderUser = await DbService.getById(COLLECTIONS.USERS, chat.clientId);
+                        }
                     } else {
                         oppositeUser = await DbService.getById(COLLECTIONS.USERS, chat.clientId);
-                    }
-                    if (chat.clientId.toString() == messageInfo.messageInfo.senderId.toString()) {
-                        senderUser = await DbService.getById(COLLECTIONS.USERS, chat.clientId);
-                    } else {
                         let personalTrainer = await DbService.getById(COLLECTIONS.PERSONAL_TRAINERS, chat.personalTrainerId);
-                        if (personalTrainer) senderUser = await DbService.getById(COLLECTIONS.USERS, personalTrainer.userId);
+                        if (personalTrainer) {
+                            senderUser = await DbService.getById(COLLECTIONS.USERS, personalTrainer.userId);
+                        }
                     }
-                    if (oppositeUser) {
-                        const expoPushTokens = await NotificationsService.getExpoPushTokensByUserId(senderUser._id);
-                        console.log("eto gi", expoPushTokens, senderUser.firstName);
+                    if (oppositeUser && senderUser) {
+                        const expoPushTokens = await NotificationsService.getExpoPushTokensByUserId(oppositeUser._id);
+                        console.log("eto gi", expoPushTokens, oppositeUser.firstName);
                         for (let expoPushToken of expoPushTokens) {
-                            await NotificationsService.sendChatNotification(expoPushToken, {
-                                title: "Message from " + senderUser.firstName,
-                                body: messageInfo.messageInfo.message,
-                                data: { chatId }
-                            });
+                            if (expoPushToken) {
+                                await NotificationsService.sendChatNotification(expoPushToken, {
+                                    title: senderUser.firstName,
+                                    body: messageInfo.messageInfo.message,
+                                    data: { chatId: messageInfo.messageInfo.chatId }
+                                });
+                            }
                         }
                     }
                 }
-            })();*/
+            })();
         } catch (err) {
             console.log(err);
         }
@@ -320,6 +332,41 @@ io.on("connection", (socket) => {
             const message = await MessagingService.sendFileMessage(messageInfo.messageInfo.chatId, messageInfo.messageInfo.senderId, messageInfo.messageInfo.base64, messageInfo.messageInfo.name, messageInfo.messageInfo.size, messageInfo.messageInfo.mimeType);
             io.to(messageInfo.messageInfo.chatId).emit("receive-message", { message });
             io.to(messageInfo.messageInfo.chatId).emit("update-last-message", { message });
+            (async function () {
+                const chat = await DbService.getById(COLLECTIONS.CHATS, messageInfo.messageInfo.chatId);
+                if (chat.status == CHAT_STATUSES.ACTIVE) {
+                    let oppositeUser = null;
+                    let senderUser = null;
+                    if (chat.clientId.toString() == messageInfo.messageInfo.senderId.toString()) {
+                        let personalTrainer = await DbService.getById(COLLECTIONS.PERSONAL_TRAINERS, chat.personalTrainerId);
+                        if (personalTrainer) {
+                            oppositeUser = await DbService.getById(COLLECTIONS.USERS, personalTrainer.userId);
+                            senderUser = await DbService.getById(COLLECTIONS.USERS, chat.clientId);
+                        }
+                    } else {
+                        oppositeUser = await DbService.getById(COLLECTIONS.USERS, chat.clientId);
+                        let personalTrainer = await DbService.getById(COLLECTIONS.PERSONAL_TRAINERS, chat.personalTrainerId);
+                        if (personalTrainer) {
+                            senderUser = await DbService.getById(COLLECTIONS.USERS, personalTrainer.userId);
+                        }
+                    }
+                    if (oppositeUser && senderUser) {
+                        const expoPushTokens = await NotificationsService.getExpoPushTokensByUserId(oppositeUser._id);
+                        console.log("eto gi", expoPushTokens, oppositeUser.firstName);
+                        for (let expoPushToken of expoPushTokens) {
+                            if (expoPushToken) {
+                                await NotificationsService.sendChatNotification(expoPushToken, {
+                                    title: senderUser.firstName,
+                                    body: oppositeUser.language && Object.values(SUPPORTED_LANGUAGES).includes(oppositeUser.language)
+                                        ? notificationMessages[oppositeUser.language].fileMessage
+                                        : notificationMessages[SUPPORTED_LANGUAGES.ENGLISH].fileMessage,
+                                    data: { chatId: messageInfo.messageInfo.chatId }
+                                });
+                            }
+                        }
+                    }
+                }
+            })();
         } catch (err) {
             console.log(err);
         }
@@ -328,7 +375,7 @@ io.on("connection", (socket) => {
     socket.on('disconnectUser', function () {
         console.log("disconnected", socket.id)
         socket.disconnect();
-  
+
     });
 });
 
