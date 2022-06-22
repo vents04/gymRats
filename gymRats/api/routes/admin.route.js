@@ -1,4 +1,5 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const ResponseError = require('../errors/responseError');
 const { COLLECTIONS, ADMIN_STATUSES, HTTP_STATUS_CODES } = require('../global');
 const { adminAuthenticate } = require('../middlewares/authenticate');
@@ -12,10 +13,13 @@ router.post("/login", async (req, res, next) => {
     if (error) return next(new ResponseError(error.details[0].message, HTTP_STATUS_CODES.BAD_REQUEST));
 
     req.body.email = req.body.email.toLowerCase();
+    if (req.body.email.split('@')[1] != "uploy.app")
+        return next(new ResponseError("Email should end with uploy.app", HTTP_STATUS_CODES.BAD_REQUEST));
 
     try {
         const admin = await DbService.getOne(COLLECTIONS.ADMINS, { email: req.body.email });
         if (!admin) return next(new ResponseError("Admin not found", HTTP_STATUS_CODES.NOT_FOUND));
+        if (admin.status != ADMIN_STATUSES.ACTIVE) return next(new ResponseError("Admin status must be active to login", HTTP_STATUS_CODES.CONFLICT))
 
         const isPasswordValid = AuthenticationService.verifyPassword(req.body.password, admin.password);
         if (!isPasswordValid) return next(new ResponseError("Invalid credentials for login", HTTP_STATUS_CODES.BAD_REQUEST));

@@ -144,11 +144,14 @@ const DbService = {
         })
     },
 
-    getManyWithSort: function (collection, filter, sort, limit) {
+    getManyWithSort: function (collection, filter, sort) {
         return new Promise((resolve, reject) => {
             validateCollection(collection, reject);
             db.collection(collection).find(filter).sort(sort).toArray(function (err, cursor) {
-                if (err) return reject(new ResponseError(err.message || HTTP_STATUS_CODES.INTERNAL_SERVER));
+                if (err) {
+                    console.log(err);
+                    return reject(new ResponseError(err.message || HTTP_STATUS_CODES.INTERNAL_SERVER));
+                }
                 resolve(cursor);
             });
         })

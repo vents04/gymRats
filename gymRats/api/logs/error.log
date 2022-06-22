@@ -704,3 +704,27 @@
 {"level":"error","message":"Cannot read properties of undefined (reading 'createdDt')"}
 {"level":"error","message":"Cannot read properties of undefined (reading 'createdDt')"}
 {"level":"error","message":"Invalid id parameter/s"}
+{"level":"error","message":"jwt malformed"}
+{"level":"error","message":"Email is a required field"}
+{"level":"error","message":"Email is a required field"}
+{"level":"error","message":"Email is a required field"}
+{"level":"error","message":"Email is a required field"}
+{"level":"error","message":"Email is a required field"}
+{"level":"error","message":"Email is a required field"}
+{"level":"error","message":"Email is a required field"}
+{"level":"error","message":"Email is a required field"}
+{"level":"error","message":"Email is a required field"}
+{"level":"error","message":"Email is a required field"}
+{"level":"error","message":"Email is a required field"}
+{"level":"error","message":"Email is a required field"}
+{"level":"error","message":"Email is a required field"}
+{"level":"error","message":"Email is a required field"}
+{"level":"error","message":"Email should end with uploy.app"}
+{"level":"error","message":"Email should end with uploy.app"}
+{"level":"error","message":"Email should end with uploy.app"}
+{"level":"error","message":"Email should end with uploy.app"}
+{"level":"error","message":"Admin status must be active to login"}
+{"level":"error","message":"Email should end with uploy.app"}
+{"level":"error","message":"Email should end with uploy.app"}
+{"level":"error","message":"Email should end with uploy.app"}
+{"level":"error","message":"Invalid credentials for login"}
