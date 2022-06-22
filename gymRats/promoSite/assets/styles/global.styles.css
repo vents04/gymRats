@@ -28,6 +28,11 @@
   src: url("../fonts/Montserrat/Montserrat-Medium.ttf");
 }
 
+@font-face {
+  font-family: "Titan One";
+  src: url("../fonts/TitanOne/TitanOne-Regular.ttf");
+}
+
 * {
   box-sizing: border-box;
 }

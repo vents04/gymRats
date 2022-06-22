@@ -95,7 +95,7 @@ const itemPostValidation = (data, lng) => {
             "string.max": stringMaxError(lng, "title", 300),
             "any.required": anyRequiredError(lng, "title")
         }),
-        brand: Joi.string().min(1).max(300).required().messages({
+        brand: Joi.string().min(1).max(300).optional().messages({
             "string.base": stringBaseError(lng, "brand", 1),
             "string.empty": stringEmptyError(lng, "brand"),
             "string.min": stringMinError(lng, "brand", 1),
@@ -113,19 +113,19 @@ const itemPostValidation = (data, lng) => {
             "number.min": numberMinError(lng, "calories", 0),
             "any.required": anyRequiredError(lng, "calories"),
         }),
-        protein: Joi.number().integer().required().positive().allow(0).min(0).messages({
+        protein: Joi.number().required().positive().allow(0).min(0).messages({
             "number.integer": numberIntegerError(lng, "protein"),
             "number.positive": numberPositiveError(lng, "protein"),
             "number.min": numberMinError(lng, "protein", 0),
             "any.required": anyRequiredError(lng, "protein"),
         }),
-        carbs: Joi.number().integer().required().positive().allow(0).min(0).messages({
+        carbs: Joi.number().required().positive().allow(0).min(0).messages({
             "number.integer": numberIntegerError(lng, "carbs"),
             "number.positive": numberPositiveError(lng, "carbs"),
             "number.min": numberMinError(lng, "carbs", 0),
             "any.required": anyRequiredError(lng, "carbs"),
         }),
-        fats: Joi.number().integer().required().positive().allow(0).min(0).messages({
+        fats: Joi.number().required().positive().allow(0).min(0).messages({
             "number.integer": numberIntegerError(lng, "fats"),
             "number.positive": numberPositiveError(lng, "fats"),
             "number.min": numberMinError(lng, "fats", 0),

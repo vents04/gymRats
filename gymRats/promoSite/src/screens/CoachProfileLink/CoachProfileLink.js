@@ -4,12 +4,13 @@ import { useParams } from 'react-router';
 import './CoachProfileLink.css';
 
 import logo from '../../../assets/images/icon.png';
-import google from "../../../assets/images/badges/google.png"
-import apple from "../../../assets/images/badges/apple.svg"
 
 import ApiRequests from '../../classes/ApiRequests';
+import translations from '../../translations';
 
-export default function CoachProfileLink() {
+const badges = require.context("../../../assets/images/badges", true);
+
+export default function CoachProfileLink(props) {
     const { id } = useParams();
     const [coach, setCoach] = React.useState(null);
     const [showDownloadApp, setShowDownloadApp] = React.useState(false);
@@ -34,7 +35,7 @@ export default function CoachProfileLink() {
         <div className="coach-profile">
             <div className="coach-profile-logo-container">
                 <img className="coach-profile-logo" src={logo} alt="logo" />
-                <p className="coach-profile-logo-text">Gym Rats</p>
+                <p className="coach-profile-logo-text">{translations[props.language].coachProfile.logoText}</p>
             </div>
             {
                 coach
@@ -53,17 +54,17 @@ export default function CoachProfileLink() {
                         </div>
                         {
                             !showDownloadApp
-                                ? <button className='action-button' onClick={() => { openCoachProfileInApp() }}>Open profile in app</button>
+                                ? <button className='action-button' onClick={() => { openCoachProfileInApp() }}>{translations[props.language].coachProfile.linkToAppButton}</button>
                                 : <>
-                                    <p className='notation'>It looks like you have not installed Gym Rats on this device</p>
+                                    <p className='notation'>{translations[props.language].coachProfile.noAppIncentive}</p>
                                     <div className="badges-container">
-                                        <img className="google-badge" src={google} alt="google" />
-                                        <img className="apple-badge" src={apple} alt="apple" />
+                                        <img className="google-badge" src={badges(`./google-${props.language.toLowerCase()}.png`).default} alt="google" />
+                                        <img className="apple-badge" src={badges(`./apple-${props.language.toLowerCase()}.svg`).default} alt="apple" />
                                     </div>
                                 </>
                         }
                     </>
-                    : <p className="notation">Coach not found</p>
+                    : <p className="notation">{translations[props.language].coachProfile.coachNotFound}</p>
             }
         </div>
     )

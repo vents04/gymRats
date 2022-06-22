@@ -8,8 +8,8 @@ class App extends React.Component {
         return (
             <BrowserRouter>
                 <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/coach-profile/:id" element={<CoachProfileLink />} />
+                    <Route path="/" element={<Home language={this.props.language || "en"} />} />
+                    <Route path="/coach-profile/:id" element={<CoachProfileLink language={this.props.language || "en"} />} />
                 </Routes>
             </BrowserRouter>
         )
