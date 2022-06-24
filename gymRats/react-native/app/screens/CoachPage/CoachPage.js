@@ -76,6 +76,7 @@ export default class CoachPage extends Component {
     }
 
     render() {
+        console.log(this.props.route.params)
         return (
             <View style={globalStyles.safeAreaView}>
                 <View style={globalStyles.pageContainer}>
@@ -187,35 +188,41 @@ export default class CoachPage extends Component {
                                                 <Text style={[globalStyles.modalText, { textAlign: 'left' }]}>Reviews</Text>
                                                 {
                                                     this.props.route.params.coach.reviews.map((review, index) =>
-                                                        <View key={index} style={styles.coachResult}>
-                                                            <View style={styles.coachResultInline}>
-                                                                {
-                                                                    !review.clientInstance.profilePicture
-                                                                        ? <View style={styles.reviewProfilePictureContainer}>
-                                                                            <Text style={styles.reviewNoProfilePictureText}>
-                                                                                {review.clientInstance.firstName.charAt(0)}
-                                                                                {review.clientInstance.lastName.charAt(0)}
+                                                        <>
+                                                            {
+                                                                review.clientInstance
+                                                                    ? <View key={index} style={styles.coachResult}>
+                                                                        <View style={styles.coachResultInline}>
+                                                                            {
+                                                                                !review.clientInstance.profilePicture
+                                                                                    ? <View style={styles.reviewProfilePictureContainer}>
+                                                                                        <Text style={styles.reviewNoProfilePictureText}>
+                                                                                            {review.clientInstance.firstName.charAt(0)}
+                                                                                            {review.clientInstance.lastName.charAt(0)}
+                                                                                        </Text>
+                                                                                    </View>
+                                                                                    : <Image style={styles.reviewProfilePictureContainer}
+                                                                                        source={{ uri: review.clientInstance.profilePicture }} />
+                                                                            }
+                                                                            <Text style={styles.reviewNames}>
+                                                                                {review.clientInstance.firstName}
+                                                                                &nbsp;
+                                                                                {review.clientInstance.lastName}
                                                                             </Text>
                                                                         </View>
-                                                                        : <Image style={styles.reviewProfilePictureContainer}
-                                                                            source={{ uri: review.clientInstance.profilePicture }} />
-                                                                }
-                                                                <Text style={styles.reviewNames}>
-                                                                    {review.clientInstance.firstName}
-                                                                    &nbsp;
-                                                                    {review.clientInstance.lastName}
-                                                                </Text>
-                                                            </View>
-                                                            <View style={[styles.coachResultInline, { marginTop: 8 }]}>
-                                                                <Ionicons name="md-star" size={20} color="#1f6cb0" />
-                                                                <Text style={styles.coachResultReviews}>{review.rating}/5</Text>
-                                                            </View>
-                                                            {
-                                                                review.review && review.review.length > 0
-                                                                    ? <Text style={[globalStyles.notation, { marginTop: 8 }]}>{review.review}</Text>
+                                                                        <View style={[styles.coachResultInline, { marginTop: 8 }]}>
+                                                                            <Ionicons name="md-star" size={20} color="#1f6cb0" />
+                                                                            <Text style={styles.coachResultReviews}>{review.rating}/5</Text>
+                                                                        </View>
+                                                                        {
+                                                                            review.review && review.review.length > 0
+                                                                                ? <Text style={[globalStyles.notation, { marginTop: 8 }]}>{review.review}</Text>
+                                                                                : null
+                                                                        }
+                                                                    </View>
                                                                     : null
                                                             }
-                                                        </View>
+                                                        </>
                                                     )
                                                 }
                                             </ScrollView>

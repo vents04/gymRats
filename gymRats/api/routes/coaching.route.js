@@ -653,11 +653,25 @@ router.get("/coach/:id", async (req, res, next) => {
         }
 
         coach.rating = rating;
-        coach.reviews = reviews;
         coach.clients = relations.length;
 
+        let finalReviews = [];
+
+        for (let review of reviews) {
+            const relation = await DbService.getById(COLLECTIONS.RELATIONS, review.relationId);
+            if (relation) {
+                const client = await DbService.getById(COLLECTIONS.USERS, relation.clientId);
+                if (client) {
+                    review.clientInstance = client;
+                    finalReviews.push(review);
+                }
+            }
+
+        }
+
+        coach.reviews = finalReviews;
+
         const user = await DbService.getOne(COLLECTIONS.USERS, { "$or": [{ _id: mongoose.Types.ObjectId(coach.userId) }, { _id: coach.userId }] });
-        console.log(user)
         if (!user) return next(new ResponseError("User was not found", HTTP_STATUS_CODES.NOT_FOUND, 39));
 
         coach.user = user;

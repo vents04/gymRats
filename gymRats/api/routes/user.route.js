@@ -132,7 +132,6 @@ router.post("/suggestion", authenticate, async (req, res, next) => {
 });
 
 router.get("/", authenticate, async (req, res, next) => {
-    console.log(req.headers);
     return res.status(HTTP_STATUS_CODES.OK).send({
         user: req.user
     })

@@ -187,7 +187,7 @@ export default class CoachSearch extends Component {
                                             this.props.navigation.navigate("CoachPage", { coach: result })
                                         }}>
                                             {
-                                                result.hasOwnProperty("user")
+                                                result.user
                                                     ? <View style={styles.coachResult}>
                                                         <View style={styles.coachResultInline}>
                                                             {

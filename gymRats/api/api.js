@@ -39,7 +39,7 @@ app
 mongo.connect();
 
 (async function () {
-    await StatsService.getAveragePeriodBetweenLogins();
+    //await StatsService.getAveragePeriodBetweenLogins();
 })();
 
 const notificationMessages = {

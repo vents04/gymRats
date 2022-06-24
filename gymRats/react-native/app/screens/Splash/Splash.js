@@ -3,6 +3,7 @@ import { ActivityIndicator, Image, View, Text, Alert } from 'react-native';
 import * as Device from 'expo-device';
 import { default as AsyncStorage } from '@react-native-async-storage/async-storage';
 import i18n from 'i18n-js'
+import * as Network from 'expo-network';
 
 import Auth from '../../classes/Auth';
 import User from '../../classes/User';
@@ -56,12 +57,21 @@ export default class Splash extends Component {
 
     componentDidMount() {
         setTimeout(async () => {
+            const token = await Auth.getToken();
+            const networkState = await Network.getNetworkStateAsync();
+            if ((!networkState.isConnected || !networkState.isInternetReachable) && token) {
+                this.props.navigation.reset({
+                    index: 0,
+                    routes: [{ name: 'NavigationRoutes' }],
+                });
+                return;
+            }
+            console.log("eqwkrl;kqwer;kl")
             let validationEndpointResponse = null;
             let isAuthenticated = false;
             let hasUnverifiedEmail = false;
             let user = {};
             try {
-                const token = await Auth.getToken();
                 if (token) {
                     validationEndpointResponse = await User.validateToken(token);
                     isAuthenticated = validationEndpointResponse.valid;
