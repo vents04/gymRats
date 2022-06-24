@@ -3,7 +3,9 @@ module.exports = {
         home: {
             logoText: "GYM RATS",
             incentive: ["Progress made", "easy"],
-            downloadAndroidText: ["Or download directly from", "here", "for Android devices"]
+            downloadAndroidText: ["Or download directly from", "here", "for Android devices"],
+            joinTheWaitlist: "Join the waitlist",
+            blogText: ["or read more about Gym Rats from", "here"]
         },
         coachProfile: {
             logoText: "GYM RATS",
@@ -16,7 +18,9 @@ module.exports = {
         home: {
             logoText: "GYM RATS",
             incentive: ["Прогресът", "е улеснен"],
-            downloadAndroidText: ["Или изтеглете директно от", "тук", "за Android устройства"]
+            downloadAndroidText: ["Или изтеглете директно от", "тук", "за Android устройства"],
+            joinTheWaitlist: "Присъедини се към чакащите",
+            blogText: ["или прочетете повече за Gym Rats", "оттук"]
         },
         coachProfile: {
             logoText: "GYM RATS",
