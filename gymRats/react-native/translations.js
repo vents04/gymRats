@@ -21,7 +21,7 @@ module.exports = {
                 goToLogin: "Go to Login"
             },
             calendar: {
-                calendarControllerBack: "Previous",
+                calendarControllerBack: "Back",
                 calendarControllerNext: "Next",
                 addData: "Add data",
                 noData: "No data added for this date",

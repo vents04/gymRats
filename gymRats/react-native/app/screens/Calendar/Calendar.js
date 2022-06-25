@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import { DataManager } from "../../classes/DataManager";
 
-import { Alert, BackHandler, Dimensions, Platform, Pressable, RefreshControl, ScrollView, Text, TouchableHighlight, TouchableNativeFeedback, TouchableWithoutFeedback, View } from 'react-native';
+import { Alert, BackHandler, Dimensions, Modal, Platform, Pressable, RefreshControl, ScrollView, Text, TouchableHighlight, TouchableNativeFeedback, TouchableWithoutFeedback, View } from 'react-native';
 import BottomSheet from "react-native-gesture-bottom-sheet";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import GestureRecognizer, {
@@ -47,7 +47,8 @@ export default class Calendar extends Component {
             timezoneOffset: null,
             showCalendarPicker: false,
             cardsRefreshing: false,
-            calendarActionButtonBucket: null
+            calendarActionButtonBucket: null,
+            iosCurrentSelectedDate: null
         }
 
         this.focusListener;
@@ -171,7 +172,7 @@ export default class Calendar extends Component {
             }}>
             <View style={globalStyles.pageContainer}>
                 {
-                    this.state.showCalendarPicker
+                    this.state.showCalendarPicker && Platform.OS == "android"
                         ? <DateTimePicker
                             testID="dateTimePicker"
                             value={new Date(this.state.selectedDate)}
@@ -182,7 +183,59 @@ export default class Calendar extends Component {
                                 })
                             }}
                         />
-                        : null
+                        : this.state.showCalendarPicker && Platform.OS == "ios"
+                            ? <Modal
+                                animationType="slide"
+                                transparent={true}
+                                visible={true}>
+                                <View style={globalStyles.centeredView}>
+                                    <View style={globalStyles.modalView}>
+                                        <Text style={globalStyles.modalTitle}>Select a date</Text>
+                                        <DateTimePicker
+                                            testID="dateTimePicker"
+                                            value={new Date(this.state.iosCurrentSelectedDate)}
+                                            mode={"date"}
+                                            display={"spinner"}
+                                            onChange={(event, selectedDate) => {
+                                                this.setState({ iosCurrentSelectedDate: new Date(selectedDate) })
+                                            }}
+                                            style={{
+                                                width: "100%",
+                                            }}
+                                        />
+                                        <View style={globalStyles.modalActionsContainer}>
+                                            <Pressable onPress={() => {
+                                                this.setState({ showCalendarPicker: false })
+                                            }} style={({ pressed }) => [
+                                                globalStyles.confirmationBoxOption,
+                                                {
+                                                    opacity: pressed ? 0.1 : 1,
+                                                }
+                                            ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }}>
+                                                <Text style={globalStyles.modalActionTitle}>{i18n.t('components')['confirmationBox']['denial']}</Text>
+                                            </Pressable>
+                                            <Pressable style={({ pressed }) => [
+                                                globalStyles.confirmationBoxOption,
+                                                {
+                                                    opacity: pressed ? 0.1 : 1,
+                                                }
+                                            ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }}
+                                                onPress={() => {
+                                                    this.setState({ showCalendarPicker: false }, () => {
+                                                        if (this.state.iosCurrentSelectedDate) {
+                                                            this.setState({ selectedDate: this.state.iosCurrentSelectedDate });
+                                                        }
+                                                    })
+                                                }}>
+                                                <Text style={[globalStyles.modalActionTitle, {
+                                                    color: "#1f6cb0"
+                                                }]}>{i18n.t('components')['confirmationBox']['affirmation']}</Text>
+                                            </Pressable>
+                                        </View>
+                                    </View>
+                                </View>
+                            </Modal>
+                            : null
                 }
                 <LogoBar />
                 <View style={globalStyles.topbarIconContainer}>
@@ -239,7 +292,7 @@ export default class Calendar extends Component {
                                     <Entypo name="chevron-left" size={14} color="#999" style={{ marginRight: 5 }} />
                                     <Text style={styles.calendarControllerText}>{i18n.t('screens')['calendar']['calendarControllerBack']}</Text>
                                 </Pressable>
-                                <TouchableWithoutFeedback onPress={() => { this.setState({ showCalendarPicker: true }) }}>
+                                <TouchableWithoutFeedback onPress={() => { this.setState({ showCalendarPicker: true, iosCurrentSelectedDate: new Date(this.state.selectedDate || new Date()) }) }}>
                                     <Text style={styles.calendarCurrentDate}>
                                         {this.state.selectedDate.getDate()}
                                         .

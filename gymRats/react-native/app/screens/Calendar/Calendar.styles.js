@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { Dimensions, StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
     calendarControllersContainer: {
@@ -28,7 +28,19 @@ export default StyleSheet.create({
         fontSize: 12,
         flex: 1,
         textAlign: "center",
-        padding: 8
+        padding: 8,
+    },
+    calendarIosCurrentDateContainer: {
+        position: "absolute",
+        width: "100%",
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    calendarIosDatePicker: {
+        width: Dimensions.get("screen").width / 4,
+        alignItems: "flex-start",
     },
     bottomSheetTopbar: {
         padding: 32,

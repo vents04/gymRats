@@ -258,5 +258,10 @@ export default StyleSheet.create({
         fontFamily: "MainMedium",
         fontSize: 14,
         color: "#1f6cb0"
+    },
+    confirmationBoxOption: {
+        width: '50%',
+        display: 'flex',
+        alignItems: 'center'
     }
 });
