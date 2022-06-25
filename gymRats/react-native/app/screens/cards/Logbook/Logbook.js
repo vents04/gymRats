@@ -366,7 +366,7 @@ export default class Logbook extends Component {
                                                 opacity: pressed ? 0.1 : 1,
                                             }
                                         ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
-                                            this.setState({ hasDeniedWorkoutTemplateCreation: true, showWorkoutTemplateModal: false })
+                                            this.setState({ showWorkoutTemplateModal: false })
                                             this.saveChanges();
                                         }}>
                                             <Text style={[globalStyles.modalActionTitle, {
@@ -382,6 +382,22 @@ export default class Logbook extends Component {
                                             this.addWorkoutTemplate();
                                         }}>
                                             <Text style={globalStyles.modalActionTitle}>{i18n.t('screens')['logbook']['workoutTemplateAdd']}</Text>
+                                        </Pressable>
+                                    </View>
+                                    <View style={globalStyles.modalActionsContainer}>
+                                        <Pressable style={({ pressed }) => [
+                                            styles.option,
+                                            {
+                                                opacity: pressed ? 0.1 : 1,
+                                                flex: 2
+                                            }
+                                        ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
+                                            this.setState({ hasDeniedWorkoutTemplateCreation: true, showWorkoutTemplateModal: false })
+                                            this.saveChanges();
+                                        }}>
+                                            <Text style={[globalStyles.modalActionTitle, {
+                                                color: "#1f6cb0"
+                                            }]}>{i18n.t('screens')['logbook']['workoutTemplateDeny']}</Text>
                                         </Pressable>
                                     </View>
                                 </View>
