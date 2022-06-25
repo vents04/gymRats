@@ -48,6 +48,8 @@ export default class Logbook extends Component {
         this.focusListener;
 
         this.backHandler;
+
+        this.scrollView = React.createRef();
     }
 
     backAction = () => {
@@ -98,7 +100,9 @@ export default class Logbook extends Component {
                             duration: undefined
                         }]
                     });
-                    this.setState({ exercises: exercises, hasChanges: true });
+                    this.setState({ exercises: exercises, hasChanges: true }, () => {
+                        this.scrollView.current.scrollToEnd({ animated: true });
+                    });
                 } else if (this.props.route.params.data) {
                     this.getSession(this.props.route.params.date);
                 } else if (this.state.exercises.length == 0) {
@@ -192,7 +196,9 @@ export default class Logbook extends Component {
     addSet = (exerciseId) => {
         this.setState({ hasChanges: true });
         const exercises = this.state.exercises;
+        let index = 0;
         for (let exercise of exercises) {
+            index++;
             if (exercise.exerciseId == exerciseId) {
                 exercise.sets.push({
                     reps: exercise.sets.length > 0 ? exercise.sets[exercise.sets.length - 1].reps : 0,
@@ -202,7 +208,11 @@ export default class Logbook extends Component {
                     },
                     duration: exercise.sets.length > 0 ? exercise.sets[exercise.sets.length - 1].duration : undefined,
                 })
-                this.setState({ exercises: exercises });
+                this.setState({ exercises: exercises }, () => {
+                    if (index == exercises.length) {
+                        this.scrollView.current.scrollToEnd({ animated: true });
+                    }
+                });
                 return;
             }
         }
@@ -554,7 +564,7 @@ export default class Logbook extends Component {
                                 <Ionicons name="add-sharp" size={35} color={cardColors.logbook} />
                             </Pressable>
                         </View>
-                        <KeyboardAwareScrollView style={globalStyles.fillEmptySpace}>
+                        <KeyboardAwareScrollView style={globalStyles.fillEmptySpace} ref={this.scrollView}>
                             {
                                 this.state.exercises.length == 0
                                     ? <Text style={globalStyles.notation}>{i18n.t('screens')['logbook']['noExercisesAdded']}</Text>
