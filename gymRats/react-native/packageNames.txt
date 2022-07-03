@@ -1,0 +1,3 @@
+android (not huawei): com.gymrats.android
+android (huawei): com.uploy.gymrats
+ios: com.uploy.gymrats

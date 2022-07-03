@@ -2,7 +2,7 @@
   "expo": {
     "name": "Gym Rats",
     "slug": "gym-rats",
-    "version": "1.0.0",
+    "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./assets/img/ic_launcher_icon.png",
     "scheme": "gymrats",
@@ -41,11 +41,13 @@
         "NSCameraUsageDescription": "Allow $(PRODUCT_NAME) to access your camera",
         "NSMicrophoneUsageDescription": "Allow $(PRODUCT_NAME) to access your microphone"
       },
-      "bundleIdentifier": "com.gymrats.android",
+      "bundleIdentifier": "com.uploy.gymrats",
       "usesIcloudStorage": true,
-      "icon": "./assets/img/ic_launcher_icon.png"
+      "icon": "./assets/img/ic_launcher_icon.png",
+      "buildNumber": "1.0.2"
     },
     "android": {
+      "versionCode": 2,
       "useNextNotificationsApi": true,
       "icon": "./assets/img/ic_launcher_icon.png",
       "permissions": [
