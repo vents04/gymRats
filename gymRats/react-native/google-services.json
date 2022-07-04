@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "705441606820",
-    "project_id": "gym-rats-5a84b",
-    "storage_bucket": "gym-rats-5a84b.appspot.com"
+    "project_number": "594433492064",
+    "project_id": "gym-rats-fc649",
+    "storage_bucket": "gym-rats-fc649.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:705441606820:android:7f1226841fcfbcd4cc8a31",
+        "mobilesdk_app_id": "1:594433492064:android:ed854b6809879e4e2a2f05",
         "android_client_info": {
-          "package_name": "com.gymrats.android"
+          "package_name": "com.uploy.gymrats"
         }
       },
       "oauth_client": [
         {
-          "client_id": "705441606820-1vrugksfede8n6hf3tdira8q1bph19ak.apps.googleusercontent.com",
+          "client_id": "594433492064-9421v56m5pku0vqlf811ru0gi9orkt2f.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCRM0MLgS2uE063QMxVzi7rJjWoXdFW4kU"
+          "current_key": "AIzaSyCNtsoqRGnHv_ttFx1VSn3Z5iPLzPETMMk"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "705441606820-1vrugksfede8n6hf3tdira8q1bph19ak.apps.googleusercontent.com",
+              "client_id": "594433492064-9421v56m5pku0vqlf811ru0gi9orkt2f.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

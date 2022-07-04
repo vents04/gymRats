@@ -153,6 +153,7 @@ export default class Calendar extends Component {
         const incrementedDate = new Date(this.state.selectedDate);
         incrementedDate.setDate(incrementedDate.getDate() + amount);
         this.setDate(incrementedDate);
+        console.log(incrementedDate);
     }
 
     render() {
