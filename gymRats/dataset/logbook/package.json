@@ -12,6 +12,7 @@
     "@faker-js/faker": "^7.3.0",
     "mongoose": "^6.4.2",
     "nodemon": "^2.0.18",
+    "prettier": "^2.7.1",
     "puppeteer": "^13.1.1"
   }
 }

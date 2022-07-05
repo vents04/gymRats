@@ -1,49 +1,50 @@
 const mongoose = require('mongoose');
+const MAX_WEIGHT = 150;
+const MIN_WEIGHT = 40;
+const DEVIATION = 0.30;
+const SEVEN_DAYS_TO_MILLISECONDS = 604800000;
+const ONE_DAY_TO_MILLISECONDS = 84000;
+const COMMAND_FOR_WEIGHTS = "weights";
+const COMMAND_FOR_DATES = "dates";
 
-function generateRandomWeightInRange  (min,max){
-
-    return  parseFloat(parseFloat(Math.random()*(max - min) + min).toFixed(2));
+function generateRandomWeightsOrDatesInRange(min,max,command){
+    if (command === "dates") {
+        return  Math.floor(Math.random()*(max - min) + min);
+    }else if (command === "weights") {
+        return  parseFloat(parseFloat(Math.random()*(max - min) + min).toFixed(2));
+    }else{
+        throw new Error("Undefined command");
+    }
 }
 
 function generateRandomWeightsWithProximityToPrevious  (weightsCount){
-    let generatedWeights = [generateRandomWeightInRange(MIN_WEIGHT,MAX_WEIGHT)];
+    let generatedWeights = [generateRandomWeightsOrDatesInRange(MIN_WEIGHT,MAX_WEIGHT, COMMAND_FOR_WEIGHTS)];
     while(weightsCount  - 1> 0){
         const lastWeight = generatedWeights[generatedWeights.length -1];
-        generatedWeights.push(generateRandomWeightInRange(lastWeight - DEVIATION,lastWeight + DEVIATION))
+        generatedWeights.push(generateRandomWeightsOrDatesInRange(lastWeight - DEVIATION,lastWeight + DEVIATION, COMMAND_FOR_WEIGHTS))
         weightsCount = weightsCount -1;
     }
     return generatedWeights;
 }
 
-function generateRandomDateInRange (min,max){
-    return  Math.floor(Math.random()*(max - min) + min);
-}
-
-
 function generateRandomDatesWithProximityToPrevious(datesCount){
     const dt = new Date().getTime()
-    let generatedDates = [generateRandomDateInRange(dt,dt + SEVEN_DAYS_TO_MILLISECONDS)];
+    let generatedDates = [generateRandomWeightsOrDatesInRange(dt,dt + SEVEN_DAYS_TO_MILLISECONDS, COMMAND_FOR_DATES)];
     while(datesCount  - 1> 0){
         const lastDate = generatedDates[generatedDates.length -1];
-        generatedDates.push(generateRandomDateInRange(lastDate + 84000,lastDate + SEVEN_DAYS_TO_MILLISECONDS))
+        generatedDates.push(generateRandomWeightsOrDatesInRange(lastDate + ONE_DAY_TO_MILLISECONDS,lastDate + SEVEN_DAYS_TO_MILLISECONDS, COMMAND_FOR_DATES))
         datesCount --;
     }
     return generatedDates;
 }
 
-
-
-
-const MAX_WEIGHT = 150;
-const MIN_WEIGHT = 40;
-let weights = [];
-const DEVIATION = 0.30;
-const SEVEN_DAYS_TO_MILLISECONDS = 604800000;
-for (let index = 0; index < 200; index++) {
+function generateRandomTestsForWeight (UserIdCount, weightsForUserID){
+for (let index = 0; index < UserIdCount; index++) {
+    let weights = [];
     const UserId = mongoose.Types.ObjectId().toString();
     const userWeights = generateRandomWeightsWithProximityToPrevious(20);
     const userDates = generateRandomDatesWithProximityToPrevious(20);
-    for (let y = 0; y < 20; y++) {
+    for (let y = 0; y < weightsForUserID; y++) {
        const weight = {
         userId: UserId,
         weight: userWeights[y],
@@ -51,9 +52,13 @@ for (let index = 0; index < 200; index++) {
        }
        weights.push(weight);
     }
+    return weights;
+}
 }
 
-console.log(weights);
+let tests = generateRandomTestsForWeight(200,20)
+
+console.log(tests);
 
 
     
