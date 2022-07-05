@@ -108,7 +108,6 @@ export default class Chat extends Component {
     }
 
     getChat = (id) => {
-        console.log("here")
         let lastMessageId = null;
         if (this.state.chat && this.state.chat.messages.length > 0) {
             lastMessageId = this.state.chat.messages[0]._id;
