@@ -5,3 +5,20 @@
 {"dt":1656080100845,"level":"error","message":"error","status":400,"userId":"62974944fcd70c324a2e0c4d"}
 {"dt":1656080143853,"language":"en","level":"error","message":"error","status":400,"userId":"62974944fcd70c324a2e0c4d"}
 {"dt":1656081024459,"language":"en","level":"error","message":"Coach was not found","status":404,"userId":null}
+{"dt":1657122371486,"language":"en","level":"error","message":"Invalid chat id","status":400,"userId":"62a75e25b181f3500c3687dd"}
+{"dt":1657122378181,"language":"en","level":"error","message":"Invalid chat id","status":400,"userId":"62a75e25b181f3500c3687dd"}
+{"dt":1657125972330,"language":"en","level":"error","message":"Invalid chat id","status":400,"userId":"62a75e25b181f3500c3687dd"}
+{"dt":1657126052643,"language":"en","level":"error","message":"Invalid credentials for login","status":404,"userId":null}
+{"dt":1657126164395,"language":"en","level":"error","message":"User not found","status":401,"userId":null}
+{"dt":1657126164397,"language":"en","level":"error","message":"Cannot read properties of undefined (reading '_id')","status":500,"userId":null}
+{"dt":1657126166715,"language":"en","level":"error","message":"User not found","status":401,"userId":null}
+{"dt":1657126166717,"language":"en","level":"error","message":"Cannot read properties of undefined (reading '_id')","status":500,"userId":null}
+{"dt":1657126166719,"language":"en","level":"error","message":"User not found","status":401,"userId":null}
+{"dt":1657126166721,"language":"en","level":"error","message":"Cannot read properties of undefined (reading '_id')","userId":null}
+{"dt":1657126210094,"language":"en","level":"error","message":"Invalid credentials for login","status":404,"userId":null}
+{"dt":1657126215937,"language":"en","level":"error","message":"Invalid credentials for login","status":404,"userId":null}
+{"dt":1657126787202,"language":"en","level":"error","message":"User not found","status":401,"userId":null}
+{"dt":1657126787203,"language":"en","level":"error","message":"Cannot read properties of undefined (reading '_id')","status":500,"userId":null}
+{"dt":1657126803060,"language":"en","level":"error","message":"User not found","status":401,"userId":null}
+{"dt":1657127709767,"language":"en","level":"error","message":"Email verification code has already been used","status":409,"userId":null}
+{"dt":1657127712453,"language":"en","level":"error","message":"Email verification code has already been used","status":409,"userId":null}

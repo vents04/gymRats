@@ -3,6 +3,7 @@ import { Text, Pressable, View, ScrollView, TextInput, Image, Alert, BackHandler
 
 import ApiRequests from '../../classes/ApiRequests';
 import Auth from '../../classes/Auth';
+import socketClass from '../../classes/Socket';
 
 import { Ionicons } from '@expo/vector-icons';
 
@@ -35,6 +36,14 @@ export default class EmailVerification extends Component {
         this.setState({ showLoading: true }, () => {
             ApiRequests.get(`user/check-email-verification-code?identifier=${this.state.identifier}&code=${this.state.code.trim().replace(" ", "")}`).then(async (response) => {
                 await Auth.setToken(response.data.token);
+
+                let chatsRoomSocket = socketClass.getChatsRoomSocket();
+                    if (!chatsRoomSocket) {
+                        chatsRoomSocket = socketClass.initConnection();
+                        socketClass.setChatsRoomSocket(chatsRoomSocket);
+                    }
+                socketClass.joinChatsRoom();
+
                 this.setState({ showError: false, showPasswordEntry: true, showCodeEntry: false, showEmailEntry: false });
                 Alert.alert(i18n.t('screens')['emailVerification']['emailVerified'], i18n.t('screens')['emailVerification']['alertText'], [{
                     text: "OK",

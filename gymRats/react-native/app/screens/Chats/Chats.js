@@ -61,6 +61,7 @@ export default class Chats extends Component {
 
     getChats = () => {
         ApiRequests.get("chat", {}, true).then((response) => {
+            console.log(response.data.chats)
             response.data.chats = this.sortChatsBySeen(response.data.chats);
             this.setState({ chats: response.data.chats });
         }).catch((error) => {

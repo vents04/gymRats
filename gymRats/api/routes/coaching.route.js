@@ -292,6 +292,7 @@ router.post('/relation/:id/review', authenticate, async (req, res, next) => {
 });
 
 router.get("/coach/search", authenticate, async (req, res, next) => {
+    console.log(req.user._id)
     let names = req.query.name;
     let reviewsForPush = [];
     const reviews = await DbService.getMany(COLLECTIONS.REVIEWS, {});
@@ -305,6 +306,7 @@ router.get("/coach/search", authenticate, async (req, res, next) => {
             let sumOfAllRatings = 0, counter = 0, overallRating = 0;
             for (let review of reviews) {
                 const relation = await DbService.getOne(COLLECTIONS.RELATIONS, { "$or": [{ _id: review.relationId }, { _id: mongoose.Types.ObjectId(review.relationId) }] });
+                //console.log(relation);
                 if (relation && relation.personalTrainerId.toString() == trainers[i]._id.toString()) {
                     sumOfAllRatings += review.rating;
                     counter++;
