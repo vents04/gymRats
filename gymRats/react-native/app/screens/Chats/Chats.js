@@ -48,12 +48,23 @@ export default class Chats extends Component {
 
     sortChatsBySeen = (chats) => {
         chats.sort((a, b) => {
-            if (a.lastMessage.seen && !b.lastMessage.seen) {
-                return -1;
-            } else if (!a.lastMessage.seen && b.lastMessage.seen) {
+            if(!a.lastMessage && !b.lastMessage) {
+                if(new Date(a.createdDt).getTime() < new Date(b.createdDt).getTime()) {
+                    return -1;
+                }
                 return 1;
-            } else {
-                return 0;
+            }
+            else if(!a.lastMessage && new Date(a.createdDt).getTime() < new Date(b.lastMessage.createdDt)) {
+                return -1;
+            } 
+            else if(!b.lastMessage && new Date(b.createdDt).getTime() > new Date(a.lastMessage.createdDt)) {
+                return -1;
+            } 
+            else {
+               if(new Date(a.lastMessage.createdDt).getTime() < new Date(b.lastMessage.createdDt)) {
+                return -1;
+               }
+               return 1;
             }
         }).reverse();
         return chats;
