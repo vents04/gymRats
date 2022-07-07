@@ -15,6 +15,7 @@ import { NavigationRoutes, Auth } from './app/navigation/navigation';
 import { useFonts } from 'expo-font';
 import * as Localization from 'expo-localization';
 import socketClass from './app/classes/Socket';
+import User from './app/classes/User';
 import i18n from 'i18n-js';
 import translations from './translations';
 import * as Linking from 'expo-linking';
@@ -76,6 +77,7 @@ const App = (props) => {
           socketClass.setChatsRoomSocket(null);
         }
 
+
         const navAnalytics = await AsyncStorage.getItem('@gymRats:navAnalytics');
         if (navAnalytics) {
           const navigationAnalytics = JSON.parse(navAnalytics);
@@ -86,13 +88,18 @@ const App = (props) => {
       } else if (nextAppState == 'active') {
         console.log("active state1")
 
-        let chatsRoomSocket = socketClass.getChatsRoomSocket();
-        if (!chatsRoomSocket) {
-          console.log("FAUBFYUABFYUWBFYUQBW(OQNOM")
-          chatsRoomSocket = socketClass.initConnection();
-          socketClass.setChatsRoomSocket(chatsRoomSocket);
-        }
-        socketClass.joinChatsRoom();
+        const token = await AsyncStorage.getItem(AUTHENTICATION_TOKEN_KEY);
+        const validation = await User.validateToken()
+
+        if(token && validation.valid){
+          let chatsRoomSocket = socketClass.getChatsRoomSocket();
+          if (!chatsRoomSocket) {
+              console.log("FAUBFYUABFYUWBFYUQBW(OQNOM")
+              chatsRoomSocket = socketClass.initConnection();
+              socketClass.setChatsRoomSocket(chatsRoomSocket);
+            }
+            socketClass.joinChatsRoom();
+          }
       }
 
     });

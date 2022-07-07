@@ -22,7 +22,7 @@ const UserService = {
                         if (item.userId == userId) unverifiedEmailTimeouts.splice(unverifiedEmailTimeouts.indexOf(item), 1);
                     }
                 }
-            }, 60000)
+            }, 600000)
         });
     },
 
@@ -58,7 +58,7 @@ const UserService = {
                             for (let item of unverifiedEmailTimeouts) {
                                 if (item.userId == user._id) unverifiedEmailTimeouts.splice(unverifiedEmailTimeouts.indexOf(item), 1);
                             }
-                        }, (new Date(user.createdDt).getTime() + 60000) - new Date().getTime())
+                        }, (new Date(user.createdDt).getTime() + 600000) - new Date().getTime())
                     }
                     unverifiedEmailTimeouts.push(item);
                 }

@@ -7,7 +7,6 @@ import * as FileSystem from 'expo-file-system';
 import i18n from 'i18n-js'
 import { default as AsyncStorage } from '@react-native-async-storage/async-storage';
 
-
 import socketClass from '../../classes/Socket';
 
 import ApiRequests from '../../classes/ApiRequests';

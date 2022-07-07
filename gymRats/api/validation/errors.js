@@ -48,6 +48,9 @@ const HapiErrors = {
     },
     booleanBaseError: (lng, field) => {
         return `${translations[lng].fields[field]} ${translations[lng].errors.booleanBaseError[0]}`;
+    },
+    lettersOnlyError: (lng, field) => {
+        return `${translations[lng].fields[field]} ${translations[lng].errors.lettersOnlyError[0]}`
     }
 }
 

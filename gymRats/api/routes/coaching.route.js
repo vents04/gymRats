@@ -292,6 +292,7 @@ router.post('/relation/:id/review', authenticate, async (req, res, next) => {
 });
 
 router.get("/coach/search", authenticate, async (req, res, next) => {
+    console.log(req.user._id)
     let names = req.query.name;
     let reviewsForPush = [];
     const reviews = await DbService.getMany(COLLECTIONS.REVIEWS, {});
@@ -350,6 +351,7 @@ router.get("/coach/search", authenticate, async (req, res, next) => {
             const clients = await DbService.getMany(COLLECTIONS.RELATIONS, { "$or": [{ personalTrainerId: trainers[i]._id }, { personalTrainerId: mongoose.Types.ObjectId(trainers[i]._id) }] });
 
             Object.assign(trainers[i], { rating: overallRating }, { reviews: reviewsForPush }, { clients: clients.length });
+            reviewsForPush = [];
         }
 
         return res.status(HTTP_STATUS_CODES.OK).send({

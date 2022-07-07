@@ -2,29 +2,45 @@ const Joi = require('@hapi/joi');
 const mongoose = require('mongoose');
 const { CALORIES_COUNTER_UNITS, WEIGHT_UNITS, CALORIES_COUNTER_MEALS, RELATION_STATUSES, PERSONAL_TRAINER_STATUSES } = require('../global');
 const translations = require("./translations");
-const { booleanBaseError, numberPrecisionError, anyOnlyError, stringBaseError, stringEmptyError, anyRequiredError, stringMinError, stringMaxError, stringEmailError, invalidIdError, numberMinError, numberMaxError, numberIntegerError, numberPositiveError, stringAlphabeticalRegexError, arrayIncludesError } = require('./errors');
+const { booleanBaseError, numberPrecisionError, anyOnlyError, stringBaseError, stringEmptyError, anyRequiredError, stringMinError, stringMaxError, stringEmailError, invalidIdError, numberMinError, numberMaxError, numberIntegerError, numberPositiveError, stringAlphabeticalRegexError, arrayIncludesError, lettersOnlyError } = require('./errors');
+
+const INVALID_INPUT_FIELD_VALUES_FOR_LETTER_ONLY_FIELDS = ["!", "\"", "#", "$", "%", "&", "\'", "(", ")", "*", "+", ",", "-", ".", "/", ":", ";", "<", "=", ">", "?", "@", "[", "\\", "]", "^", "_", "`", "{", "|", "}", "~", "\"", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
 
 const firstNameValidation = (lng) => {
     if (!lng) lng = "en";
-    return Joi.string().min(1).max(32).regex(/^[A-Za-z]+$/).required().messages({
+    return Joi.string().min(1).max(32).required().messages({
         "string.base": stringBaseError(lng, "firstName", 1),
         "string.empty": stringEmptyError(lng, "firstName"),
         "string.min": stringMinError(lng, "firstName", 1),
         "string.max": stringMaxError(lng, "firstName", 32),
-        "string.pattern.base": stringAlphabeticalRegexError(lng, "firstName"),
+        "any.invalid": lettersOnlyError(lng, "firstName"),
         "any.required": anyRequiredError(lng, "firstName")
+    }).custom((value, helper) => {
+        for(let char of value) {
+            if(INVALID_INPUT_FIELD_VALUES_FOR_LETTER_ONLY_FIELDS.includes(char)) {
+                return helper.message(lettersOnlyError(lng, "firstName"));
+            }
+        }
+        return true;
     })
 }
 
 const lastNameValidation = (lng) => {
     if (!lng) lng = "en";
-    return Joi.string().min(1).max(32).regex(/^[A-Za-z]+$/).required().messages({
+    return Joi.string().min(1).max(32).required().messages({
         "string.base": stringBaseError(lng, "lastName", 1),
         "string.empty": stringEmptyError(lng, "lastName"),
         "string.min": stringMinError(lng, "lastName", 1),
         "string.max": stringMaxError(lng, "lastName", 32),
-        "string.pattern.base": stringAlphabeticalRegexError(lng, "lastName"),
+        "any.invalid": lettersOnlyError(lng, "lastName"),
         "any.required": anyRequiredError(lng, "lastName")
+    }).custom((value, helper) => {
+        for(let char of value) {
+            if(INVALID_INPUT_FIELD_VALUES_FOR_LETTER_ONLY_FIELDS.includes(char)) {
+                return helper.message(lettersOnlyError(lng, "firstName"));
+            }
+        }
+        return true;
     })
 }
 
