@@ -49,6 +49,7 @@ export default class Chats extends Component {
     sortChatsBySeen = (chats) => {
         chats.sort((a, b) => {
             if(!a.lastMessage && !b.lastMessage) {
+                console.log("123456789")
                 if(new Date(a.createdDt).getTime() < new Date(b.createdDt).getTime()) {
                     return -1;
                 }
@@ -72,7 +73,6 @@ export default class Chats extends Component {
 
     getChats = () => {
         ApiRequests.get("chat", {}, true).then((response) => {
-            console.log(response.data.chats)
             response.data.chats = this.sortChatsBySeen(response.data.chats);
             this.setState({ chats: response.data.chats });
         }).catch((error) => {
