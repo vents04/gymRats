@@ -30,6 +30,17 @@ router.get("/page", authenticate, async (req, res, next) => {
         console.log(err)
         return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
     }
-})
+});
+
+// Define a get endpoint that returns in response the value returned from the service you have written in a json object with some adequate properties //
+router.get("/logbook-progress", authenticate, async (req, res, next) => {
+    try {
+        return res.status(HTTP_STATUS_CODES.OK).send({
+            
+        })
+    } catch (err) {
+        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+    }
+});
 
 module.exports = router;
