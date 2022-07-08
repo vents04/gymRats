@@ -50,12 +50,11 @@ router.get('/', authenticate, async (req, res, next) => {
                     chat.lastMessage = message.message;
                     chat.lastMessage.seen = message.seen;
                     chat.lastMessage.senderId = message.senderId;
+                    chat.lastMessage.createdDt = message.createdDt;
                     minTime = new Date(message.createdDt).getTime();
                 }
             }
         }
-
-        console.log(chats)
 
         return res.status(HTTP_STATUS_CODES.OK).send({
             chats,

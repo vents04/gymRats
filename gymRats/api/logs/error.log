@@ -23,3 +23,7 @@
 {"dt":1657127709767,"language":"en","level":"error","message":"Email verification code has already been used","status":409,"userId":null}
 {"dt":1657127712453,"language":"en","level":"error","message":"Email verification code has already been used","status":409,"userId":null}
 {"dt":1657280905779,"language":"en","level":"error","message":"i is not defined","status":500,"userId":"62a83eca6c25204eb928ed6f"}
+{"dt":1657283129381,"language":"en","level":"error","message":"Invalid credentials for login","status":404,"userId":null}
+{"dt":1657283169340,"language":"en","level":"error","message":"Invalid credentials for login","status":404,"userId":null}
+{"dt":1657283268811,"language":"en","level":"error","message":"Invalid credentials for login","status":404,"userId":null}
+{"dt":1657283577518,"language":"en","level":"error","message":"jwt malformed","status":401,"userId":null}
