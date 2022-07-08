@@ -35,12 +35,11 @@ const Socket = {
         return new Promise(async (resolve, reject) => {
             try {
                 console.log("join chats room");
-                if (!chatsRoomSocket) console.log("Socket is not initialized");
                 const token = await AsyncStorage.getItem(AUTHENTICATION_TOKEN_KEY);
-                if (!token) console.log("No token found");
                 const validation = await User.validateToken()
-                if (!validation.valid) console.log("Invalid token")
-                chatsRoomSocket.emit("join-chats-room", { userId: validation.user._id });
+                if (token && chatsRoomSocket && validation.valid){
+                    chatsRoomSocket.emit("join-chats-room", { userId: validation.user._id });
+                }
             } catch (error) {
                 reject(error);
             }
