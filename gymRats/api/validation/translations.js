@@ -71,7 +71,8 @@ module.exports = {
             anyOnlyError: ["is with an invalid format"],
             numberPrecisionError: ["should have at most 2 digits past the decimal point"],
             invalidRepsValue: ["Invalid reps value"],
-            booleanBaseError: ["has an invalid boolean value"]
+            booleanBaseError: ["has an invalid boolean value"],
+            lettersOnlyError: ["should be only of letters"]
         }
     },
     bg: {
@@ -146,7 +147,8 @@ module.exports = {
             anyOnlyError: ["не е в подходящ формат"],
             numberPrecisionError: ["трябва да има максимум", "цифри след десетичната запетая"],
             invalidRepsValue: ["Невалидна стойност за повторения"],
-            booleanBaseError: ["има невалидна булева стойност"]
+            booleanBaseError: ["има невалидна булева стойност"],
+            lettersOnlyError: ["трябва да е само от букви"]
         }
     }
 }

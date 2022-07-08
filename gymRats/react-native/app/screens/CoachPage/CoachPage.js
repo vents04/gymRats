@@ -153,7 +153,7 @@ export default class CoachPage extends Component {
                                             {
                                                 opacity: pressed ? 0.1 : 1,
                                             }
-                                        ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
+                                        ]} onPress={() => {
                                             Linking.openURL(`https://google.com/maps/@${this.props.route.params.coach.location.lat},${this.props.route.params.coach.location.lng},11z`)
                                         }}>
                                             <Text style={styles.location}>{this.props.route.params.coach.location.address}</Text>
