@@ -48,22 +48,31 @@ export default class Chats extends Component {
 
     sortChatsBySeen = (chats) => {
         chats.sort((a, b) => {
+        
             if(!a.lastMessage && !b.lastMessage) {
-                console.log("123456789")
                 if(new Date(a.createdDt).getTime() < new Date(b.createdDt).getTime()) {
                     return -1;
                 }
                 return 1;
             }
-            else if(!a.lastMessage && new Date(a.createdDt).getTime() < new Date(b.lastMessage.createdDt)) {
+
+            if(!a.lastMessage && new Date(a.createdDt).getTime() < new Date(b.lastMessage.createdDt)) {
                 return -1;
             } 
-            else if(!b.lastMessage && new Date(b.createdDt).getTime() > new Date(a.lastMessage.createdDt)) {
+            else if(!a.lastMessage && new Date(a.createdDt).getTime() > new Date(b.lastMessage.createdDt)){
+                return 1;
+            }
+
+            if(!b.lastMessage && new Date(b.createdDt).getTime() > new Date(a.lastMessage.createdDt)) {
                 return -1;
             } 
-            else {
-               if(new Date(a.lastMessage.createdDt).getTime() < new Date(b.lastMessage.createdDt)) {
-                return -1;
+            else if(!b.lastMessage && new Date(a.createdDt).getTime() > new Date(b.lastMessage.createdDt)){
+                return 1;
+            }
+
+            if(a.lastMessage && b.lastMessage) {
+                if(new Date(a.lastMessage.createdDt).getTime() < new Date(b.lastMessage.createdDt)) {
+                    return -1;
                }
                return 1;
             }

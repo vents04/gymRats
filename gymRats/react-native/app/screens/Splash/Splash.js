@@ -86,6 +86,7 @@ export default class Splash extends Component {
             if (isAuthenticated) {
                 user = validationEndpointResponse.user;
                 if (!hasUnverifiedEmail) {
+                    console.log("testese")
                     let chatsRoomSocket = socketClass.getChatsRoomSocket();
                     if (!chatsRoomSocket) {
                         chatsRoomSocket = socketClass.initConnection();
