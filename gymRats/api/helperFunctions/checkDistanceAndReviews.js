@@ -3,10 +3,9 @@ const { COLLECTIONS } = require("../global");
 const DbService = require("../services/db.service");
 
 async function checkForDistanceAndReviews(trainer, location, reviews, reqLat, reqLng, maxDistance, minRating, distanceForCheck) {
-
     let reviewsForPush = [];
     let minRatingCopy = 0;
-    if(reqLat && reqLng) {
+    if(reqLat != "null" || reqLng != "null") {
         let lat1 = location.lat;
         let lat2 = reqLat;
         let lng1 = location.lng;
@@ -56,7 +55,7 @@ async function checkForDistanceAndReviews(trainer, location, reviews, reqLat, re
     } else {
         overallRating = 3.0;
     }
-    if (minRating) {
+    if (minRating != undefined) {
         minRatingCopy = minRating;
         if (overallRating < minRating) {
             return -1;
@@ -90,6 +89,7 @@ async function checkForDistanceAndReviews(trainer, location, reviews, reqLat, re
             trainer.criteriasMet += 2;
         }
     }
+
     return 1;
 
 }
