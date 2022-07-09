@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Alert, BackHandler, Modal, ScrollView, Text, TextInput, Pressable, View } from 'react-native'
+import { Alert, BackHandler, Modal, ScrollView, Text, TextInput, Pressable, View, Keyboard } from 'react-native'
 import i18n from 'i18n-js';
 import { Picker } from '@react-native-picker/picker';
 import DropDownPicker from 'react-native-dropdown-picker'
@@ -194,6 +194,7 @@ export default class Logbook extends Component {
     }
 
     addSet = (exerciseId) => {
+        Keyboard.dismiss();
         this.setState({ hasChanges: true });
         const exercises = this.state.exercises;
         let index = 0;
@@ -219,6 +220,7 @@ export default class Logbook extends Component {
     }
 
     deleteSet = (exerciseId, setIndex) => {
+        Keyboard.dismiss();
         this.setState({ hasChanges: true });
         const exercises = this.state.exercises;
         for (let index = 0; index < exercises.length; index++) {
@@ -304,6 +306,7 @@ export default class Logbook extends Component {
     }
 
     saveChanges = () => {
+        Keyboard.dismiss();
         let finalExercises = [];
         const exercises = this.state.exercises;
         for (let exercise of exercises) {
@@ -332,6 +335,7 @@ export default class Logbook extends Component {
     }
 
     swapExercises = (exerciseIndex) => {
+        Keyboard.dismiss();
         const exercises = this.state.exercises;
         const firstExercise = exercises[exerciseIndex];
         if (exercises.length - 1 > exerciseIndex) {
@@ -394,6 +398,8 @@ export default class Logbook extends Component {
                                             <Text style={globalStyles.modalActionTitle}>{i18n.t('screens')['logbook']['workoutTemplateAdd']}</Text>
                                         </Pressable>
                                     </View>
+                                    {
+                                        /*
                                     <View style={globalStyles.modalActionsContainer}>
                                         <Pressable style={({ pressed }) => [
                                             styles.option,
@@ -410,6 +416,8 @@ export default class Logbook extends Component {
                                             }]}>{i18n.t('screens')['logbook']['workoutTemplateDeny']}</Text>
                                         </Pressable>
                                     </View>
+                                        */
+                                    }
                                 </View>
                             </View>
                         </Modal>
@@ -528,7 +536,7 @@ export default class Logbook extends Component {
                     }
                     {
                         this.state.showError
-                            ? <Text style={globalStyles.errorBox}>{this.state.error}</Text>
+                            ? <Text style={{...globalStyles.errorBox, marginBottom: 16}}>{this.state.error}</Text>
                             : null
                     }
                     {
@@ -613,17 +621,6 @@ export default class Logbook extends Component {
                                                                         style={styles.setContainer}
                                                                         contentContainerStyle={{ alignItems: "center", paddingVertical: 5 }}>
                                                                         <View style={styles.setContainerItem}>
-                                                                            <TextInput
-                                                                                style={styles.setContainerItemInput}
-                                                                                keyboardType='numeric'
-                                                                                value={set.weight.amount && set.weight.amount != undefined ? set.weight.amount.toString() : null}
-                                                                                onChangeText={(val) => {
-                                                                                    this.changeSetVariable(exercise.exerciseId, index, "weight", val)
-                                                                                    this.setState({ showError: false })
-                                                                                }} />
-                                                                            <Text style={styles.setContainerItemDescriptor}>{i18n.t('common')['weightUnits'][set.weight.unit]}</Text>
-                                                                        </View>
-                                                                        <View style={styles.setContainerItem}>
                                                                             <TextInput style={styles.setContainerItemInput}
                                                                                 keyboardType='numeric'
                                                                                 value={set.reps && set.reps != undefined ? set.reps.toString() : null}
@@ -633,6 +630,17 @@ export default class Logbook extends Component {
                                                                                     this.setState({ showError: false })
                                                                                 }} />
                                                                             <Text style={styles.setContainerItemDescriptor}>{i18n.t('common')['reps']}</Text>
+                                                                        </View>
+                                                                        <View style={styles.setContainerItem}>
+                                                                            <TextInput
+                                                                                style={styles.setContainerItemInput}
+                                                                                keyboardType='numeric'
+                                                                                value={set.weight.amount && set.weight.amount != undefined ? set.weight.amount.toString() : null}
+                                                                                onChangeText={(val) => {
+                                                                                    this.changeSetVariable(exercise.exerciseId, index, "weight", val)
+                                                                                    this.setState({ showError: false })
+                                                                                }} />
+                                                                            <Text style={styles.setContainerItemDescriptor}>{i18n.t('common')['weightUnits'][set.weight.unit]}</Text>
                                                                         </View>
                                                                         <View style={styles.setContainerItem}>
                                                                             <TextInput style={styles.setContainerItemInput}
