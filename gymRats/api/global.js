@@ -23,7 +23,8 @@ const DATABASE_MODELS = {
     DEVICE: "Device",
     PASSWORD_RECOVERY_CODE: "PasswordRecoveryCode",
     EMAIL_VERIFICATION_CODE: "EmailVerificationCode",
-    ADMIN: "Admin"
+    ADMIN: "Admin",
+    CONTENT: "Content",
 }
 
 const COLLECTIONS = {
@@ -50,7 +51,8 @@ const COLLECTIONS = {
     DEVICES: "devices",
     PASSWORD_RECOVERY_CODES: "passwordRecoveryCodes",
     EMAIL_VERIFICATION_CODES: "emailVerificationCodes",
-    ADMINS: "admins"
+    ADMINS: "admins",
+    CONTENTS: "contents",
 }
 
 const PERSONAL_TRAINER_STATUSES = {
@@ -203,6 +205,17 @@ const ADMIN_STATUSES = {
     BLOCKED: "BLOCKED",
 }
 
+const CONTENT_VISIBILITY = {
+    VISIBLE_FOR_ALL: "VISIBLE_FOR_ALL",
+    VISIBLE_FOR_CLIENTS: "VISIBLE_FOR_CLIENTS",
+    HIDDEN: "HIDDEN",
+}
+
+const CONTENT_STATUSES = {
+    ACTIVE: "ACTIVE",
+    BLOCKED: "BLOCKED",
+}
+
 module.exports = {
     DATABASE_MODELS: DATABASE_MODELS,
     DB_URI: DB_URI,
@@ -237,5 +250,7 @@ module.exports = {
     ADMIN_STATUSES: ADMIN_STATUSES,
     ADMIN_SECRET: ADMIN_SECRET,
     ONE_MONTH_TO_MILLISECONDS: ONE_MONTH_TO_MILLISECONDS,
-    ONE_DAY_TO_MILLISECONDS: ONE_DAY_TO_MILLISECONDS
+    ONE_DAY_TO_MILLISECONDS: ONE_DAY_TO_MILLISECONDS,
+    CONTENT_VISIBILITY,
+    CONTENT_STATUSES
 }

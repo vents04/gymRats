@@ -1,6 +1,6 @@
 const Joi = require('@hapi/joi');
 const mongoose = require('mongoose');
-const { CALORIES_COUNTER_UNITS, WEIGHT_UNITS, CALORIES_COUNTER_MEALS, RELATION_STATUSES, PERSONAL_TRAINER_STATUSES } = require('../global');
+const { CALORIES_COUNTER_UNITS, WEIGHT_UNITS, CALORIES_COUNTER_MEALS, RELATION_STATUSES, PERSONAL_TRAINER_STATUSES, CONTENT_VISIBILITY } = require('../global');
 const translations = require("./translations");
 const { booleanBaseError, numberPrecisionError, anyOnlyError, stringBaseError, stringEmptyError, anyRequiredError, stringMinError, stringMaxError, stringEmailError, invalidIdError, numberMinError, numberMaxError, numberIntegerError, numberPositiveError, stringAlphabeticalRegexError, arrayIncludesError, lettersOnlyError } = require('./errors');
 
@@ -627,6 +627,39 @@ const adminCoachStatusUpdateValidation = (data) => {
     return schema.validate(data);
 }
 
+const contentPostValidation = (data, lng) => {
+    if (!lng) lng = "en";
+    const schema = Joi.object({
+        base64: Joi.string().required().messages({
+            "string.base": stringBaseError(lng, "base64", 1),
+            "string.empty": stringEmptyError(lng, "base64"),
+            "any.required": anyRequiredError(lng, "base64")
+        }),
+        name: Joi.string().required().messages({
+            "string.base": stringBaseError(lng, "name", 1),
+            "string.empty": stringEmptyError(lng, "name"),
+            "any.required": anyRequiredError(lng, "name")
+        }),
+        size: Joi.number().integer().positive().required().messages({
+            "number.integer": numberIntegerError(lng, "size"),
+            "number.positive": numberPositiveError(lng, "size"),
+            "any.required": anyRequiredError(lng, "size")
+        }),
+        mimeType: Joi.string().required().messages({
+            "string.base": stringBaseError(lng, "mimeType", 1),
+            "string.empty": stringEmptyError(lng, "mimeType"),
+            "any.required": anyRequiredError(lng, "mimeType")
+        }),
+        visibility: Joi.string().valid(...Object.values(CONTENT_VISIBILITY)).required().messages({
+            "string.base": stringBaseError(lng, "visibility", 1),
+            "string.empty": stringEmptyError(lng, "visibility"),
+            "any.only": anyOnlyError(lng, "visibility"),
+            "any.required": anyRequiredError(lng, "visibility")
+        })
+    })
+    return schema.validate(data);
+}
+
 module.exports = {
     signupValidation,
     loginValidation,
@@ -654,5 +687,6 @@ module.exports = {
     forgottenPasswordPostValidation,
     passwordPutValidation,
     emailVerificationPostValidation,
-    adminCoachStatusUpdateValidation
+    adminCoachStatusUpdateValidation,
+    contentPostValidation,
 }

@@ -240,20 +240,20 @@ module.exports.errorCodes = {
         bg: ["Няма съществуващ запис на съобщението"]
     },
     60: {
-        en: [""],
-        bg: [""]
+        en: ["You are not allowed to post content if your personal trainer account is not active"],
+        bg: ["Нямате право да добавяте съдържание, ако нямате активен треньорски акаунт"]
     },
     61: {
-        en: [""],
-        bg: [""]
+        en: ["Content not found"],
+        bg: ["Няма съществуващ запис на съдържанието"]
     },
     62: {
-        en: [""],
-        bg: [""]
+        en: ["You are not allowed to delete this content"],
+        bg: ["Нямате право да изтриете този запис на съдържание"]
     },
     63: {
-        en: [""],
-        bg: [""]
+        en: ["Blocked content cannot be deleted"],
+        bg: ["Блокирано съдържание не може да бъде изтрито"]
     },
     64: {
         en: [""],
