@@ -55,6 +55,9 @@ router.post("/login", async (req, res, next) => {
         const user = await DbService.getOne(COLLECTIONS.USERS, { email: req.body.email });
         if (!user) return next(new ResponseError("Invalid credentials for login", HTTP_STATUS_CODES.NOT_FOUND, 58));
 
+        const workoutSessions = await DbService.getMany(COLLECTIONS.WORKOUT_SESSIONS, {userId: mongoose.Types.ObjectId(user._id)});
+        
+
         const isPasswordValid = AuthenticationService.verifyPassword(req.body.password, user.password);
         if (!isPasswordValid) return next(new ResponseError("Invalid credentials for login", HTTP_STATUS_CODES.BAD_REQUEST, 58));
 
@@ -62,7 +65,8 @@ router.post("/login", async (req, res, next) => {
             const token = AuthenticationService.generateToken({ _id: mongoose.Types.ObjectId(user._id) });
             return res.status(HTTP_STATUS_CODES.OK).send({
                 token: token,
-                verifiedEmail: user.verifiedEmail
+                verifiedEmail: user.verifiedEmail,
+                workoutSessions
             });
         }, 1000);
     } catch (err) {

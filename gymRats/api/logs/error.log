@@ -27,3 +27,9 @@
 {"dt":1657283169340,"language":"en","level":"error","message":"Invalid credentials for login","status":404,"userId":null}
 {"dt":1657283268811,"language":"en","level":"error","message":"Invalid credentials for login","status":404,"userId":null}
 {"dt":1657283577518,"language":"en","level":"error","message":"jwt malformed","status":401,"userId":null}
+{"dt":1657370584141,"language":"en","level":"error","message":"Invalid credentials for login","status":400,"userId":null}
+{"dt":1657371037137,"language":"en","level":"error","message":"Invalid credentials for login","status":400,"userId":null}
+{"dt":1657372650466,"language":"en","level":"error","message":"jwt malformed","status":401,"userId":null}
+{"dt":1657372669577,"language":"en","level":"error","message":"Invalid credentials for login","status":404,"userId":null}
+{"dt":1657372677424,"language":"en","level":"error","message":"Invalid credentials for login","status":404,"userId":null}
+{"dt":1657372694673,"language":"en","level":"error","message":"User with this email was not found","status":404,"userId":null}
