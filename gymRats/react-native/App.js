@@ -105,11 +105,7 @@ const App = (props) => {
     });
 
     initABTestingCampaigns();
-
-    registerForPushNotificationsAsync().then(token => {
-      setExpoPushToken(token);
-      AsyncStorage.setItem("@gymRats:expoPushToken", token);
-    })
+    registerForPushNotificationsAsync();
 
     responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
       if (response.notification && response.notification.request
@@ -136,19 +132,19 @@ const App = (props) => {
   async function registerForPushNotificationsAsync() {
     let token;
     if (Device.isDevice) {
-      const { status: existingStatus } = await Notifications.getPermissionsAsync();
-      let finalStatus = existingStatus;
-      if (existingStatus !== 'granted') {
-        const { status } = await Notifications.requestPermissionsAsync();
-        finalStatus = status;
-      }
-      if (finalStatus !== 'granted') {
-        alert('Failed to get push token for push notification!');
-        return;
+      let settings = await Notifications.getPermissionsAsync();
+      let isAllowedToSendNotifications = settings.granted || settings.ios?.status === Notifications.IosAuthorizationStatus.PROVISIONAL
+      if(!isAllowedToSendNotifications) {
+        settings = await Notifications.requestPermissionsAsync();
+        isAllowedToSendNotifications = settings.granted || settings.ios?.status === Notifications.IosAuthorizationStatus.PROVISIONAL
+        if(!isAllowedToSendNotifications) {
+          console.log("Failed to register for push notifications");
+          return;
+        }
       }
       token = (await Notifications.getExpoPushTokenAsync()).data;
     } else {
-      alert('Must use physical device for Push Notifications');
+      console.log('Must use physical device for Push Notifications');
     }
 
     if (Platform.OS === 'android') {
@@ -159,6 +155,9 @@ const App = (props) => {
         lightColor: '#FF231F7C',
       });
     }
+
+    setExpoPushToken(token);
+    await AsyncStorage.setItem("@gymRats:expoPushToken", token);
 
     return token;
   }

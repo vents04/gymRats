@@ -14,7 +14,13 @@
         "appleTeamId": "WQS4A6LBYK"
       }
     },
-    "production": {}
+    "production": {
+      "ios": {
+        "simulator": true,
+        "appleId": "v.dimitrov@uploy.app",
+        "appleTeamId": "WQS4A6LBYK"
+      }
+    }
   },
   "submit": {
     "production": {
