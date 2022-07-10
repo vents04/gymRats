@@ -8,19 +8,9 @@
       "distribution": "internal"
     },
     "preview": {
-      "ios": {
-        "simulator": true,
-        "appleId": "v.dimitrov@uploy.app",
-        "appleTeamId": "WQS4A6LBYK"
-      }
+      "distribution": "internal"
     },
-    "production": {
-      "ios": {
-        "simulator": true,
-        "appleId": "v.dimitrov@uploy.app",
-        "appleTeamId": "WQS4A6LBYK"
-      }
-    }
+    "production": {}
   },
   "submit": {
     "production": {
