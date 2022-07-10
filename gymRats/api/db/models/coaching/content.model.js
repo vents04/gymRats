@@ -39,7 +39,7 @@ const contentSchema = mongoose.Schema({
         required: true
     },
     status: {
-        type: Sting,
+        type: String,
         enum: Object.keys(CONTENT_STATUSES),
         default: CONTENT_STATUSES.ACTIVE
     },

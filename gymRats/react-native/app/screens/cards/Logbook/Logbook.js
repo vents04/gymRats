@@ -53,9 +53,11 @@ export default class Logbook extends Component {
     }
 
     backAction = () => {
-        if (this.state.exercises.length == 0 && !this.state.showTemplatePickerModal && this.state.hasWorkoutTemplates) {
+        /*
+        if (this.s-tate.exercises.length == 0 && !this.state.showTemplatePickerModal && this.state.hasWorkoutTemplates) {
             this.setState({ showTemplatePickerModal: true });
         } else {
+            */
             if (this.state.hasChanges) {
                 Alert.alert(i18n.t('screens')['logbook']['backActionAlertTitle'], i18n.t('screens')['logbook']['backActionAlertMessage'], [
                     {
@@ -68,7 +70,7 @@ export default class Logbook extends Component {
             } else {
                 BackButtonHandler.goToPageWithDataManagerCardUpdate(this.props.navigation, "Calendar", this.props.route.params.date)
             }
-        }
+        //}
         return true;
     }
 
