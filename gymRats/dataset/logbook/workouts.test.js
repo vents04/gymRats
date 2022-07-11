@@ -19,13 +19,13 @@ function generateRandomSessionExercises(lastSession) {
     let currentExerciseSets = [];
     for (let y = 0; y < setsForCurrentExercise.length; y++) {
       let currentSetReps = setsForCurrentExercise[y].reps;
-      let currentSetAmount = setsForCurrentExercise[y].amount;
-      let currentSetUnit = setsForCurrentExercise[y].unit;
+      let currentSetAmount = setsForCurrentExercise[y].weight.amount;
+      let currentSetUnit = setsForCurrentExercise[y].weight.unit;
       currentExerciseSets.push({
         reps: generateRandomWeightsOrDatesInRange(
           currentSetReps - 2,
           currentSetReps + 2,
-          "weights"
+          "reps"
         ),
         weight: {
           amount: generateRandomWeightsOrDatesInRange(
@@ -45,7 +45,6 @@ function generateRandomSessionExercises(lastSession) {
   }
   return exercisesForNextSession;
 }
-
 let lastSchema = {
   
   date: new Date(dt).getDate(),
@@ -90,15 +89,17 @@ let lastSchema = {
   ],
 };
 (async function(){
-    for (let index = 0; index < 2000; index++) {
+    for (let index = 0; index < 5; index++) {
         let exercisesForNextSession = generateRandomSessionExercises(lastSchema);
+        console.log(exercisesForNextSession);
         //console.log(dt)
         let currentSchema = {
           date: new Date(dt).getDate(),
-          month: new Date(dt).getMonth(),
+          month: new Date(dt).getMonth() + 1,
           year: new Date(dt).getFullYear(),
           userId: userId,
           exercises: exercisesForNextSession,
+          workoutId: mongoose.Types.ObjectId("62cbde235d524de3e804f953")
         };
       
         lastSchema = currentSchema;

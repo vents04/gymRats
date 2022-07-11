@@ -9,7 +9,10 @@ const COMMAND_FOR_WEIGHTS = "weights";
 const COMMAND_FOR_DATES = "dates";
 
 function generateRandomWeightsOrDatesInRange(min, max, command) {
-  if (command === "dates") {
+  if(command === "reps"){
+    return Math.floor(Math.random() * (max - min) + min);
+  }
+  else if (command === "dates") {
     return Math.floor(Math.random() * (max - min) + min);
   } else if (command === "weights") {
     return parseFloat(parseFloat(Math.random() * (max - min) + min).toFixed(2));
