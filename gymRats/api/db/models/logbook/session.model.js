@@ -51,7 +51,12 @@ const sessionSchema = mongoose.Schema({
             optional: true,
             default: null
         }
-    }]
+    }],
+    workoutId: {
+        type: mongoose.Types.ObjectId,
+        ref: DATABASE_MODELS.WORKOUT,
+        required: true
+    }
 });
 
 const Session = mongoose.model(DATABASE_MODELS.WORKOUT_SESSION, sessionSchema);
