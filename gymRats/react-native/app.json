@@ -47,7 +47,7 @@
       "buildNumber": "1.0.3"
     },
     "android": {
-      "versionCode": 2,
+      "versionCode": 3,
       "useNextNotificationsApi": true,
       "icon": "./assets/img/ic_launcher_icon.png",
       "permissions": [
@@ -60,7 +60,7 @@
         "android.useNextNotificationsApi"
       ],
       "googleServicesFile": "./google-services.json",
-      "package": "com.gymrats.android",
+      "package": "com.uploy.gymrats",
       "intentFilters": [
         {
           "action": "VIEW",

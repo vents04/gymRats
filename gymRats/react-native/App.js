@@ -3,7 +3,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { default as AsyncStorage } from '@react-native-async-storage/async-storage';
 import { AUTHENTICATION_TOKEN_KEY } from './global';
-import { Alert, AppState, Button, Platform, Text } from 'react-native';
+import { AppState, Platform, Text } from 'react-native';
 import ApiRequests from "./app/classes/ApiRequests";
 import { ABTesting, campaigns } from './app/classes/ABTesting';
 
@@ -21,28 +21,11 @@ import translations from './translations';
 import * as Linking from 'expo-linking';
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
-import CoachPage from './app/screens/CoachPage/CoachPage';
-
-const prefix = Linking.createURL('/');
 
 const Stack = createStackNavigator();
 
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: false,
-    shouldSetBadge: false,
-  }),
-});
-
 const App = (props) => {
-  const [expoPushToken, setExpoPushToken] = useState('');
-  const [notification, setNotification] = useState(false);
-  const [chatNotification, setChatNotification] = useState(false);
-  const [coach, setCoach] = useState(null);
-  const [navigationRefInterval, setNavigationRefInterval] = useState(null)
-  const notificationListener = useRef();
-  const responseListener = useRef();
+  let linkingListener, appStateListener;
 
   const linking = {
     prefix: ["gymrats://"],
@@ -54,7 +37,20 @@ const App = (props) => {
   }
 
   useEffect(async () => {
-    Linking.addEventListener('url', async (event) => {
+    initLinkingListener();
+    initAppStateListener();
+    initABTestingCampaigns();
+    registerForPushNotificationsAsync();
+
+    return () => {
+      if (linkingListener) linkingListener.remove();
+      if (appStateListener) appStateListener.remove();
+      clearInterval(interval);
+    };
+  }, []);
+
+  const initLinkingListener = () => {
+    linkingListener = Linking.addEventListener('url', async (event) => {
       let data = event.url;
       if (data.includes('coach-profile/')) {
         let coachId = data.split('/coach-profile/')[1];
@@ -67,16 +63,16 @@ const App = (props) => {
         })
       }
     });
-    const subscription = AppState.addEventListener("change", async nextAppState => {
-      if (nextAppState == 'background') {
-        console.log("background1")
+  }
 
+  const initAppStateListener = () => {
+    appStateListener = AppState.addEventListener("change", async nextAppState => {
+      if (nextAppState == 'background') {
         let chatsRoomSocket = socketClass.getChatsRoomSocket();
         if (chatsRoomSocket) {
           socketClass.getChatsRoomSocket().emit("disconnectUser")
           socketClass.setChatsRoomSocket(null);
         }
-
 
         const navAnalytics = await AsyncStorage.getItem('@gymRats:navAnalytics');
         if (navAnalytics) {
@@ -86,15 +82,12 @@ const App = (props) => {
           }).catch((error) => { })
         }
       } else if (nextAppState == 'active') {
-        console.log("active state1")
-
         const token = await AsyncStorage.getItem(AUTHENTICATION_TOKEN_KEY);
         const validation = await User.validateToken()
 
         if(token && validation.valid){
           let chatsRoomSocket = socketClass.getChatsRoomSocket();
           if (!chatsRoomSocket) {
-              console.log("FAUBFYUABFYUWBFYUQBW(OQNOM")
               chatsRoomSocket = socketClass.initConnection();
               socketClass.setChatsRoomSocket(chatsRoomSocket);
             }
@@ -103,23 +96,7 @@ const App = (props) => {
       }
 
     });
-
-    initABTestingCampaigns();
-    registerForPushNotificationsAsync();
-
-    responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
-      if (response.notification && response.notification.request
-        && response.notification.request.content && response.notification.request.content.data
-        && response.notification.request.content.data.chatId) {
-      }
-    });
-
-    return () => {
-      if (subscription) subscription.remove();
-      clearInterval(interval);
-      Notifications.removeNotificationSubscription(responseListener.current);
-    };
-  }, []);
+  }
 
   const initABTestingCampaigns = () => {
     Object.keys(campaigns).forEach(async campaign => {
@@ -129,7 +106,7 @@ const App = (props) => {
     });
   }
 
-  async function registerForPushNotificationsAsync() {
+  const registerForPushNotificationsAsync = async () => {
     let token;
     if (Device.isDevice) {
       let settings = await Notifications.getPermissionsAsync();
@@ -143,6 +120,7 @@ const App = (props) => {
         }
       }
       token = (await Notifications.getExpoPushTokenAsync()).data;
+      if (token) await AsyncStorage.setItem("@gymRats:expoPushToken", token);
     } else {
       console.log('Must use physical device for Push Notifications');
     }
@@ -155,13 +133,7 @@ const App = (props) => {
         lightColor: '#FF231F7C',
       });
     }
-
-    setExpoPushToken(token);
-    await AsyncStorage.setItem("@gymRats:expoPushToken", token);
-
-    return token;
   }
-
 
   const navigationRef = useNavigationContainerRef();
   const routeNameRef = useRef();
@@ -213,8 +185,7 @@ const App = (props) => {
         onStateChange={async () => {
           const previousRouteName = routeNameRef.current;
           const currentRouteName = navigationRef.getCurrentRoute().name;
-
-
+          
           if (previousRouteName !== currentRouteName) {
             if (previousRouteName != "Splash") {
               const previousScreenData = {
@@ -236,13 +207,9 @@ const App = (props) => {
             }
             setScreenOpenDt(new Date().getTime());
           }
-
-          if (currentRouteName == "Chats") {
-            setChatNotification(false);
-          }
           routeNameRef.current = currentRouteName;
         }}>
-        <Stack.Navigator initialRouteName="Splash" chatNotification={chatNotification}>
+        <Stack.Navigator initialRouteName="Splash">
           <Stack.Screen
             name="Splash"
             component={Splash}
