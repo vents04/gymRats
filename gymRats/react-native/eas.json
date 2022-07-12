@@ -9,9 +9,7 @@
     },
     "preview": {
       "ios": {
-        "simulator": true,
-        "appleTeamId": "WQS4A6LBYK",
-        "appleId": "v.dimitrov@uploy.app"
+        "simulator": true
       }
     },
     "production": {}
