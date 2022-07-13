@@ -81,7 +81,7 @@ export default class Chats extends Component {
 
         return (i + 1);
     }
-    
+
     sortChatsBySeen = (arr, low, high) => {
         if (low < high) {
             let pivot = arr[high];
@@ -95,7 +95,6 @@ export default class Chats extends Component {
     getChats = () => {
         ApiRequests.get("chat", {}, true).then((response) => {
             this.sortChatsBySeen(response.data.chats, 0, response.data.chats.length - 1);
-            console.log(response.data.chats)
             this.setState({ chats: response.data.chats });
         }).catch((error) => {
             if (error.response) {
