@@ -59,41 +59,43 @@ export default class Chats extends Component {
             if(!arr[j].lastMessage && !pivot.lastMessage) {
                 if(new Date(arr[j].createdDt).getTime() > new Date(pivot.createdDt).getTime()) {
                     i++;
-                    swap(arr, i, j);
+                    this.swap(arr, i, j);
                 }
             }
             else if(!arr[j].lastMessage && new Date(arr[j].createdDt).getTime() > new Date(pivot.lastMessage.createdDt)) {
                 i++;
-                swap(arr, i, j);
+                this.swap(arr, i, j);
             }
-            else if(!pivot.lastMessage && new Date(arr[j].createdDt).getTime() > new Date(pivot.lastMessage.createdDt)){
+            else if(!pivot.lastMessage && new Date(arr[j].lastMessage.createdDt).getTime() > new Date(pivot.createdDt)){
                 i++;
-                swap(arr, i, j);
+                this.swap(arr, i, j);
             }
             else if(arr[j].lastMessage && pivot.lastMessage) {
                 if(new Date(arr[j].lastMessage.createdDt).getTime() > new Date(pivot.lastMessage.createdDt)) {
                     i++;
-                    swap(arr, i, j);
+                    this.swap(arr, i, j);
                }
             }
-
         }
-        swap(arr, i + 1, high);
+        this.swap(arr, i + 1, high);
+
         return (i + 1);
     }
     sortChatsBySeen = (arr, low, high) => {
         if (low < high) {
             let pivot = arr[high];
     
-            let pi = partition(arr, low, high, pivot);
-            sortChatsBySeen(arr, low, pi - 1);
-            sortChatsBySeen(arr, pi + 1, high);
+            let pi = this.partition(arr, low, high, pivot);
+            console.log(pi)
+            this.sortChatsBySeen(arr, low, pi - 1);
+            this.sortChatsBySeen(arr, pi + 1, high);
         }
     }
 
     getChats = () => {
         ApiRequests.get("chat", {}, true).then((response) => {
-            response.data.chats = this.sortChatsBySeen(response.data.chats, 0, response.data.chats.length - 1);
+            this.sortChatsBySeen(response.data.chats, 0, response.data.chats.length - 1);
+            console.log(response.data.chats)
             this.setState({ chats: response.data.chats });
         }).catch((error) => {
             if (error.response) {
@@ -133,7 +135,7 @@ export default class Chats extends Component {
                         break;
                     }
                 }
-                chats = this.sortChatsBySeen(chats, 0, chats.length - 1);
+                this.sortChatsBySeen(chats, 0, chats.length - 1);
                 this.setState({ chats });
             } catch (error) {
                 console.log(error);
