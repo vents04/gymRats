@@ -52,6 +52,7 @@ export default class Chats extends Component {
         arr[j] = temp;
     }
 
+    
     partition = (arr, low, high, pivot) => {
         let i = (low - 1);
      
