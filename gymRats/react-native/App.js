@@ -45,7 +45,6 @@ const App = (props) => {
     return () => {
       if (linkingListener) linkingListener.remove();
       if (appStateListener) appStateListener.remove();
-      clearInterval(interval);
     };
   }, []);
 
