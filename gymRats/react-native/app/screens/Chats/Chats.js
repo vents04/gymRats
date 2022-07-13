@@ -52,7 +52,6 @@ export default class Chats extends Component {
         arr[j] = temp;
     }
 
-    
     partition = (arr, low, high, pivot) => {
         let i = (low - 1);
      
@@ -82,12 +81,12 @@ export default class Chats extends Component {
 
         return (i + 1);
     }
+    
     sortChatsBySeen = (arr, low, high) => {
         if (low < high) {
             let pivot = arr[high];
     
             let pi = this.partition(arr, low, high, pivot);
-            console.log(pi)
             this.sortChatsBySeen(arr, low, pi - 1);
             this.sortChatsBySeen(arr, pi + 1, high);
         }
