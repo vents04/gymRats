@@ -5,7 +5,7 @@ const DbService = require("../services/db.service");
 async function checkForDistanceAndReviews(trainer, location, reviews, reqLat, reqLng, maxDistance, minRating, distanceForCheck) {
     let reviewsForPush = [];
     let minRatingCopy = 0;
-    if(reqLat != "null" || reqLng != "null") {
+    if(reqLat != "null" && reqLng != "null") {
         let lat1 = location.lat;
         let lat2 = reqLat;
         let lng1 = location.lng;

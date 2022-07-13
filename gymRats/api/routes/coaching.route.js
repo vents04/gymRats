@@ -368,9 +368,13 @@ router.get("/coach/search", authenticate, async (req, res, next) => {
             Object.assign(trainers1[i], { rating: overallRating }, { reviews: reviewsForPush }, { clients: clients.length });
         }
 
+        quicksort(trainers1, 0, trainers1.length - 1)
+
         return res.status(HTTP_STATUS_CODES.OK).send({
             results: trainers1
         })
+
+
     }
 
     if (req.query.maxDistance && (req.query.lat == "null" || req.query.lng == "null")) {
