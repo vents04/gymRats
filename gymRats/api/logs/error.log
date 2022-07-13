@@ -33,3 +33,4 @@
 {"dt":1657372669577,"language":"en","level":"error","message":"Invalid credentials for login","status":404,"userId":null}
 {"dt":1657372677424,"language":"en","level":"error","message":"Invalid credentials for login","status":404,"userId":null}
 {"dt":1657372694673,"language":"en","level":"error","message":"User with this email was not found","status":404,"userId":null}
+{"dt":1657538715668,"language":"en","level":"error","message":"Daily weight not found","status":404,"userId":"62c97a01d4ffec1dbd9e4d32"}

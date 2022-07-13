@@ -110,6 +110,8 @@ const DbService = {
         })
     },
 
+    
+
     getWithFilterAndProduct: function (collection, filter, product) {
         return new Promise((resolve, reject) => {
             validateCollection(collection, reject);
