@@ -180,7 +180,10 @@ export default class Calendar extends Component {
                             mode={"date"}
                             onChange={(event, selectedDate) => {
                                 this.setState({ showCalendarPicker: false }, () => {
-                                    this.setDate(new Date(selectedDate));
+                                    if(selectedDate && new Date(selectedDate)) {
+                                        console.log(selectedDate, new Date(selectedDate));
+                                        this.setDate(new Date(selectedDate));
+                                    }
                                 })
                             }}
                         />
@@ -198,7 +201,9 @@ export default class Calendar extends Component {
                                             mode={"date"}
                                             display={"spinner"}
                                             onChange={(event, selectedDate) => {
-                                                this.setState({ iosCurrentSelectedDate: new Date(selectedDate) })
+                                                if(selectedDate && new Date(selectedDate)) {
+                                                    this.setState({ iosCurrentSelectedDate: new Date(selectedDate) })
+                                                }
                                             }}
                                             style={{
                                                 width: "100%",

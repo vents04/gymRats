@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { Dimensions, StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
     shadow: {
@@ -16,7 +16,7 @@ export default StyleSheet.create({
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        width: "100%"
+        width: Dimensions.get("window").width / 5,
     },
     tabBarIconText: {
         fontFamily: "MainRegular",
