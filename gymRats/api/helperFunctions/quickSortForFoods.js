@@ -50,12 +50,12 @@ function quicksort(arr, low, high, oneWord) {
 
         if(!oneWord){
             let pi = partition(arr, low, high, pivot);
-            quicksort(arr, low, pi - 1);
-            quicksort(arr, pi + 1, high);
+            quicksort(arr, low, pi - 1, false);
+            quicksort(arr, pi + 1, high, false);
         }else{
             let pi = partitionOneWord(arr, low, high, pivot);
-            quicksort(arr, low, pi - 1);
-            quicksort(arr, pi + 1, high);
+            quicksort(arr, low, pi - 1, true);
+            quicksort(arr, pi + 1, high, true);
         }
     }
 }

@@ -46,43 +46,55 @@ export default class Chats extends Component {
         this.getChats();
     }
 
-    sortChatsBySeen = (chats) => {
-        chats.sort((a, b) => {
-        
-            if(!a.lastMessage && !b.lastMessage) {
-                if(new Date(a.createdDt).getTime() < new Date(b.createdDt).getTime()) {
-                    return -1;
+    swap = (arr, i, j) => {
+        let temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+
+    partition = (arr, low, high, pivot) => {
+        let i = (low - 1);
+     
+        for (let j = low; j <= high - 1; j++) {
+            if(!arr[j].lastMessage && !pivot.lastMessage) {
+                if(new Date(arr[j].createdDt).getTime() > new Date(pivot.createdDt).getTime()) {
+                    i++;
+                    this.swap(arr, i, j);
                 }
-                return 1;
             }
-
-            if(!a.lastMessage && new Date(a.createdDt).getTime() < new Date(b.lastMessage.createdDt)) {
-                return -1;
-            } 
-            else if(!a.lastMessage && new Date(a.createdDt).getTime() > new Date(b.lastMessage.createdDt)){
-                return 1;
+            else if(!arr[j].lastMessage && new Date(arr[j].createdDt).getTime() > new Date(pivot.lastMessage.createdDt)) {
+                i++;
+                this.swap(arr, i, j);
             }
-
-            if(!b.lastMessage && new Date(b.createdDt).getTime() > new Date(a.lastMessage.createdDt)) {
-                return -1;
-            } 
-            else if(!b.lastMessage && new Date(a.createdDt).getTime() > new Date(b.lastMessage.createdDt)){
-                return 1;
+            else if(!pivot.lastMessage && new Date(arr[j].lastMessage.createdDt).getTime() > new Date(pivot.createdDt)){
+                i++;
+                this.swap(arr, i, j);
             }
-
-            if(a.lastMessage && b.lastMessage) {
-                if(new Date(a.lastMessage.createdDt).getTime() < new Date(b.lastMessage.createdDt)) {
-                    return -1;
+            else if(arr[j].lastMessage && pivot.lastMessage) {
+                if(new Date(arr[j].lastMessage.createdDt).getTime() > new Date(pivot.lastMessage.createdDt)) {
+                    i++;
+                    this.swap(arr, i, j);
                }
-               return 1;
             }
-        }).reverse();
-        return chats;
+        }
+        this.swap(arr, i + 1, high);
+
+        return (i + 1);
+    }
+
+    sortChatsBySeen = (arr, low, high) => {
+        if (low < high) {
+            let pivot = arr[high];
+    
+            let pi = this.partition(arr, low, high, pivot);
+            this.sortChatsBySeen(arr, low, pi - 1);
+            this.sortChatsBySeen(arr, pi + 1, high);
+        }
     }
 
     getChats = () => {
         ApiRequests.get("chat", {}, true).then((response) => {
-            response.data.chats = this.sortChatsBySeen(response.data.chats);
+            this.sortChatsBySeen(response.data.chats, 0, response.data.chats.length - 1);
             this.setState({ chats: response.data.chats });
         }).catch((error) => {
             if (error.response) {
@@ -122,7 +134,7 @@ export default class Chats extends Component {
                         break;
                     }
                 }
-                chats = this.sortChatsBySeen(chats);
+                this.sortChatsBySeen(chats, 0, chats.length - 1);
                 this.setState({ chats });
             } catch (error) {
                 console.log(error);

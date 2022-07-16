@@ -11,7 +11,12 @@ function partition(arr, low, high, pivot) {
             i++;
             swap(arr, i, j);
         }else if(arr[j].criteriasMet == pivot.criteriasMet){
-            if (arr[j].distance < pivot.distance) {
+            if (arr[j].distance && pivot.distance) {
+                if(arr[j].distance < pivot.distance){
+                    i++;
+                    swap(arr, i, j);
+                }
+            }else if(arr[j].rating > pivot.rating){
                 i++;
                 swap(arr, i, j);
             }

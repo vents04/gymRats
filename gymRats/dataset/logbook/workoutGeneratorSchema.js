@@ -4,12 +4,15 @@ const MIN_WEIGHT = 40;
 const DEVIATION = 0.3;
 const SEVEN_DAYS_TO_MILLISECONDS = 604800000;
 const ONE_MONTH_TO_MILLISECONDS = 2629800000;
-const ONE_DAY_TO_MILLISECONDS = 84000;
+const ONE_DAY_TO_MILLISECONDS = 86400000;
 const COMMAND_FOR_WEIGHTS = "weights";
 const COMMAND_FOR_DATES = "dates";
 
 function generateRandomWeightsOrDatesInRange(min, max, command) {
-  if (command === "dates") {
+  if(command === "reps"){
+    return Math.floor(Math.random() * (max - min) + min);
+  }
+  else if (command === "dates") {
     return Math.floor(Math.random() * (max - min) + min);
   } else if (command === "weights") {
     return parseFloat(parseFloat(Math.random() * (max - min) + min).toFixed(2));
