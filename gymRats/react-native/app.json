@@ -2,7 +2,7 @@
   "expo": {
     "name": "Gym Rats",
     "slug": "gym-rats",
-    "version": "1.0.5",
+    "version": "1.0.6",
     "orientation": "portrait",
     "icon": "./assets/img/ic_launcher_icon.png",
     "scheme": "gymrats",
@@ -44,10 +44,10 @@
       "bundleIdentifier": "com.uploy.gymrats",
       "usesIcloudStorage": true,
       "icon": "./assets/img/ic_launcher_icon.png",
-      "buildNumber": "1.0.5"
+      "buildNumber": "1.0.6"
     },
     "android": {
-      "versionCode": 4,
+      "versionCode": 5,
       "useNextNotificationsApi": true,
       "icon": "./assets/img/ic_launcher_icon.png",
       "permissions": [
