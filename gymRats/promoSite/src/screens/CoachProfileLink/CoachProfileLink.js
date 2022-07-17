@@ -30,6 +30,19 @@ export default function CoachProfileLink(props) {
         window.location = "gymrats://coach-profile/" + id;
     }
 
+    const redirectToStore = (store) => {
+        switch(store) {
+          case  'APPLE': 
+            window.open('https://apps.apple.com/us/app/gym-rats-progress-made-easy/id1632827633', '_blank')
+            break;
+          case 'GOOGLE':
+            window.open('https://play.google.com/store/apps/details?id=com.uploy.gymrats', '_blank');
+            break;
+          case 'HUAWEI':
+            window.open('https://appgallery.huawei.com/app/C106584783', '_blank')
+            break;
+        }
+    }
 
     return (
         <div className="coach-profile">
@@ -58,8 +71,11 @@ export default function CoachProfileLink(props) {
                                 : <>
                                     <p className='notation'>{translations[props.language].coachProfile.noAppIncentive}</p>
                                     <div className="badges-container">
-                                        <img className="google-badge" src={badges(`./google-${props.language.toLowerCase()}.png`).default} alt="google" />
-                                        <img className="apple-badge" src={badges(`./apple-${props.language.toLowerCase()}.svg`).default} alt="apple" />
+                                        <img className="google-badge" onClick={() => {redirectToStore('GOOGLE')}} src={badges(`./google-${props.language.toLowerCase()}.png`).default} alt="google" />
+                                        <img className="apple-badge" onClick={() => {redirectToStore('APPLE')}} src={badges(`./apple-${props.language.toLowerCase()}.svg`).default} alt="apple" />
+                                    </div>
+                                    <div className="badges-container">
+                                        <img className="huawei-badge" onClick={() => {redirectToStore('HUAWEI')}} src={badges(`./huawei-${props.language.toLowerCase()}.png`).default} alt="huawei" />
                                     </div>
                                 </>
                         }
