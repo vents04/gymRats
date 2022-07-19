@@ -343,7 +343,15 @@ const workoutSessionValidation = (data, lng) => {
                 "array.includes": arrayIncludesError(lng, "sets"),
                 "any.required": anyRequiredError(lng, "sets")
             }),
-            note: Joi.string().optional().allow(null).allow("")
+            note: Joi.string().optional().allow(null).allow(""),
+            /*workoutId: Joi.string().custom((value, helper) => {
+                if (!mongoose.Types.ObjectId.isValid(value)) return helper.message(invalidIdError(lng, "workout"));
+                return true;
+            }).required().messages({
+                "string.base": stringBaseError(lng, "workout", 1),
+                "string.empty": stringEmptyError(lng, "workout"),
+                "any.required": anyRequiredError(lng, "workout")
+            }),*/
         }).required()).messages({
             "array.includes": arrayIncludesError(lng, "exercises"),
             "any.required": anyRequiredError(lng, "exercises")
