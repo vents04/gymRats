@@ -129,10 +129,14 @@ const DbService = {
     getManyWithSortAndLimit: function (collection, filter, sort, limit) {
         return new Promise((resolve, reject) => {
             validateCollection(collection, reject);
-            db.collection(collection).find(filter).sort(sort).limit(limit).toArray(function (err, cursor) {
+            let results = [];
+            db.collection(collection).find(filter, {sort, limit}, async function (err, cursor) {
                 if (err) return reject(new ResponseError(err.message || HTTP_STATUS_CODES.INTERNAL_SERVER));
-                resolve(cursor);
-            });
+                await cursor.forEach(result => {
+                    results.push(result);
+                })
+                resolve(results);
+            })
         })
     },
 

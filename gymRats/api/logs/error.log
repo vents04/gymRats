@@ -40,3 +40,10 @@
 {"dt":1657741974230,"language":"en","level":"error","message":"undefined е задължително поле","status":400,"userId":"62c97a01d4ffec1dbd9e4d32"}
 {"dt":1657741993932,"language":"en","level":"error","message":"undefined е задължително поле","status":400,"userId":"62c97a01d4ffec1dbd9e4d32"}
 {"dt":1657742066080,"language":"en","level":"error","message":"undefined е задължително поле","status":400,"userId":"62c97a01d4ffec1dbd9e4d32"}
+{"dt":1658256476393,"language":"en","level":"error","message":"jwt malformed","status":401,"userId":null}
+{"dt":1658256514363,"language":"en","level":"error","message":"jwt malformed","status":401,"userId":null}
+{"dt":1658256588198,"language":"en","level":"error","message":"User with this email already exists","status":400,"userId":null}
+{"dt":1658256601774,"language":"en","level":"error","message":"Invalid credentials for login","status":400,"userId":null}
+{"dt":1658256614098,"language":"en","level":"error","message":"Invalid credentials for login","status":400,"userId":null}
+{"dt":1658256697153,"language":"en","level":"error","message":"Invalid credentials for login","status":404,"userId":null}
+{"dt":1658256708463,"language":"en","level":"error","message":"Invalid credentials for login","status":404,"userId":null}

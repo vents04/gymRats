@@ -10,7 +10,6 @@ const {
 const DbService = require("../db.service");
 const mongo = require("../../db/mongo");
 const oneRepMax = require("../../helperFunctions/oneRepMax");
-
 mongo.connect();
 
 const progressService = {
@@ -18,7 +17,7 @@ const progressService = {
     return new Promise(async (resolve, reject) => {
       try {
         let averageVolumeForTheFirstSessions = 0;
-        let averageVolumeFroTheSecondSessions = 0;
+        let averageVolumeForTheSecondSessions = 0;
         let percentageProgress = 0;
         for (let index = 0; index < collection.length; index++ ) {
           for (const exercise of collection[index].exercises) {
@@ -26,38 +25,19 @@ const progressService = {
               const reps = set.reps;
               const amount = set.weight.amount;
               const unit = set.weight.unit; 
-              if (index < collection.length-1) {
+              if (index < collection.length /2) {
                 averageVolumeForTheSecondSessions+= reps*amount;
               }else{
-                averageVolumeFroTheFirstSessions+= reps*amount;
+                averageVolumeForTheFirstSessions+= reps*amount;
               }
             }
           }
 
         }
         averageVolumeForTheFirstSessions = averageVolumeForTheFirstSessions/(collection.length/2);
-        averageVolumeFroTheSecondSessions = averageVolumeFroTheSecondSessions/(collection.length/2);
-        percentageProgress = function (){
-          let x;
-          x = 100*(averageVolumeFroTheSecondSessions/averageVolumeForTheFirstSessions);
-          let y = 100 -x;
-          if (y > 0) {
-            return {
-              percentage: Math.abs(y),
-              message: `negative`
-            }
-          }else if(y < 0) {
-            return {
-              percentage: Math.abs(y),
-              message: `positive`
-            }
-          }else if(y === 0){
-            return {
-              percentage: 0,
-              message: `none`
-            }
-          }
-        }
+        averageVolumeForTheSecondSessions = averageVolumeForTheSecondSessions/(collection.length/2);
+        percentageProgress = progressService.returnPercentage(averageVolumeForTheFirstSessions,averageVolumeForTheSecondSessions);
+        console.log(percentageProgress)
         resolve(percentageProgress);
         
       } catch (err) {
@@ -138,10 +118,40 @@ const progressService = {
   },
 
   returnPercentage: (firstCollection,secondCollection) => {
-    
+    let x;
+          x = 100*(secondCollection/firstCollection);
+          console.log(x)
+          let y = 100 -x;
+          if (y > 0) {
+            return ({
+              percentage: Math.abs(y),
+              message: `negative`
+            })
+          }else if(y < 0) {
+            return ({
+              percentage: Math.abs(y),
+              message: `positive`
+            })
+          }else if(y === 0){
+            return ({
+              percentage: 0,
+              message: `none`
+            })
+          }
   }
    
   
 };
 
-progressService.getTemplateProgressStrength("62c97a01d4ffec1dbd9e4d32");
+ async function kur () { 
+  const collectionTest = await  DbService.getManyWithSortAndLimit(COLLECTIONS.WORKOUT_SESSIONS, {
+  userId: mongoose.Types.ObjectId("62d6fd17fdba80ae28af4971"),
+workoutId: mongoose.Types.ObjectId("62cbde235d524de3e804f953")},
+[['year', -1],['month', -1],['date', -1]],
+10
+);
+progressService.getTemplateProgressVolume(collectionTest);
+console.log(collectionTest);
+}
+
+kur();
