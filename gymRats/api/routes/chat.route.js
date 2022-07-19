@@ -25,7 +25,6 @@ router.get('/', authenticate, async (req, res, next) => {
         if (personalTrainer)
             chats.push(...await DbService.getMany(COLLECTIONS.CHATS, { personalTrainerId: mongoose.Types.ObjectId(personalTrainer._id) }))
 
-        //console.log(chats);
 
         for (let chat of chats) {
             let oppositeUser = null;

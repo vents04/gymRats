@@ -1,7 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const ResponseError = require('../errors/responseError');
-const { COLLECTIONS, ADMIN_STATUSES, HTTP_STATUS_CODES } = require('../global');
+const { COLLECTIONS, ADMIN_STATUSES, HTTP_STATUS_CODES, PERSONAL_TRAINER_STATUSES } = require('../global');
 const { adminAuthenticate } = require('../middlewares/authenticate');
 const AuthenticationService = require('../services/authentication.service');
 const DbService = require('../services/db.service');
@@ -66,6 +66,32 @@ router.post('/validate-token', async (req, res, next) => {
         return next(new ResponseError(error.message || DEFAULT_ERROR_MESSAGE, error.status || HTTP_STATUS_CODES.UNAUTHORIZED), req, res, next);
     }
 });
+
+router.get('/pending-trainers', adminAuthenticate, async (req, res, next) => {
+    try {
+        const pendingTrainers = await DbService.getMany(COLLECTIONS.PERSONAL_TRAINERS, {status: PERSONAL_TRAINER_STATUSES.PENDING})
+
+        return res.status(HTTP_STATUS_CODES.OK).send({
+            pendingTrainers
+        })
+        
+    } catch (err) {
+        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+    }
+});
+
+/*router.put('/pending-trainers-update', adminAuthenticate, async (req, res, next) => {
+    try {
+        const pendingTrainers = await DbService.getMany(COLLECTIONS.PERSONAL_TRAINERS, {status: PERSONAL_TRAINER_STATUSES.PENDING})
+
+        return res.status(HTTP_STATUS_CODES.OK).send({
+            pendingTrainers
+        })
+        
+    } catch (err) {
+        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+    }
+});*/
 
 
 module.exports = router;
