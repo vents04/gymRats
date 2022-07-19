@@ -34,3 +34,17 @@
 {"dt":1657372677424,"language":"en","level":"error","message":"Invalid credentials for login","status":404,"userId":null}
 {"dt":1657372694673,"language":"en","level":"error","message":"User with this email was not found","status":404,"userId":null}
 {"dt":1657538715668,"language":"en","level":"error","message":"Daily weight not found","status":404,"userId":"62c97a01d4ffec1dbd9e4d32"}
+{"dt":1658257555788,"language":"en","level":"error","message":"Email is a required field","status":400,"userId":null}
+{"dt":1658257650731,"language":"en","level":"error","message":"Token not provided","status":401,"userId":null}
+{"dt":1658257650742,"language":"en","level":"error","message":"Invalid collection","status":500,"userId":null}
+{"dt":1658257664034,"language":"en","level":"error","message":"Secret not provided","status":401,"userId":null}
+{"dt":1658257664037,"language":"en","level":"error","message":"Invalid collection","status":500,"userId":null}
+{"dt":1658257693582,"language":"en","level":"error","message":"ADMIN_SECRET is not defined","status":401,"userId":null}
+{"dt":1658257693584,"language":"en","level":"error","message":"Invalid collection","status":500,"userId":null}
+{"dt":1658257714552,"language":"en","level":"error","message":"Invalid collection","status":500,"userId":null}
+{"dt":1658257761114,"language":"en","level":"error","message":"CONSOLE is not defined","status":401,"userId":null}
+{"dt":1658257761128,"language":"en","level":"error","message":"Invalid collection","status":500,"userId":null}
+{"dt":1658257769009,"language":"en","level":"error","message":"Invalid collection","status":500,"userId":null}
+{"dt":1658257782208,"language":"en","level":"error","message":"Invalid collection","status":500,"userId":null}
+{"dt":1658257798297,"language":"en","level":"error","message":"mongoose is not defined","status":500,"userId":null}
+{"dt":1658259956522,"language":"en","level":"error","message":"mongoose is not defined","status":500,"userId":null}

@@ -322,7 +322,7 @@ export default class Calendar extends Component {
                                     <Entypo name="chevron-right" style={{ marginLeft: 5 }} size={14} color="#999" />
                                 </Pressable>
                             </View>
-                            {
+                            {/* {
                                 this.state.calendarActionButtonBucket
                                     ? this.state.calendarActionButtonBucket == campaigns.calendarActionButton[1]
                                         ? <View>
@@ -437,7 +437,7 @@ export default class Calendar extends Component {
                                             </View>
                                             : null
                                     : null
-                            }
+                            } */}
                             <ScrollView
                                 overScrollMode={"never"}
                                 fadingEdgeLength={150}
@@ -456,43 +456,112 @@ export default class Calendar extends Component {
                                     />
                                 }>
                                 {
-                                    !this.state.cardsRefreshing
-                                        ? <>
-                                            {
-                                                this.state.cards.length > 0
-                                                    ? this.state.cards.map((card, index) =>
-                                                        card.card == "dailyWeights"
-                                                            ? <WeightTrackerCard key={"_" + index} actionButtonFunction={() => {
-                                                                this.props.navigation.navigate("WeightTracker", {
-                                                                    date: this.state.selectedDate,
-                                                                    timezoneOffset: this.state.timezoneOffset,
-                                                                    weight: card.data.weight,
-                                                                    weightUnit: card.data.unit,
-                                                                    _id: card.data._id
-                                                                });
-                                                            }} data={card.data} date={this.state.selectedDate} {...this.props} />
-                                                            : card.card == 'workoutSessions'
-                                                                ? <LogbookCard key={"_" + index} actionButtonFunction={() => {
-                                                                    this.props.navigation.navigate("Logbook", {
-                                                                        date: this.state.selectedDate,
-                                                                        timezoneOffset: this.state.timezoneOffset,
-                                                                        data: card.data
-                                                                    });
-                                                                }} data={card.data} date={this.state.selectedDate} {...this.props} />
-                                                                : card.card == 'caloriesCounterDays'
-                                                                    ? <CaloriesIntakeCard key={"_" + index} actionButtonFunction={() => {
-                                                                        this.props.navigation.navigate("CaloriesIntake", {
-                                                                            date: this.state.selectedDate,
-                                                                            timezoneOffset: this.state.timezoneOffset,
-                                                                            data: card.data
-                                                                        });
-                                                                    }} data={card.data} date={this.state.selectedDate} {...this.props} />
-                                                                    : null
-                                                    )
-                                                    : <Text style={globalStyles.notation}>{i18n.t('screens')['calendar']['noData']}</Text>
-                                            }
-                                        </>
-                                        : <Text style={globalStyles.notation}>{i18n.t("screens")["calendar"]["cardsRefreshing"]}</Text>
+                                    !this.state.doNotShow.includes("dailyWeights")
+                                    ? <Pressable style={({ pressed }) => [
+                                        {
+                                            opacity: pressed ? 0.1 : 1,
+                                        }
+                                        ]} onPress={() => {
+                                            this.bottomSheet.current.close();
+                                            this.props.navigation.navigate("WeightTracker", {
+                                                date: this.state.selectedDate,
+                                                timezoneOffset: this.state.timezoneOffset
+                                            });
+                                        }}><View style={styles.addDataItemContainer}>
+                                            <View style={styles.addDataItemLeft}>
+                                                <FontAwesome5 name="weight" size={25} color={cardColors.weightTracker} />
+                                                <View style={styles.addDataItemLabels}>
+                                                    <Text style={styles.addDataItemTitle}>{i18n.t('components')['cards']['weightTracker']['cardTitle']}</Text>
+                                                    <Text style={styles.addDataDescription}>Track your daily weight changes</Text>
+                                                </View>
+                                            </View>
+                                            <Ionicons name="add-circle-sharp" size={24} color="#262626" />
+                                        </View>
+                                        </Pressable>
+                                    : null
+                                }
+                                {
+                                    !this.state.doNotShow.includes("workoutSessions")
+                                    ? <Pressable style={({ pressed }) => [
+                                        {
+                                            opacity: pressed ? 0.1 : 1,
+                                        }
+                                        ]} onPress={() => {
+                                            this.bottomSheet.current.close();
+                                            this.props.navigation.navigate("Logbook", {
+                                                date: this.state.selectedDate,
+                                                timezoneOffset: this.state.timezoneOffset
+                                            });
+                                        }}><View style={styles.addDataItemContainer}>
+                                            <View style={styles.addDataItemLeft}>
+                                                <FontAwesome5 name="book-open" size={25} color={cardColors.logbook} />
+                                                <View style={styles.addDataItemLabels}>
+                                                    <Text style={styles.addDataItemTitle}>{i18n.t('components')['cards']['logbook']['cardTitle']}</Text>
+                                                    <Text style={styles.addDataDescription}>Track your workouts</Text>
+                                                </View>
+                                            </View>
+                                            <Ionicons name="add-circle-sharp" size={24} color="#262626" />
+                                        </View> 
+                                    </Pressable>
+                                    : null
+                                }
+                                {
+                                    !this.state.doNotShow.includes("caloriesCounterDays")
+                                    ? <Pressable style={({ pressed }) => [
+                                        {
+                                            opacity: pressed ? 0.1 : 1,
+                                        }
+                                        ]} onPress={() => {
+                                            this.bottomSheet.current.close();
+                                            this.props.navigation.navigate("CaloriesIntake", {
+                                                date: this.state.selectedDate,
+                                                timezoneOffset: this.state.timezoneOffset
+                                            });
+                                        }}><View style={styles.addDataItemContainer}>
+                                            <View style={styles.addDataItemLeft}>
+                                                <MaterialCommunityIcons name="food-variant" size={25} color={cardColors.caloriesIntake} />
+                                                <View style={styles.addDataItemLabels}>
+                                                    <Text style={styles.addDataItemTitle}>{i18n.t('components')['cards']['caloriesIntake']['cardTitle']}</Text>
+                                                    <Text style={styles.addDataDescription}>Track your meals throughout the day</Text>
+                                                </View>
+                                            </View>
+                                            <Ionicons name="add-circle-sharp" size={24} color="#262626" />
+                                        </View> 
+                                    </Pressable>
+                                    : null
+                                }
+                                {
+                                    this.state.cards.length > 0
+                                        ? this.state.cards.map((card, index) =>
+                                            card.card == "dailyWeights"
+                                                ? <WeightTrackerCard key={"_" + index} actionButtonFunction={() => {
+                                                    this.props.navigation.navigate("WeightTracker", {
+                                                        date: this.state.selectedDate,
+                                                        timezoneOffset: this.state.timezoneOffset,
+                                                        weight: card.data.weight,
+                                                        weightUnit: card.data.unit,
+                                                        _id: card.data._id
+                                                    });
+                                                }} data={card.data} date={this.state.selectedDate} {...this.props} />
+                                                : card.card == 'workoutSessions'
+                                                    ? <LogbookCard key={"_" + index} actionButtonFunction={() => {
+                                                        this.props.navigation.navigate("Logbook", {
+                                                            date: this.state.selectedDate,
+                                                            timezoneOffset: this.state.timezoneOffset,
+                                                            data: card.data
+                                                        });
+                                                    }} data={card.data} date={this.state.selectedDate} {...this.props} />
+                                                    : card.card == 'caloriesCounterDays'
+                                                        ? <CaloriesIntakeCard key={"_" + index} actionButtonFunction={() => {
+                                                            this.props.navigation.navigate("CaloriesIntake", {
+                                                                date: this.state.selectedDate,
+                                                                timezoneOffset: this.state.timezoneOffset,
+                                                                data: card.data
+                                                            });
+                                                        }} data={card.data} date={this.state.selectedDate} {...this.props} />
+                                                        : null
+                                        )
+                                        : null
                                 }
                             </ScrollView>
                         </View>

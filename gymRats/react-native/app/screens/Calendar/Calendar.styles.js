@@ -79,5 +79,38 @@ export default StyleSheet.create({
     cards: {
         display: "flex",
         flexDirection: "column",
+    },
+    addDataItemContainer: {
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+        borderWidth: 2,
+        borderRadius: 4,
+        borderColor: "#e7e7e7",
+        padding: 16,
+        marginBottom: 16
+    },
+    addDataItemLeft: {
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center"
+    },
+    addDataItemLabels: {
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "flex-start",
+        marginLeft: 16
+    },
+    addDataItemTitle: {
+        fontFamily: "MainBold",
+        fontSize: 14,
+        textTransform: "uppercase"
+    },
+    addDataDescription: {
+        fontFamily: "MainRegular",
+        fontSize: 12,
+        marginTop: 4,
+        color: "#777"
     }
 });
