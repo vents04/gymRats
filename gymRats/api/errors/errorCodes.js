@@ -240,8 +240,8 @@ module.exports.errorCodes = {
         bg: ["Няма съществуващ запис на съобщението"]
     },
     60: {
-        en: [""],
-        bg: [""]
+        en: ["You have already requested account deletion"],
+        bg: ["Вече сте изплатили заявка за изтриване на акаунта ви"]
     },
     61: {
         en: [""],

@@ -176,6 +176,10 @@ module.exports = {
                 KILOGRAMS: "Metric system (kilograms)",
                 POUNDS: "Imperial system (pounds)",
                 removeProfilePicture: "Remove profile picture",
+                accountDeletion: "Account deletion",
+                initiateAccountDeletion: "Initiate account deletion",
+                pendingAccountDeletionDescription: "You account deletion will be completed between 7 and 30 days after the request has been initiated. Until then you may cancel the request by the button below.",
+                cancelAccountDeletion: "Cancel account deletion"
             },
             profile: {
                 saving: "Saving...",
@@ -590,6 +594,10 @@ module.exports = {
                 KILOGRAMS: "Метрична система (килограми)",
                 POUNDS: "Имперска система (паунди)",
                 removeProfilePicture: "Премахни профилната снимка",
+                accountDeletion: "Изтриване на акаунт",
+                initiateAccountDeletion: "Заяви желание за изтриване на акаунта",
+                pendingAccountDeletionDescription: "Изтриването на акаунта ще отнеме от 7 до 3 дни след подаване на заявката за изтриване. Дотогава може да откажете изтриването на акаунта с бутона по-долу.",
+                cancelAccountDeletion: "Откажи изтриването на акаунта"
             },
             profile: {
                 saving: "Запазване...",

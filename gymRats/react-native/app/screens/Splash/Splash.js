@@ -66,7 +66,6 @@ export default class Splash extends Component {
                 });
                 return;
             }
-            console.log("eqwkrl;kqwer;kl")
             let validationEndpointResponse = null;
             let isAuthenticated = false;
             let hasUnverifiedEmail = false;
@@ -86,7 +85,6 @@ export default class Splash extends Component {
             if (isAuthenticated) {
                 user = validationEndpointResponse.user;
                 if (!hasUnverifiedEmail) {
-                    console.log("testese")
                     let chatsRoomSocket = socketClass.getChatsRoomSocket();
                     if (!chatsRoomSocket) {
                         chatsRoomSocket = socketClass.initConnection();

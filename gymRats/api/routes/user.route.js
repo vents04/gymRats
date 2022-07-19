@@ -15,11 +15,12 @@ const ResponseError = require('../errors/responseError');
 
 const { authenticate } = require('../middlewares/authenticate');
 
-const { HTTP_STATUS_CODES, COLLECTIONS, DEFAULT_ERROR_MESSAGE } = require('../global');
+const { HTTP_STATUS_CODES, COLLECTIONS, DEFAULT_ERROR_MESSAGE, ACCOUNT_DELETION_REQUEST_STATUSES } = require('../global');
 const { signupValidation, loginValidation, suggestionPostValidation, userUpdateValidation, forgottenPasswordPostValidation, passwordPutValidation, emailVerificationPostValidation } = require('../validation/hapi');
 const PasswordRecoveryCode = require('../db/models/generic/passwordRecoveryCode.model');
 const EmailVerificationCode = require('../db/models/generic/emailVerificationCode.model');
 const UserService = require('../services/user.service');
+const AccountDeletionRequest = require('../db/models/generic/accountDeletionRequest.model');
 
 router.post("/signup", async (req, res, next) => {
     const { error } = signupValidation(req.body, req.headers.lng);
@@ -295,6 +296,48 @@ router.get("/check-email-verification-code", async (req, res, next) => {
     } catch (err) {
         return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
     }
-})
+});
+
+router.post('/account-deletion-request', authenticate, async (req, res, next) => {
+    try {
+        const existingAccountDeletionRequest = await DbService.getOne(COLLECTIONS.ACCOUNT_DELETION_REQUESTS, {userId: mongoose.Types.ObjectId(req.user._id)});
+        if(existingAccountDeletionRequest) return next(new ResponseError("You have already requested account deletion", HTTP_STATUS_CODES.BAD_REQUEST, 60))
+        
+        const accountDeletionRequest = new AccountDeletionRequest({
+            userId: mongoose.Types.ObjectId(req.user._id),
+        });
+
+        await DbService.create(COLLECTIONS.ACCOUNT_DELETION_REQUESTS, accountDeletionRequest);
+
+        EmailService.send("v.dimitrov@uploy.app", "Account deletion request", `${req.user.firstName} ${req.user.lastName} with id ${req.user._id} has requested account deletion on ${new Date()}`);
+
+        return res.sendStatus(HTTP_STATUS_CODES.OK);
+    } catch (err) {
+        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+    }
+});
+
+router.get('/account-deletion-request', authenticate, async (req, res, next) => {
+    try {        
+        const accountDeletionRequest = await DbService.getOne(COLLECTIONS.ACCOUNT_DELETION_REQUESTS, {userId: mongoose.Types.ObjectId(req.user._id)});
+        return res.status(HTTP_STATUS_CODES.OK).send({
+            accountDeletionRequest
+        });
+    } catch (err) {
+        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+    }
+});
+
+router.delete('/account-deletion-request', authenticate, async (req, res, next) => {
+    try {
+        await DbService.delete(COLLECTIONS.ACCOUNT_DELETION_REQUESTS, {userId: mongoose.Types.ObjectId(req.user._id)});
+
+        EmailService.send("v.dimitrov@uploy.app", "Account deletion request cancelled", `${req.user.firstName} ${req.user.lastName} with user id ${req.user._id} has cancelled their account deletion request`);
+
+        return res.sendStatus(HTTP_STATUS_CODES.OK);
+    } catch (err) {
+        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+    }
+});
 
 module.exports = router;

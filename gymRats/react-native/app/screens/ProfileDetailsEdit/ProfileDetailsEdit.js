@@ -26,6 +26,7 @@ export default class ProfileDetailsEdit extends Component {
             firstName: "",
             lastName: "",
             profile: {},
+            accountDeletionRequest: null,
             weightUnitDropDownOpened: false,
             weightUnits: [],
             showError: false,
@@ -50,10 +51,53 @@ export default class ProfileDetailsEdit extends Component {
         })
         BackHandler.addEventListener("hardwareBackPress", this.backAction);
         this.setWeightUnitsArray();
+        this.getAccountDeletionRequest();
     }
 
     componentWillUnmount() {
         BackHandler.removeEventListener("hardwareBackPress", this.backAction);
+    }
+
+    getAccountDeletionRequest = () => {
+        ApiRequests.get('user/account-deletion-request', {}, true).then((response) => {
+            this.setState({accountDeletionRequest: response.data.accountDeletionRequest})
+        }).catch((error) => {
+            this.setState({
+                showSaving: false,
+                showError: true,
+                error: error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR && !error.response.data.includes("<html>")
+                    ? error.response.data
+                    : i18n.ti18n.t('errors')['internalServerError']
+            })
+        })
+    }
+
+    postAccountDeletionRequest = () => {
+        ApiRequests.post('user/account-deletion-request', {}, {}, true).then((response) => {
+            this.getAccountDeletionRequest();
+        }).catch((error) => {
+            this.setState({
+                showSaving: false,
+                showError: true,
+                error: error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR && !error.response.data.includes("<html>")
+                    ? error.response.data
+                    : i18n.ti18n.t('errors')['internalServerError']
+            })
+        })
+    }
+
+    deleteAccountDeletionRequest = () => {
+        ApiRequests.delete('user/account-deletion-request', {}, true).then((response) => {
+            this.getAccountDeletionRequest();
+        }).catch((error) => {
+            this.setState({
+                showSaving: false,
+                showError: true,
+                error: error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR && !error.response.data.includes("<html>")
+                    ? error.response.data
+                    : i18n.ti18n.t('errors')['internalServerError']
+            })
+        })
     }
 
     setWeightUnitsArray = () => {
@@ -234,6 +278,36 @@ export default class ProfileDetailsEdit extends Component {
                                 marginBottom: 16,
                             }}
                         />
+                    </View>
+                    <View style={styles.editSection}>
+                        <Text style={styles.editSectionTitle}>{i18n.t('screens')['profileDetailsEdit']['accountDeletion']}</Text>
+                        {
+                            !this.state.accountDeletionRequest
+                            ?                        <Pressable style={({ pressed }) => [
+                                globalStyles.authPageActionButton,
+                                {
+                                    opacity: pressed ? 0.1 : 1,
+                                }
+                            ]} onPress={() => {
+                                this.postAccountDeletionRequest(); 
+                            }}>
+                                <Text style={globalStyles.authPageActionButtonText}>{i18n.t('screens')['profileDetailsEdit']['initiateAccountDeletion']}</Text>
+                            </Pressable>
+                            : <View>
+                                <Text style={globalStyles.notation}>{i18n.t('screens')['profileDetailsEdit']['pendingAccountDeletionDescription']}</Text>
+                                <Pressable style={({ pressed }) => [
+                                    globalStyles.authPageActionButton,
+                                    {
+                                        opacity: pressed ? 0.1 : 1,
+                                        marginTop: 16
+                                    }
+                                ]} onPress={() => {
+                                    this.deleteAccountDeletionRequest();
+                                }}>
+                                    <Text style={globalStyles.authPageActionButtonText}>{i18n.t('screens')['profileDetailsEdit']['cancelAccountDeletion']}</Text>
+                                </Pressable>
+                            </View>
+                        }
                     </View>
                     {
                         this.state.profile.profilePicture
