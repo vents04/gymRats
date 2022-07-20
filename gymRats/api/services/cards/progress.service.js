@@ -37,7 +37,6 @@ const progressService = {
         averageVolumeForTheFirstSessions = averageVolumeForTheFirstSessions/(collection.length/2);
         averageVolumeForTheSecondSessions = averageVolumeForTheSecondSessions/(collection.length/2);
         percentageProgress = progressService.returnPercentage(averageVolumeForTheFirstSessions,averageVolumeForTheSecondSessions);
-        console.log(percentageProgress)
         resolve(percentageProgress);
         
       } catch (err) {
@@ -54,16 +53,13 @@ const progressService = {
   getTemplateProgress: (collection) =>{
     return new Promise(async (resolve, reject) => {
       try{
-        let workoutTemplate = DbService.getById(COLLECTIONS.WORKOUTS, { _id: mongoose.Types.ObjectId(collection[0].workoutId)})
-        let arrayWithVolumeAndOneRepMaxForEveryExerciseAverage1 = {};
-        let arrayWithVolumeAndOneRepMaxForEveryExerciseAverage2 = {};
+        let averagePercentage = 0;
         let arrayWithVolumeAndOneRepMaxForEveryExerciseCombined1 = {};
         let arrayWithVolumeAndOneRepMaxForEveryExerciseCombined2 = {};
         for (let index = 0; index < collection.length; index++) {
-          for (const exercise of collection[index]) {
-            let exerciseVolume = 0;
+          for (const exercise of collection[index].exercises) {
             let exerciseOneRepMax = 0;
-            let name  = (exercise.exerciseId).toString();
+            let id  = (exercise.exerciseId).toString();
             for (const set of exercise.sets) {
               const reps = set.reps;
               const amount = set.weight.amount;
@@ -73,33 +69,42 @@ const progressService = {
                 exerciseOneRepMax = currentOneRepMax;
               }
                if (index < collection.length/2) {
-                if (!arrayWithVolumeAndOneRepMaxForEveryExerciseCombined2.hasOwnProperty(name)) {
-                  arrayWithVolumeAndOneRepMaxForEveryExerciseCombined2[name] = {};
-                  arrayWithVolumeAndOneRepMaxForEveryExerciseCombined2[name]["volume"] = reps*amount;
+                if (!arrayWithVolumeAndOneRepMaxForEveryExerciseCombined2.hasOwnProperty(id)) {
+                  arrayWithVolumeAndOneRepMaxForEveryExerciseCombined2[id] = {};
+                  arrayWithVolumeAndOneRepMaxForEveryExerciseCombined2[id]["oneRepMax"] = 0;
+                  arrayWithVolumeAndOneRepMaxForEveryExerciseCombined2[id]["volume"] = reps*amount;
                 }else{
-                  arrayWithVolumeAndOneRepMaxForEveryExerciseCombined2[name]["volume"]+= reps*amount;
+                  arrayWithVolumeAndOneRepMaxForEveryExerciseCombined2[id]["volume"]+= reps*amount;
                 }
                }else{
-                if (!arrayWithVolumeAndOneRepMaxForEveryExerciseCombined1.hasOwnProperty(name)) {
-                  arrayWithVolumeAndOneRepMaxForEveryExerciseCombined1[name] = {};
-                  arrayWithVolumeAndOneRepMaxForEveryExerciseCombined1[name]["volume"] = reps*amount;
+                if (!arrayWithVolumeAndOneRepMaxForEveryExerciseCombined1.hasOwnProperty(id)) {
+                  arrayWithVolumeAndOneRepMaxForEveryExerciseCombined1[id] = {};
+                  arrayWithVolumeAndOneRepMaxForEveryExerciseCombined1[id]["oneRepMax"] = 0;
+                  arrayWithVolumeAndOneRepMaxForEveryExerciseCombined1[id]["volume"] = reps*amount;
                 }else{
-                  arrayWithVolumeAndOneRepMaxForEveryExerciseCombined1[name]["volume"]+= reps*amount;
+                  arrayWithVolumeAndOneRepMaxForEveryExerciseCombined1[id]["volume"]+= reps*amount;
                 }
                }
             }
             if (index < collection.length/2) {
-            arrayWithVolumeAndOneRepMaxForEveryExerciseCombined2[name]["oneRepMax"] += exerciseOneRepMax;
+            arrayWithVolumeAndOneRepMaxForEveryExerciseCombined2[id]["oneRepMax"] += exerciseOneRepMax;
             }else{
-              arrayWithVolumeAndOneRepMaxForEveryExerciseCombined1[name]["oneRepMax"] += exerciseOneRepMax;
+              arrayWithVolumeAndOneRepMaxForEveryExerciseCombined1[id]["oneRepMax"] += exerciseOneRepMax;
             }
           }
         }
 
-        for (const exercisesId of workoutTemplate.exercises) {
-          let id = exercisesId._id;
-          let 
+        for (const exercise of collection[0].exercises) {
+          let id = exercise.exerciseId.toString();
+          let volumeForTheFirstSessions = arrayWithVolumeAndOneRepMaxForEveryExerciseCombined1[id]["volume"];
+          let oneRepMaxForTheFirstSessions = arrayWithVolumeAndOneRepMaxForEveryExerciseCombined1[id]["oneRepMax"];
+          let volumeForTheSecondSessions = arrayWithVolumeAndOneRepMaxForEveryExerciseCombined2[id]["volume"];
+          let oneRepMaxForTheSecondSessions = arrayWithVolumeAndOneRepMaxForEveryExerciseCombined2[id]["oneRepMax"];
+          let percentageForVolume = progressService.returnPercentage(volumeForTheFirstSessions,volumeForTheSecondSessions)
+          let percentageForOneRepMax = progressService.returnPercentage(oneRepMaxForTheFirstSessions,oneRepMaxForTheSecondSessions)
+          averagePercentage += (percentageForVolume + percentageForOneRepMax)/2;
         }
+        resolve(averagePercentage);
       }catch(err){
         reject(
           new ResponseError(
@@ -111,47 +116,22 @@ const progressService = {
     })
   },
 
-  checkIfEqual: (a, b) => {
-    const Equal = (a, b) =>
-      JSON.stringify(a.sort()) === JSON.stringify(b.sort());
-    return Equal;
-  },
-
   returnPercentage: (firstCollection,secondCollection) => {
     let x;
           x = 100*(secondCollection/firstCollection);
           console.log(x)
           let y = 100 -x;
           if (y > 0) {
-            return ({
-              percentage: Math.abs(y),
-              message: `negative`
-            })
+            y = -y;
+            return y
           }else if(y < 0) {
-            return ({
-              percentage: Math.abs(y),
-              message: `positive`
-            })
+            y = -y;
+            return y
           }else if(y === 0){
-            return ({
-              percentage: 0,
-              message: `none`
-            })
+            return y
           }
   }
    
   
 };
 
- async function kur () { 
-  const collectionTest = await  DbService.getManyWithSortAndLimit(COLLECTIONS.WORKOUT_SESSIONS, {
-  userId: mongoose.Types.ObjectId("62d6fd17fdba80ae28af4971"),
-workoutId: mongoose.Types.ObjectId("62cbde235d524de3e804f953")},
-[['year', -1],['month', -1],['date', -1]],
-10
-);
-progressService.getTemplateProgressVolume(collectionTest);
-console.log(collectionTest);
-}
-
-kur();

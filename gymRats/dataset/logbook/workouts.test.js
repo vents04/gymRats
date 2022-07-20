@@ -99,7 +99,7 @@ let lastSchema = {
           year: new Date(dt).getFullYear(),
           userId: userId,
           exercises: exercisesForNextSession,
-          workoutId: mongoose.Types.ObjectId("62cbde235d524de3e804f953")
+          workoutId: mongoose.Types.ObjectId("62cec7d66276605142b9e24f")
         };
       
         lastSchema = currentSchema;
