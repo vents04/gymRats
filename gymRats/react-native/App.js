@@ -57,7 +57,7 @@ const App = (props) => {
   const initLinkingListener = () => {
     linkingListener = Linking.addEventListener('url', async (event) => {
       let data = event.url;
-      if (data.includes('coach-profile/')) {
+      if (data.includes('coach-profile/') && hasNetworkConnection) {
         let coachId = data.split('/coach-profile/')[1];
         ApiRequests.get("coaching/coach/" + coachId).then((response) => {
           if (navigationRef.current && navigationRef.current.isReady()) {
@@ -72,31 +72,33 @@ const App = (props) => {
 
   const initAppStateListener = () => {
     appStateListener = AppState.addEventListener("change", async nextAppState => {
-      if (nextAppState == 'background') {
-        let chatsRoomSocket = socketClass.getChatsRoomSocket();
-        if (chatsRoomSocket) {
-          socketClass.getChatsRoomSocket().emit("disconnectUser")
-          socketClass.setChatsRoomSocket(null);
-        }
-
-        const navAnalytics = await AsyncStorage.getItem('@gymRats:navAnalytics');
-        if (navAnalytics) {
-          const navigationAnalytics = JSON.parse(navAnalytics);
-          ApiRequests.post("analytics/navigation", {}, { navigationAnalytics }, false).then(() => {
-            AsyncStorage.setItem('@gymRats:navAnalytics', "[]");
-          }).catch((error) => { })
-        }
-      } else if (nextAppState == 'active') {
-        const token = await AsyncStorage.getItem(AUTHENTICATION_TOKEN_KEY);
-        const validation = await User.validateToken()
-
-        if (token && validation.valid) {
+      if(hasNetworkConnection) {
+        if (nextAppState == 'background') {
           let chatsRoomSocket = socketClass.getChatsRoomSocket();
-          if (!chatsRoomSocket) {
-            chatsRoomSocket = socketClass.initConnection();
-            socketClass.setChatsRoomSocket(chatsRoomSocket);
+          if (chatsRoomSocket) {
+            socketClass.getChatsRoomSocket().emit("disconnectUser")
+            socketClass.setChatsRoomSocket(null);
           }
-          socketClass.joinChatsRoom();
+  
+          const navAnalytics = await AsyncStorage.getItem('@gymRats:navAnalytics');
+          if (navAnalytics) {
+            const navigationAnalytics = JSON.parse(navAnalytics);
+            ApiRequests.post("analytics/navigation", {}, { navigationAnalytics }, false).then(() => {
+              AsyncStorage.setItem('@gymRats:navAnalytics', "[]");
+            }).catch((error) => { })
+          }
+        } else if (nextAppState == 'active') {
+          const token = await AsyncStorage.getItem(AUTHENTICATION_TOKEN_KEY);
+          const validation = await User.validateToken()
+  
+          if (token && validation.valid) {
+            let chatsRoomSocket = socketClass.getChatsRoomSocket();
+            if (!chatsRoomSocket) {
+              chatsRoomSocket = socketClass.initConnection();
+              socketClass.setChatsRoomSocket(chatsRoomSocket);
+            }
+            socketClass.joinChatsRoom();
+          }
         }
       }
     });
@@ -177,7 +179,7 @@ const App = (props) => {
         onReady={async () => {
           routeNameRef.current = navigationRef.getCurrentRoute().name;
           const initialUrl = await Linking.getInitialURL();
-          if (initialUrl) {
+          if (initialUrl && hasNetworkConnection) {
             if (initialUrl.includes("coach-profile/")) {
               let coachId = initialUrl.split('/coach-profile/')[1];
               ApiRequests.get("coaching/coach/" + coachId).then((response) => {
