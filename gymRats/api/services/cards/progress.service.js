@@ -1,10 +1,13 @@
+const { default: mongoose } = require("mongoose");
 const ResponseError = require("../../errors/responseError");
 const {
   WEIGHT_UNITS,
   WEIGHT_UNIT_RELATIONS,
   HTTP_STATUS_CODES,
+  COLLECTIONS,
 } = require("../../global");
 const oneRepMax = require("../../helperFunctions/oneRepMax");
+const DbService = require("../db.service");
 
 const ProgressService = {
   getTemplateProgressVolume: (collection) => {
@@ -53,6 +56,7 @@ const ProgressService = {
   getTemplateProgress: (collection) => {
     return new Promise(async (resolve, reject) => {
       try {
+        collection = await DbService.getMany(COLLECTIONS.WORKOUT_SESSIONS, {});
         let averagePercentage = 0;
         let arrayWithVolumeAndOneRepMaxForEveryExerciseCombined1 = {};
         let arrayWithVolumeAndOneRepMaxForEveryExerciseCombined2 = {};
@@ -160,7 +164,6 @@ const ProgressService = {
   returnPercentage: (firstCollection, secondCollection) => {
     let x;
     x = 100 * (secondCollection / firstCollection);
-    console.log(x);
     let y = 100 - x;
     if (y > 0) {
       y = -y;
@@ -173,3 +176,5 @@ const ProgressService = {
     }
   },
 };
+
+module.exports = ProgressService;
