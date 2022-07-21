@@ -11,6 +11,7 @@ const {
 } = require("../global");
 const { authenticate } = require("../middlewares/authenticate");
 const LogbookService = require("../services/cards/logbook.service");
+const ProgressService = require("../services/cards/progress.service");
 const WeightTrackerService = require("../services/cards/weightTracker.service");
 const DbService = require("../services/db.service");
 
@@ -60,7 +61,7 @@ router.get("/page", authenticate, async (req, res, next) => {
 
 // Define a get endpoint that returns in response the value returned from the service you have written in a json object with some adequate properties //
 router.get(
-  "/logbook-progress/:progressType",
+  "/logbook-progress",
   authenticate,
   async (req, res, next) => {
     try {
@@ -71,7 +72,9 @@ router.get(
           [['year', -1],['month', -1],['date', -1]],
           req.body.limit
         );
-      return res.status(HTTP_STATUS_CODES.OK).send({});
+        const percentageProgressVolume = ProgressService.getTemplateProgressVolume(workoutsWithSpecificTemplate);
+        const percentageProgressCombined = ProgressService.getTemplateProgress(workoutsWithSpecificTemplate);
+      return res.status(HTTP_STATUS_CODES.OK).send({percentageProgressCombined,percentageProgressVolume});
     } catch (err) {
       return next(
         new ResponseError(
