@@ -33,15 +33,9 @@ const ProgressService = {
             }
           }
         }
-        averageVolumeForFirstHalfSessions =
-          averageVolumeForFirstHalfSessions / (collection.length / 2);
-        averageVolumeForSecondHalfSessions =
-          averageVolumeForSecondHalfSessions / (collection.length / 2);
-        percentageProgress = ProgressService.returnPercentage(
-          averageVolumeForFirstHalfSessions,
-          averageVolumeForSecondHalfSessions
-        );
-        console.log(percentageProgress);
+        averageVolumeForTheFirstSessions = averageVolumeForTheFirstSessions/(collection.length/2);
+        averageVolumeForTheSecondSessions = averageVolumeForTheSecondSessions/(collection.length/2);
+        percentageProgress = progressService.returnPercentage(averageVolumeForTheFirstSessions,averageVolumeForTheSecondSessions);
         resolve(percentageProgress);
       } catch (err) {
         reject(
@@ -56,32 +50,15 @@ const ProgressService = {
 
   getTemplateProgress: (collection) => {
     return new Promise(async (resolve, reject) => {
-      try {
-        const workoutTemplateId = collection[0].workoutId;
-        collection.forEach((item) => {
-          if (
-            workoutTemplateId !== undefined &&
-            item.workoutId.toString() != workoutTemplateId
-          ) {
-            throw new Error(
-              "Not all elements in the collection have the same workoutId"
-            );
-          }
-        });
-
-        const workoutTemplate = DbService.getById(
-          COLLECTIONS.WORKOUTS,
-          workoutTemplateId
-        );
-
+      try{
+        let averagePercentage = 0;
         let arrayWithVolumeAndOneRepMaxForEveryExerciseCombined1 = {};
         let arrayWithVolumeAndOneRepMaxForEveryExerciseCombined2 = {};
 
         for (let index = 0; index < collection.length; index++) {
-          for (const exercise of collection[index]) {
-            let exerciseVolume = 0;
+          for (const exercise of collection[index].exercises) {
             let exerciseOneRepMax = 0;
-            let name = exercise.exerciseId.toString();
+            let id  = (exercise.exerciseId).toString();
             for (const set of exercise.sets) {
               const reps = set.reps;
               const amount = set.weight.amount;
@@ -90,57 +67,44 @@ const ProgressService = {
               if (currentOneRepMax > exerciseOneRepMax) {
                 exerciseOneRepMax = currentOneRepMax;
               }
-              if (index < collection.length / 2) {
-                if (
-                  !arrayWithVolumeAndOneRepMaxForEveryExerciseCombined2.hasOwnProperty(
-                    name
-                  )
-                ) {
-                  arrayWithVolumeAndOneRepMaxForEveryExerciseCombined2[name] =
-                    {};
-                  arrayWithVolumeAndOneRepMaxForEveryExerciseCombined2[name][
-                    "volume"
-                  ] = reps * amount;
-                } else {
-                  arrayWithVolumeAndOneRepMaxForEveryExerciseCombined2[name][
-                    "volume"
-                  ] += reps * amount;
+               if (index < collection.length/2) {
+                if (!arrayWithVolumeAndOneRepMaxForEveryExerciseCombined2.hasOwnProperty(id)) {
+                  arrayWithVolumeAndOneRepMaxForEveryExerciseCombined2[id] = {};
+                  arrayWithVolumeAndOneRepMaxForEveryExerciseCombined2[id]["oneRepMax"] = 0;
+                  arrayWithVolumeAndOneRepMaxForEveryExerciseCombined2[id]["volume"] = reps*amount;
+                }else{
+                  arrayWithVolumeAndOneRepMaxForEveryExerciseCombined2[id]["volume"]+= reps*amount;
                 }
-              } else {
-                if (
-                  !arrayWithVolumeAndOneRepMaxForEveryExerciseCombined1.hasOwnProperty(
-                    name
-                  )
-                ) {
-                  arrayWithVolumeAndOneRepMaxForEveryExerciseCombined1[name] =
-                    {};
-                  arrayWithVolumeAndOneRepMaxForEveryExerciseCombined1[name][
-                    "volume"
-                  ] = reps * amount;
-                } else {
-                  arrayWithVolumeAndOneRepMaxForEveryExerciseCombined1[name][
-                    "volume"
-                  ] += reps * amount;
+               }else{
+                if (!arrayWithVolumeAndOneRepMaxForEveryExerciseCombined1.hasOwnProperty(id)) {
+                  arrayWithVolumeAndOneRepMaxForEveryExerciseCombined1[id] = {};
+                  arrayWithVolumeAndOneRepMaxForEveryExerciseCombined1[id]["oneRepMax"] = 0;
+                  arrayWithVolumeAndOneRepMaxForEveryExerciseCombined1[id]["volume"] = reps*amount;
+                }else{
+                  arrayWithVolumeAndOneRepMaxForEveryExerciseCombined1[id]["volume"]+= reps*amount;
                 }
               }
             }
-            if (index < collection.length / 2) {
-              arrayWithVolumeAndOneRepMaxForEveryExerciseCombined2[name][
-                "oneRepMax"
-              ] += exerciseOneRepMax;
-            } else {
-              arrayWithVolumeAndOneRepMaxForEveryExerciseCombined1[name][
-                "oneRepMax"
-              ] += exerciseOneRepMax;
+            if (index < collection.length/2) {
+            arrayWithVolumeAndOneRepMaxForEveryExerciseCombined2[id]["oneRepMax"] += exerciseOneRepMax;
+            }else{
+              arrayWithVolumeAndOneRepMaxForEveryExerciseCombined1[id]["oneRepMax"] += exerciseOneRepMax;
             }
           }
         }
 
-        for (const exercisesId of workoutTemplate.exercises) {
-          let id = exercisesId._id;
-          let;
+        for (const exercise of collection[0].exercises) {
+          let id = exercise.exerciseId.toString();
+          let volumeForTheFirstSessions = arrayWithVolumeAndOneRepMaxForEveryExerciseCombined1[id]["volume"];
+          let oneRepMaxForTheFirstSessions = arrayWithVolumeAndOneRepMaxForEveryExerciseCombined1[id]["oneRepMax"];
+          let volumeForTheSecondSessions = arrayWithVolumeAndOneRepMaxForEveryExerciseCombined2[id]["volume"];
+          let oneRepMaxForTheSecondSessions = arrayWithVolumeAndOneRepMaxForEveryExerciseCombined2[id]["oneRepMax"];
+          let percentageForVolume = progressService.returnPercentage(volumeForTheFirstSessions,volumeForTheSecondSessions)
+          let percentageForOneRepMax = progressService.returnPercentage(oneRepMaxForTheFirstSessions,oneRepMaxForTheSecondSessions)
+          averagePercentage += (percentageForVolume + percentageForOneRepMax)/2;
         }
-      } catch (err) {
+        resolve(averagePercentage);
+      }catch(err){
         reject(
           new ResponseError(
             "Internal server error",
@@ -151,34 +115,22 @@ const ProgressService = {
     });
   },
 
-  checkIfEqual: (a, b) => {
-    const Equal = (a, b) =>
-      JSON.stringify(a.sort()) === JSON.stringify(b.sort());
-    return Equal;
-  },
-
-  returnPercentage: (firstCollection, secondCollection) => {
+  returnPercentage: (firstCollection,secondCollection) => {
     let x;
-    x = 100 * (secondCollection / firstCollection);
-    console.log(x);
-    let y = 100 - x;
-    if (y > 0) {
-      return {
-        percentage: Math.abs(y),
-        message: `negative`,
-      };
-    } else if (y < 0) {
-      return {
-        percentage: Math.abs(y),
-        message: `positive`,
-      };
-    } else if (y === 0) {
-      return {
-        percentage: 0,
-        message: `none`,
-      };
-    }
-  },
+          x = 100*(secondCollection/firstCollection);
+          console.log(x)
+          let y = 100 -x;
+          if (y > 0) {
+            y = -y;
+            return y
+          }else if(y < 0) {
+            y = -y;
+            return y
+          }else if(y === 0){
+            return y
+          }
+  }
+   
+  
 };
 
-module.exports = ProgressService;
