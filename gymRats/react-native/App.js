@@ -99,7 +99,6 @@ const App = (props) => {
           socketClass.joinChatsRoom();
         }
       }
-
     });
   }
 
