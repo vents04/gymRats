@@ -6,12 +6,13 @@ const ResponseError = require('../errors/responseError');
 const Navigation = require('../db/models/analytics/navigation.model');
 const DbService = require('../services/db.service');
 
-const { authenticate } = require('../middlewares/authenticate');
+const { authenticate, adminAuthenticate } = require('../middlewares/authenticate');
 
 const { navigationAnalyticsValidation, devicePostValidation } = require('../validation/hapi');
 
 const { HTTP_STATUS_CODES, DEFAULT_ERROR_MESSAGE, COLLECTIONS } = require('../global');
 const Device = require('../db/models/analytics/device.model');
+const AnalyticsService = require('../services/analytics.service');
 
 router.post("/navigation", async (req, res, next) => {
     const { error } = navigationAnalyticsValidation(req.body, req.headers.lng);
@@ -68,4 +69,17 @@ router.put("/expo-push-token/:token", authenticate, async (req, res, next) => {
         return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
     }
 })
+
+router.get("/user-stats/:id", adminAuthenticate, async(req, res, next) => {
+    if(!mongoose.Types.ObjectId(req.params.id)) return next(new ResponseError("Invalid id params", HTTP_STATUS_CODES.BAD_REQUEST));
+
+    try {
+        const stats = await AnalyticsService.getUserStats(req.params.id);
+        return res.status(HTTP_STATUS_CODES.OK).send({
+            stats
+        })
+    } catch (err) {
+        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR))
+    }
+});
 module.exports = router;

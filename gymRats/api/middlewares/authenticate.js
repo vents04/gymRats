@@ -1,4 +1,4 @@
-const { COLLECTIONS, HTTP_STATUS_CODES, ADMIN_STATUSES, SUPPORTED_LANGUAGES } = require('../global');
+const { COLLECTIONS, HTTP_STATUS_CODES, ADMIN_STATUSES, SUPPORTED_LANGUAGES, ADMIN_SECRET } = require('../global');
 const mongoose = require('mongoose')
 
 const DbService = require('../services/db.service');
@@ -45,7 +45,7 @@ let authenticate = async (req, res, next) => {
 
 let adminAuthenticate = async (req, res, next) => {
     const token = req.header("x-admin-token");
-    const secret = req.headers("x-admin-secret");
+    const secret = req.header("x-admin-secret");
     if (!token) {
         errorHandler(new ResponseError("Token not provided", HTTP_STATUS_CODES.UNAUTHORIZED), req, res, next);
         return;
