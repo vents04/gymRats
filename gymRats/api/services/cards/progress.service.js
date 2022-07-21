@@ -56,7 +56,8 @@ const ProgressService = {
   getTemplateProgress: (collection) => {
     return new Promise(async (resolve, reject) => {
       try {
-        collection = await DbService.getMany(COLLECTIONS.WORKOUT_SESSIONS, {});
+        collection = await DbService.getManyWithSortAndLimit(COLLECTIONS.WORKOUT_SESSIONS, {},
+        [['year', -1],['month', -1],['date', -1]], 10);
         let averagePercentage = 0;
         let arrayWithVolumeAndOneRepMaxForEveryExerciseCombined1 = {};
         let arrayWithVolumeAndOneRepMaxForEveryExerciseCombined2 = {};
