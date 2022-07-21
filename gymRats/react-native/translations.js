@@ -313,12 +313,16 @@ module.exports = {
                 getTheMost: "Get the most out of what you have earned through Gym Rats",
                 submitApplication: "Submit application",
                 clients: "Clients"
+            },
+            noNetwork: {
+                text: "Gym Rats works only when you are connected to the internet. We are waiting to see you back online soon."
             }
         },
         components: {
             cards: {
                 logbook: {
                     cardTitle: "Workout",
+                    cardDescription: "Track your workouts",
                     redirectButton: "Info and progress",
                     for: "for",
                     seconds: "seconds",
@@ -326,12 +330,14 @@ module.exports = {
                 },
                 weightTracker: {
                     cardTitle: "Weight",
+                    cardDescription: "Track your daily weight changes",
                     gainedWeight: "gained compared to last measurement",
                     lostWeight: "lost compared to last measurement",
                     redirectButton: "More info"
                 },
                 caloriesIntake: {
                     cardTitle: "Calories intake",
+                    cardDescription: "Track your meals throughout the day",
                     calories: "Calories",
                     carbs: "Carbs",
                     grams: "g",
@@ -732,11 +738,15 @@ module.exports = {
                 cancel: "Отказ",
                 yes: "Да, изтрий"
             },
+            noNetwork: {
+                text: "Gym Rats работи само при връзка с интернет. Ще те чакаме отново на линия в Gym Rats."
+            }
         },
         components: {
             cards: {
                 logbook: {
                     cardTitle: "Тренировка",
+                    cardDescription: "Следи прогреса в тренировките си",
                     redirectButton: "Инфо и прогрес",
                     for: "за",
                     seconds: "секунди",
@@ -744,12 +754,14 @@ module.exports = {
                 },
                 weightTracker: {
                     cardTitle: "Тегло",
+                    cardDescription: "Следи промените в теглото си",
                     gainedWeight: "покачени от последното измерване",
                     lostWeight: "свалени от последното измерване",
                     redirectButton: "Повече инфо"
                 },
                 caloriesIntake: {
                     cardTitle: "Приети калории",
+                    cardDescription: "Следи храненията през деня си",
                     calories: "калории",
                     carbs: "въглехидр.",
                     grams: "гр.",

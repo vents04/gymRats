@@ -21,11 +21,15 @@ import translations from './translations';
 import * as Linking from 'expo-linking';
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
+import NetInfo from '@react-native-community/netinfo';
+import NoNetwork from './app/screens/NoNetwork/NoNetwork';
 
 const Stack = createStackNavigator();
 
 const App = (props) => {
-  let linkingListener, appStateListener;
+  let linkingListener, appStateListener, netInfoListener;
+
+  const [hasNetworkConnection, setHasNetworkConnection] = useState(true);
 
   const linking = {
     prefix: ["gymrats://"],
@@ -39,12 +43,14 @@ const App = (props) => {
   useEffect(async () => {
     initLinkingListener();
     initAppStateListener();
+    initNetInfoListener();
     initABTestingCampaigns();
     registerForPushNotificationsAsync();
 
     return () => {
       if (linkingListener) linkingListener.remove();
       if (appStateListener) appStateListener.remove();
+      if (netInfoListener) netInfoListener();
     };
   }, []);
 
@@ -84,16 +90,23 @@ const App = (props) => {
         const token = await AsyncStorage.getItem(AUTHENTICATION_TOKEN_KEY);
         const validation = await User.validateToken()
 
-        if(token && validation.valid){
+        if (token && validation.valid) {
           let chatsRoomSocket = socketClass.getChatsRoomSocket();
           if (!chatsRoomSocket) {
-              chatsRoomSocket = socketClass.initConnection();
-              socketClass.setChatsRoomSocket(chatsRoomSocket);
-            }
-            socketClass.joinChatsRoom();
+            chatsRoomSocket = socketClass.initConnection();
+            socketClass.setChatsRoomSocket(chatsRoomSocket);
           }
+          socketClass.joinChatsRoom();
+        }
       }
 
+    });
+  }
+
+  const initNetInfoListener = () => {
+    netInfoListener = NetInfo.addEventListener(state => {
+      setHasNetworkConnection(state.isConnected);
+      console.log("is connected:", state.isConnected)
     });
   }
 
@@ -110,10 +123,10 @@ const App = (props) => {
     if (Device.isDevice) {
       let settings = await Notifications.getPermissionsAsync();
       let isAllowedToSendNotifications = settings.granted || settings.ios?.status === Notifications.IosAuthorizationStatus.PROVISIONAL
-      if(!isAllowedToSendNotifications) {
+      if (!isAllowedToSendNotifications) {
         settings = await Notifications.requestPermissionsAsync();
         isAllowedToSendNotifications = settings.granted || settings.ios?.status === Notifications.IosAuthorizationStatus.PROVISIONAL
-        if(!isAllowedToSendNotifications) {
+        if (!isAllowedToSendNotifications) {
           console.log("Failed to register for push notifications");
           return;
         }
@@ -184,7 +197,7 @@ const App = (props) => {
         onStateChange={async () => {
           const previousRouteName = routeNameRef.current;
           const currentRouteName = navigationRef.getCurrentRoute().name;
-          
+
           if (previousRouteName !== currentRouteName) {
             if (previousRouteName != "Splash") {
               const previousScreenData = {
@@ -208,23 +221,33 @@ const App = (props) => {
           }
           routeNameRef.current = currentRouteName;
         }}>
-        <Stack.Navigator initialRouteName="Splash">
-          <Stack.Screen
-            name="Splash"
-            component={Splash}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Auth"
-            component={Auth}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="NavigationRoutes"
-            component={NavigationRoutes}
-            options={{ headerShown: false }}
-          />
-        </Stack.Navigator>
+        {
+          hasNetworkConnection
+            ? <Stack.Navigator initialRouteName="Splash">
+              <Stack.Screen
+                name="Splash"
+                component={Splash}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="Auth"
+                component={Auth}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="NavigationRoutes"
+                component={NavigationRoutes}
+                options={{ headerShown: false }}
+              />
+            </Stack.Navigator>
+            : <Stack.Navigator initialRouteName="NoNetwork">
+              <Stack.Screen
+                name="NoNetwork"
+                component={NoNetwork}
+                options={{ headerShown: false }}
+              />
+            </Stack.Navigator>
+        }
       </NavigationContainer>
     </SafeAreaProvider>
   );

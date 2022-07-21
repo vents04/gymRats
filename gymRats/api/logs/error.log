@@ -48,3 +48,4 @@
 {"dt":1658257782208,"language":"en","level":"error","message":"Invalid collection","status":500,"userId":null}
 {"dt":1658257798297,"language":"en","level":"error","message":"mongoose is not defined","status":500,"userId":null}
 {"dt":1658259956522,"language":"en","level":"error","message":"mongoose is not defined","status":500,"userId":null}
+{"dt":1658432177129,"language":"en","level":"error","message":"Invalid credentials for login","status":400,"userId":null}

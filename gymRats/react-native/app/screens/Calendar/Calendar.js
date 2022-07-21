@@ -472,7 +472,7 @@ export default class Calendar extends Component {
                                                 <FontAwesome5 name="weight" size={25} color={cardColors.weightTracker} />
                                                 <View style={styles.addDataItemLabels}>
                                                     <Text style={styles.addDataItemTitle}>{i18n.t('components')['cards']['weightTracker']['cardTitle']}</Text>
-                                                    <Text style={styles.addDataDescription}>Track your daily weight changes</Text>
+                                                    <Text style={styles.addDataDescription}>{i18n.t('components')['cards']['weightTracker']['cardDescription']}</Text>
                                                 </View>
                                             </View>
                                             <Ionicons name="add-circle-sharp" size={24} color="#262626" />
@@ -497,7 +497,7 @@ export default class Calendar extends Component {
                                                 <FontAwesome5 name="book-open" size={25} color={cardColors.logbook} />
                                                 <View style={styles.addDataItemLabels}>
                                                     <Text style={styles.addDataItemTitle}>{i18n.t('components')['cards']['logbook']['cardTitle']}</Text>
-                                                    <Text style={styles.addDataDescription}>Track your workouts</Text>
+                                                    <Text style={styles.addDataDescription}>{i18n.t('components')['cards']['logbook']['cardDescription']}</Text>
                                                 </View>
                                             </View>
                                             <Ionicons name="add-circle-sharp" size={24} color="#262626" />
@@ -522,7 +522,7 @@ export default class Calendar extends Component {
                                                 <MaterialCommunityIcons name="food-variant" size={25} color={cardColors.caloriesIntake} />
                                                 <View style={styles.addDataItemLabels}>
                                                     <Text style={styles.addDataItemTitle}>{i18n.t('components')['cards']['caloriesIntake']['cardTitle']}</Text>
-                                                    <Text style={styles.addDataDescription}>Track your meals throughout the day</Text>
+                                                    <Text style={styles.addDataDescription}>{i18n.t('components')['cards']['caloriesIntake']['cardDescription']}</Text>
                                                 </View>
                                             </View>
                                             <Ionicons name="add-circle-sharp" size={24} color="#262626" />
