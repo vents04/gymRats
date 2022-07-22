@@ -82,4 +82,5 @@ router.get("/user-stats/:id", adminAuthenticate, async(req, res, next) => {
         return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR))
     }
 });
+
 module.exports = router;

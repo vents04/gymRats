@@ -12,6 +12,7 @@ const coachingRoute = require("./coaching.route");
 const googleRoute = require("./google.route");
 const chatRoute = require("./chat.route");
 const progressRoute = require("./progress.route");
+const marketingRoute = require("./marketing.route");
 
 router.use("/admin", adminRoute);
 router.use("/analytics", analyticsRoute);
@@ -24,5 +25,6 @@ router.use("/coaching", coachingRoute);
 router.use("/google", googleRoute);
 router.use("/chat", chatRoute);
 router.use("/progress", progressRoute);
+router.use("/marketing", marketingRoute);
 
 module.exports = router;
