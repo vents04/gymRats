@@ -30,8 +30,26 @@ router.post("/workout", authenticate, async (req, res, next) => {
         workout.userId = mongoose.Types.ObjectId(req.user._id);
         await DbService.create(COLLECTIONS.WORKOUTS, workout);
 
+        const workoutSessions = await DbService.getMany(COLLECTIONS.WORKOUT_SESSIONS, {
+            userId: mongoose.Types.ObjectId(req.user._id)
+        });
+
+        for(let workoutSession of workoutSessions) {
+            if(workoutSession.exercises.length != workout.exercises.length) continue;
+            let isValid = true;
+            for(let exercise of workoutSession.exercises) {
+                if(!req.body.exercises.includes(exercise.exerciseId.toString())) isValid = false;
+            }
+            if(isValid) {
+                await DbService.update(COLLECTIONS.WORKOUT_SESSIONS, {_id: mongoose.Types.ObjectId(workoutSession._id)}, {
+                    workoutId: workout._id
+                })
+            }
+        }
+
         res.sendStatus(HTTP_STATUS_CODES.OK);
     } catch (error) {
+        console.log(error)
         return next(new ResponseError(error.message || DEFAULT_ERROR_MESSAGE, error.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
     }
 });
@@ -97,6 +115,8 @@ router.delete("/workout/:id", authenticate, async (req, res, next) => {
 
         await DbService.delete(COLLECTIONS.WORKOUTS, { _id: mongoose.Types.ObjectId(req.params.id) });
 
+        await DbService.updateMany(COLLECTIONS.WORKOUT_SESSIONS, { workoutId: mongoose.Types.ObjectId(req.params.id) }, {workoutId: null})
+
         return res.sendStatus(HTTP_STATUS_CODES.OK);
     } catch (err) {
         return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
@@ -122,6 +142,8 @@ router.put("/workout/:id", authenticate, async (req, res, next) => {
         req.body.exercises = exercises;
 
         await DbService.update(COLLECTIONS.WORKOUTS, { _id: mongoose.Types.ObjectId(req.params.id) }, req.body);
+
+        await DbService.updateMany(COLLECTIONS.WORKOUT_SESSIONS, { workoutId: mongoose.Types.ObjectId(req.params.id) }, {workoutId: null})
 
         return res.sendStatus(HTTP_STATUS_CODES.OK);
     } catch (err) {
@@ -187,10 +209,16 @@ router.post("/workout-session", authenticate, async (req, res, next) => {
 
         if (existingSession) await DbService.delete(COLLECTIONS.WORKOUT_SESSIONS, { _id: mongoose.Types.ObjectId(existingSession._id) })
 
+        let exerciseIds = [];
         for (let exercise of req.body.exercises) {
+            exerciseIds.push(exercise.exerciseId);
             const foundExercise = await DbService.getById(COLLECTIONS.EXERCISES, exercise.exerciseId);
             if (!foundExercise) return next(new ResponseError("Exercise not found", HTTP_STATUS_CODES.NOT_FOUND, 40));
         }
+
+        const workouts = await DbService.getMany(COLLECTIONS.WORKOUTS, {
+            userId: mongoose.Types.ObjectId(req.user._id),
+        })
 
         const workoutSession = new Session({
             date: +req.query.date,
@@ -200,12 +228,20 @@ router.post("/workout-session", authenticate, async (req, res, next) => {
             exercises: req.body.exercises
         });
 
-        if(req.body.workoutId) {
-            const workout = await DbService.getById(COLLECTIONS.WORKOUTS, req.body.workoutId);
-            if(!workout) return next(new ResponseError("Workout not found", HTTP_STATUS_CODES.NOT_FOUND, 42));
-            if(workout.userId.toString() != req.user._id.toString()) return next(new ResponseError("You cannot access this workout template", HTTP_STATUS_CODES.FORBIDDEN, 44));
-            workoutSession.workoutId = req.body.workoutId;
+        for(let workout of workouts) {
+            if(workout.exercises.length != exerciseIds.length) continue;
+            let isValid = true;
+            for(let exercise of workout.exercises) {
+                console.log(exerciseIds, exercise.toString())
+                if(!exerciseIds.includes(exercise.toString())) isValid = false;
+            }
+            if(isValid) {
+                workoutSession.workoutId = workout._id;
+                break;
+            }
         }
+
+        console.log("vtoro", workoutSession)
 
         await DbService.create(COLLECTIONS.WORKOUT_SESSIONS, workoutSession);
 

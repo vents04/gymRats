@@ -347,13 +347,6 @@ const workoutSessionValidation = (data, lng) => {
         }).required()).messages({
             "array.includes": arrayIncludesError(lng, "exercises"),
             "any.required": anyRequiredError(lng, "exercises")
-        }),
-        workoutId: Joi.string().optional().messages({
-            "string.base": stringBaseError(lng, "workoutId", 1),
-            "string.empty": stringEmptyError(lng, "workoutId"),
-        }).custom((value, helper) => {
-            if(!mongoose.Types.ObjectId.isValid(value)) return helper.message(invalidIdError(lng, "workoutId"));
-            return true;
         })
     })
     return schema.validate(data);

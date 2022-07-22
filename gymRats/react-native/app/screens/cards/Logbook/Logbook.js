@@ -43,7 +43,6 @@ export default class Logbook extends Component {
             hasWorkoutTemplates: false,
             templatePickerModalTemplateIds: [],
             isTemplatePickerModalOpened: false,
-            selectedTemplateId: null
         }
 
         this.focusListener;
