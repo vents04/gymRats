@@ -199,6 +199,14 @@ router.post("/workout-session", authenticate, async (req, res, next) => {
             userId: mongoose.Types.ObjectId(req.user._id),
             exercises: req.body.exercises
         });
+
+        if(req.body.workoutId) {
+            const workout = await DbService.getById(COLLECTIONS.WORKOUTS, req.body.workoutId);
+            if(!workout) return next(new ResponseError("Workout not found", HTTP_STATUS_CODES.NOT_FOUND, 42));
+            if(workout.userId.toString() != req.user._id.toString()) return next(new ResponseError("You cannot access this workout template", HTTP_STATUS_CODES.FORBIDDEN, 44));
+            workoutSession.workoutId = req.body.workoutId;
+        }
+
         await DbService.create(COLLECTIONS.WORKOUT_SESSIONS, workoutSession);
 
         for (let exercise of workoutSession.exercises) {
