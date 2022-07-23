@@ -156,7 +156,10 @@ module.exports = {
                 friendsLinkModalTitle: ["Add", "as a friend"],
                 sendFriendRequest: "Send friendship request",
                 competitiveProgressNotationBetter: "You are progressing quicker",
-                competitiveProgressNotationWorse: "You are progressing slower"
+                competitiveProgressNotationWorse: "You are progressing slower",
+                competitiveProgressNotationNeutral: "You are progressing at the same pace",
+                competitiveRegress: "% regress",
+                competitiveProgress: "% progress"
             },
             addFood: {
                 optional: "optional",
@@ -588,7 +591,10 @@ module.exports = {
                 friendsLinkModalTitle: ["Добави", "като приятел/ка"],
                 sendFriendRequest: "Изпрати покана за приятелство",
                 competitiveProgressNotationBetter: "Прогресирате по-бързо",
-                competitiveProgressNotationWorse: "Прогресирате по-бавно"
+                competitiveProgressNotationWorse: "Прогресирате по-бавно",
+                competitiveProgressNotationNeutral: "Прогресирате еднакво бързо",
+                competitiveRegress: "% регрес",
+                competitiveProgress: "% прогрес"
             },
             addFood: {
                 optional: "опиционално",

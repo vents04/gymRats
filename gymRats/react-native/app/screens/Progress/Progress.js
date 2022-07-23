@@ -7,7 +7,7 @@ import ApiRequests from '../../classes/ApiRequests';
 
 import i18n from 'i18n-js';
 
-import { Ionicons } from '@expo/vector-icons';
+import { FontAwesome, Ionicons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
@@ -38,6 +38,7 @@ export default class Progress extends Component {
             activeTab: "friends",
             requests: [],
             friends: [],
+            friendsCompetitive: [],
             showUserFromFriendsLinkModal: true,
             showUserFromFriendsLinkModalLoading: false
         }
@@ -49,6 +50,7 @@ export default class Progress extends Component {
     onFocusFunction = () => {
         this.getProgress();
         this.getFriends();
+        this.getFriendsCompetitive();
     }
 
     componentDidMount = () => {
@@ -111,6 +113,7 @@ export default class Progress extends Component {
             }, true).then((response) => {
                 this.setState({showUserFromFriendsLinkModal: false})
                 this.getFriends();
+                this.getFriendsCompetitive();
             }).catch((error) => {
                 if (error.response) {
                     if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
@@ -150,6 +153,7 @@ export default class Progress extends Component {
     deleteRequest = (id) => {
         ApiRequests.delete("social/connection/" + id, {}, true).then((response) => {
             this.getFriends();
+            this.getFriendsCompetitive();
         }).catch((error) => {
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
@@ -168,6 +172,27 @@ export default class Progress extends Component {
     acceptRequest = (id) => {
         ApiRequests.put("social/connection/" + id + "/accept", {}, {}, true).then((response) => {
             this.getFriends();
+            this.getFriendsCompetitive();
+        }).catch((error) => {
+            console.log(error.response.data)
+            if (error.response) {
+                if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
+                    this.setState({ showModalError: true, error: error.response.data });
+                } else {
+                    ApiRequests.showInternalServerError();
+                }
+            } else if (error.request) {
+                ApiRequests.showNoResponseError();
+            } else {
+                ApiRequests.showRequestSettingError();
+            }
+        })
+    }
+
+    getFriendsCompetitive = () => {
+        ApiRequests.get("social/friends-competitive", {}, true).then((response) => {
+            console.log(response.data)
+            this.setState({friendsCompetitive: response.data.competitive});
         }).catch((error) => {
             console.log(error.response.data)
             if (error.response) {
@@ -559,7 +584,7 @@ export default class Progress extends Component {
                         </ScrollView>
                     : <ScrollView contentContainerStyle={globalStyles.fillEmptySpace}>
                         {
-                            this.state.requests?.length == 0 && this.state.friends?.length == 0
+                            this.state.requests?.length == 0 && this.state.friends?.length == 0 && this.state.friendsCompetitive?.length == 0
                             ?<View style={styles.noFriendsContainer} key={"111"}>
                                 <Image style={styles.noFriendsImage} source={noFriendsImage}></Image>
                                 <Text style={styles.noFriendsText}>{i18n.t('screens')['progress']['noFriendsText']}</Text>
@@ -619,16 +644,73 @@ export default class Progress extends Component {
                                     )
                                 }
                                 {
-                                    this.state.friends.map((friend) =>
+                                    this.state.friendsCompetitive.map((friend) =>
                                         <View style={styles.friendContainer} key={friend._id}>
-                                            <Text style={styles.friendProgressNotation}>{i18n.t('screens')['progress']['competitiveProgressNotationBetter']}</Text>     
+                                            <Text style={[styles.friendProgressNotation, {
+                                                backgroundColor: friend.friend.percentageProgress > friend.me.percentageProgress
+                                                    ? "#cf3333"
+                                                    : "#1f6cb0"
+                                            }]}>{
+                                                friend.friend.percentageProgress > friend.me.percentageProgress
+                                                    ? i18n.t('screens')['progress']['competitiveProgressNotationWorse']
+                                                    : friend.friend.percentageProgress < friend.me.percentageProgress
+                                                        ? i18n.t('screens')['progress']['competitiveProgressNotationBetter']
+                                                        : i18n.t('screens')['progress']['competitiveProgressNotationNeutral']
+                                            }</Text>     
                                             <View style={styles.comparisonContainer}>
                                                 <View style={styles.comparisonUserContainer}>
-
+                                                    {
+                                                        !friend.me.profilePicture
+                                                            ? <View style={styles.profilePictureContainerMini}>
+                                                                <Text style={styles.noProfilePictureTextMini}>
+                                                                    {friend.me.firstName.charAt(0)}
+                                                                    {friend.me.lastName.charAt(0)}
+                                                                </Text>
+                                                            </View>
+                                                            : <Image style={styles.profilePictureContainerMini}
+                                                                source={{ uri: friend.me.profilePicture }} />
+                                                    }
+                                                    <Text style={styles.namesMini}>
+                                                        {friend.me.firstName}
+                                                    </Text>
+                                                    <View style={styles.friendProgressRate}>
+                                                        {
+                                                            friend.me.percentageProgress < 0
+                                                            ? <FontAwesome name="long-arrow-down" size={14} color={cardColors.negative} />
+                                                            : <FontAwesome name="long-arrow-up" size={14} color="#1f6cb0" />
+                                                        }
+                                                        <Text style={styles.friendProgressRateText}>
+                                                            {friend.me.percentageProgress}
+                                                            {
+                                                                !isNaN(Math.abs(friend.me.percentageProgress))
+                                                                ? Math.abs(friend.me.percentageProgress)
+                                                                : ""
+                                                            } {
+                                                            friend.me.percentageProgress < 0
+                                                            ? i18n.t('screens')['progress']['competitiveRegress']
+                                                            : i18n.t('screens')['progress']['competitiveProgress']
+                                                        }</Text>
+                                                    </View>
                                                 </View>
                                                 <Text style={styles.comparisonVs}>VS</Text>
                                                 <View style={styles.comparisonUserContainer}>
-                                                    
+                                                    {
+                                                        !friend.friend.profilePicture
+                                                            ? <View style={styles.profilePictureContainerMini}>
+                                                                <Text style={styles.noProfilePictureTextMini}>
+                                                                    {friend.friend.firstName.charAt(0)}
+                                                                    {friend.friend.lastName.charAt(0)}
+                                                                </Text>
+                                                            </View>
+                                                            : <Image style={styles.profilePictureContainerMini}
+                                                                source={{ uri: friend.friend.profilePicture }} />
+                                                    }
+                                                    <Text style={styles.namesMini}>
+                                                        {friend.friend.firstName}
+                                                    </Text>
+                                                    <View style={styles.friendProgressRate}>
+
+                                                    </View>
                                                 </View>
                                             </View>
                                         </View>
