@@ -1,6 +1,7 @@
 import React from 'react';
 import { Route, Routes, BrowserRouter } from 'react-router-dom';
 import CoachProfileLink from './screens/CoachProfileLink/CoachProfileLink';
+import FriendsLink from './screens/FriendsLink/FriendsLink';
 import Home from './screens/Home/Home';
 
 class App extends React.Component {
@@ -10,6 +11,7 @@ class App extends React.Component {
                 <Routes>
                     <Route path="/" element={<Home language={this.props.language || "en"} />} />
                     <Route path="/coach-profile/:id" element={<CoachProfileLink language={this.props.language || "en"} />} />
+                    <Route path="/friends-link/:id" element={<FriendsLink language={this.props.language || "en"} />} />
                 </Routes>
             </BrowserRouter>
         )

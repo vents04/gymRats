@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Dimensions, Image, ScrollView, Text, TextInput, Pressable, View, ActivityIndicator } from 'react-native';
+import { Dimensions, Image, ScrollView, Text, TextInput, Pressable, View, ActivityIndicator, Share } from 'react-native';
 import { WebView } from 'react-native-webview';
 import DropDownPicker from 'react-native-dropdown-picker'
 
@@ -80,14 +80,24 @@ export default class Progress extends Component {
     }
 
     shareFriendsLink = async () => {
-        try {
-            const url = `https://gymrats.uploy.app/friend/${this.state.coach._id}`
+        ApiRequests.get("user/friends-link", {}, true).then(async (response) => {
+            const url = `https://gymrats.uploy.app/friends-link/${response.data.linkId}`
             await Share.share({
-                message: `Compete with ${this.state.coach.firstName}!\n${url}`,
+                message: `Compete with ${response.data.firstName} on Gym Rats!\n${url}`,
             });
-        } catch (error) {
-            alert(error.message);
-        }
+        }).catch((error) => {
+            if (error.response) {
+                if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
+                    this.setState({ showError: true, error: error.response.data });
+                } else {
+                    ApiRequests.showInternalServerError();
+                }
+            } else if (error.request) {
+                ApiRequests.showNoResponseError();
+            } else {
+                ApiRequests.showRequestSettingError();
+            }
+        })
     }
 
     render() {

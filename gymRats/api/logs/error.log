@@ -54,3 +54,5 @@
 {"dt":1658570028030,"language":"en","level":"error","message":"Notification to should be a string<ExpoPushToken>","status":500,"userId":null}
 {"dt":1658570165542,"language":"en","level":"error","message":"Notification to should be a string<ExpoPushToken>","status":500,"userId":null}
 {"dt":1658570312514,"language":"en","level":"error","message":"\"[0].ttl\" must be less than or equal to 2419200.","status":500,"userId":null}
+{"dt":1658579633757,"language":"en","level":"error","message":"Invalid credentials for login","status":400,"userId":null}
+{"dt":1658579639289,"language":"en","level":"error","message":"Invalid credentials for login","status":400,"userId":null}
