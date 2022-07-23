@@ -177,7 +177,8 @@ const App = (props) => {
     MainMedium: require('./assets/fonts/Montserrat/static/Montserrat-Medium.ttf'),
     MainBlack: require('./assets/fonts/Montserrat/static/Montserrat-Black.ttf'),
     MainBold: require('./assets/fonts/Montserrat/static/Montserrat-Bold.ttf'),
-    MainRegular: require('./assets/fonts/Montserrat/static/Montserrat-Regular.ttf')
+    MainRegular: require('./assets/fonts/Montserrat/static/Montserrat-Regular.ttf'),
+    Sonsie: require('./assets/fonts/Sonsie_One/SonsieOne-Regular.ttf')
   });
 
   if (!loaded) {

@@ -154,7 +154,9 @@ module.exports = {
                 noFriendsText: "Gym Rats is way more fun when you are competing with your friend's progress",
                 noFriendsIncentive: "Invite your friends",
                 friendsLinkModalTitle: ["Add", "as a friend"],
-                sendFriendRequest: "Send friendship request"
+                sendFriendRequest: "Send friendship request",
+                competitiveProgressNotationBetter: "You are progressing quicker",
+                competitiveProgressNotationWorse: "You are progressing slower"
             },
             addFood: {
                 optional: "optional",
@@ -584,7 +586,9 @@ module.exports = {
                 noFriendsText: "Gym Rats е много по-интересно, когато се състезаваш с прогреса на приятелите си",
                 noFriendsIncentive: "Покани приятелите си",
                 friendsLinkModalTitle: ["Добави", "като приятел/ка"],
-                sendFriendRequest: "Изпрати покана за приятелство"
+                sendFriendRequest: "Изпрати покана за приятелство",
+                competitiveProgressNotationBetter: "Прогресирате по-бързо",
+                competitiveProgressNotationWorse: "Прогресирате по-бавно"
             },
             addFood: {
                 optional: "опиционално",
