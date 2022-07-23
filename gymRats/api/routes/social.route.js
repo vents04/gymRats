@@ -274,12 +274,12 @@ router.get("/friends-competitive", authenticate, async (req, res, next) => {
       }
       connectionsProgress.push({
         me: {
-            percentageProgress: userProgression,
+            percentageProgress: userProgression.toFixed(1),
             firstName: req.user.firstName,
             profilePicture: req.user.profilePicture
         },
         friend:{
-            percentageProgress: friendProgression,
+            percentageProgress: friendProgression.toFixed(1),
             firstName: friendProperties.firstName,
             profilePicture: friendProperties.profilePicture
         }
