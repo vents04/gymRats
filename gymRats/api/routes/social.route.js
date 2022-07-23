@@ -272,6 +272,12 @@ router.get("/friends-competitive", authenticate, async (req, res, next) => {
           let progressPerTemplate = await ProgressService.getTemplateProgress(workoutsWithSpecificTemplate);
           friendProgression += progressPerTemplate;
       }
+
+      userProgression /= userTemplates.length;
+      friendProgression /= friendTemplates.length
+
+      console.log(userProgression.toFixed());
+      console.log(friendProgression.toFixed());
       connectionsProgress.push({
         me: {
             percentageProgress: userProgression.toFixed(1),

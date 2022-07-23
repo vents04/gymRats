@@ -680,16 +680,16 @@ export default class Progress extends Component {
                                                             : <FontAwesome name="long-arrow-up" size={14} color="#1f6cb0" />
                                                         }
                                                         <Text style={styles.friendProgressRateText}>
-                                                            {friend.me.percentageProgress}
                                                             {
-                                                                !isNaN(Math.abs(friend.me.percentageProgress))
-                                                                ? Math.abs(friend.me.percentageProgress)
+                                                                !isNaN(Math.abs(friend.me.percentageProgress).toFixed(1))
+                                                                ? Math.abs(friend.me.percentageProgress).toFixed(1)
                                                                 : ""
                                                             } {
-                                                            friend.me.percentageProgress < 0
-                                                            ? i18n.t('screens')['progress']['competitiveRegress']
-                                                            : i18n.t('screens')['progress']['competitiveProgress']
-                                                        }</Text>
+                                                                friend.me.percentageProgress < 0
+                                                                ? i18n.t('screens')['progress']['competitiveRegress']
+                                                                : i18n.t('screens')['progress']['competitiveProgress']
+                                                            }
+                                                        </Text>
                                                     </View>
                                                 </View>
                                                 <Text style={styles.comparisonVs}>VS</Text>
@@ -707,6 +707,18 @@ export default class Progress extends Component {
                                                     }
                                                     <Text style={styles.namesMini}>
                                                         {friend.friend.firstName}
+                                                    </Text>
+                                                    <Text style={styles.friendProgressRateText}>
+                                                        {friend.friend.percentageProgress}
+                                                        {
+                                                            !isNaN(Math.abs(friend.friend.percentageProgress).toFixed(1))
+                                                            ? Math.abs(friend.friend.percentageProgress).toFixed(1)
+                                                            : 0
+                                                        } {
+                                                            friend.friend.percentageProgress < 0
+                                                            ? i18n.t('screens')['progress']['competitiveRegress']
+                                                            : i18n.t('screens')['progress']['competitiveProgress']
+                                                        }
                                                     </Text>
                                                     <View style={styles.friendProgressRate}>
 
