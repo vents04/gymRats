@@ -620,8 +620,17 @@ export default class Progress extends Component {
                                 }
                                 {
                                     this.state.friends.map((friend) =>
-                                        <View style={styles.friendContainer}  key={friend._id}>
+                                        <View style={styles.friendContainer} key={friend._id}>
+                                            <Text style={styles.friendProgressNotation}>{i18n.t('screens')['progress']['competitiveProgressNotationBetter']}</Text>     
+                                            <View style={styles.comparisonContainer}>
+                                                <View style={styles.comparisonUserContainer}>
+
+                                                </View>
+                                                <Text style={styles.comparisonVs}>VS</Text>
+                                                <View style={styles.comparisonUserContainer}>
                                                     
+                                                </View>
+                                            </View>
                                         </View>
                                     )
                                 }

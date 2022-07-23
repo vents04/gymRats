@@ -204,5 +204,36 @@ export default StyleSheet.create({
         fontSize: 10,
         color: "#aaa",
         marginTop: 4
+    },
+    friendContainer: {
+        borderRadius: 4,
+        borderColor: "#e7e7e7",
+        borderWidth: 2,
+        padding: 16
+    },
+    friendProgressNotation: {
+        paddingHorizontal: 16,
+        paddingVertical: 8,
+        fontFamily: "MainBold",
+        color: "#fff",
+        backgroundColor: "#9ae17b",
+        borderRadius: 4,
+        fontSize: 14,
+        textAlign: "center",
+        marginBottom: 16
+    },
+    comparisonContainer: {
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between"
+    },
+    comparisonVs: {
+        fontFamily: "Sonsie",
+        fontSize: 25,
+        color: "#1f6cb0"
+    },
+    comparisonUserContainer: {
+        maxWidth: "40%",
     }
 })
