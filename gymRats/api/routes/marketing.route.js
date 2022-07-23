@@ -78,6 +78,7 @@ router.post("/retention-notifications", adminAuthenticate, async (req, res, next
                 usersForNotification.push({_id: user._id.toString(), firstName: user.firstName});
             }
         }
+        let sentToUsers = [];
         for(let user of usersForNotification) {
             const devices = await DbService.getMany(COLLECTIONS.DEVICES, { userId: mongoose.Types.ObjectId(user._id)});
             let uniqueExpoPushTokens = [];
@@ -85,6 +86,7 @@ router.post("/retention-notifications", adminAuthenticate, async (req, res, next
                 if(device.expoPushNotificationsToken && !uniqueExpoPushTokens.includes(device.expoPushNotificationsToken))
                     uniqueExpoPushTokens.push(device.expoPushNotificationsToken);
             }
+            let tokens = [];
             for(let expoPushToken of uniqueExpoPushTokens) {
                 const notification = {
                     to: expoPushToken, 
@@ -96,10 +98,19 @@ router.post("/retention-notifications", adminAuthenticate, async (req, res, next
                     priority: 'high'
                 };
                 const ticket = await expo.sendPushNotificationsAsync([notification]);
-                console.log(ticket, notification, user._id);
+                tokens.push(expoPushToken);
+            }
+            if(tokens.length > 0) {
+                sentToUsers.push({
+                    user,
+                    tokens
+                })
             }
         }
-        return res.sendStatus(HTTP_STATUS_CODES.OK);
+        return res.status(HTTP_STATUS_CODES.OK).send({
+            sentTo: `${sentToUsers.length} users`,
+            users: sentToUsers
+        });
     } catch (err) {
         return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
     }
