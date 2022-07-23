@@ -56,3 +56,18 @@
 {"dt":1658570312514,"language":"en","level":"error","message":"\"[0].ttl\" must be less than or equal to 2419200.","status":500,"userId":null}
 {"dt":1658579633757,"language":"en","level":"error","message":"Invalid credentials for login","status":400,"userId":null}
 {"dt":1658579639289,"language":"en","level":"error","message":"Invalid credentials for login","status":400,"userId":null}
+{"dt":1658586465902,"language":"en","level":"error","message":"You already have a connection","status":409,"userId":"62974944fcd70c324a2e0c4d"}
+{"dt":1658586478691,"language":"en","level":"error","message":"You already have a connection","status":409,"userId":"62974944fcd70c324a2e0c4d"}
+{"dt":1658586495580,"language":"en","level":"error","message":"You already have a connection","status":409,"userId":"62974944fcd70c324a2e0c4d"}
+{"dt":1658586561433,"language":"en","level":"error","message":"You already have a connection","status":409,"userId":"62974944fcd70c324a2e0c4d"}
+{"dt":1658595665613,"language":"en","level":"error","message":"You cannot send a friend request to yourself","status":409,"userId":"62974944fcd70c324a2e0c4d"}
+{"dt":1658596242024,"language":"en","level":"error","message":"jwt malformed","status":401,"userId":null}
+{"dt":1658596244693,"language":"en","level":"error","message":"jwt malformed","status":401,"userId":null}
+{"dt":1658596244698,"language":"en","level":"error","message":"Cannot read properties of undefined (reading '_id')","status":500,"userId":null}
+{"dt":1658596244714,"language":"en","level":"error","message":"jwt malformed","status":401,"userId":null}
+{"dt":1658596244715,"language":"en","level":"error","message":"Cannot read properties of undefined (reading '_id')","status":500,"userId":null}
+{"dt":1658596252016,"language":"en","level":"error","message":"jwt malformed","status":401,"userId":null}
+{"dt":1658596332782,"language":"en","level":"error","message":"Invalid credentials for login","status":404,"userId":null}
+{"dt":1658596336998,"language":"en","level":"error","message":"Invalid credentials for login","status":404,"userId":null}
+{"dt":1658596342090,"language":"en","level":"error","message":"Invalid credentials for login","status":404,"userId":null}
+{"dt":1658596581696,"language":"en","level":"error","message":"You already have a connection","status":409,"userId":"628fe3b819b1f618551d7d05"}

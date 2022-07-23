@@ -254,7 +254,8 @@ const WeightTrackerService = {
                         { "$or": [{ date: { "$lt": currentDate.getDate() } }, { date: { "$eq": currentDate.getDate() } }] }
                     ]
                 }, { year: -1, month: -1, date: -1 }, 3);
-                if (weights.length < 2) resolve(null);
+                console.log(weights)
+                if (weights.length < 2) return resolve(null);
 
                 const weight = weights[0].weight;
                 const days =

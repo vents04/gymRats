@@ -630,23 +630,11 @@ const adminCoachStatusUpdateValidation = (data) => {
 const connectionPostValidation = (data, lng) => {
     if (!lng) lng = "en";
     const schema = Joi.object({
-        initiatorId: Joi.string().custom((value, helper) => {
-            if (!mongoose.Types.ObjectId.isValid(value)) return helper.message(invalidIdError(lng, "initiatorId"));
+        receiverId: Joi.string().custom((value, helper) => {
+            if (!mongoose.Types.ObjectId.isValid(value)) return helper.message(invalidIdError(lng, "receiverId"));
             return true;
         }).required().messages({
             "any.required": anyRequiredError(lng, "message")
-        }),
-        recieverId: Joi.string().custom((value, helper) => {
-            if (!mongoose.Types.ObjectId.isValid(value)) return helper.message(invalidIdError(lng, "recieverId"));
-            return true;
-        }).required().messages({
-            "any.required": anyRequiredError(lng, "message")
-        }),
-        status: Joi.string().valid(...Object.values(CONNECTION_STATUSES)).required().messages({
-            "string.base": stringBaseError(lng, "status", 1),
-            "string.empty": stringEmptyError(lng, "status"),
-            "any.only": anyOnlyError(lng, "status"),
-            "any.required": anyRequiredError(lng, "status")
         })
     })
     return schema.validate(data);

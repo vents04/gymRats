@@ -32,10 +32,11 @@ const App = (props) => {
   const [hasNetworkConnection, setHasNetworkConnection] = useState(true);
 
   const linking = {
-    prefix: ["gymrats://"],
+    prefix: ["gymrats://", "exp://"],
     config: {
       screens: {
-        CoachPage: "coach-profile"
+        CoachPage: "coach-profile",
+        Progress: "friends-link"
       }
     }
   }
@@ -57,15 +58,28 @@ const App = (props) => {
   const initLinkingListener = () => {
     linkingListener = Linking.addEventListener('url', async (event) => {
       let data = event.url;
-      if (data.includes('coach-profile/') && hasNetworkConnection) {
-        let coachId = data.split('/coach-profile/')[1];
-        ApiRequests.get("coaching/coach/" + coachId).then((response) => {
-          if (navigationRef.current && navigationRef.current.isReady()) {
-            navigationRef.current.navigate("NavigationRoutes", { screen: "coachingScreenStack", params: { screen: "CoachPage", params: { coach: response.data.coach } } })
-          }
-        }).catch((error) => {
-          console.log(error)
-        })
+      if(hasNetworkConnection) {
+        if (data.includes('coach-profile/')) {
+          let coachId = data.split('/coach-profile/')[1];
+          ApiRequests.get("coaching/coach/" + coachId).then((response) => {
+            if (navigationRef.current && navigationRef.current.isReady()) {
+              navigationRef.current.navigate("NavigationRoutes", { screen: "coachingScreenStack", params: { screen: "CoachPage", params: { coach: response.data.coach } } })
+            }
+          }).catch((error) => {
+            console.log(error)
+          })
+        } else if (data.includes('friends-link/')) {
+          let linkId = data.split('/friends-link/')[1];
+          console.log(linkId)
+          ApiRequests.get("user/friends-link/" + linkId).then((response) => {
+            console.log(response.data)
+            if(navigationRef.current && navigationRef.current.isReady() && response.data.user) {
+              navigationRef.current.navigate("NavigationRoutes", { screen: "progressScreenStack", params: { screen: "Progress", params: { userFromFriendsLink: response.data.user } } })
+            }
+          }).catch((error) => {
+            console.log(error);
+          })
+        }
       }
     });
   }
@@ -178,20 +192,36 @@ const App = (props) => {
         ref={navigationRef}
         onReady={async () => {
           routeNameRef.current = navigationRef.getCurrentRoute().name;
-          const initialUrl = await Linking.getInitialURL();
-          if (initialUrl && hasNetworkConnection) {
-            if (initialUrl.includes("coach-profile/")) {
-              let coachId = initialUrl.split('/coach-profile/')[1];
-              ApiRequests.get("coaching/coach/" + coachId).then((response) => {
-                navigationRef.current.addListener("state", (state) => {
-                  if (state.data && state.data.state) {
-                    navigationRef.current.navigate("NavigationRoutes", { screen: "coachingScreenStack", params: { screen: "CoachPage", params: { coach: response.data.coach } } })
-                    navigationRef.removeListener("state");
-                  }
+          const initialUrl = await Linking.getInitialURL()
+          if(hasNetworkConnection) {
+            if (initialUrl) {
+              if (initialUrl.includes("coach-profile/")) {
+                let coachId = initialUrl.split('/coach-profile/')[1];
+                ApiRequests.get("coaching/coach/" + coachId).then((response) => {
+                  navigationRef.current.addListener("state", (state) => {
+                    if (state.data && state.data.state) {
+                      navigationRef.current.navigate("NavigationRoutes", { screen: "coachingScreenStack", params: { screen: "CoachPage", params: { coach: response.data.coach } } })
+                      navigationRef.removeListener("state");
+                    }
+                  })
+                }).catch((error) => {
+                  console.log(error)
                 })
-              }).catch((error) => {
-                console.log(error)
-              })
+              } else if (initialUrl.includes("friends-link/")) {
+                let linkId = initialUrl.split('/friends-link/')[1];
+                ApiRequests.get("user/friends-link/" + linkId).then((response) => {
+                  console.log(response.data.user);
+                  navigationRef.current.addListener("state", (state) => {
+                    if (state.data && state.data.state && response.data.user) {
+                      console.log("dkjaskjdla", navigationRef.current.isReady())
+                      navigationRef.current.navigate("NavigationRoutes", { screen: "progressScreenStack", params: { screen: "Progress", params: { userFromFriendsLink: response.data.user } } })
+                      navigationRef.removeListener("state");
+                    }
+                  })
+                }).catch((error) => {
+                  console.log(error)
+                })
+              }
             }
           }
         }}

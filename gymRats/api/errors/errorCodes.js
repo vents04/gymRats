@@ -244,8 +244,8 @@ module.exports.errorCodes = {
         bg: ["Вече сте изплатили заявка за изтриване на акаунта ви"]
     },
     61: {
-        en: ["You already have a connection"],
-        bg: ["Вече имате връзка"]
+        en: ["You are already friends"],
+        bg: ["Вече сте приятели"]
     },
     62: {
         en: ["Connection not found"],
@@ -256,8 +256,8 @@ module.exports.errorCodes = {
         bg: ["Не може да изтриете връзката"]
     },
     64: {
-        en: [""],
-        bg: [""]
+        en: ["You cannot send a friend request to yourself"],
+        bg: ["Не може да изпратите покана за приятелство на себе си"]
     },
     65: {
         en: [""],

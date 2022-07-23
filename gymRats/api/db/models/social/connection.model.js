@@ -7,7 +7,7 @@ const connectionSchema = mongoose.Schema({
         ref: DATABASE_MODELS.USER,
         required: true,
     },
-    recieverId: {
+    receiverId: {
         type: mongoose.Types.ObjectId,
         required: true,
         ref: DATABASE_MODELS.USER

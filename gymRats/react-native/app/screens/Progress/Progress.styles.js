@@ -111,5 +111,98 @@ export default StyleSheet.create({
         fontFamily: 'MainMedium',
         fontSize: 16,
         textAlign: "center"
+    },
+    option: {
+        width: '50%',
+        display: 'flex',
+        alignItems: 'center'
+    },
+    profilePictureContainer: {
+        width: 80,
+        height: 80,
+        backgroundColor: "#ccc",
+        borderRadius: 1000,
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center",
+        marginTop: 24
+    },
+    noProfilePictureText: {
+        fontFamily: "MainBold",
+        fontSize: 20,
+        color: "#777",
+    },
+    names: {
+        fontFamily: "MainMedium",
+        fontSize: 16,
+        color: "#222",
+        marginVertical: 16
+    },
+    modalTopbar: {
+        width: "100%",
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "space-between"
+    },
+    chatItemContainer: {
+        display: 'flex',
+        flexDirection: 'column',
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 4,
+        padding: 16,
+        marginVertical: 8
+    },
+    coachRequestInfoContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    requestContainer: {
+        display: 'flex',
+        flexDirection: 'column',
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 4,
+        padding: 16,
+        marginVertical: 8
+    },
+    coachRequestInfoContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    profilePictureContainerRequest: {
+        width: 40,
+        height: 40,
+        backgroundColor: "#ccc",
+        borderRadius: 1000,
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center"
+    },
+    noProfilePictureTextRequest: {
+        fontFamily: "MainBold",
+        fontSize: 10,
+        color: "#777",
+    },
+    chatsItemDetailsContainer: {
+        marginLeft: 12,
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+    },
+    chatsItemNames: {
+        fontFamily: "MainBold",
+        fontSize: 14
+    },
+    chatsItemLastMessage: {
+        fontFamily: "MainRegular",
+        fontSize: 10,
+        color: "#aaa",
+        marginTop: 4
     }
 })

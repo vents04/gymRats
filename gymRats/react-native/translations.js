@@ -152,7 +152,9 @@ module.exports = {
                 messageToUser: "After adding some data you will have the ability to monitor your progress from this tab as well as get software-based suggestions on how to improve your fitness.",
                 letsUnlockThisTab: "Let's unlock this tab!",
                 noFriendsText: "Gym Rats is way more fun when you are competing with your friend's progress",
-                noFriendsIncentive: "Invite your friends"
+                noFriendsIncentive: "Invite your friends",
+                friendsLinkModalTitle: ["Add", "as a friend"],
+                sendFriendRequest: "Send friendship request"
             },
             addFood: {
                 optional: "optional",
@@ -580,7 +582,9 @@ module.exports = {
                 messageToUser: "След като добавите данни, ще имате възможността да наблюдавате напредъка си от тази страница, както и да получавате алгоритмично базирани предложения как да подобрите своето здраве.",
                 letsUnlockThisTab: "Нека отключим тази страница",
                 noFriendsText: "Gym Rats е много по-интересно, когато се състезаваш с прогреса на приятелите си",
-                noFriendsIncentive: "Покани приятелите си"
+                noFriendsIncentive: "Покани приятелите си",
+                friendsLinkModalTitle: ["Добави", "като приятел/ка"],
+                sendFriendRequest: "Изпрати покана за приятелство"
             },
             addFood: {
                 optional: "опиционално",
