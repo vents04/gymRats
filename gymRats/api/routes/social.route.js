@@ -250,7 +250,7 @@ router.get("/friends-competitive", authenticate, async (req, res, next) => {
             ],
             2
           );
-          let progressPerTemplate = ProgressService.getTemplateProgress(workoutsWithSpecificTemplate);
+          let progressPerTemplate = await ProgressService.getTemplateProgress(workoutsWithSpecificTemplate);
           userProgression += progressPerTemplate;
       }
 
@@ -269,7 +269,7 @@ router.get("/friends-competitive", authenticate, async (req, res, next) => {
             ],
             2
           );
-          let progressPerTemplate = ProgressService.getTemplateProgress(workoutsWithSpecificTemplate);
+          let progressPerTemplate = await ProgressService.getTemplateProgress(workoutsWithSpecificTemplate);
           friendProgression += progressPerTemplate;
       }
       connectionsProgress.push({
