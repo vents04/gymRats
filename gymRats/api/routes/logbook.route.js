@@ -49,7 +49,6 @@ router.post("/workout", authenticate, async (req, res, next) => {
 
         res.sendStatus(HTTP_STATUS_CODES.OK);
     } catch (error) {
-        console.log(error)
         return next(new ResponseError(error.message || DEFAULT_ERROR_MESSAGE, error.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
     }
 });
@@ -232,7 +231,6 @@ router.post("/workout-session", authenticate, async (req, res, next) => {
             if(workout.exercises.length != exerciseIds.length) continue;
             let isValid = true;
             for(let exercise of workout.exercises) {
-                console.log(exerciseIds, exercise.toString())
                 if(!exerciseIds.includes(exercise.toString())) isValid = false;
             }
             if(isValid) {
@@ -240,8 +238,6 @@ router.post("/workout-session", authenticate, async (req, res, next) => {
                 break;
             }
         }
-
-        console.log("vtoro", workoutSession)
 
         await DbService.create(COLLECTIONS.WORKOUT_SESSIONS, workoutSession);
 

@@ -49,7 +49,7 @@ router.get("/page", authenticate, async (req, res, next) => {
       hasAddedWorkoutSession: workoutSession ? true : false,
     });
   } catch (err) {
-    console.log(err);
+    
     return next(
       new ResponseError(
         err.message || DEFAULT_ERROR_MESSAGE,
