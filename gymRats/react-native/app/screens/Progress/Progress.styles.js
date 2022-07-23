@@ -229,7 +229,7 @@ export default StyleSheet.create({
         justifyContent: "space-between"
     },
     comparisonVs: {
-        fontFamily: "Sonsie",
+        fontFamily: "MainBold",
         fontSize: 25,
         color: "#1f6cb0"
     },
