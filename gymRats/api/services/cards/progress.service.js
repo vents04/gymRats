@@ -170,7 +170,7 @@ const ProgressService = {
       y = -y;
       return y;
     } else if (y < 0) {
-      y = -y;
+      y = Math.abs(y);
       return y;
     } else if (y === 0) {
       return y;
