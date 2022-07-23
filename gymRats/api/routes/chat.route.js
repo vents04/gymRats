@@ -9,7 +9,6 @@ const ResponseError = require('../errors/responseError');
 const { authenticate } = require('../middlewares/authenticate');
 
 const { HTTP_STATUS_CODES, COLLECTIONS, DEFAULT_ERROR_MESSAGE } = require('../global');
-const AuthenticationService = require('../services/authentication.service');
 
 const fs = require('fs');
 const path = require('path');

@@ -244,8 +244,8 @@ module.exports.errorCodes = {
         bg: ["Вече сте изплатили заявка за изтриване на акаунта ви"]
     },
     61: {
-        en: [""],
-        bg: [""]
+        en: ["You already have a connection"],
+        bg: ["Вече имате връзка"]
     },
     62: {
         en: [""],
