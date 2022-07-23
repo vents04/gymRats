@@ -248,12 +248,12 @@ module.exports.errorCodes = {
         bg: ["Вече имате връзка"]
     },
     62: {
-        en: [""],
-        bg: [""]
+        en: ["Connection not found"],
+        bg: ["Връзката не е намерена"]
     },
     63: {
-        en: [""],
-        bg: [""]
+        en: ["Cannot delete connection"],
+        bg: ["Не може да изтриете връзката"]
     },
     64: {
         en: [""],
