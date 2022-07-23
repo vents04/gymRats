@@ -276,11 +276,13 @@ router.get("/friends-competitive", authenticate, async (req, res, next) => {
         me: {
             percentageProgress: userProgression,
             firstName: req.user.firstName,
+            lastName: req.user.lastName,
             profilePicture: req.user.profilePicture
         },
         friend:{
             percentageProgress: friendProgression,
             firstName: friendProperties.firstName,
+            lastName: friendProperties.lastName,
             profilePicture: friendProperties.profilePicture
         }
       })

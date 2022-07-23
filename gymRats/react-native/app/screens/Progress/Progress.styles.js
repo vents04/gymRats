@@ -234,6 +234,33 @@ export default StyleSheet.create({
         color: "#1f6cb0"
     },
     comparisonUserContainer: {
-        maxWidth: "40%",
-    }
+        width: "33%",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center"
+    },
+    profilePictureContainerMini: {
+        width: 60,
+        height: 60,
+        backgroundColor: "#ccc",
+        borderRadius: 1000,
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center",
+        marginTop: 8
+    },
+    noProfilePictureTextMini: {
+        fontFamily: "MainBold",
+        fontSize: 12,
+        color: "#777",
+    },
+    namesMini: {
+        fontFamily: "MainBold",
+        fontSize: 12,
+        textTransform: "uppercase",
+        color: "#222",
+        marginVertical: 12
+    },
 })
