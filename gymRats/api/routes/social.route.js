@@ -37,9 +37,16 @@ router.post('/', authenticate, async (req, res, next) => {
 
 router.get('/', authenticate, async (req, res, next) => {
     try {
-        const connections = await DbService.getMany(COLLECTIONS.CONNECTIONS, {initiatorId: mongoose.Types.ObjectId(req.user._id), "$or": [{CONNECTION_STATUSES: CONNECTION_STATUSES.ACCEPTED}, {CONNECTION_STATUSES: CONNECTION_STATUSES.REQUESTED}]})
+        let connectionsForPush = [];
+        const connections = await DbService.getMany(COLLECTIONS.CONNECTIONS, {"$or": [{initiatorId: mongoose.Types.ObjectId(req.user._id)}, {recieverId: mongoose.Types.ObjectId(req.user._id)}]})
+
+        for(let connection of connections){
+            if(connection.status == CONNECTION_STATUSES.ACCEPTED || connection.status == CONNECTION_STATUSES.REQUESTED){
+                connectionsForPush.push(connection)
+            }
+        }
         return res.status(HTTP_STATUS_CODES.OK).send({
-            connections
+            connectionsForPush
         })
     } catch (err) {
         return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
