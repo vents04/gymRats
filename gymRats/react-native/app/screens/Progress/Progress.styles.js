@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { Dimensions, StyleSheet } from "react-native";
 
 export default StyleSheet.create({
     progressCardContainer: {
@@ -76,5 +76,40 @@ export default StyleSheet.create({
         fontSize: 14,
         color: "#999",
         marginBottom: 14
+    },
+    tabsContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        width: '100%',
+        borderColor: "#e7e7e7",
+        borderRadius: 4,
+        borderBottomWidth: 2,
+        marginBottom: 32,
+    },
+    tabTitleContainer: {
+        width: '50%',
+        padding: 20,
+    },
+    tabTitle: {
+        fontFamily: 'MainBold',
+        fontSize: 14,
+        textTransform: "uppercase",
+        textAlign: "center"
+    },
+    noFriendsContainer: {
+        width: '100%',
+        height: '100%',
+    },
+    noFriendsImage: {
+        width: null,
+		resizeMode: 'contain',
+		height: 300
+    },
+    noFriendsText: {
+        fontFamily: 'MainMedium',
+        fontSize: 16,
+        textAlign: "center"
     }
 })

@@ -125,6 +125,8 @@ module.exports = {
             },
             progress: {
                 pageTitle: "Progress",
+                myProgress: "My progress",
+                friends: "Friends",
                 weightTracker: "Weight tracker",
                 minorWeightLoss: "Minor weight loss",
                 efficientWeightLoss: "Efficient weight loss",
@@ -148,7 +150,9 @@ module.exports = {
                 addWorkoutSession: "Add a workout session",
                 selectExercise: "Please, select an exercise to show progress charts for.",
                 messageToUser: "After adding some data you will have the ability to monitor your progress from this tab as well as get software-based suggestions on how to improve your fitness.",
-                letsUnlockThisTab: "Let's unlock this tab!"
+                letsUnlockThisTab: "Let's unlock this tab!",
+                noFriendsText: "Gym Rats is way more fun when you are competing with your friend's progress",
+                noFriendsIncentive: "Invite your friends"
             },
             addFood: {
                 optional: "optional",
@@ -549,6 +553,8 @@ module.exports = {
             },
             progress: {
                 pageTitle: "Прогрес",
+                myProgress: "Моят прогрес",
+                freinds: "Приятели",
                 weightTracker: "Тегло",
                 minorWeightLoss: "Незначителна загуба на тегло",
                 efficientWeightLoss: "Оптимална загуба на тегло",
@@ -572,7 +578,9 @@ module.exports = {
                 addWorkoutSession: "Добави тренировка",
                 selectExercise: "Моля, изберете упражнение, чийто прогрес искате да видите.",
                 messageToUser: "След като добавите данни, ще имате възможността да наблюдавате напредъка си от тази страница, както и да получавате алгоритмично базирани предложения как да подобрите своето здраве.",
-                letsUnlockThisTab: "Нека отключим тази страница"
+                letsUnlockThisTab: "Нека отключим тази страница",
+                noFriendsText: "Gym Rats е много по-интересно, когато се състезаваш с прогреса на приятелите си",
+                noFriendsIncentive: "Покани приятелите си"
             },
             addFood: {
                 optional: "опиционално",
@@ -728,7 +736,7 @@ module.exports = {
                 getAccessToClientData: "Имаш достъп до информация свързана с твоите клиенти (тренировки, диети, тегло и др.)",
                 getTheMost: "Изкараш това, което ти се полага от Gym Rats",
                 submitApplication: "Подай заявка",
-                clients: "Клиенти"
+                clients: "Клиенти",
             },
             manageWorkoutTemplates: {
                 title: "Управление на тренировъчните шаблони",
