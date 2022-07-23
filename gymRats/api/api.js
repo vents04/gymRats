@@ -20,6 +20,7 @@ const oneRepMax = require('./helperFunctions/oneRepMax');
 const { NotificationsService, Notification } = require('./services/notifications.service');
 const UserService = require('./services/user.service');
 const StatsService = require('./services/stats.service');
+const ProgressService = require('./services/cards/progress.service');
 const io = require("socket.io")(httpServer, { cors: { origin: "*" }, maxHttpBufferSize: 5e+7 });
 
 app
@@ -39,7 +40,8 @@ app
 mongo.connect();
 
 (async function () {
-    //await StatsService.getAveragePeriodBetweenLogins();
+    const percentage = await ProgressService.getTemplateProgress();
+    console.log(percentage)
 })();
 
 const notificationMessages = {

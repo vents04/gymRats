@@ -9,7 +9,7 @@ const {
 } = require("./workoutGeneratorSchema");
 mongo.connect();
 let dt = new Date().getTime();
-const userId = mongoose.Types.ObjectId("62c97a01d4ffec1dbd9e4d32");
+const userId = mongoose.Types.ObjectId("62d6fd17fdba80ae28af4971");
 let test = [];
 function generateRandomSessionExercises(lastSession) {
   let exercisesForNextSession = [];
@@ -89,7 +89,7 @@ let lastSchema = {
   ],
 };
 (async function(){
-    for (let index = 0; index < 5; index++) {
+    for (let index = 0; index < 10; index++) {
         let exercisesForNextSession = generateRandomSessionExercises(lastSchema);
         console.log(exercisesForNextSession);
         //console.log(dt)
@@ -99,7 +99,7 @@ let lastSchema = {
           year: new Date(dt).getFullYear(),
           userId: userId,
           exercises: exercisesForNextSession,
-          workoutId: mongoose.Types.ObjectId("62cbde235d524de3e804f953")
+          workoutId: mongoose.Types.ObjectId("62cec7d66276605142b9e24f")
         };
       
         lastSchema = currentSchema;
