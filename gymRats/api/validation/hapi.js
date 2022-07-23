@@ -355,7 +355,7 @@ const workoutSessionValidation = (data, lng) => {
         }).required()).messages({
             "array.includes": arrayIncludesError(lng, "exercises"),
             "any.required": anyRequiredError(lng, "exercises")
-        }),
+        })
     })
     return schema.validate(data);
 }

@@ -47,3 +47,95 @@
 {"dt":1658256614098,"language":"en","level":"error","message":"Invalid credentials for login","status":400,"userId":null}
 {"dt":1658256697153,"language":"en","level":"error","message":"Invalid credentials for login","status":404,"userId":null}
 {"dt":1658256708463,"language":"en","level":"error","message":"Invalid credentials for login","status":404,"userId":null}
+{"dt":1658257555788,"language":"en","level":"error","message":"Email is a required field","status":400,"userId":null}
+{"dt":1658257650731,"language":"en","level":"error","message":"Token not provided","status":401,"userId":null}
+{"dt":1658257650742,"language":"en","level":"error","message":"Invalid collection","status":500,"userId":null}
+{"dt":1658257664034,"language":"en","level":"error","message":"Secret not provided","status":401,"userId":null}
+{"dt":1658257664037,"language":"en","level":"error","message":"Invalid collection","status":500,"userId":null}
+{"dt":1658257693582,"language":"en","level":"error","message":"ADMIN_SECRET is not defined","status":401,"userId":null}
+{"dt":1658257693584,"language":"en","level":"error","message":"Invalid collection","status":500,"userId":null}
+{"dt":1658257714552,"language":"en","level":"error","message":"Invalid collection","status":500,"userId":null}
+{"dt":1658257761114,"language":"en","level":"error","message":"CONSOLE is not defined","status":401,"userId":null}
+{"dt":1658257761128,"language":"en","level":"error","message":"Invalid collection","status":500,"userId":null}
+{"dt":1658257769009,"language":"en","level":"error","message":"Invalid collection","status":500,"userId":null}
+{"dt":1658257782208,"language":"en","level":"error","message":"Invalid collection","status":500,"userId":null}
+{"dt":1658257798297,"language":"en","level":"error","message":"mongoose is not defined","status":500,"userId":null}
+{"dt":1658259956522,"language":"en","level":"error","message":"mongoose is not defined","status":500,"userId":null}
+{"dt":1658432177129,"language":"en","level":"error","message":"Invalid credentials for login","status":400,"userId":null}
+{"dt":1658522151174,"language":"en","level":"error","message":"Cannot read property 'title' of null","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658522309953,"language":"en","level":"error","message":"Cannot read property 'title' of null","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658522311332,"language":"en","level":"error","message":"Cannot read property 'title' of null","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658522312019,"language":"en","level":"error","message":"Cannot read property 'title' of null","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658522312523,"language":"en","level":"error","message":"Cannot read property 'title' of null","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658522312944,"language":"en","level":"error","message":"Cannot read property 'title' of null","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658522313366,"language":"en","level":"error","message":"Cannot read property 'title' of null","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658522315052,"language":"en","level":"error","message":"Cannot read property 'title' of null","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658522315431,"language":"en","level":"error","message":"Cannot read property 'title' of null","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658522315798,"language":"en","level":"error","message":"Cannot read property 'title' of null","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658522316170,"language":"en","level":"error","message":"Cannot read property 'title' of null","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658522316552,"language":"en","level":"error","message":"Cannot read property 'title' of null","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658522317673,"language":"en","level":"error","message":"Cannot read property 'title' of null","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658522318789,"language":"en","level":"error","message":"Cannot read property 'title' of null","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658522319880,"language":"en","level":"error","message":"Cannot read property 'title' of null","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658522320231,"language":"en","level":"error","message":"Cannot read property 'title' of null","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658522320625,"language":"en","level":"error","message":"Cannot read property 'title' of null","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658522321034,"language":"en","level":"error","message":"Cannot read property 'title' of null","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658522321552,"language":"en","level":"error","message":"Cannot read property 'title' of null","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658522323745,"language":"en","level":"error","message":"Cannot read property 'title' of null","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658522324208,"language":"en","level":"error","message":"Cannot read property 'title' of null","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658522326004,"language":"en","level":"error","message":"Cannot read property 'title' of null","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658522334113,"language":"en","level":"error","message":"Cannot read property 'title' of null","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658522334465,"language":"en","level":"error","message":"Cannot read property 'title' of null","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658522334856,"language":"en","level":"error","message":"Cannot read property 'title' of null","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658522335204,"language":"en","level":"error","message":"Cannot read property 'title' of null","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658522335550,"language":"en","level":"error","message":"Cannot read property 'title' of null","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658522335943,"language":"en","level":"error","message":"Cannot read property 'title' of null","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658522337615,"language":"en","level":"error","message":"Cannot read property 'title' of null","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658522338016,"language":"en","level":"error","message":"Cannot read property 'title' of null","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658522339228,"language":"en","level":"error","message":"Cannot read property 'title' of null","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658522339593,"language":"en","level":"error","message":"Cannot read property 'title' of null","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658522340461,"language":"en","level":"error","message":"Cannot read property 'title' of null","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658522341344,"language":"en","level":"error","message":"Cannot read property 'title' of null","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658522343325,"language":"en","level":"error","message":"Cannot read property 'title' of null","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658522349847,"language":"en","level":"error","message":"Cannot read property 'title' of null","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658522350674,"language":"en","level":"error","message":"Cannot read property 'title' of null","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658522351374,"language":"en","level":"error","message":"Cannot read property 'title' of null","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658522359007,"language":"en","level":"error","message":"Cannot read property 'title' of null","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658522359797,"language":"en","level":"error","message":"Cannot read property 'title' of null","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658522360805,"language":"en","level":"error","message":"Cannot read property 'title' of null","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658522368419,"language":"en","level":"error","message":"Cannot read property 'title' of null","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658522369648,"language":"en","level":"error","message":"Cannot read property 'title' of null","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658522370735,"language":"en","level":"error","message":"Cannot read property 'title' of null","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658522375779,"language":"en","level":"error","message":"Cannot read property 'title' of null","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658522381091,"language":"en","level":"error","message":"Cannot read property 'title' of null","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658522385201,"language":"en","level":"error","message":"Cannot read property 'title' of null","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658522387188,"language":"en","level":"error","message":"Cannot read property 'title' of null","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658522387841,"language":"en","level":"error","message":"Cannot read property 'title' of null","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658522388388,"language":"en","level":"error","message":"Cannot read property 'title' of null","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658522388919,"language":"en","level":"error","message":"Cannot read property 'title' of null","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658522389413,"language":"en","level":"error","message":"Cannot read property 'title' of null","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658522389939,"language":"en","level":"error","message":"Cannot read property 'title' of null","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658522391479,"language":"en","level":"error","message":"Cannot read property 'title' of null","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658522392252,"language":"en","level":"error","message":"Cannot read property 'title' of null","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658522392733,"language":"en","level":"error","message":"Cannot read property 'title' of null","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658522393253,"language":"en","level":"error","message":"Cannot read property 'title' of null","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658522393728,"language":"en","level":"error","message":"Cannot read property 'title' of null","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658522395009,"language":"en","level":"error","message":"Cannot read property 'title' of null","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658522397142,"language":"en","level":"error","message":"Cannot read property 'title' of null","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658522397660,"language":"en","level":"error","message":"Cannot read property 'title' of null","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658522398148,"language":"en","level":"error","message":"Cannot read property 'title' of null","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658522399093,"language":"en","level":"error","message":"Cannot read property 'title' of null","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658522399503,"language":"en","level":"error","message":"Cannot read property 'title' of null","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658522400024,"language":"en","level":"error","message":"Cannot read property 'title' of null","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658522402075,"language":"en","level":"error","message":"Cannot read property 'title' of null","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658522402591,"language":"en","level":"error","message":"Cannot read property 'title' of null","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658522403054,"language":"en","level":"error","message":"Cannot read property 'title' of null","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658522403499,"language":"en","level":"error","message":"Cannot read property 'title' of null","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658522404006,"language":"en","level":"error","message":"Cannot read property 'title' of null","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658522404524,"language":"en","level":"error","message":"Cannot read property 'title' of null","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658522743360,"language":"en","level":"error","message":"\"name\" is not allowed to be empty","status":400,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658523364707,"language":"en","level":"error","message":"\"name\" is not allowed to be empty","status":400,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658523783091,"language":"en","level":"error","message":"Cannot read property 'toString' of undefined","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658523862841,"language":"en","level":"error","message":"Cannot read property 'toString' of undefined","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658523873112,"language":"en","level":"error","message":"Cannot read property 'toString' of undefined","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658523882938,"language":"en","level":"error","message":"Cannot read property 'toString' of undefined","status":500,"userId":"62d6fd17fdba80ae28af4971"}

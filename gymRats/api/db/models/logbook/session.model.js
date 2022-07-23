@@ -54,6 +54,7 @@ const sessionSchema = mongoose.Schema({
     }],
     workoutId: {
         type: mongoose.Types.ObjectId,
+        ref: DATABASE_MODELS.WORKOUT,
         default: null
     }
 });
