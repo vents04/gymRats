@@ -1,6 +1,6 @@
 const Joi = require('@hapi/joi');
 const mongoose = require('mongoose');
-const { CALORIES_COUNTER_UNITS, WEIGHT_UNITS, CALORIES_COUNTER_MEALS, RELATION_STATUSES, PERSONAL_TRAINER_STATUSES } = require('../global');
+const { CALORIES_COUNTER_UNITS, WEIGHT_UNITS, CALORIES_COUNTER_MEALS, RELATION_STATUSES, PERSONAL_TRAINER_STATUSES, CONNECTION_STATUSES } = require('../global');
 const translations = require("./translations");
 const { booleanBaseError, numberPrecisionError, anyOnlyError, stringBaseError, stringEmptyError, anyRequiredError, stringMinError, stringMaxError, stringEmailError, invalidIdError, numberMinError, numberMaxError, numberIntegerError, numberPositiveError, stringAlphabeticalRegexError, arrayIncludesError, lettersOnlyError } = require('./errors');
 
@@ -627,6 +627,31 @@ const adminCoachStatusUpdateValidation = (data) => {
     return schema.validate(data);
 }
 
+const connectionPostValidation = (data, lng) => {
+    if (!lng) lng = "en";
+    const schema = Joi.object({
+        initiatorId: Joi.string().custom((value, helper) => {
+            if (!mongoose.Types.ObjectId.isValid(value)) return helper.message(invalidIdError(lng, "initiatorId"));
+            return true;
+        }).required().messages({
+            "any.required": anyRequiredError(lng, "message")
+        }),
+        recieverId: Joi.string().custom((value, helper) => {
+            if (!mongoose.Types.ObjectId.isValid(value)) return helper.message(invalidIdError(lng, "recieverId"));
+            return true;
+        }).required().messages({
+            "any.required": anyRequiredError(lng, "message")
+        }),
+        status: Joi.string().valid(...Object.values(CONNECTION_STATUSES)).required().messages({
+            "string.base": stringBaseError(lng, "status", 1),
+            "string.empty": stringEmptyError(lng, "status"),
+            "any.only": anyOnlyError(lng, "status"),
+            "any.required": anyRequiredError(lng, "status")
+        })
+    })
+    return schema.validate(data);
+}
+
 module.exports = {
     signupValidation,
     loginValidation,
@@ -654,5 +679,6 @@ module.exports = {
     forgottenPasswordPostValidation,
     passwordPutValidation,
     emailVerificationPostValidation,
-    adminCoachStatusUpdateValidation
+    adminCoachStatusUpdateValidation,
+    connectionPostValidation
 }

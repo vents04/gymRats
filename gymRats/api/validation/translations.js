@@ -52,7 +52,9 @@ module.exports = {
             muscles: "Muscles",
             keywords: "Keywords",
             sets: "Sets",
-            prefersOfflineCoaching: "Preference for coaching offline"
+            prefersOfflineCoaching: "Preference for coaching offline",
+            initiatorId: "The id of the initiator",
+            recieverId: "The id of the receiver"
         },
         errors: {
             stringBaseError: ["must be a string with at least", "characters"],
@@ -128,7 +130,9 @@ module.exports = {
             muscles: "Мускулите",
             keywords: "Ключовите думи",
             sets: "Сериите",
-            prefersOfflineCoaching: "Предпочитанието за работа на живо"
+            prefersOfflineCoaching: "Предпочитанието за работа на живо",
+            initiatorId: "Идентификаторът на инициатора",
+            recieverId: "Идентификаторът на получателя"
         },
         errors: {
             stringBaseError: ["трябва да бъде текст с поне", "символа"],
