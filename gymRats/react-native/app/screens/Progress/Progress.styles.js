@@ -263,4 +263,21 @@ export default StyleSheet.create({
         color: "#222",
         marginVertical: 12
     },
+    friendProgressRate: {
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center"
+    },
+    friendProgressRateText: {
+        fontFamily: "MainRegular",
+        marginLeft: 8
+    },
+    progressRateComparisonContainer: {
+        width: "100%",
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between"
+    }
 })

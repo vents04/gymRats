@@ -673,24 +673,6 @@ export default class Progress extends Component {
                                                     <Text style={styles.namesMini}>
                                                         {friend.me.firstName}
                                                     </Text>
-                                                    <View style={styles.friendProgressRate}>
-                                                        {
-                                                            friend.me.percentageProgress < 0
-                                                            ? <FontAwesome name="long-arrow-down" size={14} color={cardColors.negative} />
-                                                            : <FontAwesome name="long-arrow-up" size={14} color="#1f6cb0" />
-                                                        }
-                                                        <Text style={styles.friendProgressRateText}>
-                                                            {
-                                                                !isNaN(Math.abs(friend.me.percentageProgress).toFixed(1))
-                                                                ? Math.abs(friend.me.percentageProgress).toFixed(1)
-                                                                : ""
-                                                            } {
-                                                                friend.me.percentageProgress < 0
-                                                                ? i18n.t('screens')['progress']['competitiveRegress']
-                                                                : i18n.t('screens')['progress']['competitiveProgress']
-                                                            }
-                                                        </Text>
-                                                    </View>
                                                 </View>
                                                 <Text style={styles.comparisonVs}>VS</Text>
                                                 <View style={styles.comparisonUserContainer}>
@@ -708,21 +690,44 @@ export default class Progress extends Component {
                                                     <Text style={styles.namesMini}>
                                                         {friend.friend.firstName}
                                                     </Text>
+                                                </View>
+                                            </View>
+                                            <View style={styles.progressRateComparisonContainer}>
+                                                <View style={styles.friendProgressRate}>
+                                                    {
+                                                        friend.me.percentageProgress < 0
+                                                        ? <FontAwesome name="long-arrow-down" size={14} color={cardColors.negative} />
+                                                        : <FontAwesome name="long-arrow-up" size={14} color="#1f6cb0" />
+                                                    }
                                                     <Text style={styles.friendProgressRateText}>
-                                                        {friend.friend.percentageProgress}
                                                         {
-                                                            !isNaN(Math.abs(friend.friend.percentageProgress).toFixed(1))
-                                                            ? Math.abs(friend.friend.percentageProgress).toFixed(1)
-                                                            : 0
+                                                            !isNaN(Math.abs(friend.me.percentageProgress).toFixed(0))
+                                                            ? Math.abs(friend.me.percentageProgress).toFixed(0)
+                                                            : ""
+                                                        } {
+                                                            friend.me.percentageProgress < 0
+                                                            ? i18n.t('screens')['progress']['competitiveRegress']
+                                                            : i18n.t('screens')['progress']['competitiveProgress']
+                                                        }
+                                                    </Text>
+                                                </View>
+                                                <View style={styles.friendProgressRate}>
+                                                    {
+                                                        friend.friend.percentageProgress < 0
+                                                        ? <FontAwesome name="long-arrow-down" size={14} color={cardColors.negative} />
+                                                        : <FontAwesome name="long-arrow-up" size={14} color="#1f6cb0" />
+                                                    }
+                                                    <Text style={styles.friendProgressRateText}>
+                                                        {
+                                                            !isNaN(Math.abs(friend.friend.percentageProgress).toFixed(0))
+                                                            ? Math.abs(friend.friend.percentageProgress).toFixed(0)
+                                                            : ""
                                                         } {
                                                             friend.friend.percentageProgress < 0
                                                             ? i18n.t('screens')['progress']['competitiveRegress']
                                                             : i18n.t('screens')['progress']['competitiveProgress']
                                                         }
                                                     </Text>
-                                                    <View style={styles.friendProgressRate}>
-
-                                                    </View>
                                                 </View>
                                             </View>
                                         </View>
