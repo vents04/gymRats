@@ -25,7 +25,8 @@ const DATABASE_MODELS = {
     EMAIL_VERIFICATION_CODE: "EmailVerificationCode",
     ADMIN: "Admin",
     ACCOUNT_DELETION_REQUEST: "AccountDeletionRequest",
-    CONNECTION: "Connection"
+    CONNECTION: "Connection",
+    FRIENDS_LINK: "FriendsLink",
 }
 
 const COLLECTIONS = {
@@ -55,6 +56,7 @@ const COLLECTIONS = {
     ADMINS: "admins",
     ACCOUNT_DELETION_REQUESTS: "accountDeletionRequests",
     CONNECTIONS: "connections",
+    FRIENDS_LINKS: "friendsLinks",
 }
 
 const PERSONAL_TRAINER_STATUSES = {
