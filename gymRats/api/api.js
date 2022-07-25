@@ -40,8 +40,7 @@ app
 mongo.connect();
 
 (async function () {
-    const percentage = await ProgressService.getTemplateProgress();
-    console.log(percentage)
+
 })();
 
 const notificationMessages = {

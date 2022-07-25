@@ -55,9 +55,9 @@ const ProgressService = {
 
   getTemplateProgress: (collection) => {
     return new Promise(async (resolve, reject) => {
+      console.log("asdasd", collection);
       try {
-        collection = await DbService.getManyWithSortAndLimit(COLLECTIONS.WORKOUT_SESSIONS, {},
-        [['year', -1],['month', -1],['date', -1]], 10);
+        if(!collection || collection.length == 0) return resolve(0)
         let averagePercentage = 0;
         let arrayWithVolumeAndOneRepMaxForEveryExerciseCombined1 = {};
         let arrayWithVolumeAndOneRepMaxForEveryExerciseCombined2 = {};
@@ -124,6 +124,7 @@ const ProgressService = {
           }
         }
 
+        console.log(collection)
         for (let exercise of collection[0].exercises) {
           const id = exercise.exerciseId.toString();
           const volumeForTheFirstSessions =
@@ -152,6 +153,7 @@ const ProgressService = {
         }
         resolve(averagePercentage);
       } catch (err) {
+        console.log(err)
         reject(
           new ResponseError(
             "Internal server error",

@@ -220,10 +220,10 @@ router.get("/friends-competitive", authenticate, async (req, res, next) => {
     let connectionsProgress = [];
     for (const connection of userConnections) {
       let friend = null;
-      if (req.user._id === connection.initiatorId) {
-        friend = connection.receiverId;
+      if (req.user._id.toString() == connection.initiatorId.toString()) {
+        friend = connection.receiverId.toString();
       } else {
-        friend = connection.initiatorId;
+        friend = connection.initiatorId.toString();
       }
       const userTemplates = await DbService.getMany(COLLECTIONS.WORKOUTS, {
         userId: mongoose.Types.ObjectId(req.user._id),
@@ -241,7 +241,7 @@ router.get("/friends-competitive", authenticate, async (req, res, next) => {
             COLLECTIONS.WORKOUT_SESSIONS,
             {
               userId: mongoose.Types.ObjectId(req.user._id),
-              workoutId: mongoose.Types.ObjectId(template.workoutId),
+              workoutId: mongoose.Types.ObjectId(template._id),
             },
             [
               ["year", -1],
@@ -260,7 +260,7 @@ router.get("/friends-competitive", authenticate, async (req, res, next) => {
             COLLECTIONS.WORKOUT_SESSIONS,
             {
               userId: mongoose.Types.ObjectId(friend),
-              workoutId: mongoose.Types.ObjectId(template.workoutId),
+              workoutId: mongoose.Types.ObjectId(template._id),
             },
             [
               ["year", -1],
@@ -301,6 +301,7 @@ router.get("/friends-competitive", authenticate, async (req, res, next) => {
         competitive: connectionsProgress
     });
   } catch (err) {
+    console.log(err)
     return next(
       new ResponseError(
         err.message || DEFAULT_ERROR_MESSAGE,

@@ -139,3 +139,13 @@
 {"dt":1658523862841,"language":"en","level":"error","message":"Cannot read property 'toString' of undefined","status":500,"userId":"62d6fd17fdba80ae28af4971"}
 {"dt":1658523873112,"language":"en","level":"error","message":"Cannot read property 'toString' of undefined","status":500,"userId":"62d6fd17fdba80ae28af4971"}
 {"dt":1658523882938,"language":"en","level":"error","message":"Cannot read property 'toString' of undefined","status":500,"userId":"62d6fd17fdba80ae28af4971"}
+{"dt":1658777027344,"language":"en","level":"error","message":"Internal server error","status":500,"userId":"62974944fcd70c324a2e0c4d"}
+{"dt":1658777029740,"language":"en","level":"error","message":"Internal server error","status":500,"userId":"62974944fcd70c324a2e0c4d"}
+{"dt":1658777064125,"language":"en","level":"error","message":"Internal server error","status":500,"userId":"62974944fcd70c324a2e0c4d"}
+{"dt":1658777141356,"language":"en","level":"error","message":"Internal server error","status":500,"userId":"62974944fcd70c324a2e0c4d"}
+{"dt":1658777142469,"language":"en","level":"error","message":"Internal server error","status":500,"userId":"62974944fcd70c324a2e0c4d"}
+{"dt":1658777148272,"language":"en","level":"error","message":"Internal server error","status":500,"userId":"62974944fcd70c324a2e0c4d"}
+{"dt":1658777148275,"language":"en","level":"error","message":"Internal server error","status":500,"userId":"62974944fcd70c324a2e0c4d"}
+{"dt":1658778057868,"language":"en","level":"error","message":"jwt malformed","status":401,"userId":null}
+{"dt":1658778058516,"language":"en","level":"error","message":"Invalid credentials for login","status":400,"userId":null}
+{"dt":1658778063239,"language":"en","level":"error","message":"Invalid credentials for login","status":400,"userId":null}

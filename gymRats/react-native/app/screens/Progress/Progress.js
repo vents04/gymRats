@@ -136,6 +136,7 @@ export default class Progress extends Component {
         ApiRequests.get("social/connection", {}, true).then((response) => {
             this.setState({friends: response.data.connections, requests: response.data.requests});
         }).catch((error) => {
+            console.log(error.response.data)
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
                     this.setState({ showModalError: true, error: error.response.data });
