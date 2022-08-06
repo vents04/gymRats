@@ -55,9 +55,8 @@ const ProgressService = {
 
   getTemplateProgress: (collection) => {
     return new Promise(async (resolve, reject) => {
-      console.log("asdasd", collection);
       try {
-        if(!collection || collection.length == 0) return resolve(0)
+        if (!collection || collection.length == 0) return resolve(0);
         let averagePercentage = 0;
         let arrayWithVolumeAndOneRepMaxForEveryExerciseCombined1 = {};
         let arrayWithVolumeAndOneRepMaxForEveryExerciseCombined2 = {};
@@ -124,7 +123,7 @@ const ProgressService = {
           }
         }
 
-        console.log(collection)
+        console.log(collection);
         for (let exercise of collection[0].exercises) {
           const id = exercise.exerciseId.toString();
           const volumeForTheFirstSessions =
@@ -153,7 +152,7 @@ const ProgressService = {
         }
         resolve(averagePercentage);
       } catch (err) {
-        console.log(err)
+        console.log(err);
         reject(
           new ResponseError(
             "Internal server error",
@@ -179,5 +178,30 @@ const ProgressService = {
     }
   },
 };
+
+(async function kur() {
+  console.log("workoung");
+  try {
+    let collection = await DbService.getManyWithSortAndLimit(
+      COLLECTIONS.WORKOUT_SESSIONS,
+      {
+        userId: mongoose.Types.ObjectId("62c97a01d4ffec1dbd9e4d32"),
+        workoutId: mongoose.Types.ObjectId("62de4f24fd5aebc39423ba8a"),
+      },
+      {
+        year: -1,
+        month: -1,
+        date: -1,
+      },
+      2
+    );
+    console.log(collection);
+  } catch (error) {
+    console.log(error);
+  }
+
+  console.log("dadad");
+  //let result = await ProgressService.getTemplateProgress(collection);
+})();
 
 module.exports = ProgressService;
