@@ -126,29 +126,32 @@ const ProgressService = {
         console.log(collection);
         for (let exercise of collection[0].exercises) {
           const id = exercise.exerciseId.toString();
-          const volumeForTheFirstSessions =
-            arrayWithVolumeAndOneRepMaxForEveryExerciseCombined1[id]["volume"];
-          const oneRepMaxForTheFirstSessions =
-            arrayWithVolumeAndOneRepMaxForEveryExerciseCombined1[id][
-            "oneRepMax"
-            ];
-          const volumeForTheSecondSessions =
-            arrayWithVolumeAndOneRepMaxForEveryExerciseCombined2[id]["volume"];
-          const oneRepMaxForTheSecondSessions =
-            arrayWithVolumeAndOneRepMaxForEveryExerciseCombined2[id][
-            "oneRepMax"
-            ];
+          // combined values can be empty objects (fix required) //
+          if (arrayWithVolumeAndOneRepMaxForEveryExerciseCombined1[id] && arrayWithVolumeAndOneRepMaxForEveryExerciseCombined2[id]) {
+            const volumeForTheFirstSessions =
+              arrayWithVolumeAndOneRepMaxForEveryExerciseCombined1[id]["volume"];
+            const oneRepMaxForTheFirstSessions =
+              arrayWithVolumeAndOneRepMaxForEveryExerciseCombined1[id][
+              "oneRepMax"
+              ];
+            const volumeForTheSecondSessions =
+              arrayWithVolumeAndOneRepMaxForEveryExerciseCombined2[id]["volume"];
+            const oneRepMaxForTheSecondSessions =
+              arrayWithVolumeAndOneRepMaxForEveryExerciseCombined2[id][
+              "oneRepMax"
+              ];
 
-          const percentageForVolume = ProgressService.returnPercentage(
-            volumeForTheFirstSessions,
-            volumeForTheSecondSessions
-          );
-          const percentageForOneRepMax = ProgressService.returnPercentage(
-            oneRepMaxForTheFirstSessions,
-            oneRepMaxForTheSecondSessions
-          );
-          averagePercentage +=
-            (percentageForVolume + percentageForOneRepMax) / 2;
+            const percentageForVolume = ProgressService.returnPercentage(
+              volumeForTheFirstSessions,
+              volumeForTheSecondSessions
+            );
+            const percentageForOneRepMax = ProgressService.returnPercentage(
+              oneRepMaxForTheFirstSessions,
+              oneRepMaxForTheSecondSessions
+            );
+            averagePercentage +=
+              (percentageForVolume + percentageForOneRepMax) / 2;
+          }
         }
         resolve(averagePercentage);
       } catch (err) {
