@@ -250,8 +250,8 @@ router.get("/friends-competitive", authenticate, async (req, res, next) => {
             ],
             2
           );
-          let progressPerTemplate = await ProgressService.getTemplateProgress(workoutsWithSpecificTemplate);
-          userProgression += progressPerTemplate;
+        let progressPerTemplate = await ProgressService.getTemplateProgress(workoutsWithSpecificTemplate);
+        userProgression += progressPerTemplate;
       }
 
       for (const template of friendTemplates) {
@@ -269,14 +269,14 @@ router.get("/friends-competitive", authenticate, async (req, res, next) => {
             ],
             2
           );
-          let progressPerTemplate = await ProgressService.getTemplateProgress(workoutsWithSpecificTemplate);
-          friendProgression += progressPerTemplate;
+        let progressPerTemplate = await ProgressService.getTemplateProgress(workoutsWithSpecificTemplate);
+        friendProgression += progressPerTemplate;
       }
 
       userProgression
         ? userProgression /= userTemplates.length
         : null
-      friendProgression != 0 
+      friendProgression != 0
         ? friendProgression /= friendTemplates.length
         : null
 
@@ -284,21 +284,21 @@ router.get("/friends-competitive", authenticate, async (req, res, next) => {
       console.log(friendProgression);
       connectionsProgress.push({
         me: {
-            percentageProgress: userProgression.toFixed(1),
-            firstName: req.user.firstName,
-            lastName: req.user.lastName,
-            profilePicture: req.user.profilePicture
+          percentageProgress: userProgression.toFixed(1),
+          firstName: req.user.firstName,
+          lastName: req.user.lastName,
+          profilePicture: req.user.profilePicture
         },
-        friend:{
-            percentageProgress: friendProgression.toFixed(1),
-            firstName: friendProperties.firstName,
-            lastName: friendProperties.lastName,
-            profilePicture: friendProperties.profilePicture
+        friend: {
+          percentageProgress: friendProgression.toFixed(1),
+          firstName: friendProperties.firstName,
+          lastName: friendProperties.lastName,
+          profilePicture: friendProperties.profilePicture
         }
       })
     }
     return res.status(HTTP_STATUS_CODES.OK).send({
-        competitive: connectionsProgress
+      competitive: connectionsProgress
     });
   } catch (err) {
     console.log(err)

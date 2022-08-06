@@ -136,7 +136,7 @@ export default class Progress extends Component {
         ApiRequests.get("social/connection", {}, true).then((response) => {
             this.setState({ friends: response.data.connections, requests: response.data.requests });
         }).catch((error) => {
-            console.log(error.response.data)
+            console.log("3", error.response.data, error)
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
                     this.setState({ showModalError: true, error: error.response.data });
@@ -175,7 +175,7 @@ export default class Progress extends Component {
             this.getFriends();
             this.getFriendsCompetitive();
         }).catch((error) => {
-            console.log(error.response.data)
+            console.log("1", error.response.data, error)
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
                     this.setState({ showModalError: true, error: error.response.data });
@@ -195,7 +195,7 @@ export default class Progress extends Component {
             console.log(response.data)
             this.setState({ friendsCompetitive: response.data.competitive });
         }).catch((error) => {
-            console.log(error.response.data)
+            console.log("2", error.response.data, error)
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
                     this.setState({ showModalError: true, error: error.response.data });
