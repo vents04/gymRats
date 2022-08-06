@@ -58,7 +58,7 @@ const App = (props) => {
   const initLinkingListener = () => {
     linkingListener = Linking.addEventListener('url', async (event) => {
       let data = event.url;
-      if(hasNetworkConnection) {
+      if (hasNetworkConnection) {
         if (data.includes('coach-profile/')) {
           let coachId = data.split('/coach-profile/')[1];
           ApiRequests.get("coaching/coach/" + coachId).then((response) => {
@@ -73,7 +73,7 @@ const App = (props) => {
           console.log(linkId)
           ApiRequests.get("user/friends-link/" + linkId).then((response) => {
             console.log(response.data)
-            if(navigationRef.current && navigationRef.current.isReady() && response.data.user) {
+            if (navigationRef.current && navigationRef.current.isReady() && response.data.user) {
               navigationRef.current.navigate("NavigationRoutes", { screen: "progressScreenStack", params: { screen: "Progress", params: { userFromFriendsLink: response.data.user } } })
             }
           }).catch((error) => {
@@ -86,14 +86,14 @@ const App = (props) => {
 
   const initAppStateListener = () => {
     appStateListener = AppState.addEventListener("change", async nextAppState => {
-      if(hasNetworkConnection) {
+      if (hasNetworkConnection) {
         if (nextAppState == 'background') {
           let chatsRoomSocket = socketClass.getChatsRoomSocket();
           if (chatsRoomSocket) {
             socketClass.getChatsRoomSocket().emit("disconnectUser")
             socketClass.setChatsRoomSocket(null);
           }
-  
+
           const navAnalytics = await AsyncStorage.getItem('@gymRats:navAnalytics');
           if (navAnalytics) {
             const navigationAnalytics = JSON.parse(navAnalytics);
@@ -104,7 +104,7 @@ const App = (props) => {
         } else if (nextAppState == 'active') {
           const token = await AsyncStorage.getItem(AUTHENTICATION_TOKEN_KEY);
           const validation = await User.validateToken()
-  
+
           if (token && validation.valid) {
             let chatsRoomSocket = socketClass.getChatsRoomSocket();
             if (!chatsRoomSocket) {
@@ -177,8 +177,7 @@ const App = (props) => {
     MainMedium: require('./assets/fonts/Montserrat/static/Montserrat-Medium.ttf'),
     MainBlack: require('./assets/fonts/Montserrat/static/Montserrat-Black.ttf'),
     MainBold: require('./assets/fonts/Montserrat/static/Montserrat-Bold.ttf'),
-    MainRegular: require('./assets/fonts/Montserrat/static/Montserrat-Regular.ttf'),
-    Sonsie: require('./assets/fonts/Sonsie_One/SonsieOne-Regular.ttf')
+    MainRegular: require('./assets/fonts/Montserrat/static/Montserrat-Regular.ttf')
   });
 
   if (!loaded) {
@@ -194,7 +193,7 @@ const App = (props) => {
         onReady={async () => {
           routeNameRef.current = navigationRef.getCurrentRoute().name;
           const initialUrl = await Linking.getInitialURL()
-          if(hasNetworkConnection) {
+          if (hasNetworkConnection) {
             if (initialUrl) {
               if (initialUrl.includes("coach-profile/")) {
                 let coachId = initialUrl.split('/coach-profile/')[1];
