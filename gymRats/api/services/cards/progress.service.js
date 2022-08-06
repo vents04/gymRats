@@ -130,13 +130,13 @@ const ProgressService = {
             arrayWithVolumeAndOneRepMaxForEveryExerciseCombined1[id]["volume"];
           const oneRepMaxForTheFirstSessions =
             arrayWithVolumeAndOneRepMaxForEveryExerciseCombined1[id][
-              "oneRepMax"
+            "oneRepMax"
             ];
           const volumeForTheSecondSessions =
             arrayWithVolumeAndOneRepMaxForEveryExerciseCombined2[id]["volume"];
           const oneRepMaxForTheSecondSessions =
             arrayWithVolumeAndOneRepMaxForEveryExerciseCombined2[id][
-              "oneRepMax"
+            "oneRepMax"
             ];
 
           const percentageForVolume = ProgressService.returnPercentage(
@@ -180,27 +180,19 @@ const ProgressService = {
 };
 
 (async function kur() {
-  console.log("workoung");
-  try {
-    let collection = await DbService.getManyWithSortAndLimit(
-      COLLECTIONS.WORKOUT_SESSIONS,
-      {
-        userId: mongoose.Types.ObjectId("62c97a01d4ffec1dbd9e4d32"),
-        workoutId: mongoose.Types.ObjectId("62de4f24fd5aebc39423ba8a"),
-      },
-      {
-        year: -1,
-        month: -1,
-        date: -1,
-      },
-      2
-    );
-    console.log(collection);
-  } catch (error) {
-    console.log(error);
-  }
-
-  console.log("dadad");
+  let collection = await DbService.getManyWithSortAndLimit(
+    COLLECTIONS.WORKOUT_SESSIONS,
+    {
+      userId: mongoose.Types.ObjectId("62c97a01d4ffec1dbd9e4d32"),
+      workoutId: mongoose.Types.ObjectId("62de4f24fd5aebc39423ba8a"),
+    },
+    {
+      year: -1,
+      month: -1,
+      date: -1,
+    },
+    2
+  );
   //let result = await ProgressService.getTemplateProgress(collection);
 })();
 
