@@ -7,15 +7,20 @@ export default StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         width: '100%',
+        borderColor: "#e7e7e7",
+        borderRadius: 4,
+        borderBottomWidth: 2,
+        marginBottom: 32,
     },
     tabTitleContainer: {
         width: '50%',
+        padding: 20,
     },
     tabTitle: {
         fontFamily: 'MainBold',
-        fontSize: 16,
+        fontSize: 14,
         textTransform: "uppercase",
-        paddingVertical: 20,
+        textAlign: "center"
     },
     tabContent: {
         paddingVertical: 30,
