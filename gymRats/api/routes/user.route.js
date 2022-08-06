@@ -21,6 +21,7 @@ const PasswordRecoveryCode = require('../db/models/generic/passwordRecoveryCode.
 const EmailVerificationCode = require('../db/models/generic/emailVerificationCode.model');
 const UserService = require('../services/user.service');
 const AccountDeletionRequest = require('../db/models/generic/accountDeletionRequest.model');
+const FriendsLink = require('../db/models/social/friends-link.model');
 
 router.post("/signup", async (req, res, next) => {
     const { error } = signupValidation(req.body, req.headers.lng);
@@ -339,5 +340,48 @@ router.delete('/account-deletion-request', authenticate, async (req, res, next) 
         return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
     }
 });
+
+router.get('/friends-link', authenticate, async (req, res, next) => {
+    try {
+        const existingFriendsLink = await DbService.getOne(COLLECTIONS.FRIENDS_LINKS, {userId: mongoose.Types.ObjectId(req.user._id)});
+        if(existingFriendsLink) {
+            return res.status(HTTP_STATUS_CODES.OK).send({
+                linkId: existingFriendsLink.linkId,
+                firstName: req.user.firstName
+            })
+        }
+
+        const friendsLink = new FriendsLink({
+            userId: mongoose.Types.ObjectId(req.user._id),
+            linkId: uuid()
+        })
+
+        await DbService.create(COLLECTIONS.FRIENDS_LINKS, friendsLink);
+
+        return res.status(HTTP_STATUS_CODES.OK).send({
+            linkId: friendsLink.linkId,
+            firstName: req.user.firstName
+        })
+    } catch (err) {
+        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+    }
+})
+
+router.get('/friends-link/:linkId', async (req, res, next) => {
+    try {
+        let user = null;
+        const friendsLink = await DbService.getOne(COLLECTIONS.FRIENDS_LINKS, {linkId: req.params.linkId});
+        if(friendsLink) {
+            const friendsLinkUser = await DbService.getById(COLLECTIONS.USERS, friendsLink.userId);
+            if(friendsLinkUser) user = friendsLinkUser;
+        }
+
+        return res.status(HTTP_STATUS_CODES.OK).send({
+            user
+        })
+    } catch (err) {
+        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
+    }
+})
 
 module.exports = router;

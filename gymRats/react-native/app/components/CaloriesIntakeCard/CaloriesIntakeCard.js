@@ -147,7 +147,7 @@ export default class CaloriesIntakeCard extends Component {
                         : null
                 }
                 <View style={globalStyles.cardTopbar}>
-                    <MaterialCommunityIcons name="food-variant" size={25} color={cardColors.caloriesIntake} />
+                    <MaterialCommunityIcons name="food-apple" size={25} color={cardColors.caloriesIntake} />
                     <Text style={globalStyles.cardTitle}>{i18n.t('components')['cards']['caloriesIntake']['cardTitle']}</Text>
                     {
                         !this.props.client

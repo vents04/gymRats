@@ -117,7 +117,7 @@ router.get('/me-as-coach', authenticate, async (req, res, next) => {
             coach
         })
     } catch (err) {
-        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.letERNAL_SERVER_ERROR));
+        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
     }
 });
 
@@ -175,7 +175,7 @@ router.post('/relation', authenticate, async (req, res, next) => {
 
         return res.sendStatus(HTTP_STATUS_CODES.OK);
     } catch (err) {
-        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.letERNAL_SERVER_ERROR));
+        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
     }
 });
 
@@ -192,7 +192,7 @@ router.delete("/relation/:id", authenticate, async (req, res, next) => {
 
         return res.sendStatus(HTTP_STATUS_CODES.OK);
     } catch (err) {
-        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.letERNAL_SERVER_ERROR));
+        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
     }
 });
 
@@ -262,7 +262,7 @@ router.get('/requests', authenticate, async (req, res, next) => {
             relations
         })
     } catch (err) {
-        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.letERNAL_SERVER_ERROR));
+        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
     }
 });
 
@@ -287,7 +287,7 @@ router.post('/relation/:id/review', authenticate, async (req, res, next) => {
 
         return res.sendStatus(HTTP_STATUS_CODES.CREATED);
     } catch (error) {
-        return next(new ResponseError(error.message || DEFAULT_ERROR_MESSAGE, error.status || HTTP_STATUS_CODES.letERNAL_SERVER_ERROR));
+        return next(new ResponseError(error.message || DEFAULT_ERROR_MESSAGE, error.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
     }
 });
 
@@ -542,7 +542,7 @@ router.get('/client/:id', authenticate, async (req, res, next) => {
             client
         })
     } catch (err) {
-        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.letERNAL_SERVER_ERROR));
+        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
     }
 });
 
@@ -625,7 +625,7 @@ router.get('/client/:id/date', authenticate, async (req, res, next) => {
             cards
         });
     } catch (err) {
-        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.letERNAL_SERVER_ERROR));
+        return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
     }
 })
 

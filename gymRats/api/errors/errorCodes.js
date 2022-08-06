@@ -244,20 +244,20 @@ module.exports.errorCodes = {
         bg: ["Вече сте изплатили заявка за изтриване на акаунта ви"]
     },
     61: {
-        en: [""],
-        bg: [""]
+        en: ["You are already friends"],
+        bg: ["Вече сте приятели"]
     },
     62: {
-        en: [""],
-        bg: [""]
+        en: ["Connection not found"],
+        bg: ["Връзката не е намерена"]
     },
     63: {
-        en: [""],
-        bg: [""]
+        en: ["Cannot delete connection"],
+        bg: ["Не може да изтриете връзката"]
     },
     64: {
-        en: [""],
-        bg: [""]
+        en: ["You cannot send a friend request to yourself"],
+        bg: ["Не може да изпратите покана за приятелство на себе си"]
     },
     65: {
         en: [""],

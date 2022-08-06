@@ -1,6 +1,6 @@
 const Joi = require('@hapi/joi');
 const mongoose = require('mongoose');
-const { CALORIES_COUNTER_UNITS, WEIGHT_UNITS, CALORIES_COUNTER_MEALS, RELATION_STATUSES, PERSONAL_TRAINER_STATUSES } = require('../global');
+const { CALORIES_COUNTER_UNITS, WEIGHT_UNITS, CALORIES_COUNTER_MEALS, RELATION_STATUSES, PERSONAL_TRAINER_STATUSES, CONNECTION_STATUSES } = require('../global');
 const translations = require("./translations");
 const { booleanBaseError, numberPrecisionError, anyOnlyError, stringBaseError, stringEmptyError, anyRequiredError, stringMinError, stringMaxError, stringEmailError, invalidIdError, numberMinError, numberMaxError, numberIntegerError, numberPositiveError, stringAlphabeticalRegexError, arrayIncludesError, lettersOnlyError } = require('./errors');
 
@@ -343,11 +343,19 @@ const workoutSessionValidation = (data, lng) => {
                 "array.includes": arrayIncludesError(lng, "sets"),
                 "any.required": anyRequiredError(lng, "sets")
             }),
-            note: Joi.string().optional().allow(null).allow("")
+            note: Joi.string().optional().allow(null).allow(""),
+            /*workoutId: Joi.string().custom((value, helper) => {
+                if (!mongoose.Types.ObjectId.isValid(value)) return helper.message(invalidIdError(lng, "workout"));
+                return true;
+            }).required().messages({
+                "string.base": stringBaseError(lng, "workout", 1),
+                "string.empty": stringEmptyError(lng, "workout"),
+                "any.required": anyRequiredError(lng, "workout")
+            }),*/
         }).required()).messages({
             "array.includes": arrayIncludesError(lng, "exercises"),
             "any.required": anyRequiredError(lng, "exercises")
-        }),
+        })
     })
     return schema.validate(data);
 }
@@ -627,6 +635,19 @@ const adminCoachStatusUpdateValidation = (data) => {
     return schema.validate(data);
 }
 
+const connectionPostValidation = (data, lng) => {
+    if (!lng) lng = "en";
+    const schema = Joi.object({
+        receiverId: Joi.string().custom((value, helper) => {
+            if (!mongoose.Types.ObjectId.isValid(value)) return helper.message(invalidIdError(lng, "receiverId"));
+            return true;
+        }).required().messages({
+            "any.required": anyRequiredError(lng, "message")
+        })
+    })
+    return schema.validate(data);
+}
+
 module.exports = {
     signupValidation,
     loginValidation,
@@ -654,5 +675,6 @@ module.exports = {
     forgottenPasswordPostValidation,
     passwordPutValidation,
     emailVerificationPostValidation,
-    adminCoachStatusUpdateValidation
+    adminCoachStatusUpdateValidation,
+    connectionPostValidation
 }

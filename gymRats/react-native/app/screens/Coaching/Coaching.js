@@ -181,7 +181,6 @@ export default class Coaching extends Component {
                             }
                         ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
                             this.setState({ activeTab: "myCoach" });
-                            this.getCoachingPageState();
                         }}>
                             <Text style={[styles.tabTitle, {
                                 color: this.state.activeTab == "myCoach" ? "#1f6cb0" : "#aaa"
@@ -194,7 +193,6 @@ export default class Coaching extends Component {
                             }
                         ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
                             this.setState({ activeTab: "myClients" });
-                            this.getCoachingPageState();
                         }}>
                             <Text style={[styles.tabTitle, {
                                 color: this.state.activeTab == "myClients" ? "#1f6cb0" : "#aaa"

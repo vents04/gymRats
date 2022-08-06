@@ -86,7 +86,7 @@ export default class LogbookCard extends Component {
                         : null
                 }
                 <View style={globalStyles.cardTopbar}>
-                    <FontAwesome5 name="book-open" size={25} color={cardColors.logbook} />
+                    <FontAwesome5 name="dumbbell" size={25} color={cardColors.logbook} />
                     <Text style={globalStyles.cardTitle}>{i18n.t('components')['cards']['logbook']['cardTitle']}</Text>
                     {
                         !this.props.client
