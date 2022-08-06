@@ -601,6 +601,16 @@ export default class Progress extends Component {
                                             </Pressable>
                                         </View>
                                         : <>
+                                            <Pressable style={({ pressed }) => [
+                                                globalStyles.authPageActionButton, {
+                                                    opacity: pressed ? 0.1 : 1,
+                                                    marginBottom: 24
+                                                }
+                                            ]} onPress={() => {
+                                                this.shareFriendsLink();
+                                            }}>
+                                                <Text style={globalStyles.authPageActionButtonText}>{i18n.t('screens')['progress']['noFriendsIncentive']}</Text>
+                                            </Pressable>
                                             {
                                                 this.state.requests.map((request) =>
                                                     <View style={styles.requestContainer} key={request._id}>
