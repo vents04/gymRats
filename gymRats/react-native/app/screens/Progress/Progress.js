@@ -314,11 +314,11 @@ export default class Progress extends Component {
                                 opacity: pressed ? 0.1 : 1,
                             }
                         ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
-                            this.setState({ activeTab: "myProgress" });
+                            this.setState({ activeTab: "friends" });
                         }}>
                             <Text style={[styles.tabTitle, {
-                                color: this.state.activeTab == "myProgress" ? "#1f6cb0" : "#aaa"
-                            }]}>{i18n.t('screens')['progress']['myProgress']}</Text>
+                                color: this.state.activeTab == "friends" ? "#1f6cb0" : "#aaa"
+                            }]}>{i18n.t('screens')['progress']['friends']}</Text>
                         </Pressable>
                         <Pressable style={({ pressed }) => [
                             styles.tabTitleContainer,
@@ -326,11 +326,11 @@ export default class Progress extends Component {
                                 opacity: pressed ? 0.1 : 1,
                             }
                         ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
-                            this.setState({ activeTab: "friends" });
+                            this.setState({ activeTab: "myProgress" });
                         }}>
                             <Text style={[styles.tabTitle, {
-                                color: this.state.activeTab == "friends" ? "#1f6cb0" : "#aaa"
-                            }]}>{i18n.t('screens')['progress']['friends']}</Text>
+                                color: this.state.activeTab == "myProgress" ? "#1f6cb0" : "#aaa"
+                            }]}>{i18n.t('screens')['progress']['myProgress']}</Text>
                         </Pressable>
                     </View>
                     {
