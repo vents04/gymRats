@@ -85,6 +85,9 @@ const ProgressService = {
                   ] = 0;
                   arrayWithVolumeAndOneRepMaxForEveryExerciseCombined2[id][
                     "volume"
+                  ] =0;
+                  arrayWithVolumeAndOneRepMaxForEveryExerciseCombined2[id][
+                    "volume"
                   ] = reps * amount;
                 } else {
                   arrayWithVolumeAndOneRepMaxForEveryExerciseCombined2[id][
@@ -100,6 +103,9 @@ const ProgressService = {
                   arrayWithVolumeAndOneRepMaxForEveryExerciseCombined1[id] = {};
                   arrayWithVolumeAndOneRepMaxForEveryExerciseCombined1[id][
                     "oneRepMax"
+                  ] = 0;
+                  arrayWithVolumeAndOneRepMaxForEveryExerciseCombined1[id][
+                    "volume"
                   ] = 0;
                   arrayWithVolumeAndOneRepMaxForEveryExerciseCombined1[id][
                     "volume"
@@ -196,7 +202,9 @@ const ProgressService = {
     },
     2
   );
-  //let result = await ProgressService.getTemplateProgress(collection);
+  console.log(collection)
+  let result = await ProgressService.getTemplateProgress(collection);
+  console.log(result)
 })();
 
 module.exports = ProgressService;
