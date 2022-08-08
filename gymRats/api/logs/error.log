@@ -149,3 +149,4 @@
 {"dt":1658778057868,"language":"en","level":"error","message":"jwt malformed","status":401,"userId":null}
 {"dt":1658778058516,"language":"en","level":"error","message":"Invalid credentials for login","status":400,"userId":null}
 {"dt":1658778063239,"language":"en","level":"error","message":"Invalid credentials for login","status":400,"userId":null}
+{"dt":1659859667610,"language":"en","level":"error","message":"jwt malformed","status":401,"userId":null}
