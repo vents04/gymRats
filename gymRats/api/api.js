@@ -40,7 +40,9 @@ app
 mongo.connect();
 
 (async function () {
-
+    console.log("sdsd", ProgressService.returnPercentage(null, null))
+    console.log("sdsd1", ProgressService.getTemplateProgress(null))
+    console.log("sdsd2", ProgressService.getTemplateProgressVolume(null))
 })();
 
 const notificationMessages = {

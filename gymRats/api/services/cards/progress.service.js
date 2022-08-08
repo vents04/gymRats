@@ -13,9 +13,12 @@ const ProgressService = {
   getTemplateProgressVolume: (collection) => {
     return new Promise(async (resolve, reject) => {
       try {
+        if (!collection || collection.length < 2) return resolve(0);
+
         let averageVolumeForFirstHalfSessions = 0;
         let averageVolumeForSecondHalfSessions = 0;
         let percentageProgress = 0;
+
         for (
           let workoutSessionIndex = 0;
           workoutSessionIndex < collection.length;
@@ -37,12 +40,13 @@ const ProgressService = {
           averageVolumeForFirstHalfSessions / (collection.length / 2);
         averageVolumeForSecondHalfSessions =
           averageVolumeForSecondHalfSessions / (collection.length / 2);
-        percentageProgress = progressService.returnPercentage(
+        percentageProgress = ProgressService.returnPercentage(
           averageVolumeForFirstHalfSessions,
           averageVolumeForSecondHalfSessions
         );
         resolve(percentageProgress);
       } catch (err) {
+        console.log(err)
         reject(
           new ResponseError(
             "Internal server error",
@@ -55,9 +59,9 @@ const ProgressService = {
 
   getTemplateProgress: (collection) => {
     return new Promise(async (resolve, reject) => {
-      console.log("asdasd", collection);
       try {
-        if(!collection || collection.length == 0) return resolve(0)
+        if (!collection || collection.length == 0) return resolve(0);
+
         let averagePercentage = 0;
         let arrayWithVolumeAndOneRepMaxForEveryExerciseCombined1 = {};
         let arrayWithVolumeAndOneRepMaxForEveryExerciseCombined2 = {};
@@ -124,20 +128,19 @@ const ProgressService = {
           }
         }
 
-        console.log(collection)
         for (let exercise of collection[0].exercises) {
           const id = exercise.exerciseId.toString();
           const volumeForTheFirstSessions =
             arrayWithVolumeAndOneRepMaxForEveryExerciseCombined1[id]["volume"];
           const oneRepMaxForTheFirstSessions =
             arrayWithVolumeAndOneRepMaxForEveryExerciseCombined1[id][
-              "oneRepMax"
+            "oneRepMax"
             ];
           const volumeForTheSecondSessions =
             arrayWithVolumeAndOneRepMaxForEveryExerciseCombined2[id]["volume"];
           const oneRepMaxForTheSecondSessions =
             arrayWithVolumeAndOneRepMaxForEveryExerciseCombined2[id][
-              "oneRepMax"
+            "oneRepMax"
             ];
 
           const percentageForVolume = ProgressService.returnPercentage(
@@ -151,9 +154,9 @@ const ProgressService = {
           averagePercentage +=
             (percentageForVolume + percentageForOneRepMax) / 2;
         }
+
         resolve(averagePercentage);
       } catch (err) {
-        console.log(err)
         reject(
           new ResponseError(
             "Internal server error",
@@ -177,6 +180,7 @@ const ProgressService = {
     } else if (y === 0) {
       return y;
     }
+    return 0;
   },
 };
 
