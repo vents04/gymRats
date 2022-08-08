@@ -17,7 +17,6 @@ const ProgressService = {
 
         let averageVolumeForFirstHalfSessions = 0;
         let averageVolumeForSecondHalfSessions = 0;
-        let percentageProgress = 0;
 
         for (
           let workoutSessionIndex = 0;
@@ -26,24 +25,24 @@ const ProgressService = {
         ) {
           for (let exercise of collection[workoutSessionIndex].exercises) {
             for (let set of exercise.sets) {
-              const reps = set.reps;
-              if (set.weight.unit == WEIGHT_UNITS.POUNDS)
-                set.weight.amount *= WEIGHT_UNIT_RELATIONS.POUNDS.KILOGRAMS;
-              const amount = set.weight.amount;
+              if (set.weight.unit == WEIGHT_UNITS.POUNDS) set.weight.amount *= WEIGHT_UNIT_RELATIONS.POUNDS.KILOGRAMS;
               workoutSessionIndex < collection.length / 2
-                ? (averageVolumeForFirstHalfSessions += reps * amount)
-                : (averageVolumeForSecondHalfSessions += reps * amount);
+                ? (averageVolumeForFirstHalfSessions += set.reps * set.weight.amount)
+                : (averageVolumeForSecondHalfSessions += set.reps * set.weight.amount);
             }
           }
         }
+
         averageVolumeForFirstHalfSessions =
           averageVolumeForFirstHalfSessions / (collection.length / 2);
         averageVolumeForSecondHalfSessions =
           averageVolumeForSecondHalfSessions / (collection.length / 2);
-        percentageProgress = ProgressService.returnPercentage(
+
+        const percentageProgress = ProgressService.returnPercentage(
           averageVolumeForFirstHalfSessions,
           averageVolumeForSecondHalfSessions
         );
+
         resolve(percentageProgress);
       } catch (err) {
         reject(

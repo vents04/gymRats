@@ -6,7 +6,6 @@ test('@getTemplateProgressVolume/parameters/length', async () => {
     await expect(ProgressService.getTemplateProgressVolume(["1"])).resolves.toBe(0);
 })
 
-/*
 test('@getTemplateProgressVolume/parameters/types', async () => {
     await expect(ProgressService.getTemplateProgressVolume([[], []])).rejects.toThrow('Invalid parameters')
     await expect(ProgressService.getTemplateProgressVolume([{}, {}])).rejects.toThrow('Invalid parameters');
@@ -48,7 +47,6 @@ test('@getTemplateProgressVolume/parameters/types', async () => {
         }
     ])).rejects.toThrow('Invalid parameters');
 })
-*/
 
 test('@getTemplateProgressVolume/result/value', async () => {
     await expect(ProgressService.getTemplateProgressVolume([
@@ -94,7 +92,7 @@ test('@getTemplateProgressVolume/result/value', async () => {
                 }
             ]
         }
-    ])).resolves.toBeGreaterThan(0)
+    ])).resolves.toBeCloseTo(10, 5)
     await expect(ProgressService.getTemplateProgressVolume([
         {
             exercises: [
@@ -116,5 +114,5 @@ test('@getTemplateProgressVolume/result/value', async () => {
                 }
             ]
         }
-    ])).resolves.toBeLessThan(0)
+    ])).resolves.toBeCloseTo(-10, 5)
 })
