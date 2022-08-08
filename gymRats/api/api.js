@@ -10,7 +10,7 @@ const path = require('path');
 const fs = require('fs');
 const readline = require('readline');
 
-const { PORT, HTTP_STATUS_CODES, COLLECTIONS, FOOD_TYPES, PROGRESS_NOTATION, LOGBOOK_PROGRESS_NOTATIONS, CHAT_STATUSES, SUPPORTED_LANGUAGES } = require('./global');
+const { PORT, HTTP_STATUS_CODES, COLLECTIONS, FOOD_TYPES, PROGRESS_NOTATION, LOGBOOK_PROGRESS_NOTATIONS, CHAT_STATUSES, SUPPORTED_LANGUAGES, WEIGHT_UNITS } = require('./global');
 const MessagingService = require('./services/messaging.service');
 const ResponseError = require('./errors/responseError');
 const DbService = require('./services/db.service');
@@ -40,9 +40,28 @@ app
 mongo.connect();
 
 (async function () {
-    console.log("sdsd", ProgressService.returnPercentage(null, null))
-    console.log("sdsd1", ProgressService.getTemplateProgress(null))
-    console.log("sdsd2", ProgressService.getTemplateProgressVolume(null))
+    console.log("sdsd2", await ProgressService.getTemplateProgressVolume([
+        {
+            exercises: [
+                {
+                    sets: [
+                        { reps: 10, weight: { unit: WEIGHT_UNITS.KILOGRAMS, amount: 40 } },
+                        { reps: 10, weight: { unit: WEIGHT_UNITS.KILOGRAMS, amount: 40 } },
+                    ]
+                }
+            ]
+        },
+        {
+            exercises: [
+                {
+                    sets: [
+                        { reps: 10, weight: { unit: WEIGHT_UNITS.KILOGRAMS, amount: 40 } },
+                        { reps: 12, weight: { unit: WEIGHT_UNITS.KILOGRAMS, amount: 40 } },
+                    ]
+                }
+            ]
+        }
+    ]))
 })();
 
 const notificationMessages = {

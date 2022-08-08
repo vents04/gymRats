@@ -31,8 +31,8 @@ const ProgressService = {
                 set.weight.amount *= WEIGHT_UNIT_RELATIONS.POUNDS.KILOGRAMS;
               const amount = set.weight.amount;
               workoutSessionIndex < collection.length / 2
-                ? (averageVolumeForSecondHalfSessions += reps * amount)
-                : (averageVolumeForFirstHalfSessions += reps * amount);
+                ? (averageVolumeForFirstHalfSessions += reps * amount)
+                : (averageVolumeForSecondHalfSessions += reps * amount);
             }
           }
         }
@@ -46,7 +46,6 @@ const ProgressService = {
         );
         resolve(percentageProgress);
       } catch (err) {
-        console.log(err)
         reject(
           new ResponseError(
             "Internal server error",
