@@ -9,6 +9,9 @@ const errorHandler = (error, req, res, next) => {
     if (error.code) {
         error.message = errorCodes[error.code][req.header('lng') ? req.header('lng') : 'bg'][0] || error.message;
     }
+    if (err.status == HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
+        error.message = 'Internal server error';
+    }
     res.status(error.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).send(error.message);
     next();
 }

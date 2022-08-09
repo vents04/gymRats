@@ -1,8 +1,10 @@
+const LogbookService = require("../services/cards/logbook.service");
 const ProgressService = require("../services/cards/progress.service");
 
-test('nulls', () => {
-    expect.assertions(3);
-    expect(ProgressService.getTemplateProgress(null)).resolves.toBe(0);
-    expect(ProgressService.getTemplateProgressVolume(null)).resolves.toBe(0);
-    expect(ProgressService.returnPercentage(null, null)).toBe(0);
+test('null/undefined', async () => {
+    expect.assertions(2);
+
+    await expect(ProgressService.getTemplateProgress(null)).rejects.toThrow('Parameter/s with null/undefined value provided');
+    await expect(ProgressService.getTemplateProgressVolume(null)).rejects.toThrow('Parameter/s with null/undefined value provided');
+    expect(ProgressService.returnPercentage(null, null)).toThrow('Parameter/s with null/undefined value provided');
 })

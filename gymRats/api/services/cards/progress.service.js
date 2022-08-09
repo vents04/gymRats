@@ -1,19 +1,40 @@
-const { default: mongoose } = require("mongoose");
 const ResponseError = require("../../errors/responseError");
 const {
   WEIGHT_UNITS,
   WEIGHT_UNIT_RELATIONS,
   HTTP_STATUS_CODES,
-  COLLECTIONS,
 } = require("../../global");
+
 const oneRepMax = require("../../helperFunctions/oneRepMax");
-const DbService = require("../db.service");
+
+const validateCollectionParameter = (collection, requiresExerciseId) => {
+  try {
+    if (!collection) throw new ResponseError("Parameter/s with null/undefined value provided", HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR);
+    if (!Array.isArray(collection)) throw new ResponseError(`Invalid parameters: ${collection}`, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR);
+    for (let element of collection) {
+      if (!element || !element.exercises || !Array.isArray(element.exercises) || element.exercises.length == 0)
+        throw new ResponseError(`Invalid parameters: ${collection}`, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR);
+      for (let exercise of element.exercises) {
+        if (!exercise || (requiresExerciseId && !exercise.exerciseId) || !exercise.sets || !Array.isArray(exercise.sets) || exercise.sets.length == 0) 
+          throw new ResponseError(`Invalid parameters: ${collection}`, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR);
+        for (let set of exercise.sets) {
+          if ((set.reps != 0 && !set.reps) || !set.weight || (set.weight.amount != 0 && !set.weight.amount)
+            || isNaN(set.weight.amount) || !set.weight.unit || !Object.values(WEIGHT_UNITS).includes(set.weight.unit))
+            throw new ResponseError(`Invalid parameters: ${collection}`, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR);
+        }
+      }
+    }
+  } catch (err) {
+    throw new ResponseError(err.message, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR);
+  }
+}
 
 const ProgressService = {
   getTemplateProgressVolume: (collection) => {
     return new Promise(async (resolve, reject) => {
       try {
-        if (!collection || collection.length < 2) return resolve(0);
+        validateCollectionParameter(collection, false);
+        if (collection.length < 2) throw new ResponseError(`Invalid parameters: ${collection}`, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR);
 
         let averageVolumeForFirstHalfSessions = 0;
         let averageVolumeForSecondHalfSessions = 0;
@@ -47,7 +68,7 @@ const ProgressService = {
       } catch (err) {
         reject(
           new ResponseError(
-            "Internal server error",
+            err.message || "Internal server error",
             err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR
           )
         );
@@ -58,7 +79,8 @@ const ProgressService = {
   getTemplateProgress: (collection) => {
     return new Promise(async (resolve, reject) => {
       try {
-        if (!collection || collection.length == 0) return resolve(0);
+        validateCollectionParameter(collection, true);
+        if (collection.length === 0) throw new ResponseError(`Invalid parameters: ${collection}`, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR);
 
         let averagePercentage = 0;
         let arrayWithVolumeAndOneRepMaxForEveryExerciseCombined1 = {};
@@ -157,7 +179,7 @@ const ProgressService = {
       } catch (err) {
         reject(
           new ResponseError(
-            "Internal server error",
+            err.message || "Internal server error",
             err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR
           )
         );
@@ -166,19 +188,11 @@ const ProgressService = {
   },
 
   returnPercentage: (firstCollection, secondCollection) => {
-    let x;
-    x = 100 * (secondCollection / firstCollection);
-    let y = 100 - x;
-    if (y > 0) {
-      y = -y;
-      return y;
-    } else if (y < 0) {
-      y = Math.abs(y);
-      return y;
-    } else if (y === 0) {
-      return y;
-    }
-    return 0;
+    if ((firstCollection != 0 && secondCollection != 0) && (!firstCollection || !secondCollection)) 
+      throw new ResponseError("Parameter/s with null/undefined value provided", HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR);
+    return firstCollection > 0
+      ? ((secondCollection - firstCollection) / firstCollection) * 100
+      : 0;
   },
 };
 

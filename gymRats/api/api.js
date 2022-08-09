@@ -40,28 +40,7 @@ app
 mongo.connect();
 
 (async function () {
-    console.log("sdsd2", await ProgressService.getTemplateProgressVolume([
-        {
-            exercises: [
-                {
-                    sets: [
-                        { reps: 10, weight: { unit: WEIGHT_UNITS.KILOGRAMS, amount: 40 } },
-                        { reps: 10, weight: { unit: WEIGHT_UNITS.KILOGRAMS, amount: 40 } },
-                    ]
-                }
-            ]
-        },
-        {
-            exercises: [
-                {
-                    sets: [
-                        { reps: 10, weight: { unit: WEIGHT_UNITS.KILOGRAMS, amount: 40 } },
-                        { reps: 12, weight: { unit: WEIGHT_UNITS.KILOGRAMS, amount: 40 } },
-                    ]
-                }
-            ]
-        }
-    ]))
+    console.log("sdsd2", ProgressService.returnPercentage(null, null))
 })();
 
 const notificationMessages = {

@@ -22,7 +22,7 @@ const LogbookService = {
                         }
                         let sessionOneRepMax = null;
                         for (let set of exercise.sets) {
-                            if (set.weight?.amount && set.reps) {
+                            if (set.weight && set.weight.amount && set.reps) {
                                 const currentOneRepMax = oneRepMax(set.weight.amount, set.reps) || 0;
                                 if (set.weight.unit == WEIGHT_UNITS.POUNDS) currentOneRepMax = currentOneRepMax * WEIGHT_UNIT_RELATIONS.POUNDS.KILOGRAMS;
                                 if (sessionOneRepMax == null || currentOneRepMax > sessionOneRepMax) sessionOneRepMax = currentOneRepMax;
