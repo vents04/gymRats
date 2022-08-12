@@ -4,6 +4,7 @@ const {
   WEIGHT_UNIT_RELATIONS,
   HTTP_STATUS_CODES,
 } = require("../../global");
+const mongoose = require("mongoose");
 
 const oneRepMax = require("../../helperFunctions/oneRepMax");
 
@@ -15,7 +16,7 @@ const validateCollectionParameter = (collection, requiresExerciseId) => {
       if (!element || !element.exercises || !Array.isArray(element.exercises) || element.exercises.length == 0)
         throw new ResponseError(`Invalid parameters: ${collection}`, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR);
       for (let exercise of element.exercises) {
-        if (!exercise || (requiresExerciseId && !exercise.exerciseId) || !exercise.sets || !Array.isArray(exercise.sets) || exercise.sets.length == 0) 
+        if (!exercise || (requiresExerciseId && (!exercise.exerciseId || !mongoose.Types.ObjectId.isValid(exercise.exerciseId))) || !exercise.sets || !Array.isArray(exercise.sets) || exercise.sets.length == 0)
           throw new ResponseError(`Invalid parameters: ${collection}`, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR);
         for (let set of exercise.sets) {
           if ((set.reps != 0 && !set.reps) || !set.weight || (set.weight.amount != 0 && !set.weight.amount)
@@ -27,6 +28,10 @@ const validateCollectionParameter = (collection, requiresExerciseId) => {
   } catch (err) {
     throw new ResponseError(err.message, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR);
   }
+}
+
+const sortByDate = (collection) => {
+
 }
 
 const ProgressService = {
@@ -80,7 +85,7 @@ const ProgressService = {
     return new Promise(async (resolve, reject) => {
       try {
         validateCollectionParameter(collection, true);
-        if (collection.length === 0) throw new ResponseError(`Invalid parameters: ${collection}`, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR);
+        if (collection.length < 2) throw new ResponseError(`Invalid parameters: ${collection}`, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR);
 
         let averagePercentage = 0;
         let arrayWithVolumeAndOneRepMaxForEveryExerciseCombined1 = {};
@@ -96,27 +101,8 @@ const ProgressService = {
                 set.weight.amount *= WEIGHT_UNIT_RELATIONS.POUNDS.KILOGRAMS;
               const amount = set.weight.amount;
               const currentOneRepMax = oneRepMax(amount, reps);
-              if (currentOneRepMax > exerciseOneRepMax)
-                exerciseOneRepMax = currentOneRepMax;
+              if (currentOneRepMax > exerciseOneRepMax) exerciseOneRepMax = currentOneRepMax;
               if (index < collection.length / 2) {
-                if (
-                  !arrayWithVolumeAndOneRepMaxForEveryExerciseCombined2.hasOwnProperty(
-                    id
-                  )
-                ) {
-                  arrayWithVolumeAndOneRepMaxForEveryExerciseCombined2[id] = {};
-                  arrayWithVolumeAndOneRepMaxForEveryExerciseCombined2[id][
-                    "oneRepMax"
-                  ] = 0;
-                  arrayWithVolumeAndOneRepMaxForEveryExerciseCombined2[id][
-                    "volume"
-                  ] = reps * amount;
-                } else {
-                  arrayWithVolumeAndOneRepMaxForEveryExerciseCombined2[id][
-                    "volume"
-                  ] += reps * amount;
-                }
-              } else {
                 if (
                   !arrayWithVolumeAndOneRepMaxForEveryExerciseCombined1.hasOwnProperty(
                     id
@@ -134,14 +120,32 @@ const ProgressService = {
                     "volume"
                   ] += reps * amount;
                 }
+              } else {
+                if (
+                  !arrayWithVolumeAndOneRepMaxForEveryExerciseCombined2.hasOwnProperty(
+                    id
+                  )
+                ) {
+                  arrayWithVolumeAndOneRepMaxForEveryExerciseCombined2[id] = {};
+                  arrayWithVolumeAndOneRepMaxForEveryExerciseCombined2[id][
+                    "oneRepMax"
+                  ] = 0;
+                  arrayWithVolumeAndOneRepMaxForEveryExerciseCombined2[id][
+                    "volume"
+                  ] = reps * amount;
+                } else {
+                  arrayWithVolumeAndOneRepMaxForEveryExerciseCombined2[id][
+                    "volume"
+                  ] += reps * amount;
+                }
               }
             }
             if (index < collection.length / 2) {
-              arrayWithVolumeAndOneRepMaxForEveryExerciseCombined2[id][
+              arrayWithVolumeAndOneRepMaxForEveryExerciseCombined1[id][
                 "oneRepMax"
               ] += exerciseOneRepMax;
             } else {
-              arrayWithVolumeAndOneRepMaxForEveryExerciseCombined1[id][
+              arrayWithVolumeAndOneRepMaxForEveryExerciseCombined2[id][
                 "oneRepMax"
               ] += exerciseOneRepMax;
             }
@@ -167,10 +171,12 @@ const ProgressService = {
             volumeForTheFirstSessions,
             volumeForTheSecondSessions
           );
+
           const percentageForOneRepMax = ProgressService.returnPercentage(
             oneRepMaxForTheFirstSessions,
             oneRepMaxForTheSecondSessions
           );
+
           averagePercentage +=
             (percentageForVolume + percentageForOneRepMax) / 2;
         }
@@ -188,7 +194,7 @@ const ProgressService = {
   },
 
   returnPercentage: (firstCollection, secondCollection) => {
-    if ((firstCollection != 0 && secondCollection != 0) && (!firstCollection || !secondCollection)) 
+    if ((firstCollection != 0 && secondCollection != 0) && (!firstCollection || !secondCollection))
       throw new ResponseError("Parameter/s with null/undefined value provided", HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR);
     return firstCollection > 0
       ? ((secondCollection - firstCollection) / firstCollection) * 100

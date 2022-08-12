@@ -40,6 +40,7 @@ app
 mongo.connect();
 
 (async function () {
+    const id = mongoose.Types.ObjectId();
     console.log("sdsd2", ProgressService.returnPercentage(null, null))
 })();
 
