@@ -22,6 +22,7 @@ router.get("/page", authenticate, async (req, res, next) => {
     const relation = await DbService.getOne(COLLECTIONS.RELATIONS, {
       clientId: mongoose.Types.ObjectId(req.user._id),
     });
+
     if (relation && relation.status == RELATION_STATUSES.ACTIVE) message = true;
 
     const date = new Date();
@@ -49,7 +50,7 @@ router.get("/page", authenticate, async (req, res, next) => {
       hasAddedWorkoutSession: workoutSession ? true : false,
     });
   } catch (err) {
-    
+
     return next(
       new ResponseError(
         err.message || DEFAULT_ERROR_MESSAGE,
@@ -67,14 +68,16 @@ router.get(
     try {
       const workoutsWithSpecificTemplate =
         await DbService.getManyWithSortAndLimit(COLLECTIONS.WORKOUT_SESSIONS, {
-            userId: mongoose.Types.ObjectId(req.user._id),
-          workoutId: mongoose.Types.ObjectId(req.body.workoutId)},
-          [['year', -1],['month', -1],['date', -1]],
+          userId: mongoose.Types.ObjectId(req.user._id),
+          workoutId: mongoose.Types.ObjectId(req.body.workoutId)
+        },
+          [['year', -1], ['month', -1], ['date', -1]],
           req.body.limit
         );
-        const percentageProgressVolume = ProgressService.getTemplateProgressVolume(workoutsWithSpecificTemplate);
-        const percentageProgressCombined = ProgressService.getTemplateProgress(workoutsWithSpecificTemplate);
-      return res.status(HTTP_STATUS_CODES.OK).send({percentageProgressCombined,percentageProgressVolume});
+      workoutsWithSpecificTemplate.reverse();
+      const percentageProgressVolume = ProgressService.getTemplateProgressVolume(workoutsWithSpecificTemplate);
+      const percentageProgressCombined = ProgressService.getTemplateProgress(workoutsWithSpecificTemplate);
+      return res.status(HTTP_STATUS_CODES.OK).send({ percentageProgressCombined, percentageProgressVolume });
     } catch (err) {
       return next(
         new ResponseError(
