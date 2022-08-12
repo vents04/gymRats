@@ -10,7 +10,7 @@ const path = require('path');
 const fs = require('fs');
 const readline = require('readline');
 
-const { PORT, HTTP_STATUS_CODES, COLLECTIONS, FOOD_TYPES, PROGRESS_NOTATION, LOGBOOK_PROGRESS_NOTATIONS, CHAT_STATUSES, SUPPORTED_LANGUAGES } = require('./global');
+const { PORT, HTTP_STATUS_CODES, COLLECTIONS, FOOD_TYPES, PROGRESS_NOTATION, LOGBOOK_PROGRESS_NOTATIONS, CHAT_STATUSES, SUPPORTED_LANGUAGES, WEIGHT_UNITS } = require('./global');
 const MessagingService = require('./services/messaging.service');
 const ResponseError = require('./errors/responseError');
 const DbService = require('./services/db.service');
@@ -40,7 +40,6 @@ app
 mongo.connect();
 
 (async function () {
-
 })();
 
 const notificationMessages = {
