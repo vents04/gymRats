@@ -17,6 +17,7 @@ const ProgressService = {
         let averageVolumeForSecondHalfSessions = 0;
         let percentageProgress = 0;
         for (
+          
           let workoutSessionIndex = 0;
           workoutSessionIndex < collection.length;
           workoutSessionIndex++
