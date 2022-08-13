@@ -60,7 +60,6 @@ router.get("/page", authenticate, async (req, res, next) => {
   }
 });
 
-// Define a get endpoint that returns in response the value returned from the service you have written in a json object with some adequate properties //
 router.get(
   "/logbook-progress",
   authenticate,
