@@ -27,9 +27,6 @@ const StatsService = {
                         finalNavigationsPerUser[userId].push(...navigationsPerUser[userId])
                     }
                 }
-                for (let userId in finalNavigationsPerUser) {
-                    console.log(userId, finalNavigationsPerUser[userId].length);
-                }
                 resolve();
             } catch (err) {
                 reject(err);
@@ -79,7 +76,6 @@ const StatsService = {
                 }
                 resolve(navigationsPerUser);
             } catch (err) {
-                console.log(err)
                 reject(err);
             }
         })

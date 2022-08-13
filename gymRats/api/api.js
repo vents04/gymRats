@@ -40,31 +40,7 @@ app
 mongo.connect();
 
 (async function () {
-    let id = mongoose.Types.ObjectId();
-    console.log(await ProgressService.getTemplateProgressStrength([
-        {
-            exercises: [
-                {
-                    exerciseId: id,
-                    sets: [
-                        { reps: 10, weight: { unit: WEIGHT_UNITS.KILOGRAMS, amount: 40 } },
-                        { reps: 10, weight: { unit: WEIGHT_UNITS.KILOGRAMS, amount: 40 } },
-                    ]
-                }
-            ]
-        },
-        {
-            exercises: [
-                {
-                    exerciseId: id,
-                    sets: [
-                        { reps: 10, weight: { unit: WEIGHT_UNITS.KILOGRAMS, amount: 40 } },
-                        { reps: 12, weight: { unit: WEIGHT_UNITS.KILOGRAMS, amount: 40 } },
-                    ]
-                }
-            ]
-        }
-    ]))
+
 })();
 
 const notificationMessages = {
@@ -77,7 +53,6 @@ const notificationMessages = {
 }
 
 io.on("connection", (socket) => {
-    console.log("connected", socket.id)
     socket.on("connect_error", (err) => {
         console.log(`connect_error due to ${err.message}`);
     });
@@ -112,9 +87,7 @@ io.on("connection", (socket) => {
     socket.on("send-text-message", async (messageInfo) => {
         try {
             const message = await MessagingService.sendTextMessage(messageInfo.messageInfo.chatId, messageInfo.messageInfo.senderId, messageInfo.messageInfo.message);
-            console.log(io.sockets.adapter.rooms)
             io.to(messageInfo.messageInfo.chatId).emit("receive-message", { message });
-            console.log("mina")
             io.to(messageInfo.messageInfo.chatId).emit("update-last-message", { message });
             (async function () {
                 const chat = await DbService.getById(COLLECTIONS.CHATS, messageInfo.messageInfo.chatId);
@@ -136,7 +109,6 @@ io.on("connection", (socket) => {
                     }
                     if (oppositeUser && senderUser) {
                         const expoPushTokens = await NotificationsService.getExpoPushTokensByUserId(oppositeUser._id);
-                        console.log("eto gi", expoPushTokens, oppositeUser.firstName);
                         for (let expoPushToken of expoPushTokens) {
                             if (expoPushToken) {
                                 await NotificationsService.sendChatNotification(expoPushToken, {
@@ -179,7 +151,6 @@ io.on("connection", (socket) => {
                     }
                     if (oppositeUser && senderUser) {
                         const expoPushTokens = await NotificationsService.getExpoPushTokensByUserId(oppositeUser._id);
-                        console.log("eto gi", expoPushTokens, oppositeUser.firstName);
                         for (let expoPushToken of expoPushTokens) {
                             if (expoPushToken) {
                                 await NotificationsService.sendChatNotification(expoPushToken, {
@@ -200,7 +171,6 @@ io.on("connection", (socket) => {
     });
 
     socket.on('disconnectUser', function () {
-        console.log("disconnected", socket.id)
         socket.disconnect();
 
     });

@@ -354,7 +354,6 @@ router.get("/search/food", async (req, res, next) => {
                     }
 
                     if (food.userId) {
-                        console.log("here")
                         const user = await DbService.getById(COLLECTIONS.USERS, food.userId);
                         food.userInstance = user;
                     }

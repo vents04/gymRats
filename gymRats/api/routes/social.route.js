@@ -246,6 +246,7 @@ router.get("/friends-competitive", authenticate, async (req, res, next) => {
             2
           );
         workoutsWithSpecificTemplate.reverse();
+        if (workoutsWithSpecificTemplate.length % 2 != 0) workoutsWithSpecificTemplate.shift();
         let progressPerTemplate = await ProgressService.getTemplateProgress(workoutsWithSpecificTemplate);
         userProgression += progressPerTemplate;
       }
@@ -262,6 +263,7 @@ router.get("/friends-competitive", authenticate, async (req, res, next) => {
             2
           );
         workoutsWithSpecificTemplate.reverse();
+        if (workoutsWithSpecificTemplate.length % 2 != 0) workoutsWithSpecificTemplate.shift();
         let progressPerTemplate = await ProgressService.getTemplateProgress(workoutsWithSpecificTemplate);
         friendProgression += progressPerTemplate;
       }

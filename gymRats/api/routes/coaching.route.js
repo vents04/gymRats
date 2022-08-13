@@ -138,7 +138,6 @@ router.post('/application', authenticate, async (req, res, next) => {
 
         return res.sendStatus(HTTP_STATUS_CODES.OK);
     } catch (error) {
-        console.log(error.response.body.errors)
         return next(new ResponseError(error.message || DEFAULT_ERROR_MESSAGE, error.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
     } finally {
         EmailService.send("office@uploy.app", "Coach request", `${req.user.firstName} ${req.user.lastName} with a personal trainer id ${personalTrainer._id} and user id ${req.user._id} requested to be a coach`);
@@ -297,10 +296,10 @@ router.get("/coach/search", authenticate, async (req, res, next) => {
     let trainers1 = [];
 
     if (((req.query.lat == "null" || !req.query.lat) || (req.query.lng == "null" || !req.query.lng)) && !names) {
-        if(!req.query.minRating){
-            trainers1 = await DbService.getManyWithLimit(COLLECTIONS.PERSONAL_TRAINERS, {status: PERSONAL_TRAINER_STATUSES.ACTIVE}, 50);
-        }else{
-            trainers1 = await DbService.getMany(COLLECTIONS.PERSONAL_TRAINERS, {status: PERSONAL_TRAINER_STATUSES.ACTIVE});
+        if (!req.query.minRating) {
+            trainers1 = await DbService.getManyWithLimit(COLLECTIONS.PERSONAL_TRAINERS, { status: PERSONAL_TRAINER_STATUSES.ACTIVE }, 50);
+        } else {
+            trainers1 = await DbService.getMany(COLLECTIONS.PERSONAL_TRAINERS, { status: PERSONAL_TRAINER_STATUSES.ACTIVE });
         }
         for (let i = 0; i < trainers1.length; i++) {
             let reviewsForPush = [];
@@ -325,7 +324,7 @@ router.get("/coach/search", authenticate, async (req, res, next) => {
             }
 
             Object.assign(trainers1[i], { criteriasMet: 0 });
-            
+
             if (req.query.minRating != undefined) {
                 if (overallRating < req.query.minRating) {
                     trainers1.splice(i, 1);

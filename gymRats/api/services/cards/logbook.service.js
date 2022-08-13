@@ -111,7 +111,6 @@ const LogbookService = {
 
                 resolve(notation);
             } catch (err) {
-                console.log(err);
                 reject(new ResponseError("Internal server error", err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
             }
         })

@@ -10,16 +10,12 @@ const { GOOGLE_API_KEY, HTTP_STATUS_CODES, DEFAULT_ERROR_MESSAGE, SUPPORTED_LANG
 
 router.get('/search-places', authenticate, async (req, res, next) => {
     try {
-        console.log(req.query)
         const uri = encodeURI(`https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${req.query.query}&key=${GOOGLE_API_KEY}&language=${req.headers.lng ? req.headers.lng : SUPPORTED_LANGUAGES.ENGLISH}&types=address`);
-        console.log(uri);
         let response = await axios.get(uri);
-        console.log(response.data);
         return res.status(HTTP_STATUS_CODES.OK).send({
             results: response.data.predictions
         })
     } catch (e) {
-        console.log(e);
         return next(new ResponseError(e.message || DEFAULT_ERROR_MESSAGE, e.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
     }
 })

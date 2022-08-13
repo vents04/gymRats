@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Dimensions, Image, ScrollView, Text, TextInput, Pressable, View, ActivityIndicator, Share, Modal } from 'react-native';
 import { WebView } from 'react-native-webview';
 import DropDownPicker from 'react-native-dropdown-picker'
+import { AnimatedCircularProgress } from 'react-native-circular-progress';
 
 import ApiRequests from '../../classes/ApiRequests';
 
@@ -43,6 +44,7 @@ export default class Progress extends Component {
             showUserFromFriendsLinkModalLoading: false,
             percentageProgressStrength: 0,
             percentageProgressVolume: 0,
+            percentageProgressCombined: 0,
             templatesLengthForProgress: 0
         }
 
@@ -65,9 +67,9 @@ export default class Progress extends Component {
 
     getLogbookProgress = () => {
         ApiRequests.get(`progress/logbook-progress`, {}, true).then((response) => {
-            const { percentageProgressStrength, percentageProgressVolume, templatesLengthForProgress } = response.data;
+            const { percentageProgressStrength, percentageProgressVolume, percentageProgressCombined, templatesLengthForProgress } = response.data;
             console.log(percentageProgressStrength, percentageProgressVolume, templatesLengthForProgress)
-            this.setState({ percentageProgressStrength, percentageProgressVolume, templatesLengthForProgress });
+            this.setState({ percentageProgressStrength, percentageProgressVolume, percentageProgressCombined, templatesLengthForProgress });
         }).catch((error) => {
             console.log(error)
             if (error.response) {
@@ -415,11 +417,10 @@ export default class Progress extends Component {
                                                     </View>
                                                     : null
                                             }
-                                            {
+                                            {/* {
                                                 this.state.progress.logbookProgress
                                                     && this.state.progress.logbookProgress.length > 0
                                                     ? <View style={[styles.progressCardContainer]}>
-                                                        {/* up styles minHeight: this.state.exerciseDropdownOpened ? 275 : 0 */}
                                                         <View style={styles.progressCardHeaderContainer}>
                                                             <FontAwesome5 name="dumbbell" size={20} color={cardColors.logbook} />
                                                             <Text style={styles.progressCardHeader}>{i18n.t('screens')['progress']['logbook']}</Text>
@@ -499,7 +500,6 @@ export default class Progress extends Component {
 
                                                                                                     }
                                                                                                 </Text>
-                                                                                                {/* <Entypo name="info-with-circle" size={18} color="white" /> */}
                                                                                             </Pressable>
                                                                                         </>
                                                                                         : null
@@ -541,7 +541,6 @@ export default class Progress extends Component {
 
                                                                                                     }
                                                                                                 </Text>
-                                                                                                {/* <Entypo name="info-with-circle" size={18} color="white" /> */}
                                                                                             </Pressable>
                                                                                         </>
                                                                                         : null
@@ -581,10 +580,60 @@ export default class Progress extends Component {
                                                         }
                                                     </View>
                                                     : null
+                                            } */}
+                                            {
+                                                <View style={styles.progressCardContainer}>
+                                                    <View style={styles.progressCardHeaderContainer}>
+                                                        <FontAwesome5 name="dumbbell" size={20} color={cardColors.logbook} />
+                                                        <Text style={styles.progressCardHeader}>{i18n.t('screens')['progress']['logbook']}</Text>
+                                                    </View>
+                                                    {
+                                                        this.state.templatesLengthForProgress > 0
+                                                            ? <View style={styles.progressTypes}>
+                                                                <View style={styles.progressType}>
+                                                                    <View style={styles.progressCoefficientContainer}>
+                                                                        <Text style={styles.progressCoefficient}>{Math.abs(this.state.percentageProgressStrength)}%</Text>
+                                                                        {
+                                                                            this.state.percentageProgressStrength >= 0
+                                                                                ? <FontAwesome name="long-arrow-up" size={20} color={cardColors.logbook} />
+                                                                                : <FontAwesome name="long-arrow-down" size={20} color={cardColors.negative} />
+                                                                        }
+                                                                    </View>
+                                                                    <Text style={styles.macroCircleTitle}>strength</Text>
+                                                                </View>
+                                                                <Text style={styles.progressArithmeticOperation}>+</Text>
+                                                                <View style={styles.progressType}>
+                                                                    <View style={styles.progressCoefficientContainer}>
+                                                                        <Text style={styles.progressCoefficient}>{Math.abs(this.state.percentageProgressVolume)}%</Text>
+                                                                        {
+                                                                            this.state.percentageProgressVolume >= 0
+                                                                                ? <FontAwesome name="long-arrow-up" size={20} color={cardColors.logbook} />
+                                                                                : <FontAwesome name="long-arrow-down" size={20} color={cardColors.negative} />
+                                                                        }
+                                                                    </View>
+                                                                    <Text style={styles.macroCircleTitle}>volume</Text>
+                                                                </View>
+                                                                <Text style={styles.progressArithmeticOperation}>=</Text>
+                                                                <View style={styles.progressType}>
+                                                                    <View style={styles.progressCoefficientContainer}>
+                                                                        <Text style={styles.progressCoefficient}>{Math.abs(this.state.percentageProgressStrength + this.state.percentageProgressVolume)}%</Text>
+                                                                        {
+                                                                            (this.state.percentageProgressStrength + this.state.percentageProgressVolume) >= 0
+                                                                                ? <FontAwesome name="long-arrow-up" size={20} color={cardColors.logbook} />
+                                                                                : <FontAwesome name="long-arrow-down" size={20} color={cardColors.negative} />
+                                                                        }
+                                                                    </View>
+                                                                    <Text style={styles.macroCircleTitle}>combined</Text>
+                                                                </View>
+                                                            </View>
+                                                            : null
+                                                    }
+                                                </View>
                                             }
                                             {
                                                 !this.state.progress.weightTrackerProgress
                                                     && this.state.progress.logbookProgress.length <= 0
+                                                    && this.state.templatesLengthForProgress == 0
                                                     ? <>
                                                         <View style={styles.unknownSourceCaloriesIncentiveContainer}>
                                                             <Text style={styles.unknownSourceCaloriesIncentiveText}>{i18n.t('screens')['progress']['messageToUser']}</Text>

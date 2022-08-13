@@ -110,7 +110,7 @@ const DbService = {
         })
     },
 
-    
+
 
     getWithFilterAndProduct: function (collection, filter, product) {
         return new Promise((resolve, reject) => {
@@ -130,7 +130,7 @@ const DbService = {
         return new Promise((resolve, reject) => {
             validateCollection(collection, reject);
             let results = [];
-            db.collection(collection).find(filter, {sort, limit}, async function (err, cursor) {
+            db.collection(collection).find(filter, { sort, limit }, async function (err, cursor) {
                 if (err) return reject(new ResponseError(err.message || HTTP_STATUS_CODES.INTERNAL_SERVER));
                 await cursor.forEach(result => {
                     results.push(result);
@@ -155,7 +155,6 @@ const DbService = {
             validateCollection(collection, reject);
             db.collection(collection).find(filter).sort(sort).toArray(function (err, cursor) {
                 if (err) {
-                    console.log(err);
                     return reject(new ResponseError(err.message || HTTP_STATUS_CODES.INTERNAL_SERVER));
                 }
                 resolve(cursor);

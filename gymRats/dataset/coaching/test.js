@@ -17,7 +17,6 @@ let users = [];
 
 try {
     for (let index = 0; index < PROFILES_COUNT; index++) {
-        console.log(index)
         const randomCard = faker.helpers.createCard(); // random contact card containing many properties
         const firstName = randomCard.name.split(" ")[0];
         const lastName = randomCard.name.split(" ")[1];
@@ -59,11 +58,8 @@ try {
 
     fs.writeFile("coachesTestData.json", JSON.stringify(profiles), 'utf8', function (err) {
         if (err) {
-            console.log("An error occured while writing JSON Object to File.");
             return console.log(err);
         }
-
-        console.log("JSON file has been saved.");
     });
 
     fs.writeFile("usersTestData.json", JSON.stringify(users), 'utf8', function (err) {

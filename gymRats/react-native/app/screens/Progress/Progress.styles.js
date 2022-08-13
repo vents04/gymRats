@@ -104,8 +104,8 @@ export default StyleSheet.create({
     },
     noFriendsImage: {
         width: null,
-		resizeMode: 'contain',
-		height: 300
+        resizeMode: 'contain',
+        height: 300
     },
     noFriendsText: {
         fontFamily: 'MainMedium',
@@ -279,5 +279,51 @@ export default StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "space-between"
-    }
+    },
+    progressTypes: {
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between"
+    },
+    progressType: {
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        width: '30%',
+    },
+    progressArithmeticOperation: {
+        width: '5%',
+        fontFamily: "MainBold",
+        color: '#777'
+    },
+    progressCoefficientContainer: {
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center",
+        width: '100%'
+    },
+    progressCoefficient: {
+        fontFamily: "MainBold",
+        fontSize: 18,
+        marginRight: 6
+    },
+    macronutrientsRatioCircleTitle: {
+        fontFamily: "MainBold",
+        fontSize: 16,
+        width: "100%",
+        textAlign: "center"
+    },
+    macroCircleTitle: {
+        fontFamily: "MainBold",
+        fontSize: 12,
+        textTransform: "uppercase",
+        color: "#ccc",
+        marginTop: 8
+    },
+    mealContainer: {
+        marginVertical: 8
+    },
 })

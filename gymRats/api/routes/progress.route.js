@@ -68,6 +68,7 @@ router.get(
       const templates = await DbService.getMany(COLLECTIONS.WORKOUTS, {
         userId: mongoose.Types.ObjectId(req.user._id)
       })
+      console.log("sdasdasd", templates.length)
 
       let percentageProgressVolume = 0;
       let percentageProgressStrength = 0;
@@ -79,17 +80,23 @@ router.get(
             workoutId: mongoose.Types.ObjectId(template._id)
           },
             { year: -1, month: -1, date: -1 },
-            req.body.limit
+            4
           );
         workoutsWithSpecificTemplate.reverse();
+        if (workoutsWithSpecificTemplate.length % 2 != 0) workoutsWithSpecificTemplate.shift();
         percentageProgressVolume += await ProgressService.getTemplateProgressVolume(workoutsWithSpecificTemplate);
         percentageProgressStrength += await ProgressService.getTemplateProgressStrength(workoutsWithSpecificTemplate);
         percentageProgressCombined += await ProgressService.getTemplateProgress(workoutsWithSpecificTemplate);
+        console.log(percentageProgressVolume, percentageProgressStrength, percentageProgressCombined)
       }
 
-      if (percentageProgressVolume > 0) percentageProgressVolume += percentageProgressVolume / templates.length;
-      if (percentageProgressStrength > 0) percentageProgressStrength += percentageProgressStrength / templates.length;
-      if (percentageProgressCombined > 0) percentageProgressCombined += percentageProgressCombined / templates.length;
+      if (percentageProgressVolume > 0) percentageProgressVolume = percentageProgressVolume / templates.length;
+      if (percentageProgressStrength > 0) percentageProgressStrength = percentageProgressStrength / templates.length;
+      if (percentageProgressCombined > 0) percentageProgressCombined = percentageProgressCombined / templates.length;
+
+      percentageProgressVolume = parseInt(percentageProgressVolume.toFixed(0));
+      percentageProgressStrength = parseInt(percentageProgressStrength.toFixed(0));
+      percentageProgressCombined = parseInt(percentageProgressCombined.toFixed(0));
 
       return res.status(HTTP_STATUS_CODES.OK).send({ percentageProgressCombined, percentageProgressVolume, percentageProgressStrength, templatesLengthForProgress: templates.length });
     } catch (err) {

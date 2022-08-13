@@ -38,8 +38,10 @@ const ProgressService = {
   getTemplateProgressVolume: (collection) => {
     return new Promise(async (resolve, reject) => {
       try {
+        console.log(collection)
         validateCollectionParameter(collection, false);
         if (collection.length < 2) return resolve(0);
+        if (collection.length % 2 != 0) collection.shift();
 
         let averageVolumeForFirstHalfSessions = 0;
         let averageVolumeForSecondHalfSessions = 0;
@@ -87,6 +89,7 @@ const ProgressService = {
       try {
         validateCollectionParameter(collection, false);
         if (collection.length < 2) return resolve(0);
+        if (collection.length % 2 != 0) collection.shift();
 
         let strengthForFirstHalfSessions = 0;
         let strengthForSecondHalfSessions = 0;
@@ -132,6 +135,7 @@ const ProgressService = {
       try {
         validateCollectionParameter(collection, true);
         if (collection.length < 2) return resolve(0);
+        if (collection.length % 2 != 0) collection.shift();
 
         let averagePercentage = 0;
         let arrayWithVolumeAndOneRepMaxForEveryExerciseCombined1 = {};

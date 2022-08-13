@@ -159,7 +159,9 @@ module.exports = {
                 competitiveProgressNotationWorse: "You are progressing slower",
                 competitiveProgressNotationNeutral: "You are progressing at the same pace",
                 competitiveRegress: "% regress",
-                competitiveProgress: "% progress"
+                competitiveProgress: "% progress",
+                strength: 'strength',
+                volume: 'volume'
             },
             addFood: {
                 optional: "optional",
@@ -594,7 +596,9 @@ module.exports = {
                 competitiveProgressNotationWorse: "Прогресирате по-бавно",
                 competitiveProgressNotationNeutral: "Прогресирате еднакво бързо",
                 competitiveRegress: "% регрес",
-                competitiveProgress: "% прогрес"
+                competitiveProgress: "% прогрес",
+                strength: 'сила',
+                volume: 'обем'
             },
             addFood: {
                 optional: "опиционално",
