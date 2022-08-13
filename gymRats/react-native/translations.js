@@ -576,7 +576,7 @@ module.exports = {
                 rapidStrengthGain: "Драстично покачване на сила",
                 strengthGain: "Покачване на сила",
                 slightStrengthGain: "Слабо покачване на сила",
-                noNotableChange: "Nяма забележима промяна",
+                noNotableChange: "Няма забележима промяна",
                 slightStrengthLoss: "Слаба загуба на сила",
                 strengthLoss: "Загуба на сила",
                 rapidStrengthLoss: "Драстична загуба на сила",
