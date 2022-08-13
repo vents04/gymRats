@@ -150,3 +150,8 @@
 {"dt":1658778058516,"language":"en","level":"error","message":"Invalid credentials for login","status":400,"userId":null}
 {"dt":1658778063239,"language":"en","level":"error","message":"Invalid credentials for login","status":400,"userId":null}
 {"dt":1659859667610,"language":"en","level":"error","message":"jwt malformed","status":401,"userId":null}
+{"dt":1660394229902,"language":"en","level":"error","message":"Invalid credentials for login","status":400,"userId":null}
+{"dt":1660394238684,"language":"en","level":"error","message":"Invalid credentials for login","status":400,"userId":null}
+{"dt":1660394257412,"language":"en","level":"error","message":"Invalid credentials for login","status":400,"userId":null}
+{"dt":1660394263628,"language":"en","level":"error","message":"Invalid credentials for login","status":400,"userId":null}
+{"dt":1660394269544,"language":"en","level":"error","message":"Invalid credentials for login","status":400,"userId":null}

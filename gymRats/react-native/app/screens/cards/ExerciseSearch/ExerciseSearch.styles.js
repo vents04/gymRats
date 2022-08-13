@@ -16,7 +16,18 @@ export default StyleSheet.create({
         borderBottomColor: "#e7e7e7"
     },
     searchResult: {
-        paddingVertical: 12
+        paddingVertical: 12,
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'flex-start'
+    },
+    searchResultRight: {
+        marginLeft: 16
+    },
+    exerciseGif: {
+        height: 30,
+        width: 30
     },
     searchResultTitle: {
         fontFamily: "MainBold",

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { ScrollView, Text, TextInput, Pressable, View, BackHandler } from 'react-native'
+import { ScrollView, Text, TextInput, Pressable, View, BackHandler, Image } from 'react-native'
 import i18n from 'i18n-js';
 
 import ApiRequests from '../../../classes/ApiRequests';
@@ -111,8 +111,11 @@ export default class ExerciseSearch extends Component {
                                         })
                                     }}>
                                         <View style={styles.searchResult}>
-                                            <Text style={styles.searchResultTitle}>{exercise.title}</Text>
-                                            <Text style={styles.searchResultStats}>{i18n.t('screens')['exerciseSearch']['usageStat'][0]} {exercise.timesUsed ? exercise.timesUsed : 0} {i18n.t('screens')['exerciseSearch']['usageStat'][1]}</Text>
+                                            <Image source={{ uri: exercise.video }} style={styles.exerciseGif} />
+                                            <View style={styles.searchResultRight}>
+                                                <Text style={styles.searchResultTitle}>{exercise.title}</Text>
+                                                <Text style={styles.searchResultStats}>{i18n.t('screens')['exerciseSearch']['usageStat'][0]} {exercise.timesUsed ? exercise.timesUsed : 0} {i18n.t('screens')['exerciseSearch']['usageStat'][1]}</Text>
+                                            </View>
                                         </View>
                                     </Pressable>
                                 )

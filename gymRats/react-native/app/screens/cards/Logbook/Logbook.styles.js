@@ -20,8 +20,9 @@ export default StyleSheet.create({
         fontSize: 16
     },
     exerciseTitle: {
-        fontFamily: "MainMedium",
-        fontSize: 14
+        fontFamily: "MainBold",
+        fontSize: 16,
+        marginLeft: 8
     },
     exerciseContainerTopbar: {
         display: 'flex',
@@ -118,5 +119,56 @@ export default StyleSheet.create({
         fontSize: 14,
         color: "#999",
         marginBottom: 14
+    },
+    exerciseTableContainer: {
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: 24
+    },
+    exerciseTableRow: {
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'row',
+    },
+    exerciseTableHeaderRow: {
+        marginBottom: 16
+    },
+    exerciseTableColumnHeader: {
+        width: '25%',
+        fontFamily: 'MainSemiBold',
+        textTransform: 'uppercase',
+        color: '#777',
+        fontSize: 12,
+        textAlign: 'center',
+    },
+    setText: {
+        width: '10%',
+        textAlign: 'center',
+        height: 50,
+        textAlignVertical: 'center',
+        fontFamily: 'MainBold',
+    },
+    exerciseCellInput: {
+        width: '25%',
+        textAlign: 'center',
+        height: 50,
+        fontFamily: "MainRegular",
+        fontSize: 14
+    },
+    exerciseTableInputRow: {
+        borderTopColor: "#e7e7e7",
+        borderBottomColor: "#e7e7e7",
+        borderTopWidth: 1,
+    },
+    exerciseGif: {
+        height: 50,
+        width: 50
+    },
+    exerciseContainer: {
+        borderColor: "#e7e7e7",
+        paddingVertical: 16,
     }
 })

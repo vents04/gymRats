@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Alert, BackHandler, Modal, ScrollView, Text, TextInput, Pressable, View, Keyboard } from 'react-native'
+import { Alert, BackHandler, Modal, ScrollView, Text, TextInput, Pressable, View, Keyboard, Image } from 'react-native'
 import i18n from 'i18n-js';
 import { Picker } from '@react-native-picker/picker';
 import DropDownPicker from 'react-native-dropdown-picker'
@@ -69,6 +69,9 @@ export default class Logbook extends Component {
     }
 
     onFocusFunction = () => {
+        setTimeout(() => {
+            console.log(this.state.exercises);
+        }, 2000)
         if (!this.props.route.params.date) {
             return this.props.navigation.navigate("Calendar");
         }
@@ -532,7 +535,7 @@ export default class Logbook extends Component {
                     }
                     {
                         this.state.showError
-                            ? <Text style={{...globalStyles.errorBox, marginBottom: 16}}>{this.state.error}</Text>
+                            ? <Text style={{ ...globalStyles.errorBox, marginBottom: 16 }}>{this.state.error}</Text>
                             : null
                     }
                     {
@@ -568,33 +571,38 @@ export default class Logbook extends Component {
                                 <Ionicons name="add-sharp" size={35} color={cardColors.logbook} />
                             </Pressable>
                         </View>
-                        <KeyboardAwareScrollView style={globalStyles.fillEmptySpace} ref={this.scrollView}>
+                        <KeyboardAwareScrollView style={{ ...globalStyles.fillEmptySpace, marginBottom: 0 }} ref={this.scrollView}>
                             {
                                 this.state.exercises.length == 0
                                     ? <Text style={globalStyles.notation}>{i18n.t('screens')['logbook']['noExercisesAdded']}</Text>
                                     : <>
                                         {
                                             this.state.exercises.map((exercise, index) =>
-                                                <>
+                                                <View style={styles.exerciseContainer}>
                                                     <View key={index} style={styles.exerciseContainerTopbar}>
                                                         <View style={styles.exerciseContainerLeft}>
                                                             {
-                                                                this.state.exercises.length > 1
-                                                                    ? <Pressable style={({ pressed }) => [
-                                                                        {
-                                                                            opacity: pressed ? 0.1 : 1,
-                                                                        }
-                                                                    ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
-                                                                        this.swapExercises(index);
-                                                                        this.setState({ showError: false })
-                                                                    }}>
-                                                                        <Ionicons name="swap-vertical" size={20} color="#777" style={{ marginRight: 10, minWidth: 25, height: 25 }} />
-                                                                    </Pressable>
+                                                                exercise.exerciseInstance && exercise.exerciseInstance.video
+                                                                    ? <Image source={{ uri: exercise.exerciseInstance.video }} style={styles.exerciseGif} />
                                                                     : null
                                                             }
                                                             <Text style={styles.exerciseTitle}>{exercise.exerciseName}</Text>
                                                         </View>
-                                                        <Pressable style={({ pressed }) => [
+                                                        {
+                                                            this.state.exercises.length > 1
+                                                                ? <Pressable style={({ pressed }) => [
+                                                                    {
+                                                                        opacity: pressed ? 0.1 : 1,
+                                                                    }
+                                                                ]} hitSlop={{ top: 30, right: 30, bottom: 30, left: 30 }} onPress={() => {
+                                                                    this.swapExercises(index);
+                                                                    this.setState({ showError: false })
+                                                                }}>
+                                                                    <Ionicons name="swap-vertical" size={20} color="#777" style={{ marginRight: 10, minWidth: 25, height: 25 }} />
+                                                                </Pressable>
+                                                                : null
+                                                        }
+                                                        {/* <Pressable style={({ pressed }) => [
                                                             {
                                                                 opacity: pressed ? 0.1 : 1,
                                                             }
@@ -606,9 +614,75 @@ export default class Logbook extends Component {
                                                                 <Text style={styles.exerciseContainerAddContainerTitle}>{i18n.t('screens')['logbook']['addSet']}</Text>
                                                                 <Ionicons name="add-sharp" size={25} color={cardColors.logbook} />
                                                             </View>
-                                                        </Pressable>
+                                                        </Pressable> */}
                                                     </View>
-                                                    <View style={styles.setsContainer} key={`_${index}`}>
+                                                    <View style={styles.exerciseTableContainer}>
+                                                        <View style={{ ...styles.exerciseTableRow, ...styles.exerciseTableHeaderRow }}>
+                                                            <Text style={{ ...styles.exerciseTableColumnHeader, width: '10%' }}>Set</Text>
+                                                            <Text style={styles.exerciseTableColumnHeader}>Reps</Text>
+                                                            <Text style={styles.exerciseTableColumnHeader}>Weight</Text>
+                                                            <Text style={styles.exerciseTableColumnHeader}>Duration</Text>
+                                                        </View>
+                                                        {
+                                                            exercise.sets.map((set, index) =>
+                                                                <View style={{ ...styles.exerciseTableRow, ...styles.exerciseTableInputRow, borderBottomWidth: exercise.sets.length == index + 1 ? 1 : 0 }}>
+                                                                    <Text style={styles.setText}>{index + 1}</Text>
+                                                                    <TextInput style={styles.exerciseCellInput}
+                                                                        keyboardType='numeric'
+                                                                        value={set.reps && set.reps != undefined ? set.reps.toString() : null}
+                                                                        defaultValue={set.reps && set.reps != undefined ? set.reps.toString() : null}
+                                                                        onChangeText={(val) => {
+                                                                            this.changeSetVariable(exercise.exerciseId, index, "reps", val)
+                                                                            this.setState({ showError: false })
+                                                                        }} />
+                                                                    <TextInput
+                                                                        style={styles.exerciseCellInput}
+                                                                        keyboardType='numeric'
+                                                                        value={set.weight.amount && set.weight.amount != undefined ? set.weight.amount.toString() : null}
+                                                                        onChangeText={(val) => {
+                                                                            this.changeSetVariable(exercise.exerciseId, index, "weight", val)
+                                                                            this.setState({ showError: false })
+                                                                        }} />
+                                                                    <TextInput style={styles.exerciseCellInput}
+                                                                        keyboardType='numeric'
+                                                                        value={set.duration && set.duration != undefined ? set.duration.toString() : null}
+                                                                        defaultValue={set.duration && set.duration != undefined ? set.duration.toString() : null}
+                                                                        onChangeText={(val) => {
+                                                                            this.changeSetVariable(exercise.exerciseId, index, "duration", val)
+                                                                            this.setState({ showError: false })
+                                                                        }} />
+                                                                    <Pressable style={({ pressed }) => [
+                                                                        {
+                                                                            opacity: pressed ? 0.1 : 1,
+                                                                            width: '15%',
+                                                                            display: 'flex',
+                                                                            flexDirection: 'row',
+                                                                            alignItems: 'center',
+                                                                            justifyContent: 'center',
+                                                                        }
+                                                                    ]} onPress={() => {
+                                                                        this.deleteSet(exercise.exerciseId, index);
+                                                                        this.setState({ showError: false })
+                                                                    }}>
+                                                                        <Ionicons name="remove" size={20} color={cardColors.logbook} />
+                                                                    </Pressable>
+                                                                </View>
+                                                            )
+                                                        }
+                                                    </View>
+                                                    <Pressable style={({ pressed }) => [
+                                                        globalStyles.authPageActionButton,
+                                                        {
+                                                            opacity: pressed ? 0.1 : 1,
+                                                            marginTop: 8
+                                                        }
+                                                    ]} onPress={() => {
+                                                        this.addSet(exercise.exerciseId)
+                                                        this.setState({ showError: false })
+                                                    }}>
+                                                        <Text style={globalStyles.authPageActionButtonText}>{i18n.t('screens')['logbook']['addSet']}</Text>
+                                                    </Pressable>
+                                                    {/* <View style={styles.setsContainer} key={`_${index}`}>
                                                         {
                                                             exercise.sets.map((set, index) =>
                                                                 <View key={set._id}>
@@ -663,8 +737,8 @@ export default class Logbook extends Component {
                                                                 </View>
                                                             )
                                                         }
-                                                    </View>
-                                                </>
+                                                    </View> */}
+                                                </View>
                                             )
                                         }
                                     </>

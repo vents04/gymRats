@@ -34,14 +34,14 @@ router.post("/workout", authenticate, async (req, res, next) => {
             userId: mongoose.Types.ObjectId(req.user._id)
         });
 
-        for(let workoutSession of workoutSessions) {
-            if(workoutSession.exercises.length != workout.exercises.length) continue;
+        for (let workoutSession of workoutSessions) {
+            if (workoutSession.exercises.length != workout.exercises.length) continue;
             let isValid = true;
-            for(let exercise of workoutSession.exercises) {
-                if(!req.body.exercises.includes(exercise.exerciseId.toString())) isValid = false;
+            for (let exercise of workoutSession.exercises) {
+                if (!req.body.exercises.includes(exercise.exerciseId.toString())) isValid = false;
             }
-            if(isValid) {
-                await DbService.update(COLLECTIONS.WORKOUT_SESSIONS, {_id: mongoose.Types.ObjectId(workoutSession._id)}, {
+            if (isValid) {
+                await DbService.update(COLLECTIONS.WORKOUT_SESSIONS, { _id: mongoose.Types.ObjectId(workoutSession._id) }, {
                     workoutId: workout._id
                 })
             }
@@ -85,6 +85,7 @@ router.get("/workout", authenticate, async (req, res, next) => {
                         for (let exercise of session.exercises) {
                             const exerciseInstance = await DbService.getById(COLLECTIONS.EXERCISES, exercise.exerciseId);
                             exercise.exerciseName = exerciseInstance.title;
+                            exercise.exerciseInstance = exerciseInstance;
                         }
                         nearestSession.session = session;
                     }
@@ -114,7 +115,7 @@ router.delete("/workout/:id", authenticate, async (req, res, next) => {
 
         await DbService.delete(COLLECTIONS.WORKOUTS, { _id: mongoose.Types.ObjectId(req.params.id) });
 
-        await DbService.updateMany(COLLECTIONS.WORKOUT_SESSIONS, { workoutId: mongoose.Types.ObjectId(req.params.id) }, {workoutId: null})
+        await DbService.updateMany(COLLECTIONS.WORKOUT_SESSIONS, { workoutId: mongoose.Types.ObjectId(req.params.id) }, { workoutId: null })
 
         return res.sendStatus(HTTP_STATUS_CODES.OK);
     } catch (err) {
@@ -142,7 +143,7 @@ router.put("/workout/:id", authenticate, async (req, res, next) => {
 
         await DbService.update(COLLECTIONS.WORKOUTS, { _id: mongoose.Types.ObjectId(req.params.id) }, req.body);
 
-        await DbService.updateMany(COLLECTIONS.WORKOUT_SESSIONS, { workoutId: mongoose.Types.ObjectId(req.params.id) }, {workoutId: null})
+        await DbService.updateMany(COLLECTIONS.WORKOUT_SESSIONS, { workoutId: mongoose.Types.ObjectId(req.params.id) }, { workoutId: null })
 
         return res.sendStatus(HTTP_STATUS_CODES.OK);
     } catch (err) {
@@ -227,13 +228,13 @@ router.post("/workout-session", authenticate, async (req, res, next) => {
             exercises: req.body.exercises
         });
 
-        for(let workout of workouts) {
-            if(workout.exercises.length != exerciseIds.length) continue;
+        for (let workout of workouts) {
+            if (workout.exercises.length != exerciseIds.length) continue;
             let isValid = true;
-            for(let exercise of workout.exercises) {
-                if(!exerciseIds.includes(exercise.toString())) isValid = false;
+            for (let exercise of workout.exercises) {
+                if (!exerciseIds.includes(exercise.toString())) isValid = false;
             }
-            if(isValid) {
+            if (isValid) {
                 workoutSession.workoutId = workout._id;
                 break;
             }
@@ -283,6 +284,7 @@ router.get("/workout-session", authenticate, async (req, res, next) => {
             for (let exercise of workoutSession.exercises) {
                 const exerciseInstance = await DbService.getOne(COLLECTIONS.EXERCISES, { _id: mongoose.Types.ObjectId(exercise.exerciseId) });
                 exercise.exerciseName = exerciseInstance.title;
+                exercise.exerciseInstance = exerciseInstance;
             }
         }
 

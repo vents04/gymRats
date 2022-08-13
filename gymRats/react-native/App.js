@@ -175,6 +175,7 @@ const App = (props) => {
     Logo: require("./assets/fonts/Bebas_Neue/BebasNeue-Regular.ttf"),
     MainLight: require('./assets/fonts/Montserrat/static/Montserrat-Light.ttf'),
     MainMedium: require('./assets/fonts/Montserrat/static/Montserrat-Medium.ttf'),
+    MainSemiBold: require('./assets/fonts/Montserrat/static/Montserrat-SemiBold.ttf'),
     MainBlack: require('./assets/fonts/Montserrat/static/Montserrat-Black.ttf'),
     MainBold: require('./assets/fonts/Montserrat/static/Montserrat-Bold.ttf'),
     MainRegular: require('./assets/fonts/Montserrat/static/Montserrat-Regular.ttf')
