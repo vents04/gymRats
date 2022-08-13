@@ -40,6 +40,31 @@ app
 mongo.connect();
 
 (async function () {
+    let id = mongoose.Types.ObjectId();
+    console.log(await ProgressService.getTemplateProgressStrength([
+        {
+            exercises: [
+                {
+                    exerciseId: id,
+                    sets: [
+                        { reps: 10, weight: { unit: WEIGHT_UNITS.KILOGRAMS, amount: 40 } },
+                        { reps: 10, weight: { unit: WEIGHT_UNITS.KILOGRAMS, amount: 40 } },
+                    ]
+                }
+            ]
+        },
+        {
+            exercises: [
+                {
+                    exerciseId: id,
+                    sets: [
+                        { reps: 10, weight: { unit: WEIGHT_UNITS.KILOGRAMS, amount: 40 } },
+                        { reps: 12, weight: { unit: WEIGHT_UNITS.KILOGRAMS, amount: 40 } },
+                    ]
+                }
+            ]
+        }
+    ]))
 })();
 
 const notificationMessages = {

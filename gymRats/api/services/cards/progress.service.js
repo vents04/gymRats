@@ -39,13 +39,13 @@ const ProgressService = {
     return new Promise(async (resolve, reject) => {
       try {
         validateCollectionParameter(collection, false);
-        if (collection.length < 2) throw new ResponseError(`Invalid parameters: ${collection}`, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR);
+        if (collection.length < 2) return resolve(0);
 
         let averageVolumeForFirstHalfSessions = 0;
         let averageVolumeForSecondHalfSessions = 0;
 
         for (
-          
+
           let workoutSessionIndex = 0;
           workoutSessionIndex < collection.length;
           workoutSessionIndex++
@@ -82,11 +82,56 @@ const ProgressService = {
     });
   },
 
+  getTemplateProgressStrength: (collection) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        validateCollectionParameter(collection, false);
+        if (collection.length < 2) return resolve(0);
+
+        let strengthForFirstHalfSessions = 0;
+        let strengthForSecondHalfSessions = 0;
+
+        for (
+          let workoutSessionIndex = 0;
+          workoutSessionIndex < collection.length;
+          workoutSessionIndex++
+        ) {
+          let totalOneRepMaxes = 0;
+          for (let exercise of collection[workoutSessionIndex].exercises) {
+            let exerciseOneRepMax = 0;
+            for (let set of exercise.sets) {
+              if (set.weight.unit == WEIGHT_UNITS.POUNDS) set.weight.amount *= WEIGHT_UNIT_RELATIONS.POUNDS.KILOGRAMS;
+              const currentOneRepMax = oneRepMax(set.weight.amount, set.reps);
+              if (currentOneRepMax > exerciseOneRepMax) exerciseOneRepMax = currentOneRepMax;
+            }
+            totalOneRepMaxes += exerciseOneRepMax;
+          }
+          workoutSessionIndex < collection.length / 2
+            ? (strengthForFirstHalfSessions += totalOneRepMaxes)
+            : (strengthForSecondHalfSessions += totalOneRepMaxes);
+        }
+
+        const percentageProgress = ProgressService.returnPercentage(
+          strengthForFirstHalfSessions,
+          strengthForSecondHalfSessions
+        );
+        resolve(percentageProgress);
+      } catch (err) {
+        reject(
+          new ResponseError(
+            err.message || "Internal server error",
+            err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR
+          )
+        );
+      }
+    });
+  },
+
   getTemplateProgress: (collection) => {
     return new Promise(async (resolve, reject) => {
       try {
         validateCollectionParameter(collection, true);
-        if (collection.length < 2) throw new ResponseError(`Invalid parameters: ${collection}`, HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR);
+        if (collection.length < 2) return resolve(0);
 
         let averagePercentage = 0;
         let arrayWithVolumeAndOneRepMaxForEveryExerciseCombined1 = {};

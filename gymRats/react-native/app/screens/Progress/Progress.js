@@ -40,7 +40,10 @@ export default class Progress extends Component {
             friends: [],
             friendsCompetitive: [],
             showUserFromFriendsLinkModal: true,
-            showUserFromFriendsLinkModalLoading: false
+            showUserFromFriendsLinkModalLoading: false,
+            percentageProgressStrength: 0,
+            percentageProgressVolume: 0,
+            templatesLengthForProgress: 0
         }
 
         this.focusListener;
@@ -48,14 +51,38 @@ export default class Progress extends Component {
 
 
     onFocusFunction = () => {
-        this.getProgress();
         this.getFriends();
         this.getFriendsCompetitive();
+        this.getProgress();
+        this.getLogbookProgress();
     }
 
     componentDidMount = () => {
         this.focusListener = this.props.navigation.addListener('focus', () => {
             this.onFocusFunction();
+        })
+    }
+
+    getLogbookProgress = () => {
+        ApiRequests.get(`progress/logbook-progress`, {}, true).then((response) => {
+            const { percentageProgressStrength, percentageProgressVolume, templatesLengthForProgress } = response.data;
+            console.log(percentageProgressStrength, percentageProgressVolume, templatesLengthForProgress)
+            this.setState({ percentageProgressStrength, percentageProgressVolume, templatesLengthForProgress });
+        }).catch((error) => {
+            console.log(error)
+            if (error.response) {
+                if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
+                    this.setState({ showError: true, error: error.response.data });
+                } else {
+                    ApiRequests.showInternalServerError();
+                }
+            } else if (error.request) {
+                ApiRequests.showNoResponseError();
+            } else {
+                ApiRequests.showRequestSettingError();
+            }
+        }).finally(() => {
+            this.setState({ showLoading: false });
         })
     }
 
@@ -651,7 +678,8 @@ export default class Progress extends Component {
                                                             backgroundColor: friend.friend.percentageProgress > friend.me.percentageProgress
                                                                 ? "#cf3333"
                                                                 : "#1f6cb0"
-                                                        }]}>{
+                                                        }]}>
+                                                            {
                                                                 friend.friend.percentageProgress > friend.me.percentageProgress
                                                                     ? i18n.t('screens')['progress']['competitiveProgressNotationWorse']
                                                                     : friend.friend.percentageProgress < friend.me.percentageProgress
