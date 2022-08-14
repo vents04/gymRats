@@ -2,15 +2,36 @@ import React, { Component } from 'react'
 import "./Home.css"
 import logo from "../../../assets/images/icon.png"
 import translations from '../../translations'
+import { ClientJS } from 'clientjs';
 
 const badges = require.context("../../../assets/images/badges", true);
 const mockups = require.context("../../../assets/images/mockups", true);
 
 export default class Home extends Component {
 
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      showPage: false
+    }
+  }
+
+  componentDidMount() {
+    const client = new ClientJS();
+    if (client.isMobileIOS()) {
+      window.location.href = 'https://apps.apple.com/us/app/gym-rats-progress-made-easy/id1632827633'
+    } else {
+      if (client.isMobileAndroid()) {
+        window.location.href = 'https://play.google.com/store/apps/details?id=com.uploy.gymrats'
+      }
+    }
+    this.setState({ showPage: true });
+  }
+
   redirectToStore = (store) => {
-    switch(store) {
-      case  'APPLE': 
+    switch (store) {
+      case 'APPLE':
         window.open('https://apps.apple.com/us/app/gym-rats-progress-made-easy/id1632827633', '_blank')
         break;
       case 'GOOGLE':
@@ -23,6 +44,9 @@ export default class Home extends Component {
   }
 
   render() {
+    if (!this.state.showPage) {
+      return (<></>)
+    }
     return (
       <div className="page-container">
         <div className="logo-container">
@@ -36,15 +60,15 @@ export default class Home extends Component {
               <button className="button">{translations[this.props.language].home.joinTheWaitlist}</button>
             </a> */}
 
-<div className="badges-container">
-              <img className="google-badge" onClick={() => {this.redirectToStore('GOOGLE')}} src={badges(`./google-${this.props.language.toLowerCase()}.png`).default} alt="google" />
-              <img className="apple-badge" onClick={() => {this.redirectToStore('APPLE')}} src={badges(`./apple-${this.props.language.toLowerCase()}.svg`).default} alt="apple" />
+            <div className="badges-container">
+              <img className="google-badge" onClick={() => { this.redirectToStore('GOOGLE') }} src={badges(`./google-${this.props.language.toLowerCase()}.png`).default} alt="google" />
+              <img className="apple-badge" onClick={() => { this.redirectToStore('APPLE') }} src={badges(`./apple-${this.props.language.toLowerCase()}.svg`).default} alt="apple" />
             </div>
             <div className="badges-container">
-            <img className="huawei-badge" onClick={() => {this.redirectToStore('HUAWEI')}} src={badges(`./huawei-${this.props.language.toLowerCase()}.png`).default} alt="huawei" />
+              <img className="huawei-badge" onClick={() => { this.redirectToStore('HUAWEI') }} src={badges(`./huawei-${this.props.language.toLowerCase()}.png`).default} alt="huawei" />
             </div>
-                        {/* <p className="text">{translations[this.props.language].home.downloadAndroidText[0]}&nbsp;<a href="https://resources.uploy.app/gym-rats.apk" target="_blank" className="action-text">{translations[this.props.language].home.downloadAndroidText[1]}</a>&nbsp;{translations[this.props.language].home.downloadAndroidText[2]}</p> */}
-             
+            {/* <p className="text">{translations[this.props.language].home.downloadAndroidText[0]}&nbsp;<a href="https://resources.uploy.app/gym-rats.apk" target="_blank" className="action-text">{translations[this.props.language].home.downloadAndroidText[1]}</a>&nbsp;{translations[this.props.language].home.downloadAndroidText[2]}</p> */}
+
             {/* <p className="text">{translations[this.props.language].home.blogText[0]}&nbsp;<a href="https://medium.com/@ventsislav_dimitrov/gym-rats-progress-made-easy-5412e2eb6958" target="_blank" className="action-text">{translations[this.props.language].home.blogText[1]}</a></p> */}
           </div>
           <div className="mockup-container">

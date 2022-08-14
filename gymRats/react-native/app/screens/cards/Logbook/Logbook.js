@@ -97,7 +97,10 @@ export default class Logbook extends Component {
                                 unit: this.state.weightUnit,
                             },
                             duration: undefined
-                        }]
+                        }],
+                        exerciseInstance: {
+                            video: this.props.route.params.exercise.video
+                        }
                     });
                     this.setState({ exercises: exercises, hasChanges: true }, () => {
                         this.scrollView.current.scrollToEnd({ animated: true });

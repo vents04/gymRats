@@ -22,7 +22,6 @@ export default StyleSheet.create({
     exerciseTitle: {
         fontFamily: "MainBold",
         fontSize: 16,
-        marginLeft: 8
     },
     exerciseContainerTopbar: {
         display: 'flex',
@@ -165,7 +164,8 @@ export default StyleSheet.create({
     },
     exerciseGif: {
         height: 50,
-        width: 50
+        width: 50,
+        marginRight: 8
     },
     exerciseContainer: {
         borderColor: "#e7e7e7",
