@@ -432,7 +432,7 @@ export default class Progress extends Component {
                                                         />
                                                         {
                                                             this.state.progress.logbookProgress.map((exercise, index) =>
-                                                                <View key={"lp" + index}>
+                                                                <View key={"lp" + index}>                                                                   
                                                                     {
                                                                         this.state.currentExercise == exercise.exerciseInstance._id
                                                                             ? <>
