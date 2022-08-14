@@ -370,7 +370,7 @@ export default class Progress extends Component {
                                                         <Text style={styles.progressCardHeader}>{i18n.t('screens')['progress']['logbook']}</Text>
                                                     </View>
                                                     {
-                                                        this.state.templatesLengthForProgress > 2
+                                                        this.state.templatesLengthForProgress > 0
                                                             ? <View style={styles.progressTypes}>
                                                                 <View style={styles.progressType}>
                                                                     <View style={styles.progressCoefficientContainer}>
@@ -381,9 +381,8 @@ export default class Progress extends Component {
                                                                                 : <FontAwesome name="long-arrow-down" size={20} color={cardColors.negative} />
                                                                         }
                                                                     </View>
-                                                                    <Text style={styles.macroCircleTitle}>strength</Text>
+                                                                    <Text style={styles.macroCircleTitle}>{i18n.t('screens')['progress']['strength']}</Text>
                                                                 </View>
-                                                                <Text style={styles.progressArithmeticOperation}>+</Text>
                                                                 <View style={styles.progressType}>
                                                                     <View style={styles.progressCoefficientContainer}>
                                                                         <Text style={styles.progressCoefficient}>{Math.abs(this.state.percentageProgressVolume)}%</Text>
@@ -393,9 +392,8 @@ export default class Progress extends Component {
                                                                                 : <FontAwesome name="long-arrow-down" size={20} color={cardColors.negative} />
                                                                         }
                                                                     </View>
-                                                                    <Text style={styles.macroCircleTitle}>volume</Text>
+                                                                    <Text style={styles.macroCircleTitle}>{i18n.t('screens')['progress']['volume']}</Text>
                                                                 </View>
-                                                                <Text style={styles.progressArithmeticOperation}>=</Text>
                                                                 <View style={styles.progressType}>
                                                                     <View style={styles.progressCoefficientContainer}>
                                                                         <Text style={styles.progressCoefficient}>{Math.abs(this.state.percentageProgressCombined)}%</Text>
@@ -405,7 +403,7 @@ export default class Progress extends Component {
                                                                                 : <FontAwesome name="long-arrow-down" size={20} color={cardColors.negative} />
                                                                         }
                                                                     </View>
-                                                                    <Text style={styles.macroCircleTitle}>combined</Text>
+                                                                    <Text style={styles.macroCircleTitle}>{i18n.t('screens')['progress']['general']}</Text>
                                                                 </View>
                                                             </View>
                                                             : <>
@@ -688,6 +686,16 @@ export default class Progress extends Component {
                                             </Pressable>
                                         </View>
                                         : <>
+                                            <Pressable style={({ pressed }) => [
+                                                globalStyles.authPageActionButton, {
+                                                    opacity: pressed ? 0.1 : 1,
+                                                    marginBottom: 24
+                                                }
+                                            ]} onPress={() => {
+                                                this.shareFriendsLink();
+                                            }}>
+                                                <Text style={globalStyles.authPageActionButtonText}>{i18n.t('screens')['progress']['noFriendsIncentive']}</Text>
+                                            </Pressable>
                                             {
                                                 this.state.requests.map((request) =>
                                                     <View style={styles.requestContainer} key={request._id}>
@@ -734,18 +742,6 @@ export default class Progress extends Component {
                                             {
                                                 this.state.friendsCompetitive.map((friend) =>
                                                     <View style={styles.friendContainer} key={friend._id}>
-                                                        <Text style={[styles.friendProgressNotation, {
-                                                            backgroundColor: friend.friend.percentageProgress > friend.me.percentageProgress
-                                                                ? "#cf3333"
-                                                                : "#1f6cb0"
-                                                        }]}>
-                                                            {
-                                                                friend.friend.percentageProgress > friend.me.percentageProgress
-                                                                    ? i18n.t('screens')['progress']['competitiveProgressNotationWorse']
-                                                                    : friend.friend.percentageProgress < friend.me.percentageProgress
-                                                                        ? i18n.t('screens')['progress']['competitiveProgressNotationBetter']
-                                                                        : i18n.t('screens')['progress']['competitiveProgressNotationNeutral']
-                                                            }</Text>
                                                         <View style={styles.comparisonContainer}>
                                                             <View style={styles.comparisonUserContainer}>
                                                                 {

@@ -161,7 +161,8 @@ module.exports = {
                 competitiveRegress: "% regress",
                 competitiveProgress: "% progress",
                 strength: 'strength',
-                volume: 'volume'
+                volume: 'volume',
+                general: 'general'
             },
             addFood: {
                 optional: "optional",
@@ -598,7 +599,8 @@ module.exports = {
                 competitiveRegress: "% регрес",
                 competitiveProgress: "% прогрес",
                 strength: 'сила',
-                volume: 'обем'
+                volume: 'обем',
+                general: 'генерално'
             },
             addFood: {
                 optional: "опиционално",
