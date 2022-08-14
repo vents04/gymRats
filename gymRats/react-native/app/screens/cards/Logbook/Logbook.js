@@ -436,12 +436,12 @@ export default class Logbook extends Component {
                                 this.backAction();
                             }}>
                             <View style={globalStyles.centeredView}>
-                                <View style={globalStyles.modalView}>
+                                <View style={{ ...globalStyles.modalView }}>
                                     <Text style={globalStyles.modalTitle}>{i18n.t('screens')['logbook']['templatePickerModalTitle']}</Text>
                                     <Text style={globalStyles.modalText}>{i18n.t('screens')['logbook']['templatePickerModalMessage']}</Text>
                                     <DropDownPicker
                                         placeholder={i18n.t('screens')['logbook']['templatePickerModalDropdownPlaceholder']}
-                                        maxHeight={150}
+                                        maxHeight={75}
                                         open={this.state.isTemplatePickerModalOpened}
                                         setOpen={(value) => {
                                             this.setState({ isTemplatePickerModalOpened: value })
