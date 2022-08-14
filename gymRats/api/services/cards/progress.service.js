@@ -138,6 +138,7 @@ const ProgressService = {
         if (collection.length % 2 != 0) collection.shift();
 
         let averagePercentage = 0;
+        let averagePercentageCounter = 0;
         let arrayWithVolumeAndOneRepMaxForEveryExerciseCombined1 = {};
         let arrayWithVolumeAndOneRepMaxForEveryExerciseCombined2 = {};
 
@@ -229,7 +230,10 @@ const ProgressService = {
 
           averagePercentage +=
             (percentageForVolume + percentageForOneRepMax) / 2;
+          averagePercentageCounter++;
         }
+
+        if (averagePercentageCounter > 1) averagePercentage /= averagePercentageCounter;
 
         resolve(averagePercentage);
       } catch (err) {

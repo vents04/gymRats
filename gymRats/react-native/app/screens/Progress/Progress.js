@@ -36,7 +36,7 @@ export default class Progress extends Component {
             currentExercise: null,
             exercises: [],
             exerciseDropdownOpened: false,
-            activeTab: "friends",
+            activeTab: "myProgress",
             requests: [],
             friends: [],
             friendsCompetitive: [],
@@ -68,10 +68,8 @@ export default class Progress extends Component {
     getLogbookProgress = () => {
         ApiRequests.get(`progress/logbook-progress`, {}, true).then((response) => {
             const { percentageProgressStrength, percentageProgressVolume, percentageProgressCombined, templatesLengthForProgress } = response.data;
-            console.log(percentageProgressStrength, percentageProgressVolume, templatesLengthForProgress)
             this.setState({ percentageProgressStrength, percentageProgressVolume, percentageProgressCombined, templatesLengthForProgress });
         }).catch((error) => {
-            console.log(error)
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
                     this.setState({ showError: true, error: error.response.data });
@@ -165,7 +163,6 @@ export default class Progress extends Component {
         ApiRequests.get("social/connection", {}, true).then((response) => {
             this.setState({ friends: response.data.connections, requests: response.data.requests });
         }).catch((error) => {
-            console.log(error.response.data)
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
                     this.setState({ showModalError: true, error: error.response.data });
@@ -204,7 +201,6 @@ export default class Progress extends Component {
             this.getFriends();
             this.getFriendsCompetitive();
         }).catch((error) => {
-            console.log(error.response.data)
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
                     this.setState({ showModalError: true, error: error.response.data });
@@ -221,10 +217,8 @@ export default class Progress extends Component {
 
     getFriendsCompetitive = () => {
         ApiRequests.get("social/friends-competitive", {}, true).then((response) => {
-            console.log(response.data)
             this.setState({ friendsCompetitive: response.data.competitive });
         }).catch((error) => {
-            console.log(error.response.data)
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
                     this.setState({ showModalError: true, error: error.response.data });
@@ -369,6 +363,72 @@ export default class Progress extends Component {
                                 {
                                     this.state.progress && !this.state.showLoading
                                         ? <>
+                                            {
+                                                <View style={styles.progressCardContainer}>
+                                                    <View style={styles.progressCardHeaderContainer}>
+                                                        <FontAwesome5 name="dumbbell" size={20} color={cardColors.logbook} />
+                                                        <Text style={styles.progressCardHeader}>{i18n.t('screens')['progress']['logbook']}</Text>
+                                                    </View>
+                                                    {
+                                                        this.state.templatesLengthForProgress > 2
+                                                            ? <View style={styles.progressTypes}>
+                                                                <View style={styles.progressType}>
+                                                                    <View style={styles.progressCoefficientContainer}>
+                                                                        <Text style={styles.progressCoefficient}>{Math.abs(this.state.percentageProgressStrength)}%</Text>
+                                                                        {
+                                                                            this.state.percentageProgressStrength >= 0
+                                                                                ? <FontAwesome name="long-arrow-up" size={20} color={cardColors.logbook} />
+                                                                                : <FontAwesome name="long-arrow-down" size={20} color={cardColors.negative} />
+                                                                        }
+                                                                    </View>
+                                                                    <Text style={styles.macroCircleTitle}>strength</Text>
+                                                                </View>
+                                                                <Text style={styles.progressArithmeticOperation}>+</Text>
+                                                                <View style={styles.progressType}>
+                                                                    <View style={styles.progressCoefficientContainer}>
+                                                                        <Text style={styles.progressCoefficient}>{Math.abs(this.state.percentageProgressVolume)}%</Text>
+                                                                        {
+                                                                            this.state.percentageProgressVolume >= 0
+                                                                                ? <FontAwesome name="long-arrow-up" size={20} color={cardColors.logbook} />
+                                                                                : <FontAwesome name="long-arrow-down" size={20} color={cardColors.negative} />
+                                                                        }
+                                                                    </View>
+                                                                    <Text style={styles.macroCircleTitle}>volume</Text>
+                                                                </View>
+                                                                <Text style={styles.progressArithmeticOperation}>=</Text>
+                                                                <View style={styles.progressType}>
+                                                                    <View style={styles.progressCoefficientContainer}>
+                                                                        <Text style={styles.progressCoefficient}>{Math.abs(this.state.percentageProgressCombined)}%</Text>
+                                                                        {
+                                                                            this.state.percentageProgressCombined >= 0
+                                                                                ? <FontAwesome name="long-arrow-up" size={20} color={cardColors.logbook} />
+                                                                                : <FontAwesome name="long-arrow-down" size={20} color={cardColors.negative} />
+                                                                        }
+                                                                    </View>
+                                                                    <Text style={styles.macroCircleTitle}>combined</Text>
+                                                                </View>
+                                                            </View>
+                                                            : <>
+                                                                <Text style={globalStyles.notation}>{i18n.t('screens')['progress']['atLeastTwoSessions']}</Text>
+                                                                {
+                                                                    !this.state.progress.hasAddedWorkoutSession
+                                                                        ? <Pressable style={({ pressed }) => [
+                                                                            globalStyles.authPageActionButton, {
+                                                                                opacity: pressed ? 0.1 : 1,
+                                                                                marginTop: 12
+                                                                            }
+                                                                        ]} onPress={() => {
+                                                                            this.props.navigation.navigate("Calendar", {
+                                                                            });
+                                                                        }}>
+                                                                            <Text style={globalStyles.authPageActionButtonText}>{i18n.t('screens')['progress']['addWorkoutSession']}</Text>
+                                                                        </Pressable>
+                                                                        : null
+                                                                }
+                                                            </>
+                                                    }
+                                                </View>
+                                            }
                                             {
                                                 this.state.progress.weightTrackerProgress
                                                     ? <View style={styles.progressCardContainer}>
@@ -581,55 +641,6 @@ export default class Progress extends Component {
                                                     </View>
                                                     : null
                                             } */}
-                                            {
-                                                <View style={styles.progressCardContainer}>
-                                                    <View style={styles.progressCardHeaderContainer}>
-                                                        <FontAwesome5 name="dumbbell" size={20} color={cardColors.logbook} />
-                                                        <Text style={styles.progressCardHeader}>{i18n.t('screens')['progress']['logbook']}</Text>
-                                                    </View>
-                                                    {
-                                                        this.state.templatesLengthForProgress > 0
-                                                            ? <View style={styles.progressTypes}>
-                                                                <View style={styles.progressType}>
-                                                                    <View style={styles.progressCoefficientContainer}>
-                                                                        <Text style={styles.progressCoefficient}>{Math.abs(this.state.percentageProgressStrength)}%</Text>
-                                                                        {
-                                                                            this.state.percentageProgressStrength >= 0
-                                                                                ? <FontAwesome name="long-arrow-up" size={20} color={cardColors.logbook} />
-                                                                                : <FontAwesome name="long-arrow-down" size={20} color={cardColors.negative} />
-                                                                        }
-                                                                    </View>
-                                                                    <Text style={styles.macroCircleTitle}>strength</Text>
-                                                                </View>
-                                                                <Text style={styles.progressArithmeticOperation}>+</Text>
-                                                                <View style={styles.progressType}>
-                                                                    <View style={styles.progressCoefficientContainer}>
-                                                                        <Text style={styles.progressCoefficient}>{Math.abs(this.state.percentageProgressVolume)}%</Text>
-                                                                        {
-                                                                            this.state.percentageProgressVolume >= 0
-                                                                                ? <FontAwesome name="long-arrow-up" size={20} color={cardColors.logbook} />
-                                                                                : <FontAwesome name="long-arrow-down" size={20} color={cardColors.negative} />
-                                                                        }
-                                                                    </View>
-                                                                    <Text style={styles.macroCircleTitle}>volume</Text>
-                                                                </View>
-                                                                <Text style={styles.progressArithmeticOperation}>=</Text>
-                                                                <View style={styles.progressType}>
-                                                                    <View style={styles.progressCoefficientContainer}>
-                                                                        <Text style={styles.progressCoefficient}>{Math.abs(this.state.percentageProgressStrength + this.state.percentageProgressVolume)}%</Text>
-                                                                        {
-                                                                            (this.state.percentageProgressStrength + this.state.percentageProgressVolume) >= 0
-                                                                                ? <FontAwesome name="long-arrow-up" size={20} color={cardColors.logbook} />
-                                                                                : <FontAwesome name="long-arrow-down" size={20} color={cardColors.negative} />
-                                                                        }
-                                                                    </View>
-                                                                    <Text style={styles.macroCircleTitle}>combined</Text>
-                                                                </View>
-                                                            </View>
-                                                            : null
-                                                    }
-                                                </View>
-                                            }
                                             {
                                                 !this.state.progress.weightTrackerProgress
                                                     && this.state.progress.logbookProgress.length <= 0
