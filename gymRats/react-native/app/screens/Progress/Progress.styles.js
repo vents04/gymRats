@@ -279,5 +279,10 @@ export default StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "space-between"
+    },
+    verticleLine: {
+        height: "100%",
+        width: 1,
+        backgroundColor: '#909090'
     }
 })

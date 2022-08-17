@@ -435,14 +435,21 @@ export default class Progress extends Component {
                                                                 <View key={"lp" + index}>                                                                   
                                                                     {
                                                                         this.state.currentExercise == exercise.exerciseInstance._id
-                                                                            ? <>
+                                                                            ? <View style = {{
+                                                                                flexDirection: "row",
+                                                                                justifyContent: "space-evenly",
+                                                                            }}> 
                                                                                 {
                                                                                     exercise.lastSessionProgressNotation
-                                                                                        ? <>
-                                                                                            <Text style={{
+                                                                                        ? <View style={{
+                                                                                            flex: 1,
+                                                                                        }}>
+                                                                                            < Text numberOfLines = {3} style={{
                                                                                                 fontFamily: "MainMedium",
                                                                                                 fontSize: 14,
+                                                                                                marginTop: 12,
                                                                                                 marginBottom: 8,
+                                                                                                textAlign: "center",
                                                                                             }}>{i18n.t('screens')['progress']['trendFromLastSession']}</Text>
                                                                                             <Pressable style={({ pressed }) => [
                                                                                                 styles.progressFlagContainer,
@@ -474,17 +481,20 @@ export default class Progress extends Component {
                                                                                                 </Text>
                                                                                                 {/* <Entypo name="info-with-circle" size={18} color="white" /> */}
                                                                                             </Pressable>
-                                                                                        </>
+                                                                                        </View>
                                                                                         : null
                                                                                 }
                                                                                 {
                                                                                     exercise.lastFiveSessionsProgressNotation
-                                                                                        ? <>
+                                                                                        ? <View style = {{
+                                                                                            flex: 1,
+                                                                                        }}>
                                                                                             <Text style={{
                                                                                                 fontFamily: "MainMedium",
                                                                                                 fontSize: 14,
-                                                                                                marginBottom: 8,
-                                                                                                marginTop: 12
+                                                                                                marginBottom: 25,
+                                                                                                marginTop: 12,
+                                                                                                textAlign: "center",
                                                                                             }}>{i18n.t('screens')['progress']['generalTrend']}</Text>
                                                                                             <Pressable style={({ pressed }) => [
                                                                                                 styles.progressFlagContainer,
@@ -516,7 +526,7 @@ export default class Progress extends Component {
                                                                                                 </Text>
                                                                                                 {/* <Entypo name="info-with-circle" size={18} color="white" /> */}
                                                                                             </Pressable>
-                                                                                        </>
+                                                                                        </View>
                                                                                         : null
                                                                                 }
                                                                                 {
@@ -541,7 +551,7 @@ export default class Progress extends Component {
                                                                                         </>
                                                                                         : null
                                                                                 }
-                                                                            </>
+                                                                            </View>
                                                                             : null
                                                                     }
                                                                 </View>
