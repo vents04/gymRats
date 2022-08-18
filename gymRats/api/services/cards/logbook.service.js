@@ -9,7 +9,7 @@ const LogbookService = {
         return new Promise(async (resolve, reject) => {
             try {
                 let exercises = [];
-                const workouts = await DbService.getMany(COLLECTIONS.WORKOUT_SESSIONS, { userId: mongoose.Types.ObjectId(userId) });
+                const workouts = await DbService.getManyWithSort(COLLECTIONS.WORKOUT_SESSIONS, { userId: mongoose.Types.ObjectId(userId) }, {year:-1,month:-1,date:-1});
                 for (let workout of workouts) {
                     for (let exercise of workout.exercises) {
                         if (!exercises.some(e => e._id.toString() === exercise.exerciseId.toString())) {
@@ -65,7 +65,7 @@ const LogbookService = {
     getPercentageDifferenceBetweenAverageOrmComparedToGreatestOrm: (orms, greatestOrm) => {
         let average = 0;
         for (let index = 0; index < orms.length; index++) {
-            average += ((orms[index] + greatestOrm) / 2);
+            average += orms[index];
         }
         average /= orms.length;
         const difference = Math.abs(average - greatestOrm);
@@ -78,12 +78,12 @@ const LogbookService = {
             if (percentageDifference > 1) notation = LOGBOOK_PROGRESS_NOTATIONS.RAPID_STRENGTH_LOSS;
             else if (percentageDifference > 0.5) notation = LOGBOOK_PROGRESS_NOTATIONS.STRENGTH_LOSS;
             else if (percentageDifference > 0.25) notation = LOGBOOK_PROGRESS_NOTATIONS.SLIGHT_STRENGTH_LOSS;
-            else notation = LOGBOOK_PROGRESS_NOTATIONS.NO_LOSS;
+            else notation = LOGBOOK_PROGRESS_NOTATIONS.NO_CHANGE;
         } else {
             if (percentageDifference > 1) notation = LOGBOOK_PROGRESS_NOTATIONS.RAPID_STRENGTH_GAIN;
             else if (percentageDifference > 0.5) notation = LOGBOOK_PROGRESS_NOTATIONS.STRENGTH_GAIN;
             else if (percentageDifference > 0.25) notation = LOGBOOK_PROGRESS_NOTATIONS.SLIGHT_STRENGTH_GAIN;
-            else notation = LOGBOOK_PROGRESS_NOTATIONS.NO_LOSS;
+            else notation = LOGBOOK_PROGRESS_NOTATIONS.NO_CHANGE;
         }
         return notation
     },

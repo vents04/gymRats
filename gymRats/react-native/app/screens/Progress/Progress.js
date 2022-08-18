@@ -437,12 +437,13 @@ export default class Progress extends Component {
                                                                         this.state.currentExercise == exercise.exerciseInstance._id
                                                                             ? <View style = {{
                                                                                 flexDirection: "row",
-                                                                                justifyContent: "space-evenly",
+                                                                                justifyContent: "space-evenly"
                                                                             }}> 
                                                                                 {
                                                                                     exercise.lastSessionProgressNotation
-                                                                                        ? <View style={{
-                                                                                            flex: 1,
+                                                                                        ? <View style = {{
+                                                                                            flexDirection: "column",
+                                                                                            flex:1
                                                                                         }}>
                                                                                             < Text numberOfLines = {3} style={{
                                                                                                 fontFamily: "MainMedium",
@@ -455,7 +456,21 @@ export default class Progress extends Component {
                                                                                                 styles.progressFlagContainer,
                                                                                                 {
                                                                                                     opacity: pressed ? 0.1 : 1,
-                                                                                                    backgroundColor: cardColors.logbook
+                                                                                                    backgroundColor: exercise.lastSessionProgressNotation == LOGBOOK_PROGRESS_NOTATIONS.RAPID_STRENGTH_GAIN
+                                                                                                    ? "#53c7f0"
+                                                                                                    : exercise.lastSessionProgressNotation == LOGBOOK_PROGRESS_NOTATIONS.STRENGTH_GAIN
+                                                                                                        ? "#53c7f0"
+                                                                                                        : exercise.lastSessionProgressNotation == LOGBOOK_PROGRESS_NOTATIONS.SLIGHT_STRENGTH_GAIN
+                                                                                                            ? "#53c7f0"
+                                                                                                            : exercise.lastSessionProgressNotation == LOGBOOK_PROGRESS_NOTATIONS.NO_CHANGE
+                                                                                                                ? "#7a7474"
+                                                                                                                : exercise.lastSessionProgressNotation == LOGBOOK_PROGRESS_NOTATIONS.SLIGHT_STRENGTH_LOSS
+                                                                                                                    ? "#cf3333"
+                                                                                                                    : exercise.lastSessionProgressNotation == LOGBOOK_PROGRESS_NOTATIONS.STRENGTH_LOSS
+                                                                                                                        ? "#cf3333"
+                                                                                                                        : exercise.lastSessionProgressNotation == LOGBOOK_PROGRESS_NOTATIONS.RAPID_STRENGTH_LOSS
+                                                                                                                            ? "#cf3333"
+                                                                                                                            : null
                                                                                                 }
                                                                                             ]} onPress={() => {
                                                                                             }}>
@@ -486,8 +501,10 @@ export default class Progress extends Component {
                                                                                 }
                                                                                 {
                                                                                     exercise.lastFiveSessionsProgressNotation
-                                                                                        ? <View style = {{
+                                                                                        ? <View style ={{
+                                                                                            flexDirection: 'column',
                                                                                             flex: 1,
+                                                                                
                                                                                         }}>
                                                                                             <Text style={{
                                                                                                 fontFamily: "MainMedium",
@@ -500,7 +517,21 @@ export default class Progress extends Component {
                                                                                                 styles.progressFlagContainer,
                                                                                                 {
                                                                                                     opacity: pressed ? 0.1 : 1,
-                                                                                                    backgroundColor: cardColors.logbook
+                                                                                                    backgroundColor: exercise.lastFiveSessionsProgressNotation == LOGBOOK_PROGRESS_NOTATIONS.RAPID_STRENGTH_GAIN
+                                                                                                    ? "#53c7f0"
+                                                                                                    : exercise.lastFiveSessionsProgressNotation == LOGBOOK_PROGRESS_NOTATIONS.STRENGTH_GAIN
+                                                                                                        ? "#53c7f0"
+                                                                                                        : exercise.lastFiveSessionsProgressNotation == LOGBOOK_PROGRESS_NOTATIONS.SLIGHT_STRENGTH_GAIN
+                                                                                                            ? "#53c7f0"
+                                                                                                            : exercise.lastFiveSessionsProgressNotation == LOGBOOK_PROGRESS_NOTATIONS.NO_CHANGE
+                                                                                                                ? "#7a7474"
+                                                                                                                : exercise.lastFiveSessionsProgressNotation == LOGBOOK_PROGRESS_NOTATIONS.SLIGHT_STRENGTH_LOSS
+                                                                                                                    ? "#cf3333"
+                                                                                                                    : exercise.lastFiveSessionsProgressNotation == LOGBOOK_PROGRESS_NOTATIONS.STRENGTH_LOSS
+                                                                                                                        ? "#cf3333"
+                                                                                                                        : exercise.lastFiveSessionsProgressNotation == LOGBOOK_PROGRESS_NOTATIONS.RAPID_STRENGTH_LOSS
+                                                                                                                            ? "#cf3333"
+                                                                                                                            : null
                                                                                                 }
                                                                                             ]} onPress={() => {
                                                                                             }}>
@@ -531,7 +562,7 @@ export default class Progress extends Component {
                                                                                 }
                                                                                 {
                                                                                     !exercise.lastSessionProgressNotation && !exercise.lastFiveSessionsProgressNotation
-                                                                                        ? <>
+                                                                                        ? <View>
                                                                                             <Text style={globalStyles.notation}>{i18n.t('screens')['progress']['atLeastTwoSessions']}</Text>
                                                                                             {
                                                                                                 !this.state.progress.hasAddedWorkoutSession
@@ -548,7 +579,7 @@ export default class Progress extends Component {
                                                                                                     </Pressable>
                                                                                                     : null
                                                                                             }
-                                                                                        </>
+                                                                                        </View>
                                                                                         : null
                                                                                 }
                                                                             </View>
