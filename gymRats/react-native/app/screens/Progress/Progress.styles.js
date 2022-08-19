@@ -22,7 +22,7 @@ export default StyleSheet.create({
         color: "#aaa"
     },
     progressFlagContainer: {
-        alignSelf: "flex-start",
+        
         borderRadius: 4,
         padding: 8,
         display: "flex",

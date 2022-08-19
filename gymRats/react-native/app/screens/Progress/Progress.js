@@ -437,13 +437,14 @@ export default class Progress extends Component {
                                                                         this.state.currentExercise == exercise.exerciseInstance._id
                                                                             ? <View style = {{
                                                                                 flexDirection: "row",
-                                                                                justifyContent: "space-evenly"
+                                                                                //flex:2,
+                                                                                justifyContent: 'space-between',
                                                                             }}> 
                                                                                 {
                                                                                     exercise.lastSessionProgressNotation
                                                                                         ? <View style = {{
                                                                                             flexDirection: "column",
-                                                                                            flex:1
+                                                                                            flex:1,
                                                                                         }}>
                                                                                             < Text numberOfLines = {3} style={{
                                                                                                 fontFamily: "MainMedium",
@@ -452,8 +453,17 @@ export default class Progress extends Component {
                                                                                                 marginBottom: 8,
                                                                                                 textAlign: "center",
                                                                                             }}>{i18n.t('screens')['progress']['trendFromLastSession']}</Text>
+                                                                                            
                                                                                             <Pressable style={({ pressed }) => [
-                                                                                                styles.progressFlagContainer,
+                                                                                                {
+                                                                                                    alignSelf: exercise.lastFiveSessionsProgressNotation
+                                                                                                    ? 'stretch'
+                                                                                                    : 'flex-start'
+                                                                                                },
+                                                                                                styles.progressFlagContainer ,
+                                                                                                {
+                                                                                                    marginRight:1,
+                                                                                                },
                                                                                                 {
                                                                                                     opacity: pressed ? 0.1 : 1,
                                                                                                     backgroundColor: exercise.lastSessionProgressNotation == LOGBOOK_PROGRESS_NOTATIONS.RAPID_STRENGTH_GAIN
@@ -471,7 +481,8 @@ export default class Progress extends Component {
                                                                                                                         : exercise.lastSessionProgressNotation == LOGBOOK_PROGRESS_NOTATIONS.RAPID_STRENGTH_LOSS
                                                                                                                             ? "#cf3333"
                                                                                                                             : null
-                                                                                                }
+                                                                                                },
+                                                                                                
                                                                                             ]} onPress={() => {
                                                                                             }}>
                                                                                                 <Text style={styles.progressFlag}>
@@ -515,6 +526,9 @@ export default class Progress extends Component {
                                                                                             }}>{i18n.t('screens')['progress']['generalTrend']}</Text>
                                                                                             <Pressable style={({ pressed }) => [
                                                                                                 styles.progressFlagContainer,
+                                                                                                {
+                                                                                                    marginLeft:1,
+                                                                                                },
                                                                                                 {
                                                                                                     opacity: pressed ? 0.1 : 1,
                                                                                                     backgroundColor: exercise.lastFiveSessionsProgressNotation == LOGBOOK_PROGRESS_NOTATIONS.RAPID_STRENGTH_GAIN

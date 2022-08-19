@@ -9,7 +9,7 @@ const LogbookService = {
         return new Promise(async (resolve, reject) => {
             try {
                 let exercises = [];
-                const workouts = await DbService.getManyWithSort(COLLECTIONS.WORKOUT_SESSIONS, { userId: mongoose.Types.ObjectId(userId) }, {year:-1,month:-1,date:-1});
+                const workouts = await DbService.getManyWithSort(COLLECTIONS.WORKOUT_SESSIONS, { userId: mongoose.Types.ObjectId(userId) }, {year:-1,month:-1,date:1});
                 for (let workout of workouts) {
                     for (let exercise of workout.exercises) {
                         if (!exercises.some(e => e._id.toString() === exercise.exerciseId.toString())) {
@@ -65,7 +65,7 @@ const LogbookService = {
     getPercentageDifferenceBetweenAverageOrmComparedToGreatestOrm: (orms, greatestOrm) => {
         let average = 0;
         for (let index = 0; index < orms.length; index++) {
-            average += orms[index];
+            average += ((orms[index] + greatestOrm) / 2);
         }
         average /= orms.length;
         const difference = Math.abs(average - greatestOrm);
