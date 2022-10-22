@@ -90,5 +90,4 @@ let adminAuthenticate = async (req, res, next) => {
 module.exports = {
     authenticate: authenticate,
     adminAuthenticate: adminAuthenticate,
-    newAuthentication: newAuthentication,
 };
