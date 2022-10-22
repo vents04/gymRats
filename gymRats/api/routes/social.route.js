@@ -242,14 +242,11 @@ router.get("/friends-competitive", authenticate, async (req, res, next) => {
               userId: mongoose.Types.ObjectId(req.user._id),
               workoutId: mongoose.Types.ObjectId(template._id),
             },
-            [
-              ["year", -1],
-              ["month", -1],
-              ["date", -1],
-            ],
+            { year: -1, month: -1, date: -1 },
             2
           );
         workoutsWithSpecificTemplate.reverse();
+        if (workoutsWithSpecificTemplate.length % 2 != 0) workoutsWithSpecificTemplate.shift();
         let progressPerTemplate = await ProgressService.getTemplateProgress(workoutsWithSpecificTemplate);
         userProgression += progressPerTemplate;
       }
@@ -262,14 +259,11 @@ router.get("/friends-competitive", authenticate, async (req, res, next) => {
               userId: mongoose.Types.ObjectId(friend),
               workoutId: mongoose.Types.ObjectId(template._id),
             },
-            [
-              ["year", -1],
-              ["month", -1],
-              ["date", -1],
-            ],
+            { year: -1, month: -1, date: -1 },
             2
           );
         workoutsWithSpecificTemplate.reverse();
+        if (workoutsWithSpecificTemplate.length % 2 != 0) workoutsWithSpecificTemplate.shift();
         let progressPerTemplate = await ProgressService.getTemplateProgress(workoutsWithSpecificTemplate);
         friendProgression += progressPerTemplate;
       }
@@ -283,13 +277,13 @@ router.get("/friends-competitive", authenticate, async (req, res, next) => {
 
       connectionsProgress.push({
         me: {
-          percentageProgress: userProgression.toFixed(1),
+          percentageProgress: parseInt(userProgression.toFixed(0)),
           firstName: req.user.firstName,
           lastName: req.user.lastName,
           profilePicture: req.user.profilePicture
         },
         friend: {
-          percentageProgress: friendProgression.toFixed(1),
+          percentageProgress: parseInt(friendProgression.toFixed(0)),
           firstName: friendProperties.firstName,
           lastName: friendProperties.lastName,
           profilePicture: friendProperties.profilePicture

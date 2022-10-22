@@ -81,7 +81,6 @@ const NotificationsService = {
                             for (let chunk of chunks) {
                                 try {
                                     let ticketChunk = await expo.sendPushNotificationsAsync(chunk);
-                                    console.log(ticketChunk);
                                     tickets.push(...ticketChunk);
                                 } catch (error) {
                                     throw new Error(error);
@@ -107,7 +106,6 @@ const NotificationsService = {
                         for (let chunk of chunks) {
                             try {
                                 let ticketChunk = await expo.sendPushNotificationsAsync(chunk);
-                                console.log(ticketChunk);
                                 tickets.push(...ticketChunk);
                             } catch (error) {
                                 throw new Error(error);
@@ -133,12 +131,10 @@ const NotificationsService = {
 
     constructNotification: (data) => {
         try {
-            console.log(...data)
             const notification = new Notification(...data);
             if (!notification) throw new Error("Notification object could not be constructed");
             return notification;
         } catch (err) {
-            console.log(err);
             throw new Error(err.message);
         }
     },

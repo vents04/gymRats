@@ -65,18 +65,40 @@ router.get(
   authenticate,
   async (req, res, next) => {
     try {
-      const workoutsWithSpecificTemplate =
-        await DbService.getManyWithSortAndLimit(COLLECTIONS.WORKOUT_SESSIONS, {
-          userId: mongoose.Types.ObjectId(req.user._id),
-          workoutId: mongoose.Types.ObjectId(req.body.workoutId)
-        },
-          [['year', -1], ['month', -1], ['date', -1]],
-          req.body.limit
-        );
-      workoutsWithSpecificTemplate.reverse();
-      const percentageProgressVolume = ProgressService.getTemplateProgressVolume(workoutsWithSpecificTemplate);
-      const percentageProgressCombined = ProgressService.getTemplateProgress(workoutsWithSpecificTemplate);
-      return res.status(HTTP_STATUS_CODES.OK).send({ percentageProgressCombined, percentageProgressVolume });
+      const templates = await DbService.getMany(COLLECTIONS.WORKOUTS, {
+        userId: mongoose.Types.ObjectId(req.user._id)
+      })
+      console.log("sdasdasd", templates.length)
+
+      let percentageProgressVolume = 0;
+      let percentageProgressStrength = 0;
+      let percentageProgressCombined = 0;
+
+      for (let template of templates) {
+        const workoutsWithSpecificTemplate =
+          await DbService.getManyWithSortAndLimit(COLLECTIONS.WORKOUT_SESSIONS, {
+            workoutId: mongoose.Types.ObjectId(template._id)
+          },
+            { year: -1, month: -1, date: -1 },
+            4
+          );
+        workoutsWithSpecificTemplate.reverse();
+        if (workoutsWithSpecificTemplate.length % 2 != 0) workoutsWithSpecificTemplate.shift();
+        percentageProgressVolume += await ProgressService.getTemplateProgressVolume(workoutsWithSpecificTemplate);
+        percentageProgressStrength += await ProgressService.getTemplateProgressStrength(workoutsWithSpecificTemplate);
+        percentageProgressCombined += await ProgressService.getTemplateProgress(workoutsWithSpecificTemplate);
+        console.log(percentageProgressVolume, percentageProgressStrength, percentageProgressCombined)
+      }
+
+      if (percentageProgressVolume > 0) percentageProgressVolume = percentageProgressVolume / templates.length;
+      if (percentageProgressStrength > 0) percentageProgressStrength = percentageProgressStrength / templates.length;
+      if (percentageProgressCombined > 0) percentageProgressCombined = percentageProgressCombined / templates.length;
+
+      percentageProgressVolume = parseInt(percentageProgressVolume.toFixed(0));
+      percentageProgressStrength = parseInt(percentageProgressStrength.toFixed(0));
+      percentageProgressCombined = parseInt(percentageProgressCombined.toFixed(0));
+
+      return res.status(HTTP_STATUS_CODES.OK).send({ percentageProgressCombined, percentageProgressVolume, percentageProgressStrength, templatesLengthForProgress: templates.length });
     } catch (err) {
       return next(
         new ResponseError(

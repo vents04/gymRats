@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Dimensions, Image, ScrollView, Text, TextInput, Pressable, View, ActivityIndicator, Share, Modal } from 'react-native';
 import { WebView } from 'react-native-webview';
 import DropDownPicker from 'react-native-dropdown-picker'
+import { AnimatedCircularProgress } from 'react-native-circular-progress';
 
 import ApiRequests from '../../classes/ApiRequests';
 
@@ -35,12 +36,16 @@ export default class Progress extends Component {
             currentExercise: null,
             exercises: [],
             exerciseDropdownOpened: false,
-            activeTab: "friends",
+            activeTab: "myProgress",
             requests: [],
             friends: [],
             friendsCompetitive: [],
             showUserFromFriendsLinkModal: true,
-            showUserFromFriendsLinkModalLoading: false
+            showUserFromFriendsLinkModalLoading: false,
+            percentageProgressStrength: 0,
+            percentageProgressVolume: 0,
+            percentageProgressCombined: 0,
+            templatesLengthForProgress: 0
         }
 
         this.focusListener;
@@ -48,14 +53,36 @@ export default class Progress extends Component {
 
 
     onFocusFunction = () => {
-        this.getProgress();
         this.getFriends();
         this.getFriendsCompetitive();
+        this.getProgress();
+        this.getLogbookProgress();
     }
 
     componentDidMount = () => {
         this.focusListener = this.props.navigation.addListener('focus', () => {
             this.onFocusFunction();
+        })
+    }
+
+    getLogbookProgress = () => {
+        ApiRequests.get(`progress/logbook-progress`, {}, true).then((response) => {
+            const { percentageProgressStrength, percentageProgressVolume, percentageProgressCombined, templatesLengthForProgress } = response.data;
+            this.setState({ percentageProgressStrength, percentageProgressVolume, percentageProgressCombined, templatesLengthForProgress });
+        }).catch((error) => {
+            if (error.response) {
+                if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
+                    this.setState({ showError: true, error: error.response.data });
+                } else {
+                    ApiRequests.showInternalServerError();
+                }
+            } else if (error.request) {
+                ApiRequests.showNoResponseError();
+            } else {
+                ApiRequests.showRequestSettingError();
+            }
+        }).finally(() => {
+            this.setState({ showLoading: false });
         })
     }
 
@@ -136,7 +163,6 @@ export default class Progress extends Component {
         ApiRequests.get("social/connection", {}, true).then((response) => {
             this.setState({ friends: response.data.connections, requests: response.data.requests });
         }).catch((error) => {
-            console.log(error.response.data)
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
                     this.setState({ showModalError: true, error: error.response.data });
@@ -175,7 +201,6 @@ export default class Progress extends Component {
             this.getFriends();
             this.getFriendsCompetitive();
         }).catch((error) => {
-            console.log(error.response.data)
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
                     this.setState({ showModalError: true, error: error.response.data });
@@ -192,10 +217,8 @@ export default class Progress extends Component {
 
     getFriendsCompetitive = () => {
         ApiRequests.get("social/friends-competitive", {}, true).then((response) => {
-            console.log(response.data)
             this.setState({ friendsCompetitive: response.data.competitive });
         }).catch((error) => {
-            console.log(error.response.data)
             if (error.response) {
                 if (error.response.status != HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR) {
                     this.setState({ showModalError: true, error: error.response.data });
@@ -341,6 +364,70 @@ export default class Progress extends Component {
                                     this.state.progress && !this.state.showLoading
                                         ? <>
                                             {
+                                                <View style={styles.progressCardContainer}>
+                                                    <View style={styles.progressCardHeaderContainer}>
+                                                        <FontAwesome5 name="dumbbell" size={20} color={cardColors.logbook} />
+                                                        <Text style={styles.progressCardHeader}>{i18n.t('screens')['progress']['logbook']}</Text>
+                                                    </View>
+                                                    {
+                                                        this.state.templatesLengthForProgress > 0
+                                                            ? <View style={styles.progressTypes}>
+                                                                <View style={styles.progressType}>
+                                                                    <View style={styles.progressCoefficientContainer}>
+                                                                        <Text style={styles.progressCoefficient}>{Math.abs(this.state.percentageProgressStrength)}%</Text>
+                                                                        {
+                                                                            this.state.percentageProgressStrength >= 0
+                                                                                ? <FontAwesome name="long-arrow-up" size={20} color={cardColors.logbook} />
+                                                                                : <FontAwesome name="long-arrow-down" size={20} color={cardColors.negative} />
+                                                                        }
+                                                                    </View>
+                                                                    <Text style={styles.macroCircleTitle}>{i18n.t('screens')['progress']['strength']}</Text>
+                                                                </View>
+                                                                <View style={styles.progressType}>
+                                                                    <View style={styles.progressCoefficientContainer}>
+                                                                        <Text style={styles.progressCoefficient}>{Math.abs(this.state.percentageProgressVolume)}%</Text>
+                                                                        {
+                                                                            this.state.percentageProgressVolume >= 0
+                                                                                ? <FontAwesome name="long-arrow-up" size={20} color={cardColors.logbook} />
+                                                                                : <FontAwesome name="long-arrow-down" size={20} color={cardColors.negative} />
+                                                                        }
+                                                                    </View>
+                                                                    <Text style={styles.macroCircleTitle}>{i18n.t('screens')['progress']['volume']}</Text>
+                                                                </View>
+                                                                <View style={styles.progressType}>
+                                                                    <View style={styles.progressCoefficientContainer}>
+                                                                        <Text style={styles.progressCoefficient}>{Math.abs(this.state.percentageProgressCombined)}%</Text>
+                                                                        {
+                                                                            this.state.percentageProgressCombined >= 0
+                                                                                ? <FontAwesome name="long-arrow-up" size={20} color={cardColors.logbook} />
+                                                                                : <FontAwesome name="long-arrow-down" size={20} color={cardColors.negative} />
+                                                                        }
+                                                                    </View>
+                                                                    <Text style={styles.macroCircleTitle}>{i18n.t('screens')['progress']['general']}</Text>
+                                                                </View>
+                                                            </View>
+                                                            : <>
+                                                                <Text style={globalStyles.notation}>{i18n.t('screens')['progress']['atLeastTwoSessions']}</Text>
+                                                                {
+                                                                    !this.state.progress.hasAddedWorkoutSession
+                                                                        ? <Pressable style={({ pressed }) => [
+                                                                            globalStyles.authPageActionButton, {
+                                                                                opacity: pressed ? 0.1 : 1,
+                                                                                marginTop: 12
+                                                                            }
+                                                                        ]} onPress={() => {
+                                                                            this.props.navigation.navigate("Calendar", {
+                                                                            });
+                                                                        }}>
+                                                                            <Text style={globalStyles.authPageActionButtonText}>{i18n.t('screens')['progress']['addWorkoutSession']}</Text>
+                                                                        </Pressable>
+                                                                        : null
+                                                                }
+                                                            </>
+                                                    }
+                                                </View>
+                                            }
+                                            {
                                                 this.state.progress.weightTrackerProgress
                                                     ? <View style={styles.progressCardContainer}>
                                                         <View style={styles.progressCardHeaderContainer}>
@@ -388,11 +475,10 @@ export default class Progress extends Component {
                                                     </View>
                                                     : null
                                             }
-                                            {
+                                            {/* {
                                                 this.state.progress.logbookProgress
                                                     && this.state.progress.logbookProgress.length > 0
                                                     ? <View style={[styles.progressCardContainer]}>
-                                                        {/* up styles minHeight: this.state.exerciseDropdownOpened ? 275 : 0 */}
                                                         <View style={styles.progressCardHeaderContainer}>
                                                             <FontAwesome5 name="dumbbell" size={20} color={cardColors.logbook} />
                                                             <Text style={styles.progressCardHeader}>{i18n.t('screens')['progress']['logbook']}</Text>
@@ -505,7 +591,6 @@ export default class Progress extends Component {
 
                                                                                                     }
                                                                                                 </Text>
-                                                                                                {/* <Entypo name="info-with-circle" size={18} color="white" /> */}
                                                                                             </Pressable>
                                                                                         </View>
                                                                                         : null
@@ -569,7 +654,6 @@ export default class Progress extends Component {
 
                                                                                                     }
                                                                                                 </Text>
-                                                                                                {/* <Entypo name="info-with-circle" size={18} color="white" /> */}
                                                                                             </Pressable>
                                                                                         </View>
                                                                                         : null
@@ -609,10 +693,11 @@ export default class Progress extends Component {
                                                         }
                                                     </View>
                                                     : null
-                                            }
+                                            } */}
                                             {
                                                 !this.state.progress.weightTrackerProgress
                                                     && this.state.progress.logbookProgress.length <= 0
+                                                    && this.state.templatesLengthForProgress == 0
                                                     ? <>
                                                         <View style={styles.unknownSourceCaloriesIncentiveContainer}>
                                                             <Text style={styles.unknownSourceCaloriesIncentiveText}>{i18n.t('screens')['progress']['messageToUser']}</Text>
@@ -656,6 +741,16 @@ export default class Progress extends Component {
                                             </Pressable>
                                         </View>
                                         : <>
+                                            <Pressable style={({ pressed }) => [
+                                                globalStyles.authPageActionButton, {
+                                                    opacity: pressed ? 0.1 : 1,
+                                                    marginBottom: 24
+                                                }
+                                            ]} onPress={() => {
+                                                this.shareFriendsLink();
+                                            }}>
+                                                <Text style={globalStyles.authPageActionButtonText}>{i18n.t('screens')['progress']['noFriendsIncentive']}</Text>
+                                            </Pressable>
                                             {
                                                 this.state.requests.map((request) =>
                                                     <View style={styles.requestContainer} key={request._id}>
@@ -702,17 +797,6 @@ export default class Progress extends Component {
                                             {
                                                 this.state.friendsCompetitive.map((friend) =>
                                                     <View style={styles.friendContainer} key={friend._id}>
-                                                        <Text style={[styles.friendProgressNotation, {
-                                                            backgroundColor: friend.friend.percentageProgress > friend.me.percentageProgress
-                                                                ? "#cf3333"
-                                                                : "#1f6cb0"
-                                                        }]}>{
-                                                                friend.friend.percentageProgress > friend.me.percentageProgress
-                                                                    ? i18n.t('screens')['progress']['competitiveProgressNotationWorse']
-                                                                    : friend.friend.percentageProgress < friend.me.percentageProgress
-                                                                        ? i18n.t('screens')['progress']['competitiveProgressNotationBetter']
-                                                                        : i18n.t('screens')['progress']['competitiveProgressNotationNeutral']
-                                                            }</Text>
                                                         <View style={styles.comparisonContainer}>
                                                             <View style={styles.comparisonUserContainer}>
                                                                 {

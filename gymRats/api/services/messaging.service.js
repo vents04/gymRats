@@ -70,11 +70,6 @@ const MessagingService = {
                 const fileContents = new Buffer.from(base64, 'base64')
                 const nameSplitted = name.split(".");
                 const extension = mime.extension(mimeType);
-                console.log(__dirname)
-                console.log(NODE_ENVIRONMENT == NODE_ENVIRONMENTS.PRODUCTION
-                    ? __dirname + "/../ugc/" + fileName + "." + extension
-                    : __dirname + "\\..\\ugc\\" + fileName + "." + extension);
-
 
                 fs.writeFileSync(NODE_ENVIRONMENT == NODE_ENVIRONMENTS.PRODUCTION
                     ? __dirname + "/../ugc/" + fileName + "." + extension
@@ -104,7 +99,6 @@ const MessagingService = {
                 await DbService.create(COLLECTIONS.MESSAGES, fileMessage);
                 resolve(fileMessage);
             } catch (err) {
-                console.log(err)
                 reject(new ResponseError("Internal server error", err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
             }
         })

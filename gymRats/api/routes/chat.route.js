@@ -64,8 +64,7 @@ router.get('/', authenticate, async (req, res, next) => {
 });
 
 router.get('/:id', authenticate, async (req, res, next) => {
-    if (!mongoose.Types.ObjectId.isValid(req.params.id)) return next(new ResponseError("Invalid chat id", HTTP_STATUS_CODES.BAD_REQUEST, 5));    let lastMessageId = req.query.lastMessageId;
-    console.log(req.query)
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) return next(new ResponseError("Invalid chat id", HTTP_STATUS_CODES.BAD_REQUEST, 5)); let lastMessageId = req.query.lastMessageId;
     if (lastMessageId)
         if (!mongoose.Types.ObjectId(lastMessageId)) return next(new ResponseError("Invalid message id", HTTP_STATUS_CODES.BAD_REQUEST, 5));
 
@@ -92,23 +91,17 @@ router.get('/:id', authenticate, async (req, res, next) => {
         let messages = [];
         if (!lastMessageId) {
             messages = await DbService.getManyWithSortAndLimit(COLLECTIONS.MESSAGES, { chatId: mongoose.Types.ObjectId(req.params.id) }, { createdDt: -1 }, 25);
-            if(messages.length > 0){
+            if (messages.length > 0) {
                 messages.reverse()
-                console.log(new Date(messages[0].createdDt));
-                console.log(new Date(messages[messages.length - 1].createdDt));
             }
         } else {
             const lastMessage = await DbService.getOne(COLLECTIONS.MESSAGES, { _id: mongoose.Types.ObjectId(req.query.lastMessageId) });
             if (!lastMessage) return next(new ResponseError("Message not found", HTTP_STATUS_CODES.NOT_FOUND, 59));
             messages = await DbService.getManyWithSortAndLimit(COLLECTIONS.MESSAGES, { chatId: mongoose.Types.ObjectId(req.params.id), createdDt: { "$lt": lastMessage.createdDt } }, { createdDt: -1 }, 25);
-            if(messages.length > 0){
+            if (messages.length > 0) {
                 messages.reverse()
-                console.log(new Date(messages[0].createdDt));
-                console.log(new Date(messages[messages.length - 1].createdDt));
             }
         }
-
-        console.log(messages.length)
 
         Object.assign(chat, { user: req.user }, { oppositeUser: oppositeUser }, { messages: messages });
 

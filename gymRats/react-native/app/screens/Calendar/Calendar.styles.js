@@ -8,13 +8,17 @@ export default StyleSheet.create({
         justifyContent: 'space-between',
         flexGrow: 0,
         flexShrink: 0,
-        marginBottom: 32
+        marginBottom: 32,
+        borderTopWidth: 1,
+        borderBottomWidth: 1,
+        borderColor: '#e7e7e7',
+        padding: 16
     },
     calendarController: {
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
-        flex: 1
+        flex: 1,
     },
     calendarControllerText: {
         fontFamily: "MainBold",
@@ -25,7 +29,7 @@ export default StyleSheet.create({
     },
     calendarCurrentDate: {
         fontFamily: "MainBold",
-        fontSize: 12,
+        fontSize: 14,
         flex: 1,
         textAlign: "center",
         padding: 8,

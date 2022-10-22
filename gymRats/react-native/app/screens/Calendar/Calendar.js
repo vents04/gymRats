@@ -180,7 +180,7 @@ export default class Calendar extends Component {
                             mode={"date"}
                             onChange={(event, selectedDate) => {
                                 this.setState({ showCalendarPicker: false }, () => {
-                                    if(selectedDate && new Date(selectedDate)) {
+                                    if (selectedDate && new Date(selectedDate)) {
                                         console.log(selectedDate, new Date(selectedDate));
                                         this.setDate(new Date(selectedDate));
                                     }
@@ -201,7 +201,7 @@ export default class Calendar extends Component {
                                             mode={"date"}
                                             display={"spinner"}
                                             onChange={(event, selectedDate) => {
-                                                if(selectedDate && new Date(selectedDate)) {
+                                                if (selectedDate && new Date(selectedDate)) {
                                                     this.setState({ iosCurrentSelectedDate: new Date(selectedDate) })
                                                 }
                                             }}
@@ -341,10 +341,10 @@ export default class Calendar extends Component {
                                 }>
                                 {
                                     !this.state.doNotShow.includes("dailyWeights")
-                                    ? <Pressable style={({ pressed }) => [
-                                        {
-                                            opacity: pressed ? 0.1 : 1,
-                                        }
+                                        ? <Pressable style={({ pressed }) => [
+                                            {
+                                                opacity: pressed ? 0.1 : 1,
+                                            }
                                         ]} onPress={() => {
                                             this.bottomSheet.current.close();
                                             this.props.navigation.navigate("WeightTracker", {
@@ -352,24 +352,24 @@ export default class Calendar extends Component {
                                                 timezoneOffset: this.state.timezoneOffset
                                             });
                                         }}><View style={styles.addDataItemContainer}>
-                                            <View style={styles.addDataItemLeft}>
-                                                <FontAwesome5 name="weight" size={25} color={cardColors.weightTracker} />
-                                                <View style={styles.addDataItemLabels}>
-                                                    <Text style={styles.addDataItemTitle}>{i18n.t('components')['cards']['weightTracker']['cardTitle']}</Text>
-                                                    <Text style={styles.addDataDescription}>{i18n.t('components')['cards']['weightTracker']['cardDescription']}</Text>
+                                                <View style={styles.addDataItemLeft}>
+                                                    <FontAwesome5 name="weight" size={25} color={cardColors.weightTracker} />
+                                                    <View style={styles.addDataItemLabels}>
+                                                        <Text style={styles.addDataItemTitle}>{i18n.t('components')['cards']['weightTracker']['cardTitle']}</Text>
+                                                        <Text style={styles.addDataDescription}>{i18n.t('components')['cards']['weightTracker']['cardDescription']}</Text>
+                                                    </View>
                                                 </View>
+                                                <Ionicons name="add-circle-sharp" size={24} color="#262626" />
                                             </View>
-                                            <Ionicons name="add-circle-sharp" size={24} color="#262626" />
-                                        </View>
                                         </Pressable>
-                                    : null
+                                        : null
                                 }
                                 {
                                     !this.state.doNotShow.includes("workoutSessions")
-                                    ? <Pressable style={({ pressed }) => [
-                                        {
-                                            opacity: pressed ? 0.1 : 1,
-                                        }
+                                        ? <Pressable style={({ pressed }) => [
+                                            {
+                                                opacity: pressed ? 0.1 : 1,
+                                            }
                                         ]} onPress={() => {
                                             this.bottomSheet.current.close();
                                             this.props.navigation.navigate("Logbook", {
@@ -377,24 +377,24 @@ export default class Calendar extends Component {
                                                 timezoneOffset: this.state.timezoneOffset
                                             });
                                         }}><View style={styles.addDataItemContainer}>
-                                            <View style={styles.addDataItemLeft}>
-                                                <FontAwesome5 name="dumbbell" size={25} color={cardColors.logbook} />
-                                                <View style={styles.addDataItemLabels}>
-                                                    <Text style={styles.addDataItemTitle}>{i18n.t('components')['cards']['logbook']['cardTitle']}</Text>
-                                                    <Text style={styles.addDataDescription}>{i18n.t('components')['cards']['logbook']['cardDescription']}</Text>
+                                                <View style={styles.addDataItemLeft}>
+                                                    <FontAwesome5 name="dumbbell" size={25} color={cardColors.logbook} />
+                                                    <View style={styles.addDataItemLabels}>
+                                                        <Text style={styles.addDataItemTitle}>{i18n.t('components')['cards']['logbook']['cardTitle']}</Text>
+                                                        <Text style={styles.addDataDescription}>{i18n.t('components')['cards']['logbook']['cardDescription']}</Text>
+                                                    </View>
                                                 </View>
+                                                <Ionicons name="add-circle-sharp" size={24} color="#262626" />
                                             </View>
-                                            <Ionicons name="add-circle-sharp" size={24} color="#262626" />
-                                        </View> 
-                                    </Pressable>
-                                    : null
+                                        </Pressable>
+                                        : null
                                 }
                                 {
                                     !this.state.doNotShow.includes("caloriesCounterDays")
-                                    ? <Pressable style={({ pressed }) => [
-                                        {
-                                            opacity: pressed ? 0.1 : 1,
-                                        }
+                                        ? <Pressable style={({ pressed }) => [
+                                            {
+                                                opacity: pressed ? 0.1 : 1,
+                                            }
                                         ]} onPress={() => {
                                             this.bottomSheet.current.close();
                                             this.props.navigation.navigate("CaloriesIntake", {
@@ -402,17 +402,17 @@ export default class Calendar extends Component {
                                                 timezoneOffset: this.state.timezoneOffset
                                             });
                                         }}><View style={styles.addDataItemContainer}>
-                                            <View style={styles.addDataItemLeft}>
-                                                <MaterialCommunityIcons name="food-apple" size={25} color={cardColors.caloriesIntake} />
-                                                <View style={styles.addDataItemLabels}>
-                                                    <Text style={styles.addDataItemTitle}>{i18n.t('components')['cards']['caloriesIntake']['cardTitle']}</Text>
-                                                    <Text style={styles.addDataDescription}>{i18n.t('components')['cards']['caloriesIntake']['cardDescription']}</Text>
+                                                <View style={styles.addDataItemLeft}>
+                                                    <MaterialCommunityIcons name="food-apple" size={25} color={cardColors.caloriesIntake} />
+                                                    <View style={styles.addDataItemLabels}>
+                                                        <Text style={styles.addDataItemTitle}>{i18n.t('components')['cards']['caloriesIntake']['cardTitle']}</Text>
+                                                        <Text style={styles.addDataDescription}>{i18n.t('components')['cards']['caloriesIntake']['cardDescription']}</Text>
+                                                    </View>
                                                 </View>
+                                                <Ionicons name="add-circle-sharp" size={24} color="#262626" />
                                             </View>
-                                            <Ionicons name="add-circle-sharp" size={24} color="#262626" />
-                                        </View> 
-                                    </Pressable>
-                                    : null
+                                        </Pressable>
+                                        : null
                                 }
                                 {
                                     this.state.cards.length > 0

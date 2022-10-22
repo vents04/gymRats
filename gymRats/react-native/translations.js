@@ -146,7 +146,7 @@ module.exports = {
                 strengthLoss: "Strength loss",
                 rapidStrengthLoss: "Rapid strength loss",
                 generalTrend: "General trend:",
-                atLeastTwoSessions: "Finish at least two sessions with this exercise to unlock the progress functionality",
+                atLeastTwoSessions: "There are not enough workout sessions done to unlock this functionality",
                 addWorkoutSession: "Add a workout session",
                 selectExercise: "Please, select an exercise to show progress charts for.",
                 messageToUser: "After adding some data you will have the ability to monitor your progress from this tab as well as get software-based suggestions on how to improve your fitness.",
@@ -159,7 +159,10 @@ module.exports = {
                 competitiveProgressNotationWorse: "You are progressing slower",
                 competitiveProgressNotationNeutral: "You are progressing at the same pace",
                 competitiveRegress: "% regress",
-                competitiveProgress: "% progress"
+                competitiveProgress: "% progress",
+                strength: 'strength',
+                volume: 'volume',
+                general: 'general'
             },
             addFood: {
                 optional: "optional",
@@ -581,7 +584,7 @@ module.exports = {
                 strengthLoss: "Загуба на сила",
                 rapidStrengthLoss: "Драстична загуба на сила",
                 generalTrend: "Генерална тенденция:",
-                atLeastTwoSessions: "Направете поне 2 тренировки с това упражнение, за да отключите функционалността за прогрес",
+                atLeastTwoSessions: "Няма достатъчно добавени тренировки, за да отключите тази функционалност",
                 addWorkoutSession: "Добави тренировка",
                 selectExercise: "Моля, изберете упражнение, чийто прогрес искате да видите.",
                 messageToUser: "След като добавите данни, ще имате възможността да наблюдавате напредъка си от тази страница, както и да получавате алгоритмично базирани предложения как да подобрите своето здраве.",
@@ -594,7 +597,10 @@ module.exports = {
                 competitiveProgressNotationWorse: "Прогресирате по-бавно",
                 competitiveProgressNotationNeutral: "Прогресирате еднакво бързо",
                 competitiveRegress: "% регрес",
-                competitiveProgress: "% прогрес"
+                competitiveProgress: "% прогрес",
+                strength: 'сила',
+                volume: 'обем',
+                general: 'генерално'
             },
             addFood: {
                 optional: "опиционално",

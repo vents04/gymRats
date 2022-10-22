@@ -155,3 +155,4 @@
 {"dt":1660394257412,"language":"en","level":"error","message":"Invalid credentials for login","status":400,"userId":null}
 {"dt":1660394263628,"language":"en","level":"error","message":"Invalid credentials for login","status":400,"userId":null}
 {"dt":1660394269544,"language":"en","level":"error","message":"Invalid credentials for login","status":400,"userId":null}
+{"dt":1660471042659,"language":"en","level":"error","message":"Token not provided","status":401,"userId":null}

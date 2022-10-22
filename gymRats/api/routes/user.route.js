@@ -25,7 +25,6 @@ const FriendsLink = require('../db/models/social/friends-link.model');
 
 router.post("/signup", async (req, res, next) => {
     const { error } = signupValidation(req.body, req.headers.lng);
-    console.log(error);
     if (error) return next(new ResponseError(error.details[0].message, HTTP_STATUS_CODES.BAD_REQUEST));
 
     req.body.email = req.body.email.toLowerCase();
@@ -57,8 +56,8 @@ router.post("/login", async (req, res, next) => {
         const user = await DbService.getOne(COLLECTIONS.USERS, { email: req.body.email });
         if (!user) return next(new ResponseError("Invalid credentials for login", HTTP_STATUS_CODES.NOT_FOUND, 58));
 
-        const workoutSessions = await DbService.getMany(COLLECTIONS.WORKOUT_SESSIONS, {userId: mongoose.Types.ObjectId(user._id)});
-        
+        const workoutSessions = await DbService.getMany(COLLECTIONS.WORKOUT_SESSIONS, { userId: mongoose.Types.ObjectId(user._id) });
+
 
         const isPasswordValid = AuthenticationService.verifyPassword(req.body.password, user.password);
         if (!isPasswordValid) return next(new ResponseError("Invalid credentials for login", HTTP_STATUS_CODES.BAD_REQUEST, 58));
@@ -196,7 +195,6 @@ router.post("/password-recovery-code", async (req, res, next) => {
             identifier: passwordRecoveryCode.identifier
         })
     } catch (err) {
-        console.log(err)
         return next(new ResponseError(err.message || DEFAULT_ERROR_MESSAGE, err.status || HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR));
     }
 });
@@ -301,9 +299,9 @@ router.get("/check-email-verification-code", async (req, res, next) => {
 
 router.post('/account-deletion-request', authenticate, async (req, res, next) => {
     try {
-        const existingAccountDeletionRequest = await DbService.getOne(COLLECTIONS.ACCOUNT_DELETION_REQUESTS, {userId: mongoose.Types.ObjectId(req.user._id)});
-        if(existingAccountDeletionRequest) return next(new ResponseError("You have already requested account deletion", HTTP_STATUS_CODES.BAD_REQUEST, 60))
-        
+        const existingAccountDeletionRequest = await DbService.getOne(COLLECTIONS.ACCOUNT_DELETION_REQUESTS, { userId: mongoose.Types.ObjectId(req.user._id) });
+        if (existingAccountDeletionRequest) return next(new ResponseError("You have already requested account deletion", HTTP_STATUS_CODES.BAD_REQUEST, 60))
+
         const accountDeletionRequest = new AccountDeletionRequest({
             userId: mongoose.Types.ObjectId(req.user._id),
         });
@@ -319,8 +317,8 @@ router.post('/account-deletion-request', authenticate, async (req, res, next) =>
 });
 
 router.get('/account-deletion-request', authenticate, async (req, res, next) => {
-    try {        
-        const accountDeletionRequest = await DbService.getOne(COLLECTIONS.ACCOUNT_DELETION_REQUESTS, {userId: mongoose.Types.ObjectId(req.user._id)});
+    try {
+        const accountDeletionRequest = await DbService.getOne(COLLECTIONS.ACCOUNT_DELETION_REQUESTS, { userId: mongoose.Types.ObjectId(req.user._id) });
         return res.status(HTTP_STATUS_CODES.OK).send({
             accountDeletionRequest
         });
@@ -331,7 +329,7 @@ router.get('/account-deletion-request', authenticate, async (req, res, next) => 
 
 router.delete('/account-deletion-request', authenticate, async (req, res, next) => {
     try {
-        await DbService.delete(COLLECTIONS.ACCOUNT_DELETION_REQUESTS, {userId: mongoose.Types.ObjectId(req.user._id)});
+        await DbService.delete(COLLECTIONS.ACCOUNT_DELETION_REQUESTS, { userId: mongoose.Types.ObjectId(req.user._id) });
 
         EmailService.send("v.dimitrov@uploy.app", "Account deletion request cancelled", `${req.user.firstName} ${req.user.lastName} with user id ${req.user._id} has cancelled their account deletion request`);
 
@@ -343,8 +341,8 @@ router.delete('/account-deletion-request', authenticate, async (req, res, next) 
 
 router.get('/friends-link', authenticate, async (req, res, next) => {
     try {
-        const existingFriendsLink = await DbService.getOne(COLLECTIONS.FRIENDS_LINKS, {userId: mongoose.Types.ObjectId(req.user._id)});
-        if(existingFriendsLink) {
+        const existingFriendsLink = await DbService.getOne(COLLECTIONS.FRIENDS_LINKS, { userId: mongoose.Types.ObjectId(req.user._id) });
+        if (existingFriendsLink) {
             return res.status(HTTP_STATUS_CODES.OK).send({
                 linkId: existingFriendsLink.linkId,
                 firstName: req.user.firstName
@@ -370,10 +368,10 @@ router.get('/friends-link', authenticate, async (req, res, next) => {
 router.get('/friends-link/:linkId', async (req, res, next) => {
     try {
         let user = null;
-        const friendsLink = await DbService.getOne(COLLECTIONS.FRIENDS_LINKS, {linkId: req.params.linkId});
-        if(friendsLink) {
+        const friendsLink = await DbService.getOne(COLLECTIONS.FRIENDS_LINKS, { linkId: req.params.linkId });
+        if (friendsLink) {
             const friendsLinkUser = await DbService.getById(COLLECTIONS.USERS, friendsLink.userId);
-            if(friendsLinkUser) user = friendsLinkUser;
+            if (friendsLinkUser) user = friendsLinkUser;
         }
 
         return res.status(HTTP_STATUS_CODES.OK).send({
