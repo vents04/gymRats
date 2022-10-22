@@ -22,7 +22,7 @@ export default StyleSheet.create({
         color: "#aaa"
     },
     progressFlagContainer: {
-        alignSelf: "flex-start",
+
         borderRadius: 4,
         padding: 8,
         display: "flex",
@@ -326,4 +326,9 @@ export default StyleSheet.create({
     mealContainer: {
         marginVertical: 8
     },
+    verticleLine: {
+        height: "100%",
+        width: 1,
+        backgroundColor: '#909090'
+    }
 })

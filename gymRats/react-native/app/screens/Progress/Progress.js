@@ -518,24 +518,57 @@ export default class Progress extends Component {
                                                         />
                                                         {
                                                             this.state.progress.logbookProgress.map((exercise, index) =>
-                                                                <View key={"lp" + index}>
+                                                                <View key={"lp" + index}>                                                                   
                                                                     {
                                                                         this.state.currentExercise == exercise.exerciseInstance._id
-                                                                            ? <>
+                                                                            ? <View style = {{
+                                                                                flexDirection: "row",
+                                                                                //flex:2,
+                                                                                justifyContent: 'space-between',
+                                                                            }}> 
                                                                                 {
                                                                                     exercise.lastSessionProgressNotation
-                                                                                        ? <>
-                                                                                            <Text style={{
+                                                                                        ? <View style = {{
+                                                                                            flexDirection: "column",
+                                                                                            flex:1,
+                                                                                        }}>
+                                                                                            < Text numberOfLines = {3} style={{
                                                                                                 fontFamily: "MainMedium",
                                                                                                 fontSize: 14,
+                                                                                                marginTop: 12,
                                                                                                 marginBottom: 8,
+                                                                                                textAlign: "center",
                                                                                             }}>{i18n.t('screens')['progress']['trendFromLastSession']}</Text>
+                                                                                            
                                                                                             <Pressable style={({ pressed }) => [
-                                                                                                styles.progressFlagContainer,
+                                                                                                {
+                                                                                                    alignSelf: exercise.lastFiveSessionsProgressNotation
+                                                                                                    ? 'stretch'
+                                                                                                    : 'flex-start'
+                                                                                                },
+                                                                                                styles.progressFlagContainer ,
+                                                                                                {
+                                                                                                    marginRight:1,
+                                                                                                },
                                                                                                 {
                                                                                                     opacity: pressed ? 0.1 : 1,
-                                                                                                    backgroundColor: cardColors.logbook
-                                                                                                }
+                                                                                                    backgroundColor: exercise.lastSessionProgressNotation == LOGBOOK_PROGRESS_NOTATIONS.RAPID_STRENGTH_GAIN
+                                                                                                    ? "#53c7f0"
+                                                                                                    : exercise.lastSessionProgressNotation == LOGBOOK_PROGRESS_NOTATIONS.STRENGTH_GAIN
+                                                                                                        ? "#53c7f0"
+                                                                                                        : exercise.lastSessionProgressNotation == LOGBOOK_PROGRESS_NOTATIONS.SLIGHT_STRENGTH_GAIN
+                                                                                                            ? "#53c7f0"
+                                                                                                            : exercise.lastSessionProgressNotation == LOGBOOK_PROGRESS_NOTATIONS.NO_CHANGE
+                                                                                                                ? "#7a7474"
+                                                                                                                : exercise.lastSessionProgressNotation == LOGBOOK_PROGRESS_NOTATIONS.SLIGHT_STRENGTH_LOSS
+                                                                                                                    ? "#cf3333"
+                                                                                                                    : exercise.lastSessionProgressNotation == LOGBOOK_PROGRESS_NOTATIONS.STRENGTH_LOSS
+                                                                                                                        ? "#cf3333"
+                                                                                                                        : exercise.lastSessionProgressNotation == LOGBOOK_PROGRESS_NOTATIONS.RAPID_STRENGTH_LOSS
+                                                                                                                            ? "#cf3333"
+                                                                                                                            : null
+                                                                                                },
+                                                                                                
                                                                                             ]} onPress={() => {
                                                                                             }}>
                                                                                                 <Text style={styles.progressFlag}>
@@ -559,23 +592,45 @@ export default class Progress extends Component {
                                                                                                     }
                                                                                                 </Text>
                                                                                             </Pressable>
-                                                                                        </>
+                                                                                        </View>
                                                                                         : null
                                                                                 }
                                                                                 {
                                                                                     exercise.lastFiveSessionsProgressNotation
-                                                                                        ? <>
+                                                                                        ? <View style ={{
+                                                                                            flexDirection: 'column',
+                                                                                            flex: 1,
+                                                                                
+                                                                                        }}>
                                                                                             <Text style={{
                                                                                                 fontFamily: "MainMedium",
                                                                                                 fontSize: 14,
-                                                                                                marginBottom: 8,
-                                                                                                marginTop: 12
+                                                                                                marginBottom: 25,
+                                                                                                marginTop: 12,
+                                                                                                textAlign: "center",
                                                                                             }}>{i18n.t('screens')['progress']['generalTrend']}</Text>
                                                                                             <Pressable style={({ pressed }) => [
                                                                                                 styles.progressFlagContainer,
                                                                                                 {
+                                                                                                    marginLeft:1,
+                                                                                                },
+                                                                                                {
                                                                                                     opacity: pressed ? 0.1 : 1,
-                                                                                                    backgroundColor: cardColors.logbook
+                                                                                                    backgroundColor: exercise.lastFiveSessionsProgressNotation == LOGBOOK_PROGRESS_NOTATIONS.RAPID_STRENGTH_GAIN
+                                                                                                    ? "#53c7f0"
+                                                                                                    : exercise.lastFiveSessionsProgressNotation == LOGBOOK_PROGRESS_NOTATIONS.STRENGTH_GAIN
+                                                                                                        ? "#53c7f0"
+                                                                                                        : exercise.lastFiveSessionsProgressNotation == LOGBOOK_PROGRESS_NOTATIONS.SLIGHT_STRENGTH_GAIN
+                                                                                                            ? "#53c7f0"
+                                                                                                            : exercise.lastFiveSessionsProgressNotation == LOGBOOK_PROGRESS_NOTATIONS.NO_CHANGE
+                                                                                                                ? "#7a7474"
+                                                                                                                : exercise.lastFiveSessionsProgressNotation == LOGBOOK_PROGRESS_NOTATIONS.SLIGHT_STRENGTH_LOSS
+                                                                                                                    ? "#cf3333"
+                                                                                                                    : exercise.lastFiveSessionsProgressNotation == LOGBOOK_PROGRESS_NOTATIONS.STRENGTH_LOSS
+                                                                                                                        ? "#cf3333"
+                                                                                                                        : exercise.lastFiveSessionsProgressNotation == LOGBOOK_PROGRESS_NOTATIONS.RAPID_STRENGTH_LOSS
+                                                                                                                            ? "#cf3333"
+                                                                                                                            : null
                                                                                                 }
                                                                                             ]} onPress={() => {
                                                                                             }}>
@@ -600,12 +655,12 @@ export default class Progress extends Component {
                                                                                                     }
                                                                                                 </Text>
                                                                                             </Pressable>
-                                                                                        </>
+                                                                                        </View>
                                                                                         : null
                                                                                 }
                                                                                 {
                                                                                     !exercise.lastSessionProgressNotation && !exercise.lastFiveSessionsProgressNotation
-                                                                                        ? <>
+                                                                                        ? <View>
                                                                                             <Text style={globalStyles.notation}>{i18n.t('screens')['progress']['atLeastTwoSessions']}</Text>
                                                                                             {
                                                                                                 !this.state.progress.hasAddedWorkoutSession
@@ -622,10 +677,10 @@ export default class Progress extends Component {
                                                                                                     </Pressable>
                                                                                                     : null
                                                                                             }
-                                                                                        </>
+                                                                                        </View>
                                                                                         : null
                                                                                 }
-                                                                            </>
+                                                                            </View>
                                                                             : null
                                                                     }
                                                                 </View>

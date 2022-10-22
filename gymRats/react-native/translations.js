@@ -564,7 +564,7 @@ module.exports = {
             progress: {
                 pageTitle: "Прогрес",
                 myProgress: "Моят прогрес",
-                freinds: "Приятели",
+                friends: "Приятели",
                 weightTracker: "Тегло",
                 minorWeightLoss: "Незначителна загуба на тегло",
                 efficientWeightLoss: "Оптимална загуба на тегло",
