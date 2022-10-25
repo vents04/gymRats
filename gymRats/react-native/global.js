@@ -1,6 +1,6 @@
 const AUTHENTICATION_TOKEN_KEY = "x-auth-token";
 
-const ROOT_URL_API = "https://api.gymrats.uploy.app";
+const ROOT_URL_API = "https://192.168.31.94:4057";
 
 const HTTP_STATUS_CODES = {
     OK: 200,
