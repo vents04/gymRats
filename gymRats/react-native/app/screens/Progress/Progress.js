@@ -475,7 +475,7 @@ export default class Progress extends Component {
                                                     </View>
                                                     : null
                                             }
-                                            {/* {
+                                             {
                                                 this.state.progress.logbookProgress
                                                     && this.state.progress.logbookProgress.length > 0
                                                     ? <View style={[styles.progressCardContainer]}>
@@ -693,7 +693,7 @@ export default class Progress extends Component {
                                                         }
                                                     </View>
                                                     : null
-                                            } */}
+                                            } 
                                             {
                                                 !this.state.progress.weightTrackerProgress
                                                     && this.state.progress.logbookProgress.length <= 0
