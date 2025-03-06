@@ -141,7 +141,7 @@ const CALORIES_COUNTER_MEALS = {
     SNACKS: "SNACKS",
 }
 
-const SENDGRID_API_KEY = "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";
+const SENDGRID_API_KEY = "";
 
 const APP_EMAIL = "noreply@uploy.app";
 
@@ -154,7 +154,7 @@ const WEIGHT_UNIT_RELATIONS = {
     }
 }
 
-const GOOGLE_API_KEY = "AIzaSyAYQnnCgQuzHGk6WMcbhtOPJHROn5vycE4";
+const GOOGLE_API_KEY = "";
 
 const DEFAULT_ERROR_MESSAGE = "Internal server error";
 
